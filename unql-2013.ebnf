@@ -1,0 +1,65 @@
+/***************
+ *  unql 2013  *
+ ***************/
+unql-stmt ::=  'EXPLAIN'? select-stmt
+
+/*
+ *  select
+ */
+
+select-stmt ::= select-core ('ORDER' 'BY' ordering-term (',' ordering-term)*)? ('LIMIT' int ('OFFSET' int)?)?
+select-core ::= 'SELECT' ('DISTINCT' | 'ALL')? result-expr ('WHERE' boolean-expr)? ('GROUP' 'BY' expr (',' expr )* ('HAVING' boolean-expr)?)?
+ordering-term ::= expr ('ASC' | 'DESC')?
+result-expr ::= '*' | expr
+
+/*
+ *  expressions
+ */
+
+boolean-expr ::= logical-term | comparison-term | element-match | boolean-function | '(' boolean-expr ')'
+logical-term ::= boolean-expr 'AND' boolean-expr | boolean-expr 'OR' boolean-expr | 'NOT' boolean-expr
+comparison-term ::= expr '=' expr | expr '==' expr | expr '!=' expr | expr '<>' expr | expr '>' expr | expr '>=' expr | expr '<' expr | expr '<=' expr | expr 'LIKE' expr | expr 'NOT' 'LIKE' expr | expr 'IS' 'NULL' | expr 'IS' 'NOT' 'NULL'
+element-match ::= property-path '[' ('ANY' | 'ALL')? boolean-expr ']'
+expr ::= boolean-expr | literal-value | property-path | arithmetic-term | function |'(' expr ')'
+arithmetic-term ::= expr '+' expr | expr '-' expr | expr '*' expr | expr '/' expr | expr '%' expr |'-' expr
+
+/*
+ *  properties
+ */
+property-path ::= chars | property-path '.' chars | property-path '[' int ']'
+
+/*
+ *  functions
+ */
+function ::= function-name '(' ('*' | expr (',' expr)*)? ')'
+function-name ::= aggregate-function-name | core-function-name
+aggregate-function-name ::= 'SUM' | 'COUNT' | 'MIN' | 'MAX' | 'AVG'
+core-function-name ::= 'LENGTH'
+boolean-function ::= boolean-function-name '(' ('*' | expr (',' expr)*)? ')'
+boolean-function-name ::= 'MISSING'
+
+/*
+ *  literal JSON (with nested expressions instead of values)
+ */
+literal-value ::= string | number | object | array | 'TRUE' | 'FALSE' | 'NULL'
+object ::= '{' '}' |  '{' members '}'
+members ::= pair | pair ',' members
+pair ::= string ':' expr
+array ::= '[' ']' | '[' elements ']'
+elements ::= expr | expr ',' elements
+
+/**
+ *  low level
+ **/
+string ::= '"' '"' | '"' chars '"'
+chars ::= char chars
+char ::= unicode-character | '\' ('\' | '\' | '/' | 'b' | 'f' | 'n' | 'r' | 't' | 'u' hex-digit hex-digit hex-digit hex-digit )
+number ::= int | int frac | int exp | int frac exp
+int ::= digit | non-zero-digit digits | '-' digit | '-' non-zero-digit digits
+frac ::= '.' digits
+exp ::= e digits
+digits ::= digit | digit digits
+non-zero-digit ::= [1-9]
+digit ::= [0-9]
+e ::= 'e' | 'e+' | 'e-' | 'E' | 'E+' | 'E-'
+hex-digit ::= [0-9a-fA-F]
