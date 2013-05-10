@@ -8,35 +8,33 @@ unql-stmt ::=  'EXPLAIN'? select-stmt
  */
 
 select-stmt ::= select-core ('ORDER' 'BY' ordering-term (',' ordering-term)*)? ('LIMIT' int ('OFFSET' int)?)?
-select-core ::= 'SELECT' ('DISTINCT' | 'ALL')? result-expr ('WHERE' boolean-expr)? ('GROUP' 'BY' expr (',' expr )* ('HAVING' boolean-expr)?)?
+select-core ::= 'SELECT' ('DISTINCT' | 'ALL')? result-expr-list ('WHERE' expr)? ('GROUP' 'BY' expr (',' expr )* ('HAVING' expr)?)?
 ordering-term ::= expr ('ASC' | 'DESC')?
-result-expr ::= '*' | expr
+result-expr ::= ('*' | expr) ('AS' identifier)?
+result-expr-list ::= result-expr (',' result-expr-list)*
 
 /*
  *  expressions
  */
-
-boolean-expr ::= logical-term | comparison-term | element-match | boolean-function | '(' boolean-expr ')'
-logical-term ::= boolean-expr 'AND' boolean-expr | boolean-expr 'OR' boolean-expr | 'NOT' boolean-expr
-comparison-term ::= expr '=' expr | expr '==' expr | expr '!=' expr | expr '<>' expr | expr '>' expr | expr '>=' expr | expr '<' expr | expr '<=' expr | expr 'LIKE' expr | expr 'NOT' 'LIKE' expr | expr 'IS' 'NULL' | expr 'IS' 'NOT' 'NULL'
-element-match ::= property-path '[' ('ANY' | 'ALL')? boolean-expr ']'
-expr ::= boolean-expr | literal-value | property-path | arithmetic-term | function |'(' expr ')'
+expr ::= literal-value | identifier | case-expr | logical-term | comparison-term | arithmetic-term | function | nested-expr | '(' expr ')'
+logical-term ::= expr 'AND' expr | expr 'OR' expr | 'NOT' expr
+case-expr ::= 'CASE' 'WHEN' expr 'THEN' expr ('WHEN' expr 'THEN' expr)* ('ELSE' expr)? 'END'
+comparison-term ::= expr '=' expr | expr '==' expr | expr '!=' expr | expr '<>' expr | expr '>' expr | expr '>=' expr | expr '<' expr | expr '<=' expr | expr 'LIKE' expr | expr 'NOT' 'LIKE' expr | expr 'IS' 'NULL' | expr 'IS' 'NOT' 'NULL' | expr 'IS' 'MISSING' | expr 'IS' 'NOT' 'MISSING'
 arithmetic-term ::= expr '+' expr | expr '-' expr | expr '*' expr | expr '/' expr | expr '%' expr |'-' expr
-
-/*
- *  properties
- */
-property-path ::= chars | property-path '.' chars | property-path '[' int ']'
+nested-expr ::= expr '.' expr | expr '[' expr ']'
 
 /*
  *  functions
  */
 function ::= function-name '(' ('*' | expr (',' expr)*)? ')'
-function-name ::= aggregate-function-name | core-function-name
-aggregate-function-name ::= 'SUM' | 'COUNT' | 'MIN' | 'MAX' | 'AVG'
-core-function-name ::= 'LENGTH'
-boolean-function ::= boolean-function-name '(' ('*' | expr (',' expr)*)? ')'
-boolean-function-name ::= 'MISSING'
+function-name ::= identifier
+
+/*
+ *  identifiers
+ */
+identifier ::= unescaped-identifier | escaped-identifier
+unescaped-identifier ::= [a-zA-Z_$]  ( [0-9a-zA-Z_$] )*
+escaped-identifier ::= '`' chars '`'
 
 /*
  *  literal JSON (with nested expressions instead of values)
