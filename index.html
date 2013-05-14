@@ -152,7 +152,7 @@
          <area coords="277,171,325,203" href="#expr" shape="rect" title="expr">
          <area coords="479,171,527,203" href="#expr" shape="rect" title="expr"></map><p>
          <div class="ebnf"><pre><a href="#select-core" title="select-core">select-core</a>
-         ::= 'SELECT' ( 'DISTINCT' | 'ALL' )? <a href="#result-expr-list" title="result-expr-list">result-expr-list</a> ( 'WHERE' <a href="#expr" title="expr">expr</a> )? ( 'GROUP' 'BY' <a href="#expr" title="expr">expr</a> ( ',' <a href="#expr" title="expr">expr</a> )* ( 'HAVING' <a href="#expr" title="expr">expr</a> )? )?</pre></div>
+         ::= 'SELECT' ( 'DISTINCT' | 'UNIQUE' )? <a href="#result-expr-list" title="result-expr-list">result-expr-list</a> ( 'WHERE' <a href="#expr" title="expr">expr</a> )? ( 'GROUP' 'BY' <a href="#expr" title="expr">expr</a> ( ',' <a href="#expr" title="expr">expr</a> )* ( 'HAVING' <a href="#expr" title="expr">expr</a> )? )?</pre></div>
       </p>
       <p>referenced by:
          <ul>
@@ -167,11 +167,12 @@
          <ul>
             <li><a href="#select-stmt" title="select-stmt">select-stmt</a></li>
          </ul>
-      </p><br><p style="font-size: 14px; font-weight:bold"><a name="result-expr">result-expr:</a></p><img border="0" height="80" src="diagram/result-expr.png" usemap="#result-expr.map" width="338"><map name="result-expr.map">
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="result-expr">result-expr:</a></p><img border="0" height="96" src="diagram/result-expr.png" usemap="#result-expr.map" width="338"><map name="result-expr.map">
          <area coords="49,45,97,77" href="#expr" shape="rect" title="expr">
-         <area coords="215,1,289,33" href="#identifier" shape="rect" title="identifier"></map><p>
+         <area coords="195,45,269,77" href="#identifier" shape="rect" title="identifier"></map><p>
          <div class="ebnf"><pre><a href="#result-expr" title="result-expr">result-expr</a>
-         ::= ( '*' | <a href="#expr" title="expr">expr</a> ) ( 'AS' <a href="#identifier" title="identifier">identifier</a> )?</pre></div>
+         ::= '*'
+           | <a href="#expr" title="expr">expr</a> ( 'AS' <a href="#identifier" title="identifier">identifier</a> )?</pre></div>
       </p>
       <p>referenced by:
          <ul>
@@ -188,22 +189,24 @@
             <li><a href="#result-expr-list" title="result-expr-list">result-expr-list</a></li>
             <li><a href="#select-core" title="select-core">select-core</a></li>
          </ul>
-      </p><br><p style="font-size: 14px; font-weight:bold"><a name="expr">expr:</a></p><img border="0" height="388" src="diagram/expr.png" usemap="#expr.map" width="238"><map name="expr.map">
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="expr">expr:</a></p><img border="0" height="432" src="diagram/expr.png" usemap="#expr.map" width="238"><map name="expr.map">
          <area coords="49,1,143,33" href="#literal-value" shape="rect" title="literal-value">
          <area coords="49,45,123,77" href="#identifier" shape="rect" title="identifier">
          <area coords="49,89,131,121" href="#case-expr" shape="rect" title="case-expr">
          <area coords="49,133,141,165" href="#logical-term" shape="rect" title="logical-term">
          <area coords="49,177,175,209" href="#comparison-term" shape="rect" title="comparison-term">
          <area coords="49,221,165,253" href="#arithmetic-term" shape="rect" title="arithmetic-term">
-         <area coords="49,265,119,297" href="#function" shape="rect" title="function">
-         <area coords="49,309,145,341" href="#nested-expr" shape="rect" title="nested-expr">
-         <area coords="95,353,143,385" href="#expr" shape="rect" title="expr"></map><p>
+         <area coords="49,265,139,297" href="#string-term" shape="rect" title="string-term">
+         <area coords="49,309,119,341" href="#function" shape="rect" title="function">
+         <area coords="49,353,145,385" href="#nested-expr" shape="rect" title="nested-expr">
+         <area coords="95,397,143,429" href="#expr" shape="rect" title="expr"></map><p>
          <div class="ebnf"><pre><a href="#expr" title="expr">expr</a>     ::= <a href="#literal-value" title="literal-value">literal-value</a>
            | <a href="#identifier" title="identifier">identifier</a>
            | <a href="#case-expr" title="case-expr">case-expr</a>
            | <a href="#logical-term" title="logical-term">logical-term</a>
            | <a href="#comparison-term" title="comparison-term">comparison-term</a>
            | <a href="#arithmetic-term" title="arithmetic-term">arithmetic-term</a>
+           | <a href="#string-term" title="string-term">string-term</a>
            | <a href="#function" title="function">function</a>
            | <a href="#nested-expr" title="nested-expr">nested-expr</a>
            | '(' <a href="#expr" title="expr">expr</a> ')'</pre></div>
@@ -222,6 +225,7 @@
             <li><a href="#pair" title="pair">pair</a></li>
             <li><a href="#result-expr" title="result-expr">result-expr</a></li>
             <li><a href="#select-core" title="select-core">select-core</a></li>
+            <li><a href="#string-term" title="string-term">string-term</a></li>
          </ul>
       </p><br><p style="font-size: 14px; font-weight:bold"><a name="logical-term">logical-term:</a></p><img border="0" height="124" src="diagram/logical-term.png" usemap="#logical-term.map" width="282"><map name="logical-term.map">
          <area coords="49,1,97,33" href="#expr" shape="rect" title="expr">
@@ -318,6 +322,16 @@
          <ul>
             <li><a href="#expr" title="expr">expr</a></li>
          </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="string-term">string-term:</a></p><img border="0" height="36" src="diagram/string-term.png" usemap="#string-term.map" width="226"><map name="string-term.map">
+         <area coords="29,1,77,33" href="#expr" shape="rect" title="expr">
+         <area coords="149,1,197,33" href="#expr" shape="rect" title="expr"></map><p>
+         <div class="ebnf"><pre><a href="#string-term" title="string-term">string-term</a>
+         ::= <a href="#expr" title="expr">expr</a> '||' <a href="#expr" title="expr">expr</a></pre></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#expr" title="expr">expr</a></li>
+         </ul>
       </p><br><p style="font-size: 14px; font-weight:bold"><a name="nested-expr">nested-expr:</a></p><img border="0" height="80" src="diagram/nested-expr.png" usemap="#nested-expr.map" width="306"><map name="nested-expr.map">
          <area coords="49,1,97,33" href="#expr" shape="rect" title="expr">
          <area coords="161,1,209,33" href="#expr" shape="rect" title="expr">
@@ -331,10 +345,10 @@
          <ul>
             <li><a href="#expr" title="expr">expr</a></li>
          </ul>
-      </p><br><p style="font-size: 14px; font-weight:bold"><a name="function">function:</a></p><img border="0" height="140" src="diagram/function.png" usemap="#function.map" width="408"><map name="function.map">
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="function">function:</a></p><img border="0" height="200" src="diagram/function.png" usemap="#function.map" width="554"><map name="function.map">
          <area coords="29,1,139,33" href="#function-name" shape="rect" title="function-name">
-         <area coords="245,89,293,121" href="#expr" shape="rect" title="expr"></map><p>
-         <div class="ebnf"><pre><a href="#function" title="function">function</a> ::= <a href="#function-name" title="function-name">function-name</a> '(' ( '*' | <a href="#expr" title="expr">expr</a> ( ',' <a href="#expr" title="expr">expr</a> )* )? ')'</pre></div>
+         <area coords="391,89,439,121" href="#expr" shape="rect" title="expr"></map><p>
+         <div class="ebnf"><pre><a href="#function" title="function">function</a> ::= <a href="#function-name" title="function-name">function-name</a> '(' ( '*' | ( 'DISTINCT' | 'UNIQUE' )? <a href="#expr" title="expr">expr</a> ( ',' <a href="#expr" title="expr">expr</a> )* )? ')'</pre></div>
       </p>
       <p>referenced by:
          <ul>
