@@ -9,10 +9,10 @@ unql-stmt ::=  'EXPLAIN'? select-stmt
 
 select-stmt ::= select-core ('ORDER' 'BY' ordering-term (',' ordering-term)*)? ('LIMIT' int ('OFFSET' int)?)?
 select-core ::= 'SELECT' ('DISTINCT' | 'UNIQUE')? result-expr-list ('FROM' data-source)? ('WHERE' expr)? ('GROUP' 'BY' expr (',' expr )* ('HAVING' expr)?)?
-data-source ::= path (AS identifier)? (('PATH' 'JOIN' | 'OVER') data-source)?
+data-source ::= path (AS identifier)? ('OVER' data-source)?
 path ::= identifier ('[' int ']')? ('.' path)?
 ordering-term ::= expr ('ASC' | 'DESC')?
-result-expr ::= '*' | expr ('AS' identifier)?
+result-expr ::= (identifier ('.' identifier)* '.')? '*' | expr ('AS' identifier)?
 result-expr-list ::= result-expr (',' result-expr-list)*
 
 /*
@@ -21,7 +21,7 @@ result-expr-list ::= result-expr (',' result-expr-list)*
 expr ::= literal-value | identifier | case-expr | collection-expr | logical-term | comparison-term | arithmetic-term | string-term | function | nested-expr | '(' expr ')'
 logical-term ::= expr 'AND' expr | expr 'OR' expr | 'NOT' expr
 case-expr ::= 'CASE' 'WHEN' expr 'THEN' expr ('WHEN' expr 'THEN' expr)* ('ELSE' expr)? 'END'
-collection-expr ::= ('ANY' | 'ALL') expr 'WITH' path 'AS' identifier
+collection-expr ::= ('ANY' | 'ALL') expr 'OVER' path 'AS' identifier
 comparison-term ::= expr '=' expr | expr '==' expr | expr '!=' expr | expr '<>' expr | expr '>' expr | expr '>=' expr | expr '<' expr | expr '<=' expr | expr 'LIKE' expr | expr 'NOT' 'LIKE' expr | expr 'IS' 'NULL' | expr 'IS' 'NOT' 'NULL' | expr 'IS' 'MISSING' | expr 'IS' 'NOT' 'MISSING'
 arithmetic-term ::= expr '+' expr | expr '-' expr | expr '*' expr | expr '/' expr | expr '%' expr |'-' expr
 string-term ::= expr '||' expr
@@ -30,7 +30,7 @@ nested-expr ::= expr '.' expr | expr '[' expr ']'
 /*
  *  functions
  */
-function ::= function-name '(' ('*' | ('DISTINCT' | 'UNIQUE')? expr (',' expr)*)? ')'
+function ::= function-name '(' ((identifier ('.' identifier)* '.')? '*' | ('DISTINCT' | 'UNIQUE')? expr (',' expr)*)? ')'
 function-name ::= identifier
 
 /*
