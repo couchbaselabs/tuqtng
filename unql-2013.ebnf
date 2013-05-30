@@ -12,7 +12,7 @@ select-core ::= 'SELECT' ('DISTINCT' | 'UNIQUE')? result-expr-list ('FROM' data-
 data-source ::= path (AS identifier)? ('OVER' data-source)?
 path ::= identifier ('[' int ']')? ('.' path)?
 ordering-term ::= expr ('ASC' | 'DESC')?
-result-expr ::= (identifier ('.' identifier)* '.')? '*' | expr ('AS' identifier)?
+result-expr ::= (path '.')? '*' | expr ('AS' identifier)?
 result-expr-list ::= result-expr (',' result-expr-list)*
 
 /*
@@ -30,7 +30,7 @@ nested-expr ::= expr '.' expr | expr '[' expr ']'
 /*
  *  functions
  */
-function ::= function-name '(' ((identifier ('.' identifier)* '.')? '*' | ('DISTINCT' | 'UNIQUE')? expr (',' expr)*)? ')'
+function ::= function-name '(' ((path '.')? '*' | ('DISTINCT' | 'UNIQUE')? expr (',' expr)*)? ')'
 function-name ::= identifier
 
 /*

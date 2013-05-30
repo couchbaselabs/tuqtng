@@ -182,7 +182,9 @@
          <ul>
             <li><a href="#collection-expr" title="collection-expr">collection-expr</a></li>
             <li><a href="#data-source" title="data-source">data-source</a></li>
+            <li><a href="#function" title="function">function</a></li>
             <li><a href="#path" title="path">path</a></li>
+            <li><a href="#result-expr" title="result-expr">result-expr</a></li>
          </ul>
       </p><br><p style="font-size: 14px; font-weight:bold"><a name="ordering-term">ordering-term:</a></p><img border="0" height="96" src="diagram/ordering-term.png" usemap="#ordering-term.map" width="222"><map name="ordering-term.map">
          <area coords="29,1,77,33" href="#expr" shape="rect" title="expr"></map><p>
@@ -193,12 +195,12 @@
          <ul>
             <li><a href="#select-stmt" title="select-stmt">select-stmt</a></li>
          </ul>
-      </p><br><p style="font-size: 14px; font-weight:bold"><a name="result-expr">result-expr:</a></p><img border="0" height="162" src="diagram/result-expr.png" usemap="#result-expr.map" width="344"><map name="result-expr.map">
-         <area coords="89,45,163,77" href="#identifier" shape="rect" title="identifier">
-         <area coords="49,111,97,143" href="#expr" shape="rect" title="expr">
-         <area coords="195,111,269,143" href="#identifier" shape="rect" title="identifier"></map><p>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="result-expr">result-expr:</a></p><img border="0" height="118" src="diagram/result-expr.png" usemap="#result-expr.map" width="338"><map name="result-expr.map">
+         <area coords="69,1,117,33" href="#path" shape="rect" title="path">
+         <area coords="49,67,97,99" href="#expr" shape="rect" title="expr">
+         <area coords="195,67,269,99" href="#identifier" shape="rect" title="identifier"></map><p>
          <div class="ebnf"><pre><a href="#result-expr" title="result-expr">result-expr</a>
-         ::= ( <a href="#identifier" title="identifier">identifier</a> ( '.' <a href="#identifier" title="identifier">identifier</a> )* '.' )? '*'
+         ::= ( <a href="#path" title="path">path</a> '.' )? '*'
            | <a href="#expr" title="expr">expr</a> ( 'AS' <a href="#identifier" title="identifier">identifier</a> )?</pre></div>
       </p>
       <p>referenced by:
@@ -386,11 +388,11 @@
          <ul>
             <li><a href="#expr" title="expr">expr</a></li>
          </ul>
-      </p><br><p style="font-size: 14px; font-weight:bold"><a name="function">function:</a></p><img border="0" height="266" src="diagram/function.png" usemap="#function.map" width="566"><map name="function.map">
-         <area coords="29,45,139,77" href="#function-name" shape="rect" title="function-name">
-         <area coords="265,45,339,77" href="#identifier" shape="rect" title="identifier">
-         <area coords="391,155,439,187" href="#expr" shape="rect" title="expr"></map><p>
-         <div class="ebnf"><pre><a href="#function" title="function">function</a> ::= <a href="#function-name" title="function-name">function-name</a> '(' ( ( <a href="#identifier" title="identifier">identifier</a> ( '.' <a href="#identifier" title="identifier">identifier</a> )* '.' )? '*' | ( 'DISTINCT' | 'UNIQUE' )? <a href="#expr" title="expr">expr</a> ( ',' <a href="#expr" title="expr">expr</a> )* )? ')'</pre></div>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="function">function:</a></p><img border="0" height="222" src="diagram/function.png" usemap="#function.map" width="554"><map name="function.map">
+         <area coords="29,1,139,33" href="#function-name" shape="rect" title="function-name">
+         <area coords="245,1,293,33" href="#path" shape="rect" title="path">
+         <area coords="391,111,439,143" href="#expr" shape="rect" title="expr"></map><p>
+         <div class="ebnf"><pre><a href="#function" title="function">function</a> ::= <a href="#function-name" title="function-name">function-name</a> '(' ( ( <a href="#path" title="path">path</a> '.' )? '*' | ( 'DISTINCT' | 'UNIQUE' )? <a href="#expr" title="expr">expr</a> ( ',' <a href="#expr" title="expr">expr</a> )* )? ')'</pre></div>
       </p>
       <p>referenced by:
          <ul>
@@ -417,7 +419,6 @@
             <li><a href="#collection-expr" title="collection-expr">collection-expr</a></li>
             <li><a href="#data-source" title="data-source">data-source</a></li>
             <li><a href="#expr" title="expr">expr</a></li>
-            <li><a href="#function" title="function">function</a></li>
             <li><a href="#function-name" title="function-name">function-name</a></li>
             <li><a href="#path" title="path">path</a></li>
             <li><a href="#result-expr" title="result-expr">result-expr</a></li>
