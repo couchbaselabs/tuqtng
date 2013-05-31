@@ -22,7 +22,7 @@ expr ::= literal-value | identifier | case-expr | collection-expr | logical-term
 logical-term ::= expr 'AND' expr | expr 'OR' expr | 'NOT' expr
 case-expr ::= 'CASE' 'WHEN' expr 'THEN' expr ('WHEN' expr 'THEN' expr)* ('ELSE' expr)? 'END'
 collection-expr ::= ('ANY' | 'ALL') expr 'OVER' path 'AS' identifier
-comparison-term ::= expr '=' expr | expr '==' expr | expr '!=' expr | expr '<>' expr | expr '>' expr | expr '>=' expr | expr '<' expr | expr '<=' expr | expr 'LIKE' expr | expr 'NOT' 'LIKE' expr | expr 'IS' 'NULL' | expr 'IS' 'NOT' 'NULL' | expr 'IS' 'MISSING' | expr 'IS' 'NOT' 'MISSING'
+comparison-term ::= expr '=' expr | expr '==' expr | expr '!=' expr | expr '<>' expr | expr '>' expr | expr '>=' expr | expr '<' expr | expr '<=' expr | expr 'LIKE' expr | expr 'NOT' 'LIKE' expr | expr 'IS' 'NULL' | expr 'IS' 'NOT' 'NULL' | expr 'IS' 'MISSING' | expr 'IS' 'NOT' 'MISSING' | expr 'IS' 'VALUED' | expr 'IS' 'NOT' 'VALUED'
 arithmetic-term ::= expr '+' expr | expr '-' expr | expr '*' expr | expr '/' expr | expr '%' expr |'-' expr
 string-term ::= expr '||' expr
 nested-expr ::= expr '.' expr | expr '[' expr ']'

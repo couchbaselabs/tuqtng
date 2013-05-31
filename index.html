@@ -1,7 +1,7 @@
 <html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <meta content="Railroad Diagram Generator 1.24.557" name="generator"><style type="text/css">
+      <meta content="Railroad Diagram Generator 1.25.661" name="generator"><style type="text/css">
     ::-moz-selection
     {
       color: #FFFCF0;
@@ -125,7 +125,7 @@
       padding-left: 16px;
       padding-top: 2px; 
       padding-bottom: 2px; 
-      background:#FFF5CC;"
+      background:#FFF5CC;
     }
   </style></head>
    <body>
@@ -296,7 +296,7 @@
          <ul>
             <li><a href="#expr" title="expr">expr</a></li>
          </ul>
-      </p><br><p style="font-size: 14px; font-weight:bold"><a name="comparison-term">comparison-term:</a></p><img border="0" height="608" src="diagram/comparison-term.png" usemap="#comparison-term.map" width="368"><map name="comparison-term.map">
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="comparison-term">comparison-term:</a></p><img border="0" height="696" src="diagram/comparison-term.png" usemap="#comparison-term.map" width="368"><map name="comparison-term.map">
          <area coords="49,1,97,33" href="#expr" shape="rect" title="expr">
          <area coords="167,1,215,33" href="#expr" shape="rect" title="expr">
          <area coords="49,45,97,77" href="#expr" shape="rect" title="expr">
@@ -320,7 +320,9 @@
          <area coords="49,441,97,473" href="#expr" shape="rect" title="expr">
          <area coords="49,485,97,517" href="#expr" shape="rect" title="expr">
          <area coords="49,529,97,561" href="#expr" shape="rect" title="expr">
-         <area coords="49,573,97,605" href="#expr" shape="rect" title="expr"></map><p>
+         <area coords="49,573,97,605" href="#expr" shape="rect" title="expr">
+         <area coords="49,617,97,649" href="#expr" shape="rect" title="expr">
+         <area coords="49,661,97,693" href="#expr" shape="rect" title="expr"></map><p>
          <div class="ebnf"><pre><a href="#comparison-term" title="comparison-term">comparison-term</a>
          ::= <a href="#expr" title="expr">expr</a> '=' <a href="#expr" title="expr">expr</a>
            | <a href="#expr" title="expr">expr</a> '==' <a href="#expr" title="expr">expr</a>
@@ -335,7 +337,9 @@
            | <a href="#expr" title="expr">expr</a> 'IS' 'NULL'
            | <a href="#expr" title="expr">expr</a> 'IS' 'NOT' 'NULL'
            | <a href="#expr" title="expr">expr</a> 'IS' 'MISSING'
-           | <a href="#expr" title="expr">expr</a> 'IS' 'NOT' 'MISSING'</pre></div>
+           | <a href="#expr" title="expr">expr</a> 'IS' 'NOT' 'MISSING'
+           | <a href="#expr" title="expr">expr</a> 'IS' 'VALUED'
+           | <a href="#expr" title="expr">expr</a> 'IS' 'NOT' 'VALUED'</pre></div>
       </p>
       <p>referenced by:
          <ul>
