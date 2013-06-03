@@ -54,7 +54,7 @@ elements ::= expr | expr ',' elements
  *  low level
  **/
 string ::= '"' '"' | '"' chars '"'
-chars ::= char chars
+chars ::= char chars?
 char ::= unicode-character | '\' ('\' | '\' | '/' | 'b' | 'f' | 'n' | 'r' | 't' | 'u' hex-digit hex-digit hex-digit hex-digit )
 number ::= int | int frac | int exp | int frac exp
 int ::= digit | non-zero-digit digits | '-' digit | '-' non-zero-digit digits
