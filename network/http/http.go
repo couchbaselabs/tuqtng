@@ -91,7 +91,7 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	this.queryChannel <- query
 	for val := range response.results {
 		log.Printf("got a result val %v", val)
-		// FIXME this where we serial a result row and steam back to client
+		// FIXME this where we serialize a result row and stream back to client
 	}
 }
 
