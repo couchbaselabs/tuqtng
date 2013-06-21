@@ -9,4 +9,28 @@
 
 package ast
 
-type Value interface{}
+import (
+	"fmt"
+)
+
+type Property struct {
+	Path string
+}
+
+func NewProperty(path string) *Property {
+	return &Property{
+		Path: path,
+	}
+}
+
+func (this *Property) Evaluate(item Item) (Value, error) {
+	rv, err := item.GetPath(this.Path)
+	if err != nil {
+		return nil, err
+	}
+	return rv, nil
+}
+
+func (this *Property) String() string {
+	return fmt.Sprintf("%v", this.Path)
+}

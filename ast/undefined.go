@@ -9,4 +9,14 @@
 
 package ast
 
-type Value interface{}
+import (
+	"fmt"
+)
+
+type Undefined struct {
+	path string
+}
+
+func (this *Undefined) Error() string {
+	return fmt.Sprintf("%s is not defined", this.path)
+}

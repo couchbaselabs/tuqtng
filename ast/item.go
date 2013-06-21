@@ -9,6 +9,14 @@
 
 package ast
 
-type Context interface {
+// this is the primary object passed through the execution pipeline
+// still open questions about how aliases will be handled
+
+type Item interface {
+	// path should be a simple path (not containing . or [])
+	// those must be implemented as separate sub-expressions
 	GetPath(path string) (Value, error)
+	GetMeta() map[string]Value
 }
+
+type ItemCollection []Item

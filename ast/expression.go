@@ -10,5 +10,5 @@
 package ast
 
 type Expression interface {
-	Evaluate(context Context) (Value, error)
+	Evaluate(item Item) (Value, error)
 }

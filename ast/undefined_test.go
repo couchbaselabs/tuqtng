@@ -9,4 +9,17 @@
 
 package ast
 
-type Value interface{}
+import (
+	"testing"
+)
+
+func TestUndefined(t *testing.T) {
+
+	x := Undefined{"property"}
+	err := x.Error()
+
+	if err != "property is not defined" {
+		t.Errorf("Expected property is not defined, got %v", err)
+	}
+
+}

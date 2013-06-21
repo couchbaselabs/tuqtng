@@ -13,4 +13,6 @@ package ast
 type Statement interface {
 	GetFrom() From
 	GetWhere() Expression
+	GetGroupBy() []Expression
+	GetHaving() Expression
 }
