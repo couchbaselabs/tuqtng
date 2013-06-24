@@ -112,13 +112,9 @@ Like SQL, UnQL allows renaming fields using the AS keyword. However, UnQL also a
 
 Selection differences
 ---------------------
-The major difference between UnQL and SQL is that there are no tables in UnQL database. Hence, the FROM clause is used to select between data sources, i.e., buckets. It is possible to omit the FROM clause entirely, which will use the default bucket.
+The major difference between UnQL and SQL is that there are no tables in UnQL database. Hence, the FROM clause is used to select between data sources, i.e., buckets. If HRData is a bucket, the following will select the Name attribute from all documents in HRData bucket that have a Name attribute defined.
 
-    These queries are identical when default bucket is HRData:
-    
-    SELECT Name
     SELECT Name FROM HRData
-
 
 A new twist is that each document can itself be regarded as a data source and the query run over its nested elements. Such nested elements are addressed using the '.' operator to descend a level, and the '[ ]' operator to index into an array element.
 
