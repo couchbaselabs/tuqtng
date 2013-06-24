@@ -91,7 +91,7 @@ In UnQL, a query returns a set of documents. The returned document set may be un
 Like SQL, UnQL allows renaming fields using the AS keyword. However, UnQL also allows reshaping the data, which has no analog in SQL. This is done by embedding the attributes of the statement in the desired result object shape.
 
 
-    SELECT { Name, History, {'FullTime': true} AS 'Status'}
+    SELECT Name, History, {'FullTime': true} AS 'Status'
     FROM HRData
     
     {
