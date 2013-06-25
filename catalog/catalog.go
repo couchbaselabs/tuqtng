@@ -12,65 +12,65 @@ package catalog
 type Error error
 
 type Store interface {
-     Catalog() (*Catalog, Error)
+	Catalog() (*Catalog, Error)
 }
 
 type Catalog interface {
-     Buckets() (map[string]*Bucket, Error)
+	Buckets() (map[string]*Bucket, Error)
 }
 
 type Bucket interface {
-     Name() string
-     Count() (int64, Error)  // why is this needed?
-     AccessPaths() ([]*Scanner, Error)
-     Fetch(id string) (*Item, Error)
+	Name() string
+	Count() (int64, Error) // why is this needed?
+	AccessPaths() ([]*Scanner, Error)
+	Fetch(id string) (*Item, Error)
 }
 
 type IndexStatistics interface {
-     Count() (int64, Error)
-     Min() (*Item, Error)
-     Max() (*Item, Error)
-     DistinctCount(int64, Error)
-     Bins() ([]*Bin, Error)
+	Count() (int64, Error)
+	Min() (*Item, Error)
+	Max() (*Item, Error)
+	DistinctCount(int64, Error)
+	Bins() ([]*Bin, Error)
 }
 
 type Bin interface {
-     Count() (int64, Error)
-     Min() (*Item, Error)
-     Max() (*Item, Error)
-     DistinctCount(int64, Error)
+	Count() (int64, Error)
+	Min() (*Item, Error)
+	Max() (*Item, Error)
+	DistinctCount(int64, Error)
 }
 
-type ItemChannel channel item
+type ItemChannel chan *Item
 
 type Scanner interface {
-     Channel() (ItemChannel, Error)
-     SetChannel(ItemChannel)
+	Channel() (ItemChannel, Error)
+	SetChannel(ItemChannel)
 }
 
 type FullScanner interface {
-     Scanner
+	Scanner
 }
 
 // in rdbms, value -> id mappings are called inverted entries.
 type InvertedScanner interface {
-     Scanner
-     Key() []string
-     Direction() Direction // enum for ASC/DESC
-     Statistics() (*IndexStatistics, Error)
+	Scanner
+	Key() []string
+	Direction() Direction // enum for ASC/DESC
+	Statistics() (*IndexStatistics, Error)
 }
 
 // Couchbase view indexes
 type ViewScanner interface {
-     InvertedScanner
+	InvertedScanner
 }
 
 // Real indexes, a la SQL (not Couchbase view indexes)
 type IndexScanner interface {
-     InvertedScanner
+	InvertedScanner
 }
 
 // Full text search
 type SearchScanner interface {
-     Scanner
+	Scanner
 }
