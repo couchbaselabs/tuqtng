@@ -1,0 +1,2054 @@
+[
+    {
+        "about": "Q0 - querying on child elements / Find contacts that have kids older than 14.",
+        "data": {
+            "default": "test/contacts"
+        },
+        "query": "SELECT * WHERE children[age > 14]",
+        "results": [
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "aiden"
+                    },
+                    {
+                        "age": 2,
+                        "gender": "f",
+                        "name": "bill"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "dave",
+                "type": "contact"
+            },
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "abama"
+                    },
+                    {
+                        "age": 21,
+                        "gender": "m",
+                        "name": "bebama"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "ian",
+                "type": "contact"
+            }
+        ]
+    },
+    {
+        "about": "Q0.1 - IN query / Find contacts that have kids older than 14 and where the contact has golf as a hobby.",
+        "query": "SELECT * WHERE children[age > 14] AND hobbies[] = \"golf\"",
+        "results": [
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "aiden"
+                    },
+                    {
+                        "age": 2,
+                        "gender": "f",
+                        "name": "bill"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "dave",
+                "type": "contact"
+            },
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "abama"
+                    },
+                    {
+                        "age": 21,
+                        "gender": "f",
+                        "name": "bebama"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "ian",
+                "type": "contact"
+            }
+        ]
+    },
+    {
+        "about": "Q0.2 - arrays as sets / Find contacts who have hobbies of both golf and surfing.",
+        "query": "SELECT * WHERE hobbies[] = \"golf\" AND hobbies[] = \"surfing\"",
+        "results": [
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "aiden"
+                    },
+                    {
+                        "age": 2,
+                        "gender": "f",
+                        "name": "bill"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "dave",
+                "type": "contact"
+            },
+            {
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "fred",
+                "type": "contact"
+            },
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "abama"
+                    },
+                    {
+                        "age": 21,
+                        "gender": "m",
+                        "name": "bebama"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "ian",
+                "type": "contact"
+            }
+        ]
+    },
+    {
+        "about": "Q0.3 - AND on child elements / Find contacts who have kids that are all boys and over 14.",
+        "query": "SELECT * WHERE ALL children[gender = \"m\" AND age > 14]",
+        "results": [
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "abama"
+                    },
+                    {
+                        "age": 21,
+                        "gender": "m",
+                        "name": "bebama"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "ian",
+                "type": "contact"
+            }
+        ]
+    },
+    {
+        "about": "Q0.3all - AND on child elements / Find contacts who have kids that are all boys and over 14.",
+        "query": "SELECT * WHERE children[ALL gender = \"m\" AND age > 14]",
+        "results": [
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "abama"
+                    },
+                    {
+                        "age": 21,
+                        "gender": "m",
+                        "name": "bebama"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "ian",
+                "type": "contact"
+            }
+        ]
+    },
+    {
+        "about": "Q0.4 - any vs all / Find contacts who have any children whose age is over 14 or any boys.",
+        "query": "SELECT * WHERE children[age > 14] OR children[gender = \"m\"]",
+        "results": [
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "aiden"
+                    },
+                    {
+                        "age": 2,
+                        "gender": "f",
+                        "name": "bill"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "dave",
+                "type": "contact"
+            },
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "f",
+                        "name": "xena"
+                    },
+                    {
+                        "age": 2,
+                        "gender": "m",
+                        "name": "yuri"
+                    }
+                ],
+                "hobbies": [
+                    "surfing"
+                ],
+                "name": "earl",
+                "type": "contact"
+            },
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "abama"
+                    },
+                    {
+                        "age": 21,
+                        "gender": "m",
+                        "name": "bebama"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "ian",
+                "type": "contact"
+            }
+        ]
+    },
+    {
+        "about": "Q0.5 - comparing child field to parent field / Find all contacts where contact is younger than any child.",
+        "data": {
+            "default": [
+                {
+                    "age": 16,
+                    "children": [
+                        {
+                            "age": 17,
+                            "gender": "m",
+                            "name": "aiden"
+                        },
+                        {
+                            "age": 2,
+                            "gender": "f",
+                            "name": "bill"
+                        }
+                    ],
+                    "hobbies": [
+                        "golf",
+                        "surfing"
+                    ],
+                    "name": "dave",
+                    "type": "contact"
+                },
+                {
+                    "children": [
+                        {
+                            "age": 17,
+                            "gender": "f",
+                            "name": "xena"
+                        },
+                        {
+                            "age": 2,
+                            "gender": "m",
+                            "name": "yuri"
+                        }
+                    ],
+                    "hobbies": [
+                        "surfing"
+                    ],
+                    "name": "earl",
+                    "type": "contact"
+                },
+                {
+                    "hobbies": [
+                        "golf",
+                        "surfing"
+                    ],
+                    "name": "fred",
+                    "type": "contact"
+                },
+                {
+                    "name": "harry",
+                    "type": "contact"
+                },
+                {
+                    "children": [
+                        {
+                            "age": 17,
+                            "gender": "m",
+                            "name": "abama"
+                        },
+                        {
+                            "age": 21,
+                            "gender": "m",
+                            "name": "bebama"
+                        }
+                    ],
+                    "hobbies": [
+                        "golf",
+                        "surfing"
+                    ],
+                    "name": "ian",
+                    "type": "contact"
+                }
+            ]
+        },
+        "query": "SELECT * WHERE children[age < $.age]",
+        "results": [
+            {
+                "age": 16,
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "aiden"
+                    },
+                    {
+                        "age": 2,
+                        "gender": "f",
+                        "name": "bill"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "dave",
+                "type": "contact"
+            }
+        ]
+    },
+    {
+        "about": "Q0.5 - select just some children / Find all contacts that have children older than 14 and just list the parent and those over 14 children.",
+        "data": {
+            "default": [
+                {
+                    "age": 16,
+                    "children": [
+                        {
+                            "age": 17,
+                            "gender": "m",
+                            "name": "aiden"
+                        },
+                        {
+                            "age": 2,
+                            "gender": "f",
+                            "name": "bill"
+                        }
+                    ],
+                    "hobbies": [
+                        "golf",
+                        "surfing"
+                    ],
+                    "name": "dave",
+                    "type": "contact"
+                },
+                {
+                    "children": [
+                        {
+                            "age": 17,
+                            "gender": "f",
+                            "name": "xena"
+                        },
+                        {
+                            "age": 2,
+                            "gender": "m",
+                            "name": "yuri"
+                        }
+                    ],
+                    "hobbies": [
+                        "surfing"
+                    ],
+                    "name": "earl",
+                    "type": "contact"
+                },
+                {
+                    "hobbies": [
+                        "golf",
+                        "surfing"
+                    ],
+                    "name": "fred",
+                    "type": "contact"
+                },
+                {
+                    "name": "harry",
+                    "type": "contact"
+                },
+                {
+                    "children": [
+                        {
+                            "age": 17,
+                            "gender": "m",
+                            "name": "abama"
+                        },
+                        {
+                            "age": 21,
+                            "gender": "m",
+                            "name": "bebama"
+                        }
+                    ],
+                    "hobbies": [
+                        "golf",
+                        "surfing"
+                    ],
+                    "name": "ian",
+                    "type": "contact"
+                }
+            ]
+        },
+        "results": [
+            {
+                "age": 16,
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "aiden"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "dave",
+                "type": "contact"
+            },
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "f",
+                        "name": "xena"
+                    }
+                ],
+                "hobbies": [
+                    "surfing"
+                ],
+                "name": "earl",
+                "type": "contact"
+            },
+            {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "abama"
+                    },
+                    {
+                        "age": 21,
+                        "gender": "m",
+                        "name": "bebama"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "ian",
+                "type": "contact"
+            }
+        ]
+    },
+    {
+        "about": "Q1 - NOT IN with limit / Find the top N scoring players, ignoring players that are employees and beta-testers.",
+        "data": {
+            "default": [
+                {
+                    "id": "steve",
+                    "roles": [
+                        "emp"
+                    ],
+                    "score": 1,
+                    "type": "player"
+                },
+                {
+                    "id": "damien",
+                    "roles": [
+                        "beta"
+                    ],
+                    "score": 10,
+                    "type": "player"
+                },
+                {
+                    "id": "dustin",
+                    "score": 10,
+                    "type": "player"
+                },
+                {
+                    "id": "marty",
+                    "roles": [
+                        "beta",
+                        "alpha"
+                    ],
+                    "score": 8,
+                    "type": "player"
+                },
+                {
+                    "id": "junyi",
+                    "roles": [
+                        "map-editor",
+                        "GM"
+                    ],
+                    "score": 100,
+                    "type": "player"
+                }
+            ]
+        },
+        "query": "SELECT * WHERE roles[] != \"emp\" AND roles[] != \"beta\" ORDER BY score DESC LIMIT 5",
+        "results": [
+            {
+                "id": "junyi",
+                "score": 100
+            },
+            {
+                "id": "dustin",
+                "score": 10
+            }
+        ]
+    },
+    {
+        "about": "Q1b - NOT IN with limit / Find the top N scoring players, ignoring players that are employees and beta-testers.",
+        "data": {
+            "default": [
+                {
+                    "id": "steve",
+                    "roles": [
+                        "emp"
+                    ],
+                    "score": 1,
+                    "type": "player"
+                },
+                {
+                    "id": "damien",
+                    "roles": [
+                        "beta"
+                    ],
+                    "score": 10,
+                    "type": "player"
+                },
+                {
+                    "id": "dustin",
+                    "score": 10,
+                    "type": "player"
+                },
+                {
+                    "id": "marty",
+                    "roles": [
+                        "beta",
+                        "alpha"
+                    ],
+                    "score": 8,
+                    "type": "player"
+                },
+                {
+                    "id": "junyi",
+                    "roles": [
+                        "map-editor",
+                        "GM"
+                    ],
+                    "score": 100,
+                    "type": "player"
+                }
+            ]
+        },
+        "query": "SELECT * WHERE NOT roles && [\"emp\",\"beta\"] ORDER BY score DESC LIMIT 5",
+        "results": [
+            {
+                "id": "junyi",
+                "score": 100
+            },
+            {
+                "id": "dustin",
+                "score": 10
+            }
+        ]
+    },
+    {
+        "about": "Q2 - cross document joins / Find unshipped orders based on vendor. Find the not-yet-shipped sales orders where customers ordered any products that were supposed to be shipped from vendor X (perhaps because vendor X's warehouse had a fire and we need to cancel those orders and apologize to the customers)",
+        "data": {
+            "orders_and_products": [
+                {
+                    "custId": "abc",
+                    "id": "1200",
+                    "orderlines": [
+                        {
+                            "productId": "coffee01",
+                            "qty": 1
+                        },
+                        {
+                            "productId": "sugar22",
+                            "qty": 1
+                        }
+                    ],
+                    "shipped-on": "2012/01/02",
+                    "type": "order"
+                },
+                {
+                    "custId": "bbb",
+                    "id": "1234",
+                    "orderlines": [
+                        {
+                            "productId": "coffee01",
+                            "qty": 2
+                        },
+                        {
+                            "productId": "tea111",
+                            "qty": 1
+                        }
+                    ],
+                    "type": "order"
+                },
+                {
+                    "custId": "ccc",
+                    "id": "1235",
+                    "orderlines": [
+                        {
+                            "productId": "tea111",
+                            "qty": 1
+                        },
+                        {
+                            "productId": "sugar22",
+                            "qty": 1
+                        }
+                    ],
+                    "type": "order"
+                },
+                {
+                    "custId": "ccc",
+                    "id": "1236",
+                    "orderlines": [
+                        {
+                            "productId": "coffee01",
+                            "qty": 1
+                        },
+                        {
+                            "productId": "sugar22",
+                            "qty": 1
+                        }
+                    ],
+                    "shipped-on": null,
+                    "type": "order"
+                },
+                {
+                    "id": "coffee01",
+                    "type": "product",
+                    "vendorId": "X"
+                },
+                {
+                    "id": "sugar22",
+                    "type": "product",
+                    "vendorId": "v200"
+                },
+                {
+                    "id": "tea111",
+                    "type": "product",
+                    "vendorId": "v200"
+                }
+            ]
+        },
+        "query": null,
+        "results": [
+            {
+                "custId": "bbb",
+                "id": "1234",
+                "orderlines": [
+                    {
+                        "productId": "coffee01",
+                        "qty": 2
+                    },
+                    {
+                        "productId": "tea111",
+                        "qty": 1
+                    }
+                ],
+                "type": "order"
+            },
+            {
+                "custId": "ccc",
+                "id": "1236",
+                "orderlines": [
+                    {
+                        "productId": "coffee01",
+                        "qty": 1
+                    },
+                    {
+                        "productId": "sugar22",
+                        "qty": 1
+                    }
+                ],
+                "shipped-on": null,
+                "type": "order"
+            }
+        ]
+    },
+    {
+        "about": "Q3 - OLAP / Find whether a customer has repeating orders, where a customer orders the same stuff every time (perhaps so we can pop up a thank you msg and promotion on their next visit).",
+        "comment": "Skipping since OLAP is currently out of scope.",
+        "data": {
+            "default": [
+                {
+                    "custId": "abc",
+                    "id": "1200",
+                    "orderlines": [
+                        {
+                            "productId": "coffee01",
+                            "qty": 1
+                        },
+                        {
+                            "productId": "sugar22",
+                            "qty": 1
+                        }
+                    ],
+                    "shipped-on": "2012/01/02",
+                    "type": "order"
+                },
+                {
+                    "custId": "abc",
+                    "id": "1201",
+                    "orderlines": [
+                        {
+                            "productId": "coffee01",
+                            "qty": 1
+                        },
+                        {
+                            "productId": "sugar22",
+                            "qty": 1
+                        }
+                    ],
+                    "shipped-on": "2012/02/02",
+                    "type": "order"
+                },
+                {
+                    "custId": "xxx",
+                    "id": "1202",
+                    "orderlines": [
+                        {
+                            "productId": "coffee01",
+                            "qty": 1
+                        },
+                        {
+                            "productId": "sugar22",
+                            "qty": 1
+                        }
+                    ],
+                    "shipped-on": "2012/01/02",
+                    "type": "order"
+                },
+                {
+                    "custId": "xxx",
+                    "id": "1203",
+                    "orderlines": [
+                        {
+                            "productId": "tea01",
+                            "qty": 1
+                        },
+                        {
+                            "productId": "sugar22",
+                            "qty": 1
+                        }
+                    ],
+                    "shipped-on": "2012/02/02",
+                    "type": "order"
+                }
+            ]
+        },
+        "query": null,
+        "results": [
+            {
+                "custId": "abc",
+                "repeats": [
+                    "1200",
+                    "1201"
+                ]
+            }
+        ]
+    },
+    {
+        "about": "Q4 - counting children / Find the top N most commented-on forum posts.",
+        "data": {
+            "default": [
+                {
+                    "id": "123",
+                    "title": "i love beeer",
+                    "type": "post"
+                },
+                {
+                    "comments": [],
+                    "id": "124",
+                    "title": "i love beeer more",
+                    "type": "post"
+                },
+                {
+                    "comments": [
+                        {
+                            "msg": "you're wrong"
+                        },
+                        {
+                            "msg": "beer is better"
+                        }
+                    ],
+                    "id": "125",
+                    "title": "wine is best",
+                    "type": "post"
+                },
+                {
+                    "comments": [
+                        {
+                            "msg": "can't argue with that"
+                        },
+                        {
+                            "msg": "but beer is better"
+                        },
+                        {
+                            "msg": "+1"
+                        }
+                    ],
+                    "id": "126",
+                    "title": "i luv alcohol",
+                    "type": "post"
+                }
+            ]
+        },
+        "query": "SELECT * ORDER BY LENGTH(comments) DESC LIMIT N",
+        "results": [
+            {
+                "comments": [
+                    {
+                        "msg": "can't argue with that"
+                    },
+                    {
+                        "msg": "but beer is better"
+                    },
+                    {
+                        "msg": "+1"
+                    }
+                ],
+                "id": "126",
+                "title": "i luv alcohol",
+                "type": "post"
+            },
+            {
+                "comments": [
+                    {
+                        "msg": "you're wrong"
+                    },
+                    {
+                        "msg": "beer is better"
+                    }
+                ],
+                "id": "125",
+                "title": "wine is best",
+                "type": "post"
+            }
+        ]
+    },
+    {
+        "about": "Q4a - counting children / Find the top N most commented-on forum posts.",
+        "data": {
+            "default": [
+                {
+                    "id": "123",
+                    "title": "i love beeer",
+                    "type": "post"
+                },
+                {
+                    "comments": [],
+                    "id": "124",
+                    "title": "i love beeer more",
+                    "type": "post"
+                },
+                {
+                    "comments": [
+                        {
+                            "msg": "you're wrong"
+                        },
+                        {
+                            "msg": "beer is better"
+                        }
+                    ],
+                    "id": "125",
+                    "title": "wine is best",
+                    "type": "post"
+                },
+                {
+                    "comments": [
+                        {
+                            "msg": "can't argue with that"
+                        },
+                        {
+                            "msg": "but beer is better"
+                        },
+                        {
+                            "msg": "+1"
+                        }
+                    ],
+                    "id": "126",
+                    "title": "i luv alcohol",
+                    "type": "post"
+                }
+            ]
+        },
+        "query": "SELECT {\"type\": type, \"id\": id, \"title\": title, \"comments\": LENGTH(comments)} ORDER BY LENGTH(comments) DESC LIMIT N",
+        "results": [
+            {
+                "comments": 3,
+                "id": "126",
+                "title": "i luv alcohol",
+                "type": "post"
+            },
+            {
+                "comments": 2,
+                "id": "125",
+                "title": "wine is best",
+                "type": "post"
+            }
+        ]
+    },
+    {
+        "about": "Q4.1 - similar case but comments are separate documents (comment id in parent blog post)",
+        "data": {
+            "default": [
+                {
+                    "id": "123",
+                    "title": "i love beeer",
+                    "type": "post"
+                },
+                {
+                    "comments": [],
+                    "id": "124",
+                    "title": "i love beeer more",
+                    "type": "post"
+                },
+                {
+                    "comments": [
+                        "c1",
+                        "c2"
+                    ],
+                    "id": "125",
+                    "title": "wine is best",
+                    "type": "post"
+                },
+                {
+                    "comments": [
+                        "c3",
+                        "c4",
+                        "c5"
+                    ],
+                    "id": "126",
+                    "title": "i luv alcohol",
+                    "type": "post"
+                },
+                {
+                    "comment": "you're wrong",
+                    "id": "c1",
+                    "type": "comment"
+                },
+                {
+                    "comment": "beer is better",
+                    "id": "c2",
+                    "type": "comment"
+                },
+                {
+                    "comment": "can't argue with that",
+                    "id": "c3",
+                    "type": "comment"
+                },
+                {
+                    "comment": "but beer is better",
+                    "id": "c4",
+                    "type": "comment"
+                },
+                {
+                    "comment": "+1",
+                    "id": "c5",
+                    "type": "comment"
+                }
+            ]
+        },
+        "query": "SELECT {\"type\":\"post\", \"id\":\"126\", \"title\":\"i luv alcohol\",\"comments\": QUERY_EACH(\"SELECT WHERE id={}\", comments)} WHERE type = \"post\" ORDER BY LENGTH(comments) DESC LIMIT N",
+        "results": [
+            {
+                "comments": [
+                    {
+                        "msg": "can't argue with that"
+                    },
+                    {
+                        "msg": "but beer is better"
+                    },
+                    {
+                        "msg": "+1"
+                    }
+                ],
+                "id": "126",
+                "title": "i luv alcohol",
+                "type": "post"
+            },
+            {
+                "comments": [
+                    {
+                        "msg": "you're wrong"
+                    },
+                    {
+                        "msg": "beer is better"
+                    }
+                ],
+                "id": "125",
+                "title": "wine is best",
+                "type": "post"
+            }
+        ]
+    },
+    {
+        "about": "Q4.1 - similar case but comments are separate documents (comment id in parent blog post)",
+        "data": {
+            "default": [
+                {
+                    "id": "123",
+                    "title": "i love beeer",
+                    "type": "post"
+                },
+                {
+                    "comments": [],
+                    "id": "124",
+                    "title": "i love beeer more",
+                    "type": "post"
+                },
+                {
+                    "comments": [
+                        "c1",
+                        "c2"
+                    ],
+                    "id": "125",
+                    "title": "wine is best",
+                    "type": "post"
+                },
+                {
+                    "comments": [
+                        "c3",
+                        "c4",
+                        "c5"
+                    ],
+                    "id": "126",
+                    "title": "i luv alcohol",
+                    "type": "post"
+                },
+                {
+                    "comment": "you're wrong",
+                    "id": "c1",
+                    "type": "comment"
+                },
+                {
+                    "comment": "beer is better",
+                    "id": "c2",
+                    "type": "comment"
+                },
+                {
+                    "comment": "can't argue with that",
+                    "id": "c3",
+                    "type": "comment"
+                },
+                {
+                    "comment": "but beer is better",
+                    "id": "c4",
+                    "type": "comment"
+                },
+                {
+                    "comment": "+1",
+                    "id": "c5",
+                    "type": "comment"
+                }
+            ]
+        },
+        "query": "SELECT {\"type\": type, \"id\": id, \"title\": title, \"comments\": LENGTH(comments)} WHERE type = \"post\" ORDER BY LENGTH(comments) DESC LIMIT N",
+        "results": [
+            {
+                "comments": 3,
+                "id": "126",
+                "title": "i luv alcohol",
+                "type": "post"
+            },
+            {
+                "comments": 2,
+                "id": "125",
+                "title": "wine is best",
+                "type": "post"
+            }
+        ]
+    },
+    {
+        "about": "Q4.2 - similar case but comments are separate documents (blog id in comment)",
+        "data": {
+            "default": [
+                {
+                    "id": "123",
+                    "title": "i love beeer",
+                    "type": "post"
+                },
+                {
+                    "id": "124",
+                    "title": "i love beeer more",
+                    "type": "post"
+                },
+                {
+                    "id": "125",
+                    "title": "wine is best",
+                    "type": "post"
+                },
+                {
+                    "id": "126",
+                    "title": "i luv alcohol",
+                    "type": "post"
+                },
+                {
+                    "comment": "you're wrong",
+                    "id": "c1",
+                    "post_id": "125",
+                    "type": "comment"
+                },
+                {
+                    "comment": "beer is better",
+                    "id": "c2",
+                    "post_id": "125",
+                    "type": "comment"
+                },
+                {
+                    "comment": "can't argue with that",
+                    "id": "c3",
+                    "post_id": "126",
+                    "type": "comment"
+                },
+                {
+                    "comment": "but beer is better",
+                    "id": "c4",
+                    "post_id": "126",
+                    "type": "comment"
+                },
+                {
+                    "comment": "+1",
+                    "id": "c5",
+                    "post_id": "126",
+                    "type": "comment"
+                }
+            ]
+        },
+        "query": "SELECT {\"type\":\"post\", \"id\":post_id, \"title\": QUERY(\"SELECT title WHERE id={}\", post_id), \"comments\": QUERY(\"SELECT comments WHERE id={}\", post_id)} WHERE type = \"comment\" GROUP BY post_id ORDER BY COUNT(*) DESC",
+        "results": [
+            {
+                "comments": [
+                    {
+                        "msg": "can't argue with that"
+                    },
+                    {
+                        "msg": "but beer is better"
+                    },
+                    {
+                        "msg": "+1"
+                    }
+                ],
+                "id": "126",
+                "title": "i luv alcohol",
+                "type": "post"
+            },
+            {
+                "comments": [
+                    {
+                        "msg": "you're wrong"
+                    },
+                    {
+                        "msg": "beer is better"
+                    }
+                ],
+                "id": "125",
+                "title": "wine is best",
+                "type": "post"
+            }
+        ]
+    },
+    {
+        "about": "Q4.2b - similar case but comments are separate documents (blog id in comment)",
+        "data": {
+            "default": [
+                {
+                    "id": "123",
+                    "title": "i love beeer",
+                    "type": "post"
+                },
+                {
+                    "id": "124",
+                    "title": "i love beeer more",
+                    "type": "post"
+                },
+                {
+                    "id": "125",
+                    "title": "wine is best",
+                    "type": "post"
+                },
+                {
+                    "id": "126",
+                    "title": "i luv alcohol",
+                    "type": "post"
+                },
+                {
+                    "comment": "you're wrong",
+                    "id": "c1",
+                    "post_id": "125",
+                    "type": "comment"
+                },
+                {
+                    "comment": "beer is better",
+                    "id": "c2",
+                    "post_id": "125",
+                    "type": "comment"
+                },
+                {
+                    "comment": "can't argue with that",
+                    "id": "c3",
+                    "post_id": "126",
+                    "type": "comment"
+                },
+                {
+                    "comment": "but beer is better",
+                    "id": "c4",
+                    "post_id": "126",
+                    "type": "comment"
+                },
+                {
+                    "comment": "+1",
+                    "id": "c5",
+                    "post_id": "126",
+                    "type": "comment"
+                }
+            ]
+        },
+        "query": "SELECT {\"type\":\"post\", \"id\":post_id, \"title\": QUERY(\"SELECT post.title WHERE id={}\", post_id), \"comments\":COUNT(*)} WHERE type = \"comment\" GROUP BY post_id ORDER BY COUNT(*) DESC",
+        "results": [
+            {
+                "comments": 3,
+                "id": "126",
+                "title": "i luv alcohol",
+                "type": "post"
+            },
+            {
+                "comments": 2,
+                "id": "125",
+                "title": "wine is best",
+                "type": "post"
+            }
+        ]
+    },
+    {
+        "about": "Q5 - tag cloud / Find the tag cloud for articles, skipping those tag words that have been banned.",
+        "data": {
+            "articles_and_tags": [
+                {
+                    "id": "article-34",
+                    "type": "article"
+                },
+                {
+                    "id": "article-35",
+                    "tags": [
+                        "beer",
+                        "mayan"
+                    ],
+                    "type": "article"
+                },
+                {
+                    "id": "article-36",
+                    "tags": [
+                        "beer",
+                        "wine"
+                    ],
+                    "type": "article"
+                },
+                {
+                    "id": "article-37",
+                    "tags": [
+                        "beer",
+                        "chocolate"
+                    ],
+                    "type": "article"
+                },
+                {
+                    "id": "article-38",
+                    "tags": [
+                        "vegas",
+                        "chocolate"
+                    ],
+                    "type": "article"
+                },
+                {
+                    "id": "article-39",
+                    "tags": [
+                        "beer"
+                    ],
+                    "type": "article"
+                },
+                {
+                    "name": "beer",
+                    "type": "tag"
+                },
+                {
+                    "banned-on": "2012/02/02",
+                    "name": "vegas",
+                    "type": "tag"
+                },
+                {
+                    "banned-on": "2001/12/07",
+                    "name": "chocolate",
+                    "type": "tag"
+                },
+                {
+                    "banned-on": null,
+                    "name": "mayan",
+                    "type": "tag"
+                }
+            ]
+        },
+        "query": null,
+        "results": [
+            {
+                "count": 4,
+                "name": "beer"
+            },
+            {
+                "count": 1,
+                "name": "mayan"
+            },
+            {
+                "count": 1,
+                "name": "wine"
+            }
+        ]
+    },
+    {
+        "about": "Q6 - categorization trees / For the home page, top and second-level categories for articles, the total counts of articles by category, the total counts of NEW! articles by category. A similar concept might be organization charts.",
+        "data": {
+            "article_and_categories": [
+                {
+                    "categories": [
+                        "beer"
+                    ],
+                    "id": "article-34",
+                    "published-on": "2012/12/12",
+                    "type": "article"
+                },
+                {
+                    "categories": [
+                        "movies"
+                    ],
+                    "id": "article-35",
+                    "type": "article"
+                },
+                {
+                    "categories": [
+                        "beer",
+                        "entertainment"
+                    ],
+                    "id": "article-36",
+                    "type": "article"
+                },
+                {
+                    "categories": [
+                        "physics",
+                        "science"
+                    ],
+                    "id": "article-37",
+                    "type": "article"
+                },
+                {
+                    "categories": [
+                        "science"
+                    ],
+                    "id": "article-38",
+                    "type": "article"
+                },
+                {
+                    "categories": [
+                        "beer"
+                    ],
+                    "id": "article-39",
+                    "published-on": "2011/01/01",
+                    "type": "article"
+                },
+                {
+                    "name": "science",
+                    "type": "category"
+                },
+                {
+                    "name": "entertainment",
+                    "type": "category"
+                },
+                {
+                    "name": "physics",
+                    "parent": "science",
+                    "type": "category"
+                },
+                {
+                    "name": "beer",
+                    "parent": "entertainment",
+                    "type": "category"
+                },
+                {
+                    "name": "movies",
+                    "parent": "entertainment",
+                    "type": "category"
+                }
+            ]
+        },
+        "query": null,
+        "results": [
+            {
+                "name": "science",
+                "newArticles": 0,
+                "totalArticles": 2
+            },
+            {
+                "name": "entertainment",
+                "newArticles": 1,
+                "totalArticles": 4
+            },
+            {
+                "name": "physics",
+                "newArticles": 0,
+                "parent": "science",
+                "totalArticles": 1
+            },
+            {
+                "name": "beer",
+                "newArticles": 1,
+                "parent": "entertainment",
+                "totalArticles": 4
+            },
+            {
+                "name": "movies",
+                "newArticles": 0,
+                "parent": "entertainment",
+                "totalArticles": 1
+            }
+        ]
+    },
+    {
+        "about": "Q6.1 - categorization trees (alternative format)",
+        "data": {
+            "article_and_categories": [
+                {
+                    "categories": [
+                        "beer"
+                    ],
+                    "id": "article-34",
+                    "published-on": "2012/12/12",
+                    "type": "article"
+                },
+                {
+                    "categories": [
+                        "movies"
+                    ],
+                    "id": "article-35",
+                    "type": "article"
+                },
+                {
+                    "categories": [
+                        "beer",
+                        "entertainment"
+                    ],
+                    "id": "article-36",
+                    "type": "article"
+                },
+                {
+                    "categories": [
+                        "physics",
+                        "science"
+                    ],
+                    "id": "article-37",
+                    "type": "article"
+                },
+                {
+                    "categories": [
+                        "science"
+                    ],
+                    "id": "article-38",
+                    "type": "article"
+                },
+                {
+                    "categories": [
+                        "beer"
+                    ],
+                    "id": "article-39",
+                    "published-on": "2011/01/01",
+                    "type": "article"
+                },
+                {
+                    "name": "science",
+                    "subcategories": [
+                        "physics"
+                    ],
+                    "type": "category"
+                },
+                {
+                    "name": "entertainment",
+                    "subcategories": [
+                        "beer",
+                        "movies"
+                    ],
+                    "type": "category"
+                }
+            ]
+        },
+        "query": null,
+        "results": [
+            {
+                "name": "science",
+                "newArticles": 0,
+                "subcategories": [
+                    {
+                        "category": "physics",
+                        "newArticles": 0,
+                        "totalArticles": 1
+                    }
+                ],
+                "totalArticles": 2
+            },
+            {
+                "name": "entertainment",
+                "newArticles": 1,
+                "subcategories": [
+                    {
+                        "category": "beer",
+                        "newArticles": 1,
+                        "totalArticles": 3
+                    },
+                    {
+                        "category": "movies",
+                        "newArticles": 0,
+                        "totalArticles": 1
+                    }
+                ],
+                "totalArticles": 4
+            }
+        ]
+    },
+    {
+        "about": "Q7 - voting / Show topmost liked articles, skipping the like-votes that came from banned users.",
+        "data": {
+            "likes_and_users": [
+                {
+                    "article": "001",
+                    "type": "like",
+                    "user": "alan"
+                },
+                {
+                    "article": "002",
+                    "type": "like",
+                    "user": "alan"
+                },
+                {
+                    "article": "003",
+                    "type": "like",
+                    "user": "alan"
+                },
+                {
+                    "article": "001",
+                    "type": "like",
+                    "user": "ben"
+                },
+                {
+                    "article": "002",
+                    "type": "like",
+                    "user": "ben"
+                },
+                {
+                    "article": "001",
+                    "type": "like",
+                    "user": "charlies"
+                },
+                {
+                    "type": "user",
+                    "user": "alan"
+                },
+                {
+                    "banned": true,
+                    "type": "user",
+                    "user": "ben"
+                },
+                {
+                    "type": "user",
+                    "user": "charlize"
+                },
+                {
+                    "banned": true,
+                    "type": "user",
+                    "user": "dugan"
+                },
+                {
+                    "type": "user",
+                    "user": "eugene"
+                }
+            ]
+        },
+        "query": "SELECT {\"article\": article, \"likes\": COUNT(*)} WHERE type = \"like\" GROUP BY article",
+        "results": [
+            {
+                "article": "001",
+                "likes": 2
+            },
+            {
+                "article": "002",
+                "likes": 1
+            },
+            {
+                "article": "003",
+                "likes": 1
+            }
+        ]
+    },
+    {
+        "about": "Q8 - ecommerce light OLAP / Find the top N largest orders (by their grand total) in the last month.",
+        "data": {
+            "default": [
+                {
+                    "created": "2012/10/02",
+                    "id": "12",
+                    "total": 100
+                },
+                {
+                    "created": "2012/10/02",
+                    "id": "13",
+                    "total": 200
+                },
+                {
+                    "created": "2011/09/02",
+                    "id": "14",
+                    "total": 300
+                },
+                {
+                    "created": "2012/10/02",
+                    "id": "15",
+                    "total": 500
+                }
+            ]
+        },
+        "query": "SELECT * WHERE created > '2012-01-01' ORDER BY total DESC LIMIT N",
+        "results": [
+            {
+                "id": "15",
+                "total": 500
+            },
+            {
+                "id": "13",
+                "total": 200
+            },
+            {
+                "id": "12",
+                "total": 100
+            }
+        ]
+    },
+    {
+        "about": "Q9 / Find the N most popular bought items and the count of number of times each item were purchased in the last month, the sum of each item's purchase amounts, and the sum of amounts we would have made if each item were all bought at current price levels.",
+        "comment": "Can't be done because we would need to aggregate over value on both sides of the join (sum of order quantity, sum of order cost, and sum of product cost after joining with order). However, part of this query is still interesting, as it exposes the concept of grouping by a field that is within an array of the document: SELECT * GROUP BY orderlines.productId - The intent here would be to group by the product id, so each document would actually produce N rows where N is the number of items in its orderlines array.",
+        "data": {
+            "default": [
+                {
+                    "custId": "abc",
+                    "date": "2012-01-01",
+                    "id": "1200",
+                    "orderlines": [
+                        {
+                            "cost": 100,
+                            "productId": "coffee01",
+                            "qty": 1
+                        },
+                        {
+                            "cost": 100,
+                            "productId": "sugar22",
+                            "qty": 1
+                        }
+                    ],
+                    "type": "order"
+                },
+                {
+                    "custId": "bbb",
+                    "date": "2012-01-01",
+                    "id": "1234",
+                    "orderlines": [
+                        {
+                            "cost": 100,
+                            "productId": "coffee01",
+                            "qty": 2
+                        },
+                        {
+                            "cost": 100,
+                            "productId": "tea111",
+                            "qty": 1
+                        }
+                    ],
+                    "type": "order"
+                },
+                {
+                    "custId": "ccc",
+                    "date": "2012-01-01",
+                    "id": "1235",
+                    "orderlines": [
+                        {
+                            "cost": 100,
+                            "productId": "tea111",
+                            "qty": 1
+                        },
+                        {
+                            "cost": 100,
+                            "productId": "sugar22",
+                            "qty": 1
+                        }
+                    ],
+                    "type": "order"
+                },
+                {
+                    "custId": "ccc",
+                    "date": "2012-01-01",
+                    "id": "1236",
+                    "orderlines": [
+                        {
+                            "cost": 100,
+                            "productId": "coffee01",
+                            "qty": 1
+                        },
+                        {
+                            "cost": 100,
+                            "productId": "sugar22",
+                            "qty": 1
+                        }
+                    ],
+                    "type": "order"
+                },
+                {
+                    "cost": 200,
+                    "id": "coffee01",
+                    "type": "product",
+                    "vendorId": "X"
+                },
+                {
+                    "cost": 200,
+                    "id": "sugar22",
+                    "type": "product",
+                    "vendorId": "v200"
+                },
+                {
+                    "cost": 200,
+                    "id": "tea111",
+                    "type": "product",
+                    "vendorId": "v200"
+                }
+            ]
+        },
+        "query": null,
+        "results": [
+            {
+                "cost": 300,
+                "cost_at_current": 600,
+                "productId": "coffee01",
+                "total_sold": 3
+            },
+            {
+                "cost": 200,
+                "cost_at_current": 400,
+                "productId": "tea111",
+                "total_sold": 2
+            },
+            {
+                "cost": 200,
+                "cost_at_current": 400,
+                "productId": "sugar22",
+                "total_sold": 2
+            }
+        ]
+    },
+    {
+        "about": "Q10 - order processing inventory check / Given a sales quote (not a sales order yet), see if we have enough inventory for all the items listed in the sales quote.",
+        "comment": "Doesn't seem possible without JOIN.  We can pull product info in with subquery in projection, but cannot filter at that point.",
+        "data": {
+            "quotes_and_inventory": [
+                {
+                    "id": "quote-12",
+                    "lineItems": [
+                        {
+                            "productId": "coffee01",
+                            "qty": 100
+                        },
+                        {
+                            "productId": "sugar111",
+                            "qty": 200
+                        }
+                    ],
+                    "type": "quote"
+                },
+                {
+                    "amount": "50",
+                    "id": "coffee01",
+                    "type": "inventory"
+                },
+                {
+                    "amount": "5000",
+                    "id": "sugar111",
+                    "type": "inventory"
+                }
+            ]
+        },
+        "results": [
+            {
+                "id": "quote-12",
+                "items": [
+                    {
+                        "inventoryAmountAfter": -50,
+                        "productId": "coffee01",
+                        "qty": 100
+                    },
+                    {
+                        "inventoryAmountAfter": 4800,
+                        "productId": "sugar111",
+                        "qty": 200
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "about": "Q10a - order processing inventory check / Given a sales quote (not a sales order yet), see if we have enough inventory for all the items listed in the sales quote.",
+        "comment": "Doesn't seem possible without JOIN.  We can pull product info in with subquery in projection, but cannot filter at that point.",
+        "data": {
+            "quotes_and_inventory": [
+                {
+                    "id": "quote-12",
+                    "lineItems": [
+                        {
+                            "productId": "coffee01",
+                            "qty": 100
+                        },
+                        {
+                            "productId": "sugar111",
+                            "qty": 200
+                        }
+                    ],
+                    "type": "quote"
+                },
+                {
+                    "amount": "50",
+                    "id": "coffee01",
+                    "type": "inventory"
+                },
+                {
+                    "amount": "5000",
+                    "id": "sugar111",
+                    "type": "inventory"
+                }
+            ]
+        },
+        "query": null,
+        "results": [
+            {
+                "inventoryAmountAfter": -50,
+                "lineItem": 0,
+                "productId": "coffee01"
+            },
+            {
+                "inventoryAmountAfter": 4800,
+                "lineItem": 1,
+                "productId": "sugar111"
+            }
+        ]
+    },
+    {
+        "about": "Q11 - pattern search / Find all the emails from orders and customer records, no matter where they live in a document, at whatever depth.",
+        "data": {
+            "default": [
+                {
+                    "billToAddress": {
+                        "addr": "1234 main st.",
+                        "city": "sunnyvale",
+                        "email": "dustin@test.com",
+                        "state": "CA"
+                    },
+                    "id": "1200",
+                    "orderlines": [
+                        {
+                            "productId": "shirt",
+                            "qty": 1
+                        }
+                    ],
+                    "shipToAddress": {
+                        "addr": "1234 main st.",
+                        "city": "NY",
+                        "email": "marty@test.com",
+                        "state": "NY"
+                    },
+                    "type": "order"
+                },
+                {
+                    "contactInfo": [
+                        {
+                            "addr": "100 borax st.",
+                            "city": "pleasant",
+                            "createdOn": "1990/12/12",
+                            "email": "dustin@aol.com",
+                            "state": "AK"
+                        },
+                        {
+                            "addr": "1234 main st.",
+                            "city": "sunnyvale",
+                            "createdOn": "2012/12/12",
+                            "email": "dustin@spy.net",
+                            "state": "CA"
+                        }
+                    ],
+                    "id": "1000",
+                    "type": "customer"
+                }
+            ]
+        },
+        "results": [
+            {
+                "email": "dustin@test.com"
+            },
+            {
+                "email": "marty@test.com"
+            },
+            {
+                "email": "dustin@aol.com"
+            },
+            {
+                "email": "dustin@spy.net"
+            }
+        ]
+    },
+    {
+        "about": "Q12 - deeply-nested document / Given a sales order documents with orderlines and multiple options per orderline, find the sales orders where somebody ordered red shirts. Filtering on attributes on child and grandchild level.",
+        "data": {
+            "default": [
+                {
+                    "id": "1200",
+                    "orderlines": [
+                        {
+                            "options": [
+                                {
+                                    "choice": "red",
+                                    "name": "color"
+                                },
+                                {
+                                    "choice": "XL",
+                                    "name": "size"
+                                }
+                            ],
+                            "productId": "shirt",
+                            "qty": 1
+                        },
+                        {
+                            "productId": "pen",
+                            "qty": 1
+                        }
+                    ],
+                    "type": "order"
+                },
+                {
+                    "id": "1000",
+                    "orderlines": [
+                        {
+                            "options": [
+                                {
+                                    "choice": "red",
+                                    "name": "color"
+                                },
+                                {
+                                    "choice": "XL",
+                                    "name": "size"
+                                }
+                            ],
+                            "productId": "pants",
+                            "qty": 1
+                        },
+                        {
+                            "productId": "shirt",
+                            "qty": 1
+                        }
+                    ],
+                    "type": "order"
+                }
+            ]
+        },
+        "query": "SELECT * WHERE orderlines[productId = \"shirt\" AND options[name = \"color\" AND choice = \"red\"]]",
+        "results": [
+            {
+                "id": "1200",
+                "orderlines": [
+                    {
+                        "options": [
+                            {
+                                "choice": "red",
+                                "name": "color"
+                            },
+                            {
+                                "choice": "XL",
+                                "name": "size"
+                            }
+                        ],
+                        "productId": "shirt",
+                        "qty": 1
+                    },
+                    {
+                        "productId": "pen",
+                        "qty": 1
+                    }
+                ],
+                "type": "order"
+            }
+        ]
+    }
+]
