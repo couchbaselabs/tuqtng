@@ -50,7 +50,6 @@ type ItemChannel chan *Item
 
 type Scanner interface {
 	Channel() (ItemChannel, Error)
-	SetChannel(ItemChannel)
 }
 
 type FullScanner interface {
