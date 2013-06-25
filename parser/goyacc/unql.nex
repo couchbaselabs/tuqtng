@@ -1,0 +1,88 @@
+/\"((\\\")|(\\\\)|(\\\/)|(\\b)|(\\f)|(\\n)|(\\r)|(\\t)|(\\u[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F])|[^\"])*\"/     { 
+                    lval.s = yylex.Text()[1:len(yylex.Text())-1]
+                    logDebugTokens("%s", lval.s)
+                    logDebugTokens("STRING"); 
+                    return STRING 
+                  }
+/\+/              { logDebugTokens("PLUS"); return PLUS }
+/-/               { logDebugTokens("MINUS"); return MINUS }
+/\*/              { logDebugTokens("MULT"); return MULT }
+/\//              { logDebugTokens("DIV"); return DIV }
+/[aA][nN][dD]/    { logDebugTokens("AND"); return AND }
+/[oO][rR]/        { logDebugTokens("OR"); return OR }
+/\=\=/              { logDebugTokens("EQ"); return EQ }
+/\=/              { logDebugTokens("EQ"); return EQ }
+/\!\=/            { logDebugTokens("NE"); return NE }
+/\<\>/            { logDebugTokens("NE"); return NE }
+/\</              { logDebugTokens("LT"); return LT }
+/\<\=/            { logDebugTokens("LTE"); return LTE }
+/\>/              { logDebugTokens("GT"); return GT }
+/\>\=/            { logDebugTokens("GTE"); return GTE }
+/[nN][oO][tT]/    { logDebugTokens("NOT"); return NOT }
+/\|\|/              { logDebugTokens("CONCAT"); return CONCAT }
+/\(/              { logDebugTokens("LPAREN"); return LPAREN }
+/\)/              { logDebugTokens("RPAREN"); return RPAREN }
+/\{/              { logDebugTokens("LBRACE"); return LBRACE }
+/\}/              { logDebugTokens("RBRACE"); return RBRACE }
+/\,/              { logDebugTokens("COMMA"); return COMMA }
+/\:/              { logDebugTokens("COLON"); return COLON }
+/\[/              { logDebugTokens("LBRACKET"); return LBRACKET }
+/\]/              { logDebugTokens("RBRACKET"); return RBRACKET }
+/"/               { logDebugTokens("DQUOTE"); return DQUOTE }
+/[tT][rR][uU][eE]/ 
+                  { logDebugTokens("TRUE"); return TRUE}
+/[fF][aA][lL][sS][eE]/ 
+                  { logDebugTokens("FALSE"); return FALSE}
+/[nN][uU][lL][lL]/ 
+                  { logDebugTokens("NULL"); return NULL}
+/-?([0-9]|[1-9][0-9]*)(\.[0-9][0-9]*)([eE][+\-]?[0-9][0-9]*)?/
+                  {
+                  // there are 2 separate rules for NUMBER
+                  // instead of 1 with two optional components
+                  // to differntiate it from plan INT
+                    lval.f,_ = strconv.ParseFloat(yylex.Text(), 64);
+                    logDebugTokens("%f", lval.f)
+                    logDebugTokens("NUMBER"); 
+                    return NUMBER 
+                  }
+/-?([0-9]|[1-9][0-9]*)(\.[0-9][0-9]*)?([eE][+\-]?[0-9][0-9]*)/
+                  { 
+                    lval.f,_ = strconv.ParseFloat(yylex.Text(), 64);
+                    logDebugTokens("%f", lval.f)
+                    logDebugTokens("NUMBER"); 
+                    return NUMBER 
+                  }
+/-?[0-9]|[1-9][0-9]*/
+                  { 
+                    lval.n,_ = strconv.Atoi(yylex.Text());
+                    logDebugTokens("INT"); 
+                    return INT 
+                  }
+/[ \t\n]+/        { logDebugTokens("WHITESPACE (count=%d)", len(yylex.Text())) /* eat up whitespace */ }
+/[a-zA-Z_][a-zA-Z0-9\-_]*/     { 
+                    lval.s = yylex.Text();
+                    logDebugTokens("%s", lval.s)
+                    logDebugTokens("IDENTIFIER"); 
+                    return IDENTIFIER 
+                  }
+/`((\\\")|(\\\\)|(\\\/)|(\\b)|(\\f)|(\\n)|(\\r)|(\\t)|(\\u[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F])|[^`])+`/
+                  {
+                    //this rule allows for a wider range of identifiers by escaping them
+                    lval.s = yylex.Text()[1:len(yylex.Text())-1]
+                    logDebugTokens("%s", lval.s)
+                    logDebugTokens("IDENTIFIER"); 
+                    return IDENTIFIER 
+                  }
+//
+package goyacc
+
+import("log")
+import("strconv")
+
+func logDebugTokens(format string, v ...interface{}) {
+    if DebugTokens && len(v) > 0 {
+        log.Printf("DEBUG TOKEN " + format, v)
+    } else if DebugTokens {
+        log.Printf("DEBUG TOKEN " + format)
+    }
+}
