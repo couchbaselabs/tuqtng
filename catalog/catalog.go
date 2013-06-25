@@ -9,7 +9,12 @@
 
 package catalog
 
+// Will be moved to a shared package
 type Error error
+
+// Will be moved to a shared package
+type Item interface {
+}
 
 type Store interface {
 	Catalog() (*Catalog, Error)
@@ -52,22 +57,28 @@ type FullScanner interface {
 	Scanner
 }
 
-// in rdbms, value -> id mappings are called inverted entries.
-type InvertedScanner interface {
+type Direction int
+
+const (
+	ASC  Direction = 1
+	DESC           = 2
+)
+
+type RangeScanner interface {
 	Scanner
 	Key() []string
-	Direction() Direction // enum for ASC/DESC
+	Direction() Direction
 	Statistics() (*IndexStatistics, Error)
 }
 
 // Couchbase view indexes
 type ViewScanner interface {
-	InvertedScanner
+	RangeScanner
 }
 
-// Real indexes, a la SQL (not Couchbase view indexes)
+// Declarative btree indexes
 type IndexScanner interface {
-	InvertedScanner
+	RangeScanner
 }
 
 // Full text search
