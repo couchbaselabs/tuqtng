@@ -11,6 +11,7 @@ package ast
 
 import (
 	"fmt"
+	"log"
 )
 
 // ****************************************************************************
@@ -28,13 +29,18 @@ func NewAndOperator(operands []Expression) *AndOperator {
 }
 
 func (this *AndOperator) Evaluate(item Item) (Value, error) {
+	var rv Value
+	var re error
+	rv = true
+	re = nil
 	for _, operand := range this.operands {
 		operandVal, err := operand.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
 			case *Undefined:
-				// undefined is false
-				return false, nil
+				rv = nil
+				re = err
+				continue
 			default:
 				// any other error should be returned to caller
 				return nil, err
@@ -42,11 +48,16 @@ func (this *AndOperator) Evaluate(item Item) (Value, error) {
 		}
 		// now interpret the evaluated value in a boolean context
 		operandBoolVal := ValueInBooleanContext(operandVal)
-		if !operandBoolVal {
+		if operandBoolVal == false {
 			return false, nil
+		} else if operandBoolVal == nil && rv == true {
+			rv = operandBoolVal
+			re = nil
 		}
+		// if operandBoolVal is true, do nothing
+		// rv starts as true, and should never change back to true
 	}
-	return true, nil
+	return rv, re
 }
 
 func (this *AndOperator) String() string {
@@ -68,26 +79,35 @@ func NewOrOperator(operands []Expression) *OrOperator {
 }
 
 func (this *OrOperator) Evaluate(item Item) (Value, error) {
+	var rv Value
+	var re error
+	rv = false
+	re = nil
 	for _, operand := range this.operands {
 		operandVal, err := operand.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
 			case *Undefined:
-				// do nothing, undefined is false, need to keep looking for true value
+				rv = nil
+				re = err
 				continue
 			default:
 				// any other error should be returned to caller
 				return nil, err
 			}
 		}
-
 		// now interpret the evaluated value in a boolean context
 		operandBoolVal := ValueInBooleanContext(operandVal)
-		if operandBoolVal {
+		if operandBoolVal == true {
 			return true, nil
+		} else if operandBoolVal == nil && rv == false {
+			rv = operandBoolVal
+			re = nil
 		}
+		// if operandBoolVal is true, do nothing
+		// rv starts as true, and should never change back to true
 	}
-	return false, nil
+	return rv, re
 }
 
 func (this *OrOperator) String() string {
@@ -111,18 +131,19 @@ func NewNotOperator(operand Expression) *NotOperator {
 func (this *NotOperator) Evaluate(item Item) (Value, error) {
 	ov, err := this.operand.Evaluate(item)
 	if err != nil {
-		switch err := err.(type) {
-		case *Undefined:
-			return true, nil
-		default:
-			// any other error should be returned to caller
-			return nil, err
-		}
+		return nil, err
 	}
 
 	operandBoolVal := ValueInBooleanContext(ov)
-
-	return !operandBoolVal, nil
+	switch operandBoolVal := operandBoolVal.(type) {
+	case bool:
+		return !operandBoolVal, nil
+	case nil:
+		return nil, nil
+	default:
+		log.Fatalf("Unexpected type %T in NOT", operandBoolVal)
+		return nil, nil
+	}
 }
 
 func (this *NotOperator) String() string {

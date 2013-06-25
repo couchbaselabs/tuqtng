@@ -16,6 +16,7 @@ import (
 )
 
 func TestBooleanStringRepresentation(t *testing.T) {
+
 	booleanTrue := NewLiteralBool(true)
 	booleanFalse := NewLiteralBool(false)
 
@@ -54,40 +55,92 @@ func TestBooleanStringRepresentation(t *testing.T) {
 
 func TestBoolean(t *testing.T) {
 
+	missingProperty := NewProperty("dne")
+	null := NewLiteralNull()
 	booleanTrue := NewLiteralBool(true)
 	booleanFalse := NewLiteralBool(false)
 
 	tests := []struct {
 		input  Expression
 		output Value
+		err    error
 	}{
-		{NewAndOperator([]Expression{booleanTrue, booleanTrue}), true},
-		{NewAndOperator([]Expression{booleanTrue, booleanFalse}), false},
-		{NewAndOperator([]Expression{booleanFalse, booleanTrue}), false},
-		{NewAndOperator([]Expression{booleanFalse, booleanFalse}), false},
+		{NewAndOperator([]Expression{booleanTrue, booleanTrue}), true, nil},
+		{NewAndOperator([]Expression{booleanTrue, booleanFalse}), false, nil},
+		{NewAndOperator([]Expression{booleanFalse, booleanTrue}), false, nil},
+		{NewAndOperator([]Expression{booleanFalse, booleanFalse}), false, nil},
 
-		{NewAndOperator([]Expression{booleanTrue, booleanTrue, booleanTrue, booleanTrue, booleanTrue}), true},
-		{NewAndOperator([]Expression{booleanTrue, booleanTrue, booleanTrue, booleanTrue, booleanFalse}), false},
+		{NewAndOperator([]Expression{booleanTrue, booleanTrue, booleanTrue, booleanTrue, booleanTrue}), true, nil},
+		{NewAndOperator([]Expression{booleanTrue, booleanTrue, booleanTrue, booleanTrue, booleanFalse}), false, nil},
 
-		{NewOrOperator([]Expression{booleanTrue, booleanTrue}), true},
-		{NewOrOperator([]Expression{booleanTrue, booleanFalse}), true},
-		{NewOrOperator([]Expression{booleanFalse, booleanTrue}), true},
-		{NewOrOperator([]Expression{booleanFalse, booleanFalse}), false},
+		{NewOrOperator([]Expression{booleanTrue, booleanTrue}), true, nil},
+		{NewOrOperator([]Expression{booleanTrue, booleanFalse}), true, nil},
+		{NewOrOperator([]Expression{booleanFalse, booleanTrue}), true, nil},
+		{NewOrOperator([]Expression{booleanFalse, booleanFalse}), false, nil},
 
-		{NewOrOperator([]Expression{booleanFalse, booleanFalse, booleanFalse, booleanFalse, booleanTrue}), true},
-		{NewOrOperator([]Expression{booleanFalse, booleanFalse, booleanFalse, booleanFalse, booleanFalse}), false},
+		{NewOrOperator([]Expression{booleanFalse, booleanFalse, booleanFalse, booleanFalse, booleanTrue}), true, nil},
+		{NewOrOperator([]Expression{booleanFalse, booleanFalse, booleanFalse, booleanFalse, booleanFalse}), false, nil},
 
-		{NewNotOperator(booleanTrue), false},
-		{NewNotOperator(booleanFalse), true},
+		{NewNotOperator(booleanTrue), false, nil},
+		{NewNotOperator(booleanFalse), true, nil},
+
+		// logical comparison test table from spec
+		// AND
+		{NewAndOperator([]Expression{booleanFalse, booleanFalse}), false, nil},
+		{NewAndOperator([]Expression{booleanFalse, null}), false, nil},
+		{NewAndOperator([]Expression{booleanFalse, missingProperty}), false, nil},
+		{NewAndOperator([]Expression{booleanFalse, booleanTrue}), false, nil},
+
+		{NewAndOperator([]Expression{null, booleanFalse}), false, nil},
+		{NewAndOperator([]Expression{null, null}), nil, nil},
+		{NewAndOperator([]Expression{null, missingProperty}), nil, &Undefined{"dne"}},
+		{NewAndOperator([]Expression{null, booleanTrue}), nil, nil},
+
+		{NewAndOperator([]Expression{missingProperty, booleanFalse}), false, nil},
+		{NewAndOperator([]Expression{missingProperty, null}), nil, &Undefined{"dne"}},
+		{NewAndOperator([]Expression{missingProperty, missingProperty}), nil, &Undefined{"dne"}},
+		{NewAndOperator([]Expression{missingProperty, booleanTrue}), nil, &Undefined{"dne"}},
+
+		{NewAndOperator([]Expression{booleanTrue, booleanFalse}), false, nil},
+		{NewAndOperator([]Expression{booleanTrue, null}), nil, nil},
+		{NewAndOperator([]Expression{booleanTrue, missingProperty}), nil, &Undefined{"dne"}},
+		{NewAndOperator([]Expression{booleanTrue, booleanTrue}), true, nil},
+
+		// OR
+		{NewOrOperator([]Expression{booleanFalse, booleanFalse}), false, nil},
+		{NewOrOperator([]Expression{booleanFalse, null}), nil, nil},
+		{NewOrOperator([]Expression{booleanFalse, missingProperty}), nil, &Undefined{"dne"}},
+		{NewOrOperator([]Expression{booleanFalse, booleanTrue}), true, nil},
+
+		{NewOrOperator([]Expression{null, booleanFalse}), nil, nil},
+		{NewOrOperator([]Expression{null, null}), nil, nil},
+		{NewOrOperator([]Expression{null, missingProperty}), nil, &Undefined{"dne"}},
+		{NewOrOperator([]Expression{null, booleanTrue}), true, nil},
+
+		{NewOrOperator([]Expression{missingProperty, booleanFalse}), nil, &Undefined{"dne"}},
+		{NewOrOperator([]Expression{missingProperty, null}), nil, &Undefined{"dne"}},
+		{NewOrOperator([]Expression{missingProperty, missingProperty}), nil, &Undefined{"dne"}},
+		{NewOrOperator([]Expression{missingProperty, booleanTrue}), true, nil},
+
+		{NewOrOperator([]Expression{booleanTrue, booleanFalse}), true, nil},
+		{NewOrOperator([]Expression{booleanTrue, null}), true, nil},
+		{NewOrOperator([]Expression{booleanTrue, missingProperty}), true, nil},
+		{NewOrOperator([]Expression{booleanTrue, booleanTrue}), true, nil},
+
+		// NOT
+		{NewNotOperator(booleanTrue), false, nil},
+		{NewNotOperator(null), nil, nil},
+		{NewNotOperator(missingProperty), nil, &Undefined{"dne"}},
+		{NewNotOperator(booleanFalse), true, nil},
 	}
 
 	for _, x := range tests {
 		result, err := x.input.Evaluate(nil)
-		if err != nil {
-			t.Fatalf("Error evaluating expression: %v", err)
+		if !reflect.DeepEqual(err, x.err) {
+			t.Fatalf("Expected error %v, got %v for %v", x.err, err, x.input)
 		}
 		if !reflect.DeepEqual(result, x.output) {
-			t.Errorf("Expected %t %v, got %t %v", x.output, x.output, result, result)
+			t.Errorf("Expected %v, got %v for %v", x.output, result, x.input)
 		}
 	}
 

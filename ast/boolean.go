@@ -18,11 +18,11 @@ import (
 // should be considered true or false in a boolean context
 // NOTE: this is my first attempt at making this behave consisten with javascript
 // SEE http://ecma-international.org/ecma-262/5.1/#sec-9.2
-func ValueInBooleanContext(val Value) bool {
+func ValueInBooleanContext(val Value) Value {
 
 	switch val := val.(type) {
 	case nil:
-		return false
+		return nil
 	case bool:
 		return val
 	case float64:

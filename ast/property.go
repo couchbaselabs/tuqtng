@@ -24,6 +24,9 @@ func NewProperty(path string) *Property {
 }
 
 func (this *Property) Evaluate(item Item) (Value, error) {
+	if item == nil {
+		return nil, &Undefined{this.Path}
+	}
 	rv, err := item.GetPath(this.Path)
 	if err != nil {
 		return nil, err

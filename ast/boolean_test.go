@@ -16,9 +16,9 @@ import (
 func TestValueInBooleanContext(t *testing.T) {
 	tests := []struct {
 		input  Value
-		output bool
+		output Value
 	}{
-		{nil, false},
+		{nil, nil},
 		{true, true},
 		{false, false},
 		{0.0, false},
