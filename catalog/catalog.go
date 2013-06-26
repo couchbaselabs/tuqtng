@@ -9,14 +9,14 @@
 
 package catalog
 
-// Error will be moved to a shared package
+// Error will be moved to a shared package.
 type Error error
 
-// Item will be moved to a shared package
+// Item will be moved to a shared package.
 type Item interface {
 }
 
-// Site represents a cluster or single-node server
+// Site represents a cluster or single-node server.
 type Site interface {
 	URL() string
 }
@@ -34,7 +34,7 @@ type Bucket interface {
 	Name() string
 	Count() (int64, Error) // why is this needed?
 	AccessPaths() ([]*Scanner, Error)
-	Fetch(id string) (*Item, Error)
+	Lookup(id string) (*Item, Error)
 }
 
 // IndexStatistics captures statistics for a range index (view or
@@ -57,7 +57,7 @@ type Bin interface {
 
 type ItemChannel chan *Item
 
-// Scanner is the base type for full and various index scanners.
+// Scanner is the base type for all scanners.
 type Scanner interface {
 	Channel() (ItemChannel, Error)
 }
