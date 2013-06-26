@@ -24,14 +24,6 @@ type Store interface {
 // allocation boundary, as well as a grouping of buckets.
 type Pool interface {
 	Name() string
-	Catalog() (*Catalog, Error)
-}
-
-// Catalog represents the subset of the system catalog for a specific
-// pool.  Even though the entire system catalog is stored as a single
-// bucket, only the subset for the currently authenticated pool is loaded
-// into this Catalog object.
-type Catalog interface {
 	Buckets() (map[string]*Bucket, Error)
 }
 
