@@ -23,6 +23,7 @@ type Store interface {
 // Pool represents a logical authentication, query, and resource
 // allocation boundary, as well as a grouping of buckets.
 type Pool interface {
+	Name() string
 	Catalog() (*Catalog, Error)
 }
 
