@@ -25,33 +25,34 @@ type Site interface {
 // allocation boundary, as well as a grouping of buckets.
 type Pool interface {
 	Name() string
-	Buckets() (map[string]*Bucket, Error)
+	BucketNames() ([]string, Error)
+	Bucket(name string) (Bucket, Error)
 }
 
 // Bucket is a collection of key-value entries (typically
 // key-document, but not always).
 type Bucket interface {
 	Name() string
-	Count() (int64, Error) // why is this needed?
-	AccessPaths() ([]*Scanner, Error)
-	Lookup(id string) (*Item, Error)
+	Count() (int64, Error)
+	Scanners() ([]Scanner, Error)
+	Lookup(id string) (Item, Error)
 }
 
 // IndexStatistics captures statistics for a range index (view or
 // btree index).
-type IndexStatistics interface {
+type RangeStatistics interface {
 	Count() (int64, Error)
-	Min() (*Item, Error)
-	Max() (*Item, Error)
+	Min() (Item, Error)
+	Max() (Item, Error)
 	DistinctCount(int64, Error)
-	Bins() ([]*Bin, Error)
+	Bins() ([]Bin, Error)
 }
 
 // Bin represents a range bin within IndexStatistics.
 type Bin interface {
 	Count() (int64, Error)
-	Min() (*Item, Error)
-	Max() (*Item, Error)
+	Min() (Item, Error)
+	Max() (Item, Error)
 	DistinctCount(int64, Error)
 }
 
@@ -80,12 +81,13 @@ const (
 // scanners.
 type RangeScanner interface {
 	Scanner
+	Name() string
 	Key() []string
 	Direction() Direction
-	Statistics() (*IndexStatistics, Error)
+	Statistics() (RangeStatistics, Error)
 }
 
-// ViewScanner represents Couchbase view indexes.
+// ViewScanner represents Couchbase views.
 type ViewScanner interface {
 	RangeScanner
 }
