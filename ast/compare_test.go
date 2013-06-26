@@ -21,6 +21,10 @@ func TestCompare(t *testing.T) {
 	numberSixty := NewLiteralNumber(60.0)
 	numberNine := NewLiteralNumber(9.0)
 	stringBob := NewLiteralString("bob")
+	stringCat := NewLiteralString("cat")
+	patternMatchSingle := NewLiteralString("b_b")
+	patternMatchMulti := NewLiteralString("b%")
+	patternNoMatch := NewLiteralString("____")
 
 	tests := []struct {
 		input  Expression
@@ -68,6 +72,47 @@ func TestCompare(t *testing.T) {
 		{NewNotEqualToOperator(null, numberSixty), nil, nil},
 		{NewNotEqualToOperator(nonExistantProperty, numberSixty), nil, &Undefined{"dne"}},
 		{NewNotEqualToOperator(stringBob, numberSixty), false, nil},
+
+		{NewLikeOperator(stringBob, patternMatchSingle), true, nil},
+		{NewLikeOperator(stringCat, patternMatchSingle), false, nil},
+		{NewLikeOperator(stringBob, patternMatchMulti), true, nil},
+		{NewLikeOperator(stringCat, patternMatchMulti), false, nil},
+		{NewLikeOperator(stringBob, patternNoMatch), false, nil},
+		{NewLikeOperator(stringBob, numberNine), nil, nil},
+		{NewLikeOperator(numberNine, patternMatchSingle), nil, nil},
+
+		{NewNotLikeOperator(stringBob, patternMatchSingle), false, nil},
+		{NewNotLikeOperator(stringCat, patternMatchSingle), true, nil},
+		{NewNotLikeOperator(stringBob, patternMatchMulti), false, nil},
+		{NewNotLikeOperator(stringCat, patternMatchMulti), true, nil},
+		{NewNotLikeOperator(stringBob, patternNoMatch), true, nil},
+		{NewNotLikeOperator(stringBob, numberNine), nil, nil},
+		{NewNotLikeOperator(numberNine, patternMatchSingle), nil, nil},
+
+		// these tests all conform to the table in the specification
+		{NewIsNullOperator(stringBob), false, nil},
+		{NewIsNullOperator(null), true, nil},
+		{NewIsNullOperator(nonExistantProperty), false, nil},
+
+		{NewIsNotNullOperator(stringBob), true, nil},
+		{NewIsNotNullOperator(null), false, nil},
+		{NewIsNotNullOperator(nonExistantProperty), false, nil},
+
+		{NewIsMissingOperator(stringBob), false, nil},
+		{NewIsMissingOperator(null), false, nil},
+		{NewIsMissingOperator(nonExistantProperty), true, nil},
+
+		{NewIsNotMissingOperator(stringBob), true, nil},
+		{NewIsNotMissingOperator(null), true, nil},
+		{NewIsNotMissingOperator(nonExistantProperty), false, nil},
+
+		{NewIsValuedOperator(stringBob), true, nil},
+		{NewIsValuedOperator(null), false, nil},
+		{NewIsValuedOperator(nonExistantProperty), false, nil},
+
+		{NewIsNotValuedOperator(stringBob), false, nil},
+		{NewIsNotValuedOperator(null), true, nil},
+		{NewIsNotValuedOperator(nonExistantProperty), false, nil},
 	}
 
 	for _, x := range tests {

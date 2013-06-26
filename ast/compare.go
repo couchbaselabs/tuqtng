@@ -12,6 +12,8 @@ package ast
 import (
 	"fmt"
 	"log"
+	"regexp"
+	"strings"
 )
 
 type TypeMismatch struct {
@@ -309,4 +311,293 @@ func (this *NotEqualToOperator) Evaluate(item Item) (Value, error) {
 		log.Fatalf("Unexpected result from comparison: %v", compare)
 		return nil, nil
 	}
+}
+
+// ****************************************************************************
+// Like
+// ****************************************************************************
+// FIXME - optimize case where RHS is string literal, only compile
+//         the regular expression once
+type LikeOperator struct {
+	left  Expression
+	right Expression
+}
+
+func NewLikeOperator(left, right Expression) *LikeOperator {
+	return &LikeOperator{
+		left:  left,
+		right: right,
+	}
+}
+
+func (this *LikeOperator) Evaluate(item Item) (Value, error) {
+	lv, err := this.left.Evaluate(item)
+	if err != nil {
+		return nil, err
+	}
+	rv, err := this.right.Evaluate(item)
+	if err != nil {
+		return nil, err
+	}
+
+	switch lv := lv.(type) {
+	case string:
+		switch rv := rv.(type) {
+		case string:
+			// if both values are string we can proceed
+			pattern := strings.Replace(rv, "%", "(.*)", -1)
+			pattern = strings.Replace(pattern, "_", "(.)", -1)
+			re, err := regexp.Compile(pattern)
+			if err != nil {
+				return err, nil
+			}
+			return re.MatchString(lv), nil
+
+		default:
+			return nil, nil
+		}
+	default:
+		return nil, nil
+	}
+
+	return nil, nil
+}
+
+// ****************************************************************************
+// Not Like
+// ****************************************************************************
+// FIXME - consolidate common code with LIKE
+type NotLikeOperator struct {
+	left  Expression
+	right Expression
+}
+
+func NewNotLikeOperator(left, right Expression) *NotLikeOperator {
+	return &NotLikeOperator{
+		left:  left,
+		right: right,
+	}
+}
+
+func (this *NotLikeOperator) Evaluate(item Item) (Value, error) {
+	lv, err := this.left.Evaluate(item)
+	if err != nil {
+		return nil, err
+	}
+	rv, err := this.right.Evaluate(item)
+	if err != nil {
+		return nil, err
+	}
+
+	switch lv := lv.(type) {
+	case string:
+		switch rv := rv.(type) {
+		case string:
+			// if both values are string we can proceed
+			pattern := strings.Replace(rv, "%", "(.*)", -1)
+			pattern = strings.Replace(pattern, "_", "(.)", -1)
+			re, err := regexp.Compile(pattern)
+			if err != nil {
+				return err, nil
+			}
+			return !re.MatchString(lv), nil
+
+		default:
+			return nil, nil
+		}
+	default:
+		return nil, nil
+	}
+
+	return nil, nil
+}
+
+// ****************************************************************************
+// IS NULL
+// ****************************************************************************
+
+type IsNullOperator struct {
+	operand Expression
+}
+
+func NewIsNullOperator(operand Expression) *IsNullOperator {
+	return &IsNullOperator{
+		operand: operand,
+	}
+}
+
+func (this *IsNullOperator) Evaluate(item Item) (Value, error) {
+	ov, err := this.operand.Evaluate(item)
+	if err != nil {
+		switch err := err.(type) {
+		case *Undefined:
+			return false, nil
+		default:
+			// any other error should be returned to caller
+			return nil, err
+		}
+	}
+
+	if ov == nil {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+// ****************************************************************************
+// IS NOT NULL
+// ****************************************************************************
+
+type IsNotNullOperator struct {
+	operand Expression
+}
+
+func NewIsNotNullOperator(operand Expression) *IsNotNullOperator {
+	return &IsNotNullOperator{
+		operand: operand,
+	}
+}
+
+func (this *IsNotNullOperator) Evaluate(item Item) (Value, error) {
+	ov, err := this.operand.Evaluate(item)
+	if err != nil {
+		switch err := err.(type) {
+		case *Undefined:
+			return false, nil
+		default:
+			// any other error should be returned to caller
+			return nil, err
+		}
+	}
+
+	if ov == nil {
+		return false, nil
+	}
+
+	return true, nil
+}
+
+// ****************************************************************************
+// IS MISSING
+// ****************************************************************************
+
+type IsMissingOperator struct {
+	operand Expression
+}
+
+func NewIsMissingOperator(operand Expression) *IsMissingOperator {
+	return &IsMissingOperator{
+		operand: operand,
+	}
+}
+
+func (this *IsMissingOperator) Evaluate(item Item) (Value, error) {
+	_, err := this.operand.Evaluate(item)
+	if err != nil {
+		switch err := err.(type) {
+		case *Undefined:
+			return true, nil
+		default:
+			// any other error should be returned to caller
+			return nil, err
+		}
+	}
+
+	return false, nil
+}
+
+// ****************************************************************************
+// IS NOT MISSING
+// ****************************************************************************
+
+type IsNotMissingOperator struct {
+	operand Expression
+}
+
+func NewIsNotMissingOperator(operand Expression) *IsNotMissingOperator {
+	return &IsNotMissingOperator{
+		operand: operand,
+	}
+}
+
+func (this *IsNotMissingOperator) Evaluate(item Item) (Value, error) {
+	_, err := this.operand.Evaluate(item)
+	if err != nil {
+		switch err := err.(type) {
+		case *Undefined:
+			return false, nil
+		default:
+			// any other error should be returned to caller
+			return nil, err
+		}
+	}
+
+	return true, nil
+}
+
+// ****************************************************************************
+// IS VALUED
+// ****************************************************************************
+
+type IsValuedOperator struct {
+	operand Expression
+}
+
+func NewIsValuedOperator(operand Expression) *IsValuedOperator {
+	return &IsValuedOperator{
+		operand: operand,
+	}
+}
+
+func (this *IsValuedOperator) Evaluate(item Item) (Value, error) {
+	ov, err := this.operand.Evaluate(item)
+	if err != nil {
+		switch err := err.(type) {
+		case *Undefined:
+			return false, nil
+		default:
+			// any other error should be returned to caller
+			return nil, err
+		}
+	}
+
+	if ov == nil {
+		return false, nil
+	}
+
+	return true, nil
+}
+
+// ****************************************************************************
+// IS NOT VALUED
+// ****************************************************************************
+
+type IsNotValuedOperator struct {
+	operand Expression
+}
+
+func NewIsNotValuedOperator(operand Expression) *IsNotValuedOperator {
+	return &IsNotValuedOperator{
+		operand: operand,
+	}
+}
+
+func (this *IsNotValuedOperator) Evaluate(item Item) (Value, error) {
+	ov, err := this.operand.Evaluate(item)
+	if err != nil {
+		switch err := err.(type) {
+		case *Undefined:
+			return false, nil
+		default:
+			// any other error should be returned to caller
+			return nil, err
+		}
+	}
+
+	if ov == nil {
+		return true, nil
+	}
+
+	return false, nil
 }
