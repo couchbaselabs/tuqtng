@@ -4,13 +4,15 @@
                     logDebugTokens("STRING"); 
                     return STRING 
                   }
+/\./              { logDebugTokens("DOT"); return DOT }
 /\+/              { logDebugTokens("PLUS"); return PLUS }
 /-/               { logDebugTokens("MINUS"); return MINUS }
 /\*/              { logDebugTokens("MULT"); return MULT }
 /\//              { logDebugTokens("DIV"); return DIV }
+/%/               { logDebugTokens("MOD"); return MOD }
 /[aA][nN][dD]/    { logDebugTokens("AND"); return AND }
 /[oO][rR]/        { logDebugTokens("OR"); return OR }
-/\=\=/              { logDebugTokens("EQ"); return EQ }
+/\=\=/            { logDebugTokens("EQ"); return EQ }
 /\=/              { logDebugTokens("EQ"); return EQ }
 /\!\=/            { logDebugTokens("NE"); return NE }
 /\<\>/            { logDebugTokens("NE"); return NE }
@@ -19,7 +21,30 @@
 /\>/              { logDebugTokens("GT"); return GT }
 /\>\=/            { logDebugTokens("GTE"); return GTE }
 /[nN][oO][tT]/    { logDebugTokens("NOT"); return NOT }
-/\|\|/              { logDebugTokens("CONCAT"); return CONCAT }
+/[lL][iI][kK][eE]/ { logDebugTokens("LIKE"); return LIKE }
+/[iI][sS]/        { logDebugTokens("IS"); return IS }
+/[mM][iI][sS][sS][iI][nN][gG]/
+                  { logDebugTokens("MISSING"); return MISSING }
+/[vV][aA][lL][uU][eE][dD]/
+                  { logDebugTokens("VALUED"); return VALUED }
+/[sS][eE][lL][eE][cC][tT]/
+                  { logDebugTokens("SELECT"); return SELECT }
+/[aA][sS]/        { logDebugTokens("AS"); return AS }
+/[fF][rR][oO][mM]/
+                  { logDebugTokens("FROM"); return FROM }
+/[wW][hH][eE][rR][eE]/
+                  { logDebugTokens("WHERE"); return WHERE }
+/[oO][rR][dD][eE][rR]/
+                  { logDebugTokens("ORDER"); return ORDER }
+/[bB][yY]/        { logDebugTokens("BY"); return BY }
+/[aA][sS][cC]/    { logDebugTokens("ASC"); return ASC }
+/[dD][eE][sS][cC]/
+                  { logDebugTokens("DESC"); return DESC }
+/[lL][iI][mM][iI][tT]/
+                  { logDebugTokens("LIMIT"); return LIMIT }
+/[oO][fF][fF][sS][eE][tT]/
+                  { logDebugTokens("OFFSET"); return OFFSET }
+/\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }
 /\{/              { logDebugTokens("LBRACE"); return LBRACE }

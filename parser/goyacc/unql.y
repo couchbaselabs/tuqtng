@@ -16,6 +16,9 @@ s string
 n int
 f float64}
 
+%token SELECT AS FROM WHERE
+%token ORDER BY ASC DESC
+%token LIMIT OFFSET
 %token LBRACE RBRACE LBRACKET RBRACKET
 %token COMMA COLON DQUOTE
 %token TRUE FALSE NULL
@@ -25,19 +28,174 @@ f float64}
 %token AND OR NOT
 %token EQ NE GT GTE LT LTE
 %token LPAREN RPAREN
+%token LIKE IS VALUED MISSING
+%token DOT
+%left DOT LBRACKET
 %left OR
 %left AND 
-%left EQ LT LTE GT GTE NE
-%left PLUS MINUS MULT DIV CONCAT
+%left EQ LT LTE GT GTE NE LIKE
+%left PLUS MINUS MULT DIV MOD CONCAT
 %right NOT
 
 %%
 
 input: 
-expression { 
+select_stmt { 
 	logDebugGrammar("INPUT") 
 }
 ;
+
+//STATEMENT
+select_stmt:
+select_compound select_order select_limit_offset {
+	logDebugGrammar("SELECT_STMT")
+}
+;
+
+select_compound:    
+select_core { 
+	// future extensibility for comining queries with UNION, etc
+	logDebugGrammar("SELECT_COMPOUND") 
+}
+;
+
+select_core:    
+select_select select_from select_where { 
+	logDebugGrammar("SELECT_CORE")
+}
+;
+
+select_select:  
+select_select_head select_select_tail {
+	logDebugGrammar("SELECT_SELECT")
+}
+;
+
+select_select_head:  
+SELECT { 
+	logDebugGrammar("SELECT_SELECT_HEAD")
+}
+;
+
+select_select_tail:		
+result_list { 
+	logDebugGrammar("SELECT SELECT TAIL - EXPR")
+}
+;
+
+result_list:
+result_single {
+	
+}
+|
+result_single COMMA result_list {
+	
+};
+
+result_single:
+dotted_path_star {
+	logDebugGrammar("RESULT STAR")
+}
+|
+expression { 
+	logDebugGrammar("RESULT EXPR")
+}
+|
+expression AS IDENTIFIER { 
+	logDebugGrammar("SORT EXPR ASC")
+}
+;
+
+dotted_path_star:
+MULT {
+	logDebugGrammar("STAR")
+}
+|
+expr DOT MULT {
+	logDebugGrammar("PATH DOT STAR")
+}
+
+select_from:
+/* empty */ {
+	logDebugGrammar("SELECT FROM - EMPTY")
+}
+|
+FROM data_source {
+	logDebugGrammar("SELECT FROM - DATASOURCE")
+}
+
+data_source:
+IDENTIFIER {
+	logDebugGrammar("FROM DATASOURCE")
+}
+|
+IDENTIFIER AS IDENTIFIER {
+    // fixme support over as
+	logDebugGrammar("FROM DATASOURCE AS")
+}
+
+select_where:   
+/* empty */ { 
+	logDebugGrammar("SELECT WHERE - EMPTY")
+}
+|
+WHERE expression {
+	logDebugGrammar("SELECT WHERE - EXPR")
+};
+
+select_order:   
+/* empty */
+|
+ORDER BY sorting_list {
+	
+}
+;
+
+sorting_list:
+sorting_single {
+	
+}
+|
+sorting_single COMMA sorting_list {
+	
+};
+
+sorting_single:
+expression { 
+	logDebugGrammar("SORT EXPR")
+}
+|
+expression ASC { 
+	logDebugGrammar("SORT EXPR ASC")
+}
+|
+expression DESC { 
+	logDebugGrammar("SORT EXPR DESC")
+};
+
+select_limit_offset:
+/* empty */ {
+	
+}
+|
+select_limit {
+	
+}
+|
+select_limit select_offset {
+	
+}
+;
+
+select_limit:
+LIMIT INT {
+	logDebugGrammar("LIMIT")
+};
+
+select_offset:
+OFFSET INT { 
+	logDebugGrammar("OFFSET")
+};
 
 //EXPRESSION
 
@@ -61,6 +219,10 @@ expr MULT expr {
 |
 expr DIV expr {
 	logDebugGrammar("EXPR - DIV")
+}
+|
+expr MOD expr {
+	logDebugGrammar("EXPR - MOD")
 }
 |
 expr CONCAT expr {
@@ -99,6 +261,22 @@ expr NE expr {
 	logDebugGrammar("EXPR - NE")
 }
 |
+expr LIKE expr {
+	logDebugGrammar("EXPR - LIKE")
+}
+|
+expr NOT LIKE expr {
+	logDebugGrammar("EXPR - NOT LIKE")
+}
+|
+expr DOT IDENTIFIER {
+	logDebugGrammar("EXPR DOT MEMBER")
+}
+|
+expr LBRACKET expr RBRACKET {
+	logDebugGrammar("EXPR BRACKET MEMBER")
+}
+|
 prefix_expr {
 	
 }
@@ -109,6 +287,10 @@ NOT prefix_expr {
 	logDebugGrammar("EXPR - NOT")
 }
 |
+MINUS prefix_expr {
+	logDebugGrammar("EXPR - CHANGE SIGN")
+}
+|
 suffix_expr {
 	
 };
@@ -116,7 +298,32 @@ suffix_expr {
 suffix_expr: 
 atom {
 	logDebugGrammar("SUFFIX_EXPR")
-};
+}
+|
+atom IS NULL {
+	logDebugGrammar("SUFFIX_EXPR IS NULL")
+}
+|
+atom IS NOT NULL {
+	logDebugGrammar("SUFFIX_EXPR IS NOT NULL")
+}
+|
+atom IS MISSING {
+	logDebugGrammar("SUFFIX_EXPR IS MISSING")
+}
+|
+atom IS NOT MISSING {
+	logDebugGrammar("SUFFIX_EXPR IS NOT MISSING")
+}
+|
+atom IS VALUED {
+	logDebugGrammar("SUFFIX_EXPR IS VALUED")
+}
+|
+atom IS NOT VALUED {
+	logDebugGrammar("SUFFIX_EXPR IS NOT VALUED")
+}
+;
 
 atom:
 IDENTIFIER
