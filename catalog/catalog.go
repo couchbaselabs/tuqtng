@@ -16,8 +16,9 @@ type Error error
 type Item interface {
 }
 
-// Store represents a storage engine, e.g. CouchStore or file-based
-type Store interface {
+// Site represents a cluster or single-node server
+type Site interface {
+	URL() string
 }
 
 // Pool represents a logical authentication, query, and resource
