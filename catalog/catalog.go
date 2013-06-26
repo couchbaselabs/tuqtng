@@ -28,7 +28,7 @@ type Pool interface {
 
 // Catalog represents the subset of the system catalog for a specific
 // pool.  Even though the entire system catalog is stored as a single
-// bucket, only the subset for the currently authenticated Pool is loaded
+// bucket, only the subset for the currently authenticated pool is loaded
 // into this Catalog object.
 type Catalog interface {
 	Buckets() (map[string]*Bucket, Error)
@@ -82,7 +82,8 @@ const (
 	DESC           = 2
 )
 
-// RangeScanner is the base type for view and btree scanners.
+// RangeScanner is the base type for view and declarative index
+// scanners.
 type RangeScanner interface {
 	Scanner
 	Key() []string
