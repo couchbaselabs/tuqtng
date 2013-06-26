@@ -18,5 +18,8 @@ type Undefined struct {
 }
 
 func (this *Undefined) Error() string {
-	return fmt.Sprintf("%s is not defined", this.path)
+	if this.path != "" {
+		return fmt.Sprintf("%s is not defined", this.path)
+	}
+	return fmt.Sprint("not defined")
 }
