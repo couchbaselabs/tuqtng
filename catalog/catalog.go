@@ -9,21 +9,33 @@
 
 package catalog
 
-// Will be moved to a shared package
+// Error will be moved to a shared package
 type Error error
 
-// Will be moved to a shared package
+// Item will be moved to a shared package
 type Item interface {
 }
 
+// Store represents a storage engine, e.g. CouchStore or file-based
 type Store interface {
+}
+
+// Pool represents a logical authentication, query, and resource
+// allocation boundary, as well as a grouping of buckets.
+type Pool interface {
 	Catalog() (*Catalog, Error)
 }
 
+// Catalog represents the subset of the system catalog for a specific
+// pool.  Even though the entire system catalog is stored as a single
+// bucket, only the subset for the currently authenticated Pool is loaded
+// into this Catalog object.
 type Catalog interface {
 	Buckets() (map[string]*Bucket, Error)
 }
 
+// Bucket is a collection of key-value entries (typically
+// key-document, but not always).
 type Bucket interface {
 	Name() string
 	Count() (int64, Error) // why is this needed?
@@ -31,6 +43,8 @@ type Bucket interface {
 	Fetch(id string) (*Item, Error)
 }
 
+// IndexStatistics captures statistics for a range index (view or
+// btree index).
 type IndexStatistics interface {
 	Count() (int64, Error)
 	Min() (*Item, Error)
@@ -39,6 +53,7 @@ type IndexStatistics interface {
 	Bins() ([]*Bin, Error)
 }
 
+// Bin represents a range bin within IndexStatistics.
 type Bin interface {
 	Count() (int64, Error)
 	Min() (*Item, Error)
@@ -48,14 +63,18 @@ type Bin interface {
 
 type ItemChannel chan *Item
 
+// Scanner is the base type for full and various index scanners.
 type Scanner interface {
 	Channel() (ItemChannel, Error)
 }
 
+// FullScanner performs full bucket scans.
 type FullScanner interface {
 	Scanner
 }
 
+// Direction represents ASC and DESC
+// TODO: Is this needed?
 type Direction int
 
 const (
@@ -63,6 +82,7 @@ const (
 	DESC           = 2
 )
 
+// RangeScanner is the base type for view and btree scanners.
 type RangeScanner interface {
 	Scanner
 	Key() []string
@@ -70,17 +90,17 @@ type RangeScanner interface {
 	Statistics() (*IndexStatistics, Error)
 }
 
-// Couchbase view indexes
+// ViewScanner represents Couchbase view indexes.
 type ViewScanner interface {
 	RangeScanner
 }
 
-// Declarative btree indexes
+// IndexScanner represents declarative btree indexes.
 type IndexScanner interface {
 	RangeScanner
 }
 
-// Full text search
+// SearchScanner represents full text search indexes.
 type SearchScanner interface {
 	Scanner
 }
