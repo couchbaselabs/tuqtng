@@ -11,13 +11,21 @@ package ast
 
 // Statement is the abstract representation of an UNQL statement
 type Statement interface {
+	GetResultExpressionList() ResultExpressionList
 	GetFrom() From
 	GetWhere() Expression
+	GetOrderBy() []*SortExpression
+	GetOffset() int
+	GetLimit() int
 }
 
 type SelectStatement struct {
-	From  From       `json:"from"`
-	Where Expression `json:"where"`
+	Select  ResultExpressionList `json:"select"`
+	From    From                 `json:"from"`
+	Where   Expression           `json:"where"`
+	OrderBy []*SortExpression    `json:"orderby"`
+	Limit   int                  `json:"limit"`
+	Offset  int                  `json:"offset"`
 }
 
 func NewSelectStatement() *SelectStatement {
@@ -30,4 +38,20 @@ func (this *SelectStatement) GetFrom() From {
 
 func (this *SelectStatement) GetWhere() Expression {
 	return this.Where
+}
+
+func (this *SelectStatement) GetOrderBy() []*SortExpression {
+	return this.OrderBy
+}
+
+func (this *SelectStatement) GetLimit() int {
+	return this.Limit
+}
+
+func (this *SelectStatement) GetOffset() int {
+	return this.Offset
+}
+
+func (this *SelectStatement) GetResultExpressionList() ResultExpressionList {
+	return this.Select
 }

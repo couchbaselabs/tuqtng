@@ -528,70 +528,98 @@ yydefault:
 		//line unql.y:83
 		{ 
 		logDebugGrammar("SELECT SELECT TAIL - EXPR")
+		result_expr_list := parsingStack.Pop().(ast.ResultExpressionList)
+		switch parsingStatement := parsingStatement.(type) {
+		case *ast.SelectStatement:
+			parsingStatement.Select = result_expr_list
+		default:
+			logDebugGrammar("This statement does not support WHERE")
+		}
+	
 	}
 	case 8:
-		//line unql.y:89
+		//line unql.y:97
 		{
-		
+		result_expr := parsingStack.Pop().(*ast.ResultExpression)
+		parsingStack.Push(ast.ResultExpressionList{result_expr})
 	}
 	case 9:
-		//line unql.y:93
+		//line unql.y:102
 		{
-		
+		result_expr_list := parsingStack.Pop().(ast.ResultExpressionList)
+		result_expr := parsingStack.Pop().(*ast.ResultExpression)
+		// list items pushed onto the stack end up in reverse order
+	// this prepends items in the list to restore order
+	new_list := ast.ResultExpressionList{result_expr}
+		for _, v := range result_expr_list {
+			new_list = append(new_list, v)
+		}
+		parsingStack.Push(new_list)
 	}
 	case 10:
-		//line unql.y:98
+		//line unql.y:115
 		{
 		logDebugGrammar("RESULT STAR")
 	}
 	case 11:
-		//line unql.y:102
+		//line unql.y:119
 		{ 
 		logDebugGrammar("RESULT EXPR")
+		expr_part := parsingStack.Pop().(ast.Expression)
+		result_expr := ast.NewResultExpression(expr_part)
+		parsingStack.Push(result_expr)
 	}
 	case 12:
-		//line unql.y:106
+		//line unql.y:126
 		{ 
 		logDebugGrammar("SORT EXPR ASC")
+		expr_part := parsingStack.Pop().(ast.Expression)
+		result_expr := ast.NewResultExpressionWithAlias(expr_part, yyS[yypt-0].s)
+		parsingStack.Push(result_expr)
 	}
 	case 13:
-		//line unql.y:112
+		//line unql.y:135
 		{
 		logDebugGrammar("STAR")
+		result_expr := ast.NewStarResultExpression()
+		parsingStack.Push(result_expr)
 	}
 	case 14:
-		//line unql.y:116
+		//line unql.y:141
 		{
 		logDebugGrammar("PATH DOT STAR")
+		expr_part := parsingStack.Pop().(ast.Expression)
+		result_expr := ast.NewDotStarResultExpression(expr_part)
+		parsingStack.Push(result_expr)
 	}
 	case 15:
-		//line unql.y:121
+		//line unql.y:149
 		{
 		logDebugGrammar("SELECT FROM - EMPTY")
 	}
 	case 16:
-		//line unql.y:125
+		//line unql.y:153
 		{
 		logDebugGrammar("SELECT FROM - DATASOURCE")
 	}
 	case 17:
-		//line unql.y:130
+		//line unql.y:158
 		{
 		logDebugGrammar("FROM DATASOURCE")
 	}
 	case 18:
-		//line unql.y:134
+		//line unql.y:162
 		{
 	    // fixme support over as
 	logDebugGrammar("FROM DATASOURCE AS")
 	}
 	case 19:
-		//line unql.y:140
+		//line unql.y:168
 		{ 
 		logDebugGrammar("SELECT WHERE - EMPTY")
 	}
 	case 20:
-		//line unql.y:144
+		//line unql.y:172
 		{
 		logDebugGrammar("SELECT WHERE - EXPR")
 		where_part := parsingStack.Pop().(ast.Expression)
@@ -603,67 +631,100 @@ yydefault:
 		}
 	}
 	case 22:
-		//line unql.y:158
-		{
-		
-	}
-	case 23:
-		//line unql.y:164
-		{
-		
-	}
-	case 24:
-		//line unql.y:168
-		{
-		
-	}
-	case 25:
-		//line unql.y:173
-		{ 
-		logDebugGrammar("SORT EXPR")
-	}
-	case 26:
-		//line unql.y:177
-		{ 
-		logDebugGrammar("SORT EXPR ASC")
-	}
-	case 27:
-		//line unql.y:181
-		{ 
-		logDebugGrammar("SORT EXPR DESC")
-	}
-	case 28:
 		//line unql.y:186
 		{
 		
 	}
+	case 23:
+		//line unql.y:192
+		{
+		
+	}
+	case 24:
+		//line unql.y:196
+		{
+		
+	}
+	case 25:
+		//line unql.y:201
+		{ 
+		logDebugGrammar("SORT EXPR")
+		expr := parsingStack.Pop()
+		switch parsingStatement := parsingStatement.(type) {
+		case *ast.SelectStatement:
+			parsingStatement.OrderBy = append(parsingStatement.OrderBy, ast.NewSortExpression(expr.(ast.Expression), true))
+		default:
+			logDebugGrammar("This statement does not support ORDER BY")
+		}
+	}
+	case 26:
+		//line unql.y:212
+		{ 
+		logDebugGrammar("SORT EXPR ASC")
+		expr := parsingStack.Pop()
+		switch parsingStatement := parsingStatement.(type) {
+		case *ast.SelectStatement:
+			parsingStatement.OrderBy = append(parsingStatement.OrderBy, ast.NewSortExpression(expr.(ast.Expression), true))
+		default:
+			logDebugGrammar("This statement does not support ORDER BY")
+		}
+	}
+	case 27:
+		//line unql.y:223
+		{ 
+		logDebugGrammar("SORT EXPR DESC")
+		expr := parsingStack.Pop()
+		switch parsingStatement := parsingStatement.(type) {
+		case *ast.SelectStatement:
+			parsingStatement.OrderBy = append(parsingStatement.OrderBy, ast.NewSortExpression(expr.(ast.Expression), false))
+		default:
+			logDebugGrammar("This statement does not support ORDER BY")
+		}
+	}
+	case 28:
+		//line unql.y:235
+		{
+		
+	}
 	case 29:
-		//line unql.y:190
+		//line unql.y:239
 		{
 		
 	}
 	case 30:
-		//line unql.y:194
+		//line unql.y:243
 		{
 		
 	}
 	case 31:
-		//line unql.y:200
+		//line unql.y:249
 		{
-		logDebugGrammar("LIMIT")
+		logDebugGrammar("LIMIT %d", yyS[yypt-0].n)
+		switch parsingStatement := parsingStatement.(type) {
+		case *ast.SelectStatement:
+			parsingStatement.Limit = yyS[yypt-0].n
+		default:
+			logDebugGrammar("This statement does not support LIMIT")
+		}
 	}
 	case 32:
-		//line unql.y:205
+		//line unql.y:260
 		{ 
-		logDebugGrammar("OFFSET")
+		logDebugGrammar("OFFSET %d", yyS[yypt-0].n)
+		switch parsingStatement := parsingStatement.(type) {
+		case *ast.SelectStatement:
+			parsingStatement.Offset = yyS[yypt-0].n
+		default:
+			logDebugGrammar("This statement does not support OFFSET")
+		}
 	}
 	case 33:
-		//line unql.y:212
+		//line unql.y:273
 		{
 		logDebugGrammar("EXPRESSION")
 	}
 	case 34:
-		//line unql.y:217
+		//line unql.y:278
 		{
 		logDebugGrammar("EXPR - PLUS")
 		right := parsingStack.Pop()
@@ -672,7 +733,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 35:
-		//line unql.y:225
+		//line unql.y:286
 		{
 		logDebugGrammar("EXPR - MINUS")
 		right := parsingStack.Pop()
@@ -681,7 +742,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 36:
-		//line unql.y:233
+		//line unql.y:294
 		{
 		logDebugGrammar("EXPR - MULT")
 		right := parsingStack.Pop()
@@ -690,7 +751,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 37:
-		//line unql.y:241
+		//line unql.y:302
 		{
 		logDebugGrammar("EXPR - DIV")
 		right := parsingStack.Pop()
@@ -699,7 +760,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 38:
-		//line unql.y:249
+		//line unql.y:310
 		{
 		logDebugGrammar("EXPR - MOD")
 		right := parsingStack.Pop()
@@ -708,7 +769,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 39:
-		//line unql.y:257
+		//line unql.y:318
 		{
 		logDebugGrammar("EXPR - CONCAT")
 		right := parsingStack.Pop()
@@ -717,7 +778,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 40:
-		//line unql.y:265
+		//line unql.y:326
 		{
 		logDebugGrammar("EXPR - AND")
 		right := parsingStack.Pop()
@@ -726,7 +787,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 41:
-		//line unql.y:273
+		//line unql.y:334
 		{
 		logDebugGrammar("EXPR - OR")
 		right := parsingStack.Pop()
@@ -735,7 +796,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 42:
-		//line unql.y:281
+		//line unql.y:342
 		{
 		logDebugGrammar("EXPR - EQ")
 		right := parsingStack.Pop()
@@ -744,7 +805,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 43:
-		//line unql.y:289
+		//line unql.y:350
 		{
 		logDebugGrammar("EXPR - LT")
 		right := parsingStack.Pop()
@@ -753,7 +814,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 44:
-		//line unql.y:297
+		//line unql.y:358
 		{
 		logDebugGrammar("EXPR - LTE")
 		right := parsingStack.Pop()
@@ -762,7 +823,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 45:
-		//line unql.y:305
+		//line unql.y:366
 		{
 		logDebugGrammar("EXPR - GT")
 		right := parsingStack.Pop()
@@ -771,7 +832,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 46:
-		//line unql.y:313
+		//line unql.y:374
 		{
 		logDebugGrammar("EXPR - GTE")
 		right := parsingStack.Pop()
@@ -780,7 +841,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 47:
-		//line unql.y:321
+		//line unql.y:382
 		{
 		logDebugGrammar("EXPR - NE")
 		right := parsingStack.Pop()
@@ -789,7 +850,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 48:
-		//line unql.y:329
+		//line unql.y:390
 		{
 		logDebugGrammar("EXPR - LIKE")
 		right := parsingStack.Pop()
@@ -798,7 +859,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 49:
-		//line unql.y:337
+		//line unql.y:398
 		{
 		logDebugGrammar("EXPR - NOT LIKE")
 		right := parsingStack.Pop()
@@ -807,7 +868,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 50:
-		//line unql.y:345
+		//line unql.y:406
 		{
 		logDebugGrammar("EXPR DOT MEMBER")
 		right := ast.NewProperty(yyS[yypt-0].s) 
@@ -816,7 +877,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 51:
-		//line unql.y:353
+		//line unql.y:414
 		{
 		logDebugGrammar("EXPR BRACKET MEMBER")
 		right := parsingStack.Pop()
@@ -825,12 +886,12 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 52:
-		//line unql.y:361
+		//line unql.y:422
 		{
 		
 	}
 	case 53:
-		//line unql.y:367
+		//line unql.y:428
 		{
 		logDebugGrammar("EXPR - NOT")
 		operand := parsingStack.Pop()
@@ -838,7 +899,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 54:
-		//line unql.y:374
+		//line unql.y:435
 		{
 		logDebugGrammar("EXPR - CHANGE SIGN")
 		operand := parsingStack.Pop()
@@ -846,17 +907,17 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 55:
-		//line unql.y:381
+		//line unql.y:442
 		{
 		
 	}
 	case 56:
-		//line unql.y:386
+		//line unql.y:447
 		{
 		logDebugGrammar("SUFFIX_EXPR")
 	}
 	case 57:
-		//line unql.y:390
+		//line unql.y:451
 		{
 		logDebugGrammar("SUFFIX_EXPR IS NULL")
 		operand := parsingStack.Pop()
@@ -864,7 +925,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 58:
-		//line unql.y:397
+		//line unql.y:458
 		{
 		logDebugGrammar("SUFFIX_EXPR IS NOT NULL")
 		operand := parsingStack.Pop()
@@ -872,7 +933,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 59:
-		//line unql.y:404
+		//line unql.y:465
 		{
 		logDebugGrammar("SUFFIX_EXPR IS MISSING")
 		operand := parsingStack.Pop()
@@ -880,7 +941,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 60:
-		//line unql.y:411
+		//line unql.y:472
 		{
 		logDebugGrammar("SUFFIX_EXPR IS NOT MISSING")
 		operand := parsingStack.Pop()
@@ -888,7 +949,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 61:
-		//line unql.y:418
+		//line unql.y:479
 		{
 		logDebugGrammar("SUFFIX_EXPR IS VALUED")
 		operand := parsingStack.Pop()
@@ -896,7 +957,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 62:
-		//line unql.y:425
+		//line unql.y:486
 		{
 		logDebugGrammar("SUFFIX_EXPR IS NOT VALUED")
 		operand := parsingStack.Pop()
@@ -904,93 +965,95 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 63:
-		//line unql.y:434
+		//line unql.y:495
 		{
 		thisExpression := ast.NewProperty(yyS[yypt-0].s) 
 		parsingStack.Push(thisExpression) 
 	}
 	case 64:
-		//line unql.y:439
+		//line unql.y:500
 		{
 		logDebugGrammar("LITERAL")
 	}
 	case 65:
-		//line unql.y:443
+		//line unql.y:504
 		{
 		logDebugGrammar("NESTED EXPR")
 	}
 	case 66:
-		//line unql.y:450
+		//line unql.y:511
 		{
 		logDebugGrammar("STRING %s", yyS[yypt-0].s)
 		thisExpression := ast.NewLiteralString(yyS[yypt-0].s) 
 		parsingStack.Push(thisExpression)
 	}
 	case 67:
-		//line unql.y:456
+		//line unql.y:517
 		{
 		logDebugGrammar("NUMBER %f", yyS[yypt-0].f)
 		thisExpression := ast.NewLiteralNumber(yyS[yypt-0].f)
 		parsingStack.Push(thisExpression)
 	}
 	case 68:
-		//line unql.y:462
+		//line unql.y:523
 		{
 		logDebugGrammar("OBJECT")
 	}
 	case 69:
-		//line unql.y:466
+		//line unql.y:527
 		{
 		logDebugGrammar("ARRAY")
 	}
 	case 70:
-		//line unql.y:470
+		//line unql.y:531
 		{
 		logDebugGrammar("TRUE")
 		thisExpression := ast.NewLiteralBool(true) 
 		parsingStack.Push(thisExpression)
 	}
 	case 71:
-		//line unql.y:476
+		//line unql.y:537
 		{
 		logDebugGrammar("FALSE")
 		thisExpression := ast.NewLiteralBool(false) 
 		parsingStack.Push(thisExpression)
 	}
 	case 72:
-		//line unql.y:482
+		//line unql.y:543
 		{
 		logDebugGrammar("NULL")
 		thisExpression := ast.NewLiteralNull()
 		parsingStack.Push(thisExpression)
 	}
 	case 73:
-		//line unql.y:490
+		//line unql.y:551
 		{
 		logDebugGrammar("NUMBER %d", yyS[yypt-0].n)
 	}
 	case 74:
-		//line unql.y:494
+		//line unql.y:555
 		{
 		logDebugGrammar("NUMBER %f", yyS[yypt-0].f)
 	}
 	case 75:
-		//line unql.y:500
+		//line unql.y:561
 		{
 		logDebugGrammar("EMPTY OBJECT")
+		emptyObject := ast.NewLiteralObject(map[string]ast.Expression{})
+		parsingStack.Push(emptyObject)
 	}
 	case 76:
-		//line unql.y:504
+		//line unql.y:567
 		{
 		logDebugGrammar("OBJECT")
 	}
 	case 77:
-		//line unql.y:510
+		//line unql.y:573
 		{
 		logDebugGrammar("NAMED EXPR LIST SINGLE")
 	}
 	case 78:
-		//line unql.y:514
+		//line unql.y:577
 		{
 		logDebugGrammar("NAMED EXPR LIST COMPOUND")
 		last := parsingStack.Pop().(*ast.LiteralObject)
@@ -1001,7 +1064,7 @@ yydefault:
 		parsingStack.Push(rest)
 	}
 	case 79:
-		//line unql.y:526
+		//line unql.y:589
 		{  
 		logDebugGrammar("NAMED EXPR SINGLE")
 		thisKey := yyS[yypt-2].s
@@ -1010,14 +1073,14 @@ yydefault:
 		parsingStack.Push(thisExpression) 
 	}
 	case 80:
-		//line unql.y:536
+		//line unql.y:599
 		{
 		logDebugGrammar("EMPTY ARRAY")
 		thisExpression := ast.NewLiteralArray([]ast.Expression{})
 		parsingStack.Push(thisExpression)
 	}
 	case 81:
-		//line unql.y:542
+		//line unql.y:605
 		{
 		logDebugGrammar("ARRAY")
 		exp_list := parsingStack.Pop().([]ast.Expression)
@@ -1025,7 +1088,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 82:
-		//line unql.y:551
+		//line unql.y:614
 		{
 		logDebugGrammar("EXPRESSION LIST SINGLE")
 		exp_list := make([]ast.Expression, 0)
@@ -1033,7 +1096,7 @@ yydefault:
 		parsingStack.Push(exp_list)
 	}
 	case 83:
-		//line unql.y:558
+		//line unql.y:621
 		{ 
 		logDebugGrammar("EXPRESSION LIST COMPOUND")
 		rest := parsingStack.Pop().([]ast.Expression)

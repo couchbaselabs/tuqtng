@@ -82,16 +82,33 @@ SELECT {
 select_select_tail:		
 result_list { 
 	logDebugGrammar("SELECT SELECT TAIL - EXPR")
+	result_expr_list := parsingStack.Pop().(ast.ResultExpressionList)
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.Select = result_expr_list
+	default:
+		logDebugGrammar("This statement does not support WHERE")
+	}
+
 }
 ;
 
 result_list:
 result_single {
-	
+	result_expr := parsingStack.Pop().(*ast.ResultExpression)
+	parsingStack.Push(ast.ResultExpressionList{result_expr})
 }
 |
 result_single COMMA result_list {
-	
+	result_expr_list := parsingStack.Pop().(ast.ResultExpressionList)
+	result_expr := parsingStack.Pop().(*ast.ResultExpression)
+	// list items pushed onto the stack end up in reverse order
+	// this prepends items in the list to restore order
+	new_list := ast.ResultExpressionList{result_expr}
+	for _, v := range result_expr_list {
+		new_list = append(new_list, v)
+	}
+	parsingStack.Push(new_list)
 };
 
 result_single:
@@ -101,20 +118,31 @@ dotted_path_star {
 |
 expression { 
 	logDebugGrammar("RESULT EXPR")
+	expr_part := parsingStack.Pop().(ast.Expression)
+	result_expr := ast.NewResultExpression(expr_part)
+	parsingStack.Push(result_expr)
 }
 |
 expression AS IDENTIFIER { 
 	logDebugGrammar("SORT EXPR ASC")
+	expr_part := parsingStack.Pop().(ast.Expression)
+	result_expr := ast.NewResultExpressionWithAlias(expr_part, $3.s)
+	parsingStack.Push(result_expr)
 }
 ;
 
 dotted_path_star:
 MULT {
 	logDebugGrammar("STAR")
+	result_expr := ast.NewStarResultExpression()
+	parsingStack.Push(result_expr)
 }
 |
 expr DOT MULT {
 	logDebugGrammar("PATH DOT STAR")
+	expr_part := parsingStack.Pop().(ast.Expression)
+	result_expr := ast.NewDotStarResultExpression(expr_part)
+	parsingStack.Push(result_expr)
 }
 
 select_from:
@@ -172,14 +200,35 @@ sorting_single COMMA sorting_list {
 sorting_single:
 expression { 
 	logDebugGrammar("SORT EXPR")
+	expr := parsingStack.Pop()
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.OrderBy = append(parsingStatement.OrderBy, ast.NewSortExpression(expr.(ast.Expression), true))
+	default:
+		logDebugGrammar("This statement does not support ORDER BY")
+	}
 }
 |
 expression ASC { 
 	logDebugGrammar("SORT EXPR ASC")
+	expr := parsingStack.Pop()
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.OrderBy = append(parsingStatement.OrderBy, ast.NewSortExpression(expr.(ast.Expression), true))
+	default:
+		logDebugGrammar("This statement does not support ORDER BY")
+	}
 }
 |
 expression DESC { 
 	logDebugGrammar("SORT EXPR DESC")
+	expr := parsingStack.Pop()
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.OrderBy = append(parsingStatement.OrderBy, ast.NewSortExpression(expr.(ast.Expression), false))
+	default:
+		logDebugGrammar("This statement does not support ORDER BY")
+	}
 };
 
 select_limit_offset:
@@ -198,12 +247,24 @@ select_limit select_offset {
 
 select_limit:
 LIMIT INT {
-	logDebugGrammar("LIMIT")
+	logDebugGrammar("LIMIT %d", $2.n)
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.Limit = $2.n
+	default:
+		logDebugGrammar("This statement does not support LIMIT")
+	}
 };
 
 select_offset:
 OFFSET INT { 
-	logDebugGrammar("OFFSET")
+	logDebugGrammar("OFFSET %d", $2.n)
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.Offset = $2.n
+	default:
+		logDebugGrammar("This statement does not support OFFSET")
+	}
 };
 
 //EXPRESSION
@@ -499,6 +560,8 @@ NUMBER {
 object:
 LBRACE RBRACE {
 	logDebugGrammar("EMPTY OBJECT")
+	emptyObject := ast.NewLiteralObject(map[string]ast.Expression{})
+	parsingStack.Push(emptyObject)
 }
 |
 LBRACE named_expression_list RBRACE {

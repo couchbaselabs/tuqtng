@@ -130,7 +130,47 @@ func TestParserASTOutput(t *testing.T) {
 		input  string
 		output *ast.SelectStatement
 	}{
-		{"SELECT * FROM test WHERE true", &ast.SelectStatement{From: nil, Where: ast.NewLiteralBool(true)}},
+		{"SELECT * FROM test WHERE true",
+			&ast.SelectStatement{
+				Select: ast.ResultExpressionList{
+					ast.NewStarResultExpression(),
+				},
+				From:  nil,
+				Where: ast.NewLiteralBool(true),
+			},
+		},
+		{"SELECT * FROM test ORDER BY foo",
+			&ast.SelectStatement{
+				Select: ast.ResultExpressionList{
+					ast.NewStarResultExpression(),
+				},
+				From:  nil,
+				Where: nil,
+				OrderBy: []*ast.SortExpression{
+					ast.NewSortExpression(ast.NewProperty("foo"), true),
+				},
+			},
+		},
+		{"SELECT * FROM test LIMIT 10 OFFSET 3",
+			&ast.SelectStatement{
+				Select: ast.ResultExpressionList{
+					ast.NewStarResultExpression(),
+				},
+				From:   nil,
+				Where:  nil,
+				Limit:  10,
+				Offset: 3,
+			},
+		},
+		{"SELECT a FROM test",
+			&ast.SelectStatement{
+				Select: ast.ResultExpressionList{
+					ast.NewResultExpression(ast.NewProperty("a")),
+				},
+				From:  nil,
+				Where: nil,
+			},
+		},
 	}
 
 	DebugTokens = false

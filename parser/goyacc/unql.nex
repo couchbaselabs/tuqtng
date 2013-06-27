@@ -80,7 +80,7 @@
 /-?[0-9]|[1-9][0-9]*/
                   { 
                     lval.n,_ = strconv.Atoi(yylex.Text());
-                    logDebugTokens("INT"); 
+                    logDebugTokens("INT %d", lval.n); 
                     return INT 
                   }
 /[ \t\n]+/        { logDebugTokens("WHITESPACE (count=%d)", len(yylex.Text())) /* eat up whitespace */ }
