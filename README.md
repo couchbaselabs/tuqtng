@@ -7,13 +7,15 @@
 ### Users
 
     go get github.com/couchbaselabs/tuqtng
+    cd $GOPATH/tuqtng
+    go build
     ./tuqtnq
 
 ### Developers
 
     mkdir -p $GOPATH/src/github.com/couchbaselabs
     git clone git@github.com:couchbaselabs/tuqtng.git
-    cd tuqtng
+    cd $GOPATH/tuqtng
     go build
     ./tuqtng
 
