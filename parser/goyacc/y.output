@@ -341,37 +341,37 @@ state 29
 state 30
 	literal_value:  object.    (69)
 
-	.  reduce 69 (src line 529)
+	.  reduce 69 (src line 527)
 
 
 state 31
 	literal_value:  array.    (70)
 
-	.  reduce 70 (src line 533)
+	.  reduce 70 (src line 531)
 
 
 state 32
 	literal_value:  TRUE.    (71)
 
-	.  reduce 71 (src line 537)
+	.  reduce 71 (src line 535)
 
 
 state 33
 	literal_value:  FALSE.    (72)
 
-	.  reduce 72 (src line 543)
+	.  reduce 72 (src line 541)
 
 
 state 34
 	literal_value:  NULL.    (73)
 
-	.  reduce 73 (src line 549)
+	.  reduce 73 (src line 547)
 
 
 state 35
 	number:  INT.    (74)
 
-	.  reduce 74 (src line 557)
+	.  reduce 74 (src line 555)
 
 
 state 36
@@ -1074,7 +1074,7 @@ state 72
 state 73
 	object:  LBRACE RBRACE.    (76)
 
-	.  reduce 76 (src line 567)
+	.  reduce 76 (src line 569)
 
 
 state 74
@@ -1089,7 +1089,7 @@ state 75
 	named_expression_list:  named_expression_single.COMMA named_expression_list 
 
 	COMMA  shift 116
-	.  reduce 78 (src line 579)
+	.  reduce 78 (src line 581)
 
 
 state 76
@@ -1102,7 +1102,7 @@ state 76
 state 77
 	array:  LBRACKET RBRACKET.    (81)
 
-	.  reduce 81 (src line 605)
+	.  reduce 81 (src line 607)
 
 
 state 78
@@ -1117,7 +1117,7 @@ state 79
 	expression_list:  expression.COMMA expression_list 
 
 	COMMA  shift 119
-	.  reduce 83 (src line 620)
+	.  reduce 83 (src line 622)
 
 
 state 80
@@ -1758,7 +1758,7 @@ state 114
 state 115
 	object:  LBRACE named_expression_list RBRACE.    (77)
 
-	.  reduce 77 (src line 573)
+	.  reduce 77 (src line 575)
 
 
 state 116
@@ -1800,7 +1800,7 @@ state 117
 state 118
 	array:  LBRACKET expression_list RBRACKET.    (82)
 
-	.  reduce 82 (src line 611)
+	.  reduce 82 (src line 613)
 
 
 state 119
@@ -1942,19 +1942,19 @@ state 129
 state 130
 	named_expression_list:  named_expression_single COMMA named_expression_list.    (79)
 
-	.  reduce 79 (src line 583)
+	.  reduce 79 (src line 585)
 
 
 state 131
 	named_expression_single:  STRING COLON expression.    (80)
 
-	.  reduce 80 (src line 595)
+	.  reduce 80 (src line 597)
 
 
 state 132
 	expression_list:  expression COMMA expression_list.    (84)
 
-	.  reduce 84 (src line 627)
+	.  reduce 84 (src line 629)
 
 
 state 133

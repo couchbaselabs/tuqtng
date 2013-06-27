@@ -997,70 +997,72 @@ yydefault:
 	case 68:
 		//line unql.y:524
 		{
-		logDebugGrammar("NUMBER %f", yyS[yypt-0].f)
-		thisExpression := ast.NewLiteralNumber(yyS[yypt-0].f)
-		parsingStack.Push(thisExpression)
+		logDebugGrammar("NUMBER")
 	}
 	case 69:
-		//line unql.y:530
+		//line unql.y:528
 		{
 		logDebugGrammar("OBJECT")
 	}
 	case 70:
-		//line unql.y:534
+		//line unql.y:532
 		{
 		logDebugGrammar("ARRAY")
 	}
 	case 71:
-		//line unql.y:538
+		//line unql.y:536
 		{
 		logDebugGrammar("TRUE")
 		thisExpression := ast.NewLiteralBool(true) 
 		parsingStack.Push(thisExpression)
 	}
 	case 72:
-		//line unql.y:544
+		//line unql.y:542
 		{
 		logDebugGrammar("FALSE")
 		thisExpression := ast.NewLiteralBool(false) 
 		parsingStack.Push(thisExpression)
 	}
 	case 73:
-		//line unql.y:550
+		//line unql.y:548
 		{
 		logDebugGrammar("NULL")
 		thisExpression := ast.NewLiteralNull()
 		parsingStack.Push(thisExpression)
 	}
 	case 74:
-		//line unql.y:558
+		//line unql.y:556
 		{
 		logDebugGrammar("NUMBER %d", yyS[yypt-0].n)
+		thisExpression := ast.NewLiteralNumber(float64(yyS[yypt-0].n))
+		parsingStack.Push(thisExpression)
 	}
 	case 75:
 		//line unql.y:562
 		{
 		logDebugGrammar("NUMBER %f", yyS[yypt-0].f)
+		thisExpression := ast.NewLiteralNumber(yyS[yypt-0].f)
+		parsingStack.Push(thisExpression)
 	}
 	case 76:
-		//line unql.y:568
+		//line unql.y:570
 		{
 		logDebugGrammar("EMPTY OBJECT")
 		emptyObject := ast.NewLiteralObject(map[string]ast.Expression{})
 		parsingStack.Push(emptyObject)
 	}
 	case 77:
-		//line unql.y:574
+		//line unql.y:576
 		{
 		logDebugGrammar("OBJECT")
 	}
 	case 78:
-		//line unql.y:580
+		//line unql.y:582
 		{
 		logDebugGrammar("NAMED EXPR LIST SINGLE")
 	}
 	case 79:
-		//line unql.y:584
+		//line unql.y:586
 		{
 		logDebugGrammar("NAMED EXPR LIST COMPOUND")
 		last := parsingStack.Pop().(*ast.LiteralObject)
@@ -1071,7 +1073,7 @@ yydefault:
 		parsingStack.Push(rest)
 	}
 	case 80:
-		//line unql.y:596
+		//line unql.y:598
 		{  
 		logDebugGrammar("NAMED EXPR SINGLE")
 		thisKey := yyS[yypt-2].s
@@ -1080,14 +1082,14 @@ yydefault:
 		parsingStack.Push(thisExpression) 
 	}
 	case 81:
-		//line unql.y:606
+		//line unql.y:608
 		{
 		logDebugGrammar("EMPTY ARRAY")
 		thisExpression := ast.NewLiteralArray([]ast.Expression{})
 		parsingStack.Push(thisExpression)
 	}
 	case 82:
-		//line unql.y:612
+		//line unql.y:614
 		{
 		logDebugGrammar("ARRAY")
 		exp_list := parsingStack.Pop().([]ast.Expression)
@@ -1095,7 +1097,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 83:
-		//line unql.y:621
+		//line unql.y:623
 		{
 		logDebugGrammar("EXPRESSION LIST SINGLE")
 		exp_list := make([]ast.Expression, 0)
@@ -1103,7 +1105,7 @@ yydefault:
 		parsingStack.Push(exp_list)
 	}
 	case 84:
-		//line unql.y:628
+		//line unql.y:630
 		{ 
 		logDebugGrammar("EXPRESSION LIST COMPOUND")
 		rest := parsingStack.Pop().([]ast.Expression)

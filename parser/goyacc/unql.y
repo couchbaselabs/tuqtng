@@ -522,9 +522,7 @@ STRING {
 }
 |
 number {
-	logDebugGrammar("NUMBER %f", $1.f)
-	thisExpression := ast.NewLiteralNumber($1.f)
-	parsingStack.Push(thisExpression)
+	logDebugGrammar("NUMBER")
 }
 |
 object {
@@ -557,10 +555,14 @@ NULL {
 number:
 INT {
 	logDebugGrammar("NUMBER %d", $1.n)
+	thisExpression := ast.NewLiteralNumber(float64($1.n))
+	parsingStack.Push(thisExpression)
 }
 |
 NUMBER {
 	logDebugGrammar("NUMBER %f", $1.f)
+	thisExpression := ast.NewLiteralNumber($1.f)
+	parsingStack.Push(thisExpression)
 }
 ;
 
