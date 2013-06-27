@@ -137,6 +137,7 @@ func TestParserASTOutput(t *testing.T) {
 				},
 				From:  nil,
 				Where: ast.NewLiteralBool(true),
+				Limit: -1,
 			},
 		},
 		{"SELECT * FROM test ORDER BY foo",
@@ -149,6 +150,7 @@ func TestParserASTOutput(t *testing.T) {
 				OrderBy: []*ast.SortExpression{
 					ast.NewSortExpression(ast.NewProperty("foo"), true),
 				},
+				Limit: -1,
 			},
 		},
 		{"SELECT * FROM test LIMIT 10 OFFSET 3",
@@ -169,6 +171,7 @@ func TestParserASTOutput(t *testing.T) {
 				},
 				From:  nil,
 				Where: nil,
+				Limit: -1,
 			},
 		},
 	}
