@@ -44,6 +44,10 @@
                   { logDebugTokens("LIMIT"); return LIMIT }
 /[oO][fF][fF][sS][eE][tT]/
                   { logDebugTokens("OFFSET"); return OFFSET }
+/[eE][xX][pP][lL][aA][iI][nN]/
+                  {
+                    logDebugTokens("EXPLAIN"); return EXPLAIN
+                  }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }

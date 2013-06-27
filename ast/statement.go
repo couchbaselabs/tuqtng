@@ -17,15 +17,18 @@ type Statement interface {
 	GetOrderBy() []*SortExpression
 	GetOffset() int
 	GetLimit() int
+	SetExplainOnly(bool)
+	IsExplainOnly() bool
 }
 
 type SelectStatement struct {
-	Select  ResultExpressionList `json:"select"`
-	From    From                 `json:"from"`
-	Where   Expression           `json:"where"`
-	OrderBy []*SortExpression    `json:"orderby"`
-	Limit   int                  `json:"limit"`
-	Offset  int                  `json:"offset"`
+	Select      ResultExpressionList `json:"select"`
+	From        From                 `json:"from"`
+	Where       Expression           `json:"where"`
+	OrderBy     []*SortExpression    `json:"orderby"`
+	Limit       int                  `json:"limit"`
+	Offset      int                  `json:"offset"`
+	ExplainOnly bool                 `json:"explain"`
 }
 
 func NewSelectStatement() *SelectStatement {
@@ -54,4 +57,12 @@ func (this *SelectStatement) GetOffset() int {
 
 func (this *SelectStatement) GetResultExpressionList() ResultExpressionList {
 	return this.Select
+}
+
+func (this *SelectStatement) SetExplainOnly(explainOnly bool) {
+	this.ExplainOnly = explainOnly
+}
+
+func (this *SelectStatement) IsExplainOnly() bool {
+	return this.ExplainOnly
 }

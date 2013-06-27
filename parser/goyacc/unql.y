@@ -17,6 +17,7 @@ s string
 n int
 f float64}
 
+%token EXPLAIN
 %token SELECT AS FROM WHERE
 %token ORDER BY ASC DESC
 %token LIMIT OFFSET
@@ -73,6 +74,12 @@ select_select_head select_select_tail {
 ;
 
 select_select_head:  
+EXPLAIN SELECT { 
+	logDebugGrammar("SELECT_SELECT_HEAD")
+	parsingStatement = ast.NewSelectStatement()
+	parsingStatement.SetExplainOnly(true)
+}
+|
 SELECT { 
 	logDebugGrammar("SELECT_SELECT_HEAD")
 	parsingStatement = ast.NewSelectStatement()
