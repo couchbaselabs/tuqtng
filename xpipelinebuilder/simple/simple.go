@@ -10,7 +10,7 @@
 package simple
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/xpipeline"
@@ -23,6 +23,52 @@ func NewSimpleExecutablePipelineBuilder() *SimpleExecutablePipelineBuilder {
 	return &SimpleExecutablePipelineBuilder{}
 }
 
-func (this *SimpleExecutablePipelineBuilder) Build(*plan.Plan) (xpipeline.ExecutablePipeline, error) {
-	return nil, fmt.Errorf("Not Implemented")
+func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (xpipeline.ExecutablePipeline, error) {
+	rv := xpipeline.ExecutablePipeline{}
+
+	var lastOperator xpipeline.Operator = nil
+	currentElement := p.Root
+
+	for currentElement != nil {
+		var currentOperator xpipeline.Operator = nil
+		switch currentElement := currentElement.(type) {
+		case *plan.ExpressionEvaluator:
+			currentOperator = xpipeline.NewExpressionEvaluatorSource()
+		case *plan.Filter:
+			currentOperator = xpipeline.NewFilter(currentElement.Expr)
+		case *plan.Order:
+			currentOperator = xpipeline.NewOrder(currentElement.Sort)
+		case *plan.Limit:
+			currentOperator = xpipeline.NewLimit(currentElement.Val)
+		case *plan.Offset:
+			currentOperator = xpipeline.NewOffset(currentElement.Val)
+		case *plan.Projector:
+			currentOperator = xpipeline.NewProject(currentElement.Result)
+		}
+
+		//link root of xpipeline
+		if rv.Root == nil {
+			rv.Root = currentOperator
+		}
+
+		// link previous operator to this one
+		if lastOperator != nil {
+			lastOperator.SetSource(currentOperator)
+		}
+
+		// advance to next
+		lastOperator = currentOperator
+
+		sources := currentElement.Sources()
+		if len(sources) > 1 {
+			// FIXME future operators like JOIN will have more than one source
+			log.Fatal("multiple sources not yet supported")
+		} else if len(sources) == 1 {
+			currentElement = sources[0]
+		} else {
+			currentElement = nil
+		}
+	}
+
+	return rv, nil
 }

@@ -13,12 +13,39 @@ import (
 	"github.com/couchbaselabs/tuqtng/ast"
 )
 
-type ExecutablePipeline struct {
-	Root Operator
+type Limit struct {
+	Source      Operator
+	Limit       int
+	itemChannel ast.ItemChannel
 }
 
-type Operator interface {
-	SetSource(Operator)
-	GetItemChannel() ast.ItemChannel
-	Run()
+func NewLimit(limit int) *Limit {
+	return &Limit{
+		Limit:       limit,
+		itemChannel: make(ast.ItemChannel),
+	}
+}
+
+func (this *Limit) SetSource(source Operator) {
+	this.Source = source
+}
+
+func (this *Limit) GetItemChannel() ast.ItemChannel {
+	return this.itemChannel
+}
+
+func (this *Limit) Run() {
+	defer close(this.itemChannel)
+
+	count := 0
+
+	// start the source
+	go this.Source.Run()
+	for item := range this.Source.GetItemChannel() {
+		this.itemChannel <- item
+		count++
+		if count >= this.Limit {
+			break
+		}
+	}
 }

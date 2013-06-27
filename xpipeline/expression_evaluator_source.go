@@ -13,12 +13,26 @@ import (
 	"github.com/couchbaselabs/tuqtng/ast"
 )
 
-type ExecutablePipeline struct {
-	Root Operator
+type ExpressionEvaluatorSource struct {
+	itemChannel ast.ItemChannel
 }
 
-type Operator interface {
-	SetSource(Operator)
-	GetItemChannel() ast.ItemChannel
-	Run()
+func NewExpressionEvaluatorSource() *ExpressionEvaluatorSource {
+	return &ExpressionEvaluatorSource{
+		itemChannel: make(ast.ItemChannel),
+	}
+}
+
+func (this *ExpressionEvaluatorSource) SetSource(source Operator) {
+	panic("Cannot set source for a datasource")
+}
+
+func (this *ExpressionEvaluatorSource) GetItemChannel() ast.ItemChannel {
+	return this.itemChannel
+}
+
+func (this *ExpressionEvaluatorSource) Run() {
+	defer close(this.itemChannel)
+	item := ast.NewMapItem(map[string]ast.Value{}, nil)
+	this.itemChannel <- item
 }

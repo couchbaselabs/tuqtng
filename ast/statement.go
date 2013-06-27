@@ -19,6 +19,7 @@ type Statement interface {
 	GetLimit() int
 	SetExplainOnly(bool)
 	IsExplainOnly() bool
+	VerifySemantics() error
 }
 
 type SelectStatement struct {
@@ -32,7 +33,9 @@ type SelectStatement struct {
 }
 
 func NewSelectStatement() *SelectStatement {
-	return &SelectStatement{}
+	return &SelectStatement{
+		Limit: -1,
+	}
 }
 
 func (this *SelectStatement) GetFrom() From {
@@ -65,4 +68,19 @@ func (this *SelectStatement) SetExplainOnly(explainOnly bool) {
 
 func (this *SelectStatement) IsExplainOnly() bool {
 	return this.ExplainOnly
+}
+
+func (this *SelectStatement) VerifySemantics() error {
+	//check for duplicate aliases
+	err := this.GetResultExpressionList().CheckForDuplicateAliases()
+	if err != nil {
+		return err
+	}
+
+	// now apply default naming function
+	this.GetResultExpressionList().AssignDefaultNames()
+
+	//FIXME additional checks needed here
+
+	return nil
 }

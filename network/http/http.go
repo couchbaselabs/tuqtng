@@ -25,9 +25,11 @@ import (
 type HttpResponse struct {
 	w       http.ResponseWriter
 	results ast.ValueChannel
+	err     bool
 }
 
 func (this *HttpResponse) SendError(err error) {
+	this.err = true
 	showError(this.w, fmt.Sprintf("%v", err), 500)
 	close(this.results)
 }
@@ -118,9 +120,11 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		count++
 	}
 
-	fmt.Fprint(w, "\n    ],\n")
-	fmt.Fprintf(w, "    \"total_rows\": %d\n", count)
-	fmt.Fprint(w, "}\n")
+	if !response.err {
+		fmt.Fprint(w, "\n    ],\n")
+		fmt.Fprintf(w, "    \"total_rows\": %d\n", count)
+		fmt.Fprint(w, "}\n")
+	}
 }
 
 func mustEncode(w io.Writer, i interface{}) {

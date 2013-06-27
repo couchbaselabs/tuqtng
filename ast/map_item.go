@@ -31,6 +31,14 @@ func (this *MapItem) GetPath(path string) (Value, error) {
 	return nil, &Undefined{path}
 }
 
+func (this *MapItem) GetTopLevelKeys() []string {
+	rv := make([]string, 0, len(this.contents))
+	for k, _ := range this.contents {
+		rv = append(rv, k)
+	}
+	return rv
+}
+
 func (this *MapItem) GetMeta() map[string]Value {
 	return this.meta
 }

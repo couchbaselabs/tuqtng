@@ -17,6 +17,11 @@ type Item interface {
 	// those must be implemented as separate sub-expressions
 	GetPath(path string) (Value, error)
 	GetMeta() map[string]Value
+	// FIXME - added this method to support projecting *
+	//         not sure how well this fits with JSONPointer impl?
+	GetTopLevelKeys() []string
 }
 
 type ItemCollection []Item
+
+type ItemChannel chan Item

@@ -23,6 +23,7 @@ type Plan struct {
 type PlanChannel chan Plan
 
 type PlanElement interface {
+	Sources() []PlanElement
 }
 
 type ExpressionEvaluator struct {
@@ -35,6 +36,10 @@ func NewExpressionEvaluator() *ExpressionEvaluator {
 	}
 }
 
+func (this *ExpressionEvaluator) Sources() []PlanElement {
+	return []PlanElement{}
+}
+
 type Scan struct {
 	Type string `json:"type"`
 }
@@ -43,6 +48,10 @@ func NewScan() *Scan {
 	return &Scan{
 		Type: "scan",
 	}
+}
+
+func (this *Scan) Sources() []PlanElement {
+	return []PlanElement{}
 }
 
 type Fetch struct {
@@ -55,6 +64,10 @@ func NewFetch(input PlanElement) *Fetch {
 		Type:  "fetch",
 		Input: input,
 	}
+}
+
+func (this *Fetch) Sources() []PlanElement {
+	return []PlanElement{this.Input}
 }
 
 type Filter struct {
@@ -71,6 +84,10 @@ func NewFilter(input PlanElement, expr ast.Expression) *Filter {
 	}
 }
 
+func (this *Filter) Sources() []PlanElement {
+	return []PlanElement{this.Input}
+}
+
 type Order struct {
 	Type  string                `json:"type"`
 	Input PlanElement           `json:"input"`
@@ -83,6 +100,10 @@ func NewOrder(input PlanElement, sort []*ast.SortExpression) *Order {
 		Input: input,
 		Sort:  sort,
 	}
+}
+
+func (this *Order) Sources() []PlanElement {
+	return []PlanElement{this.Input}
 }
 
 type Limit struct {
@@ -99,6 +120,10 @@ func NewLimit(input PlanElement, limit int) *Limit {
 	}
 }
 
+func (this *Limit) Sources() []PlanElement {
+	return []PlanElement{this.Input}
+}
+
 type Offset struct {
 	Type  string      `json:"type"`
 	Input PlanElement `json:"input"`
@@ -113,6 +138,10 @@ func NewOffset(input PlanElement, offset int) *Offset {
 	}
 }
 
+func (this *Offset) Sources() []PlanElement {
+	return []PlanElement{this.Input}
+}
+
 type Projector struct {
 	Type   string                   `json:"projector"`
 	Input  PlanElement              `json:"input"`
@@ -125,4 +154,8 @@ func NewProjector(input PlanElement, result ast.ResultExpressionList) *Projector
 		Input:  input,
 		Result: result,
 	}
+}
+
+func (this *Projector) Sources() []PlanElement {
+	return []PlanElement{this.Input}
 }

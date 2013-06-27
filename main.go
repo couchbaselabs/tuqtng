@@ -36,7 +36,6 @@ func main() {
 
 	// dispatch each query that comes in
 	for query := range queryChannel {
-		log.Printf("got a query %v", query)
 		queryPipeline.DispatchQuery(query)
 	}
 }

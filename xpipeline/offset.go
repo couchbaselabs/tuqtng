@@ -13,12 +13,39 @@ import (
 	"github.com/couchbaselabs/tuqtng/ast"
 )
 
-type ExecutablePipeline struct {
-	Root Operator
+type Offset struct {
+	Source      Operator
+	Offset      int
+	itemChannel ast.ItemChannel
 }
 
-type Operator interface {
-	SetSource(Operator)
-	GetItemChannel() ast.ItemChannel
-	Run()
+func NewOffset(offset int) *Offset {
+	return &Offset{
+		Offset:      offset,
+		itemChannel: make(ast.ItemChannel),
+	}
+}
+
+func (this *Offset) SetSource(source Operator) {
+	this.Source = source
+}
+
+func (this *Offset) GetItemChannel() ast.ItemChannel {
+	return this.itemChannel
+}
+
+func (this *Offset) Run() {
+	defer close(this.itemChannel)
+
+	count := 0
+
+	// start the source
+	go this.Source.Run()
+	for item := range this.Source.GetItemChannel() {
+		count++
+		if count <= this.Offset {
+			continue
+		}
+		this.itemChannel <- item
+	}
 }

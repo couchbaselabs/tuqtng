@@ -61,6 +61,13 @@ func (this *StaticPipeline) DispatchQuery(query network.Query) {
 			return
 		}
 
+		// perform semantic verification
+		err = ast.VerifySemantics()
+		if err != nil {
+			response.SendError(err)
+			return
+		}
+
 		planChannel := this.planner.Plan(ast)
 
 		optimalPlan, err := this.optimizer.Optimize(planChannel)
