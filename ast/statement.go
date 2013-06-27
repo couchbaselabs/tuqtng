@@ -13,6 +13,21 @@ package ast
 type Statement interface {
 	GetFrom() From
 	GetWhere() Expression
-	GetGroupBy() []Expression
-	GetHaving() Expression
+}
+
+type SelectStatement struct {
+	From  From       `json:"from"`
+	Where Expression `json:"where"`
+}
+
+func NewSelectStatement() *SelectStatement {
+	return &SelectStatement{}
+}
+
+func (this *SelectStatement) GetFrom() From {
+	return this.From
+}
+
+func (this *SelectStatement) GetWhere() Expression {
+	return this.Where
 }

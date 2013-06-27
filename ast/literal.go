@@ -140,18 +140,18 @@ func (this *LiteralArray) String() string {
 // ****************************************************************************
 
 type LiteralObject struct {
-	val map[string]Expression
+	Val map[string]Expression
 }
 
 func NewLiteralObject(val map[string]Expression) *LiteralObject {
 	return &LiteralObject{
-		val: val,
+		Val: val,
 	}
 }
 
 func (this *LiteralObject) Evaluate(item Item) (Value, error) {
-	rv := make(map[string]Value, len(this.val))
-	for k, v := range this.val {
+	rv := make(map[string]Value, len(this.Val))
+	for k, v := range this.Val {
 		ev, err := v.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
@@ -169,5 +169,5 @@ func (this *LiteralObject) Evaluate(item Item) (Value, error) {
 }
 
 func (this *LiteralObject) String() string {
-	return fmt.Sprintf("%v", this.val)
+	return fmt.Sprintf("%v", this.Val)
 }

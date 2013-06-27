@@ -10,7 +10,12 @@
 package goyacc
 
 import (
+	"encoding/json"
+	"log"
+	"reflect"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/ast"
 )
 
 var validQueries = []string{
@@ -92,14 +97,21 @@ var invalidQueries = []string{
 }
 
 func TestParser(t *testing.T) {
-	DebugTokens = true
-	DebugGrammar = true
+	DebugTokens = false
+	DebugGrammar = false
 	unqlParser := NewUnqlParser()
 
 	for _, v := range validQueries {
 		_, err := unqlParser.Parse(v)
 		if err != nil {
 			t.Errorf("Valid Query Parse Failed: %v - %v", v, err)
+			//enable debugging and run it again
+			log.Printf("Debug for input: %v", v)
+			DebugTokens = true
+			DebugGrammar = true
+			unqlParser.Parse(v)
+			DebugTokens = false
+			DebugGrammar = false
 		}
 	}
 
@@ -107,6 +119,37 @@ func TestParser(t *testing.T) {
 		_, err := unqlParser.Parse(v)
 		if err == nil {
 			t.Errorf("Invalid Query Parsed Successfully: %v - %v", v, err)
+		}
+	}
+
+}
+
+func TestParserASTOutput(t *testing.T) {
+
+	tests := []struct {
+		input  string
+		output *ast.SelectStatement
+	}{
+		{"SELECT * FROM test WHERE true", &ast.SelectStatement{From: nil, Where: ast.NewLiteralBool(true)}},
+	}
+
+	DebugTokens = false
+	DebugGrammar = false
+	unqlParser := NewUnqlParser()
+
+	for _, v := range tests {
+		query, err := unqlParser.Parse(v.input)
+		if err != nil {
+			t.Errorf("Valid Query Parse Failed: %v - %v", v, err)
+		}
+
+		if !reflect.DeepEqual(query, v.output) {
+			t.Errorf("Expected %v, got %v", v.output, query)
+
+			json, err := json.Marshal(query)
+			if err == nil {
+				log.Printf("%v", string(json))
+			}
 		}
 	}
 
