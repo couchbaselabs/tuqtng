@@ -9,6 +9,10 @@
 
 package qpipeline
 
+import (
+	"github.com/couchbaselabs/tuqtng/network"
+)
+
 type QueryPipeline interface {
 	DispatchQuery(query network.Query)
 }
