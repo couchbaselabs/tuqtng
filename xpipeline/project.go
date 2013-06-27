@@ -59,7 +59,7 @@ func (this *Project) Run() {
 							}
 						}
 					} else {
-						log.Fatal("unexpected err: %v", err)
+						log.Fatalf("unexpected err: %v", err)
 					}
 				} else {
 					// just a star, take all the contents of the source item
@@ -70,7 +70,7 @@ func (this *Project) Run() {
 						if err == nil {
 							resultMap[key] = val
 						} else {
-							log.Fatal("unexpected err: %v", err)
+							log.Fatalf("unexpected err: %v", err)
 						}
 					}
 				}
@@ -80,7 +80,7 @@ func (this *Project) Run() {
 				if err == nil {
 					resultMap[resultItem.As] = val
 				} else {
-					log.Fatal("unexpected err: %v", err)
+					log.Fatalf("unexpected err: %v", err)
 				}
 			}
 		}
