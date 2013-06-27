@@ -16,19 +16,21 @@ import ()
 // ****************************************************************************
 
 type DotMemberOperator struct {
-	left  Expression
-	right *Property
+	Type  string     `json:"type"`
+	Left  Expression `json:"left"`
+	Right *Property  `json:"right"`
 }
 
 func NewDotMemberOperator(left Expression, right *Property) *DotMemberOperator {
 	return &DotMemberOperator{
-		left:  left,
-		right: right,
+		Type:  "dot_member",
+		Left:  left,
+		Right: right,
 	}
 }
 
 func (this *DotMemberOperator) Evaluate(item Item) (Value, error) {
-	lv, err := this.left.Evaluate(item)
+	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
@@ -37,10 +39,10 @@ func (this *DotMemberOperator) Evaluate(item Item) (Value, error) {
 	case map[string]Value:
 		innerContext := NewMapItem(lv, nil)
 		// now evaluate the property in this inner context
-		return this.right.Evaluate(innerContext)
+		return this.Right.Evaluate(innerContext)
 	}
 
-	return nil, &Undefined{this.right.Path}
+	return nil, &Undefined{this.Right.Path}
 }
 
 // ****************************************************************************
@@ -48,25 +50,27 @@ func (this *DotMemberOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type BracketMemberOperator struct {
-	left  Expression
-	right Expression
+	Type  string     `json:"type"`
+	Left  Expression `json:"left"`
+	Right Expression `json:"right"`
 }
 
 func NewBracketMemberOperator(left, right Expression) *BracketMemberOperator {
 	return &BracketMemberOperator{
-		left:  left,
-		right: right,
+		Type:  "bracket_member",
+		Left:  left,
+		Right: right,
 	}
 }
 
 func (this *BracketMemberOperator) Evaluate(item Item) (Value, error) {
 	// evaluting RHS first is more correct in case of side-effects
-	rv, err := this.right.Evaluate(item)
+	rv, err := this.Right.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
 
-	lv, err := this.left.Evaluate(item)
+	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}

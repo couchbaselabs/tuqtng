@@ -19,12 +19,14 @@ import (
 // ****************************************************************************
 
 type AndOperator struct {
-	operands []Expression
+	Type     string       `json:"type"`
+	Operands []Expression `json:"operands"`
 }
 
 func NewAndOperator(operands []Expression) *AndOperator {
 	return &AndOperator{
-		operands: operands,
+		Type:     "and",
+		Operands: operands,
 	}
 }
 
@@ -33,7 +35,7 @@ func (this *AndOperator) Evaluate(item Item) (Value, error) {
 	var re error
 	rv = true
 	re = nil
-	for _, operand := range this.operands {
+	for _, operand := range this.Operands {
 		operandVal, err := operand.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
@@ -61,7 +63,7 @@ func (this *AndOperator) Evaluate(item Item) (Value, error) {
 }
 
 func (this *AndOperator) String() string {
-	return fmt.Sprintf("AND %v", this.operands)
+	return fmt.Sprintf("AND %v", this.Operands)
 }
 
 // ****************************************************************************
@@ -69,12 +71,14 @@ func (this *AndOperator) String() string {
 // ****************************************************************************
 
 type OrOperator struct {
-	operands []Expression
+	Type     string       `json:"type"`
+	Operands []Expression `json:"operands"`
 }
 
 func NewOrOperator(operands []Expression) *OrOperator {
 	return &OrOperator{
-		operands: operands,
+		Type:     "or",
+		Operands: operands,
 	}
 }
 
@@ -83,7 +87,7 @@ func (this *OrOperator) Evaluate(item Item) (Value, error) {
 	var re error
 	rv = false
 	re = nil
-	for _, operand := range this.operands {
+	for _, operand := range this.Operands {
 		operandVal, err := operand.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
@@ -111,7 +115,7 @@ func (this *OrOperator) Evaluate(item Item) (Value, error) {
 }
 
 func (this *OrOperator) String() string {
-	return fmt.Sprintf("OR %v", this.operands)
+	return fmt.Sprintf("OR %v", this.Operands)
 }
 
 // ****************************************************************************
@@ -119,17 +123,19 @@ func (this *OrOperator) String() string {
 // ****************************************************************************
 
 type NotOperator struct {
-	operand Expression
+	Type    string     `json:"type"`
+	Operand Expression `json:"operand"`
 }
 
 func NewNotOperator(operand Expression) *NotOperator {
 	return &NotOperator{
-		operand: operand,
+		Type:    "not",
+		Operand: operand,
 	}
 }
 
 func (this *NotOperator) Evaluate(item Item) (Value, error) {
-	ov, err := this.operand.Evaluate(item)
+	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
@@ -147,5 +153,5 @@ func (this *NotOperator) Evaluate(item Item) (Value, error) {
 }
 
 func (this *NotOperator) String() string {
-	return fmt.Sprintf("NOT %v", this.operand)
+	return fmt.Sprintf("NOT %v", this.Operand)
 }

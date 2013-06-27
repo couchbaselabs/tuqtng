@@ -18,23 +18,25 @@ import (
 // ****************************************************************************
 
 type PlusOperator struct {
-	left  Expression
-	right Expression
+	Type  string     `json:"type"`
+	Left  Expression `json:"left"`
+	Right Expression `json:"right"`
 }
 
 func NewPlusOperator(left, right Expression) *PlusOperator {
 	return &PlusOperator{
-		left:  left,
-		right: right,
+		Type:  "plus",
+		Left:  left,
+		Right: right,
 	}
 }
 
 func (this *PlusOperator) Evaluate(item Item) (Value, error) {
-	lv, err := this.left.Evaluate(item)
+	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
-	rv, err := this.right.Evaluate(item)
+	rv, err := this.Right.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
@@ -60,23 +62,25 @@ func (this *PlusOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type SubtractOperator struct {
-	left  Expression
-	right Expression
+	Type  string     `json:"type"`
+	Left  Expression `json:"left"`
+	Right Expression `json:"right"`
 }
 
 func NewSubtractOperator(left, right Expression) *SubtractOperator {
 	return &SubtractOperator{
-		left:  left,
-		right: right,
+		Type:  "minus",
+		Left:  left,
+		Right: right,
 	}
 }
 
 func (this *SubtractOperator) Evaluate(item Item) (Value, error) {
-	lv, err := this.left.Evaluate(item)
+	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
-	rv, err := this.right.Evaluate(item)
+	rv, err := this.Right.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
@@ -102,23 +106,25 @@ func (this *SubtractOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type MultiplyOperator struct {
-	left  Expression
-	right Expression
+	Type  string     `json:"type"`
+	Left  Expression `json:"left"`
+	Right Expression `json:"right"`
 }
 
 func NewMultiplyOperator(left, right Expression) *MultiplyOperator {
 	return &MultiplyOperator{
-		left:  left,
-		right: right,
+		Type:  "multiply",
+		Left:  left,
+		Right: right,
 	}
 }
 
 func (this *MultiplyOperator) Evaluate(item Item) (Value, error) {
-	lv, err := this.left.Evaluate(item)
+	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
-	rv, err := this.right.Evaluate(item)
+	rv, err := this.Right.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
@@ -144,23 +150,25 @@ func (this *MultiplyOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type DivideOperator struct {
-	left  Expression
-	right Expression
+	Type  string     `json:"type"`
+	Left  Expression `json:"left"`
+	Right Expression `json:"right"`
 }
 
 func NewDivideOperator(left, right Expression) *DivideOperator {
 	return &DivideOperator{
-		left:  left,
-		right: right,
+		Type:  "divide",
+		Left:  left,
+		Right: right,
 	}
 }
 
 func (this *DivideOperator) Evaluate(item Item) (Value, error) {
-	lv, err := this.left.Evaluate(item)
+	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
-	rv, err := this.right.Evaluate(item)
+	rv, err := this.Right.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
@@ -186,23 +194,25 @@ func (this *DivideOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type ModuloOperator struct {
-	left  Expression
-	right Expression
+	Type  string     `json:"type"`
+	Left  Expression `json:"left"`
+	Right Expression `json:"right"`
 }
 
 func NewModuloOperator(left, right Expression) *ModuloOperator {
 	return &ModuloOperator{
-		left:  left,
-		right: right,
+		Type:  "modulo",
+		Left:  left,
+		Right: right,
 	}
 }
 
 func (this *ModuloOperator) Evaluate(item Item) (Value, error) {
-	lv, err := this.left.Evaluate(item)
+	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
-	rv, err := this.right.Evaluate(item)
+	rv, err := this.Right.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
@@ -228,17 +238,19 @@ func (this *ModuloOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type ChangeSignOperator struct {
-	operand Expression
+	Type    string     `json:"type"`
+	Operand Expression `json:"operand"`
 }
 
 func NewChangeSignOperator(operand Expression) *ChangeSignOperator {
 	return &ChangeSignOperator{
-		operand: operand,
+		Type:    "changesign",
+		Operand: operand,
 	}
 }
 
 func (this *ChangeSignOperator) Evaluate(item Item) (Value, error) {
-	ov, err := this.operand.Evaluate(item)
+	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}

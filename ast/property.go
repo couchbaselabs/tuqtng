@@ -14,11 +14,13 @@ import (
 )
 
 type Property struct {
-	Path string
+	Type string `json:"type"`
+	Path string `json:"path"`
 }
 
 func NewProperty(path string) *Property {
 	return &Property{
+		Type: "property",
 		Path: path,
 	}
 }

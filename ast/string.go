@@ -14,23 +14,25 @@ package ast
 // ****************************************************************************
 
 type StringConcatenateOperator struct {
-	left  Expression
-	right Expression
+	Type  string     `json:"type"`
+	Left  Expression `json:"left"`
+	Right Expression `json:"right"`
 }
 
 func NewStringConcatenateOperator(left, right Expression) *StringConcatenateOperator {
 	return &StringConcatenateOperator{
-		left:  left,
-		right: right,
+		Type:  "string_concat",
+		Left:  left,
+		Right: right,
 	}
 }
 
 func (this *StringConcatenateOperator) Evaluate(item Item) (Value, error) {
-	lv, err := this.left.Evaluate(item)
+	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
-	rv, err := this.right.Evaluate(item)
+	rv, err := this.Right.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}

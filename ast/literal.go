@@ -18,10 +18,13 @@ import (
 // ****************************************************************************
 
 type LiteralNull struct {
+	Type string `json:"type"`
 }
 
 func NewLiteralNull() *LiteralNull {
-	return &LiteralNull{}
+	return &LiteralNull{
+		Type: "literal_null",
+	}
 }
 
 func (this *LiteralNull) Evaluate(item Item) (Value, error) {
@@ -37,21 +40,23 @@ func (this *LiteralNull) String() string {
 // ****************************************************************************
 
 type LiteralBool struct {
-	val bool
+	Type string `json:"type"`
+	Val  bool   `json:"value"`
 }
 
 func NewLiteralBool(val bool) *LiteralBool {
 	return &LiteralBool{
-		val: val,
+		Type: "literal_bool",
+		Val:  val,
 	}
 }
 
 func (this *LiteralBool) Evaluate(item Item) (Value, error) {
-	return this.val, nil
+	return this.Val, nil
 }
 
 func (this *LiteralBool) String() string {
-	return fmt.Sprintf("%v", this.val)
+	return fmt.Sprintf("%v", this.Val)
 }
 
 // ****************************************************************************
@@ -59,21 +64,23 @@ func (this *LiteralBool) String() string {
 // ****************************************************************************
 
 type LiteralNumber struct {
-	val float64
+	Type string  `json:"type"`
+	Val  float64 `json:"value"`
 }
 
 func NewLiteralNumber(val float64) *LiteralNumber {
 	return &LiteralNumber{
-		val: val,
+		Type: "literal_number",
+		Val:  val,
 	}
 }
 
 func (this *LiteralNumber) Evaluate(item Item) (Value, error) {
-	return this.val, nil
+	return this.Val, nil
 }
 
 func (this *LiteralNumber) String() string {
-	return fmt.Sprintf("%v", this.val)
+	return fmt.Sprintf("%v", this.Val)
 }
 
 // ****************************************************************************
@@ -81,21 +88,23 @@ func (this *LiteralNumber) String() string {
 // ****************************************************************************
 
 type LiteralString struct {
-	val string
+	Type string `json:"type"`
+	Val  string `json:"value"`
 }
 
 func NewLiteralString(val string) *LiteralString {
 	return &LiteralString{
-		val: val,
+		Type: "literal_string",
+		Val:  val,
 	}
 }
 
 func (this *LiteralString) Evaluate(item Item) (Value, error) {
-	return this.val, nil
+	return this.Val, nil
 }
 
 func (this *LiteralString) String() string {
-	return fmt.Sprintf("%v", this.val)
+	return fmt.Sprintf("%v", this.Val)
 }
 
 // ****************************************************************************
@@ -103,18 +112,20 @@ func (this *LiteralString) String() string {
 // ****************************************************************************
 
 type LiteralArray struct {
-	val []Expression
+	Type string       `json:"type"`
+	Val  []Expression `json:"value"`
 }
 
 func NewLiteralArray(val []Expression) *LiteralArray {
 	return &LiteralArray{
-		val: val,
+		Type: "literal_array",
+		Val:  val,
 	}
 }
 
 func (this *LiteralArray) Evaluate(item Item) (Value, error) {
-	rv := make([]Value, 0, len(this.val))
-	for _, v := range this.val {
+	rv := make([]Value, 0, len(this.Val))
+	for _, v := range this.Val {
 		ev, err := v.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
@@ -132,7 +143,7 @@ func (this *LiteralArray) Evaluate(item Item) (Value, error) {
 }
 
 func (this *LiteralArray) String() string {
-	return fmt.Sprintf("%v", this.val)
+	return fmt.Sprintf("%v", this.Val)
 }
 
 // ****************************************************************************
@@ -140,12 +151,14 @@ func (this *LiteralArray) String() string {
 // ****************************************************************************
 
 type LiteralObject struct {
-	Val map[string]Expression
+	Type string `json:"type"`
+	Val  map[string]Expression
 }
 
 func NewLiteralObject(val map[string]Expression) *LiteralObject {
 	return &LiteralObject{
-		Val: val,
+		Type: "literal_object",
+		Val:  val,
 	}
 }
 

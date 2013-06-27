@@ -26,12 +26,12 @@ func (this *TypeMismatch) Error() string {
 }
 
 type BinaryComparisonOperator struct {
-	left  Expression
-	right Expression
+	Left  Expression `json:"left"`
+	Right Expression `json:"right"`
 }
 
 func (this *BinaryComparisonOperator) compare(item Item) (Value, error) {
-	lv, err := this.left.Evaluate(item)
+	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		// this could either be real error, or MISSING
 		// if either side is MISSING, the result is MISSING
@@ -41,7 +41,7 @@ func (this *BinaryComparisonOperator) compare(item Item) (Value, error) {
 	if lv == nil {
 		return lv, nil
 	}
-	rv, err := this.right.Evaluate(item)
+	rv, err := this.Right.Evaluate(item)
 	if err != nil {
 		// this could either be real error, or MISSING
 		// if either side is MISSING, the result is MISSING
@@ -78,14 +78,16 @@ func (this *BinaryComparisonOperator) compare(item Item) (Value, error) {
 // ****************************************************************************
 
 type GreaterThanOperator struct {
+	Type string `json:"type"`
 	BinaryComparisonOperator
 }
 
 func NewGreaterThanOperator(left, right Expression) *GreaterThanOperator {
 	return &GreaterThanOperator{
+		"greater_than",
 		BinaryComparisonOperator{
-			left:  left,
-			right: right,
+			Left:  left,
+			Right: right,
 		},
 	}
 }
@@ -118,14 +120,16 @@ func (this *GreaterThanOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type GreaterThanOrEqualOperator struct {
+	Type string `json:"type"`
 	BinaryComparisonOperator
 }
 
 func NewGreaterThanOrEqualOperator(left, right Expression) *GreaterThanOrEqualOperator {
 	return &GreaterThanOrEqualOperator{
+		"greater_than_or_equal",
 		BinaryComparisonOperator{
-			left:  left,
-			right: right,
+			Left:  left,
+			Right: right,
 		},
 	}
 }
@@ -158,14 +162,16 @@ func (this *GreaterThanOrEqualOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type LessThanOperator struct {
+	Type string `json:"type"`
 	BinaryComparisonOperator
 }
 
 func NewLessThanOperator(left, right Expression) *LessThanOperator {
 	return &LessThanOperator{
+		"less_than",
 		BinaryComparisonOperator{
-			left:  left,
-			right: right,
+			Left:  left,
+			Right: right,
 		},
 	}
 }
@@ -198,14 +204,16 @@ func (this *LessThanOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type LessThanOrEqualOperator struct {
+	Type string `json:"type"`
 	BinaryComparisonOperator
 }
 
 func NewLessThanOrEqualOperator(left, right Expression) *LessThanOrEqualOperator {
 	return &LessThanOrEqualOperator{
+		"less_than_or_equal",
 		BinaryComparisonOperator{
-			left:  left,
-			right: right,
+			Left:  left,
+			Right: right,
 		},
 	}
 }
@@ -238,14 +246,16 @@ func (this *LessThanOrEqualOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type EqualToOperator struct {
+	Type string `json:"type"`
 	BinaryComparisonOperator
 }
 
 func NewEqualToOperator(left, right Expression) *EqualToOperator {
 	return &EqualToOperator{
+		"equals",
 		BinaryComparisonOperator{
-			left:  left,
-			right: right,
+			Left:  left,
+			Right: right,
 		},
 	}
 }
@@ -278,14 +288,16 @@ func (this *EqualToOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type NotEqualToOperator struct {
+	Type string `json:"type"`
 	BinaryComparisonOperator
 }
 
 func NewNotEqualToOperator(left, right Expression) *NotEqualToOperator {
 	return &NotEqualToOperator{
+		"not_equals",
 		BinaryComparisonOperator{
-			left:  left,
-			right: right,
+			Left:  left,
+			Right: right,
 		},
 	}
 }
@@ -319,23 +331,25 @@ func (this *NotEqualToOperator) Evaluate(item Item) (Value, error) {
 // FIXME - optimize case where RHS is string literal, only compile
 //         the regular expression once
 type LikeOperator struct {
-	left  Expression
-	right Expression
+	Type  string     `json:"type"`
+	Left  Expression `json:"left"`
+	Right Expression `json:"right"`
 }
 
 func NewLikeOperator(left, right Expression) *LikeOperator {
 	return &LikeOperator{
-		left:  left,
-		right: right,
+		Type:  "like",
+		Left:  left,
+		Right: right,
 	}
 }
 
 func (this *LikeOperator) Evaluate(item Item) (Value, error) {
-	lv, err := this.left.Evaluate(item)
+	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
-	rv, err := this.right.Evaluate(item)
+	rv, err := this.Right.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
@@ -368,23 +382,25 @@ func (this *LikeOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 // FIXME - consolidate common code with LIKE
 type NotLikeOperator struct {
-	left  Expression
-	right Expression
+	Type  string     `json:"type"`
+	Left  Expression `json:"left"`
+	Right Expression `json:"right"`
 }
 
 func NewNotLikeOperator(left, right Expression) *NotLikeOperator {
 	return &NotLikeOperator{
-		left:  left,
-		right: right,
+		Type:  "not_like",
+		Left:  left,
+		Right: right,
 	}
 }
 
 func (this *NotLikeOperator) Evaluate(item Item) (Value, error) {
-	lv, err := this.left.Evaluate(item)
+	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
-	rv, err := this.right.Evaluate(item)
+	rv, err := this.Right.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
@@ -417,17 +433,19 @@ func (this *NotLikeOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type IsNullOperator struct {
-	operand Expression
+	Type    string     `json:"type"`
+	Operand Expression `json:"operand"`
 }
 
 func NewIsNullOperator(operand Expression) *IsNullOperator {
 	return &IsNullOperator{
-		operand: operand,
+		Type:    "is_null",
+		Operand: operand,
 	}
 }
 
 func (this *IsNullOperator) Evaluate(item Item) (Value, error) {
-	ov, err := this.operand.Evaluate(item)
+	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *Undefined:
@@ -450,17 +468,19 @@ func (this *IsNullOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type IsNotNullOperator struct {
-	operand Expression
+	Type    string     `json:"type"`
+	Operand Expression `json:"operand"`
 }
 
 func NewIsNotNullOperator(operand Expression) *IsNotNullOperator {
 	return &IsNotNullOperator{
-		operand: operand,
+		Type:    "is_not_null",
+		Operand: operand,
 	}
 }
 
 func (this *IsNotNullOperator) Evaluate(item Item) (Value, error) {
-	ov, err := this.operand.Evaluate(item)
+	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *Undefined:
@@ -483,17 +503,19 @@ func (this *IsNotNullOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type IsMissingOperator struct {
-	operand Expression
+	Type    string     `json:"type"`
+	Operand Expression `json:"operand"`
 }
 
 func NewIsMissingOperator(operand Expression) *IsMissingOperator {
 	return &IsMissingOperator{
-		operand: operand,
+		Type:    "is_missing",
+		Operand: operand,
 	}
 }
 
 func (this *IsMissingOperator) Evaluate(item Item) (Value, error) {
-	_, err := this.operand.Evaluate(item)
+	_, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *Undefined:
@@ -512,17 +534,19 @@ func (this *IsMissingOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type IsNotMissingOperator struct {
-	operand Expression
+	Type    string     `json:"type"`
+	Operand Expression `json:"operand"`
 }
 
 func NewIsNotMissingOperator(operand Expression) *IsNotMissingOperator {
 	return &IsNotMissingOperator{
-		operand: operand,
+		Type:    "is_not_missing",
+		Operand: operand,
 	}
 }
 
 func (this *IsNotMissingOperator) Evaluate(item Item) (Value, error) {
-	_, err := this.operand.Evaluate(item)
+	_, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *Undefined:
@@ -541,17 +565,19 @@ func (this *IsNotMissingOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type IsValuedOperator struct {
-	operand Expression
+	Type    string     `json:"type"`
+	Operand Expression `json:"operand"`
 }
 
 func NewIsValuedOperator(operand Expression) *IsValuedOperator {
 	return &IsValuedOperator{
-		operand: operand,
+		Type:    "is_valued",
+		Operand: operand,
 	}
 }
 
 func (this *IsValuedOperator) Evaluate(item Item) (Value, error) {
-	ov, err := this.operand.Evaluate(item)
+	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *Undefined:
@@ -574,17 +600,19 @@ func (this *IsValuedOperator) Evaluate(item Item) (Value, error) {
 // ****************************************************************************
 
 type IsNotValuedOperator struct {
-	operand Expression
+	Type    string     `json:"type"`
+	Operand Expression `json:"operand"`
 }
 
 func NewIsNotValuedOperator(operand Expression) *IsNotValuedOperator {
 	return &IsNotValuedOperator{
-		operand: operand,
+		Type:    "is_not_valued",
+		Operand: operand,
 	}
 }
 
 func (this *IsNotValuedOperator) Evaluate(item Item) (Value, error) {
-	ov, err := this.operand.Evaluate(item)
+	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *Undefined:
