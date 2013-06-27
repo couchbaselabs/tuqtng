@@ -24,9 +24,47 @@ func NewSimplePlanner() *SimplePlanner {
 	return &SimplePlanner{}
 }
 
-func (this *SimplePlanner) Plan(ast.Statement) plan.PlanChannel {
+func (this *SimplePlanner) Plan(stmt ast.Statement) plan.PlanChannel {
 	rv := make(plan.PlanChannel)
-	// FIXME not implemented
-	close(rv)
+	go this.buildPlans(stmt, rv)
 	return rv
+}
+
+func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
+	from := stmt.GetFrom()
+
+	var lastStep plan.PlanElement
+
+	if from == nil {
+		// simple expression evaluation
+		lastStep = plan.NewExpressionEvaluator()
+
+	} else {
+		// FIXME wire up to actual data source
+		// knows how to add scan/fetch steps to plan
+		close(pc)
+		return
+	}
+
+	if stmt.GetWhere() != nil {
+		lastStep = plan.NewFilter(lastStep, stmt.GetWhere())
+	}
+
+	if stmt.GetOrderBy() != nil {
+		lastStep = plan.NewOrder(lastStep, stmt.GetOrderBy())
+	}
+
+	if stmt.GetOffset() != 0 {
+		lastStep = plan.NewOffset(lastStep, stmt.GetOffset())
+	}
+
+	if stmt.GetLimit() >= 0 {
+		lastStep = plan.NewLimit(lastStep, stmt.GetLimit())
+	}
+
+	lastStep = plan.NewProjector(lastStep, stmt.GetResultExpressionList())
+
+	pc <- plan.Plan{lastStep}
+
+	close(pc)
 }

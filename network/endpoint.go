@@ -9,6 +9,10 @@
 
 package network
 
+import (
+	"github.com/couchbaselabs/tuqtng/ast"
+)
+
 type QueryRequest interface {
 }
 
@@ -18,6 +22,8 @@ type UNQLStringQueryRequest struct {
 
 type QueryResponse interface {
 	SendError(error)
+	SendResult(val ast.Value)
+	NoMoreResults()
 }
 
 type Query struct {

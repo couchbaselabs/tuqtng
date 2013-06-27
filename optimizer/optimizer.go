@@ -16,5 +16,5 @@ import (
 // Parser takes an input string, parses it, and returns an
 // abstract representation of it (ast.Statement)
 type Optimizer interface {
-	Optimize(plan.PlanChannel) (plan.Plan, error)
+	Optimize(plan.PlanChannel) (*plan.Plan, error)
 }

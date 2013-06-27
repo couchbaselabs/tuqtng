@@ -32,6 +32,14 @@ func (this *HttpResponse) SendError(err error) {
 	close(this.results)
 }
 
+func (this *HttpResponse) SendResult(val ast.Value) {
+	this.results <- val
+}
+
+func (this *HttpResponse) NoMoreResults() {
+	close(this.results)
+}
+
 type HttpEndpoint struct {
 	queryChannel network.QueryChannel
 }
@@ -89,10 +97,30 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	this.queryChannel <- query
+
+	first := true
+	count := 0
 	for val := range response.results {
-		log.Printf("got a result val %v", val)
-		// FIXME this where we serialize a result row and stream back to client
+		if first {
+			// open up our response
+			fmt.Fprint(w, "{\n")
+			fmt.Fprint(w, "    \"resultset\": [\n")
+			first = false
+		} else {
+			fmt.Fprint(w, ",\n")
+		}
+		body, err := json.MarshalIndent(val, "        ", "    ")
+		if err != nil {
+			log.Printf("Unable to format result to display %#v, %v", val, err)
+		} else {
+			fmt.Fprintf(w, "        %v", string(body))
+		}
+		count++
 	}
+
+	fmt.Fprint(w, "\n    ],\n")
+	fmt.Fprintf(w, "    \"total_rows\": %d\n", count)
+	fmt.Fprint(w, "}\n")
 }
 
 func mustEncode(w io.Writer, i interface{}) {

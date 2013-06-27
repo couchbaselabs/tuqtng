@@ -11,9 +11,9 @@ package executor
 
 import (
 	"github.com/couchbaselabs/tuqtng/network"
-	"github.com/couchbaselabs/tuqtng/xpipeline"
+	"github.com/couchbaselabs/tuqtng/plan"
 )
 
 type Executor interface {
-	Execute(xpipeline.ExecutablePipeline, network.Query) error
+	Execute(*plan.Plan, network.Query) error
 }

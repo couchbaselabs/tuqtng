@@ -10,30 +10,21 @@
 package simple
 
 import (
-	"fmt"
-
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
 )
 
-type SimpleOptimizer struct {
+type ExplainerExecutor struct {
 }
 
-func NewSimpleOptimizer() *SimpleOptimizer {
-	return &SimpleOptimizer{}
+func NewExplainerExecutor() *ExplainerExecutor {
+	return &ExplainerExecutor{}
 }
 
-// simplest possible implementation
-// 1.  read all plans off plan channel
-// 2.  return first channel
-func (this *SimpleOptimizer) Optimize(planChannel plan.PlanChannel) (*plan.Plan, error) {
-	plans := make([]plan.Plan, 0)
-	for plan := range planChannel {
-		plans = append(plans, plan)
-	}
+func (this *ExplainerExecutor) Execute(optimalPlan *plan.Plan, query network.Query) error {
 
-	if len(plans) > 0 {
-		return &plans[0], nil
-	}
+	query.Response.SendResult(optimalPlan)
+	query.Response.NoMoreResults()
 
-	return nil, fmt.Errorf("No Plans to Choose From")
+	return nil
 }

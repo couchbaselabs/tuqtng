@@ -7,33 +7,33 @@
 //  either express or implied. See the License for the specific language governing permissions
 //  and limitations under the License.
 
-package simple
+package plan
 
 import (
-	"fmt"
+	"encoding/json"
+	"log"
+	"testing"
 
-	"github.com/couchbaselabs/tuqtng/plan"
+	"github.com/couchbaselabs/tuqtng/ast"
 )
 
-type SimpleOptimizer struct {
-}
+func TestPlanJSON(t *testing.T) {
 
-func NewSimpleOptimizer() *SimpleOptimizer {
-	return &SimpleOptimizer{}
-}
-
-// simplest possible implementation
-// 1.  read all plans off plan channel
-// 2.  return first channel
-func (this *SimpleOptimizer) Optimize(planChannel plan.PlanChannel) (*plan.Plan, error) {
-	plans := make([]plan.Plan, 0)
-	for plan := range planChannel {
-		plans = append(plans, plan)
+	tests := []struct {
+		input *Plan
+	}{
+		{&Plan{NewScan()}},
+		{&Plan{NewFetch(NewScan())}},
+		{&Plan{NewFilter(NewFetch(NewScan()), ast.NewLiteralBool(true))}},
+		{&Plan{NewFilter(NewFetch(NewScan()), ast.NewPlusOperator(ast.NewLiteralNumber(1.0), ast.NewLiteralNumber(1.0)))}},
 	}
 
-	if len(plans) > 0 {
-		return &plans[0], nil
+	for _, x := range tests {
+		json, err := json.MarshalIndent(x.input, "", "    ")
+		if err == nil {
+			log.Printf("%v", string(json))
+		}
+
 	}
 
-	return nil, fmt.Errorf("No Plans to Choose From")
 }

@@ -10,4 +10,5 @@
 package xpipeline
 
 type ExecutablePipeline interface {
+	Execute()
 }

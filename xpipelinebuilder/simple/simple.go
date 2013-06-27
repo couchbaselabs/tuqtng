@@ -23,6 +23,6 @@ func NewSimpleExecutablePipelineBuilder() *SimpleExecutablePipelineBuilder {
 	return &SimpleExecutablePipelineBuilder{}
 }
 
-func (this *SimpleExecutablePipelineBuilder) Build(plan.Plan) (xpipeline.ExecutablePipeline, error) {
+func (this *SimpleExecutablePipelineBuilder) Build(*plan.Plan) (xpipeline.ExecutablePipeline, error) {
 	return nil, fmt.Errorf("Not Implemented")
 }

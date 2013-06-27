@@ -13,16 +13,31 @@ import (
 	"fmt"
 
 	"github.com/couchbaselabs/tuqtng/network"
-	"github.com/couchbaselabs/tuqtng/xpipeline"
+	"github.com/couchbaselabs/tuqtng/plan"
+	"github.com/couchbaselabs/tuqtng/xpipelinebuilder"
+	simpleBuilder "github.com/couchbaselabs/tuqtng/xpipelinebuilder/simple"
 )
 
 type SimpleExecutor struct {
+	xpipelinebuilder xpipelinebuilder.ExecutablePipelineBuilder
 }
 
 func NewSimpleExecutor() *SimpleExecutor {
-	return &SimpleExecutor{}
+	return &SimpleExecutor{
+		xpipelinebuilder: simpleBuilder.NewSimpleExecutablePipelineBuilder(),
+	}
 }
 
-func (this *SimpleExecutor) Execute(pipeline xpipeline.ExecutablePipeline, query network.Query) error {
+func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, query network.Query) error {
+
+	// first make the plan excutable
+	executablePipeline, err := this.xpipelinebuilder.Build(optimalPlan)
+	if err != nil {
+		return err
+	}
+
+	// now execute it
+	executablePipeline.Execute()
+
 	return fmt.Errorf("Not Implemented")
 }

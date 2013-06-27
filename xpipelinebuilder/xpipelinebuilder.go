@@ -15,5 +15,5 @@ import (
 )
 
 type ExecutablePipelineBuilder interface {
-	Build(plan.Plan) (xpipeline.ExecutablePipeline, error)
+	Build(*plan.Plan) (xpipeline.ExecutablePipeline, error)
 }

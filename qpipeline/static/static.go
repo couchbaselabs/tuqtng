@@ -18,31 +18,30 @@ import (
 	"github.com/couchbaselabs/tuqtng/optimizer"
 	"github.com/couchbaselabs/tuqtng/parser"
 	"github.com/couchbaselabs/tuqtng/planner"
-	"github.com/couchbaselabs/tuqtng/xpipelinebuilder"
 
 	// implementations
+	explainerExecutor "github.com/couchbaselabs/tuqtng/executor/explainer"
 	simpleExecutor "github.com/couchbaselabs/tuqtng/executor/simple"
 	simpleOptimizer "github.com/couchbaselabs/tuqtng/optimizer/simple"
-	"github.com/couchbaselabs/tuqtng/parser/antlr"
+	yaccParser "github.com/couchbaselabs/tuqtng/parser/goyacc"
 	simplePlanner "github.com/couchbaselabs/tuqtng/planner/simple"
-	simpleBuilder "github.com/couchbaselabs/tuqtng/xpipelinebuilder/simple"
 )
 
 type StaticPipeline struct {
-	parser           parser.Parser
-	planner          planner.Planner
-	optimizer        optimizer.Optimizer
-	xpipelinebuilder xpipelinebuilder.ExecutablePipelineBuilder
-	executor         executor.Executor
+	parser    parser.Parser
+	planner   planner.Planner
+	optimizer optimizer.Optimizer
+	executor  executor.Executor
+	explainer executor.Executor
 }
 
 func NewStaticPipeline() *StaticPipeline {
 	return &StaticPipeline{
-		parser:           antlr.NewAntlrParser(),
-		planner:          simplePlanner.NewSimplePlanner(),
-		optimizer:        simpleOptimizer.NewSimpleOptimizer(),
-		xpipelinebuilder: simpleBuilder.NewSimpleExecutablePipelineBuilder(),
-		executor:         simpleExecutor.NewSimpleExecutor(),
+		parser:    yaccParser.NewUnqlParser(),
+		planner:   simplePlanner.NewSimplePlanner(),
+		optimizer: simpleOptimizer.NewSimpleOptimizer(),
+		executor:  simpleExecutor.NewSimpleExecutor(),
+		explainer: explainerExecutor.NewExplainerExecutor(),
 	}
 }
 
@@ -70,16 +69,22 @@ func (this *StaticPipeline) DispatchQuery(query network.Query) {
 			return
 		}
 
-		executablePipeline, err := this.xpipelinebuilder.Build(optimalPlan)
-		if err != nil {
-			response.SendError(err)
-			return
-		}
+		if ast.IsExplainOnly() {
 
-		err = this.executor.Execute(executablePipeline, query)
-		if err != nil {
-			response.SendError(err)
-			return
+			log.Printf("tyring to explain the plan")
+			err = this.explainer.Execute(optimalPlan, query)
+			if err != nil {
+				response.SendError(err)
+				return
+			}
+
+		} else {
+
+			err = this.executor.Execute(optimalPlan, query)
+			if err != nil {
+				response.SendError(err)
+				return
+			}
 		}
 
 	default:
