@@ -10,3 +10,5 @@
 package ast
 
 type Value interface{}
+
+type ValueChannel chan Value
