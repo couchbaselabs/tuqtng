@@ -8,7 +8,7 @@ script:
 - go get github.com/axw/gocov/gocov
 - go get github.com/matm/gocov-html
 - mkdir -p coverage
-- gocov test ./ast | gocov-html > coverage/ast.html
+- go run gocov test ./ast | go run gocov-html > coverage/ast.html
 after_success: ./update-gh-pages.sh
 notifications:
   email:
