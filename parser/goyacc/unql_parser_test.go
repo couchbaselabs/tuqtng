@@ -86,6 +86,10 @@ var validQueries = []string{
 	`SELECT bob AS bill, bill AS bob FROM cat WHERE foo = bar and 3 > 4`,
 	`SELECT *, bob AS bill, bill AS bob FROM cat WHERE foo = bar and 3 > 4`,
 	`SELECT *, names.*, bob AS bill, bill AS bob FROM cat WHERE foo = bar and 3 > 4`,
+	`SELECT *, names.*, bob AS bill, bill AS bob FROM cat WHERE foo = bar or 3 > 4`,
+	`SELECT * FROM cat WHERE true ORDER BY name ASC`,
+	`SELECT * FROM cat WHERE true ORDER BY name DESC`,
+	`EXPLAIN SELECT * FROM cat WHERE true ORDER BY name DESC`,
 }
 
 var invalidQueries = []string{
@@ -94,6 +98,28 @@ var invalidQueries = []string{
 	`SELECT 3dog`, // unescaped identifiers cannot start with number
 	`SELECT bob FROM cat WHERE foo = bar ORDER BY this OFFSET 20`,                  // offset requires limit
 	`SELECT * AS all, bob AS bill, bill AS bob FROM cat WHERE foo = bar and 3 > 4`, // cannot alias *
+	`SELECT * WHERE true AND`,
+	`SELECT * WHERE true ORDER BY DESC`,
+	`SELECT "a`,
+	// these are me trying to understand code coverage in the parser
+	`\`,
+	`\r`,
+	`\u`,
+	`"\`,
+	`"t`,
+	`"r`,
+	`"u`,
+	`""`,
+	`"/`,
+	`"//`,
+	`"/n`,
+	`"/f`,
+	`"/\`,
+	`"\/`,
+	`"\n`,
+	`"\t`,
+	`"\r`,
+	`"\u`,
 }
 
 func TestParser(t *testing.T) {

@@ -57,7 +57,6 @@
 /\:/              { logDebugTokens("COLON"); return COLON }
 /\[/              { logDebugTokens("LBRACKET"); return LBRACKET }
 /\]/              { logDebugTokens("RBRACKET"); return RBRACKET }
-/"/               { logDebugTokens("DQUOTE"); return DQUOTE }
 /[tT][rR][uU][eE]/ 
                   { logDebugTokens("TRUE"); return TRUE}
 /[fF][aA][lL][sS][eE]/ 
@@ -109,9 +108,5 @@ import("log")
 import("strconv")
 
 func logDebugTokens(format string, v ...interface{}) {
-    if DebugTokens && len(v) > 0 {
-        log.Printf("DEBUG TOKEN " + format, v)
-    } else if DebugTokens {
-        log.Printf("DEBUG TOKEN " + format)
-    }
+    log.Printf("DEBUG TOKEN " + format, v...)
 }

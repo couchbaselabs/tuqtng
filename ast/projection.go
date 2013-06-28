@@ -121,6 +121,4 @@ OUTER:
 		}
 		return candidateName
 	}
-	panic("I ran out of names")
-	return ""
 }

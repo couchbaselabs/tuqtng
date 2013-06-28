@@ -4,11 +4,7 @@ import "log"
 import "github.com/couchbaselabs/tuqtng/ast"
 
 func logDebugGrammar(format string, v ...interface{}) {
-    if DebugGrammar && len(v) > 0 {
-        log.Printf("DEBUG GRAMMAR " + format, v)
-    } else if DebugGrammar {
-        log.Printf("DEBUG GRAMMAR " + format)
-    }
+    log.Printf("DEBUG GRAMMAR " + format, v...)
 }
 %}
 
@@ -22,7 +18,7 @@ f float64}
 %token ORDER BY ASC DESC
 %token LIMIT OFFSET
 %token LBRACE RBRACE LBRACKET RBRACKET
-%token COMMA COLON DQUOTE
+%token COMMA COLON
 %token TRUE FALSE NULL
 %token INT NUMBER IDENTIFIER STRING
 %token PLUS MINUS MULT DIV

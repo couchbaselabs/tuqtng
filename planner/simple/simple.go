@@ -64,7 +64,7 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 
 	lastStep = plan.NewProjector(lastStep, stmt.GetResultExpressionList())
 
-	pc <- plan.Plan{lastStep}
+	pc <- plan.Plan{Root: lastStep}
 
 	close(pc)
 }
