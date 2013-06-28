@@ -10,54 +10,33 @@
 package xpipeline
 
 import (
-	"log"
-
 	"github.com/couchbaselabs/tuqtng/ast"
 )
 
-type Filter struct {
-	Source      Operator
-	Expr        ast.Expression
+type StubSource struct {
+	data        ast.ItemCollection
 	itemChannel ast.ItemChannel
 }
 
-func NewFilter(expr ast.Expression) *Filter {
-	return &Filter{
-		Expr:        expr,
+func NewStubSource(data ast.ItemCollection) *StubSource {
+	return &StubSource{
+		data:        data,
 		itemChannel: make(ast.ItemChannel),
 	}
 }
 
-func (this *Filter) SetSource(source Operator) {
-	this.Source = source
+func (this *StubSource) SetSource(Operator) {
+	panic("stub source does not have a source")
 }
 
-func (this *Filter) GetItemChannel() ast.ItemChannel {
+func (this *StubSource) GetItemChannel() ast.ItemChannel {
 	return this.itemChannel
 }
 
-func (this *Filter) Run() {
+func (this *StubSource) Run() {
 	defer close(this.itemChannel)
 
-	go this.Source.Run()
-
-	for item := range this.Source.GetItemChannel() {
-		val, err := this.Expr.Evaluate(item)
-		if err == nil {
-			boolVal := ast.ValueInBooleanContext(val)
-			switch boolVal := boolVal.(type) {
-			case bool:
-				if boolVal {
-					this.itemChannel <- item
-				}
-			}
-		} else {
-			switch err := err.(type) {
-			case *ast.Undefined:
-			//ignore these
-			default:
-				log.Printf("Error evaluating filter: %v", err)
-			}
-		}
+	for _, item := range this.data {
+		this.itemChannel <- item
 	}
 }
