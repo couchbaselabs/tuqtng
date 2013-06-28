@@ -1,13 +1,23 @@
+---
 language: go
-
 go:
-  - 1.1.1
-
+- 1.1.1
 script:
-  - go test -v ./...
-  - go vet ./...
-
+- go test -v ./...
+- go vet ./...
+- go get github.com/axw/gocov/gocov
+- go get github.com/matm/gocov-html
+- mkdir -p coverage
+- gocov test ./ast | gocov-html > coverage/ast.html
+after_success: ./update-gh-pages.sh
 notifications:
   email:
-    - marty.schoch@gmail.com
-    - siri@couchbase.com
+  - marty.schoch@gmail.com
+  - siri@couchbase.com
+env:
+  global:
+    secure: ! 'jy8X9SnddqvnzWDWE9IiuF/+Hn9/6mcKF/y+QBg42KbxaqxOx+AbhBy7JS9I
+
+      cW5mgo0UXsi0/9lo7MQTn0ioC68ceSdgkGSoaT5D4iPkuirIkxMo1SWD7XPm
+
+      t8bIzpPr5W22eci/5hBVgps5Rf8Ptmcj/MdVhUjRyEffG12CHG8='
