@@ -22,4 +22,11 @@ func TestUndefined(t *testing.T) {
 		t.Errorf("Expected property is not defined, got %v", err)
 	}
 
+	y := Undefined{}
+	err = y.Error()
+
+	if err != "not defined" {
+		t.Errorf("Expected not defined, got %v", err)
+	}
+
 }

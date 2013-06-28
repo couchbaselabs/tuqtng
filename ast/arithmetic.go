@@ -53,8 +53,6 @@ func (this *PlusOperator) Evaluate(item Item) (Value, error) {
 	default:
 		return nil, nil
 	}
-
-	return nil, nil
 }
 
 // ****************************************************************************
@@ -97,8 +95,6 @@ func (this *SubtractOperator) Evaluate(item Item) (Value, error) {
 	default:
 		return nil, nil
 	}
-
-	return nil, nil
 }
 
 // ****************************************************************************
@@ -141,8 +137,6 @@ func (this *MultiplyOperator) Evaluate(item Item) (Value, error) {
 	default:
 		return nil, nil
 	}
-
-	return nil, nil
 }
 
 // ****************************************************************************
@@ -185,8 +179,6 @@ func (this *DivideOperator) Evaluate(item Item) (Value, error) {
 	default:
 		return nil, nil
 	}
-
-	return nil, nil
 }
 
 // ****************************************************************************
@@ -229,8 +221,6 @@ func (this *ModuloOperator) Evaluate(item Item) (Value, error) {
 	default:
 		return nil, nil
 	}
-
-	return nil, nil
 }
 
 // ****************************************************************************
@@ -261,6 +251,4 @@ func (this *ChangeSignOperator) Evaluate(item Item) (Value, error) {
 	default:
 		return nil, nil
 	}
-
-	return nil, nil
 }

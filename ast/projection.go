@@ -30,12 +30,14 @@ func (this ResultExpressionList) CheckForDuplicateAliases() error {
 	namesInUse := map[string]bool{}
 
 	for _, resultExpr := range this {
-		_, ok := namesInUse[resultExpr.As]
-		if !ok {
-			namesInUse[resultExpr.As] = true
-		} else {
-			// name is already in use
-			return &DuplicateAlias{resultExpr.As}
+		if resultExpr.As != "" {
+			_, ok := namesInUse[resultExpr.As]
+			if !ok {
+				namesInUse[resultExpr.As] = true
+			} else {
+				// name is already in use
+				return &DuplicateAlias{resultExpr.As}
+			}
 		}
 	}
 

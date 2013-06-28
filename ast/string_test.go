@@ -16,20 +16,27 @@ import (
 
 func TestString(t *testing.T) {
 
+	dneProperty := NewProperty("foo")
+	numberFive := NewLiteralNumber(5.0)
 	stringCouchbase := NewLiteralString("Couchbase")
 	stringServer := NewLiteralString("Server")
 
 	tests := []struct {
 		input  Expression
 		output interface{}
+		err    error
 	}{
-		{NewStringConcatenateOperator(stringCouchbase, stringServer), "CouchbaseServer"},
+		{NewStringConcatenateOperator(stringCouchbase, stringServer), "CouchbaseServer", nil},
+		{NewStringConcatenateOperator(numberFive, stringServer), nil, nil},
+		{NewStringConcatenateOperator(stringCouchbase, numberFive), nil, nil},
+		{NewStringConcatenateOperator(dneProperty, stringServer), nil, &Undefined{"foo"}},
+		{NewStringConcatenateOperator(stringCouchbase, dneProperty), nil, &Undefined{"foo"}},
 	}
 
 	for _, x := range tests {
 		result, err := x.input.Evaluate(nil)
-		if err != nil {
-			t.Fatalf("Error evaluating expression: %v", err)
+		if !reflect.DeepEqual(err, x.err) {
+			t.Fatalf("Expected error: %v, got %v", x.err, err)
 		}
 		if !reflect.DeepEqual(result, x.output) {
 			t.Errorf("Expected %t %v, got %t %v", x.output, x.output, result, result)

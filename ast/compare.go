@@ -373,8 +373,6 @@ func (this *LikeOperator) Evaluate(item Item) (Value, error) {
 	default:
 		return nil, nil
 	}
-
-	return nil, nil
 }
 
 // ****************************************************************************
@@ -424,8 +422,6 @@ func (this *NotLikeOperator) Evaluate(item Item) (Value, error) {
 	default:
 		return nil, nil
 	}
-
-	return nil, nil
 }
 
 // ****************************************************************************

@@ -9,6 +9,8 @@
 
 package ast
 
+import ()
+
 // Statement is the abstract representation of an UNQL statement
 type Statement interface {
 	GetResultExpressionList() ResultExpressionList

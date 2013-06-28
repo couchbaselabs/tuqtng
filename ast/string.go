@@ -49,6 +49,4 @@ func (this *StringConcatenateOperator) Evaluate(item Item) (Value, error) {
 	default:
 		return nil, nil
 	}
-
-	return nil, nil
 }

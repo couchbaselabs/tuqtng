@@ -80,6 +80,8 @@ func TestCompare(t *testing.T) {
 		{NewLikeOperator(stringBob, patternNoMatch), false, nil},
 		{NewLikeOperator(stringBob, numberNine), nil, nil},
 		{NewLikeOperator(numberNine, patternMatchSingle), nil, nil},
+		{NewLikeOperator(stringBob, nonExistantProperty), nil, &Undefined{"dne"}},
+		{NewLikeOperator(nonExistantProperty, stringBob), nil, &Undefined{"dne"}},
 
 		{NewNotLikeOperator(stringBob, patternMatchSingle), false, nil},
 		{NewNotLikeOperator(stringCat, patternMatchSingle), true, nil},
@@ -88,6 +90,8 @@ func TestCompare(t *testing.T) {
 		{NewNotLikeOperator(stringBob, patternNoMatch), true, nil},
 		{NewNotLikeOperator(stringBob, numberNine), nil, nil},
 		{NewNotLikeOperator(numberNine, patternMatchSingle), nil, nil},
+		{NewNotLikeOperator(stringBob, nonExistantProperty), nil, &Undefined{"dne"}},
+		{NewNotLikeOperator(nonExistantProperty, stringBob), nil, &Undefined{"dne"}},
 
 		// these tests all conform to the table in the specification
 		{NewIsNullOperator(stringBob), false, nil},

@@ -35,6 +35,7 @@ func TestDotMember(t *testing.T) {
 			"b",
 			"c",
 		},
+		"name": "bob",
 	}
 	sampleMeta := map[string]Value{
 		"id": "first",
@@ -53,14 +54,22 @@ func TestDotMember(t *testing.T) {
 		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("middle")), nil, &Undefined{"middle"}},
 		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("namez")), NewProperty("first")), nil, &Undefined{"namez"}},
 
+		{NewDotMemberOperator(NewProperty("name"), NewProperty("city")), nil, &Undefined{"city"}},
+
 		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(0.0)), "a", nil},
 		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(1.0)), "b", nil},
 		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(2.0)), "c", nil},
 		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(-1.0)), nil, &Undefined{}},
 		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(10.0)), nil, &Undefined{}},
 
+		{NewBracketMemberOperator(NewProperty("foo"), NewLiteralNumber(10.0)), nil, &Undefined{"foo"}},
+		{NewBracketMemberOperator(NewProperty("friends"), NewProperty("bar")), nil, &Undefined{"bar"}},
+
 		//compound test
 		{NewBracketMemberOperator(NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("all")), NewLiteralNumber(0.0)), "unql", nil},
+
+		// test using bracket member on object instead of array
+		{NewBracketMemberOperator(NewProperty("address"), NewLiteralString("street")), "1 recursive function", nil},
 	}
 
 	context := NewMapItem(sampleContext, sampleMeta)
