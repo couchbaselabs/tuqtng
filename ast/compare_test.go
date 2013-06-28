@@ -117,6 +117,14 @@ func TestCompare(t *testing.T) {
 		{NewIsNotValuedOperator(stringBob), false, nil},
 		{NewIsNotValuedOperator(null), true, nil},
 		{NewIsNotValuedOperator(nonExistantProperty), false, nil},
+
+		// new tests to check ordering of missing/null values
+		{NewLessThanOperator(numberSixty, nonExistantProperty), nil, &Undefined{"dne"}},
+		{NewLessThanOperator(numberSixty, null), nil, nil},
+
+		//comparing booleans
+		{NewEqualToOperator(NewLiteralBool(true), NewLiteralBool(false)), false, nil},
+		{NewEqualToOperator(NewLiteralBool(false), NewLiteralBool(true)), false, nil},
 	}
 
 	for _, x := range tests {
