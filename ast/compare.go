@@ -22,7 +22,7 @@ type TypeMismatch struct {
 }
 
 func (this *TypeMismatch) Error() string {
-	return fmt.Sprintf("Types do not match, %s %s", this.ltype, this.rtype)
+	return fmt.Sprintf("Types do not match, %d %d", this.ltype, this.rtype)
 }
 
 type BinaryComparisonOperator struct {

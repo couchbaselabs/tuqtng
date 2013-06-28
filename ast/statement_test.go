@@ -57,9 +57,16 @@ func TestSelectStatement(t *testing.T) {
 func TestSelectStatementWithDuplicateAlias(t *testing.T) {
 	stmt := NewSelectStatement()
 
-	stmt.Select = ResultExpressionList{NewResultExpressionWithAlias(NewProperty("foo"), "foo"), NewResultExpressionWithAlias(NewProperty("foo"), "foo")}
+	stmt.Select = ResultExpressionList{NewResultExpressionWithAlias(NewProperty("foo"), "foo"), NewResultExpressionWithAlias(NewProperty("foo"), "bar")}
 
 	err := stmt.VerifySemantics()
+	if err != nil {
+		t.Errorf("expected no error, got %v", err)
+	}
+
+	stmt.Select = ResultExpressionList{NewResultExpressionWithAlias(NewProperty("foo"), "foo"), NewResultExpressionWithAlias(NewProperty("foo"), "foo")}
+
+	err = stmt.VerifySemantics()
 	if err == nil || err.Error() != "alias foo is defined more than once" {
 		t.Errorf("expected error: alias foo is defined more than once")
 	}

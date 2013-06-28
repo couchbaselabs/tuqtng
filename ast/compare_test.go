@@ -130,3 +130,11 @@ func TestCompare(t *testing.T) {
 	}
 
 }
+
+func TestTypeMismatchError(t *testing.T) {
+	err := TypeMismatch{4, 3}
+
+	if err.Error() != "Types do not match, 4 3" {
+		t.Errorf("Expected Types do not match 4,3, got %v", err.Error())
+	}
+}

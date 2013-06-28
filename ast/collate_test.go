@@ -61,6 +61,9 @@ func TestCollateJSON(t *testing.T) {
 		{"ømø", "omo", 1},
 		{"\t", " ", -1},
 		{"\001", " ", -1},
+
+		// object
+		{map[string]interface{}{}, "foo", 2},
 	}
 
 	for _, test := range tests {
