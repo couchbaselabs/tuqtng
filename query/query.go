@@ -17,7 +17,38 @@ package query
 
 // Error will eventually include code, message key, and internal error
 // object (cause) and message
-type Error error
+type Error interface {
+	error
+	Code() int32
+	TranslationKey() string
+	Cause() error
+}
+
+func NewError(e error) Error {
+	return err{cause: e}
+}
+
+func NewError(internalMsg string) Error {
+	return err{internalMsg: internalMsg}
+}
+
+type err struct {
+	code        int32
+	key         string
+	internalMsg string
+	cause       error
+}
+
+func (e *err) Error() string {
+	switch {
+	default:
+		return "Unspecified error."
+	case internalMsg != nil:
+		return internalMsg
+	case cause != nil:
+		return cause.Error()
+	}
+}
 
 // Item is a pipeline data item, i.e. any data produced or consumed in
 // query processing
@@ -26,4 +57,3 @@ type Item interface {
 
 // ItemChannel is a channel of Items
 type ItemChannel chan *Item
-
