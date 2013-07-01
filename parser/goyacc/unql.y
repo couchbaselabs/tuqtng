@@ -32,7 +32,8 @@ f float64}
 %left OR
 %left AND 
 %left EQ LT LTE GT GTE NE LIKE
-%left PLUS MINUS MULT DIV MOD CONCAT
+%left PLUS MINUS
+%left MULT DIV MOD CONCAT
 %right NOT
 
 %%

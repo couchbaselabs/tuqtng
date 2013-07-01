@@ -23,7 +23,7 @@ state 1
 state 2
 	input:  select_stmt.    (1)
 
-	.  reduce 1 (src line 40)
+	.  reduce 1 (src line 41)
 
 
 state 3
@@ -31,14 +31,14 @@ state 3
 	select_order: .    (22)
 
 	ORDER  shift 10
-	.  reduce 22 (src line 186)
+	.  reduce 22 (src line 187)
 
 	select_order  goto 9
 
 state 4
 	select_compound:  select_core.    (3)
 
-	.  reduce 3 (src line 53)
+	.  reduce 3 (src line 54)
 
 
 state 5
@@ -46,7 +46,7 @@ state 5
 	select_from: .    (16)
 
 	FROM  shift 12
-	.  reduce 16 (src line 151)
+	.  reduce 16 (src line 152)
 
 	select_from  goto 11
 
@@ -92,7 +92,7 @@ state 7
 state 8
 	select_select_head:  SELECT.    (7)
 
-	.  reduce 7 (src line 78)
+	.  reduce 7 (src line 79)
 
 
 state 9
@@ -100,7 +100,7 @@ state 9
 	select_limit_offset: .    (29)
 
 	LIMIT  shift 42
-	.  reduce 29 (src line 237)
+	.  reduce 29 (src line 238)
 
 	select_limit_offset  goto 40
 	select_limit  goto 41
@@ -117,7 +117,7 @@ state 11
 	select_where: .    (20)
 
 	WHERE  shift 45
-	.  reduce 20 (src line 170)
+	.  reduce 20 (src line 171)
 
 	select_where  goto 44
 
@@ -132,13 +132,13 @@ state 12
 state 13
 	select_select:  select_select_head select_select_tail.    (5)
 
-	.  reduce 5 (src line 66)
+	.  reduce 5 (src line 67)
 
 
 state 14
 	select_select_tail:  result_list.    (8)
 
-	.  reduce 8 (src line 85)
+	.  reduce 8 (src line 86)
 
 
 state 15
@@ -146,13 +146,13 @@ state 15
 	result_list:  result_single.COMMA result_list 
 
 	COMMA  shift 48
-	.  reduce 9 (src line 99)
+	.  reduce 9 (src line 100)
 
 
 state 16
 	result_single:  dotted_path_star.    (11)
 
-	.  reduce 11 (src line 117)
+	.  reduce 11 (src line 118)
 
 
 state 17
@@ -160,13 +160,13 @@ state 17
 	result_single:  expression.AS IDENTIFIER 
 
 	AS  shift 49
-	.  reduce 12 (src line 121)
+	.  reduce 12 (src line 122)
 
 
 state 18
 	dotted_path_star:  MULT.    (14)
 
-	.  reduce 14 (src line 137)
+	.  reduce 14 (src line 138)
 
 
 state 19
@@ -209,13 +209,13 @@ state 19
 	LIKE  shift 65
 	DOT  shift 50
 	MOD  shift 55
-	.  reduce 34 (src line 275)
+	.  reduce 34 (src line 276)
 
 
 state 20
 	expr:  prefix_expr.    (53)
 
-	.  reduce 53 (src line 424)
+	.  reduce 53 (src line 425)
 
 
 state 21
@@ -271,7 +271,7 @@ state 22
 state 23
 	prefix_expr:  suffix_expr.    (56)
 
-	.  reduce 56 (src line 444)
+	.  reduce 56 (src line 445)
 
 
 state 24
@@ -284,19 +284,19 @@ state 24
 	suffix_expr:  atom.IS NOT VALUED 
 
 	IS  shift 70
-	.  reduce 57 (src line 449)
+	.  reduce 57 (src line 450)
 
 
 state 25
 	atom:  IDENTIFIER.    (64)
 
-	.  reduce 64 (src line 497)
+	.  reduce 64 (src line 498)
 
 
 state 26
 	atom:  literal_value.    (65)
 
-	.  reduce 65 (src line 502)
+	.  reduce 65 (src line 503)
 
 
 state 27
@@ -329,55 +329,55 @@ state 27
 state 28
 	literal_value:  STRING.    (67)
 
-	.  reduce 67 (src line 513)
+	.  reduce 67 (src line 514)
 
 
 state 29
 	literal_value:  number.    (68)
 
-	.  reduce 68 (src line 519)
+	.  reduce 68 (src line 520)
 
 
 state 30
 	literal_value:  object.    (69)
 
-	.  reduce 69 (src line 523)
+	.  reduce 69 (src line 524)
 
 
 state 31
 	literal_value:  array.    (70)
 
-	.  reduce 70 (src line 527)
+	.  reduce 70 (src line 528)
 
 
 state 32
 	literal_value:  TRUE.    (71)
 
-	.  reduce 71 (src line 531)
+	.  reduce 71 (src line 532)
 
 
 state 33
 	literal_value:  FALSE.    (72)
 
-	.  reduce 72 (src line 537)
+	.  reduce 72 (src line 538)
 
 
 state 34
 	literal_value:  NULL.    (73)
 
-	.  reduce 73 (src line 543)
+	.  reduce 73 (src line 544)
 
 
 state 35
 	number:  INT.    (74)
 
-	.  reduce 74 (src line 551)
+	.  reduce 74 (src line 552)
 
 
 state 36
 	number:  NUMBER.    (75)
 
-	.  reduce 75 (src line 557)
+	.  reduce 75 (src line 558)
 
 
 state 37
@@ -424,13 +424,13 @@ state 38
 state 39
 	select_select_head:  EXPLAIN SELECT.    (6)
 
-	.  reduce 6 (src line 72)
+	.  reduce 6 (src line 73)
 
 
 state 40
 	select_stmt:  select_compound select_order select_limit_offset.    (2)
 
-	.  reduce 2 (src line 47)
+	.  reduce 2 (src line 48)
 
 
 state 41
@@ -438,7 +438,7 @@ state 41
 	select_limit_offset:  select_limit.select_offset 
 
 	OFFSET  shift 81
-	.  reduce 30 (src line 241)
+	.  reduce 30 (src line 242)
 
 	select_offset  goto 80
 
@@ -481,7 +481,7 @@ state 43
 state 44
 	select_core:  select_select select_from select_where.    (4)
 
-	.  reduce 4 (src line 60)
+	.  reduce 4 (src line 61)
 
 
 state 45
@@ -514,7 +514,7 @@ state 45
 state 46
 	select_from:  FROM data_source.    (17)
 
-	.  reduce 17 (src line 155)
+	.  reduce 17 (src line 156)
 
 
 state 47
@@ -522,7 +522,7 @@ state 47
 	data_source:  IDENTIFIER.AS IDENTIFIER 
 
 	AS  shift 87
-	.  reduce 18 (src line 160)
+	.  reduce 18 (src line 161)
 
 
 state 48
@@ -998,13 +998,13 @@ state 67
 state 68
 	prefix_expr:  NOT prefix_expr.    (54)
 
-	.  reduce 54 (src line 430)
+	.  reduce 54 (src line 431)
 
 
 state 69
 	prefix_expr:  MINUS prefix_expr.    (55)
 
-	.  reduce 55 (src line 437)
+	.  reduce 55 (src line 438)
 
 
 state 70
@@ -1068,13 +1068,13 @@ state 72
 	LIKE  shift 65
 	DOT  shift 114
 	MOD  shift 55
-	.  reduce 34 (src line 275)
+	.  reduce 34 (src line 276)
 
 
 state 73
 	object:  LBRACE RBRACE.    (76)
 
-	.  reduce 76 (src line 565)
+	.  reduce 76 (src line 566)
 
 
 state 74
@@ -1089,7 +1089,7 @@ state 75
 	named_expression_list:  named_expression_single.COMMA named_expression_list 
 
 	COMMA  shift 116
-	.  reduce 78 (src line 577)
+	.  reduce 78 (src line 578)
 
 
 state 76
@@ -1102,7 +1102,7 @@ state 76
 state 77
 	array:  LBRACKET RBRACKET.    (81)
 
-	.  reduce 81 (src line 603)
+	.  reduce 81 (src line 604)
 
 
 state 78
@@ -1117,13 +1117,13 @@ state 79
 	expression_list:  expression.COMMA expression_list 
 
 	COMMA  shift 119
-	.  reduce 83 (src line 618)
+	.  reduce 83 (src line 619)
 
 
 state 80
 	select_limit_offset:  select_limit select_offset.    (31)
 
-	.  reduce 31 (src line 245)
+	.  reduce 31 (src line 246)
 
 
 state 81
@@ -1136,13 +1136,13 @@ state 81
 state 82
 	select_limit:  LIMIT INT.    (32)
 
-	.  reduce 32 (src line 251)
+	.  reduce 32 (src line 252)
 
 
 state 83
 	select_order:  ORDER BY sorting_list.    (23)
 
-	.  reduce 23 (src line 188)
+	.  reduce 23 (src line 189)
 
 
 state 84
@@ -1150,7 +1150,7 @@ state 84
 	sorting_list:  sorting_single.COMMA sorting_list 
 
 	COMMA  shift 121
-	.  reduce 24 (src line 194)
+	.  reduce 24 (src line 195)
 
 
 state 85
@@ -1160,13 +1160,13 @@ state 85
 
 	ASC  shift 122
 	DESC  shift 123
-	.  reduce 26 (src line 203)
+	.  reduce 26 (src line 204)
 
 
 state 86
 	select_where:  WHERE expression.    (21)
 
-	.  reduce 21 (src line 174)
+	.  reduce 21 (src line 175)
 
 
 state 87
@@ -1179,25 +1179,25 @@ state 87
 state 88
 	result_list:  result_single COMMA result_list.    (10)
 
-	.  reduce 10 (src line 104)
+	.  reduce 10 (src line 105)
 
 
 state 89
 	result_single:  expression AS IDENTIFIER.    (13)
 
-	.  reduce 13 (src line 128)
+	.  reduce 13 (src line 129)
 
 
 state 90
 	dotted_path_star:  expr DOT MULT.    (15)
 
-	.  reduce 15 (src line 143)
+	.  reduce 15 (src line 144)
 
 
 state 91
 	expr:  expr DOT IDENTIFIER.    (51)
 
-	.  reduce 51 (src line 408)
+	.  reduce 51 (src line 409)
 
 
 state 92
@@ -1221,8 +1221,12 @@ state 92
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
+	MULT  shift 53
+	DIV  shift 54
+	CONCAT  shift 56
 	NOT  shift 66
-	.  reduce 35 (src line 280)
+	MOD  shift 55
+	.  reduce 35 (src line 281)
 
 
 state 93
@@ -1246,8 +1250,12 @@ state 93
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
+	MULT  shift 53
+	DIV  shift 54
+	CONCAT  shift 56
 	NOT  shift 66
-	.  reduce 36 (src line 288)
+	MOD  shift 55
+	.  reduce 36 (src line 289)
 
 
 state 94
@@ -1272,7 +1280,7 @@ state 94
 	expr:  expr.LBRACKET expr RBRACKET 
 
 	NOT  shift 66
-	.  reduce 37 (src line 296)
+	.  reduce 37 (src line 297)
 
 
 state 95
@@ -1297,7 +1305,7 @@ state 95
 	expr:  expr.LBRACKET expr RBRACKET 
 
 	NOT  shift 66
-	.  reduce 38 (src line 304)
+	.  reduce 38 (src line 305)
 
 
 state 96
@@ -1322,7 +1330,7 @@ state 96
 	expr:  expr.LBRACKET expr RBRACKET 
 
 	NOT  shift 66
-	.  reduce 39 (src line 312)
+	.  reduce 39 (src line 313)
 
 
 state 97
@@ -1347,7 +1355,7 @@ state 97
 	expr:  expr.LBRACKET expr RBRACKET 
 
 	NOT  shift 66
-	.  reduce 40 (src line 320)
+	.  reduce 40 (src line 321)
 
 
 state 98
@@ -1385,7 +1393,7 @@ state 98
 	LTE  shift 61
 	LIKE  shift 65
 	MOD  shift 55
-	.  reduce 41 (src line 328)
+	.  reduce 41 (src line 329)
 
 
 state 99
@@ -1424,7 +1432,7 @@ state 99
 	LTE  shift 61
 	LIKE  shift 65
 	MOD  shift 55
-	.  reduce 42 (src line 336)
+	.  reduce 42 (src line 337)
 
 
 state 100
@@ -1455,7 +1463,7 @@ state 100
 	CONCAT  shift 56
 	NOT  shift 66
 	MOD  shift 55
-	.  reduce 43 (src line 344)
+	.  reduce 43 (src line 345)
 
 
 state 101
@@ -1486,7 +1494,7 @@ state 101
 	CONCAT  shift 56
 	NOT  shift 66
 	MOD  shift 55
-	.  reduce 44 (src line 352)
+	.  reduce 44 (src line 353)
 
 
 state 102
@@ -1517,7 +1525,7 @@ state 102
 	CONCAT  shift 56
 	NOT  shift 66
 	MOD  shift 55
-	.  reduce 45 (src line 360)
+	.  reduce 45 (src line 361)
 
 
 state 103
@@ -1548,7 +1556,7 @@ state 103
 	CONCAT  shift 56
 	NOT  shift 66
 	MOD  shift 55
-	.  reduce 46 (src line 368)
+	.  reduce 46 (src line 369)
 
 
 state 104
@@ -1579,7 +1587,7 @@ state 104
 	CONCAT  shift 56
 	NOT  shift 66
 	MOD  shift 55
-	.  reduce 47 (src line 376)
+	.  reduce 47 (src line 377)
 
 
 state 105
@@ -1610,7 +1618,7 @@ state 105
 	CONCAT  shift 56
 	NOT  shift 66
 	MOD  shift 55
-	.  reduce 48 (src line 384)
+	.  reduce 48 (src line 385)
 
 
 state 106
@@ -1641,7 +1649,7 @@ state 106
 	CONCAT  shift 56
 	NOT  shift 66
 	MOD  shift 55
-	.  reduce 49 (src line 392)
+	.  reduce 49 (src line 393)
 
 
 state 107
@@ -1716,7 +1724,7 @@ state 108
 state 109
 	suffix_expr:  atom IS NULL.    (58)
 
-	.  reduce 58 (src line 453)
+	.  reduce 58 (src line 454)
 
 
 state 110
@@ -1733,19 +1741,19 @@ state 110
 state 111
 	suffix_expr:  atom IS MISSING.    (60)
 
-	.  reduce 60 (src line 467)
+	.  reduce 60 (src line 468)
 
 
 state 112
 	suffix_expr:  atom IS VALUED.    (62)
 
-	.  reduce 62 (src line 481)
+	.  reduce 62 (src line 482)
 
 
 state 113
 	atom:  LPAREN expression RPAREN.    (66)
 
-	.  reduce 66 (src line 506)
+	.  reduce 66 (src line 507)
 
 
 state 114
@@ -1758,7 +1766,7 @@ state 114
 state 115
 	object:  LBRACE named_expression_list RBRACE.    (77)
 
-	.  reduce 77 (src line 571)
+	.  reduce 77 (src line 572)
 
 
 state 116
@@ -1800,7 +1808,7 @@ state 117
 state 118
 	array:  LBRACKET expression_list RBRACKET.    (82)
 
-	.  reduce 82 (src line 609)
+	.  reduce 82 (src line 610)
 
 
 state 119
@@ -1834,7 +1842,7 @@ state 119
 state 120
 	select_offset:  OFFSET INT.    (33)
 
-	.  reduce 33 (src line 262)
+	.  reduce 33 (src line 263)
 
 
 state 121
@@ -1869,19 +1877,19 @@ state 121
 state 122
 	sorting_single:  expression ASC.    (27)
 
-	.  reduce 27 (src line 214)
+	.  reduce 27 (src line 215)
 
 
 state 123
 	sorting_single:  expression DESC.    (28)
 
-	.  reduce 28 (src line 225)
+	.  reduce 28 (src line 226)
 
 
 state 124
 	data_source:  IDENTIFIER AS IDENTIFIER.    (19)
 
-	.  reduce 19 (src line 164)
+	.  reduce 19 (src line 165)
 
 
 state 125
@@ -1912,55 +1920,55 @@ state 125
 	CONCAT  shift 56
 	NOT  shift 66
 	MOD  shift 55
-	.  reduce 50 (src line 400)
+	.  reduce 50 (src line 401)
 
 
 state 126
 	expr:  expr LBRACKET expr RBRACKET.    (52)
 
-	.  reduce 52 (src line 416)
+	.  reduce 52 (src line 417)
 
 
 state 127
 	suffix_expr:  atom IS NOT NULL.    (59)
 
-	.  reduce 59 (src line 460)
+	.  reduce 59 (src line 461)
 
 
 state 128
 	suffix_expr:  atom IS NOT MISSING.    (61)
 
-	.  reduce 61 (src line 474)
+	.  reduce 61 (src line 475)
 
 
 state 129
 	suffix_expr:  atom IS NOT VALUED.    (63)
 
-	.  reduce 63 (src line 488)
+	.  reduce 63 (src line 489)
 
 
 state 130
 	named_expression_list:  named_expression_single COMMA named_expression_list.    (79)
 
-	.  reduce 79 (src line 581)
+	.  reduce 79 (src line 582)
 
 
 state 131
 	named_expression_single:  STRING COLON expression.    (80)
 
-	.  reduce 80 (src line 593)
+	.  reduce 80 (src line 594)
 
 
 state 132
 	expression_list:  expression COMMA expression_list.    (84)
 
-	.  reduce 84 (src line 625)
+	.  reduce 84 (src line 626)
 
 
 state 133
 	sorting_list:  sorting_single COMMA sorting_list.    (25)
 
-	.  reduce 25 (src line 198)
+	.  reduce 25 (src line 199)
 
 
 49 terminals, 32 nonterminals
@@ -1969,9 +1977,9 @@ state 133
 81 working sets used
 memory: parser 381/30000
 113 extra closures
-526 shift entries, 1 exceptions
+534 shift entries, 1 exceptions
 63 goto entries
 198 entries saved by goto default
 Optimizer space used: output 261/30000
-261 table entries, 27 zero
+261 table entries, 22 zero
 maximum spread: 49, maximum offset: 121
