@@ -41,7 +41,7 @@ type Bucket interface {
 	Name() string
 	Count() (int64, Error)
 	Scanners() ([]Scanner, Error)
-	Lookup(id string) (query.Item, Error)
+	Fetch(id string) (query.Item, Error)
 }
 
 // RangeStatistics captures statistics for a range index (view or
@@ -64,7 +64,7 @@ type Bin interface {
 
 // Scanner is the base type for all scanners.
 type Scanner interface {
-	Channel() (query.ItemChannel, Error)
+	ScanAll(query.ItemChannel) Error
 }
 
 // FullScanner performs full bucket scans.

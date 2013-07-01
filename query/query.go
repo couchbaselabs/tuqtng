@@ -16,7 +16,7 @@ processing.
 package query
 
 // Error will eventually include code, message key, and internal error
-// (cause) and message
+// object (cause) and message
 type Error error
 
 // Item is a pipeline data item, i.e. any data produced or consumed in
