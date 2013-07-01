@@ -26,3 +26,4 @@ type Item interface {
 
 // ItemChannel is a channel of Items
 type ItemChannel chan *Item
+
