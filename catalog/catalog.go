@@ -7,14 +7,18 @@
 //  either express or implied. See the License for the specific language governing permissions
 //  and limitations under the License.
 
+/*
+
+Package catalog provides a common catalog abstraction over all storage
+engines, such as Couchbase server, file, mobile, CBGB, 3rd-party
+storage engines, etc.
+
+*/
 package catalog
 
-// Error will be moved to a shared package.
-type Error error
-
-// Item will be moved to a shared package.
-type Item interface {
-}
+import (
+       "github.com/couchbaselabs/tuqtng/query"
+)
 
 // Site represents a cluster or single-node server.
 type Site interface {
@@ -37,15 +41,15 @@ type Bucket interface {
 	Name() string
 	Count() (int64, Error)
 	Scanners() ([]Scanner, Error)
-	Lookup(id string) (Item, Error)
+	Lookup(id string) (query.Item, Error)
 }
 
 // RangeStatistics captures statistics for a range index (view or
 // declarative btree index).
 type RangeStatistics interface {
 	Count() (int64, Error)
-	Min() (Item, Error)
-	Max() (Item, Error)
+	Min() (query.Item, Error)
+	Max() (query.Item, Error)
 	DistinctCount(int64, Error)
 	Bins() ([]Bin, Error)
 }
@@ -53,16 +57,14 @@ type RangeStatistics interface {
 // Bin represents a range bin within IndexStatistics.
 type Bin interface {
 	Count() (int64, Error)
-	Min() (Item, Error)
-	Max() (Item, Error)
+	Min() (query.Item, Error)
+	Max() (query.Item, Error)
 	DistinctCount(int64, Error)
 }
 
-type ItemChannel chan *Item
-
 // Scanner is the base type for all scanners.
 type Scanner interface {
-	Channel() (ItemChannel, Error)
+	Channel() (query.ItemChannel, Error)
 }
 
 // FullScanner performs full bucket scans.
