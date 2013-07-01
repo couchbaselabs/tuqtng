@@ -23,48 +23,48 @@ import (
 // Site represents a cluster or single-node server.
 type Site interface {
 	URL() string
-	PoolNames() ([]string, Error)
-	Pool(name string) (Pool, Error)
+	PoolNames() ([]string, query.Error)
+	Pool(name string) (Pool, query.Error)
 }
 
 // Pool represents a logical authentication, query, and resource
 // allocation boundary, as well as a grouping of buckets.
 type Pool interface {
 	Name() string
-	BucketNames() ([]string, Error)
-	Bucket(name string) (Bucket, Error)
+	BucketNames() ([]string, query.Error)
+	Bucket(name string) (Bucket, query.Error)
 }
 
 // Bucket is a collection of key-value entries (typically
 // key-document, but not always).
 type Bucket interface {
 	Name() string
-	Count() (int64, Error)
-	Scanners() ([]Scanner, Error)
-	Fetch(id string) (query.Item, Error)
+	Count() (int64, query.Error)
+	Scanners() ([]Scanner, query.Error)
+	Fetch(id string) (query.Item, query.Error)
 }
 
 // RangeStatistics captures statistics for a range index (view or
 // declarative btree index).
 type RangeStatistics interface {
-	Count() (int64, Error)
-	Min() (query.Item, Error)
-	Max() (query.Item, Error)
-	DistinctCount(int64, Error)
-	Bins() ([]Bin, Error)
+	Count() (int64, query.Error)
+	Min() (query.Item, query.Error)
+	Max() (query.Item, query.Error)
+	DistinctCount(int64, query.Error)
+	Bins() ([]Bin, query.Error)
 }
 
 // Bin represents a range bin within IndexStatistics.
 type Bin interface {
-	Count() (int64, Error)
-	Min() (query.Item, Error)
-	Max() (query.Item, Error)
-	DistinctCount(int64, Error)
+	Count() (int64, query.Error)
+	Min() (query.Item, query.Error)
+	Max() (query.Item, query.Error)
+	DistinctCount(int64, query.Error)
 }
 
 // Scanner is the base type for all scanners.
 type Scanner interface {
-	ScanAll(ch query.ItemChannel) Error
+	ScanAll(ch query.ItemChannel) query.Error
 }
 
 // FullScanner performs full bucket scans.
@@ -88,7 +88,7 @@ type RangeScanner interface {
 	Name() string
 	Key() []string
 	Direction() Direction
-	Statistics() (RangeStatistics, Error)
+	Statistics() (RangeStatistics, query.Error)
 }
 
 // ViewScanner represents Couchbase views.

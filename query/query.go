@@ -24,37 +24,33 @@ type Error interface {
 	Cause() error
 }
 
-func NewError(e error) Error {
-	return err{cause: e}
-}
-
-func NewError(internalMsg string) Error {
-	return err{internalMsg: internalMsg}
+func NewError(e error, internalMsg string) Error {
+     return &err{cause: e, internalMsg: internalMsg}
 }
 
 type err struct {
 	code        int32
 	key         string
-	internalMsg string
 	cause       error
+	internalMsg string
 }
 
 func (e *err) Error() string {
 	switch {
 	default:
 		return "Unspecified error."
-	case internalMsg != nil:
-		return internalMsg
-	case cause != nil:
-		return cause.Error()
+	case e.internalMsg != "":
+		return e.internalMsg
+	case e.cause != nil:
+		return e.cause.Error()
 	}
 }
 
-func (e *err) Code() error {
+func (e *err) Code() int32 {
 	return e.code
 }
 
-func (e *err) TranslationKey() error {
+func (e *err) TranslationKey() string {
 	return e.key
 }
 
