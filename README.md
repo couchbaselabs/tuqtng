@@ -6,18 +6,19 @@
 
 ### Users
 
-    go get github.com/couchbaselabs/tuqtng
-    cd $GOPATH/tuqtng
-    go build
-    ./tuqtnq
+    $ go get github.com/couchbaselabs/tuqtng
+    $ tuqtnq
 
 ### Developers
 
-    mkdir -p $GOPATH/src/github.com/couchbaselabs
-    git clone git@github.com:couchbaselabs/tuqtng.git
-    cd $GOPATH/tuqtng
-    go build
-    ./tuqtng
+    $ mkdir -p $GOPATH/src/github.com/couchbaselabs
+    $ cd $GOPATH/src/github.com/couchbaselabs
+    $ git clone git@github.com:couchbaselabs/tuqtng.git
+    $ cd tuqtng
+    $ go get code.google.com/p/go.exp/locale/collate
+    $ go get github.com/gorilla/mux
+    $ go build
+    $ ./tuqtng
 
 ## Querying
 
