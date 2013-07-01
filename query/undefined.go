@@ -7,21 +7,19 @@
 //  either express or implied. See the License for the specific language governing permissions
 //  and limitations under the License.
 
-package ast
+package query
 
-// this is the primary object passed through the execution pipeline
-// still open questions about how aliases will be handled
+import (
+	"fmt"
+)
 
-type Item interface {
-	// path should be a simple path (not containing . or [])
-	// those must be implemented as separate sub-expressions
-	GetPath(path string) (Value, error)
-	GetMeta() map[string]Value
-	// FIXME - added this method to support projecting *
-	//         not sure how well this fits with JSONPointer impl?
-	GetTopLevelKeys() []string
+type Undefined struct {
+	Path string
 }
 
-type ItemCollection []Item
-
-type ItemChannel chan Item
+func (this *Undefined) Error() string {
+	if this.Path != "" {
+		return fmt.Sprintf("%s is not defined", this.Path)
+	}
+	return fmt.Sprint("not defined")
+}

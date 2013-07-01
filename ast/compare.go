@@ -14,6 +14,8 @@ import (
 	"log"
 	"regexp"
 	"strings"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type TypeMismatch struct {
@@ -30,7 +32,7 @@ type BinaryComparisonOperator struct {
 	Right Expression `json:"right"`
 }
 
-func (this *BinaryComparisonOperator) compare(item Item) (Value, error) {
+func (this *BinaryComparisonOperator) compare(item query.Item) (query.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		// this could either be real error, or MISSING
@@ -92,7 +94,7 @@ func NewGreaterThanOperator(left, right Expression) *GreaterThanOperator {
 	}
 }
 
-func (this *GreaterThanOperator) Evaluate(item Item) (Value, error) {
+func (this *GreaterThanOperator) Evaluate(item query.Item) (query.Value, error) {
 	compare, err := this.BinaryComparisonOperator.compare(item)
 	if err != nil {
 		switch err := err.(type) {
@@ -134,7 +136,7 @@ func NewGreaterThanOrEqualOperator(left, right Expression) *GreaterThanOrEqualOp
 	}
 }
 
-func (this *GreaterThanOrEqualOperator) Evaluate(item Item) (Value, error) {
+func (this *GreaterThanOrEqualOperator) Evaluate(item query.Item) (query.Value, error) {
 	compare, err := this.BinaryComparisonOperator.compare(item)
 	if err != nil {
 		switch err := err.(type) {
@@ -176,7 +178,7 @@ func NewLessThanOperator(left, right Expression) *LessThanOperator {
 	}
 }
 
-func (this *LessThanOperator) Evaluate(item Item) (Value, error) {
+func (this *LessThanOperator) Evaluate(item query.Item) (query.Value, error) {
 	compare, err := this.BinaryComparisonOperator.compare(item)
 	if err != nil {
 		switch err := err.(type) {
@@ -218,7 +220,7 @@ func NewLessThanOrEqualOperator(left, right Expression) *LessThanOrEqualOperator
 	}
 }
 
-func (this *LessThanOrEqualOperator) Evaluate(item Item) (Value, error) {
+func (this *LessThanOrEqualOperator) Evaluate(item query.Item) (query.Value, error) {
 	compare, err := this.BinaryComparisonOperator.compare(item)
 	if err != nil {
 		switch err := err.(type) {
@@ -260,7 +262,7 @@ func NewEqualToOperator(left, right Expression) *EqualToOperator {
 	}
 }
 
-func (this *EqualToOperator) Evaluate(item Item) (Value, error) {
+func (this *EqualToOperator) Evaluate(item query.Item) (query.Value, error) {
 	compare, err := this.BinaryComparisonOperator.compare(item)
 	if err != nil {
 		switch err := err.(type) {
@@ -302,7 +304,7 @@ func NewNotEqualToOperator(left, right Expression) *NotEqualToOperator {
 	}
 }
 
-func (this *NotEqualToOperator) Evaluate(item Item) (Value, error) {
+func (this *NotEqualToOperator) Evaluate(item query.Item) (query.Value, error) {
 	compare, err := this.BinaryComparisonOperator.compare(item)
 	if err != nil {
 		switch err := err.(type) {
@@ -344,7 +346,7 @@ func NewLikeOperator(left, right Expression) *LikeOperator {
 	}
 }
 
-func (this *LikeOperator) Evaluate(item Item) (Value, error) {
+func (this *LikeOperator) Evaluate(item query.Item) (query.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -393,7 +395,7 @@ func NewNotLikeOperator(left, right Expression) *NotLikeOperator {
 	}
 }
 
-func (this *NotLikeOperator) Evaluate(item Item) (Value, error) {
+func (this *NotLikeOperator) Evaluate(item query.Item) (query.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -440,11 +442,11 @@ func NewIsNullOperator(operand Expression) *IsNullOperator {
 	}
 }
 
-func (this *IsNullOperator) Evaluate(item Item) (Value, error) {
+func (this *IsNullOperator) Evaluate(item query.Item) (query.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *Undefined:
+		case *query.Undefined:
 			return false, nil
 		default:
 			// any other error should be returned to caller
@@ -475,11 +477,11 @@ func NewIsNotNullOperator(operand Expression) *IsNotNullOperator {
 	}
 }
 
-func (this *IsNotNullOperator) Evaluate(item Item) (Value, error) {
+func (this *IsNotNullOperator) Evaluate(item query.Item) (query.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *Undefined:
+		case *query.Undefined:
 			return false, nil
 		default:
 			// any other error should be returned to caller
@@ -510,11 +512,11 @@ func NewIsMissingOperator(operand Expression) *IsMissingOperator {
 	}
 }
 
-func (this *IsMissingOperator) Evaluate(item Item) (Value, error) {
+func (this *IsMissingOperator) Evaluate(item query.Item) (query.Value, error) {
 	_, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *Undefined:
+		case *query.Undefined:
 			return true, nil
 		default:
 			// any other error should be returned to caller
@@ -541,11 +543,11 @@ func NewIsNotMissingOperator(operand Expression) *IsNotMissingOperator {
 	}
 }
 
-func (this *IsNotMissingOperator) Evaluate(item Item) (Value, error) {
+func (this *IsNotMissingOperator) Evaluate(item query.Item) (query.Value, error) {
 	_, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *Undefined:
+		case *query.Undefined:
 			return false, nil
 		default:
 			// any other error should be returned to caller
@@ -572,11 +574,11 @@ func NewIsValuedOperator(operand Expression) *IsValuedOperator {
 	}
 }
 
-func (this *IsValuedOperator) Evaluate(item Item) (Value, error) {
+func (this *IsValuedOperator) Evaluate(item query.Item) (query.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *Undefined:
+		case *query.Undefined:
 			return false, nil
 		default:
 			// any other error should be returned to caller
@@ -607,11 +609,11 @@ func NewIsNotValuedOperator(operand Expression) *IsNotValuedOperator {
 	}
 }
 
-func (this *IsNotValuedOperator) Evaluate(item Item) (Value, error) {
+func (this *IsNotValuedOperator) Evaluate(item query.Item) (query.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *Undefined:
+		case *query.Undefined:
 			return false, nil
 		default:
 			// any other error should be returned to caller

@@ -11,12 +11,14 @@ package ast
 
 import (
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 func TestValueInBooleanContext(t *testing.T) {
 	tests := []struct {
-		input  Value
-		output Value
+		input  query.Value
+		output query.Value
 	}{
 		{nil, nil},
 		{true, true},
@@ -25,8 +27,8 @@ func TestValueInBooleanContext(t *testing.T) {
 		{3.14, true},
 		{"", false},
 		{"couchbase", true},
-		{[]Value{1.0}, true},
-		{map[string]Value{"name": "bob"}, true},
+		{[]query.Value{1.0}, true},
+		{map[string]query.Value{"name": "bob"}, true},
 	}
 
 	for _, x := range tests {

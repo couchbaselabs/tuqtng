@@ -10,19 +10,19 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type Limit struct {
 	Source      Operator
 	Limit       int
-	itemChannel ast.ItemChannel
+	itemChannel query.ItemChannel
 }
 
 func NewLimit(limit int) *Limit {
 	return &Limit{
 		Limit:       limit,
-		itemChannel: make(ast.ItemChannel),
+		itemChannel: make(query.ItemChannel),
 	}
 }
 
@@ -30,7 +30,7 @@ func (this *Limit) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Limit) GetItemChannel() ast.ItemChannel {
+func (this *Limit) GetItemChannel() query.ItemChannel {
 	return this.itemChannel
 }
 

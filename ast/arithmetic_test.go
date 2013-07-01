@@ -12,6 +12,8 @@ package ast
 import (
 	"reflect"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 func TestArithmetic(t *testing.T) {
@@ -33,37 +35,37 @@ func TestArithmetic(t *testing.T) {
 		{NewPlusOperator(numberSeven, numberSeven), 14.0, nil},
 		{NewPlusOperator(numberSeven, stringCouchbase), nil, nil},
 		{NewPlusOperator(stringCouchbase, numberSeven), nil, nil},
-		{NewPlusOperator(dneProperty, numberSeven), nil, &Undefined{"foo"}},
-		{NewPlusOperator(numberSeven, dneProperty), nil, &Undefined{"foo"}},
+		{NewPlusOperator(dneProperty, numberSeven), nil, &query.Undefined{"foo"}},
+		{NewPlusOperator(numberSeven, dneProperty), nil, &query.Undefined{"foo"}},
 
 		{NewSubtractOperator(numberSeven, numberSeven), 0.0, nil},
 		{NewSubtractOperator(numberSeven, stringCouchbase), nil, nil},
 		{NewSubtractOperator(stringCouchbase, numberSeven), nil, nil},
-		{NewSubtractOperator(dneProperty, numberSeven), nil, &Undefined{"foo"}},
-		{NewSubtractOperator(numberSeven, dneProperty), nil, &Undefined{"foo"}},
+		{NewSubtractOperator(dneProperty, numberSeven), nil, &query.Undefined{"foo"}},
+		{NewSubtractOperator(numberSeven, dneProperty), nil, &query.Undefined{"foo"}},
 
 		{NewMultiplyOperator(numberSeven, numberSeven), 49.0, nil},
 		{NewMultiplyOperator(numberSeven, stringCouchbase), nil, nil},
 		{NewMultiplyOperator(stringCouchbase, numberSeven), nil, nil},
-		{NewMultiplyOperator(dneProperty, numberSeven), nil, &Undefined{"foo"}},
-		{NewMultiplyOperator(numberSeven, dneProperty), nil, &Undefined{"foo"}},
+		{NewMultiplyOperator(dneProperty, numberSeven), nil, &query.Undefined{"foo"}},
+		{NewMultiplyOperator(numberSeven, dneProperty), nil, &query.Undefined{"foo"}},
 
 		{NewDivideOperator(numberSeven, numberSeven), 1.0, nil},
 		{NewDivideOperator(numberSeven, stringCouchbase), nil, nil},
 		{NewDivideOperator(stringCouchbase, numberSeven), nil, nil},
-		{NewDivideOperator(dneProperty, numberSeven), nil, &Undefined{"foo"}},
-		{NewDivideOperator(numberSeven, dneProperty), nil, &Undefined{"foo"}},
+		{NewDivideOperator(dneProperty, numberSeven), nil, &query.Undefined{"foo"}},
+		{NewDivideOperator(numberSeven, dneProperty), nil, &query.Undefined{"foo"}},
 
 		{NewModuloOperator(numberSeven, numberSix), 1.0, nil},
 		{NewModuloOperator(stringCouchbase, numberSix), nil, nil},
 		{NewModuloOperator(numberSeven, stringCouchbase), nil, nil},
-		{NewModuloOperator(dneProperty, numberSix), nil, &Undefined{"foo"}},
-		{NewModuloOperator(numberSeven, dneProperty), nil, &Undefined{"foo"}},
+		{NewModuloOperator(dneProperty, numberSix), nil, &query.Undefined{"foo"}},
+		{NewModuloOperator(numberSeven, dneProperty), nil, &query.Undefined{"foo"}},
 
 		{NewChangeSignOperator(numberSeven), -7.0, nil},
 		{NewChangeSignOperator(numberNegativeSeven), 7.0, nil},
 		{NewChangeSignOperator(stringCouchbase), nil, nil},
-		{NewChangeSignOperator(dneProperty), nil, &Undefined{"foo"}},
+		{NewChangeSignOperator(dneProperty), nil, &query.Undefined{"foo"}},
 	}
 
 	for _, x := range tests {

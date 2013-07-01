@@ -10,7 +10,7 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type ExecutablePipeline struct {
@@ -19,6 +19,6 @@ type ExecutablePipeline struct {
 
 type Operator interface {
 	SetSource(Operator)
-	GetItemChannel() ast.ItemChannel
+	GetItemChannel() query.ItemChannel
 	Run()
 }

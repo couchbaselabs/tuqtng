@@ -11,6 +11,8 @@ package ast
 
 import (
 	"fmt"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 // ****************************************************************************
@@ -27,7 +29,7 @@ func NewLiteralNull() *LiteralNull {
 	}
 }
 
-func (this *LiteralNull) Evaluate(item Item) (Value, error) {
+func (this *LiteralNull) Evaluate(item query.Item) (query.Value, error) {
 	return nil, nil
 }
 
@@ -51,7 +53,7 @@ func NewLiteralBool(val bool) *LiteralBool {
 	}
 }
 
-func (this *LiteralBool) Evaluate(item Item) (Value, error) {
+func (this *LiteralBool) Evaluate(item query.Item) (query.Value, error) {
 	return this.Val, nil
 }
 
@@ -75,7 +77,7 @@ func NewLiteralNumber(val float64) *LiteralNumber {
 	}
 }
 
-func (this *LiteralNumber) Evaluate(item Item) (Value, error) {
+func (this *LiteralNumber) Evaluate(item query.Item) (query.Value, error) {
 	return this.Val, nil
 }
 
@@ -99,7 +101,7 @@ func NewLiteralString(val string) *LiteralString {
 	}
 }
 
-func (this *LiteralString) Evaluate(item Item) (Value, error) {
+func (this *LiteralString) Evaluate(item query.Item) (query.Value, error) {
 	return this.Val, nil
 }
 
@@ -123,13 +125,13 @@ func NewLiteralArray(val []Expression) *LiteralArray {
 	}
 }
 
-func (this *LiteralArray) Evaluate(item Item) (Value, error) {
-	rv := make([]Value, 0, len(this.Val))
+func (this *LiteralArray) Evaluate(item query.Item) (query.Value, error) {
+	rv := make([]query.Value, 0, len(this.Val))
 	for _, v := range this.Val {
 		ev, err := v.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *Undefined:
+			case *query.Undefined:
 				// ignore (missing values do not contribute to the array contents)
 			default:
 				// any other error should be returned to caller
@@ -162,13 +164,13 @@ func NewLiteralObject(val map[string]Expression) *LiteralObject {
 	}
 }
 
-func (this *LiteralObject) Evaluate(item Item) (Value, error) {
-	rv := make(map[string]Value, len(this.Val))
+func (this *LiteralObject) Evaluate(item query.Item) (query.Value, error) {
+	rv := make(map[string]query.Value, len(this.Val))
 	for k, v := range this.Val {
 		ev, err := v.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *Undefined:
+			case *query.Undefined:
 				// ignore (missing values do not contribute to the object contents)
 			default:
 				// any other error should be returned to caller

@@ -12,6 +12,8 @@ package ast
 import (
 	"fmt"
 	"log"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 // ****************************************************************************
@@ -30,8 +32,8 @@ func NewAndOperator(operands []Expression) *AndOperator {
 	}
 }
 
-func (this *AndOperator) Evaluate(item Item) (Value, error) {
-	var rv Value
+func (this *AndOperator) Evaluate(item query.Item) (query.Value, error) {
+	var rv query.Value
 	var re error
 	rv = true
 	re = nil
@@ -39,7 +41,7 @@ func (this *AndOperator) Evaluate(item Item) (Value, error) {
 		operandVal, err := operand.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *Undefined:
+			case *query.Undefined:
 				rv = nil
 				re = err
 				continue
@@ -82,8 +84,8 @@ func NewOrOperator(operands []Expression) *OrOperator {
 	}
 }
 
-func (this *OrOperator) Evaluate(item Item) (Value, error) {
-	var rv Value
+func (this *OrOperator) Evaluate(item query.Item) (query.Value, error) {
+	var rv query.Value
 	var re error
 	rv = false
 	re = nil
@@ -91,7 +93,7 @@ func (this *OrOperator) Evaluate(item Item) (Value, error) {
 		operandVal, err := operand.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *Undefined:
+			case *query.Undefined:
 				rv = nil
 				re = err
 				continue
@@ -134,7 +136,7 @@ func NewNotOperator(operand Expression) *NotOperator {
 	}
 }
 
-func (this *NotOperator) Evaluate(item Item) (Value, error) {
+func (this *NotOperator) Evaluate(item query.Item) (query.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		return nil, err

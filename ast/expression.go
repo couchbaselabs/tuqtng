@@ -9,6 +9,10 @@
 
 package ast
 
+import (
+	"github.com/couchbaselabs/tuqtng/query"
+)
+
 type Expression interface {
-	Evaluate(item Item) (Value, error)
+	Evaluate(item query.Item) (query.Value, error)
 }

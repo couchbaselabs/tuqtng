@@ -10,16 +10,16 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type ExpressionEvaluatorSource struct {
-	itemChannel ast.ItemChannel
+	itemChannel query.ItemChannel
 }
 
 func NewExpressionEvaluatorSource() *ExpressionEvaluatorSource {
 	return &ExpressionEvaluatorSource{
-		itemChannel: make(ast.ItemChannel),
+		itemChannel: make(query.ItemChannel),
 	}
 }
 
@@ -27,12 +27,12 @@ func (this *ExpressionEvaluatorSource) SetSource(source Operator) {
 	panic("Cannot set source for a datasource")
 }
 
-func (this *ExpressionEvaluatorSource) GetItemChannel() ast.ItemChannel {
+func (this *ExpressionEvaluatorSource) GetItemChannel() query.ItemChannel {
 	return this.itemChannel
 }
 
 func (this *ExpressionEvaluatorSource) Run() {
 	defer close(this.itemChannel)
-	item := ast.NewMapItem(map[string]ast.Value{}, nil)
+	item := query.NewMapItem(map[string]query.Value{}, nil)
 	this.itemChannel <- item
 }

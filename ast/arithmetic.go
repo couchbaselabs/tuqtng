@@ -11,6 +11,8 @@ package ast
 
 import (
 	"math"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 // ****************************************************************************
@@ -31,7 +33,7 @@ func NewPlusOperator(left, right Expression) *PlusOperator {
 	}
 }
 
-func (this *PlusOperator) Evaluate(item Item) (Value, error) {
+func (this *PlusOperator) Evaluate(item query.Item) (query.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -73,7 +75,7 @@ func NewSubtractOperator(left, right Expression) *SubtractOperator {
 	}
 }
 
-func (this *SubtractOperator) Evaluate(item Item) (Value, error) {
+func (this *SubtractOperator) Evaluate(item query.Item) (query.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -115,7 +117,7 @@ func NewMultiplyOperator(left, right Expression) *MultiplyOperator {
 	}
 }
 
-func (this *MultiplyOperator) Evaluate(item Item) (Value, error) {
+func (this *MultiplyOperator) Evaluate(item query.Item) (query.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -157,7 +159,7 @@ func NewDivideOperator(left, right Expression) *DivideOperator {
 	}
 }
 
-func (this *DivideOperator) Evaluate(item Item) (Value, error) {
+func (this *DivideOperator) Evaluate(item query.Item) (query.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -199,7 +201,7 @@ func NewModuloOperator(left, right Expression) *ModuloOperator {
 	}
 }
 
-func (this *ModuloOperator) Evaluate(item Item) (Value, error) {
+func (this *ModuloOperator) Evaluate(item query.Item) (query.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -239,7 +241,7 @@ func NewChangeSignOperator(operand Expression) *ChangeSignOperator {
 	}
 }
 
-func (this *ChangeSignOperator) Evaluate(item Item) (Value, error) {
+func (this *ChangeSignOperator) Evaluate(item query.Item) (query.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		return nil, err

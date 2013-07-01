@@ -10,19 +10,19 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type Offset struct {
 	Source      Operator
 	Offset      int
-	itemChannel ast.ItemChannel
+	itemChannel query.ItemChannel
 }
 
 func NewOffset(offset int) *Offset {
 	return &Offset{
 		Offset:      offset,
-		itemChannel: make(ast.ItemChannel),
+		itemChannel: make(query.ItemChannel),
 	}
 }
 
@@ -30,7 +30,7 @@ func (this *Offset) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Offset) GetItemChannel() ast.ItemChannel {
+func (this *Offset) GetItemChannel() query.ItemChannel {
 	return this.itemChannel
 }
 

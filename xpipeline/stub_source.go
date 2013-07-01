@@ -10,18 +10,18 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type StubSource struct {
-	data        ast.ItemCollection
-	itemChannel ast.ItemChannel
+	data        query.ItemCollection
+	itemChannel query.ItemChannel
 }
 
-func NewStubSource(data ast.ItemCollection) *StubSource {
+func NewStubSource(data query.ItemCollection) *StubSource {
 	return &StubSource{
 		data:        data,
-		itemChannel: make(ast.ItemChannel),
+		itemChannel: make(query.ItemChannel),
 	}
 }
 
@@ -29,7 +29,7 @@ func (this *StubSource) SetSource(Operator) {
 	panic("stub source does not have a source")
 }
 
-func (this *StubSource) GetItemChannel() ast.ItemChannel {
+func (this *StubSource) GetItemChannel() query.ItemChannel {
 	return this.itemChannel
 }
 

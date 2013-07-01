@@ -13,6 +13,8 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 func TestLiteralStringRepresentation(t *testing.T) {
@@ -45,7 +47,7 @@ func TestLiteralStringRepresentation(t *testing.T) {
 func TestEvaluateLiteral(t *testing.T) {
 	tests := []struct {
 		input  Expression
-		output Value
+		output query.Value
 	}{
 		{NewLiteralNull(), nil},
 		{NewLiteralBool(true), true},
@@ -53,11 +55,11 @@ func TestEvaluateLiteral(t *testing.T) {
 		{NewLiteralNumber(1.0), 1.0},
 		{NewLiteralNumber(3.14), 3.14},
 		{NewLiteralString("couchbase"), "couchbase"},
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0)}), []Value{1.0}},
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewLiteralBool(false)}), []Value{1.0, false}},
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewLiteralBool(false), NewLiteralString("bob")}), []Value{1.0, false, "bob"}},
-		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), map[string]Value{"name": "bob"}},
-		{NewLiteralObject(map[string]Expression{"user": NewLiteralString("test"), "age": NewLiteralNumber(27.0)}), map[string]Value{"age": 27.0, "user": "test"}},
+		{NewLiteralArray([]Expression{NewLiteralNumber(1.0)}), []query.Value{1.0}},
+		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewLiteralBool(false)}), []query.Value{1.0, false}},
+		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewLiteralBool(false), NewLiteralString("bob")}), []query.Value{1.0, false, "bob"}},
+		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), map[string]query.Value{"name": "bob"}},
+		{NewLiteralObject(map[string]Expression{"user": NewLiteralString("test"), "age": NewLiteralNumber(27.0)}), map[string]query.Value{"age": 27.0, "user": "test"}},
 	}
 
 	for _, x := range tests {
@@ -74,15 +76,15 @@ func TestEvaluateLiteral(t *testing.T) {
 
 func TestEvaluateComplexLiteralContainingMissing(t *testing.T) {
 
-	sampleDocument := map[string]Value{}
-	item := NewMapItem(sampleDocument, nil)
+	sampleDocument := map[string]query.Value{}
+	item := query.NewMapItem(sampleDocument, nil)
 
 	tests := []struct {
 		input  Expression
-		output Value
+		output query.Value
 	}{
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewProperty("bob")}), []Value{1.0}},
-		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob"), "cat": NewProperty("bob")}), map[string]Value{"name": "bob"}},
+		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewProperty("bob")}), []query.Value{1.0}},
+		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob"), "cat": NewProperty("bob")}), map[string]query.Value{"name": "bob"}},
 	}
 
 	for _, x := range tests {
