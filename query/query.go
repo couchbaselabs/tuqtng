@@ -50,6 +50,18 @@ func (e *err) Error() string {
 	}
 }
 
+func (e *err) Code() error {
+	return e.code
+}
+
+func (e *err) TranslationKey() error {
+	return e.key
+}
+
+func (e *err) Cause() error {
+	return e.cause
+}
+
 // Item is a pipeline data item, i.e. any data produced or consumed in
 // query processing
 type Item interface {
