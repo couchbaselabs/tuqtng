@@ -200,6 +200,16 @@ func TestParserASTOutput(t *testing.T) {
 				Limit: -1,
 			},
 		},
+		{"SELECT 1+1*30 as steve",
+			&ast.SelectStatement{
+				Select: ast.ResultExpressionList{
+					ast.NewResultExpressionWithAlias(ast.NewPlusOperator(ast.NewLiteralNumber(1.0), ast.NewMultiplyOperator(ast.NewLiteralNumber(1.0), ast.NewLiteralNumber(30.0))), "steve"),
+				},
+				From:  nil,
+				Where: nil,
+				Limit: -1,
+			},
+		},
 	}
 
 	DebugTokens = false
@@ -215,10 +225,16 @@ func TestParserASTOutput(t *testing.T) {
 		if !reflect.DeepEqual(query, v.output) {
 			t.Errorf("Expected %v, got %v", v.output, query)
 
-			json, err := json.Marshal(query)
+			js, err := json.MarshalIndent(v.output, "", "  ")
 			if err == nil {
-				log.Printf("%v", string(json))
+				log.Printf("Expected %v", string(js))
 			}
+
+			js, err = json.MarshalIndent(query, "", "  ")
+			if err == nil {
+				log.Printf("Got %v", string(js))
+			}
+
 		}
 	}
 
