@@ -12,9 +12,9 @@ package simple
 import (
 	"log"
 
-	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
+	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/tuqtng/xpipelinebuilder"
 	simpleBuilder "github.com/couchbaselabs/tuqtng/xpipelinebuilder/simple"
 )
@@ -29,7 +29,7 @@ func NewSimpleExecutor() *SimpleExecutor {
 	}
 }
 
-func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, query network.Query) error {
+func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) error {
 
 	// first make the plan excutable
 	executablePipeline, err := this.xpipelinebuilder.Build(optimalPlan)
@@ -47,7 +47,7 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, query network.Query)
 		// we pass around Item's on ItemChannel
 		// but its really in the way here
 		// we have to explode its contents
-		result := map[string]ast.Value{}
+		result := map[string]query.Value{}
 		tlk := item.GetTopLevelKeys()
 		for _, k := range tlk {
 			val, err := item.GetPath(k)
@@ -58,9 +58,9 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, query network.Query)
 			}
 
 		}
-		query.Response.SendResult(result)
+		q.Response.SendResult(result)
 	}
-	query.Response.NoMoreResults()
+	q.Response.NoMoreResults()
 
 	return nil
 }

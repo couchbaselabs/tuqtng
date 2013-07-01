@@ -17,14 +17,14 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/network"
+	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/gorilla/mux"
 )
 
 type HttpResponse struct {
 	w       http.ResponseWriter
-	results ast.ValueChannel
+	results query.ValueChannel
 	err     bool
 }
 
@@ -34,7 +34,7 @@ func (this *HttpResponse) SendError(err error) {
 	close(this.results)
 }
 
-func (this *HttpResponse) SendResult(val ast.Value) {
+func (this *HttpResponse) SendResult(val query.Value) {
 	this.results <- val
 }
 
@@ -92,7 +92,7 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Query String: %v", queryString)
 	}
 
-	response := HttpResponse{w: w, results: make(ast.ValueChannel)}
+	response := HttpResponse{w: w, results: make(query.ValueChannel)}
 	query := network.Query{
 		Request:  network.UNQLStringQueryRequest{QueryString: queryString},
 		Response: &response,
