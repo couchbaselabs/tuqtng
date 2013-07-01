@@ -13,18 +13,19 @@ import (
 	"log"
 
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type Project struct {
 	Source      Operator
-	itemChannel ast.ItemChannel
+	itemChannel query.ItemChannel
 	Result      ast.ResultExpressionList
 }
 
 func NewProject(result ast.ResultExpressionList) *Project {
 	return &Project{
 		Result:      result,
-		itemChannel: make(ast.ItemChannel),
+		itemChannel: make(query.ItemChannel),
 	}
 }
 
@@ -32,7 +33,7 @@ func (this *Project) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Project) GetItemChannel() ast.ItemChannel {
+func (this *Project) GetItemChannel() query.ItemChannel {
 	return this.itemChannel
 }
 
@@ -43,7 +44,7 @@ func (this *Project) Run() {
 	go this.Source.Run()
 	for item := range this.Source.GetItemChannel() {
 
-		resultMap := map[string]ast.Value{}
+		resultMap := map[string]query.Value{}
 		for _, resultItem := range this.Result {
 			if resultItem.Star {
 				if resultItem.Expr != nil {
@@ -51,7 +52,7 @@ func (this *Project) Run() {
 					val, err := resultItem.Expr.Evaluate(item)
 					if err == nil {
 						switch val := val.(type) {
-						case map[string]ast.Value:
+						case map[string]query.Value:
 							// then if the result was an object
 							// add its contents ot the result map
 							for k, v := range val {
@@ -86,7 +87,7 @@ func (this *Project) Run() {
 		}
 
 		// create the actual result Item
-		finalItem := ast.NewMapItem(resultMap, item.GetMeta())
+		finalItem := query.NewMapItem(resultMap, item.GetMeta())
 
 		// write this to the output
 		this.itemChannel <- finalItem

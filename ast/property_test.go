@@ -13,6 +13,8 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 func TestPropertyStringRepresentation(t *testing.T) {
@@ -33,18 +35,18 @@ func TestPropertyStringRepresentation(t *testing.T) {
 }
 
 func TestEvaluateProperty(t *testing.T) {
-	sampleDocument := map[string]Value{
+	sampleDocument := map[string]query.Value{
 		"name": "will",
 	}
 
 	tests := []struct {
 		input  Expression
-		output Value
+		output query.Value
 	}{
 		{NewProperty("name"), "will"},
 	}
 
-	item := NewMapItem(sampleDocument, nil)
+	item := query.NewMapItem(sampleDocument, nil)
 
 	for _, x := range tests {
 		result, err := x.input.Evaluate(item)

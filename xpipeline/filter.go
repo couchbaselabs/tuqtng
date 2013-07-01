@@ -13,18 +13,19 @@ import (
 	"log"
 
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type Filter struct {
 	Source      Operator
 	Expr        ast.Expression
-	itemChannel ast.ItemChannel
+	itemChannel query.ItemChannel
 }
 
 func NewFilter(expr ast.Expression) *Filter {
 	return &Filter{
 		Expr:        expr,
-		itemChannel: make(ast.ItemChannel),
+		itemChannel: make(query.ItemChannel),
 	}
 }
 
@@ -32,7 +33,7 @@ func (this *Filter) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Filter) GetItemChannel() ast.ItemChannel {
+func (this *Filter) GetItemChannel() query.ItemChannel {
 	return this.itemChannel
 }
 
@@ -53,7 +54,7 @@ func (this *Filter) Run() {
 			}
 		} else {
 			switch err := err.(type) {
-			case *ast.Undefined:
+			case *query.Undefined:
 			//ignore these
 			default:
 				log.Printf("Error evaluating filter: %v", err)

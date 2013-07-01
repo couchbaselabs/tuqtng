@@ -9,7 +9,9 @@
 
 package ast
 
-import ()
+import (
+	"github.com/couchbaselabs/tuqtng/query"
+)
 
 // ****************************************************************************
 // DOT MEMBER
@@ -29,20 +31,20 @@ func NewDotMemberOperator(left Expression, right *Property) *DotMemberOperator {
 	}
 }
 
-func (this *DotMemberOperator) Evaluate(item Item) (Value, error) {
+func (this *DotMemberOperator) Evaluate(item query.Item) (query.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
 
 	switch lv := lv.(type) {
-	case map[string]Value:
-		innerContext := NewMapItem(lv, nil)
+	case map[string]query.Value:
+		innerContext := query.NewMapItem(lv, nil)
 		// now evaluate the property in this inner context
 		return this.Right.Evaluate(innerContext)
 	}
 
-	return nil, &Undefined{this.Right.Path}
+	return nil, &query.Undefined{this.Right.Path}
 }
 
 // ****************************************************************************
@@ -63,7 +65,7 @@ func NewBracketMemberOperator(left, right Expression) *BracketMemberOperator {
 	}
 }
 
-func (this *BracketMemberOperator) Evaluate(item Item) (Value, error) {
+func (this *BracketMemberOperator) Evaluate(item query.Item) (query.Value, error) {
 	// evaluting RHS first is more correct in case of side-effects
 	rv, err := this.Right.Evaluate(item)
 	if err != nil {
@@ -76,14 +78,14 @@ func (this *BracketMemberOperator) Evaluate(item Item) (Value, error) {
 	}
 
 	switch lv := lv.(type) {
-	case map[string]Value:
+	case map[string]query.Value:
 		switch rv := rv.(type) {
 		case string:
-			innerContext := NewMapItem(lv, nil)
+			innerContext := query.NewMapItem(lv, nil)
 			virtualProperty := NewProperty(rv)
 			return virtualProperty.Evaluate(innerContext)
 		}
-	case []Value:
+	case []query.Value:
 		switch rv := rv.(type) {
 		case float64:
 			index := int(rv)
@@ -93,5 +95,5 @@ func (this *BracketMemberOperator) Evaluate(item Item) (Value, error) {
 		}
 	}
 
-	return nil, &Undefined{}
+	return nil, &query.Undefined{}
 }

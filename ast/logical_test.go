@@ -13,6 +13,8 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 func TestBooleanStringRepresentation(t *testing.T) {
@@ -62,7 +64,7 @@ func TestBoolean(t *testing.T) {
 
 	tests := []struct {
 		input  Expression
-		output Value
+		output query.Value
 		err    error
 	}{
 		{NewAndOperator([]Expression{booleanTrue, booleanTrue}), true, nil},
@@ -93,33 +95,33 @@ func TestBoolean(t *testing.T) {
 
 		{NewAndOperator([]Expression{null, booleanFalse}), false, nil},
 		{NewAndOperator([]Expression{null, null}), nil, nil},
-		{NewAndOperator([]Expression{null, missingProperty}), nil, &Undefined{"dne"}},
+		{NewAndOperator([]Expression{null, missingProperty}), nil, &query.Undefined{"dne"}},
 		{NewAndOperator([]Expression{null, booleanTrue}), nil, nil},
 
 		{NewAndOperator([]Expression{missingProperty, booleanFalse}), false, nil},
-		{NewAndOperator([]Expression{missingProperty, null}), nil, &Undefined{"dne"}},
-		{NewAndOperator([]Expression{missingProperty, missingProperty}), nil, &Undefined{"dne"}},
-		{NewAndOperator([]Expression{missingProperty, booleanTrue}), nil, &Undefined{"dne"}},
+		{NewAndOperator([]Expression{missingProperty, null}), nil, &query.Undefined{"dne"}},
+		{NewAndOperator([]Expression{missingProperty, missingProperty}), nil, &query.Undefined{"dne"}},
+		{NewAndOperator([]Expression{missingProperty, booleanTrue}), nil, &query.Undefined{"dne"}},
 
 		{NewAndOperator([]Expression{booleanTrue, booleanFalse}), false, nil},
 		{NewAndOperator([]Expression{booleanTrue, null}), nil, nil},
-		{NewAndOperator([]Expression{booleanTrue, missingProperty}), nil, &Undefined{"dne"}},
+		{NewAndOperator([]Expression{booleanTrue, missingProperty}), nil, &query.Undefined{"dne"}},
 		{NewAndOperator([]Expression{booleanTrue, booleanTrue}), true, nil},
 
 		// OR
 		{NewOrOperator([]Expression{booleanFalse, booleanFalse}), false, nil},
 		{NewOrOperator([]Expression{booleanFalse, null}), nil, nil},
-		{NewOrOperator([]Expression{booleanFalse, missingProperty}), nil, &Undefined{"dne"}},
+		{NewOrOperator([]Expression{booleanFalse, missingProperty}), nil, &query.Undefined{"dne"}},
 		{NewOrOperator([]Expression{booleanFalse, booleanTrue}), true, nil},
 
 		{NewOrOperator([]Expression{null, booleanFalse}), nil, nil},
 		{NewOrOperator([]Expression{null, null}), nil, nil},
-		{NewOrOperator([]Expression{null, missingProperty}), nil, &Undefined{"dne"}},
+		{NewOrOperator([]Expression{null, missingProperty}), nil, &query.Undefined{"dne"}},
 		{NewOrOperator([]Expression{null, booleanTrue}), true, nil},
 
-		{NewOrOperator([]Expression{missingProperty, booleanFalse}), nil, &Undefined{"dne"}},
-		{NewOrOperator([]Expression{missingProperty, null}), nil, &Undefined{"dne"}},
-		{NewOrOperator([]Expression{missingProperty, missingProperty}), nil, &Undefined{"dne"}},
+		{NewOrOperator([]Expression{missingProperty, booleanFalse}), nil, &query.Undefined{"dne"}},
+		{NewOrOperator([]Expression{missingProperty, null}), nil, &query.Undefined{"dne"}},
+		{NewOrOperator([]Expression{missingProperty, missingProperty}), nil, &query.Undefined{"dne"}},
 		{NewOrOperator([]Expression{missingProperty, booleanTrue}), true, nil},
 
 		{NewOrOperator([]Expression{booleanTrue, booleanFalse}), true, nil},
@@ -130,7 +132,7 @@ func TestBoolean(t *testing.T) {
 		// NOT
 		{NewNotOperator(booleanTrue), false, nil},
 		{NewNotOperator(null), nil, nil},
-		{NewNotOperator(missingProperty), nil, &Undefined{"dne"}},
+		{NewNotOperator(missingProperty), nil, &query.Undefined{"dne"}},
 		{NewNotOperator(booleanFalse), true, nil},
 	}
 

@@ -12,58 +12,60 @@ package ast
 import (
 	"reflect"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 func TestDotMember(t *testing.T) {
 
-	sampleContext := map[string]Value{
-		"address": map[string]Value{
+	sampleContext := map[string]query.Value{
+		"address": map[string]query.Value{
 			"street": "1 recursive function",
 		},
-		"contact": map[string]Value{
-			"name": map[string]Value{
+		"contact": map[string]query.Value{
+			"name": map[string]query.Value{
 				"first": "unql",
 				"last":  "couchbase",
-				"all": []Value{
+				"all": []query.Value{
 					"unql",
 					"couchbase",
 				},
 			},
 		},
-		"friends": []Value{
+		"friends": []query.Value{
 			"a",
 			"b",
 			"c",
 		},
 		"name": "bob",
 	}
-	sampleMeta := map[string]Value{
+	sampleMeta := map[string]query.Value{
 		"id": "first",
 	}
 
 	tests := []struct {
 		input  Expression
-		output Value
+		output query.Value
 		err    error
 	}{
 		{NewDotMemberOperator(NewProperty("address"), NewProperty("street")), "1 recursive function", nil},
 		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("first")), "unql", nil},
 		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("last")), "couchbase", nil},
 
-		{NewDotMemberOperator(NewProperty("address"), NewProperty("city")), nil, &Undefined{"city"}},
-		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("middle")), nil, &Undefined{"middle"}},
-		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("namez")), NewProperty("first")), nil, &Undefined{"namez"}},
+		{NewDotMemberOperator(NewProperty("address"), NewProperty("city")), nil, &query.Undefined{"city"}},
+		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("middle")), nil, &query.Undefined{"middle"}},
+		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("namez")), NewProperty("first")), nil, &query.Undefined{"namez"}},
 
-		{NewDotMemberOperator(NewProperty("name"), NewProperty("city")), nil, &Undefined{"city"}},
+		{NewDotMemberOperator(NewProperty("name"), NewProperty("city")), nil, &query.Undefined{"city"}},
 
 		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(0.0)), "a", nil},
 		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(1.0)), "b", nil},
 		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(2.0)), "c", nil},
-		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(-1.0)), nil, &Undefined{}},
-		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(10.0)), nil, &Undefined{}},
+		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(-1.0)), nil, &query.Undefined{}},
+		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(10.0)), nil, &query.Undefined{}},
 
-		{NewBracketMemberOperator(NewProperty("foo"), NewLiteralNumber(10.0)), nil, &Undefined{"foo"}},
-		{NewBracketMemberOperator(NewProperty("friends"), NewProperty("bar")), nil, &Undefined{"bar"}},
+		{NewBracketMemberOperator(NewProperty("foo"), NewLiteralNumber(10.0)), nil, &query.Undefined{"foo"}},
+		{NewBracketMemberOperator(NewProperty("friends"), NewProperty("bar")), nil, &query.Undefined{"bar"}},
 
 		//compound test
 		{NewBracketMemberOperator(NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("all")), NewLiteralNumber(0.0)), "unql", nil},
@@ -72,7 +74,7 @@ func TestDotMember(t *testing.T) {
 		{NewBracketMemberOperator(NewProperty("address"), NewLiteralString("street")), "1 recursive function", nil},
 	}
 
-	context := NewMapItem(sampleContext, sampleMeta)
+	context := query.NewMapItem(sampleContext, sampleMeta)
 
 	for _, x := range tests {
 		value, err := x.input.Evaluate(context)

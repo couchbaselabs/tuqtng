@@ -10,17 +10,17 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/query"
 	"testing"
 )
 
 func TestStubSource(t *testing.T) {
 
-	testData := ast.ItemCollection{
-		ast.NewMapItem(map[string]ast.Value{"name": "marty"}, map[string]ast.Value{"id": "1"}),
-		ast.NewMapItem(map[string]ast.Value{"name": "steve"}, map[string]ast.Value{"id": "2"}),
-		ast.NewMapItem(map[string]ast.Value{"name": "gerald"}, map[string]ast.Value{"id": "3"}),
-		ast.NewMapItem(map[string]ast.Value{"name": "siri"}, map[string]ast.Value{"id": "4"}),
+	testData := query.ItemCollection{
+		query.NewMapItem(map[string]query.Value{"name": "marty"}, map[string]query.Value{"id": "1"}),
+		query.NewMapItem(map[string]query.Value{"name": "steve"}, map[string]query.Value{"id": "2"}),
+		query.NewMapItem(map[string]query.Value{"name": "gerald"}, map[string]query.Value{"id": "3"}),
+		query.NewMapItem(map[string]query.Value{"name": "siri"}, map[string]query.Value{"id": "4"}),
 	}
 
 	stubSource := NewStubSource(testData)

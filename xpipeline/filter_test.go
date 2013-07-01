@@ -10,19 +10,21 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/ast"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
-var testData = ast.ItemCollection{
-	ast.NewMapItem(map[string]ast.Value{"name": "mike", "age": 100.0}, map[string]ast.Value{"id": "1"}),
-	ast.NewMapItem(map[string]ast.Value{"name": "dustin"}, map[string]ast.Value{"id": "1"}),
-	ast.NewMapItem(map[string]ast.Value{"name": "bob", "age": nil}, map[string]ast.Value{"id": "1"}),
-	ast.NewMapItem(map[string]ast.Value{"name": "marty", "age": 99.0}, map[string]ast.Value{"id": "1"}),
-	ast.NewMapItem(map[string]ast.Value{"name": "steve", "age": 200.0}, map[string]ast.Value{"id": "2"}),
-	ast.NewMapItem(map[string]ast.Value{"name": "gerald", "age": 175.0}, map[string]ast.Value{"id": "3"}),
-	ast.NewMapItem(map[string]ast.Value{"name": "siri", "age": 74.0}, map[string]ast.Value{"id": "4"}),
-	ast.NewMapItem(map[string]ast.Value{"name": "ali", "age": 100.0}, map[string]ast.Value{"id": "1"}),
+var testData = query.ItemCollection{
+	query.NewMapItem(map[string]query.Value{"name": "mike", "age": 100.0}, map[string]query.Value{"id": "1"}),
+	query.NewMapItem(map[string]query.Value{"name": "dustin"}, map[string]query.Value{"id": "1"}),
+	query.NewMapItem(map[string]query.Value{"name": "bob", "age": nil}, map[string]query.Value{"id": "1"}),
+	query.NewMapItem(map[string]query.Value{"name": "marty", "age": 99.0}, map[string]query.Value{"id": "1"}),
+	query.NewMapItem(map[string]query.Value{"name": "steve", "age": 200.0}, map[string]query.Value{"id": "2"}),
+	query.NewMapItem(map[string]query.Value{"name": "gerald", "age": 175.0}, map[string]query.Value{"id": "3"}),
+	query.NewMapItem(map[string]query.Value{"name": "siri", "age": 74.0}, map[string]query.Value{"id": "4"}),
+	query.NewMapItem(map[string]query.Value{"name": "ali", "age": 100.0}, map[string]query.Value{"id": "1"}),
 }
 
 func TestFilterTrue(t *testing.T) {

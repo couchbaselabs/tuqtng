@@ -12,13 +12,15 @@ package ast
 import (
 	"log"
 	"math"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 // this function is repsonible for determining if a value
 // should be considered true or false in a boolean context
 // NOTE: this is my first attempt at making this behave consisten with javascript
 // SEE http://ecma-international.org/ecma-262/5.1/#sec-9.2
-func ValueInBooleanContext(val Value) Value {
+func ValueInBooleanContext(val query.Value) query.Value {
 
 	switch val := val.(type) {
 	case nil:
@@ -35,9 +37,9 @@ func ValueInBooleanContext(val Value) Value {
 			return false
 		}
 		return true
-	case []Value:
+	case []query.Value:
 		return true
-	case map[string]Value:
+	case map[string]query.Value:
 		return true
 	default:
 		// conservative - throw up on any type we didn't code for

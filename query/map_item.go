@@ -7,7 +7,7 @@
 //  either express or implied. See the License for the specific language governing permissions
 //  and limitations under the License.
 
-package ast
+package query
 
 //  MapItem is an implementation of Item using a map structure
 //  (typically this is from parsed JSON)

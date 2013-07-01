@@ -10,7 +10,7 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/query"
 	"reflect"
 	"testing"
 )
@@ -25,7 +25,7 @@ func TestExpressionEvaluatorSource(t *testing.T) {
 	count := 0
 	for item := range sourceItemChannel {
 		count++
-		if !reflect.DeepEqual(item, ast.NewMapItem(map[string]ast.Value{}, nil)) {
+		if !reflect.DeepEqual(item, query.NewMapItem(map[string]query.Value{}, nil)) {
 			t.Errorf("Expected empty map item, got %v", item)
 		}
 	}

@@ -9,6 +9,10 @@
 
 package ast
 
+import (
+	"github.com/couchbaselabs/tuqtng/query"
+)
+
 // ****************************************************************************
 // String Concatenation
 // ****************************************************************************
@@ -27,7 +31,7 @@ func NewStringConcatenateOperator(left, right Expression) *StringConcatenateOper
 	}
 }
 
-func (this *StringConcatenateOperator) Evaluate(item Item) (Value, error) {
+func (this *StringConcatenateOperator) Evaluate(item query.Item) (query.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err

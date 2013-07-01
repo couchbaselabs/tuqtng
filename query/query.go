@@ -49,11 +49,3 @@ func (e *err) Error() string {
 		return cause.Error()
 	}
 }
-
-// Item is a pipeline data item, i.e. any data produced or consumed in
-// query processing
-type Item interface {
-}
-
-// ItemChannel is a channel of Items
-type ItemChannel chan *Item

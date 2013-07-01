@@ -12,6 +12,8 @@ package ast
 import (
 	"reflect"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 func TestCompare(t *testing.T) {
@@ -28,49 +30,49 @@ func TestCompare(t *testing.T) {
 
 	tests := []struct {
 		input  Expression
-		output Value
+		output query.Value
 		err    error
 	}{
 		{NewGreaterThanOperator(numberSixty, numberSixty), false, nil},
 		{NewGreaterThanOperator(numberSixty, numberNine), true, nil},
 		{NewGreaterThanOperator(numberNine, numberSixty), false, nil},
 		{NewGreaterThanOperator(null, numberSixty), nil, nil},
-		{NewGreaterThanOperator(nonExistantProperty, numberSixty), nil, &Undefined{"dne"}},
+		{NewGreaterThanOperator(nonExistantProperty, numberSixty), nil, &query.Undefined{"dne"}},
 		{NewGreaterThanOperator(stringBob, numberSixty), false, nil},
 
 		{NewGreaterThanOrEqualOperator(numberSixty, numberSixty), true, nil},
 		{NewGreaterThanOrEqualOperator(numberSixty, numberNine), true, nil},
 		{NewGreaterThanOrEqualOperator(numberNine, numberSixty), false, nil},
 		{NewGreaterThanOrEqualOperator(null, numberSixty), nil, nil},
-		{NewGreaterThanOrEqualOperator(nonExistantProperty, numberSixty), nil, &Undefined{"dne"}},
+		{NewGreaterThanOrEqualOperator(nonExistantProperty, numberSixty), nil, &query.Undefined{"dne"}},
 		{NewGreaterThanOrEqualOperator(stringBob, numberSixty), false, nil},
 
 		{NewLessThanOperator(numberSixty, numberSixty), false, nil},
 		{NewLessThanOperator(numberSixty, numberNine), false, nil},
 		{NewLessThanOperator(numberNine, numberSixty), true, nil},
 		{NewLessThanOperator(null, numberSixty), nil, nil},
-		{NewLessThanOperator(nonExistantProperty, numberSixty), nil, &Undefined{"dne"}},
+		{NewLessThanOperator(nonExistantProperty, numberSixty), nil, &query.Undefined{"dne"}},
 		{NewLessThanOperator(stringBob, numberSixty), false, nil},
 
 		{NewLessThanOrEqualOperator(numberSixty, numberSixty), true, nil},
 		{NewLessThanOrEqualOperator(numberSixty, numberNine), false, nil},
 		{NewLessThanOrEqualOperator(numberNine, numberSixty), true, nil},
 		{NewLessThanOrEqualOperator(null, numberSixty), nil, nil},
-		{NewLessThanOrEqualOperator(nonExistantProperty, numberSixty), nil, &Undefined{"dne"}},
+		{NewLessThanOrEqualOperator(nonExistantProperty, numberSixty), nil, &query.Undefined{"dne"}},
 		{NewLessThanOrEqualOperator(stringBob, numberSixty), false, nil},
 
 		{NewEqualToOperator(numberSixty, numberSixty), true, nil},
 		{NewEqualToOperator(numberSixty, numberNine), false, nil},
 		{NewEqualToOperator(numberNine, numberSixty), false, nil},
 		{NewEqualToOperator(null, numberSixty), nil, nil},
-		{NewEqualToOperator(nonExistantProperty, numberSixty), nil, &Undefined{"dne"}},
+		{NewEqualToOperator(nonExistantProperty, numberSixty), nil, &query.Undefined{"dne"}},
 		{NewEqualToOperator(stringBob, numberSixty), false, nil},
 
 		{NewNotEqualToOperator(numberSixty, numberSixty), false, nil},
 		{NewNotEqualToOperator(numberSixty, numberNine), true, nil},
 		{NewNotEqualToOperator(numberNine, numberSixty), true, nil},
 		{NewNotEqualToOperator(null, numberSixty), nil, nil},
-		{NewNotEqualToOperator(nonExistantProperty, numberSixty), nil, &Undefined{"dne"}},
+		{NewNotEqualToOperator(nonExistantProperty, numberSixty), nil, &query.Undefined{"dne"}},
 		{NewNotEqualToOperator(stringBob, numberSixty), false, nil},
 
 		{NewLikeOperator(stringBob, patternMatchSingle), true, nil},
@@ -80,8 +82,8 @@ func TestCompare(t *testing.T) {
 		{NewLikeOperator(stringBob, patternNoMatch), false, nil},
 		{NewLikeOperator(stringBob, numberNine), nil, nil},
 		{NewLikeOperator(numberNine, patternMatchSingle), nil, nil},
-		{NewLikeOperator(stringBob, nonExistantProperty), nil, &Undefined{"dne"}},
-		{NewLikeOperator(nonExistantProperty, stringBob), nil, &Undefined{"dne"}},
+		{NewLikeOperator(stringBob, nonExistantProperty), nil, &query.Undefined{"dne"}},
+		{NewLikeOperator(nonExistantProperty, stringBob), nil, &query.Undefined{"dne"}},
 
 		{NewNotLikeOperator(stringBob, patternMatchSingle), false, nil},
 		{NewNotLikeOperator(stringCat, patternMatchSingle), true, nil},
@@ -90,8 +92,8 @@ func TestCompare(t *testing.T) {
 		{NewNotLikeOperator(stringBob, patternNoMatch), true, nil},
 		{NewNotLikeOperator(stringBob, numberNine), nil, nil},
 		{NewNotLikeOperator(numberNine, patternMatchSingle), nil, nil},
-		{NewNotLikeOperator(stringBob, nonExistantProperty), nil, &Undefined{"dne"}},
-		{NewNotLikeOperator(nonExistantProperty, stringBob), nil, &Undefined{"dne"}},
+		{NewNotLikeOperator(stringBob, nonExistantProperty), nil, &query.Undefined{"dne"}},
+		{NewNotLikeOperator(nonExistantProperty, stringBob), nil, &query.Undefined{"dne"}},
 
 		// these tests all conform to the table in the specification
 		{NewIsNullOperator(stringBob), false, nil},
@@ -119,7 +121,7 @@ func TestCompare(t *testing.T) {
 		{NewIsNotValuedOperator(nonExistantProperty), false, nil},
 
 		// new tests to check ordering of missing/null values
-		{NewLessThanOperator(numberSixty, nonExistantProperty), nil, &Undefined{"dne"}},
+		{NewLessThanOperator(numberSixty, nonExistantProperty), nil, &query.Undefined{"dne"}},
 		{NewLessThanOperator(numberSixty, null), nil, nil},
 
 		//comparing booleans

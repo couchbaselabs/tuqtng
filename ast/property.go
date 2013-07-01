@@ -11,6 +11,8 @@ package ast
 
 import (
 	"fmt"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type Property struct {
@@ -25,9 +27,9 @@ func NewProperty(path string) *Property {
 	}
 }
 
-func (this *Property) Evaluate(item Item) (Value, error) {
+func (this *Property) Evaluate(item query.Item) (query.Value, error) {
 	if item == nil {
-		return nil, &Undefined{this.Path}
+		return nil, &query.Undefined{this.Path}
 	}
 	rv, err := item.GetPath(this.Path)
 	if err != nil {

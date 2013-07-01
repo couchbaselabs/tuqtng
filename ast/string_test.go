@@ -12,6 +12,8 @@ package ast
 import (
 	"reflect"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 func TestString(t *testing.T) {
@@ -23,14 +25,14 @@ func TestString(t *testing.T) {
 
 	tests := []struct {
 		input  Expression
-		output interface{}
+		output query.Value
 		err    error
 	}{
 		{NewStringConcatenateOperator(stringCouchbase, stringServer), "CouchbaseServer", nil},
 		{NewStringConcatenateOperator(numberFive, stringServer), nil, nil},
 		{NewStringConcatenateOperator(stringCouchbase, numberFive), nil, nil},
-		{NewStringConcatenateOperator(dneProperty, stringServer), nil, &Undefined{"foo"}},
-		{NewStringConcatenateOperator(stringCouchbase, dneProperty), nil, &Undefined{"foo"}},
+		{NewStringConcatenateOperator(dneProperty, stringServer), nil, &query.Undefined{"foo"}},
+		{NewStringConcatenateOperator(stringCouchbase, dneProperty), nil, &query.Undefined{"foo"}},
 	}
 
 	for _, x := range tests {

@@ -14,20 +14,21 @@ import (
 	"sort"
 
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type Order struct {
 	Source      Operator
 	OrderBy     []*ast.SortExpression
-	itemChannel ast.ItemChannel
-	buffer      ast.ItemCollection
+	itemChannel query.ItemChannel
+	buffer      query.ItemCollection
 }
 
 func NewOrder(orderBy []*ast.SortExpression) *Order {
 	return &Order{
 		OrderBy:     orderBy,
-		itemChannel: make(ast.ItemChannel),
-		buffer:      make(ast.ItemCollection, 0),
+		itemChannel: make(query.ItemChannel),
+		buffer:      make(query.ItemCollection, 0),
 	}
 }
 
@@ -35,7 +36,7 @@ func (this *Order) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Order) GetItemChannel() ast.ItemChannel {
+func (this *Order) GetItemChannel() query.ItemChannel {
 	return this.itemChannel
 }
 
@@ -71,7 +72,7 @@ func (this *Order) Less(i, j int) bool {
 		leftVal, lerr := oe.Expr.Evaluate(left)
 		if lerr != nil {
 			switch lerr := lerr.(type) {
-			case *ast.Undefined:
+			case *query.Undefined:
 			default:
 				log.Printf("Error evaluating expression: %v", lerr)
 				return false
@@ -80,7 +81,7 @@ func (this *Order) Less(i, j int) bool {
 		rightVal, rerr := oe.Expr.Evaluate(right)
 		if rerr != nil {
 			switch rerr := rerr.(type) {
-			case *ast.Undefined:
+			case *query.Undefined:
 			default:
 				log.Printf("Error evaluating expression: %v", rerr)
 				return false
