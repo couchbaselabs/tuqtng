@@ -19,6 +19,8 @@ type Item interface {
 // Site represents a cluster or single-node server.
 type Site interface {
 	URL() string
+	PoolNames() ([]string, Error)
+	Pool(name string) (Pool, Error)
 }
 
 // Pool represents a logical authentication, query, and resource
@@ -38,8 +40,8 @@ type Bucket interface {
 	Lookup(id string) (Item, Error)
 }
 
-// IndexStatistics captures statistics for a range index (view or
-// btree index).
+// RangeStatistics captures statistics for a range index (view or
+// declarative btree index).
 type RangeStatistics interface {
 	Count() (int64, Error)
 	Min() (Item, Error)
