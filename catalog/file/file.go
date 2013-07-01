@@ -18,6 +18,7 @@ package file
 import (
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -37,22 +38,26 @@ func (s *site) PoolNames() ([]string, query.Error) {
 	return s.poolNames, nil
 }
 
-func (s *site) Pool(name string) (p Pool, e query.Error) {
+func (s *site) Pool(name string) (p catalog.Pool, e query.Error) {
 	p, ok := s.pools[strings.ToUpper(name)]
 	if !ok {
-		e = query.NewError("Pool " + name + " not found.")
+		e = query.NewError(nil, "Pool " + name + " not found.")
 	}
+
+	return
 }
 
 // NewSite creates a new file-based site for the given filepath.
-func NewSite(path string) (s Site, e query.Error) {
-	s = new(site)
-	s.path = path
+func NewSite(path string) (s catalog.Site, e query.Error) {
+	fs := &site{path: path}
 
-	e = s.loadPools()
+	e = fs.loadPools()
 	if e != nil {
-		s = nil
+		return
 	}
+
+	s = fs
+	return
 }
 
 func (s *site) loadPools() (e query.Error) {
@@ -62,32 +67,35 @@ func (s *site) loadPools() (e query.Error) {
 			f.Close()
 		}
 
-		return query.NewError(err)
+		return query.NewError(err, "")
 	}
 
 	dirs, err := f.Readdirnames(0)
 	f.Close()
 
 	if err != nil {
-		return query.NewError(err)
+		return query.NewError(err, "")
 	}
 
-	s.pools = make(map[string]*pool, len(dirs))
+	s.pools = make(map[string] *pool, len(dirs))
 	s.poolNames = dirs
 
+	var p *pool
 	for _, dir := range dirs {
 		diru := strings.ToUpper(dir)
 		if _, ok := s.pools[diru]; ok {
-			return query.NewError("Duplicate pool name " + dir)
+			return query.NewError(nil, "Duplicate pool name " + dir)
 		}
 
-		pool, e := newPool(s, dir)
+		p, e = newPool(s, dir)
 		if e != nil {
 			return
 		}
 
-		s.pools[diru] = pool
+		s.pools[diru] = p
 	}
+
+	return
 }
 
 // pool represents a file-based Pool.
@@ -106,11 +114,13 @@ func (p *pool) BucketNames() ([]string, query.Error) {
 	return p.bucketNames, nil
 }
 
-func (p *pool) Bucket(name string) (b Bucket, e query.Error) {
+func (p *pool) Bucket(name string) (b catalog.Bucket, e query.Error) {
 	b, ok := p.buckets[strings.ToUpper(name)]
 	if !ok {
-		e = query.NewError("Bucket " + name + " not found.")
+		e = query.NewError(nil, "Bucket " + name + " not found.")
 	}
+
+	return
 }
 
 func (p *pool) path() string {
@@ -118,12 +128,13 @@ func (p *pool) path() string {
 }
 
 // newPool creates a new pool.
-func newPool(s *site, dir string) (p pool, e query.Error) {
+func newPool(s *site, dir string) (p *pool, e query.Error) {
 	p = new(pool)
 	p.site = s
 	p.name = dir
 
 	e = p.loadBuckets()
+	return
 }
 
 func (p *pool) loadBuckets() (e query.Error) {
@@ -133,32 +144,35 @@ func (p *pool) loadBuckets() (e query.Error) {
 			f.Close()
 		}
 
-		return query.NewError(err)
+		return query.NewError(err, "")
 	}
 
 	dirs, err := f.Readdirnames(0)
 	f.Close()
 
 	if err != nil {
-		return query.NewError(err)
+		return query.NewError(err, "")
 	}
 
-	p.buckets = make(map[string]*pool, len(dirs))
-	s.bucketNames = dirs
+	p.buckets = make(map[string] *bucket, len(dirs))
+	p.bucketNames = dirs
 
+	var b *bucket
 	for _, dir := range dirs {
 		diru := strings.ToUpper(dir)
 		if _, ok := p.buckets[diru]; ok {
-			return query.NewError("Duplicate bucket name " + dir)
+			return query.NewError(nil, "Duplicate bucket name " + dir)
 		}
 
-		bucket, e := newBucket(p, dir)
+		b, e = newBucket(p, dir)
 		if e != nil {
 			return
 		}
 
-		p.buckets[diru] = bucket
+		p.buckets[diru] = b
 	}
+
+	return
 }
 
 // bucket is a file-based bucket.
@@ -166,7 +180,7 @@ type bucket struct {
 	pool      *pool
 	name      string
 	filenames []string
-	scanners  []Scanner
+	scanners  []catalog.Scanner
 }
 
 func (b *bucket) Name() string {
@@ -174,10 +188,10 @@ func (b *bucket) Name() string {
 }
 
 func (b *bucket) Count() (int64, query.Error) {
-	return len(b.filenames), nil
+	return int64(len(b.filenames)), nil
 }
 
-func (b *bucket) Scanners() ([]Scanner, query.Error) {
+func (b *bucket) Scanners() ([]catalog.Scanner, query.Error) {
 	return b.scanners, nil
 }
 
@@ -185,7 +199,7 @@ func (b *bucket) Fetch(id string) (item query.Item, e query.Error) {
 	path := filepath.Join(b.path(), id)
 	fi, err := os.Stat(path)
 	if err != nil {
-		return nil, query.NewError(err)
+		return nil, query.NewError(err, "")
 	}
 
 	f, err := os.Open(path)
@@ -194,15 +208,17 @@ func (b *bucket) Fetch(id string) (item query.Item, e query.Error) {
 			f.Close()
 		}
 
-		return nil, query.NewError(err)
+		return nil, query.NewError(err, "")
 	}
 
 	bytes := make([]byte, fi.Size())
-	n, err := f.Read(bytes)
+	_, err = f.Read(bytes)
 	f.Close()
 	if err != nil {
-		return nil, query.NewError(err)
+		return nil, query.NewError(err, "")
 	}
+
+	return
 }
 
 func (b *bucket) path() string {
@@ -210,7 +226,7 @@ func (b *bucket) path() string {
 }
 
 // newBucket creates a new bucket.
-func newBucket(p *pool, dir string) (b bucket, e query.Error) {
+func newBucket(p *pool, dir string) (b *bucket, e query.Error) {
 	b = new(bucket)
 	b.pool = p
 	b.name = dir
@@ -221,19 +237,21 @@ func newBucket(p *pool, dir string) (b bucket, e query.Error) {
 			f.Close()
 		}
 
-		return nil, query.NewError(err)
+		return nil, query.NewError(err, "")
 	}
 
-	b.filenames, err = f.Readdirnames()
+	b.filenames, err = f.Readdirnames(0)
 	f.Close()
 	if err != nil {
-		return nil, query.NewError(err)
+		return nil, query.NewError(err, "")
 	}
 
-	b.scanners = make([]Scanner, 1)
+	b.scanners = make([]catalog.Scanner, 1)
 	fs := new(fullScanner)
 	fs.bucket = b
-	b.scanners.append(fs)
+	b.scanners = append(b.scanners, fs)
+
+	return
 }
 
 // fullScanner performs full bucket scans.
@@ -241,5 +259,6 @@ type fullScanner struct {
 	bucket *bucket
 }
 
-func (fs *fullScanner) ScanAll(ch query.ItemChannel) query.Error {
+func (fs *fullScanner) ScanAll(ch query.ItemChannel) (e query.Error) {
+     return
 }
