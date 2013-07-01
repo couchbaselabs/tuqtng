@@ -241,5 +241,5 @@ type fullScanner struct {
 	bucket *bucket
 }
 
-func (fs *fullScanner) ScanAll(ch ItemChannel) query.Error {
+func (fs *fullScanner) ScanAll(ch query.ItemChannel) query.Error {
 }
