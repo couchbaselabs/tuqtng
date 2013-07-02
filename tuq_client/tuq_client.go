@@ -16,7 +16,7 @@ import (
 	"strings"
 )
 
-var tiServer = flag.String("tuqtng", "http://localhost:8093/", "URL to tuqqedin")
+var tiServer = flag.String("tuqtng", "http://localhost:8093/", "URL to tuqtng")
 
 func main() {
 	flag.Parse()
