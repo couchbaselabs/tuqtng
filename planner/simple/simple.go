@@ -68,7 +68,7 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 			for _, scanner := range scanners {
 				switch scanner.(type) {
 				case catalog.FullScanner:
-					lastStep = plan.NewScan(bucket.Name(), "_all_docs") // FIXME need scanner names
+					lastStep = plan.NewScan(bucket.Name(), scanner.Name())
 					lastStep = plan.NewFetch(lastStep, bucket.Name())
 					foundUsableScanner = true
 					break

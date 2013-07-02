@@ -17,7 +17,7 @@ storage engines, etc.
 package catalog
 
 import (
-       "github.com/couchbaselabs/tuqtng/query"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 // Site represents a cluster or single-node server.
@@ -41,6 +41,8 @@ type Bucket interface {
 	Name() string
 	Count() (int64, query.Error)
 	Scanners() ([]Scanner, query.Error)
+	ScannerNames() ([]string, query.Error)
+	Scanner(name string) (Scanner, query.Error)
 	Fetch(id string) (query.Item, query.Error)
 }
 
@@ -64,6 +66,7 @@ type Bin interface {
 
 // Scanner is the base type for all scanners.
 type Scanner interface {
+	Name() string
 	ScanAll(ch query.ItemChannel, errch query.ErrorChannel)
 }
 
@@ -85,7 +88,6 @@ const (
 // scanners.
 type RangeScanner interface {
 	Scanner
-	Name() string
 	Key() []string
 	Direction() Direction
 	Statistics() (RangeStatistics, query.Error)

@@ -41,11 +41,11 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 			if err != nil {
 				return nil, err
 			}
-			scanners, err := bucket.Scanners() // FIXME hard-coded, need to get scanner by name (currentElement.Scanner)
+			scanner, err := bucket.Scanner(currentElement.Scanner)
 			if err != nil {
 				return nil, err
 			}
-			currentOperator = xpipeline.NewScan(scanners[0])
+			currentOperator = xpipeline.NewScan(scanner)
 		case *plan.ExpressionEvaluator:
 			currentOperator = xpipeline.NewExpressionEvaluatorSource()
 		case *plan.Fetch:

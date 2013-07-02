@@ -17,6 +17,7 @@ package file
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -171,7 +172,7 @@ func (p *pool) loadBuckets() (e query.Error) {
 type bucket struct {
 	pool     *pool
 	name     string
-	scanners []catalog.Scanner
+	scanners map[string]catalog.Scanner
 }
 
 func (b *bucket) Name() string {
@@ -186,8 +187,28 @@ func (b *bucket) Count() (int64, query.Error) {
 	return int64(len(dirEntries)), nil
 }
 
+func (b *bucket) ScannerNames() ([]string, query.Error) {
+	rv := make([]string, 0, len(b.scanners))
+	for name, _ := range b.scanners {
+		rv = append(rv, name)
+	}
+	return rv, nil
+}
+
 func (b *bucket) Scanners() ([]catalog.Scanner, query.Error) {
-	return b.scanners, nil
+	rv := make([]catalog.Scanner, 0, len(b.scanners))
+	for _, scanner := range b.scanners {
+		rv = append(rv, scanner)
+	}
+	return rv, nil
+}
+
+func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
+	scanner, ok := b.scanners[name]
+	if !ok {
+		return nil, query.NewError(nil, fmt.Sprintf("Bucket %v not found.", name))
+	}
+	return scanner, nil
 }
 
 func (b *bucket) Fetch(id string) (item query.Item, e query.Error) {
@@ -219,17 +240,23 @@ func newBucket(p *pool, dir string) (b *bucket, e query.Error) {
 		return nil, query.NewError(err, "")
 	}
 
-	b.scanners = make([]catalog.Scanner, 0, 1)
+	b.scanners = make(map[string]catalog.Scanner, 1)
 	fs := new(fullScanner)
 	fs.bucket = b
-	b.scanners = append(b.scanners, fs)
+	fs.name = "all_docs"
+	b.scanners[fs.name] = fs
 
 	return
 }
 
 // fullScanner performs full bucket scans.
 type fullScanner struct {
+	name   string
 	bucket *bucket
+}
+
+func (fs *fullScanner) Name() string {
+	return fs.name
 }
 
 func (fs *fullScanner) ScanAll(ch query.ItemChannel, errch query.ErrorChannel) {
