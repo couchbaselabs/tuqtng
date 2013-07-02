@@ -169,10 +169,9 @@ func (p *pool) loadBuckets() (e query.Error) {
 
 // bucket is a file-based bucket.
 type bucket struct {
-	pool      *pool
-	name      string
-	filenames []string
-	scanners  []catalog.Scanner
+	pool     *pool
+	name     string
+	scanners []catalog.Scanner
 }
 
 func (b *bucket) Name() string {
@@ -180,7 +179,11 @@ func (b *bucket) Name() string {
 }
 
 func (b *bucket) Count() (int64, query.Error) {
-	return int64(len(b.filenames)), nil
+	dirEntries, err := ioutil.ReadDir(b.path())
+	if err != nil {
+		return 0, query.NewError(err, "")
+	}
+	return int64(len(dirEntries)), nil
 }
 
 func (b *bucket) Scanners() ([]catalog.Scanner, query.Error) {
@@ -213,12 +216,6 @@ func newBucket(p *pool, dir string) (b *bucket, e query.Error) {
 			f.Close()
 		}
 
-		return nil, query.NewError(err, "")
-	}
-
-	b.filenames, err = f.Readdirnames(0)
-	f.Close()
-	if err != nil {
 		return nil, query.NewError(err, "")
 	}
 
