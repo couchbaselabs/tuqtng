@@ -24,6 +24,8 @@ type Error interface {
 	Cause() error
 }
 
+type ErrorChannel chan Error
+
 func NewError(e error, internalMsg string) Error {
      return &err{cause: e, internalMsg: internalMsg}
 }
