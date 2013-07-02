@@ -120,6 +120,11 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		count++
 	}
 
+	if count == 0 {
+		fmt.Fprint(w, "{\n")
+		fmt.Fprint(w, "    \"resultset\": [")
+	}
+
 	if !response.err {
 		fmt.Fprint(w, "\n    ],\n")
 		fmt.Fprintf(w, "    \"total_rows\": %d\n", count)
