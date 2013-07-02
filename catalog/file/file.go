@@ -206,7 +206,7 @@ func (b *bucket) Scanners() ([]catalog.Scanner, query.Error) {
 func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
 	scanner, ok := b.scanners[name]
 	if !ok {
-		return nil, query.NewError(nil, fmt.Sprintf("Bucket %v not found.", name))
+		return nil, query.NewError(nil, fmt.Sprintf("Scanner %v not found.", name))
 	}
 	return scanner, nil
 }
