@@ -222,7 +222,7 @@ func newBucket(p *pool, dir string) (b *bucket, e query.Error) {
 		return nil, query.NewError(err, "")
 	}
 
-	b.scanners = make([]catalog.Scanner, 1)
+	b.scanners = make([]catalog.Scanner, 0, 1)
 	fs := new(fullScanner)
 	fs.bucket = b
 	b.scanners = append(b.scanners, fs)

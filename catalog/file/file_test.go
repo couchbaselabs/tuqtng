@@ -12,6 +12,8 @@ package file
 import (
 	"log"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 func TestFile(t *testing.T) {
@@ -42,6 +44,38 @@ func TestFile(t *testing.T) {
 	bucket, err := pool.Bucket("contacts")
 	if err != nil {
 		t.Errorf("failed to get bucket contacts")
+	}
+
+	scanners, err := bucket.Scanners()
+	if err != nil {
+		t.Errorf("failed ot get scanners")
+	}
+
+	if len(scanners) < 1 {
+		t.Errorf("Expected at least 1 scanner for bucket")
+	}
+
+	scanner := scanners[0]
+	switch scanner := scanner.(type) {
+	case *fullScanner:
+		itemChannel := make(query.ItemChannel)
+		errorChannel := make(query.ErrorChannel)
+		go scanner.ScanAll(itemChannel, errorChannel)
+
+		var item query.Item
+		var err query.Error
+		ok := true
+		for ok {
+			select {
+			case item, ok = <-itemChannel:
+				log.Printf("got item %v", item)
+			case err, ok = <-errorChannel:
+				log.Printf("got error %v", err)
+			}
+		}
+		log.Printf("done")
+	default:
+		log.Printf("not full scanner %T", scanner)
 	}
 
 	doc, err := bucket.Fetch("fred.json")
