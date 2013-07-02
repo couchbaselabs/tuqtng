@@ -16,11 +16,13 @@ package.
 package file
 
 import (
-	"github.com/couchbaselabs/tuqtng/catalog"
-	"github.com/couchbaselabs/tuqtng/query"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/couchbaselabs/tuqtng/catalog"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 // site is the root for the file-based Site.
@@ -66,38 +68,30 @@ func NewSite(path string) (s catalog.Site, e query.Error) {
 }
 
 func (s *site) loadPools() (e query.Error) {
-	f, err := os.Open(s.path)
-	if err != nil {
-		if f != nil {
-			f.Close()
-		}
-
-		return query.NewError(err, "")
-	}
-
-	dirs, err := f.Readdirnames(0)
-	f.Close()
-
+	dirEntries, err := ioutil.ReadDir(s.path)
 	if err != nil {
 		return query.NewError(err, "")
 	}
 
-	s.pools = make(map[string]*pool, len(dirs))
-	s.poolNames = dirs
+	s.pools = make(map[string]*pool)
+	s.poolNames = make([]string, 0)
 
 	var p *pool
-	for _, dir := range dirs {
-		diru := strings.ToUpper(dir)
-		if _, ok := s.pools[diru]; ok {
-			return query.NewError(nil, "Duplicate pool name "+dir)
-		}
+	for _, dirEntry := range dirEntries {
+		if dirEntry.IsDir() {
+			s.poolNames = append(s.poolNames, dirEntry.Name())
+			diru := strings.ToUpper(dirEntry.Name())
+			if _, ok := s.pools[diru]; ok {
+				return query.NewError(nil, "Duplicate pool name "+dirEntry.Name())
+			}
 
-		p, e = newPool(s, dir)
-		if e != nil {
-			return
-		}
+			p, e = newPool(s, dirEntry.Name())
+			if e != nil {
+				return
+			}
 
-		s.pools[diru] = p
+			s.pools[diru] = p
+		}
 	}
 
 	return
@@ -143,38 +137,29 @@ func newPool(s *site, dir string) (p *pool, e query.Error) {
 }
 
 func (p *pool) loadBuckets() (e query.Error) {
-	f, err := os.Open(p.path())
-	if err != nil {
-		if f != nil {
-			f.Close()
-		}
-
-		return query.NewError(err, "")
-	}
-
-	dirs, err := f.Readdirnames(0)
-	f.Close()
-
+	dirEntries, err := ioutil.ReadDir(p.path())
 	if err != nil {
 		return query.NewError(err, "")
 	}
 
-	p.buckets = make(map[string]*bucket, len(dirs))
-	p.bucketNames = dirs
+	p.buckets = make(map[string]*bucket)
+	p.bucketNames = make([]string, 0)
 
 	var b *bucket
-	for _, dir := range dirs {
-		diru := strings.ToUpper(dir)
-		if _, ok := p.buckets[diru]; ok {
-			return query.NewError(nil, "Duplicate bucket name "+dir)
-		}
+	for _, dirEntry := range dirEntries {
+		if dirEntry.IsDir() {
+			diru := strings.ToUpper(dirEntry.Name())
+			if _, ok := p.buckets[diru]; ok {
+				return query.NewError(nil, "Duplicate bucket name "+dirEntry.Name())
+			}
 
-		b, e = newBucket(p, dir)
-		if e != nil {
-			return
-		}
+			b, e = newBucket(p, dirEntry.Name())
+			if e != nil {
+				return
+			}
 
-		p.buckets[diru] = b
+			p.buckets[diru] = b
+		}
 	}
 
 	return
