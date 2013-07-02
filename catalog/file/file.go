@@ -16,8 +16,10 @@ package.
 package file
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -275,5 +277,24 @@ func fetch(path string) (item query.Item, e query.Error) {
 		return nil, query.NewError(err, "")
 	}
 
+	// convert file bytes to json
+	doc := map[string]query.Value{}
+	err = json.Unmarshal(bytes, &doc)
+	if err != nil {
+		return nil, query.NewError(err, "")
+	}
+
+	meta := map[string]query.Value{
+		"id": documentPathToId(path),
+	}
+
+	item = query.NewMapItem(doc, meta)
+
 	return
+}
+
+func documentPathToId(p string) string {
+	_, file := path.Split(p)
+	ext := path.Ext(file)
+	return file[0 : len(file)-len(ext)]
 }
