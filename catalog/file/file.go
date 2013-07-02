@@ -188,7 +188,7 @@ func (b *bucket) Scanners() ([]catalog.Scanner, query.Error) {
 }
 
 func (b *bucket) Fetch(id string) (item query.Item, e query.Error) {
-	path := filepath.Join(b.path(), id)
+	path := filepath.Join(b.path(), id+".json")
 	item, e = fetch(path)
 	if e != nil {
 		item = nil
@@ -240,19 +240,22 @@ func (fs *fullScanner) ScanAll(ch query.ItemChannel, errch query.ErrorChannel) {
 }
 
 func (fs *fullScanner) scanAll(ch query.ItemChannel, errch query.ErrorChannel) {
-	bpath := fs.bucket.path()
-	for _, filename := range fs.bucket.filenames {
-		item, err := fetch(filepath.Join(bpath, filename))
-		if err != nil {
-			errch <- err
-			break
-		}
+	defer close(ch)
+	defer close(errch)
 
-		ch <- item
+	dirEntries, err := ioutil.ReadDir(fs.bucket.path())
+	if err != nil {
+		errch <- query.NewError(err, "")
+		return
 	}
 
-	close(ch)
-	close(errch)
+	for _, dirEntry := range dirEntries {
+		if !dirEntry.IsDir() {
+			doc := map[string]query.Value{}
+			meta := map[string]query.Value{"id": documentPathToId(dirEntry.Name())}
+			ch <- query.NewMapItem(doc, meta)
+		}
+	}
 }
 
 func fetch(path string) (item query.Item, e query.Error) {

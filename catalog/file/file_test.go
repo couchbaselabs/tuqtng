@@ -70,15 +70,16 @@ func TestFile(t *testing.T) {
 			case item, ok = <-itemChannel:
 				log.Printf("got item %v", item)
 			case err, ok = <-errorChannel:
-				log.Printf("got error %v", err)
+				if err != nil {
+					t.Errorf("got error while scanning: %v", err)
+				}
 			}
 		}
-		log.Printf("done")
 	default:
 		log.Printf("not full scanner %T", scanner)
 	}
 
-	doc, err := bucket.Fetch("fred.json")
+	doc, err := bucket.Fetch("fred")
 	if err != nil {
 		t.Errorf("failed to fetch fred: %v", err)
 	}
