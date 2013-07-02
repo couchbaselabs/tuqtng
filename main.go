@@ -14,6 +14,7 @@ import (
 	"log"
 
 	"github.com/couchbaselabs/tuqtng/catalog"
+	"github.com/couchbaselabs/tuqtng/catalog/couchbase"
 	"github.com/couchbaselabs/tuqtng/catalog/file"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/network/http"
@@ -21,6 +22,7 @@ import (
 )
 
 var addr = flag.String("addr", ":8093", "HTTP listen address")
+var couchbaseSite = flag.String("couchbase", "", "Couchbase Cluster Address")
 var fileSite = flag.String("file", "", "File Site Directory")
 var poolName = flag.String("pool", "default", "Pool")
 
@@ -33,6 +35,11 @@ func main() {
 		site, err = file.NewSite(*fileSite)
 		if err != nil {
 			log.Fatalf("Unable to access file site: %v", err)
+		}
+	} else if *couchbaseSite != "" {
+		site, err = couchbase.NewSite(*couchbaseSite)
+		if err != nil {
+			log.Fatalf("Unable to access Couchbase site: %v", err)
 		}
 	}
 
