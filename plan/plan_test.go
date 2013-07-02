@@ -22,10 +22,10 @@ func TestPlanJSON(t *testing.T) {
 	tests := []struct {
 		input *Plan
 	}{
-		{&Plan{NewScan()}},
-		{&Plan{NewFetch(NewScan())}},
-		{&Plan{NewFilter(NewFetch(NewScan()), ast.NewLiteralBool(true))}},
-		{&Plan{NewFilter(NewFetch(NewScan()), ast.NewPlusOperator(ast.NewLiteralNumber(1.0), ast.NewLiteralNumber(1.0)))}},
+		{&Plan{NewScan("bucket", "index")}},
+		{&Plan{NewFetch(NewScan("bucket", "index"), "bucket")}},
+		{&Plan{NewFilter(NewFetch(NewScan("bucket", "index"), "bucket"), ast.NewLiteralBool(true))}},
+		{&Plan{NewFilter(NewFetch(NewScan("bucket", "index"), "bucket"), ast.NewPlusOperator(ast.NewLiteralNumber(1.0), ast.NewLiteralNumber(1.0)))}},
 	}
 
 	for _, x := range tests {

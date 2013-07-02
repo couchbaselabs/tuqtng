@@ -19,7 +19,7 @@ func TestSelectStatement(t *testing.T) {
 
 	stmt.ExplainOnly = true
 	stmt.Select = ResultExpressionList{NewStarResultExpression(), NewDotStarResultExpression(NewProperty("foo")), NewResultExpression(NewProperty("bar"))}
-	stmt.From = "test"
+	stmt.From = &From{Bucket: "test"}
 	stmt.Where = NewLiteralBool(true)
 	stmt.OrderBy = []*SortExpression{NewSortExpression(NewProperty("foo"), true)}
 	stmt.Limit = 10
@@ -31,7 +31,7 @@ func TestSelectStatement(t *testing.T) {
 	if !reflect.DeepEqual(stmt.GetResultExpressionList(), ResultExpressionList{NewStarResultExpression(), NewDotStarResultExpression(NewProperty("foo")), NewResultExpression(NewProperty("bar"))}) {
 		t.Errorf("Expected star result expression")
 	}
-	if stmt.GetFrom() != "test" {
+	if stmt.GetFrom().Bucket != "test" {
 		t.Errorf("Expected from test")
 	}
 	if !reflect.DeepEqual(stmt.GetWhere(), NewLiteralBool(true)) {

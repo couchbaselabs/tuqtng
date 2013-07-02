@@ -16,7 +16,9 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
-func TestFile(t *testing.T) {
+// not named like a proper test function
+// because requires couchbase server
+func notTestCouchbase(t *testing.T) {
 	site, err := NewSite("http://localhost:8091")
 	if err != nil {
 		t.Errorf("failed to create site: %v", err)
