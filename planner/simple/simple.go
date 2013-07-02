@@ -13,15 +13,21 @@
 package simple
 
 import (
+	"log"
+
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/plan"
 )
 
 type SimplePlanner struct {
+	pool catalog.Pool
 }
 
-func NewSimplePlanner() *SimplePlanner {
-	return &SimplePlanner{}
+func NewSimplePlanner(pool catalog.Pool) *SimplePlanner {
+	return &SimplePlanner{
+		pool: pool,
+	}
 }
 
 func (this *SimplePlanner) Plan(stmt ast.Statement) plan.PlanChannel {
@@ -40,10 +46,45 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 		lastStep = plan.NewExpressionEvaluator()
 
 	} else {
-		// FIXME wire up to actual data source
-		// knows how to add scan/fetch steps to plan
-		close(pc)
-		return
+		// see if the bucket exists
+		if this.pool != nil {
+			bucket, err := this.pool.Bucket(from.Bucket)
+			if err != nil {
+				log.Printf("no bucket named %v", from.Bucket)
+				// no bucket, no plan
+				close(pc)
+				return
+			}
+
+			// find all docs scanner
+			scanners, err := bucket.Scanners()
+			if err != nil {
+				// no scanner, no plan
+				close(pc)
+				return
+			}
+
+			foundUsableScanner := false
+			for _, scanner := range scanners {
+				switch scanner.(type) {
+				case catalog.FullScanner:
+					lastStep = plan.NewScan(bucket.Name(), "_all_docs") // FIXME need scanner names
+					lastStep = plan.NewFetch(lastStep, bucket.Name())
+					foundUsableScanner = true
+					break
+				}
+			}
+
+			if !foundUsableScanner {
+				// no useable scanner
+				close(pc)
+				return
+			}
+		} else {
+			// there is no pool
+			close(pc)
+			return
+		}
 	}
 
 	if stmt.GetWhere() != nil {

@@ -13,6 +13,7 @@ import (
 	"log"
 
 	// interfaces
+	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/executor"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/optimizer"
@@ -28,6 +29,7 @@ import (
 )
 
 type StaticPipeline struct {
+	pool      catalog.Pool
 	parser    parser.Parser
 	planner   planner.Planner
 	optimizer optimizer.Optimizer
@@ -35,12 +37,13 @@ type StaticPipeline struct {
 	explainer executor.Executor
 }
 
-func NewStaticPipeline() *StaticPipeline {
+func NewStaticPipeline(pool catalog.Pool) *StaticPipeline {
 	return &StaticPipeline{
+		pool:      pool,
 		parser:    yaccParser.NewUnqlParser(),
-		planner:   simplePlanner.NewSimplePlanner(),
+		planner:   simplePlanner.NewSimplePlanner(pool),
 		optimizer: simpleOptimizer.NewSimpleOptimizer(),
-		executor:  simpleExecutor.NewSimpleExecutor(),
+		executor:  simpleExecutor.NewSimpleExecutor(pool),
 		explainer: explainerExecutor.NewExplainerExecutor(),
 	}
 }

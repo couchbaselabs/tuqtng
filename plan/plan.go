@@ -41,12 +41,16 @@ func (this *ExpressionEvaluator) Sources() []PlanElement {
 }
 
 type Scan struct {
-	Type string `json:"type"`
+	Type    string `json:"type"`
+	Scanner string `json:"scanner"`
+	Bucket  string `json:"bucket"`
 }
 
-func NewScan() *Scan {
+func NewScan(bucket string, scanner string) *Scan {
 	return &Scan{
-		Type: "scan",
+		Type:    "scan",
+		Bucket:  bucket,
+		Scanner: scanner,
 	}
 }
 
@@ -55,14 +59,16 @@ func (this *Scan) Sources() []PlanElement {
 }
 
 type Fetch struct {
-	Type  string      `json:"type"`
-	Input PlanElement `json:"input"`
+	Type   string      `json:"type"`
+	Input  PlanElement `json:"input"`
+	Bucket string      `json:"bucket"`
 }
 
-func NewFetch(input PlanElement) *Fetch {
+func NewFetch(input PlanElement, bucket string) *Fetch {
 	return &Fetch{
-		Type:  "fetch",
-		Input: input,
+		Type:   "fetch",
+		Input:  input,
+		Bucket: bucket,
 	}
 }
 

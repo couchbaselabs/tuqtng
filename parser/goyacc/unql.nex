@@ -108,5 +108,7 @@ import("log")
 import("strconv")
 
 func logDebugTokens(format string, v ...interface{}) {
-    log.Printf("DEBUG TOKEN " + format, v...)
+    if DebugTokens {
+        log.Printf("DEBUG TOKEN " + format, v...)
+    }
 }

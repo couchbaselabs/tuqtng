@@ -12,19 +12,23 @@ package simple
 import (
 	"log"
 
+	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/xpipeline"
 )
 
 type SimpleExecutablePipelineBuilder struct {
+	pool catalog.Pool
 }
 
-func NewSimpleExecutablePipelineBuilder() *SimpleExecutablePipelineBuilder {
-	return &SimpleExecutablePipelineBuilder{}
+func NewSimpleExecutablePipelineBuilder(pool catalog.Pool) *SimpleExecutablePipelineBuilder {
+	return &SimpleExecutablePipelineBuilder{
+		pool: pool,
+	}
 }
 
-func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (xpipeline.ExecutablePipeline, error) {
-	rv := xpipeline.ExecutablePipeline{}
+func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.ExecutablePipeline, error) {
+	rv := &xpipeline.ExecutablePipeline{}
 
 	var lastOperator xpipeline.Operator = nil
 	currentElement := p.Root
@@ -32,8 +36,24 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (xpipeline.Exec
 	for currentElement != nil {
 		var currentOperator xpipeline.Operator = nil
 		switch currentElement := currentElement.(type) {
+		case *plan.Scan:
+			bucket, err := this.pool.Bucket(currentElement.Bucket)
+			if err != nil {
+				return nil, err
+			}
+			scanners, err := bucket.Scanners() // FIXME hard-coded, need to get scanner by name (currentElement.Scanner)
+			if err != nil {
+				return nil, err
+			}
+			currentOperator = xpipeline.NewScan(scanners[0])
 		case *plan.ExpressionEvaluator:
 			currentOperator = xpipeline.NewExpressionEvaluatorSource()
+		case *plan.Fetch:
+			bucket, err := this.pool.Bucket(currentElement.Bucket)
+			if err != nil {
+				return nil, err
+			}
+			currentOperator = xpipeline.NewFetch(bucket)
 		case *plan.Filter:
 			currentOperator = xpipeline.NewFilter(currentElement.Expr)
 		case *plan.Order:

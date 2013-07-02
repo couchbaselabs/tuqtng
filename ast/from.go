@@ -9,5 +9,6 @@
 
 package ast
 
-type From interface {
+type From struct {
+	Bucket string
 }

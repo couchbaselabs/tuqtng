@@ -12,6 +12,7 @@ package simple
 import (
 	"log"
 
+	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/query"
@@ -21,11 +22,13 @@ import (
 
 type SimpleExecutor struct {
 	xpipelinebuilder xpipelinebuilder.ExecutablePipelineBuilder
+	pool             catalog.Pool
 }
 
-func NewSimpleExecutor() *SimpleExecutor {
+func NewSimpleExecutor(pool catalog.Pool) *SimpleExecutor {
 	return &SimpleExecutor{
-		xpipelinebuilder: simpleBuilder.NewSimpleExecutablePipelineBuilder(),
+		xpipelinebuilder: simpleBuilder.NewSimpleExecutablePipelineBuilder(pool),
+		pool:             pool,
 	}
 }
 

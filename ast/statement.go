@@ -14,7 +14,7 @@ import ()
 // Statement is the abstract representation of an UNQL statement
 type Statement interface {
 	GetResultExpressionList() ResultExpressionList
-	GetFrom() From
+	GetFrom() *From
 	GetWhere() Expression
 	GetOrderBy() []*SortExpression
 	GetOffset() int
@@ -26,7 +26,7 @@ type Statement interface {
 
 type SelectStatement struct {
 	Select      ResultExpressionList `json:"select"`
-	From        From                 `json:"from"`
+	From        *From                `json:"from"`
 	Where       Expression           `json:"where"`
 	OrderBy     []*SortExpression    `json:"orderby"`
 	Limit       int                  `json:"limit"`
@@ -40,7 +40,7 @@ func NewSelectStatement() *SelectStatement {
 	}
 }
 
-func (this *SelectStatement) GetFrom() From {
+func (this *SelectStatement) GetFrom() *From {
 	return this.From
 }
 

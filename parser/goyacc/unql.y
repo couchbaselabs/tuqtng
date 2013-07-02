@@ -4,7 +4,9 @@ import "log"
 import "github.com/couchbaselabs/tuqtng/ast"
 
 func logDebugGrammar(format string, v ...interface{}) {
-    log.Printf("DEBUG GRAMMAR " + format, v...)
+	if DebugGrammar {
+    	log.Printf("DEBUG GRAMMAR " + format, v...)
+    }
 }
 %}
 
@@ -156,6 +158,12 @@ select_from:
 |
 FROM data_source {
 	logDebugGrammar("SELECT FROM - DATASOURCE")
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.From = &ast.From{Bucket: $2.s}
+	default:
+		logDebugGrammar("This statement does not support WHERE")
+	}
 }
 
 data_source:

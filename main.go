@@ -13,17 +13,39 @@ import (
 	"flag"
 	"log"
 
+	"github.com/couchbaselabs/tuqtng/catalog"
+	"github.com/couchbaselabs/tuqtng/catalog/file"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/network/http"
 	"github.com/couchbaselabs/tuqtng/qpipeline/static"
 )
 
 var addr = flag.String("addr", ":8093", "HTTP listen address")
+var fileSite = flag.String("file", "", "File Site Directory")
+var poolName = flag.String("pool", "default", "Pool")
 
 func main() {
+	var err error
+	flag.Parse()
+
+	var site catalog.Site
+	if *fileSite != "" {
+		site, err = file.NewSite(*fileSite)
+		if err != nil {
+			log.Fatalf("Unable to access file site: %v", err)
+		}
+	}
+
+	var pool catalog.Pool
+	if site != nil {
+		pool, err = site.Pool(*poolName)
+		if err != nil {
+			log.Fatalf("Unable to access pool %v in the site: %v", *poolName, err)
+		}
+	}
 
 	// create a StaticQueryPipeline we use to process queries
-	queryPipeline := static.NewStaticPipeline()
+	queryPipeline := static.NewStaticPipeline(pool)
 
 	// create a QueryChannel
 	queryChannel := make(network.QueryChannel)
