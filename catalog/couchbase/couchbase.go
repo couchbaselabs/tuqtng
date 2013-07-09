@@ -169,12 +169,13 @@ func (vs *viewScanner) Name() string {
 	return fmt.Sprintf("_design/%s/_view/%s", vs.ddoc, vs.view)
 }
 
-func (vs *viewScanner) ScanAll(ch query.ItemChannel, errch query.ErrorChannel) {
-	go vs.scanAll(ch, errch)
+func (vs *viewScanner) ScanAll(ch query.ItemChannel, warnch, errch query.ErrorChannel) {
+	go vs.scanAll(ch, warnch, errch)
 }
 
-func (vs *viewScanner) scanAll(ch query.ItemChannel, errch query.ErrorChannel) {
+func (vs *viewScanner) scanAll(ch query.ItemChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
+	defer close(warnch)
 	defer close(errch)
 
 	viewRowChannel := make(chan cb.ViewRow)

@@ -259,12 +259,13 @@ func (fs *fullScanner) Name() string {
 	return fs.name
 }
 
-func (fs *fullScanner) ScanAll(ch query.ItemChannel, errch query.ErrorChannel) {
-	go fs.scanAll(ch, errch)
+func (fs *fullScanner) ScanAll(ch query.ItemChannel, warnch, errch query.ErrorChannel) {
+	go fs.scanAll(ch, warnch, errch)
 }
 
-func (fs *fullScanner) scanAll(ch query.ItemChannel, errch query.ErrorChannel) {
+func (fs *fullScanner) scanAll(ch query.ItemChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
+	defer close(warnch)
 	defer close(errch)
 
 	dirEntries, err := ioutil.ReadDir(fs.bucket.path())
@@ -283,23 +284,7 @@ func (fs *fullScanner) scanAll(ch query.ItemChannel, errch query.ErrorChannel) {
 }
 
 func fetch(path string) (item query.Item, e query.Error) {
-	fi, err := os.Stat(path)
-	if err != nil {
-		return nil, query.NewError(err, "")
-	}
-
-	f, err := os.Open(path)
-	if err != nil {
-		if f != nil {
-			f.Close()
-		}
-
-		return nil, query.NewError(err, "")
-	}
-
-	bytes := make([]byte, fi.Size())
-	_, err = f.Read(bytes)
-	f.Close()
+	bytes, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, query.NewError(err, "")
 	}

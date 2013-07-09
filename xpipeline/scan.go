@@ -40,11 +40,12 @@ func (this *Scan) Run() {
 	defer close(this.itemChannel)
 
 	scannerItemChannel := make(query.ItemChannel)
+	scannerWarnChannel := make(query.ErrorChannel)
 	scannerErrorChannel := make(query.ErrorChannel)
 	var item query.Item
 	var err query.Error
 
-	go this.scanner.ScanAll(scannerItemChannel, scannerErrorChannel)
+	go this.scanner.ScanAll(scannerItemChannel, scannerWarnChannel, scannerErrorChannel)
 
 	ok := true
 	for ok {

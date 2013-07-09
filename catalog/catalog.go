@@ -67,7 +67,7 @@ type Bin interface {
 // Scanner is the base type for all scanners.
 type Scanner interface {
 	Name() string
-	ScanAll(ch query.ItemChannel, errch query.ErrorChannel)
+	ScanAll(ch query.ItemChannel, warnch, errch query.ErrorChannel)
 }
 
 // FullScanner performs full bucket scans.
