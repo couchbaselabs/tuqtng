@@ -61,8 +61,9 @@ func notTestCouchbase(t *testing.T) {
 	switch scanner := scanner.(type) {
 	case *viewScanner:
 		itemChannel := make(query.ItemChannel)
+		warnChannel := make(query.ErrorChannel)
 		errorChannel := make(query.ErrorChannel)
-		go scanner.ScanAll(itemChannel, errorChannel)
+		go scanner.ScanAll(itemChannel, warnChannel, errorChannel)
 
 		var item query.Item
 		var err query.Error

@@ -59,8 +59,9 @@ func TestFile(t *testing.T) {
 	switch scanner := scanner.(type) {
 	case *fullScanner:
 		itemChannel := make(query.ItemChannel)
+		warnChannel := make(query.ErrorChannel)
 		errorChannel := make(query.ErrorChannel)
-		go scanner.ScanAll(itemChannel, errorChannel)
+		go scanner.ScanAll(itemChannel, warnChannel, errorChannel)
 
 		var item query.Item
 		var err query.Error
