@@ -81,7 +81,7 @@ func (this *StaticPipeline) DispatchQuery(query network.Query) {
 
 		if ast.IsExplainOnly() {
 
-			log.Printf("tyring to explain the plan")
+			log.Printf("trying to explain the plan")
 			err = this.explainer.Execute(optimalPlan, query)
 			if err != nil {
 				response.SendError(err)
