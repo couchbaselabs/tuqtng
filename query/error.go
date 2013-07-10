@@ -27,7 +27,7 @@ type Error interface {
 type ErrorChannel chan Error
 
 func NewError(e error, internalMsg string) Error {
-     return &err{cause: e, internalMsg: internalMsg}
+	return &err{cause: e, internalMsg: internalMsg}
 }
 
 type err struct {
