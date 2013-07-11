@@ -38,10 +38,10 @@ func Site(s string) (catalog.Site, error) {
 
 func main() {
 	flag.Parse()
-	Main(*couchbaseSite, *poolName)
+	Main(*couchbaseSite, *poolName, nil)
 }
 
-func Main(couchbaseSite, poolName string) {
+func Main(couchbaseSite, poolName string, quit chan bool) {
 	site, err := Site(couchbaseSite)
 	if err != nil {
 		log.Fatalf("Unable to access site %s, err: %v", couchbaseSite, err)
@@ -69,7 +69,12 @@ func Main(couchbaseSite, poolName string) {
 	log.Printf("site: %s", couchbaseSite)
 
 	// dispatch each query that comes in
-	for query := range queryChannel {
-		queryPipeline.DispatchQuery(query)
+	for {
+		select {
+		case <-quit:
+			return
+		case query := <-queryChannel:
+			queryPipeline.DispatchQuery(query)
+		}
 	}
 }
