@@ -22,7 +22,7 @@
 
 To run against the test json files as your "site":
 
-    $ ./tuqtng -file=./test -pool=json
+    $ ./tuqtng -couchbase dir:./test -pool=json
 
 Then in your tuq_client:
 
