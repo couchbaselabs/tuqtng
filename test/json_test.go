@@ -10,6 +10,8 @@
 package test
 
 import (
+	"fmt"
+	"io/ioutil"
 	"testing"
 
 	"github.com/couchbaselabs/tuqtng"
@@ -69,5 +71,21 @@ func TestSyntaxErr(t *testing.T) {
 	r, err = run(qc, "") // empty string query
 	if err == nil || len(r) != 0 {
 		t.Errorf("expected err")
+	}
+}
+
+func TestSimpleSelect(t *testing.T) {
+	qc := start()
+	defer close(qc)
+
+	r, err := run(qc, "select * from orders")
+	if err != nil || len(r) == 0 {
+		t.Errorf("did not expect err")
+	}
+
+	fileInfos, _ := ioutil.ReadDir("./json/orders")
+	if len(r) != len(fileInfos) {
+		fmt.Printf("r: %#v, fileInfos: %#v\n", r, fileInfos)
+		t.Errorf("expected # of results to match directory listing")
 	}
 }
