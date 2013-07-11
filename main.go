@@ -12,6 +12,7 @@ package main
 import (
 	"flag"
 	"log"
+	"strings"
 
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/catalog/couchbase"
@@ -22,25 +23,25 @@ import (
 )
 
 var addr = flag.String("addr", ":8093", "HTTP listen address")
-var couchbaseSite = flag.String("couchbase", "", "Couchbase Cluster Address")
-var fileSite = flag.String("file", "", "File Site Directory")
+var couchbaseSite = flag.String("couchbase", "", "Couchbase Cluster Address (http://...) or dir:PATH")
 var poolName = flag.String("pool", "default", "Pool")
 
+func Site(s string) (catalog.Site, error) {
+	if strings.HasPrefix(s, ".") || strings.HasPrefix(s, "/") {
+		return file.NewSite(s)
+	}
+	if strings.HasPrefix(s, "dir:") {
+		return file.NewSite(s[4:])
+	}
+	return couchbase.NewSite(s)
+}
+
 func main() {
-	var err error
 	flag.Parse()
 
-	var site catalog.Site
-	if *fileSite != "" {
-		site, err = file.NewSite(*fileSite)
-		if err != nil {
-			log.Fatalf("Unable to access file site: %v", err)
-		}
-	} else if *couchbaseSite != "" {
-		site, err = couchbase.NewSite(*couchbaseSite)
-		if err != nil {
-			log.Fatalf("Unable to access Couchbase site: %v", err)
-		}
+	site, err := Site(*couchbaseSite)
+	if err != nil {
+		log.Fatalf("Unable to access site: %s, err: %v", *couchbaseSite, err)
 	}
 
 	var pool catalog.Pool
