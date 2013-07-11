@@ -14,10 +14,60 @@ import (
 
 	"github.com/couchbaselabs/tuqtng"
 	"github.com/couchbaselabs/tuqtng/network"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
-func TestMain(t *testing.T) {
+type MockResponse struct {
+	err     error
+	results []query.Value
+	done    chan bool
+}
+
+func (this *MockResponse) SendError(err error) {
+	this.err = err
+	close(this.done)
+}
+
+func (this *MockResponse) SendResult(val query.Value) {
+	this.results = append(this.results, val)
+}
+
+func (this *MockResponse) NoMoreResults() {
+	close(this.done)
+}
+
+func run(qc network.QueryChannel, q string) ([]query.Value, error) {
+	mr := &MockResponse{results: []query.Value{}, done: make(chan bool)}
+	query := network.Query{
+		Request:  network.UNQLStringQueryRequest{QueryString: q},
+		Response: mr,
+	}
+	qc <- query
+	<-mr.done
+	return mr.results, mr.err
+}
+
+func start() network.QueryChannel {
 	qc := make(network.QueryChannel)
 	go main.Main("dir:.", "json", qc)
+	return qc
+}
+
+func TestMainClose(t *testing.T) {
+	qc := start()
 	close(qc)
+}
+
+func TestSyntaxErr(t *testing.T) {
+	qc := start()
+	defer close(qc)
+
+	r, err := run(qc, "this is a bad query")
+	if err == nil || len(r) != 0 {
+		t.Errorf("expected err")
+	}
+	r, err = run(qc, "") // empty string query
+	if err == nil || len(r) != 0 {
+		t.Errorf("expected err")
+	}
 }
