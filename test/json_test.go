@@ -23,14 +23,19 @@ import (
 )
 
 type MockResponse struct {
-	err     error
-	results []query.Value
-	done    chan bool
+	err      error
+	results  []query.Value
+	warnings []error
+	done     chan bool
 }
 
 func (this *MockResponse) SendError(err error) {
 	this.err = err
 	close(this.done)
+}
+
+func (this *MockResponse) SendWarning(warning error) {
+	this.warnings = append(this.warnings, warning)
 }
 
 func (this *MockResponse) SendResult(val query.Value) {
@@ -41,15 +46,17 @@ func (this *MockResponse) NoMoreResults() {
 	close(this.done)
 }
 
-func run(qc network.QueryChannel, q string) ([]query.Value, error) {
-	mr := &MockResponse{results: []query.Value{}, done: make(chan bool)}
+func run(qc network.QueryChannel, q string) ([]query.Value, []error, error) {
+	mr := &MockResponse{
+		results: []query.Value{}, warnings: []error{}, done: make(chan bool),
+	}
 	query := network.Query{
 		Request:  network.UNQLStringQueryRequest{QueryString: q},
 		Response: mr,
 	}
 	qc <- query
 	<-mr.done
-	return mr.results, mr.err
+	return mr.results, mr.warnings, mr.err
 }
 
 func start() network.QueryChannel {
@@ -67,11 +74,11 @@ func TestSyntaxErr(t *testing.T) {
 	qc := start()
 	defer close(qc)
 
-	r, err := run(qc, "this is a bad query")
+	r, _, err := run(qc, "this is a bad query")
 	if err == nil || len(r) != 0 {
 		t.Errorf("expected err")
 	}
-	r, err = run(qc, "") // empty string query
+	r, _, err = run(qc, "") // empty string query
 	if err == nil || len(r) != 0 {
 		t.Errorf("expected err")
 	}
@@ -81,7 +88,7 @@ func TestSimpleSelect(t *testing.T) {
 	qc := start()
 	defer close(qc)
 
-	r, err := run(qc, "select * from orders")
+	r, _, err := run(qc, "select * from orders")
 	if err != nil || len(r) == 0 {
 		t.Errorf("did not expect err")
 	}
@@ -125,7 +132,7 @@ func testCaseFile(t *testing.T, fname string) {
 
 		qc := start()
 		defer close(qc)
-		resultsActual, errActual := run(qc, statements)
+		resultsActual, _, errActual := run(qc, statements)
 
 		errExpected := ""
 		v, ok = c["err"]

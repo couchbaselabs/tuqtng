@@ -23,15 +23,20 @@ import (
 )
 
 type HttpResponse struct {
-	w       http.ResponseWriter
-	results query.ValueChannel
-	err     bool
+	w        http.ResponseWriter
+	results  query.ValueChannel
+	warnings []error
+	err      error
 }
 
 func (this *HttpResponse) SendError(err error) {
-	this.err = true
+	this.err = err
 	showError(this.w, fmt.Sprintf(`{"error":"%v"}`, err), 500)
 	close(this.results)
+}
+
+func (this *HttpResponse) SendWarning(warning error) {
+	this.warnings = append(this.warnings, warning)
 }
 
 func (this *HttpResponse) SendResult(val query.Value) {
@@ -120,13 +125,23 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		count++
 	}
 
-	if !response.err {
+	if response.err == nil {
 		if count == 0 {
 			fmt.Fprint(w, "{\n")
 			fmt.Fprint(w, "    \"resultset\": [")
 		}
 		fmt.Fprint(w, "\n    ],\n")
 		fmt.Fprintf(w, "    \"total_rows\": %d\n", count)
+		if len(response.warnings) > 0 {
+			fmt.Fprintf(w, "    \"warnings\": [", )
+			for i, warning := range response.warnings {
+				fmt.Fprintf(w, "\n        \"%v\"", warning)
+				if i < len(response.warnings) - 1 {
+					fmt.Fprintf(w, ",")
+				}
+			}
+			fmt.Fprintf(w, "\n    ],\n")
+		}
 		fmt.Fprint(w, "}\n")
 	}
 }

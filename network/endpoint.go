@@ -22,6 +22,7 @@ type UNQLStringQueryRequest struct {
 
 type QueryResponse interface {
 	SendError(error)
+	SendWarning(error)
 	SendResult(val query.Value)
 	NoMoreResults()
 }
