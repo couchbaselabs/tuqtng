@@ -10,12 +10,14 @@
 package test
 
 import (
-	"github.com/couchbaselabs/tuqtng"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng"
+	"github.com/couchbaselabs/tuqtng/network"
 )
 
 func TestMain(t *testing.T) {
-	quit := make(chan bool)
-	go main.Main("dir:.", "json", quit)
-	close(quit)
+	qc := make(network.QueryChannel)
+	go main.Main("dir:.", "json", qc)
+	close(qc)
 }

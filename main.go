@@ -38,10 +38,18 @@ func Site(s string) (catalog.Site, error) {
 
 func main() {
 	flag.Parse()
-	Main(*couchbaseSite, *poolName, nil)
+
+	// create a QueryChannel
+	queryChannel := make(network.QueryChannel)
+
+	// create one or more network endpoints
+	httpEndpoint := http.NewHttpEndpoint(*addr)
+	httpEndpoint.SendQueriesTo(queryChannel)
+
+	Main(*couchbaseSite, *poolName, queryChannel)
 }
 
-func Main(couchbaseSite, poolName string, quit chan bool) {
+func Main(couchbaseSite, poolName string, queryChannel network.QueryChannel) {
 	site, err := Site(couchbaseSite)
 	if err != nil {
 		log.Fatalf("Unable to access site %s, err: %v", couchbaseSite, err)
@@ -58,23 +66,11 @@ func Main(couchbaseSite, poolName string, quit chan bool) {
 	// create a StaticQueryPipeline we use to process queries
 	queryPipeline := static.NewStaticPipeline(pool)
 
-	// create a QueryChannel
-	queryChannel := make(network.QueryChannel)
-
-	// create one or more network endpoints
-	httpEndpoint := http.NewHttpEndpoint(*addr)
-	httpEndpoint.SendQueriesTo(queryChannel)
-
 	log.Printf("tuqtng started...")
 	log.Printf("site: %s", couchbaseSite)
 
 	// dispatch each query that comes in
-	for {
-		select {
-		case <-quit:
-			return
-		case query := <-queryChannel:
-			queryPipeline.DispatchQuery(query)
-		}
+	for query := range queryChannel {
+		queryPipeline.DispatchQuery(query)
 	}
 }
