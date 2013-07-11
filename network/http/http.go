@@ -105,14 +105,12 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	this.queryChannel <- query
 
-	first := true
 	count := 0
 	for val := range response.results {
-		if first {
+		if count == 0 {
 			// open up our response
 			fmt.Fprint(w, "{\n")
 			fmt.Fprint(w, "    \"resultset\": [\n")
-			first = false
 		} else {
 			fmt.Fprint(w, ",\n")
 		}
