@@ -30,7 +30,7 @@ type HttpResponse struct {
 
 func (this *HttpResponse) SendError(err error) {
 	this.err = true
-	showError(this.w, fmt.Sprintf("%v", err), 500)
+	showError(this.w, fmt.Sprintf(`{"error":"%v"}`, err), 500)
 	close(this.results)
 }
 
