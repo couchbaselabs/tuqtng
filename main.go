@@ -38,17 +38,20 @@ func Site(s string) (catalog.Site, error) {
 
 func main() {
 	flag.Parse()
+	Main(*couchbaseSite, *poolName)
+}
 
-	site, err := Site(*couchbaseSite)
+func Main(couchbaseSite, poolName string) {
+	site, err := Site(couchbaseSite)
 	if err != nil {
-		log.Fatalf("Unable to access site: %s, err: %v", *couchbaseSite, err)
+		log.Fatalf("Unable to access site %s, err: %v", couchbaseSite, err)
 	}
 
 	var pool catalog.Pool
 	if site != nil {
-		pool, err = site.Pool(*poolName)
+		pool, err = site.Pool(poolName)
 		if err != nil {
-			log.Fatalf("Unable to access pool %v in the site: %v", *poolName, err)
+			log.Fatalf("Unable to access pool %v in the site: %v", poolName, err)
 		}
 	}
 
@@ -63,6 +66,7 @@ func main() {
 	httpEndpoint.SendQueriesTo(queryChannel)
 
 	log.Printf("tuqtng started...")
+	log.Printf("site: %s", couchbaseSite)
 
 	// dispatch each query that comes in
 	for query := range queryChannel {
