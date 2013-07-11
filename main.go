@@ -10,31 +10,17 @@
 package main
 
 import (
-	"flag"
 	"log"
-	"strings"
+	"flag"
 
-	"github.com/couchbaselabs/tuqtng/catalog"
-	"github.com/couchbaselabs/tuqtng/catalog/couchbase"
-	"github.com/couchbaselabs/tuqtng/catalog/file"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/network/http"
-	"github.com/couchbaselabs/tuqtng/qpipeline/static"
+	"github.com/couchbaselabs/tuqtng/server"
 )
 
 var addr = flag.String("addr", ":8093", "HTTP listen address")
 var couchbaseSite = flag.String("couchbase", "", "Couchbase Cluster Address (http://...) or dir:PATH")
 var poolName = flag.String("pool", "default", "Pool")
-
-func Site(s string) (catalog.Site, error) {
-	if strings.HasPrefix(s, ".") || strings.HasPrefix(s, "/") {
-		return file.NewSite(s)
-	}
-	if strings.HasPrefix(s, "dir:") {
-		return file.NewSite(s[4:])
-	}
-	return couchbase.NewSite(s)
-}
 
 func main() {
 	flag.Parse()
@@ -46,31 +32,8 @@ func main() {
 	httpEndpoint := http.NewHttpEndpoint(*addr)
 	httpEndpoint.SendQueriesTo(queryChannel)
 
-	Main(*couchbaseSite, *poolName, queryChannel)
-}
-
-func Main(couchbaseSite, poolName string, queryChannel network.QueryChannel) {
-	site, err := Site(couchbaseSite)
+	err := server.Server(*couchbaseSite, *poolName, queryChannel)
 	if err != nil {
-		log.Fatalf("Unable to access site %s, err: %v", couchbaseSite, err)
-	}
-
-	var pool catalog.Pool
-	if site != nil {
-		pool, err = site.Pool(poolName)
-		if err != nil {
-			log.Fatalf("Unable to access pool %v in the site: %v", poolName, err)
-		}
-	}
-
-	// create a StaticQueryPipeline we use to process queries
-	queryPipeline := static.NewStaticPipeline(pool)
-
-	log.Printf("tuqtng started...")
-	log.Printf("site: %s", couchbaseSite)
-
-	// dispatch each query that comes in
-	for query := range queryChannel {
-		queryPipeline.DispatchQuery(query)
+		log.Fatalf("Unable to run server, err: %v", err)
 	}
 }

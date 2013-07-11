@@ -14,9 +14,9 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/couchbaselabs/tuqtng"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/couchbaselabs/tuqtng/server"
 )
 
 type MockResponse struct {
@@ -51,7 +51,7 @@ func run(qc network.QueryChannel, q string) ([]query.Value, error) {
 
 func start() network.QueryChannel {
 	qc := make(network.QueryChannel)
-	go main.Main("dir:.", "json", qc)
+	go server.Server("dir:.", "json", qc)
 	return qc
 }
 
