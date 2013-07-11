@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"reflect"
 	"testing"
 
 	"github.com/couchbaselabs/tuqtng/network"
@@ -124,29 +125,59 @@ func testCaseFile(t *testing.T, fname string) {
 
 		qc := start()
 		defer close(qc)
-		resultsActual, err := run(qc, statements)
-		if err != nil {
-			v, ok := c["err"]
-			if !ok || v == nil {
-				t.Errorf("unexpected err: %v, statements: %v", err, statements)
-				return
-			}
-			// TODO: Check that the err matches the expected err.
-			continue
-		}
+		resultsActual, errActual := run(qc, statements)
 
+		errExpected := ""
+		v, ok = c["err"]
+		if ok {
+			errExpected = v.(string)
+		}
 		v, ok = c["results"]
 		if !ok || v == nil {
 			t.Errorf("missing results for case file: %v, index: %v", fname, i)
 			return
 		}
-		results := v.([]interface{})
-		if len(resultsActual) != len(results) {
-			t.Errorf("results len don't match, %v vs %v, %v vs %v"+
-				", for case file: %v, index: %v",
-				len(resultsActual), len(results), resultsActual, results, fname, i)
+		resultsExpected := v.([]interface{})
+
+		if errActual != nil {
+			if errExpected == "" {
+				t.Errorf("unexpected err: %v, statements: %v"+
+					", for case file: %v, index: %v", errActual, statements, fname, i)
+				return
+			}
+			// TODO: Check that the actual err matches the expected err.
+			continue
+		}
+		if errExpected != "" {
+			t.Errorf("did not see the expected err: %v, statements: %v"+
+				", for case file: %v, index: %v", errActual, statements, fname, i)
 			return
 		}
-		// TODO: Deep results vs resultsActual comparison.
+
+		if len(resultsActual) != len(resultsExpected) {
+			t.Errorf("results len don't match, %v vs %v, %v vs %v"+
+				", for case file: %v, index: %v",
+				len(resultsActual), len(resultsExpected),
+				resultsActual, resultsExpected, fname, i)
+			return
+		}
+		// Extra marshal/unmarshal hop is to get from query.Value to
+		// interface{} so that reflect.DeepEqual() works.
+		j, err := json.Marshal(resultsActual)
+		if err != nil {
+			t.Errorf("json marshal failed: %v", err)
+			return
+		}
+		var ra interface{}
+		err = json.Unmarshal(j, &ra)
+		if err != nil {
+			t.Errorf("json unmarshal failed: %v", err)
+			return
+		}
+		if !reflect.DeepEqual(ra, resultsExpected) {
+			t.Errorf("results don't match, actual: %#v, expected: %#v"+
+				", for case file: %v, index: %v",
+				resultsActual, resultsExpected, fname, i)
+		}
 	}
 }
