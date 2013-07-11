@@ -20,14 +20,18 @@
     $ go build
     $ ./tuqtng -couchbase http://localhost:8091
 
+To run unit tests:
+
+    $ go test ./...
+
 ## Querying via interactive command-line tool
 
     $ tuq_client
     tuq> SELECT * FROM beer-sample LIMIT 5
 
-The tuq_client takes an optional parameter pointing to the tuqtng server:
+The --tuqtng parameter let's you specify the tuqtng server:
 
-* --tuqtng="http://localhost:8093/"
+    $ tuq_client --tuqtng="http://localhost:8093/"
 
 ## Querying via HTTP
 
