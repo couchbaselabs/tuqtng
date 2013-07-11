@@ -10,8 +10,10 @@
 package test
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 	"testing"
 
 	"github.com/couchbaselabs/tuqtng/network"
@@ -87,5 +89,64 @@ func TestSimpleSelect(t *testing.T) {
 	if len(r) != len(fileInfos) {
 		fmt.Printf("r: %#v, fileInfos: %#v\n", r, fileInfos)
 		t.Errorf("expected # of results to match directory listing")
+	}
+}
+
+func TestAllCaseFiles(t *testing.T) {
+	matches, err := filepath.Glob("case_*.json")
+	if err != nil {
+		t.Errorf("glob failed: %v", err)
+	}
+	for _, m := range matches {
+		testCaseFile(t, m)
+	}
+}
+
+func testCaseFile(t *testing.T, fname string) {
+	b, err := ioutil.ReadFile(fname)
+	if err != nil {
+		t.Errorf("ReadFile failed: %v", err)
+		return
+	}
+	var cases []map[string]interface{}
+	err = json.Unmarshal(b, &cases)
+	if err != nil {
+		t.Errorf("couldn't json unmarshal: %v, err: %v", string(b), err)
+		return
+	}
+	for i, c := range cases {
+		v, ok := c["statements"]
+		if !ok || v == nil {
+			t.Errorf("missing statements for case file: %v, index: %v", fname, i)
+			return
+		}
+		statements := v.(string)
+
+		qc := start()
+		defer close(qc)
+		resultsActual, err := run(qc, statements)
+		if err != nil {
+			v, ok := c["err"]
+			if !ok || v == nil {
+				t.Errorf("unexpected err: %v, statements: %v", err, statements)
+				return
+			}
+			// TODO: Check that the err matches the expected err.
+			continue
+		}
+
+		v, ok = c["results"]
+		if !ok || v == nil {
+			t.Errorf("missing results for case file: %v, index: %v", fname, i)
+			return
+		}
+		results := v.([]interface{})
+		if len(resultsActual) != len(results) {
+			t.Errorf("results len don't match, %v vs %v, %v vs %v"+
+				", for case file: %v, index: %v",
+				len(resultsActual), len(results), resultsActual, results, fname, i)
+			return
+		}
+		// TODO: Deep results vs resultsActual comparison.
 	}
 }

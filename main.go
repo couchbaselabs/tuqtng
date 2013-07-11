@@ -10,8 +10,8 @@
 package main
 
 import (
-	"log"
 	"flag"
+	"log"
 
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/network/http"
