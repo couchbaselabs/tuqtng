@@ -11,17 +11,9 @@ package couchbase
 
 import (
 	"log"
-	"strings"
 
 	cb "github.com/couchbaselabs/go-couchbase"
 )
-
-var MIN_KEY map[string]interface{}
-var MAX_KEY = map[string]interface{}{} //FIXME better approximation of max
-// a key in Couchbase is at most 250 bytes
-// in a view, items with the same key are sorted by id (using basic memcmp comparison)
-// so 251 bytes of 0xff is higher than any valid key in couchbase
-var MAX_ID = cb.DocId(strings.Repeat(string([]byte{0xff}), 251))
 
 func WalkViewInBatches(result chan cb.ViewRow, bucket *cb.Bucket,
 	ddoc string, view string, options map[string]interface{}, batchSize int) {
