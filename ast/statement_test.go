@@ -82,11 +82,11 @@ func TestSelectStatementDefaultNaming(t *testing.T) {
 		t.Errorf("exepect no errors verifying semantics, got %v", err)
 	}
 
-	if stmt.Select[0].As != "$1" {
-		t.Errorf("Expected alias ot be $1, got %v", stmt.Select[0].As)
+	if stmt.Select[0].As != "foo" {
+		t.Errorf("Expected alias ot be foo, got %v", stmt.Select[0].As)
 	}
 
-	if stmt.Select[1].As != "$2" {
-		t.Errorf("Expected alias ot be $2, got %v", stmt.Select[1].As)
+	if stmt.Select[1].As != "$1" {
+		t.Errorf("Expected alias to be $1, got %v", stmt.Select[1].As)
 	}
 }

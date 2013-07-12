@@ -57,11 +57,25 @@ func (this ResultExpressionList) AssignDefaultNames() {
 		}
 	}
 
-	// now assign new names to the unnamed
+	// now try to assign a name if expression is a property
+	for _, resultExpr := range this {
+		prop, ok := (resultExpr.Expr).(*Property)
+		if ok {
+			// assign the new name
+			if candidateName, uniq := propertyName(prop, namesInUse); uniq {
+				// assign the new name
+				resultExpr.As = candidateName
+				// record that this name is used
+				namesInUse = append(namesInUse, candidateName)
+			}
+		}
+	}
+
+	// now assign default names for anything remaining
 	for _, resultExpr := range this {
 		if resultExpr.As == "" {
 			// assign the new name
-			resultExpr.As = DefaultExpressionName(resultExpr.Expr, namesInUse)
+			resultExpr.As = defaultExpressionName(resultExpr.Expr, namesInUse)
 			// record that this name is used
 			namesInUse = append(namesInUse, resultExpr.As)
 		}
@@ -103,14 +117,24 @@ func NewResultExpressionWithAlias(expr Expression, as string) *ResultExpression 
 	}
 }
 
-// this function is responsible for generating names for expressions
-// it also consults a list of names already used to avoid duplicates
-func DefaultExpressionName(expr Expression, namesInUse []string) string {
-	// FIXME the worst naming function ever
+// this function returns (true, property path) unless the property
+// path in question has already been used as a name
+func propertyName(prop *Property, namesInUse []string) (string, bool) {
+	candidateName := prop.Path
+	for _, name := range namesInUse {
+		if candidateName == name {
+			return "", false
+		}
+	}
+	return candidateName, true
+}
+
+// this function is responsible for generating default names for expressions
+// that do not otherwise have a logical name. also used to resolve name clashes.
+func defaultExpressionName(expr Expression, namesInUse []string) string {
 	// starts with $1
 	// if already in use, increment to $2
 	// repeat until not in use
-
 OUTER:
 	for counter := 1; ; counter++ {
 		candidateName := fmt.Sprintf("$%d", counter)
