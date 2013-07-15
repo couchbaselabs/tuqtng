@@ -73,7 +73,7 @@ func (this ResultExpressionList) AssignDefaultNames() {
 
 	// now assign default names for anything remaining
 	for _, resultExpr := range this {
-		if resultExpr.As == "" {
+		if resultExpr.Star == false && resultExpr.As == "" {
 			// assign the new name
 			resultExpr.As = defaultExpressionName(resultExpr.Expr, namesInUse)
 			// record that this name is used

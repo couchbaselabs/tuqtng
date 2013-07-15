@@ -34,6 +34,10 @@ func TestAssignDefaultNames(t *testing.T) {
 			ResultExpressionList{NewResultExpressionWithAlias(NewProperty("path"), "custom")},
 			ResultExpressionList{NewResultExpressionWithAlias(NewProperty("path"), "custom")},
 		},
+		{
+			ResultExpressionList{NewStarResultExpression(), NewResultExpression(NewLiteralBool(true))},
+			ResultExpressionList{NewStarResultExpression(), NewResultExpressionWithAlias(NewLiteralBool(true), "$1")},
+		},
 	}
 
 	for _, x := range tests {
