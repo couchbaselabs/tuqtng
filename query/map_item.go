@@ -41,8 +41,8 @@ func (this *MapItem) GetPath(path string) (Value, error) {
 			rv := make([]Value, 0)
 			for _, v := range value {
 				rv = append(rv, v)
-				return rv, nil
 			}
+			return rv, nil
 		default:
 			return value, nil
 		}

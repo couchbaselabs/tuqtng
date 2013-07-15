@@ -184,7 +184,7 @@ func testCaseFile(t *testing.T, fname string) {
 		if !reflect.DeepEqual(ra, resultsExpected) {
 			t.Errorf("results don't match, actual: %#v, expected: %#v"+
 				", for case file: %v, index: %v",
-				resultsActual, resultsExpected, fname, i)
+				ra, resultsExpected, fname, i)
 		}
 	}
 }
