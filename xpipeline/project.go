@@ -60,7 +60,7 @@ func (this *Project) Run() {
 							}
 						}
 					} else {
-						log.Fatalf("unexpected err: %v", err)
+						log.Fatalf("unexpected error projecting dot star expression: %v", err)
 					}
 				} else {
 					// just a star, take all the contents of the source item
@@ -71,7 +71,7 @@ func (this *Project) Run() {
 						if err == nil {
 							resultMap[key] = val
 						} else {
-							log.Fatalf("unexpected err: %v", err)
+							log.Fatalf("unexpected error projecting star expression: %v", err)
 						}
 					}
 				}
@@ -81,7 +81,15 @@ func (this *Project) Run() {
 				if err == nil {
 					resultMap[resultItem.As] = val
 				} else {
-					log.Fatalf("unexpected err: %v", err)
+					switch err := err.(type) {
+					case *query.Undefined:
+						// undefined contributes nothing to the result map
+						// but otherwise is NOT an error
+						continue
+					default:
+						log.Fatalf("unexpected error projecting expression: %v", err)
+					}
+
 				}
 			}
 		}
