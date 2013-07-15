@@ -12,6 +12,7 @@ package ast
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -25,7 +26,7 @@ type FunctionCall struct {
 func NewFunctionCall(name string, operands FunctionArgExpressionList) *FunctionCall {
 	return &FunctionCall{
 		Type:     "function",
-		Name:     name,
+		Name:     strings.ToUpper(name),
 		Operands: operands,
 	}
 }

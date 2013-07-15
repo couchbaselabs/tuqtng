@@ -10,6 +10,8 @@
 package ast
 
 import (
+	"strings"
+
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -24,5 +26,5 @@ func registerSystemFunction(name string, sf SystemFunction) {
 	if SystemFunctionRegistry == nil {
 		SystemFunctionRegistry = make(map[string]SystemFunction)
 	}
-	SystemFunctionRegistry[name] = sf
+	SystemFunctionRegistry[strings.ToUpper(name)] = sf
 }
