@@ -26,7 +26,27 @@ func NewMapItem(contents, meta map[string]Value) *MapItem {
 func (this *MapItem) GetPath(path string) (Value, error) {
 	value, ok := this.contents[path]
 	if ok {
-		return value, nil
+		// FIXME review this to possibly avoid rebuilding maps (custom JSON parser up front?)
+		// check type of value
+		// map[string]interface{} should be converted to map[string]Value
+		// []interface{} should be converted to []Value
+		switch value := value.(type) {
+		case map[string]interface{}:
+			rv := make(map[string]Value)
+			for k, v := range value {
+				rv[k] = v
+			}
+			return rv, nil
+		case []interface{}:
+			rv := make([]Value, 0)
+			for _, v := range value {
+				rv = append(rv, v)
+				return rv, nil
+			}
+		default:
+			return value, nil
+		}
+
 	}
 	return nil, &Undefined{path}
 }
