@@ -139,7 +139,7 @@ func (b *bucket) Fetch(id string) (query.Item, query.Error) {
 func newBucket(p *pool, name string) (*bucket, query.Error) {
 	cbbucket, err := p.cbpool.GetBucket(name)
 	if err != nil {
-		query.NewError(nil, fmt.Sprintf("Bucket %v not found.", name))
+		return nil, query.NewError(nil, fmt.Sprintf("Bucket %v not found.", name))
 	}
 
 	rv := &bucket{
