@@ -82,7 +82,29 @@ func (this *SelectStatement) VerifySemantics() error {
 	// now apply default naming function
 	this.GetResultExpressionList().AssignDefaultNames()
 
-	//FIXME additional checks needed here
+	// verify the projection
+	err = this.Select.Validate()
+	if err != nil {
+		return err
+	}
+
+	// verify the where
+	if this.Where != nil {
+		err = this.Where.Validate()
+		if err != nil {
+			return err
+		}
+	}
+
+	// verify the order by
+	for _, orderExpr := range this.OrderBy {
+		if orderExpr.Expr != nil {
+			err := orderExpr.Expr.Validate()
+			if err != nil {
+				return err
+			}
+		}
+	}
 
 	return nil
 }

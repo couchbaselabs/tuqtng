@@ -68,6 +68,16 @@ func (this *AndOperator) String() string {
 	return fmt.Sprintf("AND %v", this.Operands)
 }
 
+func (this *AndOperator) Validate() error {
+	for _, o := range this.Operands {
+		err := o.Validate()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // ****************************************************************************
 // OR
 // ****************************************************************************
@@ -120,6 +130,16 @@ func (this *OrOperator) String() string {
 	return fmt.Sprintf("OR %v", this.Operands)
 }
 
+func (this *OrOperator) Validate() error {
+	for _, o := range this.Operands {
+		err := o.Validate()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // ****************************************************************************
 // NOT
 // ****************************************************************************
@@ -156,4 +176,9 @@ func (this *NotOperator) Evaluate(item query.Item) (query.Value, error) {
 
 func (this *NotOperator) String() string {
 	return fmt.Sprintf("NOT %v", this.Operand)
+}
+
+func (this *NotOperator) Validate() error {
+	err := this.Operand.Validate()
+	return err
 }

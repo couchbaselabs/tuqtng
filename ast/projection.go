@@ -23,6 +23,18 @@ func (this *DuplicateAlias) Error() string {
 
 type ResultExpressionList []*ResultExpression
 
+func (this ResultExpressionList) Validate() error {
+	for _, resultExpr := range this {
+		if resultExpr.Expr != nil {
+			err := resultExpr.Expr.Validate()
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 // this function should be called before assigning default names
 // it should check to see if any explicitly named aliases are duplicated
 // if so, this is an error

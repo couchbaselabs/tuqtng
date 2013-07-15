@@ -37,6 +37,10 @@ func (this *LiteralNull) String() string {
 	return fmt.Sprintf("null")
 }
 
+func (this *LiteralNull) Validate() error {
+	return nil
+}
+
 // ****************************************************************************
 // Bool
 // ****************************************************************************
@@ -59,6 +63,10 @@ func (this *LiteralBool) Evaluate(item query.Item) (query.Value, error) {
 
 func (this *LiteralBool) String() string {
 	return fmt.Sprintf("%v", this.Val)
+}
+
+func (this *LiteralBool) Validate() error {
+	return nil
 }
 
 // ****************************************************************************
@@ -85,6 +93,10 @@ func (this *LiteralNumber) String() string {
 	return fmt.Sprintf("%v", this.Val)
 }
 
+func (this *LiteralNumber) Validate() error {
+	return nil
+}
+
 // ****************************************************************************
 // String
 // ****************************************************************************
@@ -107,6 +119,10 @@ func (this *LiteralString) Evaluate(item query.Item) (query.Value, error) {
 
 func (this *LiteralString) String() string {
 	return fmt.Sprintf("%v", this.Val)
+}
+
+func (this *LiteralString) Validate() error {
+	return nil
 }
 
 // ****************************************************************************
@@ -148,6 +164,16 @@ func (this *LiteralArray) String() string {
 	return fmt.Sprintf("%v", this.Val)
 }
 
+func (this *LiteralArray) Validate() error {
+	for _, v := range this.Val {
+		err := v.Validate()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // ****************************************************************************
 // Object
 // ****************************************************************************
@@ -185,4 +211,14 @@ func (this *LiteralObject) Evaluate(item query.Item) (query.Value, error) {
 
 func (this *LiteralObject) String() string {
 	return fmt.Sprintf("%v", this.Val)
+}
+
+func (this *LiteralObject) Validate() error {
+	for _, v := range this.Val {
+		err := v.Validate()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

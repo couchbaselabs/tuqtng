@@ -13,7 +13,16 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
-type Expression interface {
-	Evaluate(item query.Item) (query.Value, error)
-	Validate() error
+type SystemFunction interface {
+	Evaluate(query.Item, FunctionArgExpressionList) (query.Value, error)
+	Validate(FunctionArgExpressionList) error
+}
+
+var SystemFunctionRegistry map[string]SystemFunction
+
+func registerSystemFunction(name string, sf SystemFunction) {
+	if SystemFunctionRegistry == nil {
+		SystemFunctionRegistry = make(map[string]SystemFunction)
+	}
+	SystemFunctionRegistry[name] = sf
 }

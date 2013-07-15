@@ -54,3 +54,15 @@ func (this *StringConcatenateOperator) Evaluate(item query.Item) (query.Value, e
 		return nil, nil
 	}
 }
+
+func (this *StringConcatenateOperator) Validate() error {
+	err := this.Left.Validate()
+	if err != nil {
+		return err
+	}
+	err = this.Right.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
+}

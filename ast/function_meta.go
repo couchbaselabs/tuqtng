@@ -10,10 +10,25 @@
 package ast
 
 import (
+	"fmt"
+
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
-type Expression interface {
-	Evaluate(item query.Item) (query.Value, error)
-	Validate() error
+func init() {
+	registerSystemFunction("META", &FunctionMeta{})
+}
+
+type FunctionMeta struct {
+}
+
+func (this *FunctionMeta) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+	return item.GetMeta(), nil
+}
+
+func (this *FunctionMeta) Validate(arguments FunctionArgExpressionList) error {
+	if len(arguments) > 0 {
+		return fmt.Errorf("the META() function takes no arguments")
+	}
+	return nil
 }

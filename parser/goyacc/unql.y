@@ -516,6 +516,66 @@ literal_value {
 LPAREN expression RPAREN {
 	logDebugGrammar("NESTED EXPR")
 }
+|
+IDENTIFIER LPAREN RPAREN {
+	logDebugGrammar("FUNCTION EXPR NOPARAM")
+	thisExpression := ast.NewFunctionCall($1.s, ast.FunctionArgExpressionList{})
+	parsingStack.Push(thisExpression)
+}
+|
+IDENTIFIER LPAREN function_arg_list RPAREN {
+	logDebugGrammar("FUNCTION EXPR PARAM")
+	funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
+	thisExpression := ast.NewFunctionCall($1.s, funarg_exp_list)
+	parsingStack.Push(thisExpression)
+}
+;
+
+function_arg_list:
+function_arg_single {
+	funarg_expr := parsingStack.Pop().(*ast.FunctionArgExpression)
+	parsingStack.Push(ast.FunctionArgExpressionList{funarg_expr})
+}
+|
+function_arg_single COMMA function_arg_list {
+	funarg_expr_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
+	funarg_expr := parsingStack.Pop().(*ast.FunctionArgExpression)
+	// list items pushed onto the stack end up in reverse order
+	// this prepends items in the list to restore order
+	new_list := ast.FunctionArgExpressionList{funarg_expr}
+	for _, v := range funarg_expr_list {
+		new_list = append(new_list, v)
+	}
+	parsingStack.Push(new_list)
+}
+;
+
+function_arg_single:
+fun_dotted_path_star {
+	logDebugGrammar("FUNARG STAR")
+}
+|
+expression {
+	logDebugGrammar("FUNARG EXPR")
+	expr_part := parsingStack.Pop().(ast.Expression)
+	funarg_expr := ast.NewFunctionArgExpression(expr_part)
+	parsingStack.Push(funarg_expr)
+}
+;
+
+fun_dotted_path_star:
+MULT {
+	logDebugGrammar("FUNSTAR")
+	funarg_expr := ast.NewStarFunctionArgExpression()
+	parsingStack.Push(funarg_expr)
+}
+|
+expr DOT MULT {
+	logDebugGrammar("FUN PATH DOT STAR")
+	expr_part := parsingStack.Pop().(ast.Expression)
+	funarg_expr := ast.NewDotStarFunctionArgExpression(expr_part)
+	parsingStack.Push(funarg_expr)
+}
 
 //JSON
 

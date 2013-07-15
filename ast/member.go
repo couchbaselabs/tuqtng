@@ -47,6 +47,18 @@ func (this *DotMemberOperator) Evaluate(item query.Item) (query.Value, error) {
 	return nil, &query.Undefined{this.Right.Path}
 }
 
+func (this *DotMemberOperator) Validate() error {
+	err := this.Left.Validate()
+	if err != nil {
+		return err
+	}
+	err = this.Right.Validate()
+	if err != nil {
+		return err
+	}
+	return err
+}
+
 // ****************************************************************************
 // BRACKET MEMBER
 // ****************************************************************************
@@ -96,4 +108,16 @@ func (this *BracketMemberOperator) Evaluate(item query.Item) (query.Value, error
 	}
 
 	return nil, &query.Undefined{}
+}
+
+func (this *BracketMemberOperator) Validate() error {
+	err := this.Left.Validate()
+	if err != nil {
+		return err
+	}
+	err = this.Right.Validate()
+	if err != nil {
+		return err
+	}
+	return err
 }

@@ -90,6 +90,7 @@ var validQueries = []string{
 	`SELECT * FROM cat WHERE true ORDER BY name ASC`,
 	`SELECT * FROM cat WHERE true ORDER BY name DESC`,
 	`EXPLAIN SELECT * FROM cat WHERE true ORDER BY name DESC`,
+	`SELECT Color(metal) FROM materials AS metal WHERE Conductivity(metal, 'heat') > 3.5`,
 }
 
 var invalidQueries = []string{

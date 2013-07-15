@@ -57,6 +57,18 @@ func (this *PlusOperator) Evaluate(item query.Item) (query.Value, error) {
 	}
 }
 
+func (this *PlusOperator) Validate() error {
+	err := this.Left.Validate()
+	if err != nil {
+		return err
+	}
+	err = this.Right.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // ****************************************************************************
 // MINUS
 // ****************************************************************************
@@ -97,6 +109,18 @@ func (this *SubtractOperator) Evaluate(item query.Item) (query.Value, error) {
 	default:
 		return nil, nil
 	}
+}
+
+func (this *SubtractOperator) Validate() error {
+	err := this.Left.Validate()
+	if err != nil {
+		return err
+	}
+	err = this.Right.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // ****************************************************************************
@@ -141,6 +165,18 @@ func (this *MultiplyOperator) Evaluate(item query.Item) (query.Value, error) {
 	}
 }
 
+func (this *MultiplyOperator) Validate() error {
+	err := this.Left.Validate()
+	if err != nil {
+		return err
+	}
+	err = this.Right.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // ****************************************************************************
 // DIV
 // ****************************************************************************
@@ -181,6 +217,18 @@ func (this *DivideOperator) Evaluate(item query.Item) (query.Value, error) {
 	default:
 		return nil, nil
 	}
+}
+
+func (this *DivideOperator) Validate() error {
+	err := this.Left.Validate()
+	if err != nil {
+		return err
+	}
+	err = this.Right.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // ****************************************************************************
@@ -225,6 +273,18 @@ func (this *ModuloOperator) Evaluate(item query.Item) (query.Value, error) {
 	}
 }
 
+func (this *ModuloOperator) Validate() error {
+	err := this.Left.Validate()
+	if err != nil {
+		return err
+	}
+	err = this.Right.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // ****************************************************************************
 // Change Sign
 // ****************************************************************************
@@ -253,4 +313,12 @@ func (this *ChangeSignOperator) Evaluate(item query.Item) (query.Value, error) {
 	default:
 		return nil, nil
 	}
+}
+
+func (this *ChangeSignOperator) Validate() error {
+	err := this.Operand.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
 }

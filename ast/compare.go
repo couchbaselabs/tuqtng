@@ -75,6 +75,18 @@ func (this *BinaryComparisonOperator) compare(item query.Item) (query.Value, err
 	return CollateJSON(lv, rv), nil
 }
 
+func (this *BinaryComparisonOperator) validate() error {
+	err := this.Left.Validate()
+	if err != nil {
+		return err
+	}
+	err = this.Right.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // ****************************************************************************
 // Greater Than
 // ****************************************************************************
@@ -115,6 +127,10 @@ func (this *GreaterThanOperator) Evaluate(item query.Item) (query.Value, error) 
 		log.Fatalf("Unexpected result from comparison: %v", compare)
 		return nil, nil
 	}
+}
+
+func (this *GreaterThanOperator) Validate() error {
+	return this.BinaryComparisonOperator.validate()
 }
 
 // ****************************************************************************
@@ -159,6 +175,10 @@ func (this *GreaterThanOrEqualOperator) Evaluate(item query.Item) (query.Value, 
 	}
 }
 
+func (this *GreaterThanOrEqualOperator) Validate() error {
+	return this.BinaryComparisonOperator.validate()
+}
+
 // ****************************************************************************
 // Less Than
 // ****************************************************************************
@@ -199,6 +219,10 @@ func (this *LessThanOperator) Evaluate(item query.Item) (query.Value, error) {
 		log.Fatalf("Unexpected result from comparison: %v", compare)
 		return nil, nil
 	}
+}
+
+func (this *LessThanOperator) Validate() error {
+	return this.BinaryComparisonOperator.validate()
 }
 
 // ****************************************************************************
@@ -243,6 +267,10 @@ func (this *LessThanOrEqualOperator) Evaluate(item query.Item) (query.Value, err
 	}
 }
 
+func (this *LessThanOrEqualOperator) Validate() error {
+	return this.BinaryComparisonOperator.validate()
+}
+
 // ****************************************************************************
 // Equal To
 // ****************************************************************************
@@ -285,6 +313,10 @@ func (this *EqualToOperator) Evaluate(item query.Item) (query.Value, error) {
 	}
 }
 
+func (this *EqualToOperator) Validate() error {
+	return this.BinaryComparisonOperator.validate()
+}
+
 // ****************************************************************************
 // Not Equal To
 // ****************************************************************************
@@ -325,6 +357,10 @@ func (this *NotEqualToOperator) Evaluate(item query.Item) (query.Value, error) {
 		log.Fatalf("Unexpected result from comparison: %v", compare)
 		return nil, nil
 	}
+}
+
+func (this *NotEqualToOperator) Validate() error {
+	return this.BinaryComparisonOperator.validate()
 }
 
 // ****************************************************************************
@@ -377,6 +413,18 @@ func (this *LikeOperator) Evaluate(item query.Item) (query.Value, error) {
 	}
 }
 
+func (this *LikeOperator) Validate() error {
+	err := this.Left.Validate()
+	if err != nil {
+		return err
+	}
+	err = this.Right.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // ****************************************************************************
 // Not Like
 // ****************************************************************************
@@ -426,6 +474,18 @@ func (this *NotLikeOperator) Evaluate(item query.Item) (query.Value, error) {
 	}
 }
 
+func (this *NotLikeOperator) Validate() error {
+	err := this.Left.Validate()
+	if err != nil {
+		return err
+	}
+	err = this.Right.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // ****************************************************************************
 // IS NULL
 // ****************************************************************************
@@ -459,6 +519,14 @@ func (this *IsNullOperator) Evaluate(item query.Item) (query.Value, error) {
 	}
 
 	return false, nil
+}
+
+func (this *IsNullOperator) Validate() error {
+	err := this.Operand.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // ****************************************************************************
@@ -496,6 +564,14 @@ func (this *IsNotNullOperator) Evaluate(item query.Item) (query.Value, error) {
 	return true, nil
 }
 
+func (this *IsNotNullOperator) Validate() error {
+	err := this.Operand.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // ****************************************************************************
 // IS MISSING
 // ****************************************************************************
@@ -527,6 +603,14 @@ func (this *IsMissingOperator) Evaluate(item query.Item) (query.Value, error) {
 	return false, nil
 }
 
+func (this *IsMissingOperator) Validate() error {
+	err := this.Operand.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // ****************************************************************************
 // IS NOT MISSING
 // ****************************************************************************
@@ -556,6 +640,14 @@ func (this *IsNotMissingOperator) Evaluate(item query.Item) (query.Value, error)
 	}
 
 	return true, nil
+}
+
+func (this *IsNotMissingOperator) Validate() error {
+	err := this.Operand.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // ****************************************************************************
@@ -593,6 +685,14 @@ func (this *IsValuedOperator) Evaluate(item query.Item) (query.Value, error) {
 	return true, nil
 }
 
+func (this *IsValuedOperator) Validate() error {
+	err := this.Operand.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // ****************************************************************************
 // IS NOT VALUED
 // ****************************************************************************
@@ -626,4 +726,12 @@ func (this *IsNotValuedOperator) Evaluate(item query.Item) (query.Value, error) 
 	}
 
 	return false, nil
+}
+
+func (this *IsNotValuedOperator) Validate() error {
+	err := this.Operand.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
 }
