@@ -60,7 +60,15 @@ func (this *Project) Run() {
 							}
 						}
 					} else {
-						log.Fatalf("unexpected error projecting dot star expression: %v", err)
+						switch err := err.(type) {
+						case *query.Undefined:
+							// undefined contributes nothing to the result map
+							// but otherwise is NOT an error
+							// FIXME review if this should be a warning
+							continue
+						default:
+							log.Fatalf("unexpected error projecting dot star expression: %v", err)
+						}
 					}
 				} else {
 					// just a star, take all the contents of the source item
@@ -85,11 +93,11 @@ func (this *Project) Run() {
 					case *query.Undefined:
 						// undefined contributes nothing to the result map
 						// but otherwise is NOT an error
+						// FIXME review if this should be a warning
 						continue
 					default:
 						log.Fatalf("unexpected error projecting expression: %v", err)
 					}
-
 				}
 			}
 		}
