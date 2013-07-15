@@ -60,7 +60,7 @@ func (this ResultExpressionList) AssignDefaultNames() {
 	// now try to assign a name if expression is a property
 	for _, resultExpr := range this {
 		prop, ok := (resultExpr.Expr).(*Property)
-		if ok {
+		if resultExpr.As == "" && ok {
 			// assign the new name
 			if candidateName, uniq := propertyName(prop, namesInUse); uniq {
 				// assign the new name
