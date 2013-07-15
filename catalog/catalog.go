@@ -44,6 +44,7 @@ type Bucket interface {
 	ScannerNames() ([]string, query.Error)
 	Scanner(name string) (Scanner, query.Error)
 	Fetch(id string) (query.Item, query.Error)
+	Release()
 }
 
 // RangeStatistics captures statistics for a range index (view or

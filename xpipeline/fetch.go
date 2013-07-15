@@ -38,6 +38,7 @@ func (this *Fetch) GetItemChannel() query.ItemChannel {
 }
 
 func (this *Fetch) Run() {
+	defer this.bucket.Release()
 	defer close(this.itemChannel)
 
 	go this.Source.Run()

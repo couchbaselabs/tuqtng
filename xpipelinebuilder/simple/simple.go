@@ -45,7 +45,7 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 			if err != nil {
 				return nil, err
 			}
-			currentOperator = xpipeline.NewScan(scanner)
+			currentOperator = xpipeline.NewScan(bucket, scanner)
 		case *plan.ExpressionEvaluator:
 			currentOperator = xpipeline.NewExpressionEvaluatorSource()
 		case *plan.Fetch:

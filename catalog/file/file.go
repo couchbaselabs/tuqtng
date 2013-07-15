@@ -175,6 +175,9 @@ type bucket struct {
 	scanners map[string]catalog.Scanner
 }
 
+func (b *bucket) Release() {
+}
+
 func (b *bucket) Name() string {
 	return b.name
 }

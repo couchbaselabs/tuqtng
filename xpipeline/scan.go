@@ -18,12 +18,14 @@ import (
 
 type Scan struct {
 	itemChannel query.ItemChannel
+	bucket      catalog.Bucket
 	scanner     catalog.Scanner
 }
 
-func NewScan(scanner catalog.Scanner) *Scan {
+func NewScan(bucket catalog.Bucket, scanner catalog.Scanner) *Scan {
 	return &Scan{
 		itemChannel: make(query.ItemChannel),
+		bucket:      bucket,
 		scanner:     scanner,
 	}
 }
@@ -38,6 +40,7 @@ func (this *Scan) GetItemChannel() query.ItemChannel {
 
 func (this *Scan) Run() {
 	defer close(this.itemChannel)
+	defer this.bucket.Release()
 
 	scannerItemChannel := make(query.ItemChannel)
 	scannerWarnChannel := make(query.ErrorChannel)

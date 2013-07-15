@@ -87,6 +87,10 @@ type bucket struct {
 	cbbucket *cb.Bucket
 }
 
+func (b *bucket) Release() {
+	b.cbbucket.Close()
+}
+
 func (b *bucket) Name() string {
 	return b.name
 }

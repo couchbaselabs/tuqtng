@@ -55,6 +55,7 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 				close(pc)
 				return
 			}
+			defer bucket.Release()
 
 			// find all docs scanner
 			scanners, err := bucket.Scanners()
