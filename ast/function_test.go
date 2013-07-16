@@ -126,6 +126,32 @@ func TestFunction(t *testing.T) {
 			nil,
 		},
 
+		// util functions
+		{
+			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			5,
+			nil,
+		},
+		{
+			NewFunctionCall("LENGTH", FunctionArgExpressionList{
+				NewFunctionArgExpression(
+					NewLiteralArray([]Expression{
+						NewLiteralString("hello"),
+						NewLiteralString("hello")}))}),
+			2,
+			nil,
+		},
+		{
+			NewFunctionCall("LENGTH", FunctionArgExpressionList{
+				NewFunctionArgExpression(
+					NewLiteralObject(map[string]Expression{
+						"val1": NewLiteralString("hello"),
+						"val2": NewLiteralString("hello"),
+						"val3": NewLiteralString("hello")}))}),
+			3,
+			nil,
+		},
+
 		// numeric functions
 		{
 			NewFunctionCall("CEIL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
