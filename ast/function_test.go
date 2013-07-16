@@ -49,6 +49,16 @@ func TestFunction(t *testing.T) {
 			"HELLO",
 			nil,
 		},
+		{
+			NewFunctionCall("CEIL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
+			6.0,
+			nil,
+		},
+		{
+			NewFunctionCall("FLOOR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
+			5.0,
+			nil,
+		},
 	}
 
 	for _, x := range tests {
