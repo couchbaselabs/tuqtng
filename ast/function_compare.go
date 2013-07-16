@@ -18,6 +18,9 @@ import (
 func init() {
 	registerSystemFunction("GREATEST", &FunctionGreatest{})
 	registerSystemFunction("LEAST", &FunctionLeast{})
+	registerSystemFunction("IFMISSING", &FunctionIfMissing{})
+	registerSystemFunction("IFNULL", &FunctionIfNull{})
+	registerSystemFunction("IFMISSINGORNULL", &FunctionIfMissingOrNull{})
 }
 
 type FunctionGreatest struct{}
@@ -94,6 +97,115 @@ func (this *FunctionLeast) Validate(arguments FunctionArgExpressionList) error {
 	}
 	if arguments[0].Star == true {
 		return fmt.Errorf("the LEAST() function does not support *")
+	}
+	return nil
+}
+
+type FunctionIfMissing struct{}
+
+func (this *FunctionIfMissing) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+
+	for _, arg := range arguments {
+		av, err := arg.Expr.Evaluate(item)
+		if err != nil {
+			switch err := err.(type) {
+			case *query.Undefined:
+				// do NOT return missing
+				continue
+			default:
+				// any other error return to caller
+				return nil, err
+			}
+		}
+
+		// wasn't missing, return the value
+		return av, nil
+	}
+
+	// if all values were MISSING return NULL
+	return nil, nil
+}
+
+func (this *FunctionIfMissing) Validate(arguments FunctionArgExpressionList) error {
+	if len(arguments) < 1 {
+		return fmt.Errorf("the IFMISSING() function expects at least one argument")
+	}
+	if arguments[0].Star == true {
+		return fmt.Errorf("the IFMISSING() function does not support *")
+	}
+	return nil
+}
+
+type FunctionIfNull struct{}
+
+func (this *FunctionIfNull) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+
+	for _, arg := range arguments {
+		av, err := arg.Expr.Evaluate(item)
+		if err != nil {
+			switch err := err.(type) {
+			case *query.Undefined:
+				// missing is NOT null, so return it
+				return nil, err
+			default:
+				// any other error return to caller
+				return nil, err
+			}
+		}
+
+		if av != nil {
+			// wasn't NULL, return the value
+			return av, nil
+		}
+	}
+
+	// if all values were NULL return NULL
+	return nil, nil
+}
+
+func (this *FunctionIfNull) Validate(arguments FunctionArgExpressionList) error {
+	if len(arguments) < 1 {
+		return fmt.Errorf("the IFNULL() function expects at least one argument")
+	}
+	if arguments[0].Star == true {
+		return fmt.Errorf("the IFNULL() function does not support *")
+	}
+	return nil
+}
+
+type FunctionIfMissingOrNull struct{}
+
+func (this *FunctionIfMissingOrNull) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+
+	for _, arg := range arguments {
+		av, err := arg.Expr.Evaluate(item)
+		if err != nil {
+			switch err := err.(type) {
+			case *query.Undefined:
+				// do not return missing
+				continue
+			default:
+				// any other error return to caller
+				return nil, err
+			}
+		}
+
+		if av != nil {
+			// wasn't NULL, return the value
+			return av, nil
+		}
+	}
+
+	// if all values were NULL or MISSING return NULL
+	return nil, nil
+}
+
+func (this *FunctionIfMissingOrNull) Validate(arguments FunctionArgExpressionList) error {
+	if len(arguments) < 1 {
+		return fmt.Errorf("the IFMISSINGORNULL() function expects at least one argument")
+	}
+	if arguments[0].Star == true {
+		return fmt.Errorf("the IFMISSINGNULL() function does not support *")
 	}
 	return nil
 }
