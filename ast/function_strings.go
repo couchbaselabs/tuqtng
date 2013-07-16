@@ -22,6 +22,7 @@ func init() {
 	registerSystemFunction("LTRIM", &FunctionLTrim{})
 	registerSystemFunction("RTRIM", &FunctionRTrim{})
 	registerSystemFunction("TRIM", &FunctionTrim{})
+	registerSystemFunction("SUBSTR", &FunctionSubStr{})
 }
 
 type FunctionLower struct{}
@@ -265,6 +266,106 @@ func (this *FunctionTrim) Validate(arguments FunctionArgExpressionList) error {
 	}
 	if arguments[0].Star == true {
 		return fmt.Errorf("the TRIM() function does not support *")
+	}
+	return nil
+}
+
+type FunctionSubStr struct{}
+
+func (this *FunctionSubStr) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+	// first evaluate the argument
+	av, err := arguments[0].Expr.Evaluate(item)
+
+	if err != nil {
+		switch err := err.(type) {
+		case *query.Undefined:
+			// undefined returns null
+			return nil, nil
+		default:
+			// any other error return to caller
+			return nil, err
+		}
+	}
+
+	position, err := arguments[1].Expr.Evaluate(item)
+	if err != nil {
+		switch err := err.(type) {
+		case *query.Undefined:
+			// undefined returns null
+			return nil, nil
+		default:
+			// any other error return to caller
+			return nil, err
+		}
+	}
+
+	var maxLen int = -1
+
+	if len(arguments) == 3 {
+		lenarg, err := arguments[1].Expr.Evaluate(item)
+		if err != nil {
+			switch err := err.(type) {
+			case *query.Undefined:
+				// undefined returns null
+				return nil, nil
+			default:
+				// any other error return to caller
+				return nil, err
+			}
+		}
+
+		switch lenarg := lenarg.(type) {
+		case float64:
+			maxLen = int(lenarg)
+			// FIXME add checks for negative values here?
+		default:
+			return nil, nil
+		}
+	}
+
+	// ensure that arg1 is a string
+	switch av := av.(type) {
+	case string:
+		// ensure that arg2 is a number
+		switch position := position.(type) {
+		case float64:
+			pos := int(position)
+
+			//validate that pos is valid
+			if pos < 0 || pos >= len(av) {
+				// FIXME add warning for invalid pos?
+				return nil, nil
+			}
+
+			if maxLen < 0 {
+				// no end limit
+				return av[pos:], nil
+			} else {
+				// validate that maxLen is valid
+				endPos := pos + maxLen + 1
+				if endPos < pos || endPos >= len(av) {
+					// FIXME add warning for invalid max len?
+					return nil, nil
+				}
+				return av[pos:endPos], nil
+			}
+		default:
+			// FIXME warn that position wasn't int?
+			return nil, nil
+		}
+	default:
+		// FIXME warn that arg1 isnt a string?
+		return nil, nil
+	}
+
+}
+
+func (this *FunctionSubStr) Validate(arguments FunctionArgExpressionList) error {
+	if len(arguments) < 2 || len(arguments) > 4 {
+		return fmt.Errorf("the SUBSTR() function expects two or three arguments")
+	}
+	if arguments[0].Star == true || arguments[1].Star == true || (len(arguments) == 3 && arguments[2].Star == true) {
+		return fmt.Errorf("the SUBSTR() function does not support *")
 	}
 	return nil
 }

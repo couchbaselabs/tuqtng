@@ -75,6 +75,21 @@ func TestFunction(t *testing.T) {
 			"hello",
 			nil,
 		},
+		{
+			NewFunctionCall("SUBSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			"hello",
+			nil,
+		},
+		{
+			NewFunctionCall("SUBSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			"ello",
+			nil,
+		},
+		{
+			NewFunctionCall("SUBSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralNumber(1.0)), NewFunctionArgExpression(NewLiteralNumber(2.0))}),
+			"el",
+			nil,
+		},
 
 		// comparison functions
 		{
