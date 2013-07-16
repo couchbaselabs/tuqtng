@@ -17,6 +17,7 @@ import (
 
 func init() {
 	registerSystemFunction("META", &FunctionMeta{})
+	registerSystemFunction("VALUE", &FunctionValue{})
 }
 
 type FunctionMeta struct {
@@ -29,6 +30,20 @@ func (this *FunctionMeta) Evaluate(item query.Item, arguments FunctionArgExpress
 func (this *FunctionMeta) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) > 0 {
 		return fmt.Errorf("the META() function takes no arguments")
+	}
+	return nil
+}
+
+type FunctionValue struct {
+}
+
+func (this *FunctionValue) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+	return item.GetValue(), nil
+}
+
+func (this *FunctionValue) Validate(arguments FunctionArgExpressionList) error {
+	if len(arguments) > 0 {
+		return fmt.Errorf("the VALUE() function takes no arguments")
 	}
 	return nil
 }

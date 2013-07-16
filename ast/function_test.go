@@ -41,6 +41,14 @@ func TestFunction(t *testing.T) {
 			nil,
 		},
 
+		{
+			NewFunctionCall("VALUE", FunctionArgExpressionList{}),
+			map[string]query.Value{
+				"name": "will",
+			},
+			nil,
+		},
+
 		// string functions
 		{
 			NewFunctionCall("LOWER", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("HELLO"))}),
