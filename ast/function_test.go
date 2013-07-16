@@ -32,6 +32,7 @@ func TestFunction(t *testing.T) {
 		output query.Value
 		err    error
 	}{
+		// meta/value functions
 		{
 			NewFunctionCall("META", FunctionArgExpressionList{}),
 			map[string]query.Value{
@@ -39,6 +40,8 @@ func TestFunction(t *testing.T) {
 			},
 			nil,
 		},
+
+		// string functions
 		{
 			NewFunctionCall("LOWER", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("HELLO"))}),
 			"hello",
@@ -49,6 +52,23 @@ func TestFunction(t *testing.T) {
 			"HELLO",
 			nil,
 		},
+		{
+			NewFunctionCall("LTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralString(" "))}),
+			"hello     ",
+			nil,
+		},
+		{
+			NewFunctionCall("RTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralString(" "))}),
+			"     hello",
+			nil,
+		},
+		{
+			NewFunctionCall("TRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralString(" "))}),
+			"hello",
+			nil,
+		},
+
+		// numeric functions
 		{
 			NewFunctionCall("CEIL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
 			6.0,
