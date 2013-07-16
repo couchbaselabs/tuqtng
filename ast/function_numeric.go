@@ -12,6 +12,7 @@ package ast
 import (
 	"fmt"
 	"math"
+	"strconv"
 
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -19,6 +20,7 @@ import (
 func init() {
 	registerSystemFunction("CEIL", &FunctionCeil{})
 	registerSystemFunction("FLOOR", &FunctionFloor{})
+	registerSystemFunction("ROUND", &FunctionRound{})
 }
 
 type FunctionCeil struct{}
@@ -91,6 +93,75 @@ func (this *FunctionFloor) Validate(arguments FunctionArgExpressionList) error {
 	}
 	if arguments[0].Star == true {
 		return fmt.Errorf("the FLOOR() function does not support *")
+	}
+	return nil
+}
+
+func RoundFloat(x float64, prec int) float64 {
+	frep := strconv.FormatFloat(x, 'g', prec, 64)
+	f, _ := strconv.ParseFloat(frep, 64)
+	return f
+}
+
+type FunctionRound struct{}
+
+func (this *FunctionRound) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+	// first evaluate the argument
+	av, err := arguments[0].Expr.Evaluate(item)
+
+	precision := 0
+	if len(arguments) > 1 {
+		// evaluate the second argument
+		pv, err := arguments[1].Expr.Evaluate(item)
+
+		// we need precision to be an integer
+		if err != nil {
+			switch err := err.(type) {
+			case *query.Undefined:
+				// undefined returns null
+				return nil, nil
+			default:
+				// any other error return to caller
+				return nil, err
+			}
+		}
+
+		switch pv := pv.(type) {
+		case float64:
+			precision = int(pv)
+		default:
+			// FIXME log warning here?
+			return nil, nil
+		}
+	}
+
+	// the spec defines this functin to ONLY operate on numeric values
+	// all other types result in NULL
+	if err != nil {
+		switch err := err.(type) {
+		case *query.Undefined:
+			// undefined returns null
+			return nil, nil
+		default:
+			// any other error return to caller
+			return nil, err
+		}
+	}
+
+	switch av := av.(type) {
+	case float64:
+		return RoundFloat(av, precision), nil
+	default:
+		return nil, nil
+	}
+}
+
+func (this *FunctionRound) Validate(arguments FunctionArgExpressionList) error {
+	if len(arguments) < 1 || len(arguments) > 2 {
+		return fmt.Errorf("the ROUND() function expects either one or two arguments")
+	}
+	if arguments[0].Star == true {
+		return fmt.Errorf("the ROUND() function does not support *")
 	}
 	return nil
 }
