@@ -12,7 +12,6 @@ package ast
 import (
 	"fmt"
 	"math"
-	"strconv"
 
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -99,9 +98,28 @@ func (this *FunctionFloor) Validate(arguments FunctionArgExpressionList) error {
 }
 
 func RoundFloat(x float64, prec int) float64 {
-	frep := strconv.FormatFloat(x, 'g', prec, 64)
-	f, _ := strconv.ParseFloat(frep, 64)
-	return f
+	if math.IsNaN(x) || math.IsInf(x, 0) {
+		return x
+	}
+
+	sign := 1.0
+	if x < 0 {
+		sign = -1
+		x *= -1
+	}
+
+	var rounder float64
+	pow := math.Pow(10, float64(prec))
+	intermed := x * pow
+	_, frac := math.Modf(intermed)
+
+	if frac >= 0.5 {
+		rounder = math.Ceil(intermed)
+	} else {
+		rounder = math.Floor(intermed)
+	}
+
+	return rounder / pow * sign
 }
 
 type FunctionRound struct{}
