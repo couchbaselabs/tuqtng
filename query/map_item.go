@@ -59,6 +59,10 @@ func (this *MapItem) GetTopLevelKeys() []string {
 	return rv
 }
 
+func (this *MapItem) GetValue() Value {
+	return this.contents
+}
+
 func (this *MapItem) GetMeta() map[string]Value {
 	return this.meta
 }
