@@ -21,6 +21,8 @@ func init() {
 	registerSystemFunction("IFMISSING", &FunctionIfMissing{})
 	registerSystemFunction("IFNULL", &FunctionIfNull{})
 	registerSystemFunction("IFMISSINGORNULL", &FunctionIfMissingOrNull{})
+	registerSystemFunction("MISSINGIF", &FunctionMissingIf{})
+	registerSystemFunction("NULLIF", &FunctionNullIf{})
 }
 
 type FunctionGreatest struct{}
@@ -206,6 +208,98 @@ func (this *FunctionIfMissingOrNull) Validate(arguments FunctionArgExpressionLis
 	}
 	if arguments[0].Star == true {
 		return fmt.Errorf("the IFMISSINGNULL() function does not support *")
+	}
+	return nil
+}
+
+type FunctionMissingIf struct{}
+
+func (this *FunctionMissingIf) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+	// first evaluate the argument
+	lav, lerr := arguments[0].Expr.Evaluate(item)
+	if lerr != nil {
+		switch lerr := lerr.(type) {
+		case *query.Undefined:
+			// do nothing yet
+		default:
+			// any other error return to caller
+			return nil, lerr
+		}
+	}
+
+	// next evaluate the second argument
+	rav, rerr := arguments[1].Expr.Evaluate(item)
+	if rerr != nil {
+		switch rerr := rerr.(type) {
+		case *query.Undefined:
+			// do nothing yet
+		default:
+			// any other error return to caller
+			return nil, rerr
+		}
+	}
+
+	compres := CollateJSON(lav, rav)
+	if compres == 0 {
+		return nil, &query.Undefined{}
+	}
+
+	//otheriwse return the left arg
+	return lav, nil
+}
+
+func (this *FunctionMissingIf) Validate(arguments FunctionArgExpressionList) error {
+	if len(arguments) != 2 {
+		return fmt.Errorf("the MISSINGIF() function expects exactly two argument")
+	}
+	if arguments[0].Star == true {
+		return fmt.Errorf("the MISSINGIF() function does not support *")
+	}
+	return nil
+}
+
+type FunctionNullIf struct{}
+
+func (this *FunctionNullIf) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+	// first evaluate the argument
+	lav, lerr := arguments[0].Expr.Evaluate(item)
+	if lerr != nil {
+		switch lerr := lerr.(type) {
+		case *query.Undefined:
+			// do nothing yet
+		default:
+			// any other error return to caller
+			return nil, lerr
+		}
+	}
+
+	// next evaluate the second argument
+	rav, rerr := arguments[1].Expr.Evaluate(item)
+	if rerr != nil {
+		switch rerr := rerr.(type) {
+		case *query.Undefined:
+			// do nothing yet
+		default:
+			// any other error return to caller
+			return nil, rerr
+		}
+	}
+
+	compres := CollateJSON(lav, rav)
+	if compres == 0 {
+		return nil, nil
+	}
+
+	//otheriwse return the left arg
+	return lav, nil
+}
+
+func (this *FunctionNullIf) Validate(arguments FunctionArgExpressionList) error {
+	if len(arguments) != 2 {
+		return fmt.Errorf("the NULLIF() function expects exactly two argument")
+	}
+	if arguments[0].Star == true {
+		return fmt.Errorf("the NULLIF() function does not support *")
 	}
 	return nil
 }
