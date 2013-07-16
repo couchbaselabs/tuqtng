@@ -21,6 +21,7 @@ func init() {
 	registerSystemFunction("CEIL", &FunctionCeil{})
 	registerSystemFunction("FLOOR", &FunctionFloor{})
 	registerSystemFunction("ROUND", &FunctionRound{})
+	registerSystemFunction("TRUNC", &FunctionTrunc{})
 }
 
 type FunctionCeil struct{}
@@ -162,6 +163,81 @@ func (this *FunctionRound) Validate(arguments FunctionArgExpressionList) error {
 	}
 	if arguments[0].Star == true {
 		return fmt.Errorf("the ROUND() function does not support *")
+	}
+	return nil
+}
+
+func TruncateFloat(x float64, prec int) float64 {
+
+	var rounder float64
+	pow := math.Pow(10, float64(prec))
+	intermed := x * pow
+	//_, frac := math.Modf(intermed)
+	rounder = math.Floor(intermed)
+
+	rv := rounder / pow
+	return rv
+}
+
+type FunctionTrunc struct{}
+
+func (this *FunctionTrunc) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+	// first evaluate the argument
+	av, err := arguments[0].Expr.Evaluate(item)
+
+	precision := 0
+	if len(arguments) > 1 {
+		// evaluate the second argument
+		pv, err := arguments[1].Expr.Evaluate(item)
+
+		// we need precision to be an integer
+		if err != nil {
+			switch err := err.(type) {
+			case *query.Undefined:
+				// undefined returns null
+				return nil, nil
+			default:
+				// any other error return to caller
+				return nil, err
+			}
+		}
+
+		switch pv := pv.(type) {
+		case float64:
+			precision = int(pv)
+		default:
+			// FIXME log warning here?
+			return nil, nil
+		}
+	}
+
+	// the spec defines this functin to ONLY operate on numeric values
+	// all other types result in NULL
+	if err != nil {
+		switch err := err.(type) {
+		case *query.Undefined:
+			// undefined returns null
+			return nil, nil
+		default:
+			// any other error return to caller
+			return nil, err
+		}
+	}
+
+	switch av := av.(type) {
+	case float64:
+		return TruncateFloat(av, precision), nil
+	default:
+		return nil, nil
+	}
+}
+
+func (this *FunctionTrunc) Validate(arguments FunctionArgExpressionList) error {
+	if len(arguments) < 1 || len(arguments) > 2 {
+		return fmt.Errorf("the TRUNC() function expects either one or two arguments")
+	}
+	if arguments[0].Star == true {
+		return fmt.Errorf("the TRUNC() function does not support *")
 	}
 	return nil
 }

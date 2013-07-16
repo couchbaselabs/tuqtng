@@ -94,6 +94,43 @@ func TestFunction(t *testing.T) {
 			55.36,
 			nil,
 		},
+
+		//trunc
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
+			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36))}),
+			55.0,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralNumber(0))}),
+			55.0,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralNumber(1))}),
+			55.3,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralNumber(2))}),
+			55.36,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralNumber(3))}),
+			55.36,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralNumber(4))}),
+			55.36,
+			nil,
+		},
 	}
 
 	for _, x := range tests {
