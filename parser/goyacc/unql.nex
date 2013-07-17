@@ -48,6 +48,26 @@
                   {
                     logDebugTokens("EXPLAIN"); return EXPLAIN
                   }
+/[cC][aA][sS][eE]/
+                  {
+                    logDebugTokens("CASE"); return CASE
+                  }
+/[wW][hH][eE][nN]/
+                  {
+                    logDebugTokens("WHEN"); return WHEN
+                  }
+/[tT][hH][eE][nN]/
+                  {
+                    logDebugTokens("THEN"); return THEN
+                  }
+/[eE][lL][sS][eE]/
+                  {
+                    logDebugTokens("ELSE"); return ELSE
+                  }
+/[eE][nN][dD]/
+                  {
+                    logDebugTokens("END"); return END
+                  }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }

@@ -30,6 +30,7 @@ f float64}
 %token LPAREN RPAREN
 %token LIKE IS VALUED MISSING
 %token DOT
+%token CASE WHEN THEN ELSE END
 %left DOT LBRACKET
 %left OR
 %left AND 
@@ -505,6 +506,7 @@ atom IS NOT VALUED {
 
 atom:
 IDENTIFIER {
+	logDebugGrammar("IDENTIFIER - %s", $1.s)
 	thisExpression := ast.NewProperty($1.s) 
 	parsingStack.Push(thisExpression) 
 }
@@ -515,6 +517,10 @@ literal_value {
 |
 LPAREN expression RPAREN {
 	logDebugGrammar("NESTED EXPR")
+}
+|
+CASE WHEN then_list else_expr END {
+	logDebugGrammar("CASE WHEN THEN ELSE END")
 }
 |
 IDENTIFIER LPAREN RPAREN {
@@ -528,6 +534,26 @@ IDENTIFIER LPAREN function_arg_list RPAREN {
 	funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
 	thisExpression := ast.NewFunctionCall($1.s, funarg_exp_list)
 	parsingStack.Push(thisExpression)
+}
+;
+
+then_list:
+expr THEN expr {
+	logDebugGrammar("THEN_LIST - SINGLE")
+}
+|
+expr THEN expr WHEN then_list {
+	logDebugGrammar("THEN_LIST - COMPOUND")
+}
+;
+
+else_expr:
+/* empty */ {
+	logDebugGrammar("ELSE - EMPTY")
+}
+|
+ELSE expr {
+	logDebugGrammar("ELSE - EXPR")
 }
 ;
 

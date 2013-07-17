@@ -91,6 +91,11 @@ var validQueries = []string{
 	`SELECT * FROM cat WHERE true ORDER BY name DESC`,
 	`EXPLAIN SELECT * FROM cat WHERE true ORDER BY name DESC`,
 	`SELECT Color(metal) FROM materials AS metal WHERE Conductivity(metal, 'heat') > 3.5`,
+	`SELECT * FROM bucket WHERE CASE WHEN abv > 5 THEN true END`,
+	`SELECT * FROM bucket WHERE CASE WHEN abv > 5 THEN true WHEN abv > 3 THEN false END`,
+	`SELECT * FROM bucket WHERE CASE WHEN abv > 5 THEN true ELSE false END`,
+	`SELECT * FROM bucket WHERE CASE WHEN abv > 5 THEN true WHEN abv > 3 THEN false ELSE 7 END`,
+	`SELECT * FROM bucket WHERE CASE WHEN abv IS NOT NULL THEN abv ELSE ibu END > 0`,
 }
 
 var invalidQueries = []string{
