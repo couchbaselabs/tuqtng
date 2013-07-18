@@ -18,7 +18,7 @@ import (
 	"syscall"
 )
 
-func handleInteractiveMode() {
+func HandleInteractiveMode(tiServer string) {
 
 	currentUser, err := user.Current()
 	if err != nil {
@@ -43,7 +43,7 @@ func handleInteractiveMode() {
 		}
 
 		UpdateHistory(liner, currentUser, line)
-		err = execute_internal(line, os.Stdout)
+		err = execute_internal(tiServer, line, os.Stdout)
 		if err != nil {
 			log.Printf("%v", err)
 		}

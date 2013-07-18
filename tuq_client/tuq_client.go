@@ -20,12 +20,12 @@ var tiServer = flag.String("tuqtng", "http://localhost:8093/", "URL to tuqtng")
 
 func main() {
 	flag.Parse()
-	handleInteractiveMode()
+	HandleInteractiveMode(*tiServer)
 }
 
-func execute_internal(line string, w io.Writer) error {
+func execute_internal(tiServer, line string, w io.Writer) error {
 
-	url := *tiServer + "query"
+	url := tiServer + "query"
 	resp, err := http.Post(url, "text/plain", strings.NewReader(line))
 	if err != nil {
 		return err
