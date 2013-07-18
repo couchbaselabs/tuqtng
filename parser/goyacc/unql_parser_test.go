@@ -114,6 +114,7 @@ var validQueries = []string{
 	`SELECT UNIQUE name from bucket`,
 	`SELECT COUNT(DISTINCT name) FROM bucket`,
 	`SELECT COUNT(UNIQUE name) FROM bucket`,
+	`SELECT * FROM contacts WHERE ANY child.age > 14 AND child.gender IS NOT NULL OVER children AS child`,
 }
 
 var invalidQueries = []string{

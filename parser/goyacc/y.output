@@ -23,7 +23,7 @@ state 1
 state 2
 	input:  select_stmt.    (1)
 
-	.  reduce 1 (src line 46)
+	.  reduce 1 (src line 47)
 
 
 state 3
@@ -31,14 +31,14 @@ state 3
 	select_order: .    (27)
 
 	ORDER  shift 10
-	.  reduce 27 (src line 224)
+	.  reduce 27 (src line 225)
 
 	select_order  goto 9
 
 state 4
 	select_compound:  select_core.    (3)
 
-	.  reduce 3 (src line 59)
+	.  reduce 3 (src line 60)
 
 
 state 5
@@ -46,7 +46,7 @@ state 5
 	select_from: .    (19)
 
 	FROM  shift 12
-	.  reduce 19 (src line 170)
+	.  reduce 19 (src line 171)
 
 	select_from  goto 11
 
@@ -56,7 +56,7 @@ state 6
 
 	DISTINCT  shift 14
 	UNIQUE  shift 15
-	.  reduce 8 (src line 91)
+	.  reduce 8 (src line 92)
 
 	select_select_qualifier  goto 13
 
@@ -70,7 +70,7 @@ state 7
 state 8
 	select_select_head:  SELECT.    (7)
 
-	.  reduce 7 (src line 84)
+	.  reduce 7 (src line 85)
 
 
 state 9
@@ -78,7 +78,7 @@ state 9
 	select_limit_offset: .    (34)
 
 	LIMIT  shift 19
-	.  reduce 34 (src line 275)
+	.  reduce 34 (src line 276)
 
 	select_limit_offset  goto 17
 	select_limit  goto 18
@@ -95,7 +95,7 @@ state 11
 	select_where: .    (25)
 
 	WHERE  shift 22
-	.  reduce 25 (src line 208)
+	.  reduce 25 (src line 209)
 
 	select_where  goto 21
 
@@ -147,25 +147,25 @@ state 13
 state 14
 	select_select_qualifier:  DISTINCT.    (9)
 
-	.  reduce 9 (src line 94)
+	.  reduce 9 (src line 95)
 
 
 state 15
 	select_select_qualifier:  UNIQUE.    (10)
 
-	.  reduce 10 (src line 98)
+	.  reduce 10 (src line 99)
 
 
 state 16
 	select_select_head:  EXPLAIN SELECT.    (6)
 
-	.  reduce 6 (src line 78)
+	.  reduce 6 (src line 79)
 
 
 state 17
 	select_stmt:  select_compound select_order select_limit_offset.    (2)
 
-	.  reduce 2 (src line 53)
+	.  reduce 2 (src line 54)
 
 
 state 18
@@ -173,7 +173,7 @@ state 18
 	select_limit_offset:  select_limit.select_offset 
 
 	OFFSET  shift 57
-	.  reduce 35 (src line 279)
+	.  reduce 35 (src line 280)
 
 	select_offset  goto 56
 
@@ -219,7 +219,7 @@ state 20
 state 21
 	select_core:  select_select select_from select_where.    (4)
 
-	.  reduce 4 (src line 66)
+	.  reduce 4 (src line 67)
 
 
 state 22
@@ -255,7 +255,7 @@ state 22
 state 23
 	select_from:  FROM data_source_over.    (20)
 
-	.  reduce 20 (src line 174)
+	.  reduce 20 (src line 175)
 
 
 state 24
@@ -263,7 +263,7 @@ state 24
 	data_source_over:  data_source.OVER data_source_over 
 
 	OVER  shift 64
-	.  reduce 21 (src line 186)
+	.  reduce 21 (src line 187)
 
 
 state 25
@@ -275,25 +275,25 @@ state 25
 	AS  shift 65
 	LBRACKET  shift 66
 	DOT  shift 67
-	.  reduce 23 (src line 196)
+	.  reduce 23 (src line 197)
 
 
 state 26
 	path:  IDENTIFIER.    (83)
 
-	.  reduce 83 (src line 643)
+	.  reduce 83 (src line 644)
 
 
 state 27
 	select_select:  select_select_head select_select_qualifier select_select_tail.    (5)
 
-	.  reduce 5 (src line 72)
+	.  reduce 5 (src line 73)
 
 
 state 28
 	select_select_tail:  result_list.    (11)
 
-	.  reduce 11 (src line 104)
+	.  reduce 11 (src line 105)
 
 
 state 29
@@ -301,13 +301,13 @@ state 29
 	result_list:  result_single.COMMA result_list 
 
 	COMMA  shift 68
-	.  reduce 12 (src line 118)
+	.  reduce 12 (src line 119)
 
 
 state 30
 	result_single:  dotted_path_star.    (14)
 
-	.  reduce 14 (src line 136)
+	.  reduce 14 (src line 137)
 
 
 state 31
@@ -315,13 +315,13 @@ state 31
 	result_single:  expression.AS IDENTIFIER 
 
 	AS  shift 69
-	.  reduce 15 (src line 140)
+	.  reduce 15 (src line 141)
 
 
 state 32
 	dotted_path_star:  MULT.    (17)
 
-	.  reduce 17 (src line 156)
+	.  reduce 17 (src line 157)
 
 
 state 33
@@ -345,6 +345,12 @@ state 33
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	LBRACKET  shift 87
 	PLUS  shift 71
@@ -362,15 +368,16 @@ state 33
 	LT  shift 80
 	LTE  shift 81
 	LIKE  shift 85
+	IS  shift 88
 	DOT  shift 70
 	MOD  shift 75
-	.  reduce 39 (src line 313)
+	.  reduce 39 (src line 314)
 
 
 state 34
-	expr:  prefix_expr.    (58)
+	expr:  prefix_expr.    (64)
 
-	.  reduce 58 (src line 462)
+	.  reduce 64 (src line 505)
 
 
 state 35
@@ -393,7 +400,7 @@ state 35
 	ALL  shift 44
 	.  error
 
-	prefix_expr  goto 88
+	prefix_expr  goto 89
 	suffix_expr  goto 37
 	atom  goto 38
 	literal_value  goto 40
@@ -421,7 +428,7 @@ state 36
 	ALL  shift 44
 	.  error
 
-	prefix_expr  goto 89
+	prefix_expr  goto 90
 	suffix_expr  goto 37
 	atom  goto 38
 	literal_value  goto 40
@@ -430,22 +437,15 @@ state 36
 	array  goto 48
 
 state 37
-	prefix_expr:  suffix_expr.    (61)
+	prefix_expr:  suffix_expr.    (67)
 
-	.  reduce 61 (src line 482)
+	.  reduce 67 (src line 525)
 
 
 state 38
-	suffix_expr:  atom.    (62)
-	suffix_expr:  atom.IS NULL 
-	suffix_expr:  atom.IS NOT NULL 
-	suffix_expr:  atom.IS MISSING 
-	suffix_expr:  atom.IS NOT MISSING 
-	suffix_expr:  atom.IS VALUED 
-	suffix_expr:  atom.IS NOT VALUED 
+	suffix_expr:  atom.    (68)
 
-	IS  shift 90
-	.  reduce 62 (src line 487)
+	.  reduce 68 (src line 530)
 
 
 state 39
@@ -456,13 +456,13 @@ state 39
 	atom:  IDENTIFIER.LPAREN UNIQUE function_arg_list RPAREN 
 
 	LPAREN  shift 91
-	.  reduce 69 (src line 535)
+	.  reduce 69 (src line 536)
 
 
 state 40
 	atom:  literal_value.    (70)
 
-	.  reduce 70 (src line 541)
+	.  reduce 70 (src line 542)
 
 
 state 41
@@ -563,55 +563,55 @@ state 44
 state 45
 	literal_value:  STRING.    (92)
 
-	.  reduce 92 (src line 715)
+	.  reduce 92 (src line 716)
 
 
 state 46
 	literal_value:  number.    (93)
 
-	.  reduce 93 (src line 721)
+	.  reduce 93 (src line 722)
 
 
 state 47
 	literal_value:  object.    (94)
 
-	.  reduce 94 (src line 725)
+	.  reduce 94 (src line 726)
 
 
 state 48
 	literal_value:  array.    (95)
 
-	.  reduce 95 (src line 729)
+	.  reduce 95 (src line 730)
 
 
 state 49
 	literal_value:  TRUE.    (96)
 
-	.  reduce 96 (src line 733)
+	.  reduce 96 (src line 734)
 
 
 state 50
 	literal_value:  FALSE.    (97)
 
-	.  reduce 97 (src line 739)
+	.  reduce 97 (src line 740)
 
 
 state 51
 	literal_value:  NULL.    (98)
 
-	.  reduce 98 (src line 745)
+	.  reduce 98 (src line 746)
 
 
 state 52
 	number:  INT.    (99)
 
-	.  reduce 99 (src line 753)
+	.  reduce 99 (src line 754)
 
 
 state 53
 	number:  NUMBER.    (100)
 
-	.  reduce 100 (src line 759)
+	.  reduce 100 (src line 760)
 
 
 state 54
@@ -661,7 +661,7 @@ state 55
 state 56
 	select_limit_offset:  select_limit select_offset.    (36)
 
-	.  reduce 36 (src line 283)
+	.  reduce 36 (src line 284)
 
 
 state 57
@@ -674,13 +674,13 @@ state 57
 state 58
 	select_limit:  LIMIT INT.    (37)
 
-	.  reduce 37 (src line 289)
+	.  reduce 37 (src line 290)
 
 
 state 59
 	select_order:  ORDER BY sorting_list.    (28)
 
-	.  reduce 28 (src line 226)
+	.  reduce 28 (src line 227)
 
 
 state 60
@@ -688,7 +688,7 @@ state 60
 	sorting_list:  sorting_single.COMMA sorting_list 
 
 	COMMA  shift 104
-	.  reduce 29 (src line 232)
+	.  reduce 29 (src line 233)
 
 
 state 61
@@ -698,7 +698,7 @@ state 61
 
 	ASC  shift 105
 	DESC  shift 106
-	.  reduce 31 (src line 241)
+	.  reduce 31 (src line 242)
 
 
 state 62
@@ -721,6 +721,12 @@ state 62
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	LBRACKET  shift 87
 	PLUS  shift 71
@@ -738,15 +744,16 @@ state 62
 	LT  shift 80
 	LTE  shift 81
 	LIKE  shift 85
+	IS  shift 88
 	DOT  shift 107
 	MOD  shift 75
-	.  reduce 39 (src line 313)
+	.  reduce 39 (src line 314)
 
 
 state 63
 	select_where:  WHERE expression.    (26)
 
-	.  reduce 26 (src line 212)
+	.  reduce 26 (src line 213)
 
 
 state 64
@@ -1302,30 +1309,30 @@ state 87
 	array  goto 48
 
 state 88
-	prefix_expr:  NOT prefix_expr.    (59)
-
-	.  reduce 59 (src line 468)
-
-
-state 89
-	prefix_expr:  MINUS prefix_expr.    (60)
-
-	.  reduce 60 (src line 475)
-
-
-state 90
-	suffix_expr:  atom IS.NULL 
-	suffix_expr:  atom IS.NOT NULL 
-	suffix_expr:  atom IS.MISSING 
-	suffix_expr:  atom IS.NOT MISSING 
-	suffix_expr:  atom IS.VALUED 
-	suffix_expr:  atom IS.NOT VALUED 
+	expr:  expr IS.NULL 
+	expr:  expr IS.NOT NULL 
+	expr:  expr IS.MISSING 
+	expr:  expr IS.NOT MISSING 
+	expr:  expr IS.VALUED 
+	expr:  expr IS.NOT VALUED 
 
 	NULL  shift 133
 	NOT  shift 134
 	VALUED  shift 136
 	MISSING  shift 135
 	.  error
+
+
+state 89
+	prefix_expr:  NOT prefix_expr.    (65)
+
+	.  reduce 65 (src line 511)
+
+
+state 90
+	prefix_expr:  MINUS prefix_expr.    (66)
+
+	.  reduce 66 (src line 518)
 
 
 state 91
@@ -1424,6 +1431,12 @@ state 94
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 	atom:  ANY expr.OVER path AS IDENTIFIER 
 
 	LBRACKET  shift 87
@@ -1442,6 +1455,7 @@ state 94
 	LT  shift 80
 	LTE  shift 81
 	LIKE  shift 85
+	IS  shift 88
 	DOT  shift 107
 	OVER  shift 149
 	MOD  shift 75
@@ -1467,6 +1481,12 @@ state 95
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 	atom:  ALL expr.OVER path AS IDENTIFIER 
 
 	LBRACKET  shift 87
@@ -1485,6 +1505,7 @@ state 95
 	LT  shift 80
 	LTE  shift 81
 	LIKE  shift 85
+	IS  shift 88
 	DOT  shift 107
 	OVER  shift 150
 	MOD  shift 75
@@ -1494,7 +1515,7 @@ state 95
 state 96
 	object:  LBRACE RBRACE.    (101)
 
-	.  reduce 101 (src line 767)
+	.  reduce 101 (src line 768)
 
 
 state 97
@@ -1509,7 +1530,7 @@ state 98
 	named_expression_list:  named_expression_single.COMMA named_expression_list 
 
 	COMMA  shift 152
-	.  reduce 103 (src line 779)
+	.  reduce 103 (src line 780)
 
 
 state 99
@@ -1522,7 +1543,7 @@ state 99
 state 100
 	array:  LBRACKET RBRACKET.    (106)
 
-	.  reduce 106 (src line 805)
+	.  reduce 106 (src line 806)
 
 
 state 101
@@ -1537,13 +1558,13 @@ state 102
 	expression_list:  expression.COMMA expression_list 
 
 	COMMA  shift 155
-	.  reduce 108 (src line 820)
+	.  reduce 108 (src line 821)
 
 
 state 103
 	select_offset:  OFFSET INT.    (38)
 
-	.  reduce 38 (src line 300)
+	.  reduce 38 (src line 301)
 
 
 state 104
@@ -1581,13 +1602,13 @@ state 104
 state 105
 	sorting_single:  expression ASC.    (32)
 
-	.  reduce 32 (src line 252)
+	.  reduce 32 (src line 253)
 
 
 state 106
 	sorting_single:  expression DESC.    (33)
 
-	.  reduce 33 (src line 263)
+	.  reduce 33 (src line 264)
 
 
 state 107
@@ -1600,13 +1621,13 @@ state 107
 state 108
 	data_source_over:  data_source OVER data_source_over.    (22)
 
-	.  reduce 22 (src line 190)
+	.  reduce 22 (src line 191)
 
 
 state 109
 	data_source:  path AS IDENTIFIER.    (24)
 
-	.  reduce 24 (src line 201)
+	.  reduce 24 (src line 202)
 
 
 state 110
@@ -1619,31 +1640,31 @@ state 110
 state 111
 	path:  path DOT IDENTIFIER.    (85)
 
-	.  reduce 85 (src line 656)
+	.  reduce 85 (src line 657)
 
 
 state 112
 	result_list:  result_single COMMA result_list.    (13)
 
-	.  reduce 13 (src line 123)
+	.  reduce 13 (src line 124)
 
 
 state 113
 	result_single:  expression AS IDENTIFIER.    (16)
 
-	.  reduce 16 (src line 147)
+	.  reduce 16 (src line 148)
 
 
 state 114
 	dotted_path_star:  expr DOT MULT.    (18)
 
-	.  reduce 18 (src line 162)
+	.  reduce 18 (src line 163)
 
 
 state 115
 	expr:  expr DOT IDENTIFIER.    (56)
 
-	.  reduce 56 (src line 446)
+	.  reduce 56 (src line 447)
 
 
 state 116
@@ -1666,13 +1687,20 @@ state 116
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	MULT  shift 73
 	DIV  shift 74
 	CONCAT  shift 76
 	NOT  shift 86
+	IS  shift 88
 	MOD  shift 75
-	.  reduce 40 (src line 318)
+	.  reduce 40 (src line 319)
 
 
 state 117
@@ -1695,13 +1723,20 @@ state 117
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	MULT  shift 73
 	DIV  shift 74
 	CONCAT  shift 76
 	NOT  shift 86
+	IS  shift 88
 	MOD  shift 75
-	.  reduce 41 (src line 326)
+	.  reduce 41 (src line 327)
 
 
 state 118
@@ -1724,9 +1759,16 @@ state 118
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	NOT  shift 86
-	.  reduce 42 (src line 334)
+	IS  shift 88
+	.  reduce 42 (src line 335)
 
 
 state 119
@@ -1749,9 +1791,16 @@ state 119
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	NOT  shift 86
-	.  reduce 43 (src line 342)
+	IS  shift 88
+	.  reduce 43 (src line 343)
 
 
 state 120
@@ -1774,9 +1823,16 @@ state 120
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	NOT  shift 86
-	.  reduce 44 (src line 350)
+	IS  shift 88
+	.  reduce 44 (src line 351)
 
 
 state 121
@@ -1799,9 +1855,16 @@ state 121
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	NOT  shift 86
-	.  reduce 45 (src line 358)
+	IS  shift 88
+	.  reduce 45 (src line 359)
 
 
 state 122
@@ -1824,7 +1887,14 @@ state 122
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 87
 	PLUS  shift 71
 	MINUS  shift 72
 	MULT  shift 73
@@ -1838,8 +1908,10 @@ state 122
 	LT  shift 80
 	LTE  shift 81
 	LIKE  shift 85
+	IS  shift 88
+	DOT  shift 107
 	MOD  shift 75
-	.  reduce 46 (src line 366)
+	.  reduce 46 (src line 367)
 
 
 state 123
@@ -1862,7 +1934,14 @@ state 123
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 87
 	PLUS  shift 71
 	MINUS  shift 72
 	MULT  shift 73
@@ -1877,8 +1956,10 @@ state 123
 	LT  shift 80
 	LTE  shift 81
 	LIKE  shift 85
+	IS  shift 88
+	DOT  shift 107
 	MOD  shift 75
-	.  reduce 47 (src line 374)
+	.  reduce 47 (src line 375)
 
 
 state 124
@@ -1901,6 +1982,12 @@ state 124
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	PLUS  shift 71
 	MINUS  shift 72
@@ -1908,8 +1995,9 @@ state 124
 	DIV  shift 74
 	CONCAT  shift 76
 	NOT  shift 86
+	IS  shift 88
 	MOD  shift 75
-	.  reduce 48 (src line 382)
+	.  reduce 48 (src line 383)
 
 
 state 125
@@ -1932,6 +2020,12 @@ state 125
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	PLUS  shift 71
 	MINUS  shift 72
@@ -1939,8 +2033,9 @@ state 125
 	DIV  shift 74
 	CONCAT  shift 76
 	NOT  shift 86
+	IS  shift 88
 	MOD  shift 75
-	.  reduce 49 (src line 390)
+	.  reduce 49 (src line 391)
 
 
 state 126
@@ -1963,6 +2058,12 @@ state 126
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	PLUS  shift 71
 	MINUS  shift 72
@@ -1970,8 +2071,9 @@ state 126
 	DIV  shift 74
 	CONCAT  shift 76
 	NOT  shift 86
+	IS  shift 88
 	MOD  shift 75
-	.  reduce 50 (src line 398)
+	.  reduce 50 (src line 399)
 
 
 state 127
@@ -1994,6 +2096,12 @@ state 127
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	PLUS  shift 71
 	MINUS  shift 72
@@ -2001,8 +2109,9 @@ state 127
 	DIV  shift 74
 	CONCAT  shift 76
 	NOT  shift 86
+	IS  shift 88
 	MOD  shift 75
-	.  reduce 51 (src line 406)
+	.  reduce 51 (src line 407)
 
 
 state 128
@@ -2025,6 +2134,12 @@ state 128
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	PLUS  shift 71
 	MINUS  shift 72
@@ -2032,8 +2147,9 @@ state 128
 	DIV  shift 74
 	CONCAT  shift 76
 	NOT  shift 86
+	IS  shift 88
 	MOD  shift 75
-	.  reduce 52 (src line 414)
+	.  reduce 52 (src line 415)
 
 
 state 129
@@ -2056,6 +2172,12 @@ state 129
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	PLUS  shift 71
 	MINUS  shift 72
@@ -2063,8 +2185,9 @@ state 129
 	DIV  shift 74
 	CONCAT  shift 76
 	NOT  shift 86
+	IS  shift 88
 	MOD  shift 75
-	.  reduce 53 (src line 422)
+	.  reduce 53 (src line 423)
 
 
 state 130
@@ -2087,6 +2210,12 @@ state 130
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	PLUS  shift 71
 	MINUS  shift 72
@@ -2094,8 +2223,9 @@ state 130
 	DIV  shift 74
 	CONCAT  shift 76
 	NOT  shift 86
+	IS  shift 88
 	MOD  shift 75
-	.  reduce 54 (src line 430)
+	.  reduce 54 (src line 431)
 
 
 state 131
@@ -2147,6 +2277,12 @@ state 132
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 	expr:  expr LBRACKET expr.RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	LBRACKET  shift 87
 	RBRACKET  shift 159
@@ -2165,21 +2301,22 @@ state 132
 	LT  shift 80
 	LTE  shift 81
 	LIKE  shift 85
+	IS  shift 88
 	DOT  shift 107
 	MOD  shift 75
 	.  error
 
 
 state 133
-	suffix_expr:  atom IS NULL.    (63)
+	expr:  expr IS NULL.    (58)
 
-	.  reduce 63 (src line 491)
+	.  reduce 58 (src line 463)
 
 
 state 134
-	suffix_expr:  atom IS NOT.NULL 
-	suffix_expr:  atom IS NOT.MISSING 
-	suffix_expr:  atom IS NOT.VALUED 
+	expr:  expr IS NOT.NULL 
+	expr:  expr IS NOT.MISSING 
+	expr:  expr IS NOT.VALUED 
 
 	NULL  shift 160
 	VALUED  shift 162
@@ -2188,21 +2325,21 @@ state 134
 
 
 state 135
-	suffix_expr:  atom IS MISSING.    (65)
+	expr:  expr IS MISSING.    (60)
 
-	.  reduce 65 (src line 505)
+	.  reduce 60 (src line 477)
 
 
 state 136
-	suffix_expr:  atom IS VALUED.    (67)
+	expr:  expr IS VALUED.    (62)
 
-	.  reduce 67 (src line 519)
+	.  reduce 62 (src line 491)
 
 
 state 137
 	atom:  IDENTIFIER LPAREN RPAREN.    (75)
 
-	.  reduce 75 (src line 582)
+	.  reduce 75 (src line 583)
 
 
 state 138
@@ -2285,25 +2422,25 @@ state 141
 	function_arg_list:  function_arg_single.COMMA function_arg_list 
 
 	COMMA  shift 166
-	.  reduce 86 (src line 667)
+	.  reduce 86 (src line 668)
 
 
 state 142
 	function_arg_single:  fun_dotted_path_star.    (88)
 
-	.  reduce 88 (src line 686)
+	.  reduce 88 (src line 687)
 
 
 state 143
 	function_arg_single:  expression.    (89)
 
-	.  reduce 89 (src line 690)
+	.  reduce 89 (src line 691)
 
 
 state 144
 	fun_dotted_path_star:  MULT.    (90)
 
-	.  reduce 90 (src line 699)
+	.  reduce 90 (src line 700)
 
 
 state 145
@@ -2326,6 +2463,12 @@ state 145
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 	fun_dotted_path_star:  expr.DOT MULT 
 
 	LBRACKET  shift 87
@@ -2344,15 +2487,16 @@ state 145
 	LT  shift 80
 	LTE  shift 81
 	LIKE  shift 85
+	IS  shift 88
 	DOT  shift 167
 	MOD  shift 75
-	.  reduce 39 (src line 313)
+	.  reduce 39 (src line 314)
 
 
 state 146
 	atom:  LPAREN expression RPAREN.    (71)
 
-	.  reduce 71 (src line 545)
+	.  reduce 71 (src line 546)
 
 
 state 147
@@ -2360,7 +2504,7 @@ state 147
 	else_expr: .    (81)
 
 	ELSE  shift 169
-	.  reduce 81 (src line 633)
+	.  reduce 81 (src line 634)
 
 	else_expr  goto 168
 
@@ -2383,6 +2527,12 @@ state 148
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 	then_list:  expr.THEN expr 
 	then_list:  expr.THEN expr WHEN then_list 
 
@@ -2402,6 +2552,7 @@ state 148
 	LT  shift 80
 	LTE  shift 81
 	LIKE  shift 85
+	IS  shift 88
 	DOT  shift 107
 	THEN  shift 170
 	MOD  shift 75
@@ -2427,7 +2578,7 @@ state 150
 state 151
 	object:  LBRACE named_expression_list RBRACE.    (102)
 
-	.  reduce 102 (src line 773)
+	.  reduce 102 (src line 774)
 
 
 state 152
@@ -2472,7 +2623,7 @@ state 153
 state 154
 	array:  LBRACKET expression_list RBRACKET.    (107)
 
-	.  reduce 107 (src line 811)
+	.  reduce 107 (src line 812)
 
 
 state 155
@@ -2509,13 +2660,13 @@ state 155
 state 156
 	sorting_list:  sorting_single COMMA sorting_list.    (30)
 
-	.  reduce 30 (src line 236)
+	.  reduce 30 (src line 237)
 
 
 state 157
 	path:  path LBRACKET INT RBRACKET.    (84)
 
-	.  reduce 84 (src line 649)
+	.  reduce 84 (src line 650)
 
 
 state 158
@@ -2538,6 +2689,12 @@ state 158
 	expr:  expr NOT LIKE expr.    (55)
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 
 	PLUS  shift 71
 	MINUS  shift 72
@@ -2545,38 +2702,39 @@ state 158
 	DIV  shift 74
 	CONCAT  shift 76
 	NOT  shift 86
+	IS  shift 88
 	MOD  shift 75
-	.  reduce 55 (src line 438)
+	.  reduce 55 (src line 439)
 
 
 state 159
 	expr:  expr LBRACKET expr RBRACKET.    (57)
 
-	.  reduce 57 (src line 454)
+	.  reduce 57 (src line 455)
 
 
 state 160
-	suffix_expr:  atom IS NOT NULL.    (64)
+	expr:  expr IS NOT NULL.    (59)
 
-	.  reduce 64 (src line 498)
+	.  reduce 59 (src line 470)
 
 
 state 161
-	suffix_expr:  atom IS NOT MISSING.    (66)
+	expr:  expr IS NOT MISSING.    (61)
 
-	.  reduce 66 (src line 512)
+	.  reduce 61 (src line 484)
 
 
 state 162
-	suffix_expr:  atom IS NOT VALUED.    (68)
+	expr:  expr IS NOT VALUED.    (63)
 
-	.  reduce 68 (src line 526)
+	.  reduce 63 (src line 498)
 
 
 state 163
 	atom:  IDENTIFIER LPAREN function_arg_list RPAREN.    (76)
 
-	.  reduce 76 (src line 588)
+	.  reduce 76 (src line 589)
 
 
 state 164
@@ -2727,49 +2885,49 @@ state 172
 state 173
 	named_expression_list:  named_expression_single COMMA named_expression_list.    (104)
 
-	.  reduce 104 (src line 783)
+	.  reduce 104 (src line 784)
 
 
 state 174
 	named_expression_single:  STRING COLON expression.    (105)
 
-	.  reduce 105 (src line 795)
+	.  reduce 105 (src line 796)
 
 
 state 175
 	expression_list:  expression COMMA expression_list.    (109)
 
-	.  reduce 109 (src line 827)
+	.  reduce 109 (src line 828)
 
 
 state 176
 	atom:  IDENTIFIER LPAREN DISTINCT function_arg_list RPAREN.    (77)
 
-	.  reduce 77 (src line 595)
+	.  reduce 77 (src line 596)
 
 
 state 177
 	atom:  IDENTIFIER LPAREN UNIQUE function_arg_list RPAREN.    (78)
 
-	.  reduce 78 (src line 602)
+	.  reduce 78 (src line 603)
 
 
 state 178
 	function_arg_list:  function_arg_single COMMA function_arg_list.    (87)
 
-	.  reduce 87 (src line 672)
+	.  reduce 87 (src line 673)
 
 
 state 179
 	fun_dotted_path_star:  expr DOT MULT.    (91)
 
-	.  reduce 91 (src line 705)
+	.  reduce 91 (src line 706)
 
 
 state 180
 	atom:  CASE WHEN then_list else_expr END.    (72)
 
-	.  reduce 72 (src line 549)
+	.  reduce 72 (src line 550)
 
 
 state 181
@@ -2791,6 +2949,12 @@ state 181
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 	else_expr:  ELSE expr.    (82)
 
 	LBRACKET  shift 87
@@ -2809,9 +2973,10 @@ state 181
 	LT  shift 80
 	LTE  shift 81
 	LIKE  shift 85
+	IS  shift 88
 	DOT  shift 107
 	MOD  shift 75
-	.  reduce 82 (src line 637)
+	.  reduce 82 (src line 638)
 
 
 state 182
@@ -2833,6 +2998,12 @@ state 182
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr.IS NULL 
+	expr:  expr.IS NOT NULL 
+	expr:  expr.IS MISSING 
+	expr:  expr.IS NOT MISSING 
+	expr:  expr.IS VALUED 
+	expr:  expr.IS NOT VALUED 
 	then_list:  expr THEN expr.    (79)
 	then_list:  expr THEN expr.WHEN then_list 
 
@@ -2852,10 +3023,11 @@ state 182
 	LT  shift 80
 	LTE  shift 81
 	LIKE  shift 85
+	IS  shift 88
 	DOT  shift 107
 	WHEN  shift 185
 	MOD  shift 75
-	.  reduce 79 (src line 611)
+	.  reduce 79 (src line 612)
 
 
 state 183
@@ -2905,19 +3077,19 @@ state 185
 state 186
 	atom:  ANY expr OVER path AS IDENTIFIER.    (73)
 
-	.  reduce 73 (src line 566)
+	.  reduce 73 (src line 567)
 
 
 state 187
 	atom:  ALL expr OVER path AS IDENTIFIER.    (74)
 
-	.  reduce 74 (src line 574)
+	.  reduce 74 (src line 575)
 
 
 state 188
 	then_list:  expr THEN expr WHEN then_list.    (80)
 
-	.  reduce 80 (src line 619)
+	.  reduce 80 (src line 620)
 
 
 59 terminals, 40 nonterminals
@@ -2926,9 +3098,9 @@ state 188
 89 working sets used
 memory: parser 412/30000
 103 extra closures
-916 shift entries, 1 exceptions
+944 shift entries, 1 exceptions
 90 goto entries
 278 entries saved by goto default
 Optimizer space used: output 621/30000
-621 table entries, 191 zero
+621 table entries, 175 zero
 maximum spread: 59, maximum offset: 185

@@ -33,12 +33,13 @@ f float64}
 %token DOT
 %token CASE WHEN THEN ELSE END
 %token ANY ALL OVER
-%left DOT LBRACKET
 %left OR
 %left AND 
+%left DOT LBRACKET
 %left EQ LT LTE GT GTE NE LIKE
 %left PLUS MINUS
 %left MULT DIV MOD CONCAT
+%left IS
 %right NOT
 
 %%
@@ -460,6 +461,48 @@ expr LBRACKET expr RBRACKET {
 	parsingStack.Push(thisExpression)
 }
 |
+expr IS NULL {
+	logDebugGrammar("SUFFIX_EXPR IS NULL")
+	operand := parsingStack.Pop()
+	thisExpression := ast.NewIsNullOperator(operand.(ast.Expression)) 
+	parsingStack.Push(thisExpression)
+}
+|
+expr IS NOT NULL {
+	logDebugGrammar("SUFFIX_EXPR IS NOT NULL")
+	operand := parsingStack.Pop()
+	thisExpression := ast.NewIsNotNullOperator(operand.(ast.Expression)) 
+	parsingStack.Push(thisExpression)
+}
+|
+expr IS MISSING {
+	logDebugGrammar("SUFFIX_EXPR IS MISSING")
+	operand := parsingStack.Pop()
+	thisExpression := ast.NewIsMissingOperator(operand.(ast.Expression)) 
+	parsingStack.Push(thisExpression)
+}
+|
+expr IS NOT MISSING {
+	logDebugGrammar("SUFFIX_EXPR IS NOT MISSING")
+	operand := parsingStack.Pop()
+	thisExpression := ast.NewIsNotMissingOperator(operand.(ast.Expression)) 
+	parsingStack.Push(thisExpression)
+}
+|
+expr IS VALUED {
+	logDebugGrammar("SUFFIX_EXPR IS VALUED")
+	operand := parsingStack.Pop()
+	thisExpression := ast.NewIsValuedOperator(operand.(ast.Expression)) 
+	parsingStack.Push(thisExpression)
+}
+|
+expr IS NOT VALUED {
+	logDebugGrammar("SUFFIX_EXPR IS NOT VALUED")
+	operand := parsingStack.Pop()
+	thisExpression := ast.NewIsNotValuedOperator(operand.(ast.Expression)) 
+	parsingStack.Push(thisExpression)
+}
+|
 prefix_expr {
 	
 }
@@ -487,48 +530,6 @@ suffix_expr {
 suffix_expr: 
 atom {
 	logDebugGrammar("SUFFIX_EXPR")
-}
-|
-atom IS NULL {
-	logDebugGrammar("SUFFIX_EXPR IS NULL")
-	operand := parsingStack.Pop()
-	thisExpression := ast.NewIsNullOperator(operand.(ast.Expression)) 
-	parsingStack.Push(thisExpression)
-}
-|
-atom IS NOT NULL {
-	logDebugGrammar("SUFFIX_EXPR IS NOT NULL")
-	operand := parsingStack.Pop()
-	thisExpression := ast.NewIsNotNullOperator(operand.(ast.Expression)) 
-	parsingStack.Push(thisExpression)
-}
-|
-atom IS MISSING {
-	logDebugGrammar("SUFFIX_EXPR IS MISSING")
-	operand := parsingStack.Pop()
-	thisExpression := ast.NewIsMissingOperator(operand.(ast.Expression)) 
-	parsingStack.Push(thisExpression)
-}
-|
-atom IS NOT MISSING {
-	logDebugGrammar("SUFFIX_EXPR IS NOT MISSING")
-	operand := parsingStack.Pop()
-	thisExpression := ast.NewIsNotMissingOperator(operand.(ast.Expression)) 
-	parsingStack.Push(thisExpression)
-}
-|
-atom IS VALUED {
-	logDebugGrammar("SUFFIX_EXPR IS VALUED")
-	operand := parsingStack.Pop()
-	thisExpression := ast.NewIsValuedOperator(operand.(ast.Expression)) 
-	parsingStack.Push(thisExpression)
-}
-|
-atom IS NOT VALUED {
-	logDebugGrammar("SUFFIX_EXPR IS NOT VALUED")
-	operand := parsingStack.Pop()
-	thisExpression := ast.NewIsNotValuedOperator(operand.(ast.Expression)) 
-	parsingStack.Push(thisExpression)
 }
 ;
 
