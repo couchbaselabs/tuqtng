@@ -1097,26 +1097,39 @@ yydefault:
 		//line unql.y:550
 		{
 		logDebugGrammar("CASE WHEN THEN ELSE END")
+		cwtee := ast.CaseOperator{}
+		topStack := parsingStack.Pop()
+		switch topStack := topStack.(type) {
+		case ast.Expression:
+			cwtee.Else = topStack
+			// now look for whenthens
+		nextStack := parsingStack.Pop().([]ast.WhenThen)
+			cwtee.WhenThens = nextStack
+		case []ast.WhenThen:
+			// no else
+		cwtee.WhenThens = topStack
+		}
+		parsingStack.Push(&cwtee)
 	}
 	case 73:
-		//line unql.y:554
+		//line unql.y:567
 		{
 		logDebugGrammar("ANY OVER AS IDENTIFIER")
 	}
 	case 74:
-		//line unql.y:558
+		//line unql.y:571
 		{
 		logDebugGrammar("ALL OVER AS IDENTIFIER")
 	}
 	case 75:
-		//line unql.y:562
+		//line unql.y:575
 		{
 		logDebugGrammar("FUNCTION EXPR NOPARAM")
 		thisExpression := ast.NewFunctionCall(yyS[yypt-2].s, ast.FunctionArgExpressionList{})
 		parsingStack.Push(thisExpression)
 	}
 	case 76:
-		//line unql.y:568
+		//line unql.y:581
 		{
 		logDebugGrammar("FUNCTION EXPR PARAM")
 		funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
@@ -1124,7 +1137,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 77:
-		//line unql.y:575
+		//line unql.y:588
 		{
 		logDebugGrammar("FUNCTION EXPR PARAM")
 		funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
@@ -1132,7 +1145,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 78:
-		//line unql.y:582
+		//line unql.y:595
 		{
 		logDebugGrammar("FUNCTION EXPR PARAM")
 		funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
@@ -1140,48 +1153,60 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 79:
-		//line unql.y:591
+		//line unql.y:604
 		{
 		logDebugGrammar("THEN_LIST - SINGLE")
+		when_then_list := make([]ast.WhenThen, 0)
+		when_then := ast.WhenThen{Then: parsingStack.Pop().(ast.Expression), When: parsingStack.Pop().(ast.Expression)}
+		when_then_list = append(when_then_list, when_then)
+		parsingStack.Push(when_then_list)
 	}
 	case 80:
-		//line unql.y:595
+		//line unql.y:612
 		{
 		logDebugGrammar("THEN_LIST - COMPOUND")
+		rest := parsingStack.Pop().([]ast.WhenThen)
+		last := ast.WhenThen{Then: parsingStack.Pop().(ast.Expression), When: parsingStack.Pop().(ast.Expression)}
+		new_list := make([]ast.WhenThen, 0, len(rest) + 1)
+		new_list = append(new_list, last)
+		for _, v := range rest {
+			new_list = append(new_list, v)
+		}
+		parsingStack.Push(new_list)
 	}
 	case 81:
-		//line unql.y:601
+		//line unql.y:626
 		{
 		logDebugGrammar("ELSE - EMPTY")
 	}
 	case 82:
-		//line unql.y:605
+		//line unql.y:630
 		{
 		logDebugGrammar("ELSE - EXPR")
 	}
 	case 83:
-		//line unql.y:611
+		//line unql.y:636
 		{
 		logDebugGrammar("PATH - %v", yyS[yypt-0].s)
 	}
 	case 84:
-		//line unql.y:615
+		//line unql.y:640
 		{
 		logDebugGrammar("PATH BRACKET - %v[%v]", yyS[yypt-3].s, yyS[yypt-1].n)
 	}
 	case 85:
-		//line unql.y:619
+		//line unql.y:644
 		{
 		logDebugGrammar("PATH DOT PATH - $1.s")
 	}
 	case 86:
-		//line unql.y:626
+		//line unql.y:651
 		{
 		funarg_expr := parsingStack.Pop().(*ast.FunctionArgExpression)
 		parsingStack.Push(ast.FunctionArgExpressionList{funarg_expr})
 	}
 	case 87:
-		//line unql.y:631
+		//line unql.y:656
 		{
 		funarg_expr_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
 		funarg_expr := parsingStack.Pop().(*ast.FunctionArgExpression)
@@ -1194,12 +1219,12 @@ yydefault:
 		parsingStack.Push(new_list)
 	}
 	case 88:
-		//line unql.y:645
+		//line unql.y:670
 		{
 		logDebugGrammar("FUNARG STAR")
 	}
 	case 89:
-		//line unql.y:649
+		//line unql.y:674
 		{
 		logDebugGrammar("FUNARG EXPR")
 		expr_part := parsingStack.Pop().(ast.Expression)
@@ -1207,14 +1232,14 @@ yydefault:
 		parsingStack.Push(funarg_expr)
 	}
 	case 90:
-		//line unql.y:658
+		//line unql.y:683
 		{
 		logDebugGrammar("FUNSTAR")
 		funarg_expr := ast.NewStarFunctionArgExpression()
 		parsingStack.Push(funarg_expr)
 	}
 	case 91:
-		//line unql.y:664
+		//line unql.y:689
 		{
 		logDebugGrammar("FUN PATH DOT STAR")
 		expr_part := parsingStack.Pop().(ast.Expression)
@@ -1222,81 +1247,81 @@ yydefault:
 		parsingStack.Push(funarg_expr)
 	}
 	case 92:
-		//line unql.y:674
+		//line unql.y:699
 		{
 		logDebugGrammar("STRING %s", yyS[yypt-0].s)
 		thisExpression := ast.NewLiteralString(yyS[yypt-0].s) 
 		parsingStack.Push(thisExpression)
 	}
 	case 93:
-		//line unql.y:680
+		//line unql.y:705
 		{
 		logDebugGrammar("NUMBER")
 	}
 	case 94:
-		//line unql.y:684
+		//line unql.y:709
 		{
 		logDebugGrammar("OBJECT")
 	}
 	case 95:
-		//line unql.y:688
+		//line unql.y:713
 		{
 		logDebugGrammar("ARRAY")
 	}
 	case 96:
-		//line unql.y:692
+		//line unql.y:717
 		{
 		logDebugGrammar("TRUE")
 		thisExpression := ast.NewLiteralBool(true) 
 		parsingStack.Push(thisExpression)
 	}
 	case 97:
-		//line unql.y:698
+		//line unql.y:723
 		{
 		logDebugGrammar("FALSE")
 		thisExpression := ast.NewLiteralBool(false) 
 		parsingStack.Push(thisExpression)
 	}
 	case 98:
-		//line unql.y:704
+		//line unql.y:729
 		{
 		logDebugGrammar("NULL")
 		thisExpression := ast.NewLiteralNull()
 		parsingStack.Push(thisExpression)
 	}
 	case 99:
-		//line unql.y:712
+		//line unql.y:737
 		{
 		logDebugGrammar("NUMBER %d", yyS[yypt-0].n)
 		thisExpression := ast.NewLiteralNumber(float64(yyS[yypt-0].n))
 		parsingStack.Push(thisExpression)
 	}
 	case 100:
-		//line unql.y:718
+		//line unql.y:743
 		{
 		logDebugGrammar("NUMBER %f", yyS[yypt-0].f)
 		thisExpression := ast.NewLiteralNumber(yyS[yypt-0].f)
 		parsingStack.Push(thisExpression)
 	}
 	case 101:
-		//line unql.y:726
+		//line unql.y:751
 		{
 		logDebugGrammar("EMPTY OBJECT")
 		emptyObject := ast.NewLiteralObject(map[string]ast.Expression{})
 		parsingStack.Push(emptyObject)
 	}
 	case 102:
-		//line unql.y:732
+		//line unql.y:757
 		{
 		logDebugGrammar("OBJECT")
 	}
 	case 103:
-		//line unql.y:738
+		//line unql.y:763
 		{
 		logDebugGrammar("NAMED EXPR LIST SINGLE")
 	}
 	case 104:
-		//line unql.y:742
+		//line unql.y:767
 		{
 		logDebugGrammar("NAMED EXPR LIST COMPOUND")
 		last := parsingStack.Pop().(*ast.LiteralObject)
@@ -1307,7 +1332,7 @@ yydefault:
 		parsingStack.Push(rest)
 	}
 	case 105:
-		//line unql.y:754
+		//line unql.y:779
 		{  
 		logDebugGrammar("NAMED EXPR SINGLE")
 		thisKey := yyS[yypt-2].s
@@ -1316,14 +1341,14 @@ yydefault:
 		parsingStack.Push(thisExpression) 
 	}
 	case 106:
-		//line unql.y:764
+		//line unql.y:789
 		{
 		logDebugGrammar("EMPTY ARRAY")
 		thisExpression := ast.NewLiteralArray([]ast.Expression{})
 		parsingStack.Push(thisExpression)
 	}
 	case 107:
-		//line unql.y:770
+		//line unql.y:795
 		{
 		logDebugGrammar("ARRAY")
 		exp_list := parsingStack.Pop().([]ast.Expression)
@@ -1331,7 +1356,7 @@ yydefault:
 		parsingStack.Push(thisExpression)
 	}
 	case 108:
-		//line unql.y:779
+		//line unql.y:804
 		{
 		logDebugGrammar("EXPRESSION LIST SINGLE")
 		exp_list := make([]ast.Expression, 0)
@@ -1339,7 +1364,7 @@ yydefault:
 		parsingStack.Push(exp_list)
 	}
 	case 109:
-		//line unql.y:786
+		//line unql.y:811
 		{ 
 		logDebugGrammar("EXPRESSION LIST COMPOUND")
 		rest := parsingStack.Pop().([]ast.Expression)

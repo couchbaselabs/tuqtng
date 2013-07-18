@@ -281,7 +281,7 @@ state 26
 
 	LBRACKET  shift 66
 	DOT  shift 67
-	.  reduce 83 (src line 610)
+	.  reduce 83 (src line 635)
 
 
 state 27
@@ -563,55 +563,55 @@ state 44
 state 45
 	literal_value:  STRING.    (92)
 
-	.  reduce 92 (src line 673)
+	.  reduce 92 (src line 698)
 
 
 state 46
 	literal_value:  number.    (93)
 
-	.  reduce 93 (src line 679)
+	.  reduce 93 (src line 704)
 
 
 state 47
 	literal_value:  object.    (94)
 
-	.  reduce 94 (src line 683)
+	.  reduce 94 (src line 708)
 
 
 state 48
 	literal_value:  array.    (95)
 
-	.  reduce 95 (src line 687)
+	.  reduce 95 (src line 712)
 
 
 state 49
 	literal_value:  TRUE.    (96)
 
-	.  reduce 96 (src line 691)
+	.  reduce 96 (src line 716)
 
 
 state 50
 	literal_value:  FALSE.    (97)
 
-	.  reduce 97 (src line 697)
+	.  reduce 97 (src line 722)
 
 
 state 51
 	literal_value:  NULL.    (98)
 
-	.  reduce 98 (src line 703)
+	.  reduce 98 (src line 728)
 
 
 state 52
 	number:  INT.    (99)
 
-	.  reduce 99 (src line 711)
+	.  reduce 99 (src line 736)
 
 
 state 53
 	number:  NUMBER.    (100)
 
-	.  reduce 100 (src line 717)
+	.  reduce 100 (src line 742)
 
 
 state 54
@@ -1495,7 +1495,7 @@ state 95
 state 96
 	object:  LBRACE RBRACE.    (101)
 
-	.  reduce 101 (src line 725)
+	.  reduce 101 (src line 750)
 
 
 state 97
@@ -1510,7 +1510,7 @@ state 98
 	named_expression_list:  named_expression_single.COMMA named_expression_list 
 
 	COMMA  shift 152
-	.  reduce 103 (src line 737)
+	.  reduce 103 (src line 762)
 
 
 state 99
@@ -1523,7 +1523,7 @@ state 99
 state 100
 	array:  LBRACKET RBRACKET.    (106)
 
-	.  reduce 106 (src line 763)
+	.  reduce 106 (src line 788)
 
 
 state 101
@@ -1538,7 +1538,7 @@ state 102
 	expression_list:  expression.COMMA expression_list 
 
 	COMMA  shift 155
-	.  reduce 108 (src line 778)
+	.  reduce 108 (src line 803)
 
 
 state 103
@@ -1620,7 +1620,7 @@ state 110
 state 111
 	path:  IDENTIFIER DOT path.    (85)
 
-	.  reduce 85 (src line 618)
+	.  reduce 85 (src line 643)
 
 
 state 112
@@ -2203,7 +2203,7 @@ state 136
 state 137
 	atom:  IDENTIFIER LPAREN RPAREN.    (75)
 
-	.  reduce 75 (src line 561)
+	.  reduce 75 (src line 574)
 
 
 state 138
@@ -2286,25 +2286,25 @@ state 141
 	function_arg_list:  function_arg_single.COMMA function_arg_list 
 
 	COMMA  shift 166
-	.  reduce 86 (src line 625)
+	.  reduce 86 (src line 650)
 
 
 state 142
 	function_arg_single:  fun_dotted_path_star.    (88)
 
-	.  reduce 88 (src line 644)
+	.  reduce 88 (src line 669)
 
 
 state 143
 	function_arg_single:  expression.    (89)
 
-	.  reduce 89 (src line 648)
+	.  reduce 89 (src line 673)
 
 
 state 144
 	fun_dotted_path_star:  MULT.    (90)
 
-	.  reduce 90 (src line 657)
+	.  reduce 90 (src line 682)
 
 
 state 145
@@ -2361,7 +2361,7 @@ state 147
 	else_expr: .    (81)
 
 	ELSE  shift 169
-	.  reduce 81 (src line 600)
+	.  reduce 81 (src line 625)
 
 	else_expr  goto 168
 
@@ -2428,7 +2428,7 @@ state 150
 state 151
 	object:  LBRACE named_expression_list RBRACE.    (102)
 
-	.  reduce 102 (src line 731)
+	.  reduce 102 (src line 756)
 
 
 state 152
@@ -2473,7 +2473,7 @@ state 153
 state 154
 	array:  LBRACKET expression_list RBRACKET.    (107)
 
-	.  reduce 107 (src line 769)
+	.  reduce 107 (src line 794)
 
 
 state 155
@@ -2516,7 +2516,7 @@ state 156
 state 157
 	path:  IDENTIFIER LBRACKET INT RBRACKET.    (84)
 
-	.  reduce 84 (src line 614)
+	.  reduce 84 (src line 639)
 
 
 state 158
@@ -2577,7 +2577,7 @@ state 162
 state 163
 	atom:  IDENTIFIER LPAREN function_arg_list RPAREN.    (76)
 
-	.  reduce 76 (src line 567)
+	.  reduce 76 (src line 580)
 
 
 state 164
@@ -2720,43 +2720,43 @@ state 172
 state 173
 	named_expression_list:  named_expression_single COMMA named_expression_list.    (104)
 
-	.  reduce 104 (src line 741)
+	.  reduce 104 (src line 766)
 
 
 state 174
 	named_expression_single:  STRING COLON expression.    (105)
 
-	.  reduce 105 (src line 753)
+	.  reduce 105 (src line 778)
 
 
 state 175
 	expression_list:  expression COMMA expression_list.    (109)
 
-	.  reduce 109 (src line 785)
+	.  reduce 109 (src line 810)
 
 
 state 176
 	atom:  IDENTIFIER LPAREN DISTINCT function_arg_list RPAREN.    (77)
 
-	.  reduce 77 (src line 574)
+	.  reduce 77 (src line 587)
 
 
 state 177
 	atom:  IDENTIFIER LPAREN UNIQUE function_arg_list RPAREN.    (78)
 
-	.  reduce 78 (src line 581)
+	.  reduce 78 (src line 594)
 
 
 state 178
 	function_arg_list:  function_arg_single COMMA function_arg_list.    (87)
 
-	.  reduce 87 (src line 630)
+	.  reduce 87 (src line 655)
 
 
 state 179
 	fun_dotted_path_star:  expr DOT MULT.    (91)
 
-	.  reduce 91 (src line 663)
+	.  reduce 91 (src line 688)
 
 
 state 180
@@ -2804,7 +2804,7 @@ state 181
 	LIKE  shift 85
 	DOT  shift 107
 	MOD  shift 75
-	.  reduce 82 (src line 604)
+	.  reduce 82 (src line 629)
 
 
 state 182
@@ -2848,7 +2848,7 @@ state 182
 	DOT  shift 107
 	WHEN  shift 185
 	MOD  shift 75
-	.  reduce 79 (src line 590)
+	.  reduce 79 (src line 603)
 
 
 state 183
@@ -2898,19 +2898,19 @@ state 185
 state 186
 	atom:  ANY expr OVER path AS IDENTIFIER.    (73)
 
-	.  reduce 73 (src line 553)
+	.  reduce 73 (src line 566)
 
 
 state 187
 	atom:  ALL expr OVER path AS IDENTIFIER.    (74)
 
-	.  reduce 74 (src line 557)
+	.  reduce 74 (src line 570)
 
 
 state 188
 	then_list:  expr THEN expr WHEN then_list.    (80)
 
-	.  reduce 80 (src line 594)
+	.  reduce 80 (src line 611)
 
 
 59 terminals, 40 nonterminals
