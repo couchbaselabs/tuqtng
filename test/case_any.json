@@ -1,0 +1,38 @@
+[
+    {
+        "statements": "SELECT name FROM contacts WHERE ANY child.age > 14 AND child.gender = \"m\" OVER children AS child",
+        "results": [
+          {
+            "name": "dave"
+          },
+          {
+            "name": "ian"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT name FROM contacts WHERE ANY child.age > 14 OVER children AS child",
+        "results": [
+          {
+            "name": "dave"
+          },
+          {
+            "name": "earl"
+          },
+          {
+            "name": "ian"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT name FROM contacts WHERE ANY child.age > 14 OVER children AS child AND ANY hobby = \"golf\" OVER hobbies as hobby",
+        "results": [
+          {
+            "name": "dave"
+          },
+          {
+            "name": "ian"
+          }
+        ]
+    }
+]
