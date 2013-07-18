@@ -96,6 +96,15 @@ var validQueries = []string{
 	`SELECT * FROM bucket WHERE CASE WHEN abv > 5 THEN true ELSE false END`,
 	`SELECT * FROM bucket WHERE CASE WHEN abv > 5 THEN true WHEN abv > 3 THEN false ELSE 7 END`,
 	`SELECT * FROM bucket WHERE CASE WHEN abv IS NOT NULL THEN abv ELSE ibu END > 0`,
+	`SELECT * FROM bucket WHERE ANY child.age > 25 OVER children AS child`,
+	`SELECT * FROM bucket WHERE ALL child.age > 25 OVER children AS child`,
+	`SELECT * FROM bucket WHERE ALL child.age > 25 OVER children[0] AS child`,
+	`SELECT * FROM bucket WHERE ALL child.age > 25 OVER a.children[0] AS child`,
+	`SELECT * FROM bucket WHERE ALL child.age > 25 OVER b.a.children[0] AS child`,
+	`SELECT * FROM bucket WHERE ALL child.age > 25 OVER b.a.children AS child`,
+	`SELECT * FROM bucket WHERE ALL child.age > 25 OVER some.my.children AS child`,
+	"SELECT * FROM bucket WHERE ALL child.age > 25 OVER `all`.my.children AS child",
+	`SELECT * FROM bucket WHERE ANY child.age > 25 OVER children AS child AND age > 65 OR color = "blue"`,
 }
 
 var invalidQueries = []string{

@@ -68,6 +68,15 @@
                   {
                     logDebugTokens("END"); return END
                   }
+/[aA][nN][yY]/    {
+                    logDebugTokens("ANY"); return ANY
+                  }
+/[aA][lL][lL]/    {
+                    logDebugTokens("ALL"); return ALL
+                  }
+/[oO][vV][eE][rR]/{
+                    logDebugTokens("OVER"); return OVER
+                  }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }

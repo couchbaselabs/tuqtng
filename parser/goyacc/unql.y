@@ -31,6 +31,7 @@ f float64}
 %token LIKE IS VALUED MISSING
 %token DOT
 %token CASE WHEN THEN ELSE END
+%token ANY ALL OVER
 %left DOT LBRACKET
 %left OR
 %left AND 
@@ -523,6 +524,14 @@ CASE WHEN then_list else_expr END {
 	logDebugGrammar("CASE WHEN THEN ELSE END")
 }
 |
+ANY expr OVER path AS IDENTIFIER {
+	logDebugGrammar("ANY OVER AS IDENTIFIER")
+}
+|
+ALL expr OVER path AS IDENTIFIER {
+	logDebugGrammar("ALL OVER AS IDENTIFIER")
+}
+|
 IDENTIFIER LPAREN RPAREN {
 	logDebugGrammar("FUNCTION EXPR NOPARAM")
 	thisExpression := ast.NewFunctionCall($1.s, ast.FunctionArgExpressionList{})
@@ -556,6 +565,21 @@ ELSE expr {
 	logDebugGrammar("ELSE - EXPR")
 }
 ;
+
+path:
+IDENTIFIER {
+	logDebugGrammar("PATH - %v", $1.s)
+}
+|
+IDENTIFIER LBRACKET INT RBRACKET {
+	logDebugGrammar("PATH BRACKET - %v[%v]", $1.s, $3.n)
+}
+|
+IDENTIFIER DOT path {
+	logDebugGrammar("PATH DOT PATH - $1.s")
+}
+;
+
 
 function_arg_list:
 function_arg_single {
