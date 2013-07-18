@@ -111,6 +111,7 @@ func TestAllCaseFiles(t *testing.T) {
 }
 
 func testCaseFile(t *testing.T, fname string) {
+	t.Logf("testCaseFile: %v\n", fname)
 	b, err := ioutil.ReadFile(fname)
 	if err != nil {
 		t.Errorf("ReadFile failed: %v", err)
@@ -129,6 +130,7 @@ func testCaseFile(t *testing.T, fname string) {
 			return
 		}
 		statements := v.(string)
+		t.Logf("  %d: %v\n", i, statements)
 
 		qc := start()
 		defer close(qc)
