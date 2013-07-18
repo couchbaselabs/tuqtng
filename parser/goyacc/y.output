@@ -275,13 +275,13 @@ state 25
 
 
 state 26
-	path:  IDENTIFIER.    (81)
+	path:  IDENTIFIER.    (83)
 	path:  IDENTIFIER.LBRACKET INT RBRACKET 
 	path:  IDENTIFIER.DOT path 
 
 	LBRACKET  shift 66
 	DOT  shift 67
-	.  reduce 81 (src line 596)
+	.  reduce 83 (src line 610)
 
 
 state 27
@@ -452,6 +452,8 @@ state 39
 	atom:  IDENTIFIER.    (69)
 	atom:  IDENTIFIER.LPAREN RPAREN 
 	atom:  IDENTIFIER.LPAREN function_arg_list RPAREN 
+	atom:  IDENTIFIER.LPAREN DISTINCT function_arg_list RPAREN 
+	atom:  IDENTIFIER.LPAREN UNIQUE function_arg_list RPAREN 
 
 	LPAREN  shift 91
 	.  reduce 69 (src line 535)
@@ -559,57 +561,57 @@ state 44
 	array  goto 48
 
 state 45
-	literal_value:  STRING.    (90)
+	literal_value:  STRING.    (92)
 
-	.  reduce 90 (src line 659)
+	.  reduce 92 (src line 673)
 
 
 state 46
-	literal_value:  number.    (91)
+	literal_value:  number.    (93)
 
-	.  reduce 91 (src line 665)
+	.  reduce 93 (src line 679)
 
 
 state 47
-	literal_value:  object.    (92)
+	literal_value:  object.    (94)
 
-	.  reduce 92 (src line 669)
+	.  reduce 94 (src line 683)
 
 
 state 48
-	literal_value:  array.    (93)
+	literal_value:  array.    (95)
 
-	.  reduce 93 (src line 673)
+	.  reduce 95 (src line 687)
 
 
 state 49
-	literal_value:  TRUE.    (94)
+	literal_value:  TRUE.    (96)
 
-	.  reduce 94 (src line 677)
+	.  reduce 96 (src line 691)
 
 
 state 50
-	literal_value:  FALSE.    (95)
-
-	.  reduce 95 (src line 683)
-
-
-state 51
-	literal_value:  NULL.    (96)
-
-	.  reduce 96 (src line 689)
-
-
-state 52
-	number:  INT.    (97)
+	literal_value:  FALSE.    (97)
 
 	.  reduce 97 (src line 697)
 
 
-state 53
-	number:  NUMBER.    (98)
+state 51
+	literal_value:  NULL.    (98)
 
 	.  reduce 98 (src line 703)
+
+
+state 52
+	number:  INT.    (99)
+
+	.  reduce 99 (src line 711)
+
+
+state 53
+	number:  NUMBER.    (100)
+
+	.  reduce 100 (src line 717)
 
 
 state 54
@@ -1330,7 +1332,11 @@ state 90
 state 91
 	atom:  IDENTIFIER LPAREN.RPAREN 
 	atom:  IDENTIFIER LPAREN.function_arg_list RPAREN 
+	atom:  IDENTIFIER LPAREN.DISTINCT function_arg_list RPAREN 
+	atom:  IDENTIFIER LPAREN.UNIQUE function_arg_list RPAREN 
 
+	DISTINCT  shift 139
+	UNIQUE  shift 140
 	LBRACE  shift 54
 	LBRACKET  shift 55
 	TRUE  shift 49
@@ -1341,7 +1347,7 @@ state 91
 	IDENTIFIER  shift 39
 	STRING  shift 45
 	MINUS  shift 36
-	MULT  shift 142
+	MULT  shift 144
 	NOT  shift 35
 	LPAREN  shift 41
 	RPAREN  shift 137
@@ -1350,15 +1356,15 @@ state 91
 	ALL  shift 44
 	.  error
 
-	expression  goto 141
-	expr  goto 143
+	expression  goto 143
+	expr  goto 145
 	prefix_expr  goto 34
 	suffix_expr  goto 37
 	atom  goto 38
 	literal_value  goto 40
 	function_arg_list  goto 138
-	function_arg_single  goto 139
-	fun_dotted_path_star  goto 140
+	function_arg_single  goto 141
+	fun_dotted_path_star  goto 142
 	number  goto 46
 	object  goto 47
 	array  goto 48
@@ -1366,7 +1372,7 @@ state 91
 state 92
 	atom:  LPAREN expression.RPAREN 
 
-	RPAREN  shift 144
+	RPAREN  shift 146
 	.  error
 
 
@@ -1390,12 +1396,12 @@ state 93
 	ALL  shift 44
 	.  error
 
-	expr  goto 146
+	expr  goto 148
 	prefix_expr  goto 34
 	suffix_expr  goto 37
 	atom  goto 38
 	literal_value  goto 40
-	then_list  goto 145
+	then_list  goto 147
 	number  goto 46
 	object  goto 47
 	array  goto 48
@@ -1438,7 +1444,7 @@ state 94
 	LTE  shift 81
 	LIKE  shift 85
 	DOT  shift 107
-	OVER  shift 147
+	OVER  shift 149
 	MOD  shift 75
 	.  error
 
@@ -1481,58 +1487,58 @@ state 95
 	LTE  shift 81
 	LIKE  shift 85
 	DOT  shift 107
-	OVER  shift 148
+	OVER  shift 150
 	MOD  shift 75
 	.  error
 
 
 state 96
-	object:  LBRACE RBRACE.    (99)
+	object:  LBRACE RBRACE.    (101)
 
-	.  reduce 99 (src line 711)
+	.  reduce 101 (src line 725)
 
 
 state 97
 	object:  LBRACE named_expression_list.RBRACE 
 
-	RBRACE  shift 149
+	RBRACE  shift 151
 	.  error
 
 
 state 98
-	named_expression_list:  named_expression_single.    (101)
+	named_expression_list:  named_expression_single.    (103)
 	named_expression_list:  named_expression_single.COMMA named_expression_list 
 
-	COMMA  shift 150
-	.  reduce 101 (src line 723)
+	COMMA  shift 152
+	.  reduce 103 (src line 737)
 
 
 state 99
 	named_expression_single:  STRING.COLON expression 
 
-	COLON  shift 151
+	COLON  shift 153
 	.  error
 
 
 state 100
-	array:  LBRACKET RBRACKET.    (104)
+	array:  LBRACKET RBRACKET.    (106)
 
-	.  reduce 104 (src line 749)
+	.  reduce 106 (src line 763)
 
 
 state 101
 	array:  LBRACKET expression_list.RBRACKET 
 
-	RBRACKET  shift 152
+	RBRACKET  shift 154
 	.  error
 
 
 state 102
-	expression_list:  expression.    (106)
+	expression_list:  expression.    (108)
 	expression_list:  expression.COMMA expression_list 
 
-	COMMA  shift 153
-	.  reduce 106 (src line 764)
+	COMMA  shift 155
+	.  reduce 108 (src line 778)
 
 
 state 103
@@ -1563,7 +1569,7 @@ state 104
 
 	expression  goto 61
 	expr  goto 62
-	sorting_list  goto 154
+	sorting_list  goto 156
 	sorting_single  goto 60
 	prefix_expr  goto 34
 	suffix_expr  goto 37
@@ -1607,14 +1613,14 @@ state 109
 state 110
 	path:  IDENTIFIER LBRACKET INT.RBRACKET 
 
-	RBRACKET  shift 155
+	RBRACKET  shift 157
 	.  error
 
 
 state 111
-	path:  IDENTIFIER DOT path.    (83)
+	path:  IDENTIFIER DOT path.    (85)
 
-	.  reduce 83 (src line 604)
+	.  reduce 85 (src line 618)
 
 
 state 112
@@ -2113,7 +2119,7 @@ state 131
 	ALL  shift 44
 	.  error
 
-	expr  goto 156
+	expr  goto 158
 	prefix_expr  goto 34
 	suffix_expr  goto 37
 	atom  goto 38
@@ -2144,7 +2150,7 @@ state 132
 	expr:  expr LBRACKET expr.RBRACKET 
 
 	LBRACKET  shift 87
-	RBRACKET  shift 157
+	RBRACKET  shift 159
 	PLUS  shift 71
 	MINUS  shift 72
 	MULT  shift 73
@@ -2176,9 +2182,9 @@ state 134
 	suffix_expr:  atom IS NOT.MISSING 
 	suffix_expr:  atom IS NOT.VALUED 
 
-	NULL  shift 158
-	VALUED  shift 160
-	MISSING  shift 159
+	NULL  shift 160
+	VALUED  shift 162
+	MISSING  shift 161
 	.  error
 
 
@@ -2203,37 +2209,105 @@ state 137
 state 138
 	atom:  IDENTIFIER LPAREN function_arg_list.RPAREN 
 
-	RPAREN  shift 161
+	RPAREN  shift 163
 	.  error
 
 
 state 139
-	function_arg_list:  function_arg_single.    (84)
-	function_arg_list:  function_arg_single.COMMA function_arg_list 
+	atom:  IDENTIFIER LPAREN DISTINCT.function_arg_list RPAREN 
 
-	COMMA  shift 162
-	.  reduce 84 (src line 611)
+	LBRACE  shift 54
+	LBRACKET  shift 55
+	TRUE  shift 49
+	FALSE  shift 50
+	NULL  shift 51
+	INT  shift 52
+	NUMBER  shift 53
+	IDENTIFIER  shift 39
+	STRING  shift 45
+	MINUS  shift 36
+	MULT  shift 144
+	NOT  shift 35
+	LPAREN  shift 41
+	CASE  shift 42
+	ANY  shift 43
+	ALL  shift 44
+	.  error
 
+	expression  goto 143
+	expr  goto 145
+	prefix_expr  goto 34
+	suffix_expr  goto 37
+	atom  goto 38
+	literal_value  goto 40
+	function_arg_list  goto 164
+	function_arg_single  goto 141
+	fun_dotted_path_star  goto 142
+	number  goto 46
+	object  goto 47
+	array  goto 48
 
 state 140
-	function_arg_single:  fun_dotted_path_star.    (86)
+	atom:  IDENTIFIER LPAREN UNIQUE.function_arg_list RPAREN 
 
-	.  reduce 86 (src line 630)
+	LBRACE  shift 54
+	LBRACKET  shift 55
+	TRUE  shift 49
+	FALSE  shift 50
+	NULL  shift 51
+	INT  shift 52
+	NUMBER  shift 53
+	IDENTIFIER  shift 39
+	STRING  shift 45
+	MINUS  shift 36
+	MULT  shift 144
+	NOT  shift 35
+	LPAREN  shift 41
+	CASE  shift 42
+	ANY  shift 43
+	ALL  shift 44
+	.  error
 
+	expression  goto 143
+	expr  goto 145
+	prefix_expr  goto 34
+	suffix_expr  goto 37
+	atom  goto 38
+	literal_value  goto 40
+	function_arg_list  goto 165
+	function_arg_single  goto 141
+	fun_dotted_path_star  goto 142
+	number  goto 46
+	object  goto 47
+	array  goto 48
 
 state 141
-	function_arg_single:  expression.    (87)
+	function_arg_list:  function_arg_single.    (86)
+	function_arg_list:  function_arg_single.COMMA function_arg_list 
 
-	.  reduce 87 (src line 634)
+	COMMA  shift 166
+	.  reduce 86 (src line 625)
 
 
 state 142
-	fun_dotted_path_star:  MULT.    (88)
+	function_arg_single:  fun_dotted_path_star.    (88)
 
-	.  reduce 88 (src line 643)
+	.  reduce 88 (src line 644)
 
 
 state 143
+	function_arg_single:  expression.    (89)
+
+	.  reduce 89 (src line 648)
+
+
+state 144
+	fun_dotted_path_star:  MULT.    (90)
+
+	.  reduce 90 (src line 657)
+
+
+state 145
 	expression:  expr.    (39)
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
@@ -2271,27 +2345,27 @@ state 143
 	LT  shift 80
 	LTE  shift 81
 	LIKE  shift 85
-	DOT  shift 163
+	DOT  shift 167
 	MOD  shift 75
 	.  reduce 39 (src line 313)
 
 
-state 144
+state 146
 	atom:  LPAREN expression RPAREN.    (71)
 
 	.  reduce 71 (src line 545)
 
 
-state 145
+state 147
 	atom:  CASE WHEN then_list.else_expr END 
-	else_expr: .    (79)
+	else_expr: .    (81)
 
-	ELSE  shift 165
-	.  reduce 79 (src line 586)
+	ELSE  shift 169
+	.  reduce 81 (src line 600)
 
-	else_expr  goto 164
+	else_expr  goto 168
 
-state 146
+state 148
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -2330,43 +2404,43 @@ state 146
 	LTE  shift 81
 	LIKE  shift 85
 	DOT  shift 107
-	THEN  shift 166
+	THEN  shift 170
 	MOD  shift 75
 	.  error
 
 
-state 147
+state 149
 	atom:  ANY expr OVER.path AS IDENTIFIER 
 
 	IDENTIFIER  shift 26
 	.  error
 
-	path  goto 167
+	path  goto 171
 
-state 148
+state 150
 	atom:  ALL expr OVER.path AS IDENTIFIER 
 
 	IDENTIFIER  shift 26
 	.  error
 
-	path  goto 168
+	path  goto 172
 
-state 149
-	object:  LBRACE named_expression_list RBRACE.    (100)
+state 151
+	object:  LBRACE named_expression_list RBRACE.    (102)
 
-	.  reduce 100 (src line 717)
+	.  reduce 102 (src line 731)
 
 
-state 150
+state 152
 	named_expression_list:  named_expression_single COMMA.named_expression_list 
 
 	STRING  shift 99
 	.  error
 
-	named_expression_list  goto 169
+	named_expression_list  goto 173
 	named_expression_single  goto 98
 
-state 151
+state 153
 	named_expression_single:  STRING COLON.expression 
 
 	LBRACE  shift 54
@@ -2386,7 +2460,7 @@ state 151
 	ALL  shift 44
 	.  error
 
-	expression  goto 170
+	expression  goto 174
 	expr  goto 62
 	prefix_expr  goto 34
 	suffix_expr  goto 37
@@ -2396,13 +2470,13 @@ state 151
 	object  goto 47
 	array  goto 48
 
-state 152
-	array:  LBRACKET expression_list RBRACKET.    (105)
+state 154
+	array:  LBRACKET expression_list RBRACKET.    (107)
 
-	.  reduce 105 (src line 755)
+	.  reduce 107 (src line 769)
 
 
-state 153
+state 155
 	expression_list:  expression COMMA.expression_list 
 
 	LBRACE  shift 54
@@ -2431,21 +2505,21 @@ state 153
 	number  goto 46
 	object  goto 47
 	array  goto 48
-	expression_list  goto 171
+	expression_list  goto 175
 
-state 154
+state 156
 	sorting_list:  sorting_single COMMA sorting_list.    (30)
 
 	.  reduce 30 (src line 236)
 
 
-state 155
-	path:  IDENTIFIER LBRACKET INT RBRACKET.    (82)
+state 157
+	path:  IDENTIFIER LBRACKET INT RBRACKET.    (84)
 
-	.  reduce 82 (src line 600)
+	.  reduce 84 (src line 614)
 
 
-state 156
+state 158
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -2476,37 +2550,51 @@ state 156
 	.  reduce 55 (src line 438)
 
 
-state 157
+state 159
 	expr:  expr LBRACKET expr RBRACKET.    (57)
 
 	.  reduce 57 (src line 454)
 
 
-state 158
+state 160
 	suffix_expr:  atom IS NOT NULL.    (64)
 
 	.  reduce 64 (src line 498)
 
 
-state 159
+state 161
 	suffix_expr:  atom IS NOT MISSING.    (66)
 
 	.  reduce 66 (src line 512)
 
 
-state 160
+state 162
 	suffix_expr:  atom IS NOT VALUED.    (68)
 
 	.  reduce 68 (src line 526)
 
 
-state 161
+state 163
 	atom:  IDENTIFIER LPAREN function_arg_list RPAREN.    (76)
 
 	.  reduce 76 (src line 567)
 
 
-state 162
+state 164
+	atom:  IDENTIFIER LPAREN DISTINCT function_arg_list.RPAREN 
+
+	RPAREN  shift 176
+	.  error
+
+
+state 165
+	atom:  IDENTIFIER LPAREN UNIQUE function_arg_list.RPAREN 
+
+	RPAREN  shift 177
+	.  error
+
+
+state 166
 	function_arg_list:  function_arg_single COMMA.function_arg_list 
 
 	LBRACE  shift 54
@@ -2519,7 +2607,7 @@ state 162
 	IDENTIFIER  shift 39
 	STRING  shift 45
 	MINUS  shift 36
-	MULT  shift 142
+	MULT  shift 144
 	NOT  shift 35
 	LPAREN  shift 41
 	CASE  shift 42
@@ -2527,36 +2615,36 @@ state 162
 	ALL  shift 44
 	.  error
 
-	expression  goto 141
-	expr  goto 143
+	expression  goto 143
+	expr  goto 145
 	prefix_expr  goto 34
 	suffix_expr  goto 37
 	atom  goto 38
 	literal_value  goto 40
-	function_arg_list  goto 172
-	function_arg_single  goto 139
-	fun_dotted_path_star  goto 140
+	function_arg_list  goto 178
+	function_arg_single  goto 141
+	fun_dotted_path_star  goto 142
 	number  goto 46
 	object  goto 47
 	array  goto 48
 
-state 163
+state 167
 	expr:  expr DOT.IDENTIFIER 
 	fun_dotted_path_star:  expr DOT.MULT 
 
 	IDENTIFIER  shift 115
-	MULT  shift 173
+	MULT  shift 179
 	.  error
 
 
-state 164
+state 168
 	atom:  CASE WHEN then_list else_expr.END 
 
-	END  shift 174
+	END  shift 180
 	.  error
 
 
-state 165
+state 169
 	else_expr:  ELSE.expr 
 
 	LBRACE  shift 54
@@ -2576,7 +2664,7 @@ state 165
 	ALL  shift 44
 	.  error
 
-	expr  goto 175
+	expr  goto 181
 	prefix_expr  goto 34
 	suffix_expr  goto 37
 	atom  goto 38
@@ -2585,7 +2673,7 @@ state 165
 	object  goto 47
 	array  goto 48
 
-state 166
+state 170
 	then_list:  expr THEN.expr 
 	then_list:  expr THEN.expr WHEN then_list 
 
@@ -2606,7 +2694,7 @@ state 166
 	ALL  shift 44
 	.  error
 
-	expr  goto 176
+	expr  goto 182
 	prefix_expr  goto 34
 	suffix_expr  goto 37
 	atom  goto 38
@@ -2615,57 +2703,69 @@ state 166
 	object  goto 47
 	array  goto 48
 
-state 167
+state 171
 	atom:  ANY expr OVER path.AS IDENTIFIER 
 
-	AS  shift 177
+	AS  shift 183
 	.  error
-
-
-state 168
-	atom:  ALL expr OVER path.AS IDENTIFIER 
-
-	AS  shift 178
-	.  error
-
-
-state 169
-	named_expression_list:  named_expression_single COMMA named_expression_list.    (102)
-
-	.  reduce 102 (src line 727)
-
-
-state 170
-	named_expression_single:  STRING COLON expression.    (103)
-
-	.  reduce 103 (src line 739)
-
-
-state 171
-	expression_list:  expression COMMA expression_list.    (107)
-
-	.  reduce 107 (src line 771)
 
 
 state 172
-	function_arg_list:  function_arg_single COMMA function_arg_list.    (85)
+	atom:  ALL expr OVER path.AS IDENTIFIER 
 
-	.  reduce 85 (src line 616)
+	AS  shift 184
+	.  error
 
 
 state 173
-	fun_dotted_path_star:  expr DOT MULT.    (89)
+	named_expression_list:  named_expression_single COMMA named_expression_list.    (104)
 
-	.  reduce 89 (src line 649)
+	.  reduce 104 (src line 741)
 
 
 state 174
+	named_expression_single:  STRING COLON expression.    (105)
+
+	.  reduce 105 (src line 753)
+
+
+state 175
+	expression_list:  expression COMMA expression_list.    (109)
+
+	.  reduce 109 (src line 785)
+
+
+state 176
+	atom:  IDENTIFIER LPAREN DISTINCT function_arg_list RPAREN.    (77)
+
+	.  reduce 77 (src line 574)
+
+
+state 177
+	atom:  IDENTIFIER LPAREN UNIQUE function_arg_list RPAREN.    (78)
+
+	.  reduce 78 (src line 581)
+
+
+state 178
+	function_arg_list:  function_arg_single COMMA function_arg_list.    (87)
+
+	.  reduce 87 (src line 630)
+
+
+state 179
+	fun_dotted_path_star:  expr DOT MULT.    (91)
+
+	.  reduce 91 (src line 663)
+
+
+state 180
 	atom:  CASE WHEN then_list else_expr END.    (72)
 
 	.  reduce 72 (src line 549)
 
 
-state 175
+state 181
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -2684,7 +2784,7 @@ state 175
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
-	else_expr:  ELSE expr.    (80)
+	else_expr:  ELSE expr.    (82)
 
 	LBRACKET  shift 87
 	PLUS  shift 71
@@ -2704,10 +2804,10 @@ state 175
 	LIKE  shift 85
 	DOT  shift 107
 	MOD  shift 75
-	.  reduce 80 (src line 590)
+	.  reduce 82 (src line 604)
 
 
-state 176
+state 182
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -2726,7 +2826,7 @@ state 176
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
-	then_list:  expr THEN expr.    (77)
+	then_list:  expr THEN expr.    (79)
 	then_list:  expr THEN expr.WHEN then_list 
 
 	LBRACKET  shift 87
@@ -2746,26 +2846,26 @@ state 176
 	LTE  shift 81
 	LIKE  shift 85
 	DOT  shift 107
-	WHEN  shift 179
+	WHEN  shift 185
 	MOD  shift 75
-	.  reduce 77 (src line 576)
+	.  reduce 79 (src line 590)
 
 
-state 177
+state 183
 	atom:  ANY expr OVER path AS.IDENTIFIER 
 
-	IDENTIFIER  shift 180
+	IDENTIFIER  shift 186
 	.  error
 
 
-state 178
+state 184
 	atom:  ALL expr OVER path AS.IDENTIFIER 
 
-	IDENTIFIER  shift 181
+	IDENTIFIER  shift 187
 	.  error
 
 
-state 179
+state 185
 	then_list:  expr THEN expr WHEN.then_list 
 
 	LBRACE  shift 54
@@ -2785,43 +2885,43 @@ state 179
 	ALL  shift 44
 	.  error
 
-	expr  goto 146
+	expr  goto 148
 	prefix_expr  goto 34
 	suffix_expr  goto 37
 	atom  goto 38
 	literal_value  goto 40
-	then_list  goto 182
+	then_list  goto 188
 	number  goto 46
 	object  goto 47
 	array  goto 48
 
-state 180
+state 186
 	atom:  ANY expr OVER path AS IDENTIFIER.    (73)
 
 	.  reduce 73 (src line 553)
 
 
-state 181
+state 187
 	atom:  ALL expr OVER path AS IDENTIFIER.    (74)
 
 	.  reduce 74 (src line 557)
 
 
-state 182
-	then_list:  expr THEN expr WHEN then_list.    (78)
+state 188
+	then_list:  expr THEN expr WHEN then_list.    (80)
 
-	.  reduce 78 (src line 580)
+	.  reduce 80 (src line 594)
 
 
 59 terminals, 40 nonterminals
-108 grammar rules, 183/2000 states
+110 grammar rules, 189/2000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
 89 working sets used
-memory: parser 385/30000
-97 extra closures
-876 shift entries, 1 exceptions
-87 goto entries
-258 entries saved by goto default
-Optimizer space used: output 590/30000
-590 table entries, 172 zero
-maximum spread: 59, maximum offset: 179
+memory: parser 412/30000
+103 extra closures
+912 shift entries, 1 exceptions
+91 goto entries
+278 entries saved by goto default
+Optimizer space used: output 621/30000
+621 table entries, 195 zero
+maximum spread: 59, maximum offset: 185

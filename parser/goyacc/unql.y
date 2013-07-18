@@ -571,6 +571,20 @@ IDENTIFIER LPAREN function_arg_list RPAREN {
 	thisExpression := ast.NewFunctionCall($1.s, funarg_exp_list)
 	parsingStack.Push(thisExpression)
 }
+|
+IDENTIFIER LPAREN DISTINCT function_arg_list RPAREN {
+	logDebugGrammar("FUNCTION EXPR PARAM")
+	funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
+	thisExpression := ast.NewFunctionCall($1.s, funarg_exp_list)
+	parsingStack.Push(thisExpression)
+}
+|
+IDENTIFIER LPAREN UNIQUE function_arg_list RPAREN {
+	logDebugGrammar("FUNCTION EXPR PARAM")
+	funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
+	thisExpression := ast.NewFunctionCall($1.s, funarg_exp_list)
+	parsingStack.Push(thisExpression)
+}
 ;
 
 then_list:
