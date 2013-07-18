@@ -17,10 +17,10 @@ import (
 func TestStubSource(t *testing.T) {
 
 	testData := query.ItemCollection{
-		query.NewMapItem(map[string]query.Value{"name": "marty"}, map[string]query.Value{"id": "1"}),
-		query.NewMapItem(map[string]query.Value{"name": "steve"}, map[string]query.Value{"id": "2"}),
-		query.NewMapItem(map[string]query.Value{"name": "gerald"}, map[string]query.Value{"id": "3"}),
-		query.NewMapItem(map[string]query.Value{"name": "siri"}, map[string]query.Value{"id": "4"}),
+		query.NewParsedItem(map[string]query.Value{"name": "marty"}, map[string]query.Value{"id": "1"}),
+		query.NewParsedItem(map[string]query.Value{"name": "steve"}, map[string]query.Value{"id": "2"}),
+		query.NewParsedItem(map[string]query.Value{"name": "gerald"}, map[string]query.Value{"id": "3"}),
+		query.NewParsedItem(map[string]query.Value{"name": "siri"}, map[string]query.Value{"id": "4"}),
 	}
 
 	stubSource := NewStubSource(testData)

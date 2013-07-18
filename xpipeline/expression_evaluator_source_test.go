@@ -25,7 +25,7 @@ func TestExpressionEvaluatorSource(t *testing.T) {
 	count := 0
 	for item := range sourceItemChannel {
 		count++
-		if !reflect.DeepEqual(item, query.NewMapItem(map[string]query.Value{}, nil)) {
+		if !reflect.DeepEqual(item, query.NewParsedItem(map[string]query.Value{}, nil)) {
 			t.Errorf("Expected empty map item, got %v", item)
 		}
 	}

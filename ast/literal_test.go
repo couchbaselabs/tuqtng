@@ -77,7 +77,7 @@ func TestEvaluateLiteral(t *testing.T) {
 func TestEvaluateComplexLiteralContainingMissing(t *testing.T) {
 
 	sampleDocument := map[string]query.Value{}
-	item := query.NewMapItem(sampleDocument, nil)
+	item := query.NewParsedItem(sampleDocument, nil)
 
 	tests := []struct {
 		input  Expression

@@ -46,7 +46,7 @@ func TestEvaluateProperty(t *testing.T) {
 		{NewProperty("name"), "will"},
 	}
 
-	item := query.NewMapItem(sampleDocument, nil)
+	item := query.NewParsedItem(sampleDocument, nil)
 
 	for _, x := range tests {
 		result, err := x.input.Evaluate(item)

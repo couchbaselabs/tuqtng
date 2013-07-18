@@ -32,7 +32,7 @@ func TestNormalJSONDocItem(t *testing.T) {
 		{"dne", nil, &Undefined{"dne"}},
 	}
 
-	context := NewMapItem(sampleContext, sampleMeta)
+	context := NewParsedItem(sampleContext, sampleMeta)
 
 	for _, x := range tests {
 		value, err := context.GetPath(x.input)
@@ -58,7 +58,7 @@ func TestTopLevelKeys(t *testing.T) {
 		"cat":  "dog",
 	}
 
-	context := NewMapItem(sampleContext, nil)
+	context := NewParsedItem(sampleContext, nil)
 
 	if !reflect.DeepEqual(context.GetTopLevelKeys(), []string{"name", "cat"}) {
 		t.Errorf("Expected name,cat, got %v", context.GetTopLevelKeys())

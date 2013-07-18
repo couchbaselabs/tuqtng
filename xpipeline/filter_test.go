@@ -17,14 +17,14 @@ import (
 )
 
 var testData = query.ItemCollection{
-	query.NewMapItem(map[string]query.Value{"name": "mike", "age": 100.0}, map[string]query.Value{"id": "1"}),
-	query.NewMapItem(map[string]query.Value{"name": "dustin"}, map[string]query.Value{"id": "1"}),
-	query.NewMapItem(map[string]query.Value{"name": "bob", "age": nil}, map[string]query.Value{"id": "1"}),
-	query.NewMapItem(map[string]query.Value{"name": "marty", "age": 99.0}, map[string]query.Value{"id": "1"}),
-	query.NewMapItem(map[string]query.Value{"name": "steve", "age": 200.0}, map[string]query.Value{"id": "2"}),
-	query.NewMapItem(map[string]query.Value{"name": "gerald", "age": 175.0}, map[string]query.Value{"id": "3"}),
-	query.NewMapItem(map[string]query.Value{"name": "siri", "age": 74.0}, map[string]query.Value{"id": "4"}),
-	query.NewMapItem(map[string]query.Value{"name": "ali", "age": 100.0}, map[string]query.Value{"id": "1"}),
+	query.NewParsedItem(map[string]query.Value{"name": "mike", "age": 100.0}, map[string]query.Value{"id": "1"}),
+	query.NewParsedItem(map[string]query.Value{"name": "dustin"}, map[string]query.Value{"id": "1"}),
+	query.NewParsedItem(map[string]query.Value{"name": "bob", "age": nil}, map[string]query.Value{"id": "1"}),
+	query.NewParsedItem(map[string]query.Value{"name": "marty", "age": 99.0}, map[string]query.Value{"id": "1"}),
+	query.NewParsedItem(map[string]query.Value{"name": "steve", "age": 200.0}, map[string]query.Value{"id": "2"}),
+	query.NewParsedItem(map[string]query.Value{"name": "gerald", "age": 175.0}, map[string]query.Value{"id": "3"}),
+	query.NewParsedItem(map[string]query.Value{"name": "siri", "age": 74.0}, map[string]query.Value{"id": "4"}),
+	query.NewParsedItem(map[string]query.Value{"name": "ali", "age": 100.0}, map[string]query.Value{"id": "1"}),
 }
 
 func TestFilterTrue(t *testing.T) {

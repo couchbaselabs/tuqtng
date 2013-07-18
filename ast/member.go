@@ -39,7 +39,7 @@ func (this *DotMemberOperator) Evaluate(item query.Item) (query.Value, error) {
 
 	switch lv := lv.(type) {
 	case map[string]query.Value:
-		innerContext := query.NewMapItem(lv, nil)
+		innerContext := query.NewParsedItem(lv, nil)
 		// now evaluate the property in this inner context
 		return this.Right.Evaluate(innerContext)
 	}
@@ -93,7 +93,7 @@ func (this *BracketMemberOperator) Evaluate(item query.Item) (query.Value, error
 	case map[string]query.Value:
 		switch rv := rv.(type) {
 		case string:
-			innerContext := query.NewMapItem(lv, nil)
+			innerContext := query.NewParsedItem(lv, nil)
 			virtualProperty := NewProperty(rv)
 			return virtualProperty.Evaluate(innerContext)
 		}

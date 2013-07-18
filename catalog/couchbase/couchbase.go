@@ -124,7 +124,7 @@ func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
 }
 
 func (b *bucket) Fetch(id string) (query.Item, query.Error) {
-	var doc map[string]query.Value
+	var doc query.Value
 	err := b.cbbucket.Get(id, &doc)
 
 	if err != nil {
@@ -135,7 +135,7 @@ func (b *bucket) Fetch(id string) (query.Item, query.Error) {
 		"id": id,
 	}
 
-	item := query.NewMapItem(doc, meta)
+	item := query.NewParsedItem(doc, meta)
 
 	return item, nil
 }
@@ -187,7 +187,7 @@ func (vs *viewScanner) scanAll(ch query.ItemChannel, warnch, errch query.ErrorCh
 	for viewRow := range viewRowChannel {
 		doc := map[string]query.Value{}
 		meta := map[string]query.Value{"id": viewRow.ID}
-		ch <- query.NewMapItem(doc, meta)
+		ch <- query.NewParsedItem(doc, meta)
 	}
 }
 

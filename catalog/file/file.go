@@ -281,7 +281,7 @@ func (fs *fullScanner) scanAll(ch query.ItemChannel, warnch, errch query.ErrorCh
 		if !dirEntry.IsDir() {
 			doc := map[string]query.Value{}
 			meta := map[string]query.Value{"id": documentPathToId(dirEntry.Name())}
-			ch <- query.NewMapItem(doc, meta)
+			ch <- query.NewParsedItem(doc, meta)
 		}
 	}
 }
@@ -293,7 +293,7 @@ func fetch(path string) (item query.Item, e query.Error) {
 	}
 
 	// convert file bytes to json
-	doc := map[string]query.Value{}
+	var doc query.Value
 	err = json.Unmarshal(bytes, &doc)
 	if err != nil {
 		return nil, query.NewError(err, "")
@@ -303,7 +303,7 @@ func fetch(path string) (item query.Item, e query.Error) {
 		"id": documentPathToId(path),
 	}
 
-	item = query.NewMapItem(doc, meta)
+	item = query.NewParsedItem(doc, meta)
 
 	return
 }

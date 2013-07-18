@@ -103,7 +103,7 @@ func (this *Project) Run() {
 		}
 
 		// create the actual result Item
-		finalItem := query.NewMapItem(resultMap, item.GetMeta())
+		finalItem := query.NewParsedItem(resultMap, item.GetMeta())
 
 		// write this to the output
 		this.itemChannel <- finalItem

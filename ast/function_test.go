@@ -25,7 +25,7 @@ func TestFunction(t *testing.T) {
 		"id": "first",
 	}
 
-	context := query.NewMapItem(sampleContext, sampleMeta)
+	context := query.NewParsedItem(sampleContext, sampleMeta)
 
 	tests := []struct {
 		input  Expression

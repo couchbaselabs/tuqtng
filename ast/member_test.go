@@ -74,7 +74,7 @@ func TestDotMember(t *testing.T) {
 		{NewBracketMemberOperator(NewProperty("address"), NewLiteralString("street")), "1 recursive function", nil},
 	}
 
-	context := query.NewMapItem(sampleContext, sampleMeta)
+	context := query.NewParsedItem(sampleContext, sampleMeta)
 
 	for _, x := range tests {
 		value, err := x.input.Evaluate(context)

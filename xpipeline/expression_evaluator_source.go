@@ -33,6 +33,6 @@ func (this *ExpressionEvaluatorSource) GetItemChannel() query.ItemChannel {
 
 func (this *ExpressionEvaluatorSource) Run() {
 	defer close(this.itemChannel)
-	item := query.NewMapItem(map[string]query.Value{}, nil)
+	item := query.NewParsedItem(map[string]query.Value{}, nil)
 	this.itemChannel <- item
 }
