@@ -566,10 +566,18 @@ CASE WHEN then_list else_expr END {
 |
 ANY expr OVER path AS IDENTIFIER {
 	logDebugGrammar("ANY OVER AS IDENTIFIER")
+	path := parsingStack.Pop().(ast.Expression)
+	condition := parsingStack.Pop().(ast.Expression)
+	collectionAny := ast.NewCollectionAnyOperator(condition, path, $6.s)
+	parsingStack.Push(collectionAny)
 }
 |
 ALL expr OVER path AS IDENTIFIER {
 	logDebugGrammar("ALL OVER AS IDENTIFIER")
+	path := parsingStack.Pop().(ast.Expression)
+	condition := parsingStack.Pop().(ast.Expression)
+	collectionAny := ast.NewCollectionAllOperator(condition, path, $6.s)
+	parsingStack.Push(collectionAny)
 }
 |
 IDENTIFIER LPAREN RPAREN {
@@ -635,14 +643,23 @@ ELSE expr {
 path:
 IDENTIFIER {
 	logDebugGrammar("PATH - %v", $1.s)
+	thisExpression := ast.NewProperty($1.s) 
+	parsingStack.Push(thisExpression) 
 }
 |
-IDENTIFIER LBRACKET INT RBRACKET {
+path LBRACKET INT RBRACKET {
 	logDebugGrammar("PATH BRACKET - %v[%v]", $1.s, $3.n)
+	left := parsingStack.Pop()
+	thisExpression := ast.NewBracketMemberOperator(left.(ast.Expression), ast.NewLiteralNumber(float64($3.n))) 
+	parsingStack.Push(thisExpression)
 }
 |
-IDENTIFIER DOT path {
+path DOT IDENTIFIER {
 	logDebugGrammar("PATH DOT PATH - $1.s")
+	right := ast.NewProperty($3.s) 
+	left := parsingStack.Pop()
+	thisExpression := ast.NewDotMemberOperator(left.(ast.Expression), right) 
+	parsingStack.Push(thisExpression)
 }
 ;
 
