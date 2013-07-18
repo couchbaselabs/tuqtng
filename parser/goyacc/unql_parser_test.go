@@ -105,6 +105,11 @@ var validQueries = []string{
 	`SELECT * FROM bucket WHERE ALL child.age > 25 OVER some.my.children AS child`,
 	"SELECT * FROM bucket WHERE ALL child.age > 25 OVER `all`.my.children AS child",
 	`SELECT * FROM bucket WHERE ANY child.age > 25 OVER children AS child AND age > 65 OR color = "blue"`,
+	`SELECT * FROM bucket AS buck`,
+	`SELECT * FROM bucket AS buck OVER buck.addresses`,
+	`SELECT * FROM bucket AS buck OVER buck.addresses AS address`,
+	`SELECT * FROM bucket AS buck OVER buck.addresses AS address OVER address.lines`,
+	`SELECT * FROM bucket AS buck OVER buck.addresses AS address OVER address.lines AS line`,
 }
 
 var invalidQueries = []string{

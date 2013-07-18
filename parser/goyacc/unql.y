@@ -158,24 +158,37 @@ select_from:
 	logDebugGrammar("SELECT FROM - EMPTY")
 }
 |
-FROM data_source {
+FROM data_source_over {
 	logDebugGrammar("SELECT FROM - DATASOURCE")
+	from := parsingStack.Pop().(*ast.From)
 	switch parsingStatement := parsingStatement.(type) {
 	case *ast.SelectStatement:
-		parsingStatement.From = &ast.From{Bucket: $2.s}
+		parsingStatement.From = from
 	default:
 		logDebugGrammar("This statement does not support WHERE")
 	}
 }
 
-data_source:
-IDENTIFIER {
-	logDebugGrammar("FROM DATASOURCE")
+data_source_over:
+data_source {
+	logDebugGrammar("FROM DATASOURCE WITHOUT OVER")
 }
 |
-IDENTIFIER AS IDENTIFIER {
+data_source OVER data_source_over {
+	logDebugGrammar("FROM DATASOURCE WITH OVER")
+}
+;
+
+data_source:
+path {
+	logDebugGrammar("FROM DATASOURCE")
+	parsingStack.Push(&ast.From{Bucket: $1.s})
+}
+|
+path AS IDENTIFIER {
     // fixme support over as
 	logDebugGrammar("FROM DATASOURCE AS")
+	parsingStack.Push(&ast.From{Bucket: $1.s})
 }
 
 select_where:   

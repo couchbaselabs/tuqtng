@@ -28,10 +28,10 @@ state 2
 
 state 3
 	select_stmt:  select_compound.select_order select_limit_offset 
-	select_order: .    (22)
+	select_order: .    (24)
 
 	ORDER  shift 10
-	.  reduce 22 (src line 197)
+	.  reduce 24 (src line 210)
 
 	select_order  goto 9
 
@@ -100,10 +100,10 @@ state 8
 
 state 9
 	select_stmt:  select_compound select_order.select_limit_offset 
-	select_limit_offset: .    (29)
+	select_limit_offset: .    (31)
 
 	LIMIT  shift 45
-	.  reduce 29 (src line 248)
+	.  reduce 31 (src line 261)
 
 	select_limit_offset  goto 43
 	select_limit  goto 44
@@ -117,20 +117,22 @@ state 10
 
 state 11
 	select_core:  select_select select_from.select_where 
-	select_where: .    (20)
+	select_where: .    (22)
 
 	WHERE  shift 48
-	.  reduce 20 (src line 181)
+	.  reduce 22 (src line 194)
 
 	select_where  goto 47
 
 state 12
-	select_from:  FROM.data_source 
+	select_from:  FROM.data_source_over 
 
-	IDENTIFIER  shift 50
+	IDENTIFIER  shift 52
 	.  error
 
-	data_source  goto 49
+	data_source_over  goto 49
+	data_source  goto 50
+	path  goto 51
 
 state 13
 	select_select:  select_select_head select_select_tail.    (5)
@@ -148,7 +150,7 @@ state 15
 	result_list:  result_single.    (9)
 	result_list:  result_single.COMMA result_list 
 
-	COMMA  shift 51
+	COMMA  shift 53
 	.  reduce 9 (src line 104)
 
 
@@ -162,7 +164,7 @@ state 17
 	result_single:  expression.    (12)
 	result_single:  expression.AS IDENTIFIER 
 
-	AS  shift 52
+	AS  shift 54
 	.  reduce 12 (src line 126)
 
 
@@ -174,7 +176,7 @@ state 18
 
 state 19
 	dotted_path_star:  expr.DOT MULT 
-	expression:  expr.    (34)
+	expression:  expr.    (36)
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -194,31 +196,31 @@ state 19
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	LBRACKET  shift 70
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	AND  shift 60
-	OR  shift 61
-	NOT  shift 69
-	EQ  shift 62
-	NE  shift 67
-	GT  shift 65
-	GTE  shift 66
-	LT  shift 63
-	LTE  shift 64
-	LIKE  shift 68
-	DOT  shift 53
-	MOD  shift 58
-	.  reduce 34 (src line 286)
+	LBRACKET  shift 72
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	AND  shift 62
+	OR  shift 63
+	NOT  shift 71
+	EQ  shift 64
+	NE  shift 69
+	GT  shift 67
+	GTE  shift 68
+	LT  shift 65
+	LTE  shift 66
+	LIKE  shift 70
+	DOT  shift 55
+	MOD  shift 60
+	.  reduce 36 (src line 299)
 
 
 state 20
-	expr:  prefix_expr.    (53)
+	expr:  prefix_expr.    (55)
 
-	.  reduce 53 (src line 435)
+	.  reduce 55 (src line 448)
 
 
 state 21
@@ -241,7 +243,7 @@ state 21
 	ALL  shift 30
 	.  error
 
-	prefix_expr  goto 71
+	prefix_expr  goto 73
 	suffix_expr  goto 23
 	atom  goto 24
 	literal_value  goto 26
@@ -269,7 +271,7 @@ state 22
 	ALL  shift 30
 	.  error
 
-	prefix_expr  goto 72
+	prefix_expr  goto 74
 	suffix_expr  goto 23
 	atom  goto 24
 	literal_value  goto 26
@@ -278,13 +280,13 @@ state 22
 	array  goto 34
 
 state 23
-	prefix_expr:  suffix_expr.    (56)
+	prefix_expr:  suffix_expr.    (58)
 
-	.  reduce 56 (src line 455)
+	.  reduce 58 (src line 468)
 
 
 state 24
-	suffix_expr:  atom.    (57)
+	suffix_expr:  atom.    (59)
 	suffix_expr:  atom.IS NULL 
 	suffix_expr:  atom.IS NOT NULL 
 	suffix_expr:  atom.IS MISSING 
@@ -292,23 +294,23 @@ state 24
 	suffix_expr:  atom.IS VALUED 
 	suffix_expr:  atom.IS NOT VALUED 
 
-	IS  shift 73
-	.  reduce 57 (src line 460)
+	IS  shift 75
+	.  reduce 59 (src line 473)
 
 
 state 25
-	atom:  IDENTIFIER.    (64)
+	atom:  IDENTIFIER.    (66)
 	atom:  IDENTIFIER.LPAREN RPAREN 
 	atom:  IDENTIFIER.LPAREN function_arg_list RPAREN 
 
-	LPAREN  shift 74
-	.  reduce 64 (src line 508)
+	LPAREN  shift 76
+	.  reduce 66 (src line 521)
 
 
 state 26
-	atom:  literal_value.    (65)
+	atom:  literal_value.    (67)
 
-	.  reduce 65 (src line 514)
+	.  reduce 67 (src line 527)
 
 
 state 27
@@ -331,8 +333,8 @@ state 27
 	ALL  shift 30
 	.  error
 
-	expression  goto 75
-	expr  goto 76
+	expression  goto 77
+	expr  goto 78
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
@@ -344,7 +346,7 @@ state 27
 state 28
 	atom:  CASE.WHEN then_list else_expr END 
 
-	WHEN  shift 77
+	WHEN  shift 79
 	.  error
 
 
@@ -368,7 +370,7 @@ state 29
 	ALL  shift 30
 	.  error
 
-	expr  goto 78
+	expr  goto 80
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
@@ -397,7 +399,7 @@ state 30
 	ALL  shift 30
 	.  error
 
-	expr  goto 79
+	expr  goto 81
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
@@ -407,69 +409,69 @@ state 30
 	array  goto 34
 
 state 31
-	literal_value:  STRING.    (85)
+	literal_value:  STRING.    (87)
 
-	.  reduce 85 (src line 632)
+	.  reduce 87 (src line 645)
 
 
 state 32
-	literal_value:  number.    (86)
+	literal_value:  number.    (88)
 
-	.  reduce 86 (src line 638)
+	.  reduce 88 (src line 651)
 
 
 state 33
-	literal_value:  object.    (87)
+	literal_value:  object.    (89)
 
-	.  reduce 87 (src line 642)
+	.  reduce 89 (src line 655)
 
 
 state 34
-	literal_value:  array.    (88)
+	literal_value:  array.    (90)
 
-	.  reduce 88 (src line 646)
+	.  reduce 90 (src line 659)
 
 
 state 35
-	literal_value:  TRUE.    (89)
+	literal_value:  TRUE.    (91)
 
-	.  reduce 89 (src line 650)
+	.  reduce 91 (src line 663)
 
 
 state 36
-	literal_value:  FALSE.    (90)
+	literal_value:  FALSE.    (92)
 
-	.  reduce 90 (src line 656)
+	.  reduce 92 (src line 669)
 
 
 state 37
-	literal_value:  NULL.    (91)
+	literal_value:  NULL.    (93)
 
-	.  reduce 91 (src line 662)
+	.  reduce 93 (src line 675)
 
 
 state 38
-	number:  INT.    (92)
+	number:  INT.    (94)
 
-	.  reduce 92 (src line 670)
+	.  reduce 94 (src line 683)
 
 
 state 39
-	number:  NUMBER.    (93)
+	number:  NUMBER.    (95)
 
-	.  reduce 93 (src line 676)
+	.  reduce 95 (src line 689)
 
 
 state 40
 	object:  LBRACE.RBRACE 
 	object:  LBRACE.named_expression_list RBRACE 
 
-	RBRACE  shift 80
-	STRING  shift 83
+	RBRACE  shift 82
+	STRING  shift 85
 	.  error
 
-	named_expression_list  goto 81
-	named_expression_single  goto 82
+	named_expression_list  goto 83
+	named_expression_single  goto 84
 
 state 41
 	array:  LBRACKET.RBRACKET 
@@ -477,7 +479,7 @@ state 41
 
 	LBRACE  shift 40
 	LBRACKET  shift 41
-	RBRACKET  shift 84
+	RBRACKET  shift 86
 	TRUE  shift 35
 	FALSE  shift 36
 	NULL  shift 37
@@ -493,8 +495,8 @@ state 41
 	ALL  shift 30
 	.  error
 
-	expression  goto 86
-	expr  goto 76
+	expression  goto 88
+	expr  goto 78
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
@@ -502,7 +504,7 @@ state 41
 	number  goto 32
 	object  goto 33
 	array  goto 34
-	expression_list  goto 85
+	expression_list  goto 87
 
 state 42
 	select_select_head:  EXPLAIN SELECT.    (6)
@@ -517,18 +519,18 @@ state 43
 
 
 state 44
-	select_limit_offset:  select_limit.    (30)
+	select_limit_offset:  select_limit.    (32)
 	select_limit_offset:  select_limit.select_offset 
 
-	OFFSET  shift 88
-	.  reduce 30 (src line 252)
+	OFFSET  shift 90
+	.  reduce 32 (src line 265)
 
-	select_offset  goto 87
+	select_offset  goto 89
 
 state 45
 	select_limit:  LIMIT.INT 
 
-	INT  shift 89
+	INT  shift 91
 	.  error
 
 
@@ -552,10 +554,10 @@ state 46
 	ALL  shift 30
 	.  error
 
-	expression  goto 92
-	expr  goto 76
-	sorting_list  goto 90
-	sorting_single  goto 91
+	expression  goto 94
+	expr  goto 78
+	sorting_list  goto 92
+	sorting_single  goto 93
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
@@ -590,8 +592,8 @@ state 48
 	ALL  shift 30
 	.  error
 
-	expression  goto 93
-	expr  goto 76
+	expression  goto 95
+	expr  goto 78
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
@@ -601,20 +603,38 @@ state 48
 	array  goto 34
 
 state 49
-	select_from:  FROM data_source.    (17)
+	select_from:  FROM data_source_over.    (17)
 
 	.  reduce 17 (src line 160)
 
 
 state 50
-	data_source:  IDENTIFIER.    (18)
-	data_source:  IDENTIFIER.AS IDENTIFIER 
+	data_source_over:  data_source.    (18)
+	data_source_over:  data_source.OVER data_source_over 
 
-	AS  shift 94
-	.  reduce 18 (src line 171)
+	OVER  shift 96
+	.  reduce 18 (src line 172)
 
 
 state 51
+	data_source:  path.    (20)
+	data_source:  path.AS IDENTIFIER 
+
+	AS  shift 97
+	.  reduce 20 (src line 182)
+
+
+state 52
+	path:  IDENTIFIER.    (78)
+	path:  IDENTIFIER.LBRACKET INT RBRACKET 
+	path:  IDENTIFIER.DOT path 
+
+	LBRACKET  shift 98
+	DOT  shift 99
+	.  reduce 78 (src line 582)
+
+
+state 53
 	result_list:  result_single COMMA.result_list 
 
 	LBRACE  shift 40
@@ -635,7 +655,7 @@ state 51
 	ALL  shift 30
 	.  error
 
-	result_list  goto 95
+	result_list  goto 100
 	result_single  goto 15
 	dotted_path_star  goto 16
 	expression  goto 17
@@ -648,169 +668,24 @@ state 51
 	object  goto 33
 	array  goto 34
 
-state 52
+state 54
 	result_single:  expression AS.IDENTIFIER 
 
-	IDENTIFIER  shift 96
+	IDENTIFIER  shift 101
 	.  error
 
 
-state 53
+state 55
 	dotted_path_star:  expr DOT.MULT 
 	expr:  expr DOT.IDENTIFIER 
 
-	IDENTIFIER  shift 98
-	MULT  shift 97
+	IDENTIFIER  shift 103
+	MULT  shift 102
 	.  error
 
-
-state 54
-	expr:  expr PLUS.expr 
-
-	LBRACE  shift 40
-	LBRACKET  shift 41
-	TRUE  shift 35
-	FALSE  shift 36
-	NULL  shift 37
-	INT  shift 38
-	NUMBER  shift 39
-	IDENTIFIER  shift 25
-	STRING  shift 31
-	MINUS  shift 22
-	NOT  shift 21
-	LPAREN  shift 27
-	CASE  shift 28
-	ANY  shift 29
-	ALL  shift 30
-	.  error
-
-	expr  goto 99
-	prefix_expr  goto 20
-	suffix_expr  goto 23
-	atom  goto 24
-	literal_value  goto 26
-	number  goto 32
-	object  goto 33
-	array  goto 34
-
-state 55
-	expr:  expr MINUS.expr 
-
-	LBRACE  shift 40
-	LBRACKET  shift 41
-	TRUE  shift 35
-	FALSE  shift 36
-	NULL  shift 37
-	INT  shift 38
-	NUMBER  shift 39
-	IDENTIFIER  shift 25
-	STRING  shift 31
-	MINUS  shift 22
-	NOT  shift 21
-	LPAREN  shift 27
-	CASE  shift 28
-	ANY  shift 29
-	ALL  shift 30
-	.  error
-
-	expr  goto 100
-	prefix_expr  goto 20
-	suffix_expr  goto 23
-	atom  goto 24
-	literal_value  goto 26
-	number  goto 32
-	object  goto 33
-	array  goto 34
 
 state 56
-	expr:  expr MULT.expr 
-
-	LBRACE  shift 40
-	LBRACKET  shift 41
-	TRUE  shift 35
-	FALSE  shift 36
-	NULL  shift 37
-	INT  shift 38
-	NUMBER  shift 39
-	IDENTIFIER  shift 25
-	STRING  shift 31
-	MINUS  shift 22
-	NOT  shift 21
-	LPAREN  shift 27
-	CASE  shift 28
-	ANY  shift 29
-	ALL  shift 30
-	.  error
-
-	expr  goto 101
-	prefix_expr  goto 20
-	suffix_expr  goto 23
-	atom  goto 24
-	literal_value  goto 26
-	number  goto 32
-	object  goto 33
-	array  goto 34
-
-state 57
-	expr:  expr DIV.expr 
-
-	LBRACE  shift 40
-	LBRACKET  shift 41
-	TRUE  shift 35
-	FALSE  shift 36
-	NULL  shift 37
-	INT  shift 38
-	NUMBER  shift 39
-	IDENTIFIER  shift 25
-	STRING  shift 31
-	MINUS  shift 22
-	NOT  shift 21
-	LPAREN  shift 27
-	CASE  shift 28
-	ANY  shift 29
-	ALL  shift 30
-	.  error
-
-	expr  goto 102
-	prefix_expr  goto 20
-	suffix_expr  goto 23
-	atom  goto 24
-	literal_value  goto 26
-	number  goto 32
-	object  goto 33
-	array  goto 34
-
-state 58
-	expr:  expr MOD.expr 
-
-	LBRACE  shift 40
-	LBRACKET  shift 41
-	TRUE  shift 35
-	FALSE  shift 36
-	NULL  shift 37
-	INT  shift 38
-	NUMBER  shift 39
-	IDENTIFIER  shift 25
-	STRING  shift 31
-	MINUS  shift 22
-	NOT  shift 21
-	LPAREN  shift 27
-	CASE  shift 28
-	ANY  shift 29
-	ALL  shift 30
-	.  error
-
-	expr  goto 103
-	prefix_expr  goto 20
-	suffix_expr  goto 23
-	atom  goto 24
-	literal_value  goto 26
-	number  goto 32
-	object  goto 33
-	array  goto 34
-
-state 59
-	expr:  expr CONCAT.expr 
+	expr:  expr PLUS.expr 
 
 	LBRACE  shift 40
 	LBRACKET  shift 41
@@ -838,8 +713,8 @@ state 59
 	object  goto 33
 	array  goto 34
 
-state 60
-	expr:  expr AND.expr 
+state 57
+	expr:  expr MINUS.expr 
 
 	LBRACE  shift 40
 	LBRACKET  shift 41
@@ -867,8 +742,8 @@ state 60
 	object  goto 33
 	array  goto 34
 
-state 61
-	expr:  expr OR.expr 
+state 58
+	expr:  expr MULT.expr 
 
 	LBRACE  shift 40
 	LBRACKET  shift 41
@@ -896,8 +771,8 @@ state 61
 	object  goto 33
 	array  goto 34
 
-state 62
-	expr:  expr EQ.expr 
+state 59
+	expr:  expr DIV.expr 
 
 	LBRACE  shift 40
 	LBRACKET  shift 41
@@ -925,8 +800,8 @@ state 62
 	object  goto 33
 	array  goto 34
 
-state 63
-	expr:  expr LT.expr 
+state 60
+	expr:  expr MOD.expr 
 
 	LBRACE  shift 40
 	LBRACKET  shift 41
@@ -954,8 +829,8 @@ state 63
 	object  goto 33
 	array  goto 34
 
-state 64
-	expr:  expr LTE.expr 
+state 61
+	expr:  expr CONCAT.expr 
 
 	LBRACE  shift 40
 	LBRACKET  shift 41
@@ -983,8 +858,8 @@ state 64
 	object  goto 33
 	array  goto 34
 
-state 65
-	expr:  expr GT.expr 
+state 62
+	expr:  expr AND.expr 
 
 	LBRACE  shift 40
 	LBRACKET  shift 41
@@ -1012,8 +887,8 @@ state 65
 	object  goto 33
 	array  goto 34
 
-state 66
-	expr:  expr GTE.expr 
+state 63
+	expr:  expr OR.expr 
 
 	LBRACE  shift 40
 	LBRACKET  shift 41
@@ -1041,8 +916,8 @@ state 66
 	object  goto 33
 	array  goto 34
 
-state 67
-	expr:  expr NE.expr 
+state 64
+	expr:  expr EQ.expr 
 
 	LBRACE  shift 40
 	LBRACKET  shift 41
@@ -1070,8 +945,8 @@ state 67
 	object  goto 33
 	array  goto 34
 
-state 68
-	expr:  expr LIKE.expr 
+state 65
+	expr:  expr LT.expr 
 
 	LBRACE  shift 40
 	LBRACKET  shift 41
@@ -1099,15 +974,37 @@ state 68
 	object  goto 33
 	array  goto 34
 
-state 69
-	expr:  expr NOT.LIKE expr 
+state 66
+	expr:  expr LTE.expr 
 
-	LIKE  shift 114
+	LBRACE  shift 40
+	LBRACKET  shift 41
+	TRUE  shift 35
+	FALSE  shift 36
+	NULL  shift 37
+	INT  shift 38
+	NUMBER  shift 39
+	IDENTIFIER  shift 25
+	STRING  shift 31
+	MINUS  shift 22
+	NOT  shift 21
+	LPAREN  shift 27
+	CASE  shift 28
+	ANY  shift 29
+	ALL  shift 30
 	.  error
 
+	expr  goto 114
+	prefix_expr  goto 20
+	suffix_expr  goto 23
+	atom  goto 24
+	literal_value  goto 26
+	number  goto 32
+	object  goto 33
+	array  goto 34
 
-state 70
-	expr:  expr LBRACKET.expr RBRACKET 
+state 67
+	expr:  expr GT.expr 
 
 	LBRACE  shift 40
 	LBRACKET  shift 41
@@ -1135,19 +1032,142 @@ state 70
 	object  goto 33
 	array  goto 34
 
-state 71
-	prefix_expr:  NOT prefix_expr.    (54)
+state 68
+	expr:  expr GTE.expr 
 
-	.  reduce 54 (src line 441)
+	LBRACE  shift 40
+	LBRACKET  shift 41
+	TRUE  shift 35
+	FALSE  shift 36
+	NULL  shift 37
+	INT  shift 38
+	NUMBER  shift 39
+	IDENTIFIER  shift 25
+	STRING  shift 31
+	MINUS  shift 22
+	NOT  shift 21
+	LPAREN  shift 27
+	CASE  shift 28
+	ANY  shift 29
+	ALL  shift 30
+	.  error
+
+	expr  goto 116
+	prefix_expr  goto 20
+	suffix_expr  goto 23
+	atom  goto 24
+	literal_value  goto 26
+	number  goto 32
+	object  goto 33
+	array  goto 34
+
+state 69
+	expr:  expr NE.expr 
+
+	LBRACE  shift 40
+	LBRACKET  shift 41
+	TRUE  shift 35
+	FALSE  shift 36
+	NULL  shift 37
+	INT  shift 38
+	NUMBER  shift 39
+	IDENTIFIER  shift 25
+	STRING  shift 31
+	MINUS  shift 22
+	NOT  shift 21
+	LPAREN  shift 27
+	CASE  shift 28
+	ANY  shift 29
+	ALL  shift 30
+	.  error
+
+	expr  goto 117
+	prefix_expr  goto 20
+	suffix_expr  goto 23
+	atom  goto 24
+	literal_value  goto 26
+	number  goto 32
+	object  goto 33
+	array  goto 34
+
+state 70
+	expr:  expr LIKE.expr 
+
+	LBRACE  shift 40
+	LBRACKET  shift 41
+	TRUE  shift 35
+	FALSE  shift 36
+	NULL  shift 37
+	INT  shift 38
+	NUMBER  shift 39
+	IDENTIFIER  shift 25
+	STRING  shift 31
+	MINUS  shift 22
+	NOT  shift 21
+	LPAREN  shift 27
+	CASE  shift 28
+	ANY  shift 29
+	ALL  shift 30
+	.  error
+
+	expr  goto 118
+	prefix_expr  goto 20
+	suffix_expr  goto 23
+	atom  goto 24
+	literal_value  goto 26
+	number  goto 32
+	object  goto 33
+	array  goto 34
+
+state 71
+	expr:  expr NOT.LIKE expr 
+
+	LIKE  shift 119
+	.  error
 
 
 state 72
-	prefix_expr:  MINUS prefix_expr.    (55)
+	expr:  expr LBRACKET.expr RBRACKET 
 
-	.  reduce 55 (src line 448)
+	LBRACE  shift 40
+	LBRACKET  shift 41
+	TRUE  shift 35
+	FALSE  shift 36
+	NULL  shift 37
+	INT  shift 38
+	NUMBER  shift 39
+	IDENTIFIER  shift 25
+	STRING  shift 31
+	MINUS  shift 22
+	NOT  shift 21
+	LPAREN  shift 27
+	CASE  shift 28
+	ANY  shift 29
+	ALL  shift 30
+	.  error
 
+	expr  goto 120
+	prefix_expr  goto 20
+	suffix_expr  goto 23
+	atom  goto 24
+	literal_value  goto 26
+	number  goto 32
+	object  goto 33
+	array  goto 34
 
 state 73
+	prefix_expr:  NOT prefix_expr.    (56)
+
+	.  reduce 56 (src line 454)
+
+
+state 74
+	prefix_expr:  MINUS prefix_expr.    (57)
+
+	.  reduce 57 (src line 461)
+
+
+state 75
 	suffix_expr:  atom IS.NULL 
 	suffix_expr:  atom IS.NOT NULL 
 	suffix_expr:  atom IS.MISSING 
@@ -1155,14 +1175,14 @@ state 73
 	suffix_expr:  atom IS.VALUED 
 	suffix_expr:  atom IS.NOT VALUED 
 
-	NULL  shift 116
-	NOT  shift 117
-	VALUED  shift 119
-	MISSING  shift 118
+	NULL  shift 121
+	NOT  shift 122
+	VALUED  shift 124
+	MISSING  shift 123
 	.  error
 
 
-state 74
+state 76
 	atom:  IDENTIFIER LPAREN.RPAREN 
 	atom:  IDENTIFIER LPAREN.function_arg_list RPAREN 
 
@@ -1176,37 +1196,37 @@ state 74
 	IDENTIFIER  shift 25
 	STRING  shift 31
 	MINUS  shift 22
-	MULT  shift 125
+	MULT  shift 130
 	NOT  shift 21
 	LPAREN  shift 27
-	RPAREN  shift 120
+	RPAREN  shift 125
 	CASE  shift 28
 	ANY  shift 29
 	ALL  shift 30
 	.  error
 
-	expression  goto 124
-	expr  goto 126
+	expression  goto 129
+	expr  goto 131
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
 	literal_value  goto 26
-	function_arg_list  goto 121
-	function_arg_single  goto 122
-	fun_dotted_path_star  goto 123
+	function_arg_list  goto 126
+	function_arg_single  goto 127
+	fun_dotted_path_star  goto 128
 	number  goto 32
 	object  goto 33
 	array  goto 34
 
-state 75
+state 77
 	atom:  LPAREN expression.RPAREN 
 
-	RPAREN  shift 127
+	RPAREN  shift 132
 	.  error
 
 
-state 76
-	expression:  expr.    (34)
+state 78
+	expression:  expr.    (36)
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -1226,28 +1246,28 @@ state 76
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	LBRACKET  shift 70
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	AND  shift 60
-	OR  shift 61
-	NOT  shift 69
-	EQ  shift 62
-	NE  shift 67
-	GT  shift 65
-	GTE  shift 66
-	LT  shift 63
-	LTE  shift 64
-	LIKE  shift 68
-	DOT  shift 128
-	MOD  shift 58
-	.  reduce 34 (src line 286)
+	LBRACKET  shift 72
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	AND  shift 62
+	OR  shift 63
+	NOT  shift 71
+	EQ  shift 64
+	NE  shift 69
+	GT  shift 67
+	GTE  shift 68
+	LT  shift 65
+	LTE  shift 66
+	LIKE  shift 70
+	DOT  shift 133
+	MOD  shift 60
+	.  reduce 36 (src line 299)
 
 
-state 77
+state 79
 	atom:  CASE WHEN.then_list else_expr END 
 
 	LBRACE  shift 40
@@ -1267,17 +1287,17 @@ state 77
 	ALL  shift 30
 	.  error
 
-	expr  goto 130
+	expr  goto 135
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
 	literal_value  goto 26
-	then_list  goto 129
+	then_list  goto 134
 	number  goto 32
 	object  goto 33
 	array  goto 34
 
-state 78
+state 80
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -1298,29 +1318,29 @@ state 78
 	expr:  expr.LBRACKET expr RBRACKET 
 	atom:  ANY expr.OVER path AS IDENTIFIER 
 
-	LBRACKET  shift 70
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	AND  shift 60
-	OR  shift 61
-	NOT  shift 69
-	EQ  shift 62
-	NE  shift 67
-	GT  shift 65
-	GTE  shift 66
-	LT  shift 63
-	LTE  shift 64
-	LIKE  shift 68
-	DOT  shift 128
-	OVER  shift 131
-	MOD  shift 58
+	LBRACKET  shift 72
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	AND  shift 62
+	OR  shift 63
+	NOT  shift 71
+	EQ  shift 64
+	NE  shift 69
+	GT  shift 67
+	GTE  shift 68
+	LT  shift 65
+	LTE  shift 66
+	LIKE  shift 70
+	DOT  shift 133
+	OVER  shift 136
+	MOD  shift 60
 	.  error
 
 
-state 79
+state 81
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -1341,298 +1361,190 @@ state 79
 	expr:  expr.LBRACKET expr RBRACKET 
 	atom:  ALL expr.OVER path AS IDENTIFIER 
 
-	LBRACKET  shift 70
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	AND  shift 60
-	OR  shift 61
-	NOT  shift 69
-	EQ  shift 62
-	NE  shift 67
-	GT  shift 65
-	GTE  shift 66
-	LT  shift 63
-	LTE  shift 64
-	LIKE  shift 68
-	DOT  shift 128
-	OVER  shift 132
-	MOD  shift 58
-	.  error
-
-
-state 80
-	object:  LBRACE RBRACE.    (94)
-
-	.  reduce 94 (src line 684)
-
-
-state 81
-	object:  LBRACE named_expression_list.RBRACE 
-
-	RBRACE  shift 133
+	LBRACKET  shift 72
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	AND  shift 62
+	OR  shift 63
+	NOT  shift 71
+	EQ  shift 64
+	NE  shift 69
+	GT  shift 67
+	GTE  shift 68
+	LT  shift 65
+	LTE  shift 66
+	LIKE  shift 70
+	DOT  shift 133
+	OVER  shift 137
+	MOD  shift 60
 	.  error
 
 
 state 82
-	named_expression_list:  named_expression_single.    (96)
-	named_expression_list:  named_expression_single.COMMA named_expression_list 
+	object:  LBRACE RBRACE.    (96)
 
-	COMMA  shift 134
-	.  reduce 96 (src line 696)
+	.  reduce 96 (src line 697)
 
 
 state 83
-	named_expression_single:  STRING.COLON expression 
+	object:  LBRACE named_expression_list.RBRACE 
 
-	COLON  shift 135
+	RBRACE  shift 138
 	.  error
 
 
 state 84
-	array:  LBRACKET RBRACKET.    (99)
+	named_expression_list:  named_expression_single.    (98)
+	named_expression_list:  named_expression_single.COMMA named_expression_list 
 
-	.  reduce 99 (src line 722)
+	COMMA  shift 139
+	.  reduce 98 (src line 709)
 
 
 state 85
-	array:  LBRACKET expression_list.RBRACKET 
+	named_expression_single:  STRING.COLON expression 
 
-	RBRACKET  shift 136
+	COLON  shift 140
 	.  error
 
 
 state 86
-	expression_list:  expression.    (101)
-	expression_list:  expression.COMMA expression_list 
+	array:  LBRACKET RBRACKET.    (101)
 
-	COMMA  shift 137
-	.  reduce 101 (src line 737)
+	.  reduce 101 (src line 735)
 
 
 state 87
-	select_limit_offset:  select_limit select_offset.    (31)
+	array:  LBRACKET expression_list.RBRACKET 
 
-	.  reduce 31 (src line 256)
+	RBRACKET  shift 141
+	.  error
 
 
 state 88
-	select_offset:  OFFSET.INT 
+	expression_list:  expression.    (103)
+	expression_list:  expression.COMMA expression_list 
 
-	INT  shift 138
-	.  error
+	COMMA  shift 142
+	.  reduce 103 (src line 750)
 
 
 state 89
-	select_limit:  LIMIT INT.    (32)
+	select_limit_offset:  select_limit select_offset.    (33)
 
-	.  reduce 32 (src line 262)
+	.  reduce 33 (src line 269)
 
 
 state 90
-	select_order:  ORDER BY sorting_list.    (23)
+	select_offset:  OFFSET.INT 
 
-	.  reduce 23 (src line 199)
-
-
-state 91
-	sorting_list:  sorting_single.    (24)
-	sorting_list:  sorting_single.COMMA sorting_list 
-
-	COMMA  shift 139
-	.  reduce 24 (src line 205)
-
-
-state 92
-	sorting_single:  expression.    (26)
-	sorting_single:  expression.ASC 
-	sorting_single:  expression.DESC 
-
-	ASC  shift 140
-	DESC  shift 141
-	.  reduce 26 (src line 214)
-
-
-state 93
-	select_where:  WHERE expression.    (21)
-
-	.  reduce 21 (src line 185)
-
-
-state 94
-	data_source:  IDENTIFIER AS.IDENTIFIER 
-
-	IDENTIFIER  shift 142
+	INT  shift 143
 	.  error
 
 
+state 91
+	select_limit:  LIMIT INT.    (34)
+
+	.  reduce 34 (src line 275)
+
+
+state 92
+	select_order:  ORDER BY sorting_list.    (25)
+
+	.  reduce 25 (src line 212)
+
+
+state 93
+	sorting_list:  sorting_single.    (26)
+	sorting_list:  sorting_single.COMMA sorting_list 
+
+	COMMA  shift 144
+	.  reduce 26 (src line 218)
+
+
+state 94
+	sorting_single:  expression.    (28)
+	sorting_single:  expression.ASC 
+	sorting_single:  expression.DESC 
+
+	ASC  shift 145
+	DESC  shift 146
+	.  reduce 28 (src line 227)
+
+
 state 95
+	select_where:  WHERE expression.    (23)
+
+	.  reduce 23 (src line 198)
+
+
+state 96
+	data_source_over:  data_source OVER.data_source_over 
+
+	IDENTIFIER  shift 52
+	.  error
+
+	data_source_over  goto 147
+	data_source  goto 50
+	path  goto 51
+
+state 97
+	data_source:  path AS.IDENTIFIER 
+
+	IDENTIFIER  shift 148
+	.  error
+
+
+state 98
+	path:  IDENTIFIER LBRACKET.INT RBRACKET 
+
+	INT  shift 149
+	.  error
+
+
+state 99
+	path:  IDENTIFIER DOT.path 
+
+	IDENTIFIER  shift 52
+	.  error
+
+	path  goto 150
+
+state 100
 	result_list:  result_single COMMA result_list.    (10)
 
 	.  reduce 10 (src line 109)
 
 
-state 96
+state 101
 	result_single:  expression AS IDENTIFIER.    (13)
 
 	.  reduce 13 (src line 133)
 
 
-state 97
+state 102
 	dotted_path_star:  expr DOT MULT.    (15)
 
 	.  reduce 15 (src line 148)
 
 
-state 98
-	expr:  expr DOT IDENTIFIER.    (51)
-
-	.  reduce 51 (src line 419)
-
-
-state 99
-	expr:  expr.PLUS expr 
-	expr:  expr PLUS expr.    (35)
-	expr:  expr.MINUS expr 
-	expr:  expr.MULT expr 
-	expr:  expr.DIV expr 
-	expr:  expr.MOD expr 
-	expr:  expr.CONCAT expr 
-	expr:  expr.AND expr 
-	expr:  expr.OR expr 
-	expr:  expr.EQ expr 
-	expr:  expr.LT expr 
-	expr:  expr.LTE expr 
-	expr:  expr.GT expr 
-	expr:  expr.GTE expr 
-	expr:  expr.NE expr 
-	expr:  expr.LIKE expr 
-	expr:  expr.NOT LIKE expr 
-	expr:  expr.DOT IDENTIFIER 
-	expr:  expr.LBRACKET expr RBRACKET 
-
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	NOT  shift 69
-	MOD  shift 58
-	.  reduce 35 (src line 291)
-
-
-state 100
-	expr:  expr.PLUS expr 
-	expr:  expr.MINUS expr 
-	expr:  expr MINUS expr.    (36)
-	expr:  expr.MULT expr 
-	expr:  expr.DIV expr 
-	expr:  expr.MOD expr 
-	expr:  expr.CONCAT expr 
-	expr:  expr.AND expr 
-	expr:  expr.OR expr 
-	expr:  expr.EQ expr 
-	expr:  expr.LT expr 
-	expr:  expr.LTE expr 
-	expr:  expr.GT expr 
-	expr:  expr.GTE expr 
-	expr:  expr.NE expr 
-	expr:  expr.LIKE expr 
-	expr:  expr.NOT LIKE expr 
-	expr:  expr.DOT IDENTIFIER 
-	expr:  expr.LBRACKET expr RBRACKET 
-
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	NOT  shift 69
-	MOD  shift 58
-	.  reduce 36 (src line 299)
-
-
-state 101
-	expr:  expr.PLUS expr 
-	expr:  expr.MINUS expr 
-	expr:  expr.MULT expr 
-	expr:  expr MULT expr.    (37)
-	expr:  expr.DIV expr 
-	expr:  expr.MOD expr 
-	expr:  expr.CONCAT expr 
-	expr:  expr.AND expr 
-	expr:  expr.OR expr 
-	expr:  expr.EQ expr 
-	expr:  expr.LT expr 
-	expr:  expr.LTE expr 
-	expr:  expr.GT expr 
-	expr:  expr.GTE expr 
-	expr:  expr.NE expr 
-	expr:  expr.LIKE expr 
-	expr:  expr.NOT LIKE expr 
-	expr:  expr.DOT IDENTIFIER 
-	expr:  expr.LBRACKET expr RBRACKET 
-
-	NOT  shift 69
-	.  reduce 37 (src line 307)
-
-
-state 102
-	expr:  expr.PLUS expr 
-	expr:  expr.MINUS expr 
-	expr:  expr.MULT expr 
-	expr:  expr.DIV expr 
-	expr:  expr DIV expr.    (38)
-	expr:  expr.MOD expr 
-	expr:  expr.CONCAT expr 
-	expr:  expr.AND expr 
-	expr:  expr.OR expr 
-	expr:  expr.EQ expr 
-	expr:  expr.LT expr 
-	expr:  expr.LTE expr 
-	expr:  expr.GT expr 
-	expr:  expr.GTE expr 
-	expr:  expr.NE expr 
-	expr:  expr.LIKE expr 
-	expr:  expr.NOT LIKE expr 
-	expr:  expr.DOT IDENTIFIER 
-	expr:  expr.LBRACKET expr RBRACKET 
-
-	NOT  shift 69
-	.  reduce 38 (src line 315)
-
-
 state 103
-	expr:  expr.PLUS expr 
-	expr:  expr.MINUS expr 
-	expr:  expr.MULT expr 
-	expr:  expr.DIV expr 
-	expr:  expr.MOD expr 
-	expr:  expr MOD expr.    (39)
-	expr:  expr.CONCAT expr 
-	expr:  expr.AND expr 
-	expr:  expr.OR expr 
-	expr:  expr.EQ expr 
-	expr:  expr.LT expr 
-	expr:  expr.LTE expr 
-	expr:  expr.GT expr 
-	expr:  expr.GTE expr 
-	expr:  expr.NE expr 
-	expr:  expr.LIKE expr 
-	expr:  expr.NOT LIKE expr 
-	expr:  expr.DOT IDENTIFIER 
-	expr:  expr.LBRACKET expr RBRACKET 
+	expr:  expr DOT IDENTIFIER.    (53)
 
-	NOT  shift 69
-	.  reduce 39 (src line 323)
+	.  reduce 53 (src line 432)
 
 
 state 104
 	expr:  expr.PLUS expr 
+	expr:  expr PLUS expr.    (37)
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
 	expr:  expr.DIV expr 
 	expr:  expr.MOD expr 
 	expr:  expr.CONCAT expr 
-	expr:  expr CONCAT expr.    (40)
 	expr:  expr.AND expr 
 	expr:  expr.OR expr 
 	expr:  expr.EQ expr 
@@ -1646,19 +1558,23 @@ state 104
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	NOT  shift 69
-	.  reduce 40 (src line 331)
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	NOT  shift 71
+	MOD  shift 60
+	.  reduce 37 (src line 304)
 
 
 state 105
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
+	expr:  expr MINUS expr.    (38)
 	expr:  expr.MULT expr 
 	expr:  expr.DIV expr 
 	expr:  expr.MOD expr 
 	expr:  expr.CONCAT expr 
 	expr:  expr.AND expr 
-	expr:  expr AND expr.    (41)
 	expr:  expr.OR expr 
 	expr:  expr.EQ expr 
 	expr:  expr.LT expr 
@@ -1671,33 +1587,24 @@ state 105
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	NOT  shift 69
-	EQ  shift 62
-	NE  shift 67
-	GT  shift 65
-	GTE  shift 66
-	LT  shift 63
-	LTE  shift 64
-	LIKE  shift 68
-	MOD  shift 58
-	.  reduce 41 (src line 339)
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	NOT  shift 71
+	MOD  shift 60
+	.  reduce 38 (src line 312)
 
 
 state 106
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
+	expr:  expr MULT expr.    (39)
 	expr:  expr.DIV expr 
 	expr:  expr.MOD expr 
 	expr:  expr.CONCAT expr 
 	expr:  expr.AND expr 
 	expr:  expr.OR expr 
-	expr:  expr OR expr.    (42)
 	expr:  expr.EQ expr 
 	expr:  expr.LT expr 
 	expr:  expr.LTE expr 
@@ -1709,22 +1616,8 @@ state 106
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	AND  shift 60
-	NOT  shift 69
-	EQ  shift 62
-	NE  shift 67
-	GT  shift 65
-	GTE  shift 66
-	LT  shift 63
-	LTE  shift 64
-	LIKE  shift 68
-	MOD  shift 58
-	.  reduce 42 (src line 347)
+	NOT  shift 71
+	.  reduce 39 (src line 320)
 
 
 state 107
@@ -1732,12 +1625,12 @@ state 107
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
 	expr:  expr.DIV expr 
+	expr:  expr DIV expr.    (40)
 	expr:  expr.MOD expr 
 	expr:  expr.CONCAT expr 
 	expr:  expr.AND expr 
 	expr:  expr.OR expr 
 	expr:  expr.EQ expr 
-	expr:  expr EQ expr.    (43)
 	expr:  expr.LT expr 
 	expr:  expr.LTE expr 
 	expr:  expr.GT expr 
@@ -1748,14 +1641,8 @@ state 107
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	NOT  shift 69
-	MOD  shift 58
-	.  reduce 43 (src line 355)
+	NOT  shift 71
+	.  reduce 40 (src line 328)
 
 
 state 108
@@ -1764,12 +1651,12 @@ state 108
 	expr:  expr.MULT expr 
 	expr:  expr.DIV expr 
 	expr:  expr.MOD expr 
+	expr:  expr MOD expr.    (41)
 	expr:  expr.CONCAT expr 
 	expr:  expr.AND expr 
 	expr:  expr.OR expr 
 	expr:  expr.EQ expr 
 	expr:  expr.LT expr 
-	expr:  expr LT expr.    (44)
 	expr:  expr.LTE expr 
 	expr:  expr.GT expr 
 	expr:  expr.GTE expr 
@@ -1779,14 +1666,8 @@ state 108
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	NOT  shift 69
-	MOD  shift 58
-	.  reduce 44 (src line 363)
+	NOT  shift 71
+	.  reduce 41 (src line 336)
 
 
 state 109
@@ -1796,12 +1677,12 @@ state 109
 	expr:  expr.DIV expr 
 	expr:  expr.MOD expr 
 	expr:  expr.CONCAT expr 
+	expr:  expr CONCAT expr.    (42)
 	expr:  expr.AND expr 
 	expr:  expr.OR expr 
 	expr:  expr.EQ expr 
 	expr:  expr.LT expr 
 	expr:  expr.LTE expr 
-	expr:  expr LTE expr.    (45)
 	expr:  expr.GT expr 
 	expr:  expr.GTE expr 
 	expr:  expr.NE expr 
@@ -1810,14 +1691,8 @@ state 109
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	NOT  shift 69
-	MOD  shift 58
-	.  reduce 45 (src line 371)
+	NOT  shift 71
+	.  reduce 42 (src line 344)
 
 
 state 110
@@ -1828,12 +1703,12 @@ state 110
 	expr:  expr.MOD expr 
 	expr:  expr.CONCAT expr 
 	expr:  expr.AND expr 
+	expr:  expr AND expr.    (43)
 	expr:  expr.OR expr 
 	expr:  expr.EQ expr 
 	expr:  expr.LT expr 
 	expr:  expr.LTE expr 
 	expr:  expr.GT expr 
-	expr:  expr GT expr.    (46)
 	expr:  expr.GTE expr 
 	expr:  expr.NE expr 
 	expr:  expr.LIKE expr 
@@ -1841,14 +1716,21 @@ state 110
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	NOT  shift 69
-	MOD  shift 58
-	.  reduce 46 (src line 379)
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	NOT  shift 71
+	EQ  shift 64
+	NE  shift 69
+	GT  shift 67
+	GTE  shift 68
+	LT  shift 65
+	LTE  shift 66
+	LIKE  shift 70
+	MOD  shift 60
+	.  reduce 43 (src line 352)
 
 
 state 111
@@ -1860,26 +1742,34 @@ state 111
 	expr:  expr.CONCAT expr 
 	expr:  expr.AND expr 
 	expr:  expr.OR expr 
+	expr:  expr OR expr.    (44)
 	expr:  expr.EQ expr 
 	expr:  expr.LT expr 
 	expr:  expr.LTE expr 
 	expr:  expr.GT expr 
 	expr:  expr.GTE expr 
-	expr:  expr GTE expr.    (47)
 	expr:  expr.NE expr 
 	expr:  expr.LIKE expr 
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	NOT  shift 69
-	MOD  shift 58
-	.  reduce 47 (src line 387)
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	AND  shift 62
+	NOT  shift 71
+	EQ  shift 64
+	NE  shift 69
+	GT  shift 67
+	GTE  shift 68
+	LT  shift 65
+	LTE  shift 66
+	LIKE  shift 70
+	MOD  shift 60
+	.  reduce 44 (src line 360)
 
 
 state 112
@@ -1892,25 +1782,25 @@ state 112
 	expr:  expr.AND expr 
 	expr:  expr.OR expr 
 	expr:  expr.EQ expr 
+	expr:  expr EQ expr.    (45)
 	expr:  expr.LT expr 
 	expr:  expr.LTE expr 
 	expr:  expr.GT expr 
 	expr:  expr.GTE expr 
 	expr:  expr.NE expr 
-	expr:  expr NE expr.    (48)
 	expr:  expr.LIKE expr 
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	NOT  shift 69
-	MOD  shift 58
-	.  reduce 48 (src line 395)
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	NOT  shift 71
+	MOD  shift 60
+	.  reduce 45 (src line 368)
 
 
 state 113
@@ -1924,27 +1814,182 @@ state 113
 	expr:  expr.OR expr 
 	expr:  expr.EQ expr 
 	expr:  expr.LT expr 
+	expr:  expr LT expr.    (46)
 	expr:  expr.LTE expr 
 	expr:  expr.GT expr 
 	expr:  expr.GTE expr 
 	expr:  expr.NE expr 
 	expr:  expr.LIKE expr 
-	expr:  expr LIKE expr.    (49)
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	NOT  shift 69
-	MOD  shift 58
-	.  reduce 49 (src line 403)
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	NOT  shift 71
+	MOD  shift 60
+	.  reduce 46 (src line 376)
 
 
 state 114
+	expr:  expr.PLUS expr 
+	expr:  expr.MINUS expr 
+	expr:  expr.MULT expr 
+	expr:  expr.DIV expr 
+	expr:  expr.MOD expr 
+	expr:  expr.CONCAT expr 
+	expr:  expr.AND expr 
+	expr:  expr.OR expr 
+	expr:  expr.EQ expr 
+	expr:  expr.LT expr 
+	expr:  expr.LTE expr 
+	expr:  expr LTE expr.    (47)
+	expr:  expr.GT expr 
+	expr:  expr.GTE expr 
+	expr:  expr.NE expr 
+	expr:  expr.LIKE expr 
+	expr:  expr.NOT LIKE expr 
+	expr:  expr.DOT IDENTIFIER 
+	expr:  expr.LBRACKET expr RBRACKET 
+
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	NOT  shift 71
+	MOD  shift 60
+	.  reduce 47 (src line 384)
+
+
+state 115
+	expr:  expr.PLUS expr 
+	expr:  expr.MINUS expr 
+	expr:  expr.MULT expr 
+	expr:  expr.DIV expr 
+	expr:  expr.MOD expr 
+	expr:  expr.CONCAT expr 
+	expr:  expr.AND expr 
+	expr:  expr.OR expr 
+	expr:  expr.EQ expr 
+	expr:  expr.LT expr 
+	expr:  expr.LTE expr 
+	expr:  expr.GT expr 
+	expr:  expr GT expr.    (48)
+	expr:  expr.GTE expr 
+	expr:  expr.NE expr 
+	expr:  expr.LIKE expr 
+	expr:  expr.NOT LIKE expr 
+	expr:  expr.DOT IDENTIFIER 
+	expr:  expr.LBRACKET expr RBRACKET 
+
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	NOT  shift 71
+	MOD  shift 60
+	.  reduce 48 (src line 392)
+
+
+state 116
+	expr:  expr.PLUS expr 
+	expr:  expr.MINUS expr 
+	expr:  expr.MULT expr 
+	expr:  expr.DIV expr 
+	expr:  expr.MOD expr 
+	expr:  expr.CONCAT expr 
+	expr:  expr.AND expr 
+	expr:  expr.OR expr 
+	expr:  expr.EQ expr 
+	expr:  expr.LT expr 
+	expr:  expr.LTE expr 
+	expr:  expr.GT expr 
+	expr:  expr.GTE expr 
+	expr:  expr GTE expr.    (49)
+	expr:  expr.NE expr 
+	expr:  expr.LIKE expr 
+	expr:  expr.NOT LIKE expr 
+	expr:  expr.DOT IDENTIFIER 
+	expr:  expr.LBRACKET expr RBRACKET 
+
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	NOT  shift 71
+	MOD  shift 60
+	.  reduce 49 (src line 400)
+
+
+state 117
+	expr:  expr.PLUS expr 
+	expr:  expr.MINUS expr 
+	expr:  expr.MULT expr 
+	expr:  expr.DIV expr 
+	expr:  expr.MOD expr 
+	expr:  expr.CONCAT expr 
+	expr:  expr.AND expr 
+	expr:  expr.OR expr 
+	expr:  expr.EQ expr 
+	expr:  expr.LT expr 
+	expr:  expr.LTE expr 
+	expr:  expr.GT expr 
+	expr:  expr.GTE expr 
+	expr:  expr.NE expr 
+	expr:  expr NE expr.    (50)
+	expr:  expr.LIKE expr 
+	expr:  expr.NOT LIKE expr 
+	expr:  expr.DOT IDENTIFIER 
+	expr:  expr.LBRACKET expr RBRACKET 
+
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	NOT  shift 71
+	MOD  shift 60
+	.  reduce 50 (src line 408)
+
+
+state 118
+	expr:  expr.PLUS expr 
+	expr:  expr.MINUS expr 
+	expr:  expr.MULT expr 
+	expr:  expr.DIV expr 
+	expr:  expr.MOD expr 
+	expr:  expr.CONCAT expr 
+	expr:  expr.AND expr 
+	expr:  expr.OR expr 
+	expr:  expr.EQ expr 
+	expr:  expr.LT expr 
+	expr:  expr.LTE expr 
+	expr:  expr.GT expr 
+	expr:  expr.GTE expr 
+	expr:  expr.NE expr 
+	expr:  expr.LIKE expr 
+	expr:  expr LIKE expr.    (51)
+	expr:  expr.NOT LIKE expr 
+	expr:  expr.DOT IDENTIFIER 
+	expr:  expr.LBRACKET expr RBRACKET 
+
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	NOT  shift 71
+	MOD  shift 60
+	.  reduce 51 (src line 416)
+
+
+state 119
 	expr:  expr NOT LIKE.expr 
 
 	LBRACE  shift 40
@@ -1964,7 +2009,7 @@ state 114
 	ALL  shift 30
 	.  error
 
-	expr  goto 143
+	expr  goto 151
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
@@ -1973,7 +2018,7 @@ state 114
 	object  goto 33
 	array  goto 34
 
-state 115
+state 120
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -1994,98 +2039,98 @@ state 115
 	expr:  expr.LBRACKET expr RBRACKET 
 	expr:  expr LBRACKET expr.RBRACKET 
 
-	LBRACKET  shift 70
-	RBRACKET  shift 144
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	AND  shift 60
-	OR  shift 61
-	NOT  shift 69
-	EQ  shift 62
-	NE  shift 67
-	GT  shift 65
-	GTE  shift 66
-	LT  shift 63
-	LTE  shift 64
-	LIKE  shift 68
-	DOT  shift 128
-	MOD  shift 58
+	LBRACKET  shift 72
+	RBRACKET  shift 152
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	AND  shift 62
+	OR  shift 63
+	NOT  shift 71
+	EQ  shift 64
+	NE  shift 69
+	GT  shift 67
+	GTE  shift 68
+	LT  shift 65
+	LTE  shift 66
+	LIKE  shift 70
+	DOT  shift 133
+	MOD  shift 60
 	.  error
 
 
-state 116
-	suffix_expr:  atom IS NULL.    (58)
+state 121
+	suffix_expr:  atom IS NULL.    (60)
 
-	.  reduce 58 (src line 464)
+	.  reduce 60 (src line 477)
 
 
-state 117
+state 122
 	suffix_expr:  atom IS NOT.NULL 
 	suffix_expr:  atom IS NOT.MISSING 
 	suffix_expr:  atom IS NOT.VALUED 
 
-	NULL  shift 145
-	VALUED  shift 147
-	MISSING  shift 146
+	NULL  shift 153
+	VALUED  shift 155
+	MISSING  shift 154
 	.  error
-
-
-state 118
-	suffix_expr:  atom IS MISSING.    (60)
-
-	.  reduce 60 (src line 478)
-
-
-state 119
-	suffix_expr:  atom IS VALUED.    (62)
-
-	.  reduce 62 (src line 492)
-
-
-state 120
-	atom:  IDENTIFIER LPAREN RPAREN.    (70)
-
-	.  reduce 70 (src line 534)
-
-
-state 121
-	atom:  IDENTIFIER LPAREN function_arg_list.RPAREN 
-
-	RPAREN  shift 148
-	.  error
-
-
-state 122
-	function_arg_list:  function_arg_single.    (79)
-	function_arg_list:  function_arg_single.COMMA function_arg_list 
-
-	COMMA  shift 149
-	.  reduce 79 (src line 584)
 
 
 state 123
-	function_arg_single:  fun_dotted_path_star.    (81)
+	suffix_expr:  atom IS MISSING.    (62)
 
-	.  reduce 81 (src line 603)
+	.  reduce 62 (src line 491)
 
 
 state 124
-	function_arg_single:  expression.    (82)
+	suffix_expr:  atom IS VALUED.    (64)
 
-	.  reduce 82 (src line 607)
+	.  reduce 64 (src line 505)
 
 
 state 125
-	fun_dotted_path_star:  MULT.    (83)
+	atom:  IDENTIFIER LPAREN RPAREN.    (72)
+
+	.  reduce 72 (src line 547)
+
+
+state 126
+	atom:  IDENTIFIER LPAREN function_arg_list.RPAREN 
+
+	RPAREN  shift 156
+	.  error
+
+
+state 127
+	function_arg_list:  function_arg_single.    (81)
+	function_arg_list:  function_arg_single.COMMA function_arg_list 
+
+	COMMA  shift 157
+	.  reduce 81 (src line 597)
+
+
+state 128
+	function_arg_single:  fun_dotted_path_star.    (83)
 
 	.  reduce 83 (src line 616)
 
 
-state 126
-	expression:  expr.    (34)
+state 129
+	function_arg_single:  expression.    (84)
+
+	.  reduce 84 (src line 620)
+
+
+state 130
+	fun_dotted_path_star:  MULT.    (85)
+
+	.  reduce 85 (src line 629)
+
+
+state 131
+	expression:  expr.    (36)
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -2106,50 +2151,50 @@ state 126
 	expr:  expr.LBRACKET expr RBRACKET 
 	fun_dotted_path_star:  expr.DOT MULT 
 
-	LBRACKET  shift 70
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	AND  shift 60
-	OR  shift 61
-	NOT  shift 69
-	EQ  shift 62
-	NE  shift 67
-	GT  shift 65
-	GTE  shift 66
-	LT  shift 63
-	LTE  shift 64
-	LIKE  shift 68
-	DOT  shift 150
-	MOD  shift 58
-	.  reduce 34 (src line 286)
+	LBRACKET  shift 72
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	AND  shift 62
+	OR  shift 63
+	NOT  shift 71
+	EQ  shift 64
+	NE  shift 69
+	GT  shift 67
+	GTE  shift 68
+	LT  shift 65
+	LTE  shift 66
+	LIKE  shift 70
+	DOT  shift 158
+	MOD  shift 60
+	.  reduce 36 (src line 299)
 
 
-state 127
-	atom:  LPAREN expression RPAREN.    (66)
+state 132
+	atom:  LPAREN expression RPAREN.    (68)
 
-	.  reduce 66 (src line 518)
+	.  reduce 68 (src line 531)
 
 
-state 128
+state 133
 	expr:  expr DOT.IDENTIFIER 
 
-	IDENTIFIER  shift 98
+	IDENTIFIER  shift 103
 	.  error
 
 
-state 129
+state 134
 	atom:  CASE WHEN then_list.else_expr END 
-	else_expr: .    (74)
+	else_expr: .    (76)
 
-	ELSE  shift 152
-	.  reduce 74 (src line 559)
+	ELSE  shift 160
+	.  reduce 76 (src line 572)
 
-	else_expr  goto 151
+	else_expr  goto 159
 
-state 130
+state 135
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -2171,60 +2216,60 @@ state 130
 	then_list:  expr.THEN expr 
 	then_list:  expr.THEN expr WHEN then_list 
 
-	LBRACKET  shift 70
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	AND  shift 60
-	OR  shift 61
-	NOT  shift 69
-	EQ  shift 62
-	NE  shift 67
-	GT  shift 65
-	GTE  shift 66
-	LT  shift 63
-	LTE  shift 64
-	LIKE  shift 68
-	DOT  shift 128
-	THEN  shift 153
-	MOD  shift 58
+	LBRACKET  shift 72
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	AND  shift 62
+	OR  shift 63
+	NOT  shift 71
+	EQ  shift 64
+	NE  shift 69
+	GT  shift 67
+	GTE  shift 68
+	LT  shift 65
+	LTE  shift 66
+	LIKE  shift 70
+	DOT  shift 133
+	THEN  shift 161
+	MOD  shift 60
 	.  error
 
 
-state 131
+state 136
 	atom:  ANY expr OVER.path AS IDENTIFIER 
 
-	IDENTIFIER  shift 155
+	IDENTIFIER  shift 52
 	.  error
 
-	path  goto 154
+	path  goto 162
 
-state 132
+state 137
 	atom:  ALL expr OVER.path AS IDENTIFIER 
 
-	IDENTIFIER  shift 155
+	IDENTIFIER  shift 52
 	.  error
 
-	path  goto 156
+	path  goto 163
 
-state 133
-	object:  LBRACE named_expression_list RBRACE.    (95)
+state 138
+	object:  LBRACE named_expression_list RBRACE.    (97)
 
-	.  reduce 95 (src line 690)
+	.  reduce 97 (src line 703)
 
 
-state 134
+state 139
 	named_expression_list:  named_expression_single COMMA.named_expression_list 
 
-	STRING  shift 83
+	STRING  shift 85
 	.  error
 
-	named_expression_list  goto 157
-	named_expression_single  goto 82
+	named_expression_list  goto 164
+	named_expression_single  goto 84
 
-state 135
+state 140
 	named_expression_single:  STRING COLON.expression 
 
 	LBRACE  shift 40
@@ -2244,8 +2289,8 @@ state 135
 	ALL  shift 30
 	.  error
 
-	expression  goto 158
-	expr  goto 76
+	expression  goto 165
+	expr  goto 78
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
@@ -2254,13 +2299,13 @@ state 135
 	object  goto 33
 	array  goto 34
 
-state 136
-	array:  LBRACKET expression_list RBRACKET.    (100)
+state 141
+	array:  LBRACKET expression_list RBRACKET.    (102)
 
-	.  reduce 100 (src line 728)
+	.  reduce 102 (src line 741)
 
 
-state 137
+state 142
 	expression_list:  expression COMMA.expression_list 
 
 	LBRACE  shift 40
@@ -2280,8 +2325,8 @@ state 137
 	ALL  shift 30
 	.  error
 
-	expression  goto 86
-	expr  goto 76
+	expression  goto 88
+	expr  goto 78
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
@@ -2289,15 +2334,15 @@ state 137
 	number  goto 32
 	object  goto 33
 	array  goto 34
-	expression_list  goto 159
+	expression_list  goto 166
 
-state 138
-	select_offset:  OFFSET INT.    (33)
+state 143
+	select_offset:  OFFSET INT.    (35)
 
-	.  reduce 33 (src line 273)
+	.  reduce 35 (src line 286)
 
 
-state 139
+state 144
 	sorting_list:  sorting_single COMMA.sorting_list 
 
 	LBRACE  shift 40
@@ -2317,10 +2362,10 @@ state 139
 	ALL  shift 30
 	.  error
 
-	expression  goto 92
-	expr  goto 76
-	sorting_list  goto 160
-	sorting_single  goto 91
+	expression  goto 94
+	expr  goto 78
+	sorting_list  goto 167
+	sorting_single  goto 93
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
@@ -2329,25 +2374,44 @@ state 139
 	object  goto 33
 	array  goto 34
 
-state 140
-	sorting_single:  expression ASC.    (27)
+state 145
+	sorting_single:  expression ASC.    (29)
 
-	.  reduce 27 (src line 225)
-
-
-state 141
-	sorting_single:  expression DESC.    (28)
-
-	.  reduce 28 (src line 236)
+	.  reduce 29 (src line 238)
 
 
-state 142
-	data_source:  IDENTIFIER AS IDENTIFIER.    (19)
+state 146
+	sorting_single:  expression DESC.    (30)
 
-	.  reduce 19 (src line 175)
+	.  reduce 30 (src line 249)
 
 
-state 143
+state 147
+	data_source_over:  data_source OVER data_source_over.    (19)
+
+	.  reduce 19 (src line 176)
+
+
+state 148
+	data_source:  path AS IDENTIFIER.    (21)
+
+	.  reduce 21 (src line 187)
+
+
+state 149
+	path:  IDENTIFIER LBRACKET INT.RBRACKET 
+
+	RBRACKET  shift 168
+	.  error
+
+
+state 150
+	path:  IDENTIFIER DOT path.    (80)
+
+	.  reduce 80 (src line 590)
+
+
+state 151
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -2364,51 +2428,51 @@ state 143
 	expr:  expr.NE expr 
 	expr:  expr.LIKE expr 
 	expr:  expr.NOT LIKE expr 
-	expr:  expr NOT LIKE expr.    (50)
+	expr:  expr NOT LIKE expr.    (52)
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
 
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	NOT  shift 69
-	MOD  shift 58
-	.  reduce 50 (src line 411)
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	NOT  shift 71
+	MOD  shift 60
+	.  reduce 52 (src line 424)
 
 
-state 144
-	expr:  expr LBRACKET expr RBRACKET.    (52)
+state 152
+	expr:  expr LBRACKET expr RBRACKET.    (54)
 
-	.  reduce 52 (src line 427)
-
-
-state 145
-	suffix_expr:  atom IS NOT NULL.    (59)
-
-	.  reduce 59 (src line 471)
+	.  reduce 54 (src line 440)
 
 
-state 146
-	suffix_expr:  atom IS NOT MISSING.    (61)
+state 153
+	suffix_expr:  atom IS NOT NULL.    (61)
 
-	.  reduce 61 (src line 485)
-
-
-state 147
-	suffix_expr:  atom IS NOT VALUED.    (63)
-
-	.  reduce 63 (src line 499)
+	.  reduce 61 (src line 484)
 
 
-state 148
-	atom:  IDENTIFIER LPAREN function_arg_list RPAREN.    (71)
+state 154
+	suffix_expr:  atom IS NOT MISSING.    (63)
 
-	.  reduce 71 (src line 540)
+	.  reduce 63 (src line 498)
 
 
-state 149
+state 155
+	suffix_expr:  atom IS NOT VALUED.    (65)
+
+	.  reduce 65 (src line 512)
+
+
+state 156
+	atom:  IDENTIFIER LPAREN function_arg_list RPAREN.    (73)
+
+	.  reduce 73 (src line 553)
+
+
+state 157
 	function_arg_list:  function_arg_single COMMA.function_arg_list 
 
 	LBRACE  shift 40
@@ -2421,7 +2485,7 @@ state 149
 	IDENTIFIER  shift 25
 	STRING  shift 31
 	MINUS  shift 22
-	MULT  shift 125
+	MULT  shift 130
 	NOT  shift 21
 	LPAREN  shift 27
 	CASE  shift 28
@@ -2429,36 +2493,36 @@ state 149
 	ALL  shift 30
 	.  error
 
-	expression  goto 124
-	expr  goto 126
+	expression  goto 129
+	expr  goto 131
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
 	literal_value  goto 26
-	function_arg_list  goto 161
-	function_arg_single  goto 122
-	fun_dotted_path_star  goto 123
+	function_arg_list  goto 169
+	function_arg_single  goto 127
+	fun_dotted_path_star  goto 128
 	number  goto 32
 	object  goto 33
 	array  goto 34
 
-state 150
+state 158
 	expr:  expr DOT.IDENTIFIER 
 	fun_dotted_path_star:  expr DOT.MULT 
 
-	IDENTIFIER  shift 98
-	MULT  shift 162
+	IDENTIFIER  shift 103
+	MULT  shift 170
 	.  error
 
 
-state 151
+state 159
 	atom:  CASE WHEN then_list else_expr.END 
 
-	END  shift 163
+	END  shift 171
 	.  error
 
 
-state 152
+state 160
 	else_expr:  ELSE.expr 
 
 	LBRACE  shift 40
@@ -2478,7 +2542,7 @@ state 152
 	ALL  shift 30
 	.  error
 
-	expr  goto 164
+	expr  goto 172
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
@@ -2487,7 +2551,7 @@ state 152
 	object  goto 33
 	array  goto 34
 
-state 153
+state 161
 	then_list:  expr THEN.expr 
 	then_list:  expr THEN.expr WHEN then_list 
 
@@ -2508,7 +2572,7 @@ state 153
 	ALL  shift 30
 	.  error
 
-	expr  goto 165
+	expr  goto 173
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
@@ -2517,115 +2581,69 @@ state 153
 	object  goto 33
 	array  goto 34
 
-state 154
+state 162
 	atom:  ANY expr OVER path.AS IDENTIFIER 
 
-	AS  shift 166
+	AS  shift 174
 	.  error
-
-
-state 155
-	path:  IDENTIFIER.    (76)
-	path:  IDENTIFIER.LBRACKET INT RBRACKET 
-	path:  IDENTIFIER.DOT path 
-
-	LBRACKET  shift 167
-	DOT  shift 168
-	.  reduce 76 (src line 569)
-
-
-state 156
-	atom:  ALL expr OVER path.AS IDENTIFIER 
-
-	AS  shift 169
-	.  error
-
-
-state 157
-	named_expression_list:  named_expression_single COMMA named_expression_list.    (97)
-
-	.  reduce 97 (src line 700)
-
-
-state 158
-	named_expression_single:  STRING COLON expression.    (98)
-
-	.  reduce 98 (src line 712)
-
-
-state 159
-	expression_list:  expression COMMA expression_list.    (102)
-
-	.  reduce 102 (src line 744)
-
-
-state 160
-	sorting_list:  sorting_single COMMA sorting_list.    (25)
-
-	.  reduce 25 (src line 209)
-
-
-state 161
-	function_arg_list:  function_arg_single COMMA function_arg_list.    (80)
-
-	.  reduce 80 (src line 589)
-
-
-state 162
-	fun_dotted_path_star:  expr DOT MULT.    (84)
-
-	.  reduce 84 (src line 622)
 
 
 state 163
-	atom:  CASE WHEN then_list else_expr END.    (67)
+	atom:  ALL expr OVER path.AS IDENTIFIER 
 
-	.  reduce 67 (src line 522)
+	AS  shift 175
+	.  error
 
 
 state 164
-	expr:  expr.PLUS expr 
-	expr:  expr.MINUS expr 
-	expr:  expr.MULT expr 
-	expr:  expr.DIV expr 
-	expr:  expr.MOD expr 
-	expr:  expr.CONCAT expr 
-	expr:  expr.AND expr 
-	expr:  expr.OR expr 
-	expr:  expr.EQ expr 
-	expr:  expr.LT expr 
-	expr:  expr.LTE expr 
-	expr:  expr.GT expr 
-	expr:  expr.GTE expr 
-	expr:  expr.NE expr 
-	expr:  expr.LIKE expr 
-	expr:  expr.NOT LIKE expr 
-	expr:  expr.DOT IDENTIFIER 
-	expr:  expr.LBRACKET expr RBRACKET 
-	else_expr:  ELSE expr.    (75)
+	named_expression_list:  named_expression_single COMMA named_expression_list.    (99)
 
-	LBRACKET  shift 70
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	AND  shift 60
-	OR  shift 61
-	NOT  shift 69
-	EQ  shift 62
-	NE  shift 67
-	GT  shift 65
-	GTE  shift 66
-	LT  shift 63
-	LTE  shift 64
-	LIKE  shift 68
-	DOT  shift 128
-	MOD  shift 58
-	.  reduce 75 (src line 563)
+	.  reduce 99 (src line 713)
 
 
 state 165
+	named_expression_single:  STRING COLON expression.    (100)
+
+	.  reduce 100 (src line 725)
+
+
+state 166
+	expression_list:  expression COMMA expression_list.    (104)
+
+	.  reduce 104 (src line 757)
+
+
+state 167
+	sorting_list:  sorting_single COMMA sorting_list.    (27)
+
+	.  reduce 27 (src line 222)
+
+
+state 168
+	path:  IDENTIFIER LBRACKET INT RBRACKET.    (79)
+
+	.  reduce 79 (src line 586)
+
+
+state 169
+	function_arg_list:  function_arg_single COMMA function_arg_list.    (82)
+
+	.  reduce 82 (src line 602)
+
+
+state 170
+	fun_dotted_path_star:  expr DOT MULT.    (86)
+
+	.  reduce 86 (src line 635)
+
+
+state 171
+	atom:  CASE WHEN then_list else_expr END.    (69)
+
+	.  reduce 69 (src line 535)
+
+
+state 172
 	expr:  expr.PLUS expr 
 	expr:  expr.MINUS expr 
 	expr:  expr.MULT expr 
@@ -2644,61 +2662,88 @@ state 165
 	expr:  expr.NOT LIKE expr 
 	expr:  expr.DOT IDENTIFIER 
 	expr:  expr.LBRACKET expr RBRACKET 
-	then_list:  expr THEN expr.    (72)
+	else_expr:  ELSE expr.    (77)
+
+	LBRACKET  shift 72
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	AND  shift 62
+	OR  shift 63
+	NOT  shift 71
+	EQ  shift 64
+	NE  shift 69
+	GT  shift 67
+	GTE  shift 68
+	LT  shift 65
+	LTE  shift 66
+	LIKE  shift 70
+	DOT  shift 133
+	MOD  shift 60
+	.  reduce 77 (src line 576)
+
+
+state 173
+	expr:  expr.PLUS expr 
+	expr:  expr.MINUS expr 
+	expr:  expr.MULT expr 
+	expr:  expr.DIV expr 
+	expr:  expr.MOD expr 
+	expr:  expr.CONCAT expr 
+	expr:  expr.AND expr 
+	expr:  expr.OR expr 
+	expr:  expr.EQ expr 
+	expr:  expr.LT expr 
+	expr:  expr.LTE expr 
+	expr:  expr.GT expr 
+	expr:  expr.GTE expr 
+	expr:  expr.NE expr 
+	expr:  expr.LIKE expr 
+	expr:  expr.NOT LIKE expr 
+	expr:  expr.DOT IDENTIFIER 
+	expr:  expr.LBRACKET expr RBRACKET 
+	then_list:  expr THEN expr.    (74)
 	then_list:  expr THEN expr.WHEN then_list 
 
-	LBRACKET  shift 70
-	PLUS  shift 54
-	MINUS  shift 55
-	MULT  shift 56
-	DIV  shift 57
-	CONCAT  shift 59
-	AND  shift 60
-	OR  shift 61
-	NOT  shift 69
-	EQ  shift 62
-	NE  shift 67
-	GT  shift 65
-	GTE  shift 66
-	LT  shift 63
-	LTE  shift 64
-	LIKE  shift 68
-	DOT  shift 128
-	WHEN  shift 170
-	MOD  shift 58
-	.  reduce 72 (src line 549)
+	LBRACKET  shift 72
+	PLUS  shift 56
+	MINUS  shift 57
+	MULT  shift 58
+	DIV  shift 59
+	CONCAT  shift 61
+	AND  shift 62
+	OR  shift 63
+	NOT  shift 71
+	EQ  shift 64
+	NE  shift 69
+	GT  shift 67
+	GTE  shift 68
+	LT  shift 65
+	LTE  shift 66
+	LIKE  shift 70
+	DOT  shift 133
+	WHEN  shift 176
+	MOD  shift 60
+	.  reduce 74 (src line 562)
 
 
-state 166
+state 174
 	atom:  ANY expr OVER path AS.IDENTIFIER 
 
-	IDENTIFIER  shift 171
+	IDENTIFIER  shift 177
 	.  error
 
 
-state 167
-	path:  IDENTIFIER LBRACKET.INT RBRACKET 
-
-	INT  shift 172
-	.  error
-
-
-state 168
-	path:  IDENTIFIER DOT.path 
-
-	IDENTIFIER  shift 155
-	.  error
-
-	path  goto 173
-
-state 169
+state 175
 	atom:  ALL expr OVER path AS.IDENTIFIER 
 
-	IDENTIFIER  shift 174
+	IDENTIFIER  shift 178
 	.  error
 
 
-state 170
+state 176
 	then_list:  expr THEN expr WHEN.then_list 
 
 	LBRACE  shift 40
@@ -2718,62 +2763,43 @@ state 170
 	ALL  shift 30
 	.  error
 
-	expr  goto 130
+	expr  goto 135
 	prefix_expr  goto 20
 	suffix_expr  goto 23
 	atom  goto 24
 	literal_value  goto 26
-	then_list  goto 175
+	then_list  goto 179
 	number  goto 32
 	object  goto 33
 	array  goto 34
 
-state 171
-	atom:  ANY expr OVER path AS IDENTIFIER.    (68)
+state 177
+	atom:  ANY expr OVER path AS IDENTIFIER.    (70)
 
-	.  reduce 68 (src line 526)
-
-
-state 172
-	path:  IDENTIFIER LBRACKET INT.RBRACKET 
-
-	RBRACKET  shift 176
-	.  error
+	.  reduce 70 (src line 539)
 
 
-state 173
-	path:  IDENTIFIER DOT path.    (78)
+state 178
+	atom:  ALL expr OVER path AS IDENTIFIER.    (71)
 
-	.  reduce 78 (src line 577)
-
-
-state 174
-	atom:  ALL expr OVER path AS IDENTIFIER.    (69)
-
-	.  reduce 69 (src line 530)
+	.  reduce 71 (src line 543)
 
 
-state 175
-	then_list:  expr THEN expr WHEN then_list.    (73)
+state 179
+	then_list:  expr THEN expr WHEN then_list.    (75)
 
-	.  reduce 73 (src line 553)
-
-
-state 176
-	path:  IDENTIFIER LBRACKET INT RBRACKET.    (77)
-
-	.  reduce 77 (src line 573)
+	.  reduce 75 (src line 566)
 
 
-57 terminals, 38 nonterminals
-103 grammar rules, 177/2000 states
+57 terminals, 39 nonterminals
+105 grammar rules, 180/2000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
-87 working sets used
-memory: parser 430/30000
+88 working sets used
+memory: parser 390/30000
 134 extra closures
-872 shift entries, 1 exceptions
-83 goto entries
-256 entries saved by goto default
-Optimizer space used: output 579/30000
-579 table entries, 167 zero
-maximum spread: 57, maximum offset: 170
+874 shift entries, 1 exceptions
+86 goto entries
+258 entries saved by goto default
+Optimizer space used: output 564/30000
+564 table entries, 149 zero
+maximum spread: 57, maximum offset: 176
