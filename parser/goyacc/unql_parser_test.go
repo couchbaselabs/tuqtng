@@ -110,6 +110,8 @@ var validQueries = []string{
 	`SELECT * FROM bucket AS buck OVER buck.addresses AS address`,
 	`SELECT * FROM bucket AS buck OVER buck.addresses AS address OVER address.lines`,
 	`SELECT * FROM bucket AS buck OVER buck.addresses AS address OVER address.lines AS line`,
+	`SELECT DISTINCT name from bucket`,
+	`SELECT UNIQUE name from bucket`,
 }
 
 var invalidQueries = []string{

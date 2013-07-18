@@ -16,6 +16,7 @@ n int
 f float64}
 
 %token EXPLAIN
+%token DISTINCT UNIQUE
 %token SELECT AS FROM WHERE
 %token ORDER BY ASC DESC
 %token LIMIT OFFSET
@@ -69,7 +70,7 @@ select_select select_from select_where {
 ;
 
 select_select:  
-select_select_head select_select_tail {
+select_select_head select_select_qualifier select_select_tail {
 	logDebugGrammar("SELECT_SELECT")
 }
 ;
@@ -84,6 +85,19 @@ EXPLAIN SELECT {
 SELECT { 
 	logDebugGrammar("SELECT_SELECT_HEAD")
 	parsingStatement = ast.NewSelectStatement()
+}
+;
+
+select_select_qualifier:
+/* empty */ {
+}
+|
+DISTINCT {
+	logDebugGrammar("SELECT_SELECT_QUALIFIER DISTINCT")
+}
+|
+UNIQUE {
+	logDebugGrammar("SELECT_SELECT_QUALIFIER UNIQUE")
 }
 ;
 

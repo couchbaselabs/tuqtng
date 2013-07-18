@@ -48,6 +48,14 @@
                   {
                     logDebugTokens("EXPLAIN"); return EXPLAIN
                   }
+/[dD][iI][sS][tT][iI][nN][cC][tT]/
+                  {
+                    logDebugTokens("DISTINCT"); return DISTINCT
+                  }
+/[uU][nN][iI][qQ][uU][eE]/
+                  {
+                    logDebugTokens("UNIQUE"); return UNIQUE
+                  }
 /[cC][aA][sS][eE]/
                   {
                     logDebugTokens("CASE"); return CASE
