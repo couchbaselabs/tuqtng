@@ -135,17 +135,10 @@ func testCaseFile(t *testing.T, fname string) {
 		resultsActual, _, errActual := run(qc, statements)
 
 		errExpected := ""
-		v, ok = c["err"]
+		v, ok = c["error"]
 		if ok {
 			errExpected = v.(string)
 		}
-		v, ok = c["results"]
-		if !ok || v == nil {
-			t.Errorf("missing results for case file: %v, index: %v", fname, i)
-			return
-		}
-		resultsExpected := v.([]interface{})
-
 		if errActual != nil {
 			if errExpected == "" {
 				t.Errorf("unexpected err: %v, statements: %v"+
@@ -161,6 +154,12 @@ func testCaseFile(t *testing.T, fname string) {
 			return
 		}
 
+		v, ok = c["results"]
+		if !ok || v == nil {
+			t.Errorf("missing results for case file: %v, index: %v", fname, i)
+			return
+		}
+		resultsExpected := v.([]interface{})
 		if len(resultsActual) != len(resultsExpected) {
 			t.Errorf("results len don't match, %v vs %v, %v vs %v"+
 				", for case file: %v, index: %v",
