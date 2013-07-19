@@ -37,17 +37,21 @@ func (this *SimplePlanner) Plan(stmt ast.Statement) plan.PlanChannel {
 }
 
 func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
-	from := stmt.GetFrom()
+	froms := stmt.GetFroms()
 
 	var lastStep plan.PlanElement
 
-	if from == nil {
+	if froms == nil {
 		// simple expression evaluation
 		lastStep = plan.NewExpressionEvaluator()
 
 	} else {
+		from := froms[0]
+		from.ConvertToBucketFrom()
+
 		// see if the bucket exists
 		if this.pool != nil {
+			log.Printf("From: %v", from)
 			bucket, err := this.pool.Bucket(from.Bucket)
 			if err != nil {
 				log.Printf("no bucket named %v", from.Bucket)
@@ -71,6 +75,10 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 				case catalog.FullScanner:
 					lastStep = plan.NewScan(bucket.Name(), scanner.Name())
 					lastStep = plan.NewFetch(lastStep, bucket.Name())
+					if from.Projection != nil {
+						// insert a project-inline phase to extrac the sub-document
+						lastStep = plan.NewProjectorInline(lastStep, ast.NewResultExpression(from.Projection))
+					}
 					foundUsableScanner = true
 					break
 				}

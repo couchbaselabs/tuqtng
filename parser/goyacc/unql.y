@@ -175,10 +175,10 @@ select_from:
 |
 FROM data_source_over {
 	logDebugGrammar("SELECT FROM - DATASOURCE")
-	from := parsingStack.Pop().(*ast.From)
+	froms := parsingStack.Pop().([]*ast.From)
 	switch parsingStatement := parsingStatement.(type) {
 	case *ast.SelectStatement:
-		parsingStatement.From = from
+		parsingStatement.Froms = froms
 	default:
 		logDebugGrammar("This statement does not support WHERE")
 	}
@@ -187,23 +187,36 @@ FROM data_source_over {
 data_source_over:
 data_source {
 	logDebugGrammar("FROM DATASOURCE WITHOUT OVER")
+	from_list := make([]*ast.From, 0)
+	from_list = append(from_list, parsingStack.Pop().(*ast.From))
+	parsingStack.Push(from_list)
 }
 |
 data_source OVER data_source_over {
 	logDebugGrammar("FROM DATASOURCE WITH OVER")
+	rest := parsingStack.Pop().([]*ast.From)
+	last := parsingStack.Pop()
+	new_list := make([]*ast.From, 0, len(rest) + 1)
+	new_list = append(new_list, last.(*ast.From))
+	for _, v := range rest {
+		new_list = append(new_list, v)
+	}
+	parsingStack.Push(new_list)
 }
 ;
 
 data_source:
 path {
 	logDebugGrammar("FROM DATASOURCE")
-	parsingStack.Push(&ast.From{Bucket: $1.s})
+	proj := parsingStack.Pop().(ast.Expression)
+	parsingStack.Push(&ast.From{Projection: proj})
 }
 |
 path AS IDENTIFIER {
     // fixme support over as
 	logDebugGrammar("FROM DATASOURCE AS")
-	parsingStack.Push(&ast.From{Bucket: $1.s})
+	proj := parsingStack.Pop().(ast.Expression)
+	parsingStack.Push(&ast.From{Projection: proj, As: $3.s})
 }
 
 select_where:   

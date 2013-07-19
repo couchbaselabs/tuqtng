@@ -186,7 +186,7 @@ func TestParserASTOutput(t *testing.T) {
 				Select: ast.ResultExpressionList{
 					ast.NewStarResultExpression(),
 				},
-				From:  &ast.From{Bucket: "test"},
+				Froms: []*ast.From{&ast.From{Projection: ast.NewProperty("test")}},
 				Where: ast.NewLiteralBool(true),
 				Limit: -1,
 			},
@@ -196,7 +196,7 @@ func TestParserASTOutput(t *testing.T) {
 				Select: ast.ResultExpressionList{
 					ast.NewStarResultExpression(),
 				},
-				From:  &ast.From{Bucket: "test"},
+				Froms: []*ast.From{&ast.From{Projection: ast.NewProperty("test")}},
 				Where: nil,
 				OrderBy: []*ast.SortExpression{
 					ast.NewSortExpression(ast.NewProperty("foo"), true),
@@ -209,7 +209,7 @@ func TestParserASTOutput(t *testing.T) {
 				Select: ast.ResultExpressionList{
 					ast.NewStarResultExpression(),
 				},
-				From:   &ast.From{Bucket: "test"},
+				Froms:  []*ast.From{&ast.From{Projection: ast.NewProperty("test")}},
 				Where:  nil,
 				Limit:  10,
 				Offset: 3,
@@ -220,7 +220,7 @@ func TestParserASTOutput(t *testing.T) {
 				Select: ast.ResultExpressionList{
 					ast.NewResultExpression(ast.NewProperty("a")),
 				},
-				From:  &ast.From{Bucket: "test"},
+				Froms: []*ast.From{&ast.From{Projection: ast.NewProperty("test")}},
 				Where: nil,
 				Limit: -1,
 			},
@@ -230,7 +230,7 @@ func TestParserASTOutput(t *testing.T) {
 				Select: ast.ResultExpressionList{
 					ast.NewResultExpressionWithAlias(ast.NewPlusOperator(ast.NewLiteralNumber(1.0), ast.NewMultiplyOperator(ast.NewLiteralNumber(1.0), ast.NewLiteralNumber(30.0))), "steve"),
 				},
-				From:  nil,
+				Froms: nil,
 				Where: nil,
 				Limit: -1,
 			},

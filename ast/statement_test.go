@@ -19,11 +19,13 @@ func TestSelectStatement(t *testing.T) {
 
 	stmt.ExplainOnly = true
 	stmt.Select = ResultExpressionList{NewStarResultExpression(), NewDotStarResultExpression(NewProperty("foo")), NewResultExpression(NewProperty("bar"))}
-	stmt.From = &From{Bucket: "test"}
+	stmt.Froms = []*From{&From{Projection: NewProperty("test")}}
 	stmt.Where = NewLiteralBool(true)
 	stmt.OrderBy = []*SortExpression{NewSortExpression(NewProperty("foo"), true)}
 	stmt.Limit = 10
 	stmt.Offset = 5
+
+	stmt.Froms[0].ConvertToBucketFrom()
 
 	if !stmt.IsExplainOnly() {
 		t.Errorf("Expected query to be explain only")
@@ -31,7 +33,7 @@ func TestSelectStatement(t *testing.T) {
 	if !reflect.DeepEqual(stmt.GetResultExpressionList(), ResultExpressionList{NewStarResultExpression(), NewDotStarResultExpression(NewProperty("foo")), NewResultExpression(NewProperty("bar"))}) {
 		t.Errorf("Expected star result expression")
 	}
-	if stmt.GetFrom().Bucket != "test" {
+	if stmt.GetFroms()[0].Bucket != "test" {
 		t.Errorf("Expected from test")
 	}
 	if !reflect.DeepEqual(stmt.GetWhere(), NewLiteralBool(true)) {

@@ -64,6 +64,8 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 			currentOperator = xpipeline.NewOffset(currentElement.Val)
 		case *plan.Projector:
 			currentOperator = xpipeline.NewProject(currentElement.Result)
+		case *plan.ProjectorInline:
+			currentOperator = xpipeline.NewProjectInline(currentElement.Result)
 		}
 
 		//link root of xpipeline

@@ -10,6 +10,8 @@
 package ast
 
 import (
+	"fmt"
+
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -57,6 +59,10 @@ func (this *DotMemberOperator) Validate() error {
 		return err
 	}
 	return err
+}
+
+func (this *DotMemberOperator) String() string {
+	return fmt.Sprintf("%v.%s", this.Left, this.Right.Path)
 }
 
 // ****************************************************************************

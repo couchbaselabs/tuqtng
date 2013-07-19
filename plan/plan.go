@@ -149,7 +149,7 @@ func (this *Offset) Sources() []PlanElement {
 }
 
 type Projector struct {
-	Type   string                   `json:"projector"`
+	Type   string                   `json:"type"`
 	Input  PlanElement              `json:"input"`
 	Result ast.ResultExpressionList `json:"result"`
 }
@@ -163,5 +163,23 @@ func NewProjector(input PlanElement, result ast.ResultExpressionList) *Projector
 }
 
 func (this *Projector) Sources() []PlanElement {
+	return []PlanElement{this.Input}
+}
+
+type ProjectorInline struct {
+	Type   string                `json:"type"`
+	Input  PlanElement           `json:"input"`
+	Result *ast.ResultExpression `json:"result"`
+}
+
+func NewProjectorInline(input PlanElement, result *ast.ResultExpression) *ProjectorInline {
+	return &ProjectorInline{
+		Type:   "projector-inline",
+		Input:  input,
+		Result: result,
+	}
+}
+
+func (this *ProjectorInline) Sources() []PlanElement {
 	return []PlanElement{this.Input}
 }
