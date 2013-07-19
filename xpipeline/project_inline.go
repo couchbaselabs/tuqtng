@@ -76,7 +76,6 @@ func (this *ProjectInline) Run() {
 			// evaluate the expression
 			val, err := this.Result.Expr.Evaluate(item)
 			if err == nil {
-				log.Printf("projected val should be %v", val)
 				res = val
 			} else {
 				switch err := err.(type) {
@@ -93,7 +92,6 @@ func (this *ProjectInline) Run() {
 
 		// create the actual result Item
 		finalItem := query.NewParsedItem(res, item.GetMeta())
-		log.Printf("final item is %v", finalItem)
 
 		// write this to the output
 		this.itemChannel <- finalItem

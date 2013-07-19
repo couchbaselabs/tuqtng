@@ -51,7 +51,6 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 
 		// see if the bucket exists
 		if this.pool != nil {
-			log.Printf("From: %v", from)
 			bucket, err := this.pool.Bucket(from.Bucket)
 			if err != nil {
 				log.Printf("no bucket named %v", from.Bucket)
