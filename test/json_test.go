@@ -101,7 +101,7 @@ func TestSimpleSelect(t *testing.T) {
 }
 
 func TestAllCaseFiles(t *testing.T) {
-	matches, err := filepath.Glob("case_*.json")
+	matches, err := filepath.Glob("json/cases/case_*.json")
 	if err != nil {
 		t.Errorf("glob failed: %v", err)
 	}
