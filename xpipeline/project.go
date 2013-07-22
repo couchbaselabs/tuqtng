@@ -71,15 +71,16 @@ func (this *Project) Run() {
 						}
 					}
 				} else {
-					// just a star, take all the contents of the source item
-					// and add them to the result item
-					topLevelKeys := item.GetTopLevelKeys()
-					for _, key := range topLevelKeys {
-						val, err := item.GetPath(key)
-						if err == nil {
-							resultMap[key] = val
-						} else {
-							log.Fatalf("unexpected error projecting star expression: %v", err)
+					// just a star, get the value, if its a map project the key/value pairs
+					val := item.GetValue()
+					switch val := val.(type) {
+					case map[string]query.Value:
+						for k, v := range val {
+							resultMap[k] = v
+						}
+					case map[string]interface{}:
+						for k, v := range val {
+							resultMap[k] = v
 						}
 					}
 				}

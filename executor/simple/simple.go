@@ -10,12 +10,9 @@
 package simple
 
 import (
-	"log"
-
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
-	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/tuqtng/xpipelinebuilder"
 	simpleBuilder "github.com/couchbaselabs/tuqtng/xpipelinebuilder/simple"
 )
@@ -45,22 +42,7 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) err
 	itemChannel := root.GetItemChannel()
 	go root.Run()
 	for item := range itemChannel {
-
-		// FIXME this whole block of code is ugly
-		// we pass around Item's on ItemChannel
-		// but its really in the way here
-		// we have to explode its contents
-		result := map[string]query.Value{}
-		tlk := item.GetTopLevelKeys()
-		for _, k := range tlk {
-			val, err := item.GetPath(k)
-			if err == nil {
-				result[k] = val
-			} else {
-				log.Fatalf("unexpected error %v", err)
-			}
-
-		}
+		result := item.GetValue()
 		q.Response.SendResult(result)
 	}
 	q.Response.NoMoreResults()

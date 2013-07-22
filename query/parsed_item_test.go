@@ -51,16 +51,3 @@ func TestNormalJSONDocItem(t *testing.T) {
 	}
 
 }
-
-func TestTopLevelKeys(t *testing.T) {
-	sampleContext := map[string]Value{
-		"name": "will",
-		"cat":  "dog",
-	}
-
-	context := NewParsedItem(sampleContext, nil)
-
-	if !reflect.DeepEqual(context.GetTopLevelKeys(), []string{"name", "cat"}) {
-		t.Errorf("Expected name,cat, got %v", context.GetTopLevelKeys())
-	}
-}

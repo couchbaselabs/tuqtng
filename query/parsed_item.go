@@ -82,21 +82,6 @@ func (this *ParsedItem) GetPath(path string) (Value, error) {
 	return nil, &Undefined{path}
 }
 
-func (this *ParsedItem) GetTopLevelKeys() []string {
-	rv := make([]string, 0)
-	switch contents := this.contents.(type) {
-	case map[string]Value:
-		for k, _ := range contents {
-			rv = append(rv, k)
-		}
-	case map[string]interface{}:
-		for k, _ := range contents {
-			rv = append(rv, k)
-		}
-	}
-	return rv
-}
-
 func (this *ParsedItem) GetValue() Value {
 	return this.contents
 }
