@@ -2,6 +2,7 @@
 *.sublime-*
 *~
 .#*
+.DS_Store
 /tuqtng
 /tuq_client/tuq_client
 /tuq_client/tmp
