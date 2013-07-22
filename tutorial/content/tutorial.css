@@ -1,0 +1,198 @@
+#all {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	line-height: 1.6em;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	position: fixed;
+}
+
+#info {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 50%;
+	height: 100%;
+}
+
+#try {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 50%;
+	width: 50%;
+	border-left:0.5px solid;
+	border-color: #D03030;
+}
+
+#header {
+	position: absolute;
+	height: 40px;
+	width: 100%;
+	padding-top: 10px;
+	padding-bottom: 5px;
+  	text-align: center;
+	border-bottom:0.5px solid;
+	border-color: #D03030;
+	background: url('logo.png');
+	background-repeat: no-repeat;
+	background-position: center left;
+    color: #646464;
+}
+
+#footer {
+	position: absolute;
+	bottom: 0;
+	height: 40px;
+	width: 100%;
+	padding-top: 10px;
+	padding-bottom: 5px;
+	border-top:0.5px solid;
+	border-color: #D03030;
+    color: #646464;
+}
+
+#slide {
+	position: absolute;
+	width: 100%;
+	top: 75px;
+	bottom: 55px;
+}
+
+#content {
+	position: absolute;
+	padding-top: 5px;
+	padding-right: 5px;
+	width: calc(100% - 5px);
+	height: calc(100% - 5px);
+}	
+
+#title {
+  font-size: 22px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+#input {
+	height: 25%;
+	width: 100%;
+    background: #FFFFFA;
+}
+
+#query {
+	height: 100%;
+    width: calc(100% - 10px);
+    padding-left: 10px;
+
+}
+
+#qrline {
+	width: 100%;
+	border-bottom:0.5px solid;
+	border-color: #D03030;
+	margin-bottom: 10px;
+    background: #FFFFFA;
+}
+
+#iedit {
+	margin: 0;
+	padding: 0;
+	height: 70%;
+    width: 100%;
+    background: #FFFFFA;
+}
+
+#iedit .ace_scrollbar {
+	overflow-y: auto !important;
+}
+
+#result {
+	height: 75%;
+    width: 100%;
+}
+
+#redit {
+	margin: 0;
+	padding: 0;
+	height: calc(100% - 30px);
+	width: 100%;
+}
+
+#redit .ace_scrollbar {
+	overflow-x: auto !important;
+	overflow-y: auto !important;
+}
+
+#redit .ace_hidden-cursors {
+	opacity:0
+}
+
+#run {
+  z-index: 999;
+  text-align: right;
+  padding: 5px 8px 8px 0px;
+}
+
+#run a {
+  background: #06c;
+  padding: 5px 8px;
+  color: #fff; 
+  font-size: 14px; 
+  font-weight: bold; 
+  text-decoration: none;
+}
+
+#run a:hover { 
+  background: #f00; 
+}
+
+#max {
+	display: none;
+	width: 0;
+	height: 0;
+}
+
+.enabled a {
+  background: #06c;
+}
+
+.enabled a:hover {
+  background: #f00; 
+}
+
+.disabled a {
+  background: #888888;
+}
+
+.disabled a:hover {
+  background: #888888;
+}
+
+#prev {
+  float: left;
+  padding: 5px 0px 0px 2%;
+}
+
+#prev a {
+  padding: 5px 8px;
+  color: #fff; 
+  font-size: 14px; 
+  font-weight: bold; 
+  text-decoration: none;
+}
+
+#next {
+  float: right;
+  padding: 5px 2% 0px 0px;
+}
+
+#next a {
+  padding: 5px 10px;
+  color: #fff; 
+  font-size: 14px; 
+  font-weight: bold; 
+  text-decoration: none;
+}
+

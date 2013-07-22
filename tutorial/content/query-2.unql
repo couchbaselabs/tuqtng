@@ -1,1 +1,3 @@
-select * from contacts
+SELECT * FROM contacts
+   WHERE name = "ian"
+
