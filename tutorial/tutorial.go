@@ -81,7 +81,7 @@ func main() {
 	go func() {
 		for {
 			filepath.Walk("./content/", walker)
-			time.Sleep(3 * time.Second)
+			time.Sleep(2 * time.Second)
 		}
 	}()
 

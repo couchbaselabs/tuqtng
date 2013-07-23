@@ -23,7 +23,7 @@
 	bottom: 0;
 	left: 50%;
 	width: 50%;
-	border-left:0.5px solid;
+	border-left: 1px solid;
 	border-color: #D03030;
 }
 
@@ -34,7 +34,7 @@
 	padding-top: 10px;
 	padding-bottom: 5px;
   	text-align: center;
-	border-bottom:0.5px solid;
+	border-bottom: 1px solid;
 	border-color: #D03030;
 	background: url('logo.png');
 	background-repeat: no-repeat;
@@ -49,24 +49,22 @@
 	width: 100%;
 	padding-top: 10px;
 	padding-bottom: 5px;
-	border-top:0.5px solid;
+	border-top: 1px solid;
 	border-color: #D03030;
     color: #646464;
 }
 
 #slide {
-	position: absolute;
+	position: absolute;	
 	width: 100%;
-	top: 75px;
+	top: 55px;
 	bottom: 55px;
+	overflow: auto;
 }
 
 #content {
 	position: absolute;
-	padding-top: 5px;
-	padding-right: 5px;
-	width: calc(100% - 5px);
-	height: calc(100% - 5px);
+	padding: 5px 5px 5px 5px;
 }	
 
 #title {
@@ -83,14 +81,14 @@
 
 #query {
 	height: 100%;
-    width: calc(100% - 10px);
+    width: 100%;
     padding-left: 10px;
 
 }
 
 #qrline {
 	width: 100%;
-	border-bottom:0.5px solid;
+	border-bottom: 1px solid;
 	border-color: #D03030;
 	margin-bottom: 10px;
     background: #FFFFFA;
@@ -114,9 +112,7 @@
 }
 
 #redit {
-	margin: 0;
-	padding: 0;
-	height: calc(100% - 30px);
+	height: 100%;
 	width: 100%;
 }
 
