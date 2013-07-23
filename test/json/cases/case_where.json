@@ -1,0 +1,104 @@
+
+[
+    {
+        "statements": "SELECT title, details.format, details.title, title  FROM catalog WHERE pricing.list > 300 and pricing.pct_savings >20",
+        "results": [
+        {
+            "$1": "DVD",
+            "$2": "ZERO DARK THIRTY",
+            "$3": "Zero Dark Thirty",
+            "title": "Zero Dark Thirty"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT banned-on FROM tags WHERE banned-on IS NOT MISSING",
+        "results": [
+        {
+            "banned-on": "2001/12/07"
+        },
+        {
+            "banned-on": null
+        },
+        {
+            "banned-on": "2012/02/02"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT banned-on FROM tags WHERE banned-on IS NOT NULL",
+        "results": [
+        {
+            "banned-on": "2001/12/07"
+        },
+        {
+            "banned-on": "2012/02/02"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT banned-on FROM tags WHERE banned-on IS NOT MISSING",
+        "results": [
+        {
+            "banned-on": "2001/12/07"
+        },
+        {
+            "banned-on": null
+        },
+        {
+            "banned-on": "2012/02/02"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT banned-on FROM tags WHERE banned-on IS NOT NULL",
+        "results": [
+        {
+            "banned-on": "2001/12/07"
+        },
+        {
+            "banned-on": "2012/02/02"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT actors FROM catalog.details WHERE actors[0] = \"Jessica Chastain\"",
+        "results": [
+        {
+            "actors": [
+                "Jessica Chastain",
+                "Mark Strong"
+            ]
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT asin, title FROM catalog WHERE type = \"Movies&TV\" and title LIKE \"Sherlock\"",
+        "results": [
+        {
+            "asin": "B0094QY3LI",
+            "title": "Sherlock: Series 1"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT asin, title FROM catalog WHERE type = \"Movies&TV\" and tags[1] LIKE \"english\"",
+        "results": [
+        {
+            "asin": "B0094QY3AB",
+            "title": "Zero Dark Thirty"
+        },
+        {
+            "asin": "B0094QY3LI",
+            "title": "Sherlock: Series 1"
+        }
+    ]
+    }
+]
