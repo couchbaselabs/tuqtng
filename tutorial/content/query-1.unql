@@ -1,1 +1,1 @@
-select * from contacts
+SELECT "Hello World" AS Greeting

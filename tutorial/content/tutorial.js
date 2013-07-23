@@ -41,7 +41,10 @@ function load(n) {
     var slide = slideUrl(n)
 	var query = queryUrl(n)
 	
-    $('#content').attr('src', slide);
+    $.get(slide, function(data, status) {
+        if (status != 'success') return;
+        $('#content').html(data);
+    });
 
 	$.get(query, function(data, status) {
 		if (status != 'success') return;
@@ -73,8 +76,6 @@ function failed(data) {
 }
 
 function ran(data) {
-    console.log("Ran");
-    console.log(data);
     var re = ace.edit('redit');
     re.setValue(data);
     re.navigateFileStart();
