@@ -1,24 +1,12 @@
-## Summary
+## Complex Data - Basic Operators
 
-Unstructured Query Language 2013 (UNQL 2013) is a query language for Couchbase.
+As documents can have nested child elements and embedded arrays, a few additional operators are needed. The '.' operator is used to refer to children, and the '[]' is used to refer to an element in an array. 
 
-This language attempts to satisfy these [requirements](https://github.com/couchbaselabs/tuqqedin/blob/master/docs/requirements.md).
+In the example on the right, we fetch the first child of each contact. Notice that the child traversal and array element dereference happens in the FROM clause. Here, the FROM clause is used to synthesize the input to the query as a collection of first child of each contact.
 
-This document describes the syntax and semantics of the language.
+An alternate way of doing this would be to set the FROM clause to merely fetch children. The SELECT clause could then fetch the first child and extract the name attribute from it. 
 
-## Statement
+Try rewriting the query to do the path expression in the SELECT clause. The answer is on the next slide.
 
-An UNQL statement is an instance of:
 
-unql-stmt:
 
-### EXPLAIN
-
-An UNQL statement can be preceded with the keyword "EXPLAIN".  This causes the statement to return information about how the UNQL statement would have operated if the EXPLAIN keyword had been omitted.
-
-The output from EXPLAIN is intended for analysis and troublehsooting only.  The details of the output format are subject to change.
-
-### SELECT Core
-
-Before looking at the full SELECT statement, let us start with a simpler subset:
-Hello WOrld

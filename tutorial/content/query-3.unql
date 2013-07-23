@@ -1,2 +1,2 @@
-SELECT * FROM contacts
-   WHERE name LIKE 'i%'
+SELECT name
+	FROM contacts.children[0]

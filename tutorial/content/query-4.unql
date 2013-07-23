@@ -1,0 +1,3 @@
+SELECT children[0].name AS cname
+	FROM contacts
+       WHERE name = "ian"

@@ -1,14 +1,19 @@
-## Summary
+## Welcome!
 
-Unstructured Query Language 2013 (UNQL 2013) is a query language for Couchbase.
+This tutorial walks you through the basics of using the Couchbase Query Language.
 
-This language attempts to satisfy these [requirements](https://github.com/couchbaselabs/tuqqedin/blob/master/docs/requirements.md).
+On the right hand side, you will see a query editor. A few buckets have been populated:
 
-This document describes the syntax and semantics of the language.
+* contacts
+* blog
+* game
+* products
+* orders
+* tags
+* articles1
+* articles2
+* categories1
+* categories2
+* non-json
 
-## Statement
-
-An UNQL statement is an instance of:
-
-unql-stmt:
-
+Go ahead, run your first query now!
