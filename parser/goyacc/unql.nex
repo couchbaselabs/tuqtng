@@ -4,6 +4,12 @@
                     logDebugTokens("STRING"); 
                     return STRING 
                   }
+/'((\\\")|(\\\\)|(\\\/)|(\\b)|(\\f)|(\\n)|(\\r)|(\\t)|(\\u[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F])|[^''])*'/     {
+                    lval.s = yylex.Text()[1:len(yylex.Text())-1]
+                    logDebugTokens("%s", lval.s)
+                    logDebugTokens("STRING");
+                    return STRING
+                  }
 /\./              { logDebugTokens("DOT"); return DOT }
 /\+/              { logDebugTokens("PLUS"); return PLUS }
 /-/               { logDebugTokens("MINUS"); return MINUS }
