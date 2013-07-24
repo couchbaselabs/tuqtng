@@ -154,7 +154,7 @@ func TestFunction(t *testing.T) {
 		// util functions
 		{
 			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
-			5,
+			5.0,
 			nil,
 		},
 		{
@@ -163,7 +163,7 @@ func TestFunction(t *testing.T) {
 					NewLiteralArray([]Expression{
 						NewLiteralString("hello"),
 						NewLiteralString("hello")}))}),
-			2,
+			2.0,
 			nil,
 		},
 		{
@@ -173,7 +173,7 @@ func TestFunction(t *testing.T) {
 						"val1": NewLiteralString("hello"),
 						"val2": NewLiteralString("hello"),
 						"val3": NewLiteralString("hello")}))}),
-			3,
+			3.0,
 			nil,
 		},
 
