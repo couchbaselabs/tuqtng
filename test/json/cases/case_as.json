@@ -1,0 +1,53 @@
+[
+
+    {
+        "statements": "select title as T , details.author as A , pricing.retail as R, title as title from catalog where title = \"Inferno\"",
+        "results": [
+        {
+            "A": "Dan Brown",
+            "R": 270,
+            "T": "Inferno",
+            "title": "Inferno"
+        }
+    ]
+    },
+
+    {
+        "statements": "select name as _1 from tags",
+        "results": [
+        {
+            "_1": "beer"
+        },
+        {
+            "_1": "hitler"
+        },
+        {
+            "_1": "mayan"
+        },
+        {
+            "_1": "sex"
+        }
+    ]
+    },
+
+
+    {
+        "statements": "select title as t, length(title) from catalog",
+        "results": [
+        {
+            "$1": 7,
+            "t": "Inferno"
+        },
+        {
+            "$1": 16,
+            "t": "Zero Dark Thirty"
+        },
+        {
+            "$1": 18,
+            "t": "Sherlock: Series 1"
+        }
+    ]
+    }
+
+]
+

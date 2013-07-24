@@ -1,0 +1,218 @@
+[
+    {
+        "statements": "SELECT lower(details.title) FROM catalog",
+        "results": [
+        {
+            "$1": "inferno"
+        },
+        {
+            "$1": "zero dark thirty"
+        },
+        {
+            "$1": "sherlock: series 1"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT lower(title) FROM catalog.details",
+        "results": [
+        {
+            "$1": "inferno"
+        },
+        {
+            "$1": "zero dark thirty"
+        },
+        {
+            "$1": "sherlock: series 1"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT lower(details.actors[0]) FROM catalog",
+        "results": [
+        {
+            "$1": null
+        },
+        {
+            "$1": "jessica chastain"
+        },
+        {
+            "$1": "benedict cumberbatch"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT lower(actors[0]) FROM catalog.details",
+        "results": [
+        {
+            "$1": null
+        },
+        {
+            "$1": "jessica chastain"
+        },
+        {
+            "$1": "benedict cumberbatch"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT lower(pricing.list) FROM catalog",
+        "results": [
+        {
+            "$1": null
+        },
+        {
+            "$1": null
+        },
+        {
+            "$1": null
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT lower(pricing.length) FROM catalog.dimensions",
+        "results": [
+        {
+            "$1": null
+        },
+        {
+            "$1": null
+        },
+        {
+            "$1": null
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT upper(details.title) FROM catalog",
+        "results": [
+        {
+            "$1": "INFERNO"
+        },
+        {
+            "$1": "ZERO DARK THIRTY"
+        },
+        {
+            "$1": "SHERLOCK: SERIES 1"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT upper(title) FROM catalog.details",
+        "results": [
+        {
+            "$1": "INFERNO"
+        },
+        {
+            "$1": "ZERO DARK THIRTY"
+        },
+        {
+            "$1": "SHERLOCK: SERIES 1"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT upper(details.actors[0]) FROM catalog",
+        "results": [
+        {
+            "$1": null
+        },
+        {
+            "$1": "JESSICA CHASTAIN"
+        },
+        {
+            "$1": "BENEDICT CUMBERBATCH"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT upper(actors[0]) FROM catalog.details",
+        "results": [
+        {
+            "$1": null
+        },
+        {
+            "$1": "JESSICA CHASTAIN"
+        },
+        {
+            "$1": "BENEDICT CUMBERBATCH"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT upper(pricing.list) FROM catalog",
+        "results": [
+        {
+            "$1": null
+        },
+        {
+            "$1": null
+        },
+        {
+            "$1": null
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT upper(pricing.length) FROM catalog.dimensions",
+        "results": [
+        {
+            "$1": null
+        },
+        {
+            "$1": null
+        },
+        {
+            "$1": null
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT  substr(title, 0) FROM catalog WHERE type = \"Movies&TV\"",
+        "results": [
+        {
+            "$1": "Zero Dark Thirty"
+        },
+        {
+            "$1": "Sherlock: Series 1"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT  substr(title, 1) FROM catalog WHERE type = \"Movies&TV\"",
+        "results": [
+        {
+            "$1": "ero Dark Thirty"
+        },
+        {
+            "$1": "herlock: Series 1"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT  substr(title, 4) FROM catalog WHERE type = \"Movies&TV\"",
+        "results": [
+        {
+            "$1": " Dark Thirty"
+        },
+        {
+            "$1": "lock: Series 1"
+        }
+    ]
+    }
+
+]
