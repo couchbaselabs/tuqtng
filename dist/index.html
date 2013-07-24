@@ -9,7 +9,7 @@
 
 tuqtng is a <a href="http://labs.couchbase.com/">couchbase labs</a> project
 
-<h3>download server <span id="server-version"></span></h3>
+<h3>Download server <span id="server-version"></span></h3>
 
 <table>
 <tr>
@@ -43,7 +43,7 @@ tuqtng is a <a href="http://labs.couchbase.com/">couchbase labs</a> project
 </tr>
 </table>
 
-<h3>download client <span id="client-version"></span></h3>
+<h3>Download client <span id="client-version"></span></h3>
 
 <table>
 <tr>
@@ -77,6 +77,40 @@ tuqtng is a <a href="http://labs.couchbase.com/">couchbase labs</a> project
 </tr>
 </table>
 
+<h3>Download tutorial <span id="tutorial-version"></span></h3>
+
+<table>
+<tr>
+  <td colspan="2">
+    <a href="tuq_tutorial.mac.gz">64-bit mac</a>
+  </td>
+</tr>
+<tr>
+  <td>
+    <a href="tuq_tutorial.lin64.gz">64-bit linux</a> &nbsp;&nbsp;
+  </td>
+  <td>
+    <a href="tuq_tutorial.lin32.gz">32-bit linux</a>
+  </td>
+</tr>
+<tr>
+  <td>
+    <a href="tuq_tutorial.win64.exe.gz">64-bit windows</a> &nbsp;&nbsp;
+  </td>
+  <td>
+    <a href="tuq_tutorial.win32.exe.gz">32-bit windows</a>
+  </td>
+</tr>
+<tr>
+  <td>
+    <a href="tuq_tutorial.arm.gz">arm</a> &nbsp;&nbsp;
+  </td>
+  <td>
+    <a href="tuq_tutorial.arm5.gz">arm5</a>
+  </td>
+</tr>
+</table>
+
 <h3>source</h3>
 
 <a href="http://github.com/couchbaselabs/tuqtng">github repo</a>
@@ -86,6 +120,7 @@ tuqtng is a <a href="http://labs.couchbase.com/">couchbase labs</a> project
         $.ajax("version.json").success(function(d) {
             $("#server-version").text("v" + d.version);
             $("#client-version").text("v" + d.version);
+            $("#tutorial-version").text("v" + d.version);
         });
     } );
 </script>
