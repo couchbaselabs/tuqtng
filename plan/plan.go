@@ -149,16 +149,18 @@ func (this *Offset) Sources() []PlanElement {
 }
 
 type Projector struct {
-	Type   string                   `json:"type"`
-	Input  PlanElement              `json:"input"`
-	Result ast.ResultExpressionList `json:"result"`
+	Type         string                   `json:"type"`
+	Input        PlanElement              `json:"input"`
+	Result       ast.ResultExpressionList `json:"result"`
+	ProjectEmpty bool                     `json:"-"`
 }
 
-func NewProjector(input PlanElement, result ast.ResultExpressionList) *Projector {
+func NewProjector(input PlanElement, result ast.ResultExpressionList, projectEmpty bool) *Projector {
 	return &Projector{
-		Type:   "projector",
-		Input:  input,
-		Result: result,
+		Type:         "projector",
+		Input:        input,
+		Result:       result,
+		ProjectEmpty: projectEmpty,
 	}
 }
 
@@ -181,5 +183,25 @@ func NewProjectorInline(input PlanElement, result *ast.ResultExpression) *Projec
 }
 
 func (this *ProjectorInline) Sources() []PlanElement {
+	return []PlanElement{this.Input}
+}
+
+type DocumentJoin struct {
+	Type  string         `json:"type"`
+	Input PlanElement    `json:"input"`
+	Over  ast.Expression `json:"over"`
+	As    string         `json:"as"`
+}
+
+func NewDocumentJoin(input PlanElement, over ast.Expression, as string) *DocumentJoin {
+	return &DocumentJoin{
+		Type:  "document-join",
+		Input: input,
+		Over:  over,
+		As:    as,
+	}
+}
+
+func (this *DocumentJoin) Sources() []PlanElement {
 	return []PlanElement{this.Input}
 }

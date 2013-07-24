@@ -65,6 +65,19 @@ func (this *DotMemberOperator) String() string {
 	return fmt.Sprintf("%v.%s", this.Left, this.Right.Path)
 }
 
+func (this *DotMemberOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	// dot member only performs verification of its LHS
+	// RHS is always the non-leading portion of the a.b.c form
+	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newleft != nil {
+		this.Left = newleft
+	}
+	return nil, nil
+}
+
 // ****************************************************************************
 // BRACKET MEMBER
 // ****************************************************************************
@@ -126,4 +139,22 @@ func (this *BracketMemberOperator) Validate() error {
 		return err
 	}
 	return err
+}
+
+func (this *BracketMemberOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newleft != nil {
+		this.Left = newleft
+	}
+	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newright != nil {
+		this.Right = newright
+	}
+	return nil, nil
 }

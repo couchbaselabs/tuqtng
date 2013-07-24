@@ -17,15 +17,17 @@ import (
 )
 
 type Project struct {
-	Source      Operator
-	itemChannel query.ItemChannel
-	Result      ast.ResultExpressionList
+	Source       Operator
+	itemChannel  query.ItemChannel
+	Result       ast.ResultExpressionList
+	projectEmpty bool
 }
 
-func NewProject(result ast.ResultExpressionList) *Project {
+func NewProject(result ast.ResultExpressionList, projectEmpty bool) *Project {
 	return &Project{
-		Result:      result,
-		itemChannel: make(query.ItemChannel),
+		Result:       result,
+		itemChannel:  make(query.ItemChannel),
+		projectEmpty: projectEmpty,
 	}
 }
 
@@ -101,6 +103,10 @@ func (this *Project) Run() {
 					}
 				}
 			}
+		}
+
+		if !this.projectEmpty && len(resultMap) == 0 {
+			continue
 		}
 
 		// create the actual result Item

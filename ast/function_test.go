@@ -19,7 +19,9 @@ import (
 func TestFunction(t *testing.T) {
 
 	sampleContext := map[string]query.Value{
-		"name": "will",
+		"bucket": map[string]query.Value{
+			"name": "will",
+		},
 	}
 	sampleMeta := map[string]query.Value{
 		"id": "first",
@@ -261,12 +263,14 @@ func TestFunction(t *testing.T) {
 	}
 
 	for _, x := range tests {
+		x.input.VerifyFormalNotation([]string{"bucket"}, "bucket")
+		x.input.Validate()
 		result, err := x.input.Evaluate(context)
 		if !reflect.DeepEqual(err, x.err) {
-			t.Fatalf("Expected error %v, got %v", x.err, err)
+			t.Fatalf("Expected error %v, got %v for %v", x.err, err, x.input)
 		}
 		if !reflect.DeepEqual(result, x.output) {
-			t.Errorf("Expected %t %v, got %t %v", x.output, x.output, result, result)
+			t.Errorf("Expected %v, got %v for %v", x.output, result, x.input)
 		}
 	}
 

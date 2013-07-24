@@ -569,9 +569,9 @@ CASE WHEN then_list else_expr END {
 	case ast.Expression:
 		cwtee.Else = topStack
 		// now look for whenthens
-		nextStack := parsingStack.Pop().([]ast.WhenThen)
+		nextStack := parsingStack.Pop().([]*ast.WhenThen)
 		cwtee.WhenThens = nextStack
-	case []ast.WhenThen:
+	case []*ast.WhenThen:
 		// no else
 		cwtee.WhenThens = topStack
 	}
@@ -625,18 +625,18 @@ IDENTIFIER LPAREN UNIQUE function_arg_list RPAREN {
 then_list:
 expr THEN expr {
 	logDebugGrammar("THEN_LIST - SINGLE")
-	when_then_list := make([]ast.WhenThen, 0)
+	when_then_list := make([]*ast.WhenThen, 0)
 	when_then := ast.WhenThen{Then: parsingStack.Pop().(ast.Expression), When: parsingStack.Pop().(ast.Expression)}
-	when_then_list = append(when_then_list, when_then)
+	when_then_list = append(when_then_list, &when_then)
 	parsingStack.Push(when_then_list)
 }
 |
 expr THEN expr WHEN then_list {
 	logDebugGrammar("THEN_LIST - COMPOUND")
-	rest := parsingStack.Pop().([]ast.WhenThen)
+	rest := parsingStack.Pop().([]*ast.WhenThen)
 	last := ast.WhenThen{Then: parsingStack.Pop().(ast.Expression), When: parsingStack.Pop().(ast.Expression)}
-	new_list := make([]ast.WhenThen, 0, len(rest) + 1)
-	new_list = append(new_list, last)
+	new_list := make([]*ast.WhenThen, 0, len(rest) + 1)
+	new_list = append(new_list, &last)
 	for _, v := range rest {
 		new_list = append(new_list, v)
 	}

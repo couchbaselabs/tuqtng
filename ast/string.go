@@ -66,3 +66,21 @@ func (this *StringConcatenateOperator) Validate() error {
 	}
 	return nil
 }
+
+func (this *StringConcatenateOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newleft != nil {
+		this.Left = newleft
+	}
+	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newright != nil {
+		this.Right = newright
+	}
+	return nil, nil
+}

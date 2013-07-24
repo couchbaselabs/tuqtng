@@ -35,6 +35,30 @@ func (this ResultExpressionList) Validate() error {
 	return nil
 }
 
+func (this ResultExpressionList) VerifyFormalNotation(aliases []string, defaultAlias string) error {
+	for _, resultExpr := range this {
+		if resultExpr.Expr != nil {
+			newres, err := resultExpr.Expr.VerifyFormalNotation(aliases, defaultAlias)
+			if err != nil {
+				return err
+			}
+			if newres != nil {
+				resultExpr.Expr = newres
+			}
+		}
+		if resultExpr.Star && resultExpr.Expr == nil {
+			// only a star, need to fixup
+			if defaultAlias != "" {
+				resultExpr.Expr = NewProperty(defaultAlias)
+			}
+			// else {
+			// 	return fmt.Errorf("* is missing qualifier bucket/alias")
+			// }
+		}
+	}
+	return nil
+}
+
 // this function should be called before assigning default names
 // it should check to see if any explicitly named aliases are duplicated
 // if so, this is an error

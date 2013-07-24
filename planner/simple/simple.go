@@ -47,7 +47,6 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 
 	} else {
 		from := froms[0]
-		from.ConvertToBucketFrom()
 
 		// see if the bucket exists
 		if this.pool != nil {
@@ -75,8 +74,18 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 					lastStep = plan.NewScan(bucket.Name(), scanner.Name())
 					lastStep = plan.NewFetch(lastStep, bucket.Name())
 					if from.Projection != nil {
-						// insert a project-inline phase to extrac the sub-document
-						lastStep = plan.NewProjectorInline(lastStep, ast.NewResultExpression(from.Projection))
+						if from.As == "" {
+							// insert a project-inline phase to extrac the sub-document
+							lastStep = plan.NewProjectorInline(lastStep, ast.NewResultExpression(from.Projection))
+						} else {
+							lastStep = plan.NewProjector(lastStep, ast.ResultExpressionList{ast.NewResultExpressionWithAlias(from.Projection, from.As)}, false)
+						}
+					}
+					if len(froms) > 1 {
+						// add document joins
+						for _, from := range froms[1:] {
+							lastStep = plan.NewDocumentJoin(lastStep, from.Projection, from.As)
+						}
 					}
 					foundUsableScanner = true
 					break
@@ -111,7 +120,7 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 		lastStep = plan.NewLimit(lastStep, stmt.GetLimit())
 	}
 
-	lastStep = plan.NewProjector(lastStep, stmt.GetResultExpressionList())
+	lastStep = plan.NewProjector(lastStep, stmt.GetResultExpressionList(), true)
 
 	pc <- plan.Plan{Root: lastStep}
 

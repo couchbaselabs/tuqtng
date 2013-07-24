@@ -87,6 +87,24 @@ func (this *BinaryComparisonOperator) validate() error {
 	return nil
 }
 
+func (this *BinaryComparisonOperator) verifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newleft != nil {
+		this.Left = newleft
+	}
+	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newright != nil {
+		this.Right = newright
+	}
+	return nil, nil
+}
+
 // ****************************************************************************
 // Greater Than
 // ****************************************************************************
@@ -131,6 +149,10 @@ func (this *GreaterThanOperator) Evaluate(item query.Item) (query.Value, error) 
 
 func (this *GreaterThanOperator) Validate() error {
 	return this.BinaryComparisonOperator.validate()
+}
+
+func (this *GreaterThanOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	return this.BinaryComparisonOperator.verifyFormalNotation(aliases, defaultAlias)
 }
 
 // ****************************************************************************
@@ -179,6 +201,10 @@ func (this *GreaterThanOrEqualOperator) Validate() error {
 	return this.BinaryComparisonOperator.validate()
 }
 
+func (this *GreaterThanOrEqualOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	return this.BinaryComparisonOperator.verifyFormalNotation(aliases, defaultAlias)
+}
+
 // ****************************************************************************
 // Less Than
 // ****************************************************************************
@@ -223,6 +249,10 @@ func (this *LessThanOperator) Evaluate(item query.Item) (query.Value, error) {
 
 func (this *LessThanOperator) Validate() error {
 	return this.BinaryComparisonOperator.validate()
+}
+
+func (this *LessThanOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	return this.BinaryComparisonOperator.verifyFormalNotation(aliases, defaultAlias)
 }
 
 // ****************************************************************************
@@ -271,6 +301,10 @@ func (this *LessThanOrEqualOperator) Validate() error {
 	return this.BinaryComparisonOperator.validate()
 }
 
+func (this *LessThanOrEqualOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	return this.BinaryComparisonOperator.verifyFormalNotation(aliases, defaultAlias)
+}
+
 // ****************************************************************************
 // Equal To
 // ****************************************************************************
@@ -317,6 +351,10 @@ func (this *EqualToOperator) Validate() error {
 	return this.BinaryComparisonOperator.validate()
 }
 
+func (this *EqualToOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	return this.BinaryComparisonOperator.verifyFormalNotation(aliases, defaultAlias)
+}
+
 // ****************************************************************************
 // Not Equal To
 // ****************************************************************************
@@ -361,6 +399,10 @@ func (this *NotEqualToOperator) Evaluate(item query.Item) (query.Value, error) {
 
 func (this *NotEqualToOperator) Validate() error {
 	return this.BinaryComparisonOperator.validate()
+}
+
+func (this *NotEqualToOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	return this.BinaryComparisonOperator.verifyFormalNotation(aliases, defaultAlias)
 }
 
 // ****************************************************************************
@@ -425,6 +467,24 @@ func (this *LikeOperator) Validate() error {
 	return nil
 }
 
+func (this *LikeOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newleft != nil {
+		this.Left = newleft
+	}
+	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newright != nil {
+		this.Right = newright
+	}
+	return nil, nil
+}
+
 // ****************************************************************************
 // Not Like
 // ****************************************************************************
@@ -486,6 +546,24 @@ func (this *NotLikeOperator) Validate() error {
 	return nil
 }
 
+func (this *NotLikeOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newleft != nil {
+		this.Left = newleft
+	}
+	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newright != nil {
+		this.Right = newright
+	}
+	return nil, nil
+}
+
 // ****************************************************************************
 // IS NULL
 // ****************************************************************************
@@ -527,6 +605,17 @@ func (this *IsNullOperator) Validate() error {
 		return err
 	}
 	return nil
+}
+
+func (this *IsNullOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newoper, err := this.Operand.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newoper != nil {
+		this.Operand = newoper
+	}
+	return nil, nil
 }
 
 // ****************************************************************************
@@ -572,6 +661,17 @@ func (this *IsNotNullOperator) Validate() error {
 	return nil
 }
 
+func (this *IsNotNullOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newoper, err := this.Operand.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newoper != nil {
+		this.Operand = newoper
+	}
+	return nil, nil
+}
+
 // ****************************************************************************
 // IS MISSING
 // ****************************************************************************
@@ -611,6 +711,17 @@ func (this *IsMissingOperator) Validate() error {
 	return nil
 }
 
+func (this *IsMissingOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newoper, err := this.Operand.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newoper != nil {
+		this.Operand = newoper
+	}
+	return nil, nil
+}
+
 // ****************************************************************************
 // IS NOT MISSING
 // ****************************************************************************
@@ -648,6 +759,17 @@ func (this *IsNotMissingOperator) Validate() error {
 		return err
 	}
 	return nil
+}
+
+func (this *IsNotMissingOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newoper, err := this.Operand.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newoper != nil {
+		this.Operand = newoper
+	}
+	return nil, nil
 }
 
 // ****************************************************************************
@@ -693,6 +815,17 @@ func (this *IsValuedOperator) Validate() error {
 	return nil
 }
 
+func (this *IsValuedOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newoper, err := this.Operand.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newoper != nil {
+		this.Operand = newoper
+	}
+	return nil, nil
+}
+
 // ****************************************************************************
 // IS NOT VALUED
 // ****************************************************************************
@@ -734,4 +867,15 @@ func (this *IsNotValuedOperator) Validate() error {
 		return err
 	}
 	return nil
+}
+
+func (this *IsNotValuedOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newoper, err := this.Operand.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newoper != nil {
+		this.Operand = newoper
+	}
+	return nil, nil
 }

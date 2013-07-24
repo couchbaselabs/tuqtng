@@ -69,6 +69,24 @@ func (this *PlusOperator) Validate() error {
 	return nil
 }
 
+func (this *PlusOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newleft != nil {
+		this.Left = newleft
+	}
+	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newright != nil {
+		this.Right = newright
+	}
+	return nil, nil
+}
+
 // ****************************************************************************
 // MINUS
 // ****************************************************************************
@@ -121,6 +139,24 @@ func (this *SubtractOperator) Validate() error {
 		return err
 	}
 	return nil
+}
+
+func (this *SubtractOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newleft != nil {
+		this.Left = newleft
+	}
+	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newright != nil {
+		this.Right = newright
+	}
+	return nil, nil
 }
 
 // ****************************************************************************
@@ -177,6 +213,24 @@ func (this *MultiplyOperator) Validate() error {
 	return nil
 }
 
+func (this *MultiplyOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newleft != nil {
+		this.Left = newleft
+	}
+	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newright != nil {
+		this.Right = newright
+	}
+	return nil, nil
+}
+
 // ****************************************************************************
 // DIV
 // ****************************************************************************
@@ -229,6 +283,24 @@ func (this *DivideOperator) Validate() error {
 		return err
 	}
 	return nil
+}
+
+func (this *DivideOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newleft != nil {
+		this.Left = newleft
+	}
+	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newright != nil {
+		this.Right = newright
+	}
+	return nil, nil
 }
 
 // ****************************************************************************
@@ -285,6 +357,24 @@ func (this *ModuloOperator) Validate() error {
 	return nil
 }
 
+func (this *ModuloOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newleft != nil {
+		this.Left = newleft
+	}
+	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newright != nil {
+		this.Right = newright
+	}
+	return nil, nil
+}
+
 // ****************************************************************************
 // Change Sign
 // ****************************************************************************
@@ -321,4 +411,15 @@ func (this *ChangeSignOperator) Validate() error {
 		return err
 	}
 	return nil
+}
+
+func (this *ChangeSignOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newoper, err := this.Operand.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newoper != nil {
+		this.Operand = newoper
+	}
+	return nil, nil
 }

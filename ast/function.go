@@ -53,6 +53,47 @@ func (this *FunctionCall) Validate() error {
 	return functionImpl.Validate(this.Operands)
 }
 
+func (this *FunctionCall) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+
+	// two specific checks need to be made here for special functions
+	if this.Name == "VALUE" {
+		// VALUE() with 0 args is converted to VALUE(defaultAlias) when there is one
+		if len(this.Operands) == 0 && defaultAlias != "" {
+			this.Operands = append(this.Operands, NewFunctionArgExpression(NewProperty(defaultAlias)))
+		}
+	}
+	if this.Name == "META" {
+		// META() with 0 args is converted to META(defaultAlias) when there is one
+		if len(this.Operands) == 0 && defaultAlias != "" {
+			this.Operands = append(this.Operands, NewFunctionArgExpression(NewProperty(defaultAlias)))
+		} else if len(this.Operands) > 0 {
+			// check to see that the correct bucket is referenced (currently always aliases[0])
+			switch operexpr := this.Operands[0].Expr.(type) {
+			case *Property:
+				if operexpr.Path != aliases[0] {
+					return nil, fmt.Errorf("invalid argument to META() function, must be bucket name/alias")
+				}
+			default:
+				return nil, fmt.Errorf("invalid argument to META() function, must be bucket name/alias")
+			}
+		}
+	}
+
+	for _, operand := range this.Operands {
+		if operand.Expr != nil {
+			newoper, err := operand.Expr.VerifyFormalNotation(aliases, defaultAlias)
+			if err != nil {
+				return nil, err
+			}
+			if newoper != nil {
+				operand.Expr = newoper
+			}
+		}
+	}
+
+	return nil, nil
+}
+
 // function arguments
 
 type FunctionArgExpressionList []*FunctionArgExpression

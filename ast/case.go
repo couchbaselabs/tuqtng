@@ -10,6 +10,8 @@
 package ast
 
 import (
+	"log"
+
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -19,7 +21,7 @@ type WhenThen struct {
 }
 
 type CaseOperator struct {
-	WhenThens []WhenThen
+	WhenThens []*WhenThen
 	Else      Expression
 }
 
@@ -81,4 +83,37 @@ func (this *CaseOperator) Validate() error {
 		}
 	}
 	return nil
+}
+
+func (this *CaseOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+
+	for _, WhenThen := range this.WhenThens {
+		newwhen, err := WhenThen.When.VerifyFormalNotation(aliases, defaultAlias)
+		if err != nil {
+			return nil, err
+		}
+		if newwhen != nil {
+			WhenThen.When = newwhen
+		}
+		newthen, err := WhenThen.Then.VerifyFormalNotation(aliases, defaultAlias)
+		if err != nil {
+			return nil, err
+		}
+		if newthen != nil {
+			WhenThen.Then = newthen
+			//this.WhenThens[i] = WhenThen
+		} else {
+			log.Printf("not update then")
+		}
+	}
+	if this.Else != nil {
+		newelse, err := this.Else.VerifyFormalNotation(aliases, defaultAlias)
+		if err != nil {
+			return nil, err
+		}
+		if newelse != nil {
+			this.Else = newelse
+		}
+	}
+	return nil, nil
 }

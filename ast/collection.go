@@ -84,6 +84,26 @@ func (this *CollectionAnyOperator) Validate() error {
 	return nil
 }
 
+func (this *CollectionAnyOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newover, err := this.Over.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newover != nil {
+		this.Over = newover
+	}
+
+	updatedAliases := append(aliases, this.As)
+	newcond, err := this.Condition.VerifyFormalNotation(updatedAliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newcond != nil {
+		this.Condition = newcond
+	}
+	return nil, nil
+}
+
 type CollectionAllOperator struct {
 	Condition Expression
 	Over      Expression
@@ -153,4 +173,24 @@ func (this *CollectionAllOperator) Validate() error {
 		return err
 	}
 	return nil
+}
+
+func (this *CollectionAllOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	newover, err := this.Over.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newover != nil {
+		this.Over = newover
+	}
+
+	updatedAliases := append(aliases, this.As)
+	newcond, err := this.Condition.VerifyFormalNotation(updatedAliases, defaultAlias)
+	if err != nil {
+		return nil, err
+	}
+	if newcond != nil {
+		this.Condition = newcond
+	}
+	return nil, nil
 }

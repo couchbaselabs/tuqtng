@@ -45,3 +45,21 @@ func (this *Property) String() string {
 func (this *Property) Validate() error {
 	return nil
 }
+
+// NOTE this should only be called on leading property references, not ones deeper in a chain (ie, for a.b.c, only a, not b or c)
+func (this *Property) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	// this test is not needed when there are no aliases in the from clause (expression evaluation only)
+	if len(aliases) > 0 {
+		for _, alias := range aliases {
+			if this.Path == alias {
+				return nil, nil
+			}
+		}
+		if defaultAlias != "" {
+			return NewDotMemberOperator(NewProperty(defaultAlias), this), nil
+		} else {
+			return nil, fmt.Errorf("Property reference %s missing qualifier bucket/alias", this.Path)
+		}
+	}
+	return nil, nil
+}

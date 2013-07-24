@@ -20,62 +20,47 @@ type ParsedItem struct {
 
 func NewParsedItem(contents Value, meta map[string]Value) *ParsedItem {
 	return &ParsedItem{
-		contents: contents,
+		contents: convertEmtpyInterfaceToValue(contents),
 		meta:     meta,
 	}
 }
 
+func convertEmtpyInterfaceToValue(input Value) Value {
+	switch input := input.(type) {
+	case map[string]Value:
+		for k, v := range input {
+			input[k] = convertEmtpyInterfaceToValue(v)
+		}
+		return input
+	case map[string]interface{}:
+		rv := map[string]Value{}
+		for k, v := range input {
+			rv[k] = convertEmtpyInterfaceToValue(v)
+		}
+		return rv
+	case []Value:
+		for i, v := range input {
+			input[i] = convertEmtpyInterfaceToValue(v)
+		}
+		return input
+	case []interface{}:
+		rv := make([]Value, 0)
+		for _, v := range input {
+			rv = append(rv, convertEmtpyInterfaceToValue(v))
+		}
+		return rv
+	default:
+		return input
+	}
+}
+
 func (this *ParsedItem) GetPath(path string) (Value, error) {
-	switch contents := this.contents.(type) {
+	contents := this.contents
+	switch contents := contents.(type) {
 	case map[string]Value:
 		value, ok := contents[path]
 		if ok {
-			// FIXME review this to possibly avoid rebuilding maps (custom JSON parser up front?)
-			// check type of value
-			// map[string]interface{} should be converted to map[string]Value
-			// []interface{} should be converted to []Value
-			switch value := value.(type) {
-			case map[string]interface{}:
-				rv := make(map[string]Value)
-				for k, v := range value {
-					rv[k] = v
-				}
-				return rv, nil
-			case []interface{}:
-				rv := make([]Value, 0)
-				for _, v := range value {
-					rv = append(rv, v)
-				}
-				return rv, nil
-			default:
-				return value, nil
-			}
-
-		}
-	case map[string]interface{}:
-		value, ok := contents[path]
-		if ok {
-			// FIXME review this to possibly avoid rebuilding maps (custom JSON parser up front?)
-			// check type of value
-			// map[string]interface{} should be converted to map[string]Value
-			// []interface{} should be converted to []Value
-			switch value := value.(type) {
-			case map[string]interface{}:
-				rv := make(map[string]Value)
-				for k, v := range value {
-					rv[k] = v
-				}
-				return rv, nil
-			case []interface{}:
-				rv := make([]Value, 0)
-				for _, v := range value {
-					rv = append(rv, v)
-				}
-				return rv, nil
-			default:
-				return value, nil
-			}
-
+			return value, nil
 		}
 	}
 

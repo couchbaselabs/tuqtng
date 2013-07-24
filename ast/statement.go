@@ -22,6 +22,7 @@ type Statement interface {
 	SetExplainOnly(bool)
 	IsExplainOnly() bool
 	VerifySemantics() error
+	GetFromAliases() []string
 }
 
 type SelectStatement struct {
@@ -38,6 +39,14 @@ func NewSelectStatement() *SelectStatement {
 	return &SelectStatement{
 		Limit: -1,
 	}
+}
+
+func (this *SelectStatement) GetFromAliases() []string {
+	rv := make([]string, 0)
+	for _, f := range this.Froms {
+		rv = append(rv, f.As)
+	}
+	return rv
 }
 
 func (this *SelectStatement) GetFroms() []*From {
@@ -81,6 +90,48 @@ func (this *SelectStatement) VerifySemantics() error {
 
 	// now apply default naming function
 	this.GetResultExpressionList().AssignDefaultNames()
+
+	// fix up all the froms (FIXME need to refactor this into FROM/OVER clenaup)
+	if this.Froms != nil && len(this.Froms) > 0 {
+		this.Froms[0].ConvertToBucketFrom()
+		for _, from := range this.Froms {
+			from.GenerateAlias()
+		}
+	}
+
+	// gather the list of aliases
+	aliases := this.GetFromAliases()
+	defaultAlias := ""
+	if len(aliases) == 1 {
+		defaultAlias = aliases[0]
+	}
+
+	// verify formal notations
+	err = this.Select.VerifyFormalNotation(aliases, defaultAlias)
+	if err != nil {
+		return err
+	}
+	if this.Where != nil {
+		newwhere, err := this.Where.VerifyFormalNotation(aliases, defaultAlias)
+		if err != nil {
+			return err
+		}
+		if newwhere != nil {
+			this.Where = newwhere
+		}
+	}
+	// verify the order by
+	for _, orderExpr := range this.OrderBy {
+		if orderExpr.Expr != nil {
+			neworderexpr, err := orderExpr.Expr.VerifyFormalNotation(aliases, defaultAlias)
+			if err != nil {
+				return err
+			}
+			if neworderexpr != nil {
+				orderExpr.Expr = neworderexpr
+			}
+		}
+	}
 
 	// verify the projection
 	err = this.Select.Validate()

@@ -24,12 +24,14 @@ type FunctionMeta struct {
 }
 
 func (this *FunctionMeta) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+	// we already checked during the VerifyFormalNotation process
+	// that this was the only allowable value
 	return item.GetMeta(), nil
 }
 
 func (this *FunctionMeta) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) > 0 {
-		return fmt.Errorf("the META() function takes no arguments")
+	if len(arguments) != 1 {
+		return fmt.Errorf("the META() function takes one argument")
 	}
 	return nil
 }
@@ -38,12 +40,23 @@ type FunctionValue struct {
 }
 
 func (this *FunctionValue) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
-	return item.GetValue(), nil
+	if len(arguments) > 0 {
+		// first evaluate the argument
+		av, err := arguments[0].Expr.Evaluate(item)
+		if err != nil {
+			return nil, err
+		}
+		return av, nil
+	} else {
+		// this mode is still relied up for projecting in the FROM clause
+		// review for cleanup
+		return item.GetValue(), nil
+	}
 }
 
 func (this *FunctionValue) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) > 0 {
-		return fmt.Errorf("the VALUE() function takes no arguments")
+	if len(arguments) != 1 {
+		return fmt.Errorf("the VALUE() function takes one argument")
 	}
 	return nil
 }

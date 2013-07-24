@@ -9,10 +9,42 @@
 
 package ast
 
+import (
+	"log"
+)
+
 type From struct {
 	Bucket     string
 	Projection Expression
 	As         string
+}
+
+func (this *From) GenerateAlias() {
+	// if there was no alias
+	// try to generate one
+	if this.As == "" {
+		switch proj := this.Projection.(type) {
+		case *FunctionCall:
+			// empty projection was converted to function call to VALUE() in previous step
+			// in this case the bucket name is the alias
+			// FROM bucket
+			// becomes FROM bucket AS bucket
+			this.As = this.Bucket
+		case *Property:
+			// in this case the property path is the alias
+			// FROM bucket.prop
+			// becomes FROM bucket.prop AS prop
+			this.As = proj.Path
+		case *DotMemberOperator:
+			// in this case the right-most property path is the alias
+			// FROM bucket.propa.propb
+			// becomes FROM bucket.propa.propb AS propb
+			this.As = proj.Right.Path
+		default:
+			log.Printf("unexpected type %T", proj)
+		}
+		// in all other cases there is no alias generated
+	}
 }
 
 // FROM is a generic structure capturing both top-level FROMs and OVER constructs
@@ -49,8 +81,8 @@ func (this *From) ConvertToBucketFrom() {
 				// if there was no previous node
 				// then it was a single property
 				// this became the bucket
-				// so now set projection to nil
-				this.Projection = nil
+				// so now set projection to VALUE()
+				this.Projection = NewFunctionCall("VALUE", FunctionArgExpressionList{})
 			case *BracketMemberOperator:
 				// find the RHS we need push up
 				rhs := prev.Right

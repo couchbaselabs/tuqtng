@@ -16,4 +16,13 @@ import (
 type Expression interface {
 	Evaluate(item query.Item) (query.Value, error)
 	Validate() error
+
+	// this method takes a list of valid aliases
+	// if there is more than 1 alias in the list
+	// all property references MUST start with one of these aliases
+	// if not, an appropriate error is returned
+	// if there is only 1 alias, and the reference can be converted
+	// a new expression with the proper reference is returned
+	// it is up to the caller to update any references it may have
+	VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error)
 }
