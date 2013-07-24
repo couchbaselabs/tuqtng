@@ -57,7 +57,7 @@ buildtutorial() {
     eval env GOARCH=arm   GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuq_tutorial.arm $pkg &
     eval env GOARCH=arm   GOARM=5 GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuq_tutorial.arm5 $pkg &
     eval env GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuq_tutorial.lin64 $pkg &
-    eval env GOARCH=amd64 GOOS=freebsd CGO_ENABLED=0 go build $goflags -o $DIST/tuq_tutorial.fbsd $pkg &&
+    eval env GOARCH=amd64 GOOS=freebsd CGO_ENABLED=0 go build $goflags -o $DIST/tuq_tutorial.fbsd $pkg &
     eval env GOARCH=386   GOOS=windows go build $goflags -o $DIST/tuq_tutorial.win32.exe $pkg &
     eval env GOARCH=amd64 GOOS=windows go build $goflags -o $DIST/tuq_tutorial.win64.exe $pkg &
     eval env GOARCH=amd64 GOOS=darwin go build $goflags -o $DIST/tuq_tutorial.mac $pkg &
@@ -67,7 +67,19 @@ buildtutorial() {
 
 compress() {
     rm -f $DIST/tuqtng.*.gz $DIST/tuq_client.*.gz $DIST/tuq_tutorial.*.gz || true
-    for i in $DIST/tuqtng.* $DIST/tuq_client.* $DIST/tuq_tutorial.*
+
+    for i in lin32 arm arm5 lin64 fbsd win32 win64 mac
+    do
+        if [ -f $DIST/tuq_tutorial.$i ]; then
+            tar zcf $DIST/tuq_tutorial.$i.tar.gz    \
+              -C $top test \
+              -C $top/tutorial content \
+              -C $DIST tuq_tutorial.$i
+            rm -f $DIST/tuq_tutorial.$i
+        fi &
+    done
+
+    for i in $DIST/tuqtng.* $DIST/tuq_client.*
     do
         gzip -9v $i &
     done
