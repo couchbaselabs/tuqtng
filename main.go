@@ -12,6 +12,10 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
+	"os/signal"
+	"runtime/pprof"
+	"syscall"
 
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/network/http"
@@ -25,6 +29,8 @@ var poolName = flag.String("pool", "default", "Pool")
 func main() {
 	flag.Parse()
 
+	go dumpOnSignal(syscall.SIGINFO)
+
 	// create a QueryChannel
 	queryChannel := make(network.QueryChannel)
 
@@ -35,5 +41,13 @@ func main() {
 	err := server.Server(*couchbaseSite, *poolName, queryChannel)
 	if err != nil {
 		log.Fatalf("Unable to run server, err: %v", err)
+	}
+}
+
+func dumpOnSignal(signals ...os.Signal) {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, signals...)
+	for _ = range c {
+		pprof.Lookup("goroutine").WriteTo(os.Stderr, 1)
 	}
 }
