@@ -40,11 +40,11 @@ func (this *FunctionLength) Evaluate(item query.Item, arguments FunctionArgExpre
 
 	switch av := av.(type) {
 	case map[string]query.Value:
-		return len(av), nil
+		return float64(len(av)), nil
 	case []query.Value:
-		return len(av), nil
+		return float64(len(av)), nil
 	case string:
-		return len(av), nil
+		return float64(len(av)), nil
 	default:
 		return nil, nil
 	}
