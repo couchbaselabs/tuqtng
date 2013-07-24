@@ -17,6 +17,7 @@ import (
 
 	"code.google.com/p/go.exp/locale/collate"
 	"code.google.com/p/go.text/locale"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 var icuCollator = collate.New(locale.Make("icu"))
@@ -79,10 +80,10 @@ func collationType(value interface{}) int {
 		return 4
 	case []interface{}:
 		return 5
-	case map[string]interface{}:
+	case map[string]interface{}, map[string]query.Value:
 		return 6
 	}
-	panic(fmt.Sprintf("collationType doesn't understand %+v", value))
+	panic(fmt.Sprintf("collationType doesn't understand %+v of type %T", value, value))
 }
 
 func collationToFloat64(value interface{}) float64 {
