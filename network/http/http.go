@@ -16,6 +16,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
@@ -82,6 +83,8 @@ func welcome(w http.ResponseWriter, r *http.Request) {
 
 func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
+	startTime := time.Now()
+
 	queryString := r.FormValue("q")
 	if queryString == "" && r.Method == "POST" {
 		queryStringBytes, err := ioutil.ReadAll(r.Body)
@@ -130,11 +133,13 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Fprint(w, "\n    ],\n")
 		fmt.Fprintf(w, "    \"total_rows\": %d\n", count)
+		elapsed_duration := time.Since(startTime)
+		fmt.Fprintf(w, "    \"total_elapsed_time\": \"%s\"\n", elapsed_duration)
 		if len(response.warnings) > 0 {
-			fmt.Fprintf(w, "    \"warnings\": [", )
+			fmt.Fprintf(w, "    \"warnings\": [")
 			for i, warning := range response.warnings {
 				fmt.Fprintf(w, "\n        \"%v\"", warning)
-				if i < len(response.warnings) - 1 {
+				if i < len(response.warnings)-1 {
 					fmt.Fprintf(w, ",")
 				}
 			}
