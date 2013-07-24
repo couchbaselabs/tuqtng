@@ -29,7 +29,7 @@ var poolName = flag.String("pool", "default", "Pool")
 func main() {
 	flag.Parse()
 
-	go dumpOnSignal(syscall.SIGINFO)
+	go dumpOnSignal(syscall.SIGUSR2)
 
 	// create a QueryChannel
 	queryChannel := make(network.QueryChannel)
