@@ -47,8 +47,8 @@ func CollateJSON(key1, key2 interface{}) int {
 		s2 := key2.(string)
 		return icuCollator.CompareString(s1, s2)
 	case 5:
-		array1 := key1.([]interface{})
-		array2 := key2.([]interface{})
+		array1 := key1.([]query.Value)
+		array2 := key2.([]query.Value)
 		for i, item1 := range array1 {
 			if i >= len(array2) {
 				return 1
@@ -78,9 +78,9 @@ func collationType(value interface{}) int {
 		return 3
 	case string:
 		return 4
-	case []interface{}:
+	case []query.Value:
 		return 5
-	case map[string]interface{}, map[string]query.Value:
+	case map[string]query.Value:
 		return 6
 	}
 	panic(fmt.Sprintf("collationType doesn't understand %+v of type %T", value, value))

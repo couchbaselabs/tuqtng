@@ -11,6 +11,8 @@ package ast
 
 import (
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 func TestCollateJSON(t *testing.T) {
@@ -39,22 +41,22 @@ func TestCollateJSON(t *testing.T) {
 		{"B", "aa", 1},
 
 		// arrays
-		{[]interface{}{}, "foo", 1},
-		{[]interface{}{}, []interface{}{}, 0},
-		{[]interface{}{true}, []interface{}{true}, 0},
-		{[]interface{}{false}, []interface{}{nil}, 1},
-		{[]interface{}{}, []interface{}{nil}, -1},
-		{[]interface{}{float64(123)}, []interface{}{float64(45)}, 1},
-		{[]interface{}{float64(123)}, []interface{}{float64(45), float64(67)}, 1},
-		{[]interface{}{123.4, "wow"}, []interface{}{123.40, float64(789)}, 1},
-		{[]interface{}{float64(5), "wow"}, []interface{}{float64(5), "wow"}, 0},
-		{[]interface{}{float64(5), "wow"}, float64(1), 2},
-		{[]interface{}{float64(1)}, []interface{}{float64(5), "wow"}, -1},
+		{[]query.Value{}, "foo", 1},
+		{[]query.Value{}, []query.Value{}, 0},
+		{[]query.Value{true}, []query.Value{true}, 0},
+		{[]query.Value{false}, []query.Value{nil}, 1},
+		{[]query.Value{}, []query.Value{nil}, -1},
+		{[]query.Value{float64(123)}, []query.Value{float64(45)}, 1},
+		{[]query.Value{float64(123)}, []query.Value{float64(45), float64(67)}, 1},
+		{[]query.Value{123.4, "wow"}, []query.Value{123.40, float64(789)}, 1},
+		{[]query.Value{float64(5), "wow"}, []query.Value{float64(5), "wow"}, 0},
+		{[]query.Value{float64(5), "wow"}, float64(1), 2},
+		{[]query.Value{float64(1)}, []query.Value{float64(5), "wow"}, -1},
 
 		// nested arrays
-		{[]interface{}{[]interface{}{}}, []interface{}{}, 1},
-		{[]interface{}{float64(1), []interface{}{float64(2), float64(3)}, float64(4)},
-			[]interface{}{float64(1), []interface{}{float64(2), 3.1}, float64(4), float64(5), float64(6)}, -1},
+		{[]query.Value{[]query.Value{}}, []query.Value{}, 1},
+		{[]query.Value{float64(1), []query.Value{float64(2), float64(3)}, float64(4)},
+			[]query.Value{float64(1), []query.Value{float64(2), 3.1}, float64(4), float64(5), float64(6)}, -1},
 
 		// unicode strings
 		{"fréd", "fréd", 0},
@@ -63,7 +65,7 @@ func TestCollateJSON(t *testing.T) {
 		{"\001", " ", -1},
 
 		// object
-		{map[string]interface{}{}, "foo", 2},
+		{map[string]query.Value{}, "foo", 2},
 	}
 
 	for _, test := range tests {
