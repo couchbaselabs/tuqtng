@@ -95,10 +95,22 @@ select_select_qualifier:
 |
 DISTINCT {
 	logDebugGrammar("SELECT_SELECT_QUALIFIER DISTINCT")
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.Distinct = true
+	default:
+		logDebugGrammar("This statement does not support WHERE")
+	}
 }
 |
 UNIQUE {
 	logDebugGrammar("SELECT_SELECT_QUALIFIER UNIQUE")
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.Distinct = true
+	default:
+		logDebugGrammar("This statement does not support WHERE")
+	}
 }
 ;
 

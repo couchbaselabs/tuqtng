@@ -13,6 +13,7 @@ import ()
 
 // Statement is the abstract representation of an UNQL statement
 type Statement interface {
+	IsDistinct() bool
 	GetResultExpressionList() ResultExpressionList
 	GetFroms() []*From
 	GetWhere() Expression
@@ -26,6 +27,7 @@ type Statement interface {
 }
 
 type SelectStatement struct {
+	Distinct    bool                 `json:"distinct"`
 	Select      ResultExpressionList `json:"select"`
 	Froms       []*From              `json:"froms"`
 	Where       Expression           `json:"where"`
@@ -67,6 +69,10 @@ func (this *SelectStatement) GetLimit() int {
 
 func (this *SelectStatement) GetOffset() int {
 	return this.Offset
+}
+
+func (this *SelectStatement) IsDistinct() bool {
+	return this.Distinct
 }
 
 func (this *SelectStatement) GetResultExpressionList() ResultExpressionList {
