@@ -132,7 +132,7 @@ func (this *CaseOperator) String() string {
 		if i != 0 {
 			inside = inside + " "
 		}
-		inside = inside + fmt.Sprintf("WHEN %V THEN %v", wt.When, wt.Then)
+		inside = inside + fmt.Sprintf("WHEN %v THEN %v", wt.When, wt.Then)
 	}
 	if this.Else != nil {
 		inside = inside + fmt.Sprintf(" ELSE %v", this.Else)

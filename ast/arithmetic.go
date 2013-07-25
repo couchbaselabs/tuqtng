@@ -393,7 +393,7 @@ func (this *ModuloOperator) VerifyFormalNotation(aliases []string, defaultAlias 
 }
 
 func (this *ModuloOperator) String() string {
-	return fmt.Sprintf("%v % %v", this.Left, this.Right)
+	return fmt.Sprintf("%v %% %v", this.Left, this.Right)
 }
 
 // ****************************************************************************

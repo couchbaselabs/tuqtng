@@ -108,7 +108,7 @@ func (this FunctionArgExpressionList) String() string {
 		if i != 0 {
 			inside = inside + ", "
 		}
-		inside = inside + fmt.Sprint("%v", arg)
+		inside = inside + fmt.Sprintf("%v", arg)
 	}
 	return inside
 }
