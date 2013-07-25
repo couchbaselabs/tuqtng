@@ -10,6 +10,7 @@
 package couchbase
 
 import (
+	"encoding/json"
 	"fmt"
 
 	cb "github.com/couchbaselabs/go-couchbase"
@@ -121,6 +122,29 @@ func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
 		return nil, query.NewError(nil, fmt.Sprintf("Scanner %v not found.", name))
 	}
 	return scanner, nil
+}
+
+func (b *bucket) BulkFetch(ids []string) (map[string]query.Item, query.Error) {
+	rv := make(map[string]query.Item, 0)
+
+	bulkResponse := b.cbbucket.GetBulk(ids)
+	for k, v := range bulkResponse {
+		var doc query.Value
+		err := json.Unmarshal(v.Body, &doc)
+		if err != nil {
+			return nil, query.NewError(err, "")
+		}
+
+		meta := map[string]query.Value{
+			"id": k,
+		}
+
+		item := query.NewParsedItem(doc, meta)
+
+		rv[k] = item
+	}
+
+	return rv, nil
 }
 
 func (b *bucket) Fetch(id string) (query.Item, query.Error) {

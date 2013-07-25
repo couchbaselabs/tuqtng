@@ -16,16 +16,20 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
+const FETCH_BATCH_SIZE = 1000
+
 type Fetch struct {
 	Source      Operator
 	itemChannel query.ItemChannel
 	bucket      catalog.Bucket
+	batch       []query.Item
 }
 
 func NewFetch(bucket catalog.Bucket) *Fetch {
 	return &Fetch{
 		itemChannel: make(query.ItemChannel),
 		bucket:      bucket,
+		batch:       make([]query.Item, 0, FETCH_BATCH_SIZE),
 	}
 }
 
@@ -44,19 +48,57 @@ func (this *Fetch) Run() {
 	go this.Source.Run()
 
 	for item := range this.Source.GetItemChannel() {
-		meta := item.GetMeta()
-		id, ok := meta["id"]
 
-		if ok {
-			fetchedItem, err := this.bucket.Fetch(id.(string)) //FIXME assert ids always strings
-			if err != nil {
-				log.Printf("error fetching from bucket %v", err)
-				// FIXME proper error handling
-			}
-			this.itemChannel <- fetchedItem
+		// add this item to the batch
+		this.batch = append(this.batch, item)
+
+		// if the batch is full, do a fetch
+		if len(this.batch) >= FETCH_BATCH_SIZE {
+			this.flushBatch()
+		}
+
+	}
+
+	// source may have closed with a parital batch
+	this.flushBatch()
+}
+
+func (this *Fetch) flushBatch() {
+
+	defer func() {
+		// no matter what hapens in this function
+		// clear out the batch and start a new one
+		this.batch = make([]query.Item, 0, FETCH_BATCH_SIZE)
+	}()
+
+	// gather the ids
+	ids := make([]string, 0, FETCH_BATCH_SIZE)
+	for _, v := range this.batch {
+		meta := v.GetMeta()
+		id, ok := meta["id"]
+		if !ok {
+			log.Printf("asked to fetch an item without an id")
 		} else {
-			log.Printf("fetch got an item without an id??")
-			// FIXME proper error handling
+			ids = append(ids, id.(string)) //FIXME assert ids always strings
+		}
+	}
+
+	// now do a bulk fetch
+
+	bulkResponse, err := this.bucket.BulkFetch(ids)
+	if err != nil {
+		// FIXME proper error handling
+		log.Printf("error getting bulk response %v", err)
+		return
+	}
+
+	// now we need to emit the bulk fetched items in the correct order (from the id list)
+	for _, v := range ids {
+		item, ok := bulkResponse[v]
+		if !ok {
+			log.Printf("missing item in the bulk response %v", v)
+		} else {
+			this.itemChannel <- item
 		}
 	}
 }

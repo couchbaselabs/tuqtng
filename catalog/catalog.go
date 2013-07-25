@@ -44,6 +44,7 @@ type Bucket interface {
 	ScannerNames() ([]string, query.Error)
 	Scanner(name string) (Scanner, query.Error)
 	Fetch(id string) (query.Item, query.Error)
+	BulkFetch([]string) (map[string]query.Item, query.Error)
 	Release()
 }
 

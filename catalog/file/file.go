@@ -214,6 +214,18 @@ func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
 	return scanner, nil
 }
 
+func (b *bucket) BulkFetch(ids []string) (map[string]query.Item, query.Error) {
+	rv := make(map[string]query.Item, 0)
+	for _, id := range ids {
+		item, e := b.Fetch(id)
+		if e != nil {
+			return nil, e
+		}
+		rv[id] = item
+	}
+	return rv, nil
+}
+
 func (b *bucket) Fetch(id string) (item query.Item, e query.Error) {
 	path := filepath.Join(b.path(), id+".json")
 	item, e = fetch(path)
