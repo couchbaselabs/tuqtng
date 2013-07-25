@@ -1,0 +1,57 @@
+[
+    {
+        "statements": "SELECT name FROM contacts WHERE name = 'ian'",
+        "results": [
+            {
+                "name": "ian"
+            }
+        ]
+    },
+    {
+        "statements": "SELECT emp.name FROM contacts AS emp WHERE name = 'ian'",
+        "results": [
+            {
+                "$1": "ian"
+            }
+        ]
+    },
+    {
+        "statements": "SELECT contacts.name FROM contacts WHERE name = 'ian'",
+        "results": [
+            {
+                "$1": "ian"
+            }
+        ]
+    },
+    {
+        "statements": "SELECT contacts.name AS name FROM contacts WHERE name = 'ian'",
+        "results": [
+            {
+                "name": "ian"
+            }
+        ]
+    },
+    {
+        "statements": "SELECT emp.name AS name FROM contacts AS emp WHERE name = 'ian'",
+        "results": [
+            {
+                "name": "ian"
+            }
+        ]
+    },
+    {
+        "statements": "SELECT name FROM contacts AS emp WHERE name = 'ian'",
+        "results": [
+            {
+                "name": "ian"
+            }
+        ]
+    },
+    {
+        "statements": "SELECT contacts.name AS name FROM contacts AS emp WHERE name = 'ian'",
+        "results": [
+            {
+            }
+        ]
+    }
+]
