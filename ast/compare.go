@@ -465,6 +465,7 @@ func (this *LikeOperator) Evaluate(item query.Item) (query.Value, error) {
 			// if both values are string we can proceed
 			pattern := strings.Replace(rv, "%", "(.*)", -1)
 			pattern = strings.Replace(pattern, "_", "(.)", -1)
+			pattern = "^" + pattern + "$"
 			re, err := regexp.Compile(pattern)
 			if err != nil {
 				return err, nil
@@ -548,6 +549,7 @@ func (this *NotLikeOperator) Evaluate(item query.Item) (query.Value, error) {
 			// if both values are string we can proceed
 			pattern := strings.Replace(rv, "%", "(.*)", -1)
 			pattern = strings.Replace(pattern, "_", "(.)", -1)
+			pattern = "^" + pattern + "$"
 			re, err := regexp.Compile(pattern)
 			if err != nil {
 				return err, nil

@@ -79,7 +79,7 @@
     },
 
     {
-        "statements": "SELECT asin, title FROM catalog WHERE type = \"Movies&TV\" and title LIKE \"Sherlock\"",
+        "statements": "SELECT asin, title FROM catalog WHERE type = \"Movies&TV\" and title LIKE \"Sherlock%\"",
         "results": [
         {
             "asin": "B0094QY3LI",
