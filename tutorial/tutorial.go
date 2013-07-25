@@ -23,24 +23,28 @@ func setup(cacheDir string, src string, srcF os.FileInfo, err error) error {
 	if strings.HasSuffix(dst, ".md") {
 		dst = strings.TrimSuffix(dst, ".md") + ".html"
 	}
-	dstF, _ := os.Stat(dst)
+	dstF, dstE := os.Stat(dst)
 
 	// if up to date, skip
-	if srcF.IsDir() && dstF != nil {
-		return nil
-	}
-	if dstF != nil && dstF.ModTime().After(srcF.ModTime()) {
+	if !os.IsNotExist(dstE) &&
+		(srcF.IsDir() || dstF.ModTime().After(srcF.ModTime())) {
 		return nil
 	}
 
 	// copy to cache
+	if os.IsNotExist(dstE) {
+		log.Println("Copying", srcF.Name())
+	} else {
+		log.Println("Updating", srcF.Name())
+	}
+
 	if srcF.IsDir() {
-		log.Println("Creating Dir", srcF.Name())
 		if err := os.MkdirAll(dst, srcF.Mode()); err != nil {
 			return err
 		}
 		return nil
 	}
+
 	sbuf, err := ioutil.ReadFile(src)
 	if err != nil {
 		return err
@@ -49,10 +53,10 @@ func setup(cacheDir string, src string, srcF os.FileInfo, err error) error {
 	if strings.HasSuffix(src, ".md") {
 		dbuf = blackfriday.MarkdownCommon(sbuf)
 	}
-	log.Println("Copying", srcF.Name())
 	if err := ioutil.WriteFile(dst, dbuf, srcF.Mode()); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -77,6 +81,8 @@ func main() {
 	if err := filepath.Walk("./content/", walker); err != nil {
 		log.Fatalln("Filewalk", err)
 	}
+
+	log.Println("Running at http:///localhost:8000/")
 
 	go func() {
 		for {

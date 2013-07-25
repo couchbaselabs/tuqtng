@@ -1,15 +1,9 @@
 To run the tutorial...
 
-(a) Install Go, http://golang.org/doc/install
-
-Please be sure to export GOROOT as outlined before continuing.
-
-(b) Run "go get github.com/couchbaselabs/tuqtng"
-
-(c) Run the below commands:
-
-    cd $GOROOT/src/github.com/couchbaselabs/tuqtng
-    ./tuqtng -couchbase dir:test/ -pool json &
-    cd tutorial; ./tutorial &
-
-(d) Visit http://localhost:8000 with your browser.
+(a) Go to http://cbfs-ext.hq.couchbase.com/tuqtng/
+(b) Download tutorial.zip and extract it, to say ~/tutorial
+(c) Download server and save it to same directory, ~/tutorial
+(d) Open two consoles, cd to ~/tutorial in each and run:
+	./tuqtng -couchbase dir:test -pool json
+	./tutorial
+(e) Visit http://localhost:8000 with your browser.
