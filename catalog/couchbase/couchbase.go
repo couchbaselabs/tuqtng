@@ -135,8 +135,12 @@ func (b *bucket) BulkFetch(ids []string) (map[string]query.Item, query.Error) {
 			return nil, query.NewError(err, "")
 		}
 
+		flags := (v.Extras[0]&0xff)<<24 | (v.Extras[1]&0xff)<<16 | (v.Extras[2]&0xff)<<8 | (v.Extras[3] & 0xff)
 		meta := map[string]query.Value{
-			"id": k,
+			"id":    k,
+			"cas":   v.Cas,
+			"type":  "json",
+			"flags": float64(flags),
 		}
 
 		item := query.NewParsedItem(doc, meta)
