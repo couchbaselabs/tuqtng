@@ -10,6 +10,8 @@
 package ast
 
 import (
+	"fmt"
+
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -104,6 +106,10 @@ func (this *CollectionAnyOperator) VerifyFormalNotation(aliases []string, defaul
 	return nil, nil
 }
 
+func (this *CollectionAnyOperator) String() string {
+	return fmt.Sprintf("ANY %v OVER %v AS %s", this.Condition, this.Over, this.As)
+}
+
 type CollectionAllOperator struct {
 	Condition Expression
 	Over      Expression
@@ -193,4 +199,8 @@ func (this *CollectionAllOperator) VerifyFormalNotation(aliases []string, defaul
 		this.Condition = newcond
 	}
 	return nil, nil
+}
+
+func (this *CollectionAllOperator) String() string {
+	return fmt.Sprintf("ALL %v OVER %v AS %s", this.Condition, this.Over, this.As)
 }

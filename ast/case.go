@@ -10,6 +10,7 @@
 package ast
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/couchbaselabs/tuqtng/query"
@@ -116,4 +117,18 @@ func (this *CaseOperator) VerifyFormalNotation(aliases []string, defaultAlias st
 		}
 	}
 	return nil, nil
+}
+
+func (this *CaseOperator) String() string {
+	inside := ""
+	for i, wt := range this.WhenThens {
+		if i != 0 {
+			inside = inside + " "
+		}
+		inside = inside + fmt.Sprintf("WHEN %V THEN %v", wt.When, wt.Then)
+	}
+	if this.Else != nil {
+		inside = inside + fmt.Sprintf(" ELSE %v", this.Else)
+	}
+	return fmt.Sprintf("CASE %v END", inside)
 }

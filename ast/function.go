@@ -94,13 +94,43 @@ func (this *FunctionCall) VerifyFormalNotation(aliases []string, defaultAlias st
 	return nil, nil
 }
 
+func (this *FunctionCall) String() string {
+	return fmt.Sprintf("%s(%v)", this.Name, this.Operands)
+}
+
 // function arguments
 
 type FunctionArgExpressionList []*FunctionArgExpression
 
+func (this FunctionArgExpressionList) String() string {
+	inside := ""
+	for i, arg := range this {
+		if i != 0 {
+			inside = inside + ", "
+		}
+		inside = inside + fmt.Sprint("%v", arg)
+	}
+	return inside
+}
+
 type FunctionArgExpression struct {
 	Star bool       `json:"star"`
 	Expr Expression `json:"expr"`
+}
+
+func (this *FunctionArgExpression) String() string {
+	inside := ""
+	if this.Expr != nil {
+		inside = fmt.Sprintf("%v", this.Expr)
+	}
+	if this.Star {
+		if inside != "" {
+			inside = inside + ".*"
+		} else {
+			inside = "*"
+		}
+	}
+	return inside
 }
 
 func NewStarFunctionArgExpression() *FunctionArgExpression {

@@ -65,7 +65,14 @@ func (this *AndOperator) Evaluate(item query.Item) (query.Value, error) {
 }
 
 func (this *AndOperator) String() string {
-	return fmt.Sprintf("AND %v", this.Operands)
+	inside := ""
+	for i, oper := range this.Operands {
+		if i != 0 {
+			inside = inside + " AND "
+		}
+		inside = inside + fmt.Sprintf("%v", oper)
+	}
+	return inside
 }
 
 func (this *AndOperator) Validate() error {
@@ -140,7 +147,14 @@ func (this *OrOperator) Evaluate(item query.Item) (query.Value, error) {
 }
 
 func (this *OrOperator) String() string {
-	return fmt.Sprintf("OR %v", this.Operands)
+	inside := ""
+	for i, oper := range this.Operands {
+		if i != 0 {
+			inside = inside + " OR "
+		}
+		inside = inside + fmt.Sprintf("%v", oper)
+	}
+	return inside
 }
 
 func (this *OrOperator) Validate() error {

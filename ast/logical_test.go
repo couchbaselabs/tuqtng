@@ -26,21 +26,21 @@ func TestBooleanStringRepresentation(t *testing.T) {
 		input  fmt.Stringer
 		output string
 	}{
-		{NewAndOperator([]Expression{booleanTrue, booleanTrue}), "AND [true true]"},
-		{NewAndOperator([]Expression{booleanTrue, booleanFalse}), "AND [true false]"},
-		{NewAndOperator([]Expression{booleanFalse, booleanTrue}), "AND [false true]"},
-		{NewAndOperator([]Expression{booleanFalse, booleanFalse}), "AND [false false]"},
+		{NewAndOperator([]Expression{booleanTrue, booleanTrue}), "true AND true"},
+		{NewAndOperator([]Expression{booleanTrue, booleanFalse}), "true AND false"},
+		{NewAndOperator([]Expression{booleanFalse, booleanTrue}), "false AND true"},
+		{NewAndOperator([]Expression{booleanFalse, booleanFalse}), "false AND false"},
 
-		{NewAndOperator([]Expression{booleanTrue, booleanTrue, booleanTrue, booleanTrue, booleanTrue}), "AND [true true true true true]"},
-		{NewAndOperator([]Expression{booleanTrue, booleanTrue, booleanTrue, booleanTrue, booleanFalse}), "AND [true true true true false]"},
+		{NewAndOperator([]Expression{booleanTrue, booleanTrue, booleanTrue, booleanTrue, booleanTrue}), "true AND true AND true AND true AND true"},
+		{NewAndOperator([]Expression{booleanTrue, booleanTrue, booleanTrue, booleanTrue, booleanFalse}), "true AND true AND true AND true AND false"},
 
-		{NewOrOperator([]Expression{booleanTrue, booleanTrue}), "OR [true true]"},
-		{NewOrOperator([]Expression{booleanTrue, booleanFalse}), "OR [true false]"},
-		{NewOrOperator([]Expression{booleanFalse, booleanTrue}), "OR [false true]"},
-		{NewOrOperator([]Expression{booleanFalse, booleanFalse}), "OR [false false]"},
+		{NewOrOperator([]Expression{booleanTrue, booleanTrue}), "true OR true"},
+		{NewOrOperator([]Expression{booleanTrue, booleanFalse}), "true OR false"},
+		{NewOrOperator([]Expression{booleanFalse, booleanTrue}), "false OR true"},
+		{NewOrOperator([]Expression{booleanFalse, booleanFalse}), "false OR false"},
 
-		{NewOrOperator([]Expression{booleanFalse, booleanFalse, booleanFalse, booleanFalse, booleanTrue}), "OR [false false false false true]"},
-		{NewOrOperator([]Expression{booleanFalse, booleanFalse, booleanFalse, booleanFalse, booleanFalse}), "OR [false false false false false]"},
+		{NewOrOperator([]Expression{booleanFalse, booleanFalse, booleanFalse, booleanFalse, booleanTrue}), "false OR false OR false OR false OR true"},
+		{NewOrOperator([]Expression{booleanFalse, booleanFalse, booleanFalse, booleanFalse, booleanFalse}), "false OR false OR false OR false OR false"},
 
 		{NewNotOperator(booleanTrue), "NOT true"},
 		{NewNotOperator(booleanFalse), "NOT false"},

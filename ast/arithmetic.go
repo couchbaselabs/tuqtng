@@ -10,6 +10,7 @@
 package ast
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/couchbaselabs/tuqtng/query"
@@ -87,6 +88,10 @@ func (this *PlusOperator) VerifyFormalNotation(aliases []string, defaultAlias st
 	return nil, nil
 }
 
+func (this *PlusOperator) String() string {
+	return fmt.Sprintf("%v + %v", this.Left, this.Right)
+}
+
 // ****************************************************************************
 // MINUS
 // ****************************************************************************
@@ -157,6 +162,10 @@ func (this *SubtractOperator) VerifyFormalNotation(aliases []string, defaultAlia
 		this.Right = newright
 	}
 	return nil, nil
+}
+
+func (this *SubtractOperator) String() string {
+	return fmt.Sprintf("%v - %v", this.Left, this.Right)
 }
 
 // ****************************************************************************
@@ -231,6 +240,10 @@ func (this *MultiplyOperator) VerifyFormalNotation(aliases []string, defaultAlia
 	return nil, nil
 }
 
+func (this *MultiplyOperator) String() string {
+	return fmt.Sprintf("%v * %v", this.Left, this.Right)
+}
+
 // ****************************************************************************
 // DIV
 // ****************************************************************************
@@ -301,6 +314,10 @@ func (this *DivideOperator) VerifyFormalNotation(aliases []string, defaultAlias 
 		this.Right = newright
 	}
 	return nil, nil
+}
+
+func (this *DivideOperator) String() string {
+	return fmt.Sprintf("%v / %v", this.Left, this.Right)
 }
 
 // ****************************************************************************
@@ -375,6 +392,10 @@ func (this *ModuloOperator) VerifyFormalNotation(aliases []string, defaultAlias 
 	return nil, nil
 }
 
+func (this *ModuloOperator) String() string {
+	return fmt.Sprintf("%v % %v", this.Left, this.Right)
+}
+
 // ****************************************************************************
 // Change Sign
 // ****************************************************************************
@@ -422,4 +443,8 @@ func (this *ChangeSignOperator) VerifyFormalNotation(aliases []string, defaultAl
 		this.Operand = newoper
 	}
 	return nil, nil
+}
+
+func (this *ChangeSignOperator) String() string {
+	return fmt.Sprintf("-%v", this.Operand)
 }

@@ -155,6 +155,10 @@ func (this *GreaterThanOperator) VerifyFormalNotation(aliases []string, defaultA
 	return this.BinaryComparisonOperator.verifyFormalNotation(aliases, defaultAlias)
 }
 
+func (this *GreaterThanOperator) String() string {
+	return fmt.Sprintf("%v > %v", this.Left, this.Right)
+}
+
 // ****************************************************************************
 // Greater Than Or Equal
 // ****************************************************************************
@@ -203,6 +207,10 @@ func (this *GreaterThanOrEqualOperator) Validate() error {
 
 func (this *GreaterThanOrEqualOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
 	return this.BinaryComparisonOperator.verifyFormalNotation(aliases, defaultAlias)
+}
+
+func (this *GreaterThanOrEqualOperator) String() string {
+	return fmt.Sprintf("%v >= %v", this.Left, this.Right)
 }
 
 // ****************************************************************************
@@ -255,6 +263,10 @@ func (this *LessThanOperator) VerifyFormalNotation(aliases []string, defaultAlia
 	return this.BinaryComparisonOperator.verifyFormalNotation(aliases, defaultAlias)
 }
 
+func (this *LessThanOperator) String() string {
+	return fmt.Sprintf("%v < %v", this.Left, this.Right)
+}
+
 // ****************************************************************************
 // Less Than Or Equal
 // ****************************************************************************
@@ -303,6 +315,10 @@ func (this *LessThanOrEqualOperator) Validate() error {
 
 func (this *LessThanOrEqualOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
 	return this.BinaryComparisonOperator.verifyFormalNotation(aliases, defaultAlias)
+}
+
+func (this *LessThanOrEqualOperator) String() string {
+	return fmt.Sprintf("%v <= %v", this.Left, this.Right)
 }
 
 // ****************************************************************************
@@ -355,6 +371,10 @@ func (this *EqualToOperator) VerifyFormalNotation(aliases []string, defaultAlias
 	return this.BinaryComparisonOperator.verifyFormalNotation(aliases, defaultAlias)
 }
 
+func (this *EqualToOperator) String() string {
+	return fmt.Sprintf("%v = %v", this.Left, this.Right)
+}
+
 // ****************************************************************************
 // Not Equal To
 // ****************************************************************************
@@ -403,6 +423,10 @@ func (this *NotEqualToOperator) Validate() error {
 
 func (this *NotEqualToOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
 	return this.BinaryComparisonOperator.verifyFormalNotation(aliases, defaultAlias)
+}
+
+func (this *NotEqualToOperator) String() string {
+	return fmt.Sprintf("%v != %v", this.Left, this.Right)
 }
 
 // ****************************************************************************
@@ -485,6 +509,10 @@ func (this *LikeOperator) VerifyFormalNotation(aliases []string, defaultAlias st
 	return nil, nil
 }
 
+func (this *LikeOperator) String() string {
+	return fmt.Sprintf("%v LIKE %v", this.Left, this.Right)
+}
+
 // ****************************************************************************
 // Not Like
 // ****************************************************************************
@@ -564,6 +592,10 @@ func (this *NotLikeOperator) VerifyFormalNotation(aliases []string, defaultAlias
 	return nil, nil
 }
 
+func (this *NotLikeOperator) String() string {
+	return fmt.Sprintf("%v NOT LIKE %v", this.Left, this.Right)
+}
+
 // ****************************************************************************
 // IS NULL
 // ****************************************************************************
@@ -616,6 +648,10 @@ func (this *IsNullOperator) VerifyFormalNotation(aliases []string, defaultAlias 
 		this.Operand = newoper
 	}
 	return nil, nil
+}
+
+func (this *IsNullOperator) String() string {
+	return fmt.Sprintf("%v IS NULL", this.Operand)
 }
 
 // ****************************************************************************
@@ -672,6 +708,10 @@ func (this *IsNotNullOperator) VerifyFormalNotation(aliases []string, defaultAli
 	return nil, nil
 }
 
+func (this *IsNotNullOperator) String() string {
+	return fmt.Sprintf("%v IS NOT NULL", this.Operand)
+}
+
 // ****************************************************************************
 // IS MISSING
 // ****************************************************************************
@@ -722,6 +762,10 @@ func (this *IsMissingOperator) VerifyFormalNotation(aliases []string, defaultAli
 	return nil, nil
 }
 
+func (this *IsMissingOperator) String() string {
+	return fmt.Sprintf("%v IS MISSING", this.Operand)
+}
+
 // ****************************************************************************
 // IS NOT MISSING
 // ****************************************************************************
@@ -770,6 +814,10 @@ func (this *IsNotMissingOperator) VerifyFormalNotation(aliases []string, default
 		this.Operand = newoper
 	}
 	return nil, nil
+}
+
+func (this *IsNotMissingOperator) String() string {
+	return fmt.Sprintf("%v IS NOT MISSING", this.Operand)
 }
 
 // ****************************************************************************
@@ -826,6 +874,10 @@ func (this *IsValuedOperator) VerifyFormalNotation(aliases []string, defaultAlia
 	return nil, nil
 }
 
+func (this *IsValuedOperator) String() string {
+	return fmt.Sprintf("%v IS VALUED", this.Operand)
+}
+
 // ****************************************************************************
 // IS NOT VALUED
 // ****************************************************************************
@@ -878,4 +930,8 @@ func (this *IsNotValuedOperator) VerifyFormalNotation(aliases []string, defaultA
 		this.Operand = newoper
 	}
 	return nil, nil
+}
+
+func (this *IsNotValuedOperator) String() string {
+	return fmt.Sprintf("%v IS NOT VALUED", this.Operand)
 }

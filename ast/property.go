@@ -39,7 +39,7 @@ func (this *Property) Evaluate(item query.Item) (query.Value, error) {
 }
 
 func (this *Property) String() string {
-	return fmt.Sprintf("%v", this.Path)
+	return fmt.Sprintf("%s", this.Path)
 }
 
 func (this *Property) Validate() error {

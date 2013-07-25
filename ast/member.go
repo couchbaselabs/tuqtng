@@ -62,7 +62,7 @@ func (this *DotMemberOperator) Validate() error {
 }
 
 func (this *DotMemberOperator) String() string {
-	return fmt.Sprintf("%v.%s", this.Left, this.Right.Path)
+	return fmt.Sprintf("%v.%v", this.Left, this.Right)
 }
 
 func (this *DotMemberOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
@@ -157,4 +157,8 @@ func (this *BracketMemberOperator) VerifyFormalNotation(aliases []string, defaul
 		this.Right = newright
 	}
 	return nil, nil
+}
+
+func (this *BracketMemberOperator) String() string {
+	return fmt.Sprintf("%v[%v]", this.Left, this.Right)
 }

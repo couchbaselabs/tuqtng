@@ -10,6 +10,8 @@
 package ast
 
 import (
+	"fmt"
+
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -83,4 +85,8 @@ func (this *StringConcatenateOperator) VerifyFormalNotation(aliases []string, de
 		this.Right = newright
 	}
 	return nil, nil
+}
+
+func (this *StringConcatenateOperator) String() string {
+	return fmt.Sprintf("%v || %v", this.Left, this.Right)
 }

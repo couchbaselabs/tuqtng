@@ -130,7 +130,7 @@ func (this *LiteralString) Evaluate(item query.Item) (query.Value, error) {
 }
 
 func (this *LiteralString) String() string {
-	return fmt.Sprintf("%v", this.Val)
+	return fmt.Sprintf("\"%s\"", this.Val)
 }
 
 func (this *LiteralString) Validate() error {
@@ -177,7 +177,15 @@ func (this *LiteralArray) Evaluate(item query.Item) (query.Value, error) {
 }
 
 func (this *LiteralArray) String() string {
-	return fmt.Sprintf("%v", this.Val)
+	inside := "["
+	for i, a := range this.Val {
+		if i != 0 {
+			inside = inside + ", "
+		}
+		inside = inside + fmt.Sprintf("%v", a)
+	}
+	inside = inside + "]"
+	return inside
 }
 
 func (this *LiteralArray) Validate() error {
@@ -239,7 +247,17 @@ func (this *LiteralObject) Evaluate(item query.Item) (query.Value, error) {
 }
 
 func (this *LiteralObject) String() string {
-	return fmt.Sprintf("%v", this.Val)
+	inside := "{"
+	count := 0
+	for k, v := range this.Val {
+		if count != 0 {
+			inside = inside + ", "
+		}
+		inside = inside + fmt.Sprintf("\"%s\": %v", k, v)
+		count++
+	}
+	inside = inside + "}"
+	return inside
 }
 
 func (this *LiteralObject) Validate() error {

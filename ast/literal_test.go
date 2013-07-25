@@ -27,12 +27,12 @@ func TestLiteralStringRepresentation(t *testing.T) {
 		{NewLiteralBool(false), "false"},
 		{NewLiteralNumber(1.0), "1"},
 		{NewLiteralNumber(3.14), "3.14"},
-		{NewLiteralString("couchbase"), "couchbase"},
+		{NewLiteralString("couchbase"), "\"couchbase\""},
 		{NewLiteralArray([]Expression{NewLiteralNumber(1.0)}), "[1]"},
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewLiteralBool(false)}), "[1 false]"},
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewLiteralBool(false), NewLiteralString("bob")}), "[1 false bob]"},
-		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), "map[name:bob]"},
-		{NewLiteralObject(map[string]Expression{"user": NewLiteralString("test"), "age": NewLiteralNumber(27.0)}), "map[user:test age:27]"},
+		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewLiteralBool(false)}), "[1, false]"},
+		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewLiteralBool(false), NewLiteralString("bob")}), "[1, false, \"bob\"]"},
+		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), "{\"name\": \"bob\"}"},
+		{NewLiteralObject(map[string]Expression{"user": NewLiteralString("test"), "age": NewLiteralNumber(27.0)}), "{\"user\": \"test\", \"age\": 27}"},
 	}
 
 	for _, x := range tests {
