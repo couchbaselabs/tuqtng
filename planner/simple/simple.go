@@ -112,18 +112,18 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 		lastStep = plan.NewOrder(lastStep, stmt.GetOrderBy())
 	}
 
+	lastStep = plan.NewProjector(lastStep, stmt.GetResultExpressionList(), true)
+
+	if stmt.IsDistinct() {
+		lastStep = plan.NewEliminateDuplicates(lastStep)
+	}
+
 	if stmt.GetOffset() != 0 {
 		lastStep = plan.NewOffset(lastStep, stmt.GetOffset())
 	}
 
 	if stmt.GetLimit() >= 0 {
 		lastStep = plan.NewLimit(lastStep, stmt.GetLimit())
-	}
-
-	lastStep = plan.NewProjector(lastStep, stmt.GetResultExpressionList(), true)
-
-	if stmt.IsDistinct() {
-		lastStep = plan.NewEliminateDuplicates(lastStep)
 	}
 
 	pc <- plan.Plan{Root: lastStep}
