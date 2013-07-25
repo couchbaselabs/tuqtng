@@ -91,6 +91,10 @@ upload() {
     cbfsclient ${cbfsserver:-http://cbfs.hq.couchbase.com:8484/} upload \
         -ignore=$DIST/.cbfsclient.ignore -delete -v \
         $DIST/ tuqtng/
+
+    cbfsclient ${cbfsserver:-http://cbfs.hq.couchbase.com:8484/} upload \
+        -ignore=$DIST/.cbfsclient.ignore -delete -v \
+        $DIST/redirect.html tuqtng
 }
 
 testpkg
