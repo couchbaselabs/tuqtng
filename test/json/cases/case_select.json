@@ -2,7 +2,7 @@
 
 [
     {
-        "statements": "SELECT title, name, details.format, details.title, title  FROM catalog",
+        "statements": "SELECT title, name, details.format, details.title, title FROM catalog",
         "results": [
         {
             "$2": "INFERNO",
@@ -25,7 +25,7 @@
     },
 
     {
-        "statements": "SELECT title, details.format, name, details.title, title  FROM catalog" ,
+        "statements": "SELECT title, details.format, name, details.title, title FROM catalog" ,
         "results": [
         {
             "$2": "INFERNO",
