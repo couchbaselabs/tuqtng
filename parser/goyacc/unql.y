@@ -563,7 +563,7 @@ LPAREN expression RPAREN {
 |
 CASE WHEN then_list else_expr END {
 	logDebugGrammar("CASE WHEN THEN ELSE END")
-	cwtee := ast.CaseOperator{}
+	cwtee := ast.NewCaseOperator()
 	topStack := parsingStack.Pop()
 	switch topStack := topStack.(type) {
 	case ast.Expression:
@@ -575,7 +575,7 @@ CASE WHEN then_list else_expr END {
 		// no else
 		cwtee.WhenThens = topStack
 	}
-	parsingStack.Push(&cwtee)
+	parsingStack.Push(cwtee)
 }
 |
 ANY expr OVER path AS IDENTIFIER {

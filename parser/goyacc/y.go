@@ -1110,7 +1110,7 @@ yydefault:
 		//line unql.y:564
 		{
 		logDebugGrammar("CASE WHEN THEN ELSE END")
-		cwtee := ast.CaseOperator{}
+		cwtee := ast.NewCaseOperator()
 		topStack := parsingStack.Pop()
 		switch topStack := topStack.(type) {
 		case ast.Expression:
@@ -1122,7 +1122,7 @@ yydefault:
 			// no else
 		cwtee.WhenThens = topStack
 		}
-		parsingStack.Push(&cwtee)
+		parsingStack.Push(cwtee)
 	}
 	case 73:
 		//line unql.y:581

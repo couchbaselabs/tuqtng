@@ -16,13 +16,15 @@ import (
 )
 
 type CollectionAnyOperator struct {
-	Condition Expression
-	Over      Expression
-	As        string
+	Type      string     `json:"type"`
+	Condition Expression `json:"condition"`
+	Over      Expression `json:"over"`
+	As        string     `json:"as"`
 }
 
 func NewCollectionAnyOperator(condition Expression, over Expression, as string) *CollectionAnyOperator {
 	return &CollectionAnyOperator{
+		Type:      "any",
 		Condition: condition,
 		Over:      over,
 		As:        as,
@@ -111,13 +113,15 @@ func (this *CollectionAnyOperator) String() string {
 }
 
 type CollectionAllOperator struct {
-	Condition Expression
-	Over      Expression
-	As        string
+	Type      string     `json:"type"`
+	Condition Expression `json:"condition"`
+	Over      Expression `json:"over"`
+	As        string     `json:"as"`
 }
 
 func NewCollectionAllOperator(condition Expression, over Expression, as string) *CollectionAllOperator {
 	return &CollectionAllOperator{
+		Type:      "all",
 		Condition: condition,
 		Over:      over,
 		As:        as,

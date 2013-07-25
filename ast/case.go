@@ -17,13 +17,20 @@ import (
 )
 
 type WhenThen struct {
-	When Expression
-	Then Expression
+	When Expression `json:"when"`
+	Then Expression `json:"then"`
 }
 
 type CaseOperator struct {
-	WhenThens []*WhenThen
-	Else      Expression
+	Type      string      `json:"type"`
+	WhenThens []*WhenThen `json:"whenthens"`
+	Else      Expression  `json:"else"`
+}
+
+func NewCaseOperator() *CaseOperator {
+	return &CaseOperator{
+		Type: "case",
+	}
 }
 
 func (this *CaseOperator) Evaluate(item query.Item) (query.Value, error) {
