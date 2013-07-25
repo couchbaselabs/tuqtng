@@ -100,5 +100,88 @@
             "title": "Sherlock: Series 1"
         }
     ]
+    },
+
+    {
+        "statements": "SELECT title, tags FROM catalog WHERE tags = [\"new release\", \"english\", \"movie\"]",
+        "results": [
+        {
+            "tags": [
+                "new release",
+                "english",
+                "movie"
+            ],
+            "title": "Zero Dark Thirty"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT name FROM tags WHERE length(name) > 5",
+        "results": [
+        {
+            "name": "hitler"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT name FROM contacts AS contact WHERE contact.name = \"dave\"",
+        "results": [
+        {
+            "name": "dave"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT dimensions.height FROM catalog WHERE pricing.list = 799",
+        "results": [
+        {
+            "$1": 1.2
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT asin, title, tags[1] FROM catalog WHERE tags[1] NOT LIKE \"english\"",
+        "results": [
+        {
+            "$1": "imported",
+            "asin": "B0094QY7HE",
+            "title": "Inferno"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT title FROM catalog WHERE (ANY genre = \"Crime\" OVER details.genre AS genre AND ANY tags = \"english\" OVER tags AS tags) AND  pricing.pct_savings > 10.55",
+        "results": [
+        {
+            "title": "Sherlock: Series 1"
+        }
+    ]
+    },
+
+   {
+        "statements": "SELECT title FROM catalog WHERE (ALL length(genre) > 5 OVER details.genre AS genre)",
+        "results": [
+        {
+            "title": "Inferno"
+        },
+        {
+            "title": "Zero Dark Thirty"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT title FROM catalog WHERE (ANY genre = \"Crime\" OVER details.genre AS genre AND ANY tags = \"english\" OVER tags AS tags) AND  NOT (pricing.pct_savings < 15)",
+        "results": [
+        {
+            "title": "Sherlock: Series 1"
+        }
+    ]
     }
+
 ]

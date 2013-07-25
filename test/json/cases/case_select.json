@@ -444,5 +444,15 @@
             "title": "Sherlock: Series 1"
         }
     ]
+    },
+
+    {
+        "statements": "SELECT catalog.title FROM catalog LIMIT 1",
+        "results": [
+        {
+            "$1": "Inferno"
+        }
+    ]
     }
+
 ]

@@ -1,0 +1,62 @@
+[
+    {
+        "statements": "SELECT D.actors[0] AS act FROM catalog.details AS D",
+        "results": [
+        {},
+        {
+            "act": "Jessica Chastain"
+        },
+        {
+            "act": "Benedict Cumberbatch"
+        }
+    ]
+    },
+
+    {
+        "statements": "select name from contacts.children[0]",
+        "error": "Property reference name missing qualifier bucket/alias"
+    },
+
+    {
+        "statements": "select C.name from contacts.children[0] as C where C.name = \"xena\"",
+        "results": [
+        {
+            "$1": "xena"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT price.list FROM catalog.pricing AS price WHERE price.pct_savings > 20",
+        "results": [
+        {
+            "$1": 599
+        }
+    ]
+    },
+
+  {
+        "statements": "SELECT catalog.title, C.title, C.type FROM catalog AS C",
+        "results": [
+        {
+            "$2": "Inferno",
+            "$3": "Book"
+        },
+        {
+            "$2": "Zero Dark Thirty",
+            "$3": "Movies&TV"
+        },
+        {
+            "$2": "Sherlock: Series 1",
+            "$3": "Movies&TV"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT type FROM catalog.non.existing[3].path",
+        "results": [ 
+    ]
+    }
+
+]

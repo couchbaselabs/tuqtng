@@ -1,0 +1,103 @@
+[
+ 
+    {
+        "statements": "SELECT  C.pricing.list AS P FROM catalog AS C ORDER BY P.list ASC",
+        "results": [
+        {
+            "P": 300
+        },
+        {
+            "P": 599
+        },
+        {
+            "P": 799
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT pricing.list FROM catalog ORDER BY pricing.list ASC",
+        "results": [
+        {
+            "$1": 300
+        },
+        {
+            "$1": 599
+        },
+        {
+            "$1": 799
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT pricing.list FROM catalog ORDER BY pricing.list DESC",
+        "results": [
+        {
+            "$1": 799
+        },
+        {
+            "$1": 599
+        },
+        {
+            "$1": 300
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT pricing.*, tags[1] FROM catalog ORDER BY tags[1], pricing.list ASC",
+        "results": [
+        {
+            "$1": "english",
+            "list": 599,
+            "pct_savings": 25,
+            "retail": 449,
+            "savings": 150
+        },
+        {
+            "$1": "english",
+            "list": 799,
+            "pct_savings": 20,
+            "retail": 639,
+            "savings": 160
+        },
+        {
+            "$1": "imported",
+            "list": 300,
+            "pct_savings": 10,
+            "retail": 270,
+            "savings": 30
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT dimensions FROM catalog ORDER BY dimensions.length, dimensions.width ASC",
+        "results": [
+        {
+            "dimensions": {
+                "height": 1.2,
+                "length": 2,
+                "width": 1.5
+            }
+        },
+        {
+            "dimensions": {
+                "height": 1,
+                "length": 2,
+                "width": 2.5
+            }
+        },
+        {
+            "dimensions": {
+                "height": 9.5,
+                "length": 7,
+                "width": 12
+            }
+        }
+    ]
+    }
+
+]
+
