@@ -14,6 +14,7 @@ package ast
 
 import (
 	"fmt"
+	"sort"
 
 	"code.google.com/p/go.exp/locale/collate"
 	"code.google.com/p/go.text/locale"
@@ -59,7 +60,52 @@ func CollateJSON(key1, key2 interface{}) int {
 		}
 		return len(array1) - len(array2)
 	case 6:
-		return 0 // ignore ordering for catch-all stuff
+		obj1 := key1.(map[string]query.Value)
+		obj2 := key2.(map[string]query.Value)
+
+		// first see if one object is larger than the other
+		if len(obj1) < len(obj2) {
+			return -1
+		} else if len(obj1) > len(obj2) {
+			return 1
+		}
+
+		// if not, proceed to do key by ke comparision
+
+		// collect all the keys
+		allkeys := make(sort.StringSlice, 0)
+		for k, _ := range obj1 {
+			allkeys = append(allkeys, k)
+		}
+		for k, _ := range obj2 {
+			allkeys = append(allkeys, k)
+		}
+
+		// sort the keys
+		allkeys.Sort()
+
+		// now compare the values associated with each key
+		for _, key := range allkeys {
+			val1, ok := obj1[key]
+			if !ok {
+				// obj1 didn't have this key, so it is smaller
+				return -1
+			}
+			val2, ok := obj2[key]
+			if !ok {
+				// ojb2 didnt have this key, so its smaller
+				return 1
+			}
+			// key was in both objects, need to compare them
+			comp := CollateJSON(val1, val2)
+			if comp != 0 {
+				// if this decided anything, return
+				return comp
+			}
+			//otherwise continue to compare next key
+		}
+		// if got here, both objects are the same
+		return 0
 	}
 	panic("bogus collationType")
 }

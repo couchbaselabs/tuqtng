@@ -66,6 +66,23 @@ func TestCollateJSON(t *testing.T) {
 
 		// object
 		{map[string]query.Value{}, "foo", 2},
+
+		// actual object comparisons
+		{map[string]query.Value{}, map[string]query.Value{}, 0},
+		{map[string]query.Value{"key1": "val1"}, map[string]query.Value{"key1": "val1"}, 0},
+		{map[string]query.Value{}, map[string]query.Value{"key1": "val1"}, -1},
+		{map[string]query.Value{"key1": "val1"}, map[string]query.Value{}, 1},
+
+		// bigger objects greater
+		{map[string]query.Value{"key1": "val1"}, map[string]query.Value{"key1": "val1", "key2": "val2"}, -1},
+		{map[string]query.Value{"key1": "val1", "altkey": "altval", "altkey2": "altval2"}, map[string]query.Value{"key1": "val1", "key2": "val2"}, 1},
+
+		// objects with same number of keys but different values
+		{map[string]query.Value{"key1": "val1", "key2": "val2a"}, map[string]query.Value{"key1": "val1", "key2": "val2"}, 1},
+
+		// objects with same number of keys but one different key
+		// "key2" sorts before "key3", obj1 has "missing" key2, therefore obj1 is less
+		{map[string]query.Value{"key1": "val1", "key3": "val3"}, map[string]query.Value{"key1": "val1", "key2": "val2"}, -1},
 	}
 
 	for _, test := range tests {
