@@ -122,6 +122,10 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 
 	lastStep = plan.NewProjector(lastStep, stmt.GetResultExpressionList(), true)
 
+	if stmt.IsDistinct() {
+		lastStep = plan.NewEliminateDuplicates(lastStep)
+	}
+
 	pc <- plan.Plan{Root: lastStep}
 
 	close(pc)

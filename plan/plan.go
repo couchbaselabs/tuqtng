@@ -205,3 +205,19 @@ func NewDocumentJoin(input PlanElement, over ast.Expression, as string) *Documen
 func (this *DocumentJoin) Sources() []PlanElement {
 	return []PlanElement{this.Input}
 }
+
+type EliminateDuplicates struct {
+	Type  string      `json:"type"`
+	Input PlanElement `json:"input"`
+}
+
+func NewEliminateDuplicates(input PlanElement) *EliminateDuplicates {
+	return &EliminateDuplicates{
+		Type:  "eliminate-duplicates",
+		Input: input,
+	}
+}
+
+func (this *EliminateDuplicates) Sources() []PlanElement {
+	return []PlanElement{this.Input}
+}
