@@ -91,7 +91,7 @@ func main() {
 		}
 	}()
 
-	http.Handle("/", http.RedirectHandler("/tutorial/tutorial.html", 302))
+	http.Handle("/", http.RedirectHandler("/tutorial/tutorial.html#1", 302))
 
 	url, _ := url.Parse("http://localhost:8093")
 	rp := httputil.NewSingleHostReverseProxy(url)
