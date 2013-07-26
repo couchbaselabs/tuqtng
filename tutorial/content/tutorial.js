@@ -77,8 +77,24 @@ function failed(data) {
 }
 
 function ran(data) {
+    var content = undefined;
+    try
+    {
+        var json = $.parseJSON(data);
+        for (var key in json) {
+            if (json.hasOwnProperty(key) && key != 'resultset') {
+                delete json[key];
+            }
+        }
+        content = JSON.stringify(json, null, 2);
+    }
+    catch (e) {
+        console.log(e);
+        content = data;
+    }
+
     var re = ace.edit('redit');
-    re.setValue(data);
+    re.setValue(content);
     re.navigateFileStart();
 }
 
