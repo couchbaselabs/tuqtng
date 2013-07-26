@@ -1,6 +1,10 @@
-
-
 [
+    {
+        "statements": "SELECT 1+1 as two",
+        "results": [
+        { "two": 2 }
+    ]
+    },
     {
         "statements": "SELECT title, name, details.format, details.title, title FROM catalog",
         "results": [
