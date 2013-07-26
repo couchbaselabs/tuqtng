@@ -131,21 +131,21 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "{\n")
 			fmt.Fprint(w, "    \"resultset\": [")
 		}
-		fmt.Fprint(w, "\n    ],\n")
-		fmt.Fprintf(w, "    \"total_rows\": %d\n", count)
+		fmt.Fprint(w, "\n    ]")
+		fmt.Fprintf(w, ",\n    \"total_rows\": %d", count)
 		elapsed_duration := time.Since(startTime)
-		fmt.Fprintf(w, "    \"total_elapsed_time\": \"%s\"\n", elapsed_duration)
+		fmt.Fprintf(w, ",\n    \"total_elapsed_time\": \"%s\"", elapsed_duration)
 		if len(response.warnings) > 0 {
-			fmt.Fprintf(w, "    \"warnings\": [")
+			fmt.Fprintf(w, ",\n    \"warnings\": [")
 			for i, warning := range response.warnings {
 				fmt.Fprintf(w, "\n        \"%v\"", warning)
 				if i < len(response.warnings)-1 {
 					fmt.Fprintf(w, ",")
 				}
 			}
-			fmt.Fprintf(w, "\n    ],\n")
+			fmt.Fprintf(w, "\n    ]")
 		}
-		fmt.Fprint(w, "}\n")
+		fmt.Fprint(w, "\n}\n")
 	}
 }
 
