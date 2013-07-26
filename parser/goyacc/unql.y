@@ -45,20 +45,30 @@ f float64}
 %%
 
 input: 
+stmt {
+	logDebugGrammar("INPUT")
+}
+|
+EXPLAIN stmt {
+	logDebugGrammar("INPUT - EXPLAIN")
+	parsingStatement.SetExplainOnly(true)
+}
+
+stmt:
 select_stmt { 
-	logDebugGrammar("INPUT") 
+	logDebugGrammar("STMT")
 }
 ;
 
 //STATEMENT
 select_stmt:
-select_compound select_order select_limit_offset {
+select_compound  {
 	logDebugGrammar("SELECT_STMT")
 }
 ;
 
 select_compound:    
-select_core { 
+select_core select_order select_limit_offset {
 	// future extensibility for comining queries with UNION, etc
 	logDebugGrammar("SELECT_COMPOUND") 
 }
@@ -66,6 +76,10 @@ select_core {
 
 select_core:    
 select_select select_from select_where { 
+	logDebugGrammar("SELECT_CORE")
+}
+|
+select_from_required select_where select_select{
 	logDebugGrammar("SELECT_CORE")
 }
 ;
@@ -77,15 +91,8 @@ select_select_head select_select_qualifier select_select_tail {
 ;
 
 select_select_head:  
-EXPLAIN SELECT { 
-	logDebugGrammar("SELECT_SELECT_HEAD")
-	parsingStatement = ast.NewSelectStatement()
-	parsingStatement.SetExplainOnly(true)
-}
-|
 SELECT { 
 	logDebugGrammar("SELECT_SELECT_HEAD")
-	parsingStatement = ast.NewSelectStatement()
 }
 ;
 
@@ -185,6 +192,18 @@ select_from:
 	logDebugGrammar("SELECT FROM - EMPTY")
 }
 |
+FROM data_source_over {
+	logDebugGrammar("SELECT FROM - DATASOURCE")
+	froms := parsingStack.Pop().([]*ast.From)
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.Froms = froms
+	default:
+		logDebugGrammar("This statement does not support WHERE")
+	}
+}
+
+select_from_required:
 FROM data_source_over {
 	logDebugGrammar("SELECT FROM - DATASOURCE")
 	froms := parsingStack.Pop().([]*ast.From)

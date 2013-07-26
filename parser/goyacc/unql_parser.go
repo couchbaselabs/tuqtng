@@ -37,7 +37,7 @@ func (u *UnqlParser) Parse(input string) (returnStatement ast.Statement, err err
 	defer u.mutex.Unlock()
 
 	parsingStack = new(Stack)
-	parsingStatement = nil
+	parsingStatement = ast.NewSelectStatement()
 
 	defer func() {
 		r := recover()
