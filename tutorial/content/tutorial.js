@@ -1,6 +1,6 @@
 $(document).ready(init);
 
-var maxpage = undefined;
+var max = undefined;
 
 function init() {
     var ie = ace.edit('iedit');
@@ -23,19 +23,20 @@ function init() {
     re.setDisplayIndentGuides(true);
     re.setShowFoldWidgets(true);
 
-    maxpage = $('#max').val();
+    max = $('#max').val();
 
     $('#run').click(run);
     $('#prev').click(prev).addClass('enabled');
     $('#next').click(next).addClass('enabled');
+    if ('onhashchange' in window) $(window).bind('hashchange', change);
 
-    load(1);
+    load(getLocation());
 }
 
 function load(n) {
-    if (n < 1 || n > maxpage) return;
+    if (n < 1 || n > max) return;
 
-    page = n;
+    setLocation(n);
     updateNav(n);
 
     var slide = slideUrl(n)
@@ -93,18 +94,33 @@ function queryUrl(n) {
 function updateNav(n) {
     if (n == 1) $('#prev').removeClass('enabled').addClass('disabled');
     if (n == 2) $('#prev').removeClass('disabled').addClass('enabled');
-    if (n == maxpage-1) $('#next').removeClass('disabled').addClass('enabled');
-    if (n == maxpage) $('#next').removeClass('enabled').addClass('disabled');
+    if (n == max-1) $('#next').removeClass('disabled').addClass('enabled');
+    if (n == max) $('#next').removeClass('enabled').addClass('disabled');
 }
 
-var page = 0;
+function setLocation(n) {
+    window.location.hash = '#' + n;
+}
+
+function getLocation(n) {
+    var h = window.location.hash;
+    if (!h || h.length < 2) return 1;
+    var n = parseInt(h.substr(1));
+    if (n >= 1 && n <= max) return n;
+    return 1;
+}
 
 function next() {
-    if (page == maxpage) return;
-    load(page + 1);
+    var n = getLocation();
+    if (n < max) load(n + 1);
 }
 
 function prev() {
-    if (page == 1) return;
-    load(page - 1);
+    var n = getLocation();
+    if (n > 1) load(n - 1);
+}
+
+function change() {
+    var n = getLocation();
+    load (n);
 }

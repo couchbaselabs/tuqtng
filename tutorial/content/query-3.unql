@@ -1,2 +1,3 @@
-SELECT name
-	FROM contacts.children[0]
+SELECT children[0].name AS cname
+	FROM contacts
+       WHERE name='dave'

@@ -1,7 +1,11 @@
-## Complex Data - SELECT versus FROM
+## Navigating in SELECT and FROM
 
-In the example on the right, the FROM clause fetches all the children records of the contacts. This becomes the input data to the query. Next, the WHERE clause trims the data to only those where the contact name is 'Ian'. Finally, the SELECT clause fetches the first child's name. 
+In the last slide, we navigated to a child object using an expression in the SELECT clause. You can do the same thing in the FROM clause.
 
-In the query, the child's name is dervied by an expression and has no logical field name. Hence, it would be assigned an auto generated field name, '$1'. To avoid this, we use the AS operator to give an explicit name.
+Navigating to a sub object in the FROM clause limits the input to the SELECT portion of the query to that particular sub object. In the example on the right, the FROM clause fetches the first 'children' object of the 'contacts' document. This becomes the input data to the SELECT clause.
 
-In general, you will find situations where you could either select a smaller set using FROM clause or do a deeper expression in the SELECT clause. You should to do expressions on the SELECT clause as it allows more flexibility when you have the choice.
+In general, when the expression involves only the '.' and the '[]' operators, you can navigate in either the SELECT or the FROM clause. However, more sophisticated expressions are allowed only in the SELECT clause.
+
+Another difference is that you could omit the 'AS cname' modifier in the SELECT clause. If you did, an auto generated name, '$1' would be used for the attribute. However, when an expression appears in the FROM clause, you must always give it an alias.
+
+Try removing 'AS child' modifier.

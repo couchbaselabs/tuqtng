@@ -1,3 +1,2 @@
-SELECT children[0].name AS cname
-	FROM contacts
-       WHERE name = "ian"
+SELECT child.name AS cname
+	FROM contacts.children[0] AS child

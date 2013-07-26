@@ -1,4 +1,4 @@
 SELECT * 
   FROM contacts
-    WHERE name = "ian"
+    WHERE name = 'ian'
 
