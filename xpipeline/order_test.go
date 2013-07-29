@@ -21,7 +21,7 @@ func TestOrder(t *testing.T) {
 	order := NewOrder([]*ast.SortExpression{ast.NewSortExpression(ast.NewProperty("age"), true)})
 	order.SetSource(stubSource)
 
-	orderItemChannel := order.GetItemChannel()
+	orderItemChannel, _, _ := order.GetChannels()
 
 	go order.Run()
 
@@ -49,7 +49,7 @@ func TestOrderDescending(t *testing.T) {
 	order := NewOrder([]*ast.SortExpression{ast.NewSortExpression(ast.NewProperty("age"), false)})
 	order.SetSource(stubSource)
 
-	orderItemChannel := order.GetItemChannel()
+	orderItemChannel, _, _ := order.GetChannels()
 
 	go order.Run()
 

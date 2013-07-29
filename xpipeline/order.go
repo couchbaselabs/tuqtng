@@ -21,6 +21,8 @@ type Order struct {
 	Source      Operator
 	OrderBy     []*ast.SortExpression
 	itemChannel query.ItemChannel
+	errChannel  query.ErrorChannel
+	warnChannel query.ErrorChannel
 	buffer      query.ItemCollection
 }
 
@@ -28,6 +30,8 @@ func NewOrder(orderBy []*ast.SortExpression) *Order {
 	return &Order{
 		OrderBy:     orderBy,
 		itemChannel: make(query.ItemChannel),
+		errChannel:  make(query.ErrorChannel),
+		warnChannel: make(query.ErrorChannel),
 		buffer:      make(query.ItemCollection, 0),
 	}
 }
@@ -36,19 +40,40 @@ func (this *Order) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Order) GetItemChannel() query.ItemChannel {
-	return this.itemChannel
+func (this *Order) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
+	return this.itemChannel, this.warnChannel, this.errChannel
 }
 
 func (this *Order) Run() {
 	defer close(this.itemChannel)
+	defer close(this.errChannel)
+	defer close(this.warnChannel)
 
-	// start the source
 	go this.Source.Run()
 
-	// store all the rows
-	for item := range this.Source.GetItemChannel() {
-		this.buffer = append(this.buffer, item)
+	var item query.Item
+	var warn query.Error
+	var err query.Error
+	sourceItemChannel, sourceWarnChannel, sourceErrorChannel := this.Source.GetChannels()
+	ok := true
+	for ok {
+		select {
+		case item, ok = <-sourceItemChannel:
+			if ok {
+				this.processItem(item)
+			}
+		case warn, ok = <-sourceWarnChannel:
+			// propogate the warning
+			if warn != nil {
+				this.warnChannel <- warn
+			}
+		case err, ok = <-sourceErrorChannel:
+			// propogate the error and return
+			if err != nil {
+				this.errChannel <- err
+				return
+			}
+		}
 	}
 
 	// sort
@@ -58,6 +83,10 @@ func (this *Order) Run() {
 	for _, item := range this.buffer {
 		this.itemChannel <- item
 	}
+}
+
+func (this *Order) processItem(item query.Item) {
+	this.buffer = append(this.buffer, item)
 }
 
 // sort.Interface interface

@@ -18,7 +18,7 @@ import (
 func TestExpressionEvaluatorSource(t *testing.T) {
 	source := NewExpressionEvaluatorSource()
 
-	sourceItemChannel := source.GetItemChannel()
+	sourceItemChannel, _, _ := source.GetChannels()
 
 	go source.Run()
 

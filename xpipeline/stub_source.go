@@ -16,12 +16,16 @@ import (
 type StubSource struct {
 	data        query.ItemCollection
 	itemChannel query.ItemChannel
+	errChannel  query.ErrorChannel
+	warnChannel query.ErrorChannel
 }
 
 func NewStubSource(data query.ItemCollection) *StubSource {
 	return &StubSource{
 		data:        data,
 		itemChannel: make(query.ItemChannel),
+		errChannel:  make(query.ErrorChannel),
+		warnChannel: make(query.ErrorChannel),
 	}
 }
 
@@ -29,12 +33,14 @@ func (this *StubSource) SetSource(Operator) {
 	panic("stub source does not have a source")
 }
 
-func (this *StubSource) GetItemChannel() query.ItemChannel {
-	return this.itemChannel
+func (this *StubSource) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
+	return this.itemChannel, this.warnChannel, this.errChannel
 }
 
 func (this *StubSource) Run() {
 	defer close(this.itemChannel)
+	defer close(this.errChannel)
+	defer close(this.warnChannel)
 
 	for _, item := range this.data {
 		this.itemChannel <- item

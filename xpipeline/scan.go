@@ -10,14 +10,14 @@
 package xpipeline
 
 import (
-	"log"
-
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type Scan struct {
 	itemChannel query.ItemChannel
+	errChannel  query.ErrorChannel
+	warnChannel query.ErrorChannel
 	bucket      catalog.Bucket
 	scanner     catalog.Scanner
 }
@@ -25,6 +25,8 @@ type Scan struct {
 func NewScan(bucket catalog.Bucket, scanner catalog.Scanner) *Scan {
 	return &Scan{
 		itemChannel: make(query.ItemChannel),
+		errChannel:  make(query.ErrorChannel),
+		warnChannel: make(query.ErrorChannel),
 		bucket:      bucket,
 		scanner:     scanner,
 	}
@@ -34,18 +36,21 @@ func (this *Scan) SetSource(source Operator) {
 	panic("Cannot set source for a datasource")
 }
 
-func (this *Scan) GetItemChannel() query.ItemChannel {
-	return this.itemChannel
+func (this *Scan) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
+	return this.itemChannel, this.warnChannel, this.errChannel
 }
 
 func (this *Scan) Run() {
 	defer close(this.itemChannel)
+	defer close(this.errChannel)
+	defer close(this.warnChannel)
 	defer this.bucket.Release()
 
 	scannerItemChannel := make(query.ItemChannel)
 	scannerWarnChannel := make(query.ErrorChannel)
 	scannerErrorChannel := make(query.ErrorChannel)
 	var item query.Item
+	var warn query.Error
 	var err query.Error
 
 	go this.scanner.ScanAll(scannerItemChannel, scannerWarnChannel, scannerErrorChannel)
@@ -57,10 +62,13 @@ func (this *Scan) Run() {
 			if ok {
 				this.itemChannel <- item
 			}
+		case warn, ok = <-scannerWarnChannel:
+			if warn != nil {
+				this.warnChannel <- warn
+			}
 		case err, ok = <-scannerErrorChannel:
 			if err != nil {
-				log.Printf("underlying scanner gave error: %v", err)
-				// FIXME proper error handling
+				this.errChannel <- err
 			}
 		}
 	}

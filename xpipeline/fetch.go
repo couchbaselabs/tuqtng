@@ -21,6 +21,8 @@ const FETCH_BATCH_SIZE = 1000
 type Fetch struct {
 	Source      Operator
 	itemChannel query.ItemChannel
+	errChannel  query.ErrorChannel
+	warnChannel query.ErrorChannel
 	bucket      catalog.Bucket
 	batch       []query.Item
 }
@@ -28,6 +30,8 @@ type Fetch struct {
 func NewFetch(bucket catalog.Bucket) *Fetch {
 	return &Fetch{
 		itemChannel: make(query.ItemChannel),
+		errChannel:  make(query.ErrorChannel),
+		warnChannel: make(query.ErrorChannel),
 		bucket:      bucket,
 		batch:       make([]query.Item, 0, FETCH_BATCH_SIZE),
 	}
@@ -37,30 +41,55 @@ func (this *Fetch) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Fetch) GetItemChannel() query.ItemChannel {
-	return this.itemChannel
+func (this *Fetch) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
+	return this.itemChannel, this.warnChannel, this.errChannel
 }
 
 func (this *Fetch) Run() {
 	defer this.bucket.Release()
 	defer close(this.itemChannel)
+	defer close(this.errChannel)
+	defer close(this.warnChannel)
 
 	go this.Source.Run()
 
-	for item := range this.Source.GetItemChannel() {
-
-		// add this item to the batch
-		this.batch = append(this.batch, item)
-
-		// if the batch is full, do a fetch
-		if len(this.batch) >= FETCH_BATCH_SIZE {
-			this.flushBatch()
+	var item query.Item
+	var warn query.Error
+	var err query.Error
+	sourceItemChannel, sourceWarnChannel, sourceErrorChannel := this.Source.GetChannels()
+	ok := true
+	for ok {
+		select {
+		case item, ok = <-sourceItemChannel:
+			if ok {
+				this.processItem(item)
+			}
+		case warn, ok = <-sourceWarnChannel:
+			// propogate the warning
+			if warn != nil {
+				this.warnChannel <- warn
+			}
+		case err, ok = <-sourceErrorChannel:
+			// propogate the error and return
+			if err != nil {
+				this.errChannel <- err
+				return
+			}
 		}
-
 	}
 
 	// source may have closed with a parital batch
 	this.flushBatch()
+}
+
+func (this *Fetch) processItem(item query.Item) {
+	// add this item to the batch
+	this.batch = append(this.batch, item)
+
+	// if the batch is full, do a fetch
+	if len(this.batch) >= FETCH_BATCH_SIZE {
+		this.flushBatch()
+	}
 }
 
 func (this *Fetch) flushBatch() {

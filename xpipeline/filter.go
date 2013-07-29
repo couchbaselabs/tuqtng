@@ -20,12 +20,16 @@ type Filter struct {
 	Source      Operator
 	Expr        ast.Expression
 	itemChannel query.ItemChannel
+	errChannel  query.ErrorChannel
+	warnChannel query.ErrorChannel
 }
 
 func NewFilter(expr ast.Expression) *Filter {
 	return &Filter{
 		Expr:        expr,
 		itemChannel: make(query.ItemChannel),
+		errChannel:  make(query.ErrorChannel),
+		warnChannel: make(query.ErrorChannel),
 	}
 }
 
@@ -33,32 +37,59 @@ func (this *Filter) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Filter) GetItemChannel() query.ItemChannel {
-	return this.itemChannel
+func (this *Filter) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
+	return this.itemChannel, this.warnChannel, this.errChannel
 }
 
 func (this *Filter) Run() {
 	defer close(this.itemChannel)
+	defer close(this.errChannel)
+	defer close(this.warnChannel)
 
 	go this.Source.Run()
 
-	for item := range this.Source.GetItemChannel() {
-		val, err := this.Expr.Evaluate(item)
-		if err == nil {
-			boolVal := ast.ValueInBooleanContext(val)
-			switch boolVal := boolVal.(type) {
-			case bool:
-				if boolVal {
-					this.itemChannel <- item
-				}
+	var item query.Item
+	var warn query.Error
+	var err query.Error
+	sourceItemChannel, sourceWarnChannel, sourceErrorChannel := this.Source.GetChannels()
+	ok := true
+	for ok {
+		select {
+		case item, ok = <-sourceItemChannel:
+			if ok {
+				this.processItem(item)
 			}
-		} else {
-			switch err := err.(type) {
-			case *query.Undefined:
-			//ignore these
-			default:
-				log.Printf("Error evaluating filter: %v", err)
+		case warn, ok = <-sourceWarnChannel:
+			// propogate the warning
+			if warn != nil {
+				this.warnChannel <- warn
 			}
+		case err, ok = <-sourceErrorChannel:
+			// propogate the error and return
+			if err != nil {
+				this.errChannel <- err
+				return
+			}
+		}
+	}
+}
+
+func (this *Filter) processItem(item query.Item) {
+	val, err := this.Expr.Evaluate(item)
+	if err == nil {
+		boolVal := ast.ValueInBooleanContext(val)
+		switch boolVal := boolVal.(type) {
+		case bool:
+			if boolVal {
+				this.itemChannel <- item
+			}
+		}
+	} else {
+		switch err := err.(type) {
+		case *query.Undefined:
+		//ignore these
+		default:
+			log.Printf("Error evaluating filter: %v", err)
 		}
 	}
 }

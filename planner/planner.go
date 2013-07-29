@@ -12,11 +12,12 @@ package planner
 import (
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/plan"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 // Planner takes an ast.Statment and returns a PlanChannel.
 // As new Plans are built, they are written to the PlanChannel.
 // When no more plans can be built, the channel is closed.
 type Planner interface {
-	Plan(ast.Statement) plan.PlanChannel
+	Plan(ast.Statement) (plan.PlanChannel, query.ErrorChannel)
 }

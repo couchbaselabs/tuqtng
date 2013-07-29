@@ -12,6 +12,8 @@ package couchbase
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+	"time"
 
 	cb "github.com/couchbaselabs/go-couchbase"
 	"github.com/couchbaselabs/tuqtng/catalog"
@@ -69,16 +71,37 @@ func (p *pool) Bucket(name string) (catalog.Bucket, query.Error) {
 	return newBucket(p, name)
 }
 
+func (p *pool) refresh() {
+	// trigger refresh of this pool
+	newpool, err := p.site.client.GetPool(p.name)
+	if err != nil {
+		log.Printf("Error updating pool: %v", err)
+		return
+	}
+	p.cbpool = newpool
+}
+
 func newPool(s *site, name string) (*pool, query.Error) {
 	cbpool, err := s.client.GetPool(name)
 	if err != nil {
 		return nil, query.NewError(nil, fmt.Sprintf("Pool %v not found.", name))
 	}
-	return &pool{
+	rv := pool{
 		site:   s,
 		name:   name,
 		cbpool: cbpool,
-	}, nil
+	}
+	go keepPoolFresh(&rv)
+	return &rv, nil
+}
+
+func keepPoolFresh(p *pool) {
+
+	tickChan := time.Tick(5 * time.Minute)
+
+	for _ = range tickChan {
+		p.refresh()
+	}
 }
 
 type bucket struct {
@@ -171,7 +194,16 @@ func (b *bucket) Fetch(id string) (query.Item, query.Error) {
 func newBucket(p *pool, name string) (*bucket, query.Error) {
 	cbbucket, err := p.cbpool.GetBucket(name)
 	if err != nil {
-		return nil, query.NewError(nil, fmt.Sprintf("Bucket %v not found.", name))
+		// go-couchbase caches the buckets
+		// to be sure no such bucket exists right now
+		// we trigger a refresh
+		p.refresh()
+		// and then check one more time
+		cbbucket, err = p.cbpool.GetBucket(name)
+		if err != nil {
+			// really no such bucket exists
+			return nil, query.NewError(nil, fmt.Sprintf("Bucket %v not found.", name))
+		}
 	}
 
 	rv := &bucket{
@@ -211,12 +243,26 @@ func (vs *viewScanner) scanAll(ch query.ItemChannel, warnch, errch query.ErrorCh
 	defer close(errch)
 
 	viewRowChannel := make(chan cb.ViewRow)
-	go WalkViewInBatches(viewRowChannel, vs.bucket.cbbucket, vs.ddoc, vs.view, map[string]interface{}{}, 1000)
-	for viewRow := range viewRowChannel {
-		doc := map[string]query.Value{}
-		meta := map[string]query.Value{"id": viewRow.ID}
-		ch <- query.NewParsedItem(doc, meta)
+	viewErrChannel := make(query.ErrorChannel)
+	go WalkViewInBatches(viewRowChannel, viewErrChannel, vs.bucket.cbbucket, vs.ddoc, vs.view, map[string]interface{}{}, 1000)
+
+	var viewRow cb.ViewRow
+	var err query.Error
+	ok := true
+	for ok {
+		select {
+		case viewRow, ok = <-viewRowChannel:
+			doc := map[string]query.Value{}
+			meta := map[string]query.Value{"id": viewRow.ID}
+			ch <- query.NewParsedItem(doc, meta)
+		case err, ok = <-viewErrChannel:
+			if err != nil {
+				errch <- err
+				return
+			}
+		}
 	}
+
 }
 
 func newViewScanner(b *bucket, ddoc string, view string) (*viewScanner, query.Error) {

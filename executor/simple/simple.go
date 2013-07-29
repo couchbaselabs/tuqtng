@@ -13,6 +13,7 @@ import (
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
+	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/tuqtng/xpipelinebuilder"
 	simpleBuilder "github.com/couchbaselabs/tuqtng/xpipelinebuilder/simple"
 )
@@ -29,23 +30,47 @@ func NewSimpleExecutor(pool catalog.Pool) *SimpleExecutor {
 	}
 }
 
-func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) error {
+func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 
 	// first make the plan excutable
-	executablePipeline, err := this.xpipelinebuilder.Build(optimalPlan)
-	if err != nil {
-		return err
+	executablePipeline, berr := this.xpipelinebuilder.Build(optimalPlan)
+	if berr != nil {
+		q.Response.SendError(berr)
 	}
+
+	root := executablePipeline.Root
+	go root.Run()
 
 	// now execute it
-	root := executablePipeline.Root
-	itemChannel := root.GetItemChannel()
-	go root.Run()
-	for item := range itemChannel {
-		result := item.GetValue()
-		q.Response.SendResult(result)
+	var item query.Item
+	var warn query.Error
+	var err query.Error
+	sourceItemChannel, sourceWarnChannel, sourceErrorChannel := root.GetChannels()
+	ok := true
+	for ok {
+		select {
+		case item, ok = <-sourceItemChannel:
+			if ok {
+				this.processItem(q, item)
+			}
+		case warn, ok = <-sourceWarnChannel:
+			// propogate the warning
+			if warn != nil {
+				// FIXME actually report warnings?
+			}
+		case err, ok = <-sourceErrorChannel:
+			// propogate the error and return
+			if err != nil {
+				q.Response.SendError(err)
+				return
+			}
+		}
 	}
-	q.Response.NoMoreResults()
 
-	return nil
+	q.Response.NoMoreResults()
+}
+
+func (this *SimpleExecutor) processItem(q network.Query, item query.Item) {
+	result := item.GetValue()
+	q.Response.SendResult(result)
 }

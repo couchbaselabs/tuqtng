@@ -15,6 +15,10 @@ processing.
 */
 package query
 
+import (
+	"fmt"
+)
+
 // Error will eventually include code, message key, and internal error
 // object (cause) and message
 type Error interface {
@@ -58,4 +62,12 @@ func (e *err) TranslationKey() string {
 
 func (e *err) Cause() error {
 	return e.cause
+}
+
+func NewBucketDoesNotExist(bucket string) Error {
+	return &err{internalMsg: fmt.Sprintf("Bucket %s does not exist", bucket)}
+}
+
+func NewPoolDoesNotExist(pool string) Error {
+	return &err{internalMsg: fmt.Sprintf("Pool %s does not exist", pool)}
 }

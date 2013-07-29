@@ -13,12 +13,14 @@ import (
 	"log"
 
 	cb "github.com/couchbaselabs/go-couchbase"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
-func WalkViewInBatches(result chan cb.ViewRow, bucket *cb.Bucket,
+func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *cb.Bucket,
 	ddoc string, view string, options map[string]interface{}, batchSize int) {
 
 	defer close(result)
+	defer close(errs)
 
 	options["limit"] = batchSize + 1
 	logURL, err := bucket.ViewURL(ddoc, view, options)
@@ -28,7 +30,7 @@ func WalkViewInBatches(result chan cb.ViewRow, bucket *cb.Bucket,
 	vres, err := bucket.View(ddoc, view, options)
 
 	if err != nil {
-		log.Printf("Error accessing view: %v", err)
+		errs <- query.NewError(err, "Unable to access view")
 		return
 	}
 
@@ -53,7 +55,7 @@ func WalkViewInBatches(result chan cb.ViewRow, bucket *cb.Bucket,
 		}
 		vres, err = bucket.View(ddoc, view, options)
 		if err != nil {
-			log.Printf("Error accessing view: %v", err)
+			errs <- query.NewError(err, "Unable to access view")
 			return
 		}
 

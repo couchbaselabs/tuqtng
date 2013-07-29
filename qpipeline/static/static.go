@@ -71,30 +71,19 @@ func (this *StaticPipeline) DispatchQuery(query network.Query) {
 			return
 		}
 
-		planChannel := this.planner.Plan(ast)
+		planChannel, planErrChannel := this.planner.Plan(ast)
 
-		optimalPlan, err := this.optimizer.Optimize(planChannel)
+		optimalPlan, err := this.optimizer.Optimize(planChannel, planErrChannel)
 		if err != nil {
 			response.SendError(err)
 			return
 		}
 
 		if ast.IsExplainOnly() {
-
-			log.Printf("trying to explain the plan")
-			err = this.explainer.Execute(optimalPlan, query)
-			if err != nil {
-				response.SendError(err)
-				return
-			}
+			this.explainer.Execute(optimalPlan, query)
 
 		} else {
-
-			err = this.executor.Execute(optimalPlan, query)
-			if err != nil {
-				response.SendError(err)
-				return
-			}
+			this.executor.Execute(optimalPlan, query)
 		}
 
 	default:

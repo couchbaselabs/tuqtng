@@ -13,11 +13,12 @@
 package simple
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/plan"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type SimplePlanner struct {
@@ -30,13 +31,17 @@ func NewSimplePlanner(pool catalog.Pool) *SimplePlanner {
 	}
 }
 
-func (this *SimplePlanner) Plan(stmt ast.Statement) plan.PlanChannel {
-	rv := make(plan.PlanChannel)
-	go this.buildPlans(stmt, rv)
-	return rv
+func (this *SimplePlanner) Plan(stmt ast.Statement) (plan.PlanChannel, query.ErrorChannel) {
+	pc := make(plan.PlanChannel)
+	ec := make(query.ErrorChannel)
+	go this.buildPlans(stmt, pc, ec)
+	return pc, ec
 }
 
-func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
+func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel, ec query.ErrorChannel) {
+	defer close(pc)
+	defer close(ec)
+
 	froms := stmt.GetFroms()
 
 	var lastStep plan.PlanElement
@@ -52,9 +57,7 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 		if this.pool != nil {
 			bucket, err := this.pool.Bucket(from.Bucket)
 			if err != nil {
-				log.Printf("no bucket named %v", from.Bucket)
-				// no bucket, no plan
-				close(pc)
+				ec <- query.NewBucketDoesNotExist(from.Bucket)
 				return
 			}
 			defer bucket.Release()
@@ -62,8 +65,7 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 			// find all docs scanner
 			scanners, err := bucket.Scanners()
 			if err != nil {
-				// no scanner, no plan
-				close(pc)
+				ec <- query.NewError(err, fmt.Sprintf("No usable scanner found for bucket %v", from.Bucket))
 				return
 			}
 
@@ -93,13 +95,11 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 			}
 
 			if !foundUsableScanner {
-				// no useable scanner
-				close(pc)
+				ec <- query.NewError(nil, fmt.Sprintf("No usable scanner found for bucket %v", from.Bucket))
 				return
 			}
 		} else {
-			// there is no pool
-			close(pc)
+			ec <- query.NewPoolDoesNotExist(this.pool.Name())
 			return
 		}
 	}
@@ -127,6 +127,4 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel) {
 	}
 
 	pc <- plan.Plan{Root: lastStep}
-
-	close(pc)
 }

@@ -10,9 +10,8 @@
 package simple
 
 import (
-	"fmt"
-
 	"github.com/couchbaselabs/tuqtng/plan"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type SimpleOptimizer struct {
@@ -25,15 +24,27 @@ func NewSimpleOptimizer() *SimpleOptimizer {
 // simplest possible implementation
 // 1.  read all plans off plan channel
 // 2.  return first channel
-func (this *SimpleOptimizer) Optimize(planChannel plan.PlanChannel) (*plan.Plan, error) {
+func (this *SimpleOptimizer) Optimize(planChannel plan.PlanChannel, errChannel query.ErrorChannel) (*plan.Plan, query.Error) {
+
 	plans := make([]plan.Plan, 0)
-	for plan := range planChannel {
-		plans = append(plans, plan)
+
+	var p plan.Plan
+	var err query.Error
+	ok := true
+	for ok {
+		select {
+		case p, ok = <-planChannel:
+			plans = append(plans, p)
+		case err, ok = <-errChannel:
+			if err != nil {
+				return nil, err
+			}
+		}
 	}
 
 	if len(plans) > 0 {
 		return &plans[0], nil
 	}
 
-	return nil, fmt.Errorf("No Plans to Choose From")
+	return nil, query.NewError(nil, "No plans produced for optimizer to choose from")
 }

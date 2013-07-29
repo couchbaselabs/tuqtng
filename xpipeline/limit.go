@@ -17,12 +17,17 @@ type Limit struct {
 	Source      Operator
 	Limit       int
 	itemChannel query.ItemChannel
+	errChannel  query.ErrorChannel
+	warnChannel query.ErrorChannel
+	count       int
 }
 
 func NewLimit(limit int) *Limit {
 	return &Limit{
 		Limit:       limit,
 		itemChannel: make(query.ItemChannel),
+		errChannel:  make(query.ErrorChannel),
+		warnChannel: make(query.ErrorChannel),
 	}
 }
 
@@ -30,22 +35,46 @@ func (this *Limit) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Limit) GetItemChannel() query.ItemChannel {
-	return this.itemChannel
+func (this *Limit) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
+	return this.itemChannel, this.warnChannel, this.errChannel
 }
 
 func (this *Limit) Run() {
 	defer close(this.itemChannel)
+	defer close(this.errChannel)
+	defer close(this.warnChannel)
 
-	count := 0
+	this.count = 0
 
-	// start the source
 	go this.Source.Run()
-	for item := range this.Source.GetItemChannel() {
-		this.itemChannel <- item
-		count++
-		if count >= this.Limit {
-			break
+
+	var item query.Item
+	var warn query.Error
+	var err query.Error
+	sourceItemChannel, sourceWarnChannel, sourceErrorChannel := this.Source.GetChannels()
+	ok := true
+	for ok && this.count < this.Limit {
+		select {
+		case item, ok = <-sourceItemChannel:
+			if ok {
+				this.processItem(item)
+			}
+		case warn, ok = <-sourceWarnChannel:
+			// propogate the warning
+			if warn != nil {
+				this.warnChannel <- warn
+			}
+		case err, ok = <-sourceErrorChannel:
+			// propogate the error and return
+			if err != nil {
+				this.errChannel <- err
+				return
+			}
 		}
 	}
+}
+
+func (this *Limit) processItem(item query.Item) {
+	this.itemChannel <- item
+	this.count++
 }

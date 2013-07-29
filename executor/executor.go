@@ -15,5 +15,5 @@ import (
 )
 
 type Executor interface {
-	Execute(*plan.Plan, network.Query) error
+	Execute(*plan.Plan, network.Query)
 }

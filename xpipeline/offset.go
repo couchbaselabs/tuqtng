@@ -17,12 +17,17 @@ type Offset struct {
 	Source      Operator
 	Offset      int
 	itemChannel query.ItemChannel
+	errChannel  query.ErrorChannel
+	warnChannel query.ErrorChannel
+	count       int
 }
 
 func NewOffset(offset int) *Offset {
 	return &Offset{
 		Offset:      offset,
 		itemChannel: make(query.ItemChannel),
+		errChannel:  make(query.ErrorChannel),
+		warnChannel: make(query.ErrorChannel),
 	}
 }
 
@@ -30,22 +35,49 @@ func (this *Offset) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Offset) GetItemChannel() query.ItemChannel {
-	return this.itemChannel
+func (this *Offset) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
+	return this.itemChannel, this.warnChannel, this.errChannel
 }
 
 func (this *Offset) Run() {
 	defer close(this.itemChannel)
+	defer close(this.errChannel)
+	defer close(this.warnChannel)
 
-	count := 0
+	this.count = 0
 
-	// start the source
 	go this.Source.Run()
-	for item := range this.Source.GetItemChannel() {
-		count++
-		if count <= this.Offset {
-			continue
+
+	var item query.Item
+	var warn query.Error
+	var err query.Error
+	sourceItemChannel, sourceWarnChannel, sourceErrorChannel := this.Source.GetChannels()
+	ok := true
+	for ok {
+		select {
+		case item, ok = <-sourceItemChannel:
+			if ok {
+				this.processItem(item)
+			}
+		case warn, ok = <-sourceWarnChannel:
+			// propogate the warning
+			if warn != nil {
+				this.warnChannel <- warn
+			}
+		case err, ok = <-sourceErrorChannel:
+			// propogate the error and return
+			if err != nil {
+				this.errChannel <- err
+				return
+			}
 		}
-		this.itemChannel <- item
 	}
+}
+
+func (this *Offset) processItem(item query.Item) {
+	this.count++
+	if this.count <= this.Offset {
+		return
+	}
+	this.itemChannel <- item
 }

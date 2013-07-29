@@ -21,10 +21,10 @@ func NewExplainerExecutor() *ExplainerExecutor {
 	return &ExplainerExecutor{}
 }
 
-func (this *ExplainerExecutor) Execute(optimalPlan *plan.Plan, query network.Query) error {
+func (this *ExplainerExecutor) Execute(optimalPlan *plan.Plan, query network.Query) {
 
 	query.Response.SendResult(optimalPlan)
 	query.Response.NoMoreResults()
 
-	return nil
+	return
 }
