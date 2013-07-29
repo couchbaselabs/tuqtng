@@ -19,6 +19,8 @@ type ExecutablePipeline struct {
 
 type Operator interface {
 	SetSource(Operator)
-	GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel)
+	GetChannels() (query.ItemChannel, PipelineSupportChannel)
 	Run()
 }
+
+type PipelineSupportChannel chan interface{}

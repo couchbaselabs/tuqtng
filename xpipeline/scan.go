@@ -15,20 +15,18 @@ import (
 )
 
 type Scan struct {
-	itemChannel query.ItemChannel
-	errChannel  query.ErrorChannel
-	warnChannel query.ErrorChannel
-	bucket      catalog.Bucket
-	scanner     catalog.Scanner
+	itemChannel    query.ItemChannel
+	supportChannel PipelineSupportChannel
+	bucket         catalog.Bucket
+	scanner        catalog.Scanner
 }
 
 func NewScan(bucket catalog.Bucket, scanner catalog.Scanner) *Scan {
 	return &Scan{
-		itemChannel: make(query.ItemChannel),
-		errChannel:  make(query.ErrorChannel),
-		warnChannel: make(query.ErrorChannel),
-		bucket:      bucket,
-		scanner:     scanner,
+		itemChannel:    make(query.ItemChannel),
+		supportChannel: make(PipelineSupportChannel),
+		bucket:         bucket,
+		scanner:        scanner,
 	}
 }
 
@@ -36,14 +34,13 @@ func (this *Scan) SetSource(source Operator) {
 	panic("Cannot set source for a datasource")
 }
 
-func (this *Scan) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
-	return this.itemChannel, this.warnChannel, this.errChannel
+func (this *Scan) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+	return this.itemChannel, this.supportChannel
 }
 
 func (this *Scan) Run() {
 	defer close(this.itemChannel)
-	defer close(this.errChannel)
-	defer close(this.warnChannel)
+	defer close(this.supportChannel)
 	defer this.bucket.Release()
 
 	scannerItemChannel := make(query.ItemChannel)
@@ -64,11 +61,11 @@ func (this *Scan) Run() {
 			}
 		case warn, ok = <-scannerWarnChannel:
 			if warn != nil {
-				this.warnChannel <- warn
+				this.supportChannel <- warn
 			}
 		case err, ok = <-scannerErrorChannel:
 			if err != nil {
-				this.errChannel <- err
+				this.supportChannel <- err
 			}
 		}
 	}

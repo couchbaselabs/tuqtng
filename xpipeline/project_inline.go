@@ -10,26 +10,23 @@
 package xpipeline
 
 import (
-	"log"
-
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type ProjectInline struct {
-	Source      Operator
-	itemChannel query.ItemChannel
-	errChannel  query.ErrorChannel
-	warnChannel query.ErrorChannel
-	Result      *ast.ResultExpression
+	Source         Operator
+	itemChannel    query.ItemChannel
+	supportChannel PipelineSupportChannel
+	Result         *ast.ResultExpression
+	ok             bool
 }
 
 func NewProjectInline(result *ast.ResultExpression) *ProjectInline {
 	return &ProjectInline{
-		Result:      result,
-		itemChannel: make(query.ItemChannel),
-		errChannel:  make(query.ErrorChannel),
-		warnChannel: make(query.ErrorChannel),
+		Result:         result,
+		itemChannel:    make(query.ItemChannel),
+		supportChannel: make(PipelineSupportChannel),
 	}
 }
 
@@ -37,38 +34,35 @@ func (this *ProjectInline) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *ProjectInline) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
-	return this.itemChannel, this.warnChannel, this.errChannel
+func (this *ProjectInline) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+	return this.itemChannel, this.supportChannel
 }
 
 func (this *ProjectInline) Run() {
 	defer close(this.itemChannel)
-	defer close(this.errChannel)
-	defer close(this.warnChannel)
+	defer close(this.supportChannel)
 
 	go this.Source.Run()
 
 	var item query.Item
-	var warn query.Error
-	var err query.Error
-	sourceItemChannel, sourceWarnChannel, sourceErrorChannel := this.Source.GetChannels()
-	ok := true
-	for ok {
+	var obj interface{}
+	sourceItemChannel, supportChannel := this.Source.GetChannels()
+	this.ok = true
+	for this.ok {
 		select {
-		case item, ok = <-sourceItemChannel:
-			if ok {
+		case item, this.ok = <-sourceItemChannel:
+			if this.ok {
 				this.processItem(item)
 			}
-		case warn, ok = <-sourceWarnChannel:
-			// propogate the warning
-			if warn != nil {
-				this.warnChannel <- warn
-			}
-		case err, ok = <-sourceErrorChannel:
-			// propogate the error and return
-			if err != nil {
-				this.errChannel <- err
-				return
+		case obj, this.ok = <-supportChannel:
+			if this.ok {
+				switch obj := obj.(type) {
+				case query.Error:
+					this.supportChannel <- obj
+					return
+				default:
+					this.supportChannel <- obj
+				}
 			}
 		}
 	}
@@ -96,7 +90,8 @@ func (this *ProjectInline) processItem(item query.Item) {
 					// FIXME review if this should be a warning
 					return
 				default:
-					log.Fatalf("unexpected error projecting dot star expression: %v", err)
+					this.supportChannel <- query.NewError(err, "unexpected error projecting dot star expression")
+					this.ok = false
 				}
 			}
 		} else {
@@ -116,7 +111,8 @@ func (this *ProjectInline) processItem(item query.Item) {
 				// FIXME review if this should be a warning
 				return
 			default:
-				log.Fatalf("unexpected error projecting expression: %v", err)
+				this.supportChannel <- query.NewError(err, "unexpected error projecting expression")
+				this.ok = false
 			}
 		}
 	}

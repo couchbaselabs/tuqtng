@@ -20,7 +20,7 @@ func TestOffset(t *testing.T) {
 	offset := NewOffset(3)
 	offset.SetSource(stubSource)
 
-	offsetItemChannel, _, _ := offset.GetChannels()
+	offsetItemChannel, _ := offset.GetChannels()
 
 	go offset.Run()
 

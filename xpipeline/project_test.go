@@ -21,7 +21,7 @@ func TestProject(t *testing.T) {
 	project := NewProject(ast.ResultExpressionList{ast.NewResultExpressionWithAlias(ast.NewProperty("name"), "f_name")}, true)
 	project.SetSource(stubSource)
 
-	projectItemChannel, _, _ := project.GetChannels()
+	projectItemChannel, _ := project.GetChannels()
 
 	go project.Run()
 

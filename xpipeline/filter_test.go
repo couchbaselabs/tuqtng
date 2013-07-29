@@ -34,7 +34,7 @@ func TestFilterTrue(t *testing.T) {
 	filter := NewFilter(ast.NewLiteralBool(true))
 	filter.SetSource(stubSource)
 
-	filterItemChannel, _, _ := filter.GetChannels()
+	filterItemChannel, _ := filter.GetChannels()
 
 	go filter.Run()
 
@@ -56,7 +56,7 @@ func TestFilterFalse(t *testing.T) {
 	filter := NewFilter(ast.NewLiteralBool(false))
 	filter.SetSource(stubSource)
 
-	filterItemChannel, _, _ := filter.GetChannels()
+	filterItemChannel, _ := filter.GetChannels()
 
 	go filter.Run()
 
@@ -78,7 +78,7 @@ func TestFilterSome(t *testing.T) {
 	filter := NewFilter(ast.NewGreaterThanOperator(ast.NewProperty("name"), ast.NewLiteralString("n")))
 	filter.SetSource(stubSource)
 
-	filterItemChannel, _, _ := filter.GetChannels()
+	filterItemChannel, _ := filter.GetChannels()
 
 	go filter.Run()
 

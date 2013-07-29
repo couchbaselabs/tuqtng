@@ -14,20 +14,18 @@ import (
 )
 
 type Limit struct {
-	Source      Operator
-	Limit       int
-	itemChannel query.ItemChannel
-	errChannel  query.ErrorChannel
-	warnChannel query.ErrorChannel
-	count       int
+	Source         Operator
+	Limit          int
+	itemChannel    query.ItemChannel
+	supportChannel PipelineSupportChannel
+	count          int
 }
 
 func NewLimit(limit int) *Limit {
 	return &Limit{
-		Limit:       limit,
-		itemChannel: make(query.ItemChannel),
-		errChannel:  make(query.ErrorChannel),
-		warnChannel: make(query.ErrorChannel),
+		Limit:          limit,
+		itemChannel:    make(query.ItemChannel),
+		supportChannel: make(PipelineSupportChannel),
 	}
 }
 
@@ -35,23 +33,21 @@ func (this *Limit) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Limit) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
-	return this.itemChannel, this.warnChannel, this.errChannel
+func (this *Limit) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+	return this.itemChannel, this.supportChannel
 }
 
 func (this *Limit) Run() {
 	defer close(this.itemChannel)
-	defer close(this.errChannel)
-	defer close(this.warnChannel)
+	defer close(this.supportChannel)
 
 	this.count = 0
 
 	go this.Source.Run()
 
 	var item query.Item
-	var warn query.Error
-	var err query.Error
-	sourceItemChannel, sourceWarnChannel, sourceErrorChannel := this.Source.GetChannels()
+	var obj interface{}
+	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	ok := true
 	for ok && this.count < this.Limit {
 		select {
@@ -59,16 +55,15 @@ func (this *Limit) Run() {
 			if ok {
 				this.processItem(item)
 			}
-		case warn, ok = <-sourceWarnChannel:
-			// propogate the warning
-			if warn != nil {
-				this.warnChannel <- warn
-			}
-		case err, ok = <-sourceErrorChannel:
-			// propogate the error and return
-			if err != nil {
-				this.errChannel <- err
-				return
+		case obj, ok = <-supportChannel:
+			if ok {
+				switch obj := obj.(type) {
+				case query.Error:
+					this.supportChannel <- obj
+					return
+				default:
+					this.supportChannel <- obj
+				}
 			}
 		}
 	}

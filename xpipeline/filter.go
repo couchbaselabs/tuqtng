@@ -10,26 +10,23 @@
 package xpipeline
 
 import (
-	"log"
-
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type Filter struct {
-	Source      Operator
-	Expr        ast.Expression
-	itemChannel query.ItemChannel
-	errChannel  query.ErrorChannel
-	warnChannel query.ErrorChannel
+	Source         Operator
+	Expr           ast.Expression
+	itemChannel    query.ItemChannel
+	supportChannel PipelineSupportChannel
+	ok             bool
 }
 
 func NewFilter(expr ast.Expression) *Filter {
 	return &Filter{
-		Expr:        expr,
-		itemChannel: make(query.ItemChannel),
-		errChannel:  make(query.ErrorChannel),
-		warnChannel: make(query.ErrorChannel),
+		Expr:           expr,
+		itemChannel:    make(query.ItemChannel),
+		supportChannel: make(PipelineSupportChannel),
 	}
 }
 
@@ -37,38 +34,35 @@ func (this *Filter) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Filter) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
-	return this.itemChannel, this.warnChannel, this.errChannel
+func (this *Filter) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+	return this.itemChannel, this.supportChannel
 }
 
 func (this *Filter) Run() {
 	defer close(this.itemChannel)
-	defer close(this.errChannel)
-	defer close(this.warnChannel)
+	defer close(this.supportChannel)
 
 	go this.Source.Run()
 
 	var item query.Item
-	var warn query.Error
-	var err query.Error
-	sourceItemChannel, sourceWarnChannel, sourceErrorChannel := this.Source.GetChannels()
-	ok := true
-	for ok {
+	var obj interface{}
+	sourceItemChannel, supportChannel := this.Source.GetChannels()
+	this.ok = true
+	for this.ok {
 		select {
-		case item, ok = <-sourceItemChannel:
-			if ok {
+		case item, this.ok = <-sourceItemChannel:
+			if this.ok {
 				this.processItem(item)
 			}
-		case warn, ok = <-sourceWarnChannel:
-			// propogate the warning
-			if warn != nil {
-				this.warnChannel <- warn
-			}
-		case err, ok = <-sourceErrorChannel:
-			// propogate the error and return
-			if err != nil {
-				this.errChannel <- err
-				return
+		case obj, this.ok = <-supportChannel:
+			if this.ok {
+				switch obj := obj.(type) {
+				case query.Error:
+					this.supportChannel <- obj
+					return
+				default:
+					this.supportChannel <- obj
+				}
 			}
 		}
 	}
@@ -89,7 +83,8 @@ func (this *Filter) processItem(item query.Item) {
 		case *query.Undefined:
 		//ignore these
 		default:
-			log.Printf("Error evaluating filter: %v", err)
+			this.supportChannel <- query.NewError(err, "error evaluating filter")
+			this.ok = false
 		}
 	}
 }

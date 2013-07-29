@@ -18,21 +18,19 @@ import (
 )
 
 type Order struct {
-	Source      Operator
-	OrderBy     []*ast.SortExpression
-	itemChannel query.ItemChannel
-	errChannel  query.ErrorChannel
-	warnChannel query.ErrorChannel
-	buffer      query.ItemCollection
+	Source         Operator
+	OrderBy        []*ast.SortExpression
+	itemChannel    query.ItemChannel
+	supportChannel PipelineSupportChannel
+	buffer         query.ItemCollection
 }
 
 func NewOrder(orderBy []*ast.SortExpression) *Order {
 	return &Order{
-		OrderBy:     orderBy,
-		itemChannel: make(query.ItemChannel),
-		errChannel:  make(query.ErrorChannel),
-		warnChannel: make(query.ErrorChannel),
-		buffer:      make(query.ItemCollection, 0),
+		OrderBy:        orderBy,
+		itemChannel:    make(query.ItemChannel),
+		supportChannel: make(PipelineSupportChannel),
+		buffer:         make(query.ItemCollection, 0),
 	}
 }
 
@@ -40,21 +38,19 @@ func (this *Order) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Order) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
-	return this.itemChannel, this.warnChannel, this.errChannel
+func (this *Order) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+	return this.itemChannel, this.supportChannel
 }
 
 func (this *Order) Run() {
 	defer close(this.itemChannel)
-	defer close(this.errChannel)
-	defer close(this.warnChannel)
+	defer close(this.supportChannel)
 
 	go this.Source.Run()
 
 	var item query.Item
-	var warn query.Error
-	var err query.Error
-	sourceItemChannel, sourceWarnChannel, sourceErrorChannel := this.Source.GetChannels()
+	var obj interface{}
+	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	ok := true
 	for ok {
 		select {
@@ -62,16 +58,15 @@ func (this *Order) Run() {
 			if ok {
 				this.processItem(item)
 			}
-		case warn, ok = <-sourceWarnChannel:
-			// propogate the warning
-			if warn != nil {
-				this.warnChannel <- warn
-			}
-		case err, ok = <-sourceErrorChannel:
-			// propogate the error and return
-			if err != nil {
-				this.errChannel <- err
-				return
+		case obj, ok = <-supportChannel:
+			if ok {
+				switch obj := obj.(type) {
+				case query.Error:
+					this.supportChannel <- obj
+					return
+				default:
+					this.supportChannel <- obj
+				}
 			}
 		}
 	}

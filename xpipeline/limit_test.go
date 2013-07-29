@@ -20,7 +20,7 @@ func TestLimit(t *testing.T) {
 	limit := NewLimit(2)
 	limit.SetSource(stubSource)
 
-	limitItemChannel, _, _ := limit.GetChannels()
+	limitItemChannel, _ := limit.GetChannels()
 
 	go limit.Run()
 

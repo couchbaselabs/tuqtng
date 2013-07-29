@@ -14,16 +14,14 @@ import (
 )
 
 type ExpressionEvaluatorSource struct {
-	itemChannel query.ItemChannel
-	errChannel  query.ErrorChannel
-	warnChannel query.ErrorChannel
+	itemChannel    query.ItemChannel
+	supportChannel PipelineSupportChannel
 }
 
 func NewExpressionEvaluatorSource() *ExpressionEvaluatorSource {
 	return &ExpressionEvaluatorSource{
-		itemChannel: make(query.ItemChannel),
-		errChannel:  make(query.ErrorChannel),
-		warnChannel: make(query.ErrorChannel),
+		itemChannel:    make(query.ItemChannel),
+		supportChannel: make(PipelineSupportChannel),
 	}
 }
 
@@ -31,14 +29,13 @@ func (this *ExpressionEvaluatorSource) SetSource(source Operator) {
 	panic("Cannot set source for a datasource")
 }
 
-func (this *ExpressionEvaluatorSource) GetChannels() (query.ItemChannel, query.ErrorChannel, query.ErrorChannel) {
-	return this.itemChannel, this.warnChannel, this.errChannel
+func (this *ExpressionEvaluatorSource) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+	return this.itemChannel, this.supportChannel
 }
 
 func (this *ExpressionEvaluatorSource) Run() {
 	defer close(this.itemChannel)
-	defer close(this.errChannel)
-	defer close(this.warnChannel)
+	defer close(this.supportChannel)
 	item := query.NewParsedItem(map[string]query.Value{}, nil)
 	this.itemChannel <- item
 }

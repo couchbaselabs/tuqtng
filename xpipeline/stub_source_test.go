@@ -25,7 +25,7 @@ func TestStubSource(t *testing.T) {
 
 	stubSource := NewStubSource(testData)
 
-	stubItemChannel, _, _ := stubSource.GetChannels()
+	stubItemChannel, _ := stubSource.GetChannels()
 
 	go stubSource.Run()
 

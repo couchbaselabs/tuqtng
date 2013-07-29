@@ -45,9 +45,8 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 
 	// now execute it
 	var item query.Item
-	var warn query.Error
-	var err query.Error
-	sourceItemChannel, sourceWarnChannel, sourceErrorChannel := root.GetChannels()
+	var obj interface{}
+	sourceItemChannel, supportChannel := root.GetChannels()
 	ok := true
 	for ok {
 		select {
@@ -55,17 +54,20 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 			if ok {
 				this.processItem(q, item)
 			}
-		case warn, ok = <-sourceWarnChannel:
-			// propogate the warning
-			if warn != nil {
-				// FIXME actually report warnings?
-			}
-		case err, ok = <-sourceErrorChannel:
-			// propogate the error and return
-			if err != nil {
-				log.Printf("Sending client error: %v", err)
-				q.Response.SendError(err)
-				return
+		case obj, ok = <-supportChannel:
+			if ok {
+				switch obj := obj.(type) {
+				case query.Error:
+					log.Printf("Sending client error: %v", obj)
+					q.Response.SendError(obj)
+					return
+				case query.Warning:
+					// handle the warning
+				case query.Info:
+					// handle the info
+				default:
+					log.Printf("Unexpected object tyep on the support channel %T", obj)
+				}
 			}
 		}
 	}
