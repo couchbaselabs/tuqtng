@@ -152,3 +152,13 @@ func NewFunctionArgExpression(expr Expression) *FunctionArgExpression {
 		Expr: expr,
 	}
 }
+
+func ValidateNoStars(function SystemFunction, arguments FunctionArgExpressionList) error {
+	for _, arg := range arguments {
+		if arg.Star == true {
+			return fmt.Errorf("the %s() function does not support *", function.Name())
+		}
+	}
+
+	return nil
+}

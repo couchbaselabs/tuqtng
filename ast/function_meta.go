@@ -16,11 +16,15 @@ import (
 )
 
 func init() {
-	registerSystemFunction("META", &FunctionMeta{})
-	registerSystemFunction("VALUE", &FunctionValue{})
+	registerSystemFunction(&FunctionMeta{})
+	registerSystemFunction(&FunctionValue{})
 }
 
 type FunctionMeta struct {
+}
+
+func (this *FunctionMeta) Name() string {
+	return "META"
 }
 
 func (this *FunctionMeta) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
@@ -33,10 +37,14 @@ func (this *FunctionMeta) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) != 1 {
 		return fmt.Errorf("the META() function takes one argument")
 	}
-	return nil
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionValue struct {
+}
+
+func (this *FunctionValue) Name() string {
+	return "VALUE"
 }
 
 func (this *FunctionValue) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
@@ -58,5 +66,5 @@ func (this *FunctionValue) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) != 1 {
 		return fmt.Errorf("the VALUE() function takes one argument")
 	}
-	return nil
+	return ValidateNoStars(this, arguments)
 }

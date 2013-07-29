@@ -16,15 +16,16 @@ import (
 )
 
 type SystemFunction interface {
+	Name() string
 	Evaluate(query.Item, FunctionArgExpressionList) (query.Value, error)
 	Validate(FunctionArgExpressionList) error
 }
 
 var SystemFunctionRegistry map[string]SystemFunction
 
-func registerSystemFunction(name string, sf SystemFunction) {
+func registerSystemFunction(sf SystemFunction) {
 	if SystemFunctionRegistry == nil {
 		SystemFunctionRegistry = make(map[string]SystemFunction)
 	}
-	SystemFunctionRegistry[strings.ToUpper(name)] = sf
+	SystemFunctionRegistry[strings.ToUpper(sf.Name())] = sf
 }

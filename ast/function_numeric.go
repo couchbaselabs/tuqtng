@@ -17,13 +17,17 @@ import (
 )
 
 func init() {
-	registerSystemFunction("CEIL", &FunctionCeil{})
-	registerSystemFunction("FLOOR", &FunctionFloor{})
-	registerSystemFunction("ROUND", &FunctionRound{})
-	registerSystemFunction("TRUNC", &FunctionTrunc{})
+	registerSystemFunction(&FunctionCeil{})
+	registerSystemFunction(&FunctionFloor{})
+	registerSystemFunction(&FunctionRound{})
+	registerSystemFunction(&FunctionTrunc{})
 }
 
 type FunctionCeil struct{}
+
+func (this *FunctionCeil) Name() string {
+	return "CEIL"
+}
 
 func (this *FunctionCeil) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 	// first evaluate the argument
@@ -54,13 +58,14 @@ func (this *FunctionCeil) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) != 1 {
 		return fmt.Errorf("the CEIL() function expects a single argument")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the CEIL() function does not support *")
-	}
-	return nil
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionFloor struct{}
+
+func (this *FunctionFloor) Name() string {
+	return "FLOOR"
+}
 
 func (this *FunctionFloor) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 	// first evaluate the argument
@@ -91,10 +96,8 @@ func (this *FunctionFloor) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) != 1 {
 		return fmt.Errorf("the FLOOR() function expects a single argument")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the FLOOR() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }
 
 func RoundFloat(x float64, prec int) float64 {
@@ -123,6 +126,10 @@ func RoundFloat(x float64, prec int) float64 {
 }
 
 type FunctionRound struct{}
+
+func (this *FunctionRound) Name() string {
+	return "ROUND"
+}
 
 func (this *FunctionRound) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 	// first evaluate the argument
@@ -179,10 +186,8 @@ func (this *FunctionRound) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) < 1 || len(arguments) > 2 {
 		return fmt.Errorf("the ROUND() function expects either one or two arguments")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the ROUND() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }
 
 func TruncateFloat(x float64, prec int) float64 {
@@ -198,6 +203,10 @@ func TruncateFloat(x float64, prec int) float64 {
 }
 
 type FunctionTrunc struct{}
+
+func (this *FunctionTrunc) Name() string {
+	return "TRUNC"
+}
 
 func (this *FunctionTrunc) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 	// first evaluate the argument
@@ -254,8 +263,6 @@ func (this *FunctionTrunc) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) < 1 || len(arguments) > 2 {
 		return fmt.Errorf("the TRUNC() function expects either one or two arguments")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the TRUNC() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }

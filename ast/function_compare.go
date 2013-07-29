@@ -16,16 +16,20 @@ import (
 )
 
 func init() {
-	registerSystemFunction("GREATEST", &FunctionGreatest{})
-	registerSystemFunction("LEAST", &FunctionLeast{})
-	registerSystemFunction("IFMISSING", &FunctionIfMissing{})
-	registerSystemFunction("IFNULL", &FunctionIfNull{})
-	registerSystemFunction("IFMISSINGORNULL", &FunctionIfMissingOrNull{})
-	registerSystemFunction("MISSINGIF", &FunctionMissingIf{})
-	registerSystemFunction("NULLIF", &FunctionNullIf{})
+	registerSystemFunction(&FunctionGreatest{})
+	registerSystemFunction(&FunctionLeast{})
+	registerSystemFunction(&FunctionIfMissing{})
+	registerSystemFunction(&FunctionIfNull{})
+	registerSystemFunction(&FunctionIfMissingOrNull{})
+	registerSystemFunction(&FunctionMissingIf{})
+	registerSystemFunction(&FunctionNullIf{})
 }
 
 type FunctionGreatest struct{}
+
+func (this *FunctionGreatest) Name() string {
+	return "GREATEST"
+}
 
 func (this *FunctionGreatest) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 
@@ -57,13 +61,14 @@ func (this *FunctionGreatest) Validate(arguments FunctionArgExpressionList) erro
 	if len(arguments) < 1 {
 		return fmt.Errorf("the GREATEST() function expects at least one argument")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the GREATEST() function does not support *")
-	}
-	return nil
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionLeast struct{}
+
+func (this *FunctionLeast) Name() string {
+	return "LEAST"
+}
 
 func (this *FunctionLeast) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 
@@ -97,13 +102,14 @@ func (this *FunctionLeast) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) < 1 {
 		return fmt.Errorf("the LEAST() function expects at least one argument")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the LEAST() function does not support *")
-	}
-	return nil
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionIfMissing struct{}
+
+func (this *FunctionIfMissing) Name() string {
+	return "IFMISSING"
+}
 
 func (this *FunctionIfMissing) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 
@@ -132,13 +138,15 @@ func (this *FunctionIfMissing) Validate(arguments FunctionArgExpressionList) err
 	if len(arguments) < 1 {
 		return fmt.Errorf("the IFMISSING() function expects at least one argument")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the IFMISSING() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionIfNull struct{}
+
+func (this *FunctionIfNull) Name() string {
+	return "IFNULL"
+}
 
 func (this *FunctionIfNull) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 
@@ -169,13 +177,15 @@ func (this *FunctionIfNull) Validate(arguments FunctionArgExpressionList) error 
 	if len(arguments) < 1 {
 		return fmt.Errorf("the IFNULL() function expects at least one argument")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the IFNULL() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionIfMissingOrNull struct{}
+
+func (this *FunctionIfMissingOrNull) Name() string {
+	return "IFMISSINGORNULL"
+}
 
 func (this *FunctionIfMissingOrNull) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 
@@ -206,13 +216,15 @@ func (this *FunctionIfMissingOrNull) Validate(arguments FunctionArgExpressionLis
 	if len(arguments) < 1 {
 		return fmt.Errorf("the IFMISSINGORNULL() function expects at least one argument")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the IFMISSINGNULL() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionMissingIf struct{}
+
+func (this *FunctionMissingIf) Name() string {
+	return "MISSINGIF"
+}
 
 func (this *FunctionMissingIf) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 	// first evaluate the argument
@@ -252,13 +264,14 @@ func (this *FunctionMissingIf) Validate(arguments FunctionArgExpressionList) err
 	if len(arguments) != 2 {
 		return fmt.Errorf("the MISSINGIF() function expects exactly two argument")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the MISSINGIF() function does not support *")
-	}
-	return nil
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionNullIf struct{}
+
+func (this *FunctionNullIf) Name() string {
+	return "NULLIF"
+}
 
 func (this *FunctionNullIf) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 	// first evaluate the argument
@@ -298,8 +311,6 @@ func (this *FunctionNullIf) Validate(arguments FunctionArgExpressionList) error 
 	if len(arguments) != 2 {
 		return fmt.Errorf("the NULLIF() function expects exactly two argument")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the NULLIF() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }

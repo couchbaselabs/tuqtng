@@ -16,10 +16,14 @@ import (
 )
 
 func init() {
-	registerSystemFunction("LENGTH", &FunctionLength{})
+	registerSystemFunction(&FunctionLength{})
 }
 
 type FunctionLength struct {
+}
+
+func (this *FunctionLength) Name() string {
+	return "LENGTH"
 }
 
 func (this *FunctionLength) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
@@ -54,8 +58,6 @@ func (this *FunctionLength) Validate(arguments FunctionArgExpressionList) error 
 	if len(arguments) != 1 {
 		return fmt.Errorf("the LENGTH() function takes exactly one argument")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the LENGTH() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }

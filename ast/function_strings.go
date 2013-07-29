@@ -17,15 +17,19 @@ import (
 )
 
 func init() {
-	registerSystemFunction("LOWER", &FunctionLower{})
-	registerSystemFunction("UPPER", &FunctionUpper{})
-	registerSystemFunction("LTRIM", &FunctionLTrim{})
-	registerSystemFunction("RTRIM", &FunctionRTrim{})
-	registerSystemFunction("TRIM", &FunctionTrim{})
-	registerSystemFunction("SUBSTR", &FunctionSubStr{})
+	registerSystemFunction(&FunctionLower{})
+	registerSystemFunction(&FunctionUpper{})
+	registerSystemFunction(&FunctionLTrim{})
+	registerSystemFunction(&FunctionRTrim{})
+	registerSystemFunction(&FunctionTrim{})
+	registerSystemFunction(&FunctionSubStr{})
 }
 
 type FunctionLower struct{}
+
+func (this *FunctionLower) Name() string {
+	return "LOWER"
+}
 
 func (this *FunctionLower) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 	// first evaluate the argument
@@ -56,13 +60,15 @@ func (this *FunctionLower) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) != 1 {
 		return fmt.Errorf("the LOWER() function expects a single argument")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the LOWER() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionUpper struct{}
+
+func (this *FunctionUpper) Name() string {
+	return "UPPER"
+}
 
 func (this *FunctionUpper) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 	// first evaluate the argument
@@ -93,13 +99,15 @@ func (this *FunctionUpper) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) != 1 {
 		return fmt.Errorf("the UPPER() function expects a single argument")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the UPPER() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionLTrim struct{}
+
+func (this *FunctionLTrim) Name() string {
+	return "LTRIM"
+}
 
 func (this *FunctionLTrim) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 	// first evaluate the argument
@@ -150,13 +158,15 @@ func (this *FunctionLTrim) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) != 2 {
 		return fmt.Errorf("the LTRIM() function expects two arguments")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the LTRIM() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionRTrim struct{}
+
+func (this *FunctionRTrim) Name() string {
+	return "RTRIM"
+}
 
 func (this *FunctionRTrim) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 	// first evaluate the argument
@@ -207,13 +217,15 @@ func (this *FunctionRTrim) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) != 2 {
 		return fmt.Errorf("the RTRIM() function expects two arguments")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the RTRIM() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionTrim struct{}
+
+func (this *FunctionTrim) Name() string {
+	return "TRIM"
+}
 
 func (this *FunctionTrim) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 	// first evaluate the argument
@@ -264,13 +276,15 @@ func (this *FunctionTrim) Validate(arguments FunctionArgExpressionList) error {
 	if len(arguments) != 2 {
 		return fmt.Errorf("the TRIM() function expects two arguments")
 	}
-	if arguments[0].Star == true {
-		return fmt.Errorf("the TRIM() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }
 
 type FunctionSubStr struct{}
+
+func (this *FunctionSubStr) Name() string {
+	return "SUBSTR"
+}
 
 func (this *FunctionSubStr) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
 	// first evaluate the argument
@@ -364,8 +378,6 @@ func (this *FunctionSubStr) Validate(arguments FunctionArgExpressionList) error 
 	if len(arguments) < 2 || len(arguments) > 4 {
 		return fmt.Errorf("the SUBSTR() function expects two or three arguments")
 	}
-	if arguments[0].Star == true || arguments[1].Star == true || (len(arguments) == 3 && arguments[2].Star == true) {
-		return fmt.Errorf("the SUBSTR() function does not support *")
-	}
-	return nil
+
+	return ValidateNoStars(this, arguments)
 }
