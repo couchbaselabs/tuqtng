@@ -10,7 +10,7 @@
 package xpipeline
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
@@ -25,6 +25,7 @@ type Fetch struct {
 	warnChannel query.ErrorChannel
 	bucket      catalog.Bucket
 	batch       []query.Item
+	ok          bool
 }
 
 func NewFetch(bucket catalog.Bucket) *Fetch {
@@ -57,19 +58,19 @@ func (this *Fetch) Run() {
 	var warn query.Error
 	var err query.Error
 	sourceItemChannel, sourceWarnChannel, sourceErrorChannel := this.Source.GetChannels()
-	ok := true
-	for ok {
+	this.ok = true
+	for this.ok {
 		select {
-		case item, ok = <-sourceItemChannel:
-			if ok {
+		case item, this.ok = <-sourceItemChannel:
+			if this.ok {
 				this.processItem(item)
 			}
-		case warn, ok = <-sourceWarnChannel:
+		case warn, this.ok = <-sourceWarnChannel:
 			// propogate the warning
 			if warn != nil {
 				this.warnChannel <- warn
 			}
-		case err, ok = <-sourceErrorChannel:
+		case err, this.ok = <-sourceErrorChannel:
 			// propogate the error and return
 			if err != nil {
 				this.errChannel <- err
@@ -106,7 +107,8 @@ func (this *Fetch) flushBatch() {
 		meta := v.GetMeta()
 		id, ok := meta["id"]
 		if !ok {
-			log.Printf("asked to fetch an item without an id")
+			this.errChannel <- query.NewError(nil, "asked to fetch an item without a key")
+			this.ok = false
 		} else {
 			ids = append(ids, id.(string)) //FIXME assert ids always strings
 		}
@@ -116,8 +118,8 @@ func (this *Fetch) flushBatch() {
 
 	bulkResponse, err := this.bucket.BulkFetch(ids)
 	if err != nil {
-		// FIXME proper error handling
-		log.Printf("error getting bulk response %v", err)
+		this.errChannel <- query.NewError(err, "error getting bulk response")
+		this.ok = false
 		return
 	}
 
@@ -125,7 +127,8 @@ func (this *Fetch) flushBatch() {
 	for _, v := range ids {
 		item, ok := bulkResponse[v]
 		if !ok {
-			log.Printf("missing item in the bulk response %v", v)
+			this.errChannel <- query.NewError(nil, fmt.Sprintf("missing value bulk response for key %s", v))
+			this.ok = false
 		} else {
 			this.itemChannel <- item
 		}
