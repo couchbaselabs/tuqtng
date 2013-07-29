@@ -15,7 +15,7 @@ import ()
 type Statement interface {
 	IsDistinct() bool
 	GetResultExpressionList() ResultExpressionList
-	GetFroms() []*From
+	GetFrom() *From
 	GetWhere() Expression
 	GetOrderBy() SortExpressionList
 	GetOffset() int
@@ -29,7 +29,7 @@ type Statement interface {
 type SelectStatement struct {
 	Distinct    bool                 `json:"distinct"`
 	Select      ResultExpressionList `json:"select"`
-	Froms       []*From              `json:"froms"`
+	From        *From                `json:"from"`
 	Where       Expression           `json:"where"`
 	OrderBy     SortExpressionList   `json:"orderby"`
 	Limit       int                  `json:"limit"`
@@ -44,15 +44,14 @@ func NewSelectStatement() *SelectStatement {
 }
 
 func (this *SelectStatement) GetFromAliases() []string {
-	rv := make([]string, 0)
-	for _, f := range this.Froms {
-		rv = append(rv, f.As)
+	if this.From != nil {
+		return this.From.GetAliases()
 	}
-	return rv
+	return []string{}
 }
 
-func (this *SelectStatement) GetFroms() []*From {
-	return this.Froms
+func (this *SelectStatement) GetFrom() *From {
+	return this.From
 }
 
 func (this *SelectStatement) GetWhere() Expression {
@@ -98,11 +97,9 @@ func (this *SelectStatement) VerifySemantics() error {
 	this.GetResultExpressionList().AssignDefaultNames()
 
 	// fix up all the froms (FIXME need to refactor this into FROM/OVER clenaup)
-	if this.Froms != nil && len(this.Froms) > 0 {
-		this.Froms[0].ConvertToBucketFrom()
-		for _, from := range this.Froms {
-			from.GenerateAlias()
-		}
+	if this.From != nil {
+		this.From.ConvertToBucketFrom()
+		this.From.GenerateAlias()
 	}
 
 	// gather the list of aliases

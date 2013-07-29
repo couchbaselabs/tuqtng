@@ -17,6 +17,20 @@ type From struct {
 	Bucket     string
 	Projection Expression
 	As         string
+	Over       *From
+}
+
+func (this *From) GetAliases() []string {
+	// important, keep the order correct
+	// top-down, first alias is bucket
+	rv := []string{this.As}
+	if this.Over != nil {
+		otherAliases := this.Over.GetAliases()
+		for _, alias := range otherAliases {
+			rv = append(rv, alias)
+		}
+	}
+	return rv
 }
 
 func (this *From) GenerateAlias() {
@@ -44,6 +58,10 @@ func (this *From) GenerateAlias() {
 			log.Printf("unexpected type %T", proj)
 		}
 		// in all other cases there is no alias generated
+	}
+	// if there is an over, reccurse this call
+	if this.Over != nil {
+		this.Over.GenerateAlias()
 	}
 }
 

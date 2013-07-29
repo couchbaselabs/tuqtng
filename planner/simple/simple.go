@@ -42,16 +42,15 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel, e
 	defer close(pc)
 	defer close(ec)
 
-	froms := stmt.GetFroms()
+	from := stmt.GetFrom()
 
 	var lastStep plan.PlanElement
 
-	if froms == nil {
+	if from == nil {
 		// simple expression evaluation
 		lastStep = plan.NewExpressionEvaluator()
 
 	} else {
-		from := froms[0]
 
 		// see if the bucket exists
 		if this.pool != nil {
@@ -83,11 +82,11 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel, e
 							lastStep = plan.NewProjector(lastStep, ast.ResultExpressionList{ast.NewResultExpressionWithAlias(from.Projection, from.As)}, false)
 						}
 					}
-					if len(froms) > 1 {
+					nextFrom := from.Over
+					for nextFrom != nil {
 						// add document joins
-						for _, from := range froms[1:] {
-							lastStep = plan.NewDocumentJoin(lastStep, from.Projection, from.As)
-						}
+						lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+						nextFrom = nextFrom.Over
 					}
 					foundUsableScanner = true
 					break

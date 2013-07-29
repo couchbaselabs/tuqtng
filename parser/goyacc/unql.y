@@ -194,10 +194,10 @@ select_from:
 |
 FROM data_source_over {
 	logDebugGrammar("SELECT FROM - DATASOURCE")
-	froms := parsingStack.Pop().([]*ast.From)
+	from := parsingStack.Pop().(*ast.From)
 	switch parsingStatement := parsingStatement.(type) {
 	case *ast.SelectStatement:
-		parsingStatement.Froms = froms
+		parsingStatement.From = from
 	default:
 		logDebugGrammar("This statement does not support WHERE")
 	}
@@ -206,10 +206,10 @@ FROM data_source_over {
 select_from_required:
 FROM data_source_over {
 	logDebugGrammar("SELECT FROM - DATASOURCE")
-	froms := parsingStack.Pop().([]*ast.From)
+	from := parsingStack.Pop().(*ast.From)
 	switch parsingStatement := parsingStatement.(type) {
 	case *ast.SelectStatement:
-		parsingStatement.Froms = froms
+		parsingStatement.From = from
 	default:
 		logDebugGrammar("This statement does not support WHERE")
 	}
@@ -218,21 +218,14 @@ FROM data_source_over {
 data_source_over:
 data_source {
 	logDebugGrammar("FROM DATASOURCE WITHOUT OVER")
-	from_list := make([]*ast.From, 0)
-	from_list = append(from_list, parsingStack.Pop().(*ast.From))
-	parsingStack.Push(from_list)
 }
 |
 data_source OVER data_source_over {
 	logDebugGrammar("FROM DATASOURCE WITH OVER")
-	rest := parsingStack.Pop().([]*ast.From)
-	last := parsingStack.Pop()
-	new_list := make([]*ast.From, 0, len(rest) + 1)
-	new_list = append(new_list, last.(*ast.From))
-	for _, v := range rest {
-		new_list = append(new_list, v)
-	}
-	parsingStack.Push(new_list)
+	rest := parsingStack.Pop().(*ast.From)
+	last := parsingStack.Pop().(*ast.From)
+	last.Over = rest
+	parsingStack.Push(last)
 }
 ;
 
