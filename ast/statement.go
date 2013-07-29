@@ -17,7 +17,7 @@ type Statement interface {
 	GetResultExpressionList() ResultExpressionList
 	GetFroms() []*From
 	GetWhere() Expression
-	GetOrderBy() []*SortExpression
+	GetOrderBy() SortExpressionList
 	GetOffset() int
 	GetLimit() int
 	SetExplainOnly(bool)
@@ -31,7 +31,7 @@ type SelectStatement struct {
 	Select      ResultExpressionList `json:"select"`
 	Froms       []*From              `json:"froms"`
 	Where       Expression           `json:"where"`
-	OrderBy     []*SortExpression    `json:"orderby"`
+	OrderBy     SortExpressionList   `json:"orderby"`
 	Limit       int                  `json:"limit"`
 	Offset      int                  `json:"offset"`
 	ExplainOnly bool                 `json:"explain"`
@@ -59,7 +59,7 @@ func (this *SelectStatement) GetWhere() Expression {
 	return this.Where
 }
 
-func (this *SelectStatement) GetOrderBy() []*SortExpression {
+func (this *SelectStatement) GetOrderBy() SortExpressionList {
 	return this.OrderBy
 }
 
@@ -127,17 +127,7 @@ func (this *SelectStatement) VerifySemantics() error {
 		}
 	}
 	// verify the order by
-	for _, orderExpr := range this.OrderBy {
-		if orderExpr.Expr != nil {
-			neworderexpr, err := orderExpr.Expr.VerifyFormalNotation(aliases, defaultAlias)
-			if err != nil {
-				return err
-			}
-			if neworderexpr != nil {
-				orderExpr.Expr = neworderexpr
-			}
-		}
-	}
+	this.OrderBy.VerifyFormalNotation(aliases, defaultAlias)
 
 	// verify the projection
 	err = this.Select.Validate()
@@ -154,14 +144,7 @@ func (this *SelectStatement) VerifySemantics() error {
 	}
 
 	// verify the order by
-	for _, orderExpr := range this.OrderBy {
-		if orderExpr.Expr != nil {
-			err := orderExpr.Expr.Validate()
-			if err != nil {
-				return err
-			}
-		}
-	}
+	this.OrderBy.Validate()
 
 	return nil
 }

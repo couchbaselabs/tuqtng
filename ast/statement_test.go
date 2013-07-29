@@ -39,7 +39,7 @@ func TestSelectStatement(t *testing.T) {
 	if !reflect.DeepEqual(stmt.GetWhere(), NewLiteralBool(true)) {
 		t.Errorf("Expected true")
 	}
-	if !reflect.DeepEqual(stmt.GetOrderBy(), []*SortExpression{NewSortExpression(NewProperty("foo"), true)}) {
+	if !reflect.DeepEqual(stmt.GetOrderBy(), SortExpressionList{NewSortExpression(NewProperty("foo"), true)}) {
 		t.Errorf("Expected order by foo ascending")
 	}
 	if stmt.GetLimit() != 10 {

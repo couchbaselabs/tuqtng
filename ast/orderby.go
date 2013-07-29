@@ -20,3 +20,32 @@ func NewSortExpression(expr Expression, asc bool) *SortExpression {
 		Ascending: asc,
 	}
 }
+
+type SortExpressionList []*SortExpression
+
+func (this SortExpressionList) Validate() error {
+	for _, orderExpr := range this {
+		if orderExpr.Expr != nil {
+			err := orderExpr.Expr.Validate()
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func (this SortExpressionList) VerifyFormalNotation(aliases []string, defaultAlias string) error {
+	for _, orderExpr := range this {
+		if orderExpr.Expr != nil {
+			neworderexpr, err := orderExpr.Expr.VerifyFormalNotation(aliases, defaultAlias)
+			if err != nil {
+				return err
+			}
+			if neworderexpr != nil {
+				orderExpr.Expr = neworderexpr
+			}
+		}
+	}
+	return nil
+}
