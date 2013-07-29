@@ -45,6 +45,8 @@ func (e *err) Error() string {
 	switch {
 	default:
 		return "Unspecified error."
+	case e.internalMsg != "" && e.cause != nil:
+		return e.internalMsg + " - cause: " + e.cause.Error()
 	case e.internalMsg != "":
 		return e.internalMsg
 	case e.cause != nil:

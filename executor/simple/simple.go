@@ -10,6 +10,8 @@
 package simple
 
 import (
+	"log"
+
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
@@ -61,6 +63,7 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 		case err, ok = <-sourceErrorChannel:
 			// propogate the error and return
 			if err != nil {
+				log.Printf("Sending client error: %v", err)
 				q.Response.SendError(err)
 				return
 			}

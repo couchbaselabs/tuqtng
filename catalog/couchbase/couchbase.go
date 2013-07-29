@@ -153,17 +153,26 @@ func (b *bucket) BulkFetch(ids []string) (map[string]query.Item, query.Error) {
 	bulkResponse := b.cbbucket.GetBulk(ids)
 	for k, v := range bulkResponse {
 		var doc query.Value
+		var meta map[string]query.Value
 		err := json.Unmarshal(v.Body, &doc)
 		if err != nil {
-			return nil, query.NewError(err, "")
-		}
-
-		flags := (v.Extras[0]&0xff)<<24 | (v.Extras[1]&0xff)<<16 | (v.Extras[2]&0xff)<<8 | (v.Extras[3] & 0xff)
-		meta := map[string]query.Value{
-			"id":    k,
-			"cas":   v.Cas,
-			"type":  "json",
-			"flags": float64(flags),
+			// not an error, this is simply not json
+			doc = map[string]interface{}{}
+			flags := (v.Extras[0]&0xff)<<24 | (v.Extras[1]&0xff)<<16 | (v.Extras[2]&0xff)<<8 | (v.Extras[3] & 0xff)
+			meta = map[string]query.Value{
+				"id":    k,
+				"cas":   v.Cas,
+				"type":  "base64",
+				"flags": float64(flags),
+			}
+		} else {
+			flags := (v.Extras[0]&0xff)<<24 | (v.Extras[1]&0xff)<<16 | (v.Extras[2]&0xff)<<8 | (v.Extras[3] & 0xff)
+			meta = map[string]query.Value{
+				"id":    k,
+				"cas":   v.Cas,
+				"type":  "json",
+				"flags": float64(flags),
+			}
 		}
 
 		item := query.NewParsedItem(doc, meta)
@@ -252,9 +261,11 @@ func (vs *viewScanner) scanAll(ch query.ItemChannel, warnch, errch query.ErrorCh
 	for ok {
 		select {
 		case viewRow, ok = <-viewRowChannel:
-			doc := map[string]query.Value{}
-			meta := map[string]query.Value{"id": viewRow.ID}
-			ch <- query.NewParsedItem(doc, meta)
+			if ok {
+				doc := map[string]query.Value{}
+				meta := map[string]query.Value{"id": viewRow.ID}
+				ch <- query.NewParsedItem(doc, meta)
+			}
 		case err, ok = <-viewErrChannel:
 			if err != nil {
 				errch <- err

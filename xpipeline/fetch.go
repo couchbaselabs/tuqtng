@@ -127,7 +127,7 @@ func (this *Fetch) flushBatch() {
 	for _, v := range ids {
 		item, ok := bulkResponse[v]
 		if !ok {
-			this.errChannel <- query.NewError(nil, fmt.Sprintf("missing value bulk response for key %s", v))
+			this.errChannel <- query.NewError(nil, fmt.Sprintf("missing value bulk response for key `%s`", v))
 			this.ok = false
 		} else {
 			this.itemChannel <- item
