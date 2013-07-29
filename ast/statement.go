@@ -87,7 +87,7 @@ func (this *SelectStatement) IsExplainOnly() bool {
 }
 
 func (this *SelectStatement) VerifySemantics() error {
-	//check for duplicate aliases
+	//check for duplicate aliases in the projection
 	err := this.GetResultExpressionList().CheckForDuplicateAliases()
 	if err != nil {
 		return err
@@ -102,6 +102,46 @@ func (this *SelectStatement) VerifySemantics() error {
 		this.From.GenerateAlias()
 	}
 
+	// verify formal notations
+	err = this.verifyFormalNotation()
+	if err != nil {
+		return err
+	}
+
+	// validate the expressions
+	err = this.validate()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (this *SelectStatement) validate() error {
+	// validate the projection
+	err := this.Select.Validate()
+	if err != nil {
+		return err
+	}
+
+	// validate the where
+	if this.Where != nil {
+		err = this.Where.Validate()
+		if err != nil {
+			return err
+		}
+	}
+
+	// validate the order by
+	err = this.OrderBy.Validate()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (this *SelectStatement) verifyFormalNotation() error {
 	// gather the list of aliases
 	aliases := this.GetFromAliases()
 	defaultAlias := ""
@@ -109,11 +149,12 @@ func (this *SelectStatement) VerifySemantics() error {
 		defaultAlias = aliases[0]
 	}
 
-	// verify formal notations
-	err = this.Select.VerifyFormalNotation(aliases, defaultAlias)
+	// verify the projection
+	err := this.Select.VerifyFormalNotation(aliases, defaultAlias)
 	if err != nil {
 		return err
 	}
+	// verify the where
 	if this.Where != nil {
 		newwhere, err := this.Where.VerifyFormalNotation(aliases, defaultAlias)
 		if err != nil {
@@ -124,24 +165,10 @@ func (this *SelectStatement) VerifySemantics() error {
 		}
 	}
 	// verify the order by
-	this.OrderBy.VerifyFormalNotation(aliases, defaultAlias)
-
-	// verify the projection
-	err = this.Select.Validate()
+	err = this.OrderBy.VerifyFormalNotation(aliases, defaultAlias)
 	if err != nil {
 		return err
 	}
-
-	// verify the where
-	if this.Where != nil {
-		err = this.Where.Validate()
-		if err != nil {
-			return err
-		}
-	}
-
-	// verify the order by
-	this.OrderBy.Validate()
 
 	return nil
 }
