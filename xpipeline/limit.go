@@ -60,7 +60,9 @@ func (this *Limit) Run() {
 				switch obj := obj.(type) {
 				case query.Error:
 					this.supportChannel <- obj
-					return
+					if obj.IsFatal() {
+						return
+					}
 				default:
 					this.supportChannel <- obj
 				}

@@ -19,6 +19,7 @@ import (
 	"github.com/couchbaselabs/tuqtng/optimizer"
 	"github.com/couchbaselabs/tuqtng/parser"
 	"github.com/couchbaselabs/tuqtng/planner"
+	"github.com/couchbaselabs/tuqtng/query"
 
 	// implementations
 	explainerExecutor "github.com/couchbaselabs/tuqtng/executor/explainer"
@@ -52,22 +53,22 @@ func NewStaticPipeline(pool catalog.Pool) *StaticPipeline {
 // that enter the pipeline at different places
 // ie, an UNQLASTQueryRequest could bypass the parser
 // or an UNQLPlanRequest could bypass parser, planner, and optimizer
-func (this *StaticPipeline) DispatchQuery(query network.Query) {
-	request := query.Request
-	response := query.Response
+func (this *StaticPipeline) DispatchQuery(q network.Query) {
+	request := q.Request
+	response := q.Response
 
 	switch request := request.(type) {
 	case network.UNQLStringQueryRequest:
 		ast, err := this.parser.Parse(request.QueryString)
 		if err != nil {
-			response.SendError(err)
+			response.SendError(query.NewParseError(err, "Parse Error"))
 			return
 		}
 
 		// perform semantic verification
 		err = ast.VerifySemantics()
 		if err != nil {
-			response.SendError(err)
+			response.SendError(query.NewSemanticError(err, "Semantic Error"))
 			return
 		}
 
@@ -75,15 +76,15 @@ func (this *StaticPipeline) DispatchQuery(query network.Query) {
 
 		optimalPlan, err := this.optimizer.Optimize(planChannel, planErrChannel)
 		if err != nil {
-			response.SendError(err)
+			response.SendError(query.NewError(err, ""))
 			return
 		}
 
 		if ast.IsExplainOnly() {
-			this.explainer.Execute(optimalPlan, query)
+			this.explainer.Execute(optimalPlan, q)
 
 		} else {
-			this.executor.Execute(optimalPlan, query)
+			this.executor.Execute(optimalPlan, q)
 		}
 
 	default:

@@ -16,6 +16,7 @@ processing.
 package query
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
@@ -36,39 +37,40 @@ type Error interface {
 	TranslationKey() string
 	Cause() error
 	Level() int
+	IsFatal() bool
 }
 
 type ErrorChannel chan Error
 
 func NewError(e error, internalMsg string) Error {
-	return &err{level: EXCEPTION, cause: e, internalMsg: internalMsg}
+	return &err{level: EXCEPTION, ICode: 5000, IKey: "Internal Error", ICause: e, InternalMsg: internalMsg}
 }
 
-func NewWarning(e error, internalMsg string) Error {
-	return &err{level: WARNING, cause: e, internalMsg: internalMsg}
+func NewWarning(internalMsg string) Error {
+	return &err{level: WARNING, InternalMsg: internalMsg}
 }
 
-func NewNotice(e error, internalMsg string) Error {
-	return &err{level: NOTICE, cause: e, internalMsg: internalMsg}
+func NewNotice(internalMsg string) Error {
+	return &err{level: NOTICE, InternalMsg: internalMsg}
 }
 
-func NewInfo(e error, internalMsg string) Error {
-	return &err{level: INFO, cause: e, internalMsg: internalMsg}
+func NewInfo(internalMsg string) Error {
+	return &err{level: INFO, InternalMsg: internalMsg}
 }
 
-func NewLog(e error, internalMsg string) Error {
-	return &err{level: LOG, cause: e, internalMsg: internalMsg}
+func NewLog(internalMsg string) Error {
+	return &err{level: LOG, InternalMsg: internalMsg}
 }
 
-func NewDebug(e error, internalMsg string) Error {
-	return &err{level: DEBUG, cause: e, internalMsg: internalMsg}
+func NewDebug(internalMsg string) Error {
+	return &err{level: DEBUG, InternalMsg: internalMsg}
 }
 
 type err struct {
-	code        int32
-	key         string
-	cause       error
-	internalMsg string
+	ICode       int32
+	IKey        string
+	ICause      error
+	InternalMsg string
 	level       int
 }
 
@@ -76,35 +78,70 @@ func (e *err) Error() string {
 	switch {
 	default:
 		return "Unspecified error."
-	case e.internalMsg != "" && e.cause != nil:
-		return e.internalMsg + " - cause: " + e.cause.Error()
-	case e.internalMsg != "":
-		return e.internalMsg
-	case e.cause != nil:
-		return e.cause.Error()
+	case e.InternalMsg != "" && e.ICause != nil:
+		return e.InternalMsg + " - cause: " + e.ICause.Error()
+	case e.InternalMsg != "":
+		return e.InternalMsg
+	case e.ICause != nil:
+		return e.ICause.Error()
 	}
+}
+
+func (e *err) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"code":    e.ICode,
+		"key":     e.IKey,
+		"message": e.InternalMsg,
+	}
+	if e.ICause != nil {
+		m["cause"] = e.ICause.Error()
+	}
+	return json.Marshal(m)
 }
 
 func (e *err) Level() int {
 	return e.level
 }
 
+func (e *err) IsFatal() bool {
+	if e.level == EXCEPTION {
+		return true
+	}
+	return false
+}
+
 func (e *err) Code() int32 {
-	return e.code
+	return e.ICode
 }
 
 func (e *err) TranslationKey() string {
-	return e.key
+	return e.IKey
 }
 
 func (e *err) Cause() error {
-	return e.cause
+	return e.ICause
+}
+
+func NewParseError(e error, msg string) Error {
+	return &err{level: EXCEPTION, ICode: 4100, IKey: "parse_error", ICause: e, InternalMsg: msg}
+}
+
+func NewSemanticError(e error, msg string) Error {
+	return &err{level: EXCEPTION, ICode: 4200, IKey: "semantic_error", ICause: e, InternalMsg: msg}
 }
 
 func NewBucketDoesNotExist(bucket string) Error {
-	return &err{level: EXCEPTION, internalMsg: fmt.Sprintf("Bucket %s does not exist", bucket)}
+	return &err{level: EXCEPTION, ICode: 4040, IKey: "bucket_not_found", InternalMsg: fmt.Sprintf("Bucket %s does not exist", bucket)}
 }
 
 func NewPoolDoesNotExist(pool string) Error {
-	return &err{level: EXCEPTION, internalMsg: fmt.Sprintf("Pool %s does not exist", pool)}
+	return &err{level: EXCEPTION, ICode: 4041, IKey: "pool_not_found", InternalMsg: fmt.Sprintf("Pool %s does not exist", pool)}
+}
+
+func NewTotalRowsInfo(rows int) Error {
+	return &err{level: INFO, ICode: 100, IKey: "total_rows", InternalMsg: fmt.Sprintf("%d", rows)}
+}
+
+func NewTotalElapsedTimeInfo(time string) Error {
+	return &err{level: INFO, ICode: 101, IKey: "total_elapsed_time", InternalMsg: fmt.Sprintf("%s", time)}
 }

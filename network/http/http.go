@@ -26,18 +26,29 @@ import (
 type HttpResponse struct {
 	w        http.ResponseWriter
 	results  query.ValueChannel
-	warnings []error
-	err      error
+	warnings []query.Error
+	info     []query.Error
+	err      query.Error
 }
 
-func (this *HttpResponse) SendError(err error) {
-	this.err = err
-	showError(this.w, fmt.Sprintf(`{"error":"%v"}`, err), 500)
-	close(this.results)
-}
+func (this *HttpResponse) SendError(err query.Error) {
+	switch err.Level() {
+	case query.EXCEPTION:
+		this.err = err
+		errBytes, err := json.MarshalIndent(this.err, "        ", "    ")
+		if err != nil {
+			log.Printf("could not serialize error to JSON")
+		}
+		showError(this.w, fmt.Sprintf("{\n    \"error\":\n        %v\n}", string(errBytes)), 500)
+	case query.WARNING:
+		this.warnings = append(this.warnings, err)
+	case query.INFO:
+		this.info = append(this.info, err)
+	}
 
-func (this *HttpResponse) SendWarning(warning error) {
-	this.warnings = append(this.warnings, warning)
+	if err.IsFatal() {
+		close(this.results)
+	}
 }
 
 func (this *HttpResponse) SendResult(val query.Value) {
@@ -101,12 +112,12 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := HttpResponse{w: w, results: make(query.ValueChannel)}
-	query := network.Query{
+	q := network.Query{
 		Request:  network.UNQLStringQueryRequest{QueryString: queryString},
 		Response: &response,
 	}
 
-	this.queryChannel <- query
+	this.queryChannel <- q
 
 	count := 0
 	for val := range response.results {
@@ -132,14 +143,33 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "    \"resultset\": [")
 		}
 		fmt.Fprint(w, "\n    ]")
-		fmt.Fprintf(w, ",\n    \"total_rows\": %d", count)
-		elapsed_duration := time.Since(startTime)
-		fmt.Fprintf(w, ",\n    \"total_elapsed_time\": \"%s\"", elapsed_duration)
 		if len(response.warnings) > 0 {
 			fmt.Fprintf(w, ",\n    \"warnings\": [")
 			for i, warning := range response.warnings {
-				fmt.Fprintf(w, "\n        \"%v\"", warning)
+				warnBytes, err := json.MarshalIndent(warning, "        ", "    ")
+				if err != nil {
+					log.Printf("could not serialize warn to json")
+				}
+				fmt.Fprintf(w, "\n        %v", string(warnBytes))
 				if i < len(response.warnings)-1 {
+					fmt.Fprintf(w, ",")
+				}
+			}
+			fmt.Fprintf(w, "\n    ]")
+		}
+		// forcibly generate some infos
+		response.SendError(query.NewTotalRowsInfo(count))
+		elapsed_duration := time.Since(startTime)
+		response.SendError(query.NewTotalElapsedTimeInfo(elapsed_duration.String()))
+		if len(response.info) > 0 {
+			fmt.Fprintf(w, ",\n    \"info\": [")
+			for i, info := range response.info {
+				infoBytes, err := json.MarshalIndent(info, "        ", "    ")
+				if err != nil {
+					log.Printf("could not serialize info to json")
+				}
+				fmt.Fprintf(w, "\n        %v", string(infoBytes))
+				if i < len(response.info)-1 {
 					fmt.Fprintf(w, ",")
 				}
 			}

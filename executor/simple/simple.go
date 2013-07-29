@@ -37,7 +37,7 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 	// first make the plan excutable
 	executablePipeline, berr := this.xpipelinebuilder.Build(optimalPlan)
 	if berr != nil {
-		q.Response.SendError(berr)
+		q.Response.SendError(query.NewError(berr, ""))
 	}
 
 	root := executablePipeline.Root
@@ -58,13 +58,10 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 			if ok {
 				switch obj := obj.(type) {
 				case query.Error:
-					switch obj.Level() {
-					case query.EXCEPTION:
-						log.Printf("Sending client error: %v", obj)
-						q.Response.SendError(obj)
+					log.Printf("Sending client error: %v", obj)
+					q.Response.SendError(obj)
+					if obj.IsFatal() {
 						return
-					default:
-						// handle other levels
 					}
 				default:
 					log.Printf("Unexpected object tyep on the support channel %T", obj)
