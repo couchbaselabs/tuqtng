@@ -58,13 +58,14 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 			if ok {
 				switch obj := obj.(type) {
 				case query.Error:
-					log.Printf("Sending client error: %v", obj)
-					q.Response.SendError(obj)
-					return
-				case query.Warning:
-					// handle the warning
-				case query.Info:
-					// handle the info
+					switch obj.Level() {
+					case query.EXCEPTION:
+						log.Printf("Sending client error: %v", obj)
+						q.Response.SendError(obj)
+						return
+					default:
+						// handle other levels
+					}
 				default:
 					log.Printf("Unexpected object tyep on the support channel %T", obj)
 				}

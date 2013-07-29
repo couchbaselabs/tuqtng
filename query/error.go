@@ -19,6 +19,15 @@ import (
 	"fmt"
 )
 
+const (
+	EXCEPTION = iota
+	WARNING
+	NOTICE
+	INFO
+	LOG
+	DEBUG
+)
+
 // Error will eventually include code, message key, and internal error
 // object (cause) and message
 type Error interface {
@@ -26,12 +35,33 @@ type Error interface {
 	Code() int32
 	TranslationKey() string
 	Cause() error
+	Level() int
 }
 
 type ErrorChannel chan Error
 
 func NewError(e error, internalMsg string) Error {
-	return &err{cause: e, internalMsg: internalMsg}
+	return &err{level: EXCEPTION, cause: e, internalMsg: internalMsg}
+}
+
+func NewWarning(e error, internalMsg string) Error {
+	return &err{level: WARNING, cause: e, internalMsg: internalMsg}
+}
+
+func NewNotice(e error, internalMsg string) Error {
+	return &err{level: NOTICE, cause: e, internalMsg: internalMsg}
+}
+
+func NewInfo(e error, internalMsg string) Error {
+	return &err{level: INFO, cause: e, internalMsg: internalMsg}
+}
+
+func NewLog(e error, internalMsg string) Error {
+	return &err{level: LOG, cause: e, internalMsg: internalMsg}
+}
+
+func NewDebug(e error, internalMsg string) Error {
+	return &err{level: DEBUG, cause: e, internalMsg: internalMsg}
 }
 
 type err struct {
@@ -39,6 +69,7 @@ type err struct {
 	key         string
 	cause       error
 	internalMsg string
+	level       int
 }
 
 func (e *err) Error() string {
@@ -54,6 +85,10 @@ func (e *err) Error() string {
 	}
 }
 
+func (e *err) Level() int {
+	return e.level
+}
+
 func (e *err) Code() int32 {
 	return e.code
 }
@@ -67,9 +102,9 @@ func (e *err) Cause() error {
 }
 
 func NewBucketDoesNotExist(bucket string) Error {
-	return &err{internalMsg: fmt.Sprintf("Bucket %s does not exist", bucket)}
+	return &err{level: EXCEPTION, internalMsg: fmt.Sprintf("Bucket %s does not exist", bucket)}
 }
 
 func NewPoolDoesNotExist(pool string) Error {
-	return &err{internalMsg: fmt.Sprintf("Pool %s does not exist", pool)}
+	return &err{level: EXCEPTION, internalMsg: fmt.Sprintf("Pool %s does not exist", pool)}
 }
