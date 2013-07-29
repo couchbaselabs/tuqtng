@@ -8,3 +8,9 @@ In the example on the right, the 'Contact' object has an embedded 'Children' arr
 always refers to an attribute in the parent document or an alias. Attributes from child documents must be explicitly aliased using the **AS** clause. Here, the child's name is aliased to 'cname'.
 
 Try removing the 'AS cname' clause and see what happens.
+
+<pre id="example" class="hidden">
+SELECT children[0].name AS cname
+	FROM contacts
+       WHERE name='dave'
+</pre>

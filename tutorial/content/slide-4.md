@@ -9,3 +9,8 @@ In general, when the expression involves only the '.' and the '[]' operators, yo
 Another difference is that you could omit the 'AS cname' modifier in the SELECT clause. If you did, an auto generated name, '$1' would be used for the attribute. However, when an expression appears in the FROM clause, you must always give it an alias.
 
 Try removing 'AS child' modifier.
+
+<pre id="example" class="hidden">
+SELECT child.name AS cname
+	FROM contacts.children[0] AS child
+</pre>

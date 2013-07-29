@@ -1,6 +1,6 @@
 $(document).ready(init);
 
-var max = undefined;
+var max = 0;
 
 function init() {
     var ie = ace.edit('iedit');
@@ -23,7 +23,8 @@ function init() {
     re.setDisplayIndentGuides(true);
     re.setShowFoldWidgets(true);
 
-    max = $('#max').val();
+    if ($('max').length > 0) max = $('#max').val();
+    if (max < 1) max = guessmax();
 
     $('#run').click(run);
     $('#prev').click(prev).addClass('enabled');
@@ -40,24 +41,22 @@ function load(n) {
     updateNav(n);
 
     var slide = slideUrl(n)
-	var query = queryUrl(n)
 	
     $.get(slide, function(data, status) {
         if (status != 'success') return;
         $('#content').html(data);
-    });
 
-	$.get(query, function(data, status) {
-		if (status != 'success') return;
-	    var ie = ace.edit('iedit');
-	    ie.setValue(data);
-	    ie.navigateFileEnd();
-	
-	    var re = ace.edit('redit');
-	    re.setValue("  ");
-	    re.navigateFileEnd();
+        var sample = $('#example').html();
+        sample += '\n';
+        var ie = ace.edit('iedit');
+        ie.setValue(sample);
+        ie.navigateFileEnd();
 
-	    ie.focus();
+        var re = ace.edit('redit');
+        re.setValue("  ");
+        re.navigateFileEnd();
+
+        ie.focus();
     });
 }
 
@@ -103,10 +102,6 @@ function slideUrl(n) {
     return 'slide-' + n + '.html';
 }
 
-function queryUrl(n) {
-    return 'query-' + n + '.unql';
-}
-
 function updateNav(n) {
     if (n == 1) $('#prev').removeClass('enabled').addClass('disabled');
     if (n == 2) $('#prev').removeClass('disabled').addClass('enabled');
@@ -139,4 +134,21 @@ function prev() {
 function change() {
     var n = getLocation();
     load (n);
+}
+
+function guessmax() {
+    var http = new XMLHttpRequest();
+    var n = 1;
+    while (true) {
+        try {
+            http.open('HEAD', slideUrl(n), false);
+            http.send();
+            if (http.status >= 400) break;
+            n = n + 1;
+        }
+        catch (e) {
+            break;
+        }
+    }
+    return n - 1;
 }

@@ -17,3 +17,7 @@ On the right hand side, you will see a query editor. A few buckets have been pop
 * non-json
 
 Go ahead, run your first query now!
+
+<pre id="example" class="hidden">
+SELECT 'Hello World' AS Greeting
+</pre>

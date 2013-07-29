@@ -150,6 +150,12 @@
 	height: 0;
 }
 
+.hidden {
+	display: none;
+	width: 0;
+	height: 0;
+}
+
 .enabled a {
   background: #06c;
 }

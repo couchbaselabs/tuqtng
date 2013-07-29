@@ -13,3 +13,9 @@ Only SELECT clause is required. The wildcard * selects all parts of the document
 Remember, there **IS NO SCHEMA** in Couchbase. You don't lose any flexibility you love about Couchbase.
 
 If you change the * to an element like 'children', you will see the query return a collection of appropriate fragments of each document.
+
+<pre id="example" class="hidden">
+SELECT *
+  FROM contacts
+    WHERE name = 'ian'
+</pre>
