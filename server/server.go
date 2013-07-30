@@ -31,7 +31,8 @@ func Site(s string) (catalog.Site, error) {
 	return couchbase.NewSite(s)
 }
 
-func Server(couchbaseSite, poolName string, queryChannel network.QueryChannel) error {
+func Server(version, couchbaseSite, poolName string,
+	queryChannel network.QueryChannel) error {
 	site, err := Site(couchbaseSite)
 	if err != nil {
 		return fmt.Errorf("Unable to access site %s, err: %v", couchbaseSite, err)
@@ -49,6 +50,7 @@ func Server(couchbaseSite, poolName string, queryChannel network.QueryChannel) e
 	queryPipeline := static.NewStaticPipeline(pool)
 
 	log.Printf("tuqtng started...")
+	log.Printf("version: %s", version)
 	log.Printf("site: %s", couchbaseSite)
 
 	// dispatch each query that comes in

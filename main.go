@@ -22,6 +22,8 @@ import (
 	"github.com/couchbaselabs/tuqtng/server"
 )
 
+var VERSION = "0.0.0" // Build-time overriddable.
+
 var addr = flag.String("addr", ":8093", "HTTP listen address")
 var couchbaseSite = flag.String("couchbase", "", "Couchbase Cluster Address (http://...) or dir:PATH")
 var poolName = flag.String("pool", "default", "Pool")
@@ -38,7 +40,7 @@ func main() {
 	httpEndpoint := http.NewHttpEndpoint(*addr)
 	httpEndpoint.SendQueriesTo(queryChannel)
 
-	err := server.Server(*couchbaseSite, *poolName, queryChannel)
+	err := server.Server(VERSION, *couchbaseSite, *poolName, queryChannel)
 	if err != nil {
 		log.Fatalf("Unable to run server, err: %v", err)
 	}

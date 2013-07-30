@@ -59,7 +59,7 @@ func run(qc network.QueryChannel, q string) ([]query.Value, []query.Error, query
 
 func start() network.QueryChannel {
 	qc := make(network.QueryChannel)
-	go server.Server("dir:.", "json", qc)
+	go server.Server("TEST", "dir:.", "json", qc)
 	return qc
 }
 
