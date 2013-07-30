@@ -94,6 +94,7 @@ func (this *ProjectInline) processItem(item query.Item) {
 				default:
 					this.supportChannel <- query.NewError(err, "unexpected error projecting dot star expression")
 					this.ok = false
+					return
 				}
 			}
 		} else {
@@ -115,6 +116,7 @@ func (this *ProjectInline) processItem(item query.Item) {
 			default:
 				this.supportChannel <- query.NewError(err, "unexpected error projecting expression")
 				this.ok = false
+				return
 			}
 		}
 	}
