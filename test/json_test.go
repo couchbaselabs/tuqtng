@@ -18,49 +18,10 @@ import (
 	"testing"
 
 	"github.com/couchbaselabs/tuqtng/network"
-	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/couchbaselabs/tuqtng/server"
 )
 
-type MockResponse struct {
-	err      query.Error
-	results  []query.Value
-	warnings []query.Error
-	done     chan bool
-}
-
-func (this *MockResponse) SendError(err query.Error) {
-	this.err = err
-	if err.IsFatal() {
-		close(this.done)
-	}
-}
-
-func (this *MockResponse) SendResult(val query.Value) {
-	this.results = append(this.results, val)
-}
-
-func (this *MockResponse) NoMoreResults() {
-	close(this.done)
-}
-
-func run(qc network.QueryChannel, q string) ([]query.Value, []query.Error, query.Error) {
-	mr := &MockResponse{
-		results: []query.Value{}, warnings: []query.Error{}, done: make(chan bool),
-	}
-	query := network.Query{
-		Request:  network.UNQLStringQueryRequest{QueryString: q},
-		Response: mr,
-	}
-	qc <- query
-	<-mr.done
-	return mr.results, mr.warnings, mr.err
-}
-
 func start() network.QueryChannel {
-	qc := make(network.QueryChannel)
-	go server.Server("TEST", "dir:.", "json", qc)
-	return qc
+	return Start("dir:.", "json")
 }
 
 func TestMainClose(t *testing.T) {
@@ -72,11 +33,11 @@ func TestSyntaxErr(t *testing.T) {
 	qc := start()
 	defer close(qc)
 
-	r, _, err := run(qc, "this is a bad query")
+	r, _, err := Run(qc, "this is a bad query")
 	if err == nil || len(r) != 0 {
 		t.Errorf("expected err")
 	}
-	r, _, err = run(qc, "") // empty string query
+	r, _, err = Run(qc, "") // empty string query
 	if err == nil || len(r) != 0 {
 		t.Errorf("expected err")
 	}
@@ -86,7 +47,7 @@ func TestSimpleSelect(t *testing.T) {
 	qc := start()
 	defer close(qc)
 
-	r, _, err := run(qc, "select * from orders")
+	r, _, err := Run(qc, "select * from orders")
 	if err != nil || len(r) == 0 {
 		t.Errorf("did not expect err")
 	}
@@ -132,7 +93,7 @@ func testCaseFile(t *testing.T, fname string) {
 
 		qc := start()
 		defer close(qc)
-		resultsActual, _, errActual := run(qc, statements)
+		resultsActual, _, errActual := Run(qc, statements)
 
 		errExpected := ""
 		v, ok = c["error"]

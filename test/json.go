@@ -7,49 +7,40 @@
 //  either express or implied. See the License for the specific language governing permissions
 //  and limitations under the License.
 
-package main
+package test
 
 import (
-	"testing"
-
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
-	test "github.com/couchbaselabs/tuqtng/test"
+	"github.com/couchbaselabs/tuqtng/server"
 )
 
-func BenchmarkMock(b *testing.B) {
-	qc := test.Start("mock:items=10000", "p0")
-	defer close(qc)
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		runBenchmarkMock(qc, `select * from b0 where id = "1234"`)
-	}
-}
-
-type MockBenchmarkResponse struct {
+type MockResponse struct {
 	err      query.Error
-	results  int
+	results  []query.Value
 	warnings []query.Error
 	done     chan bool
 }
 
-func (this *MockBenchmarkResponse) SendError(err query.Error) {
+func (this *MockResponse) SendError(err query.Error) {
 	this.err = err
 	if err.IsFatal() {
 		close(this.done)
 	}
 }
 
-func (this *MockBenchmarkResponse) SendResult(val query.Value) {
-	this.results++
+func (this *MockResponse) SendResult(val query.Value) {
+	this.results = append(this.results, val)
 }
 
-func (this *MockBenchmarkResponse) NoMoreResults() {
+func (this *MockResponse) NoMoreResults() {
 	close(this.done)
 }
 
-func runBenchmarkMock(qc network.QueryChannel, q string) (int, []query.Error, query.Error) {
-	mr := &MockBenchmarkResponse{warnings: []query.Error{}, done: make(chan bool)}
+func Run(qc network.QueryChannel, q string) ([]query.Value, []query.Error, query.Error) {
+	mr := &MockResponse{
+		results: []query.Value{}, warnings: []query.Error{}, done: make(chan bool),
+	}
 	query := network.Query{
 		Request:  network.UNQLStringQueryRequest{QueryString: q},
 		Response: mr,
@@ -57,4 +48,10 @@ func runBenchmarkMock(qc network.QueryChannel, q string) (int, []query.Error, qu
 	qc <- query
 	<-mr.done
 	return mr.results, mr.warnings, mr.err
+}
+
+func Start(site, pool string) network.QueryChannel {
+	qc := make(network.QueryChannel)
+	go server.Server("TEST", site, pool, qc)
+	return qc
 }
