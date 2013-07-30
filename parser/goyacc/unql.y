@@ -20,6 +20,7 @@ f float64}
 %token SELECT AS FROM WHERE
 %token ORDER BY ASC DESC
 %token LIMIT OFFSET
+%token GROUP BY HAVING
 %token LBRACE RBRACE LBRACKET RBRACKET
 %token COMMA COLON
 %token TRUE FALSE NULL
@@ -75,12 +76,37 @@ select_core select_order select_limit_offset {
 ;
 
 select_core:    
-select_select select_from select_where { 
+select_select select_from select_where select_group_having {
 	logDebugGrammar("SELECT_CORE")
 }
 |
-select_from_required select_where select_select{
+select_from_required select_where select_group_having select_select{
 	logDebugGrammar("SELECT_CORE")
+}
+;
+
+select_group_having:
+/* empty */ {
+}
+|
+GROUP BY expression_list having {
+
+}
+;
+
+having:
+/* empty */ {
+}
+|
+HAVING expression {
+	logDebugGrammar("SELECT HAVING - EXPR")
+	having_part := parsingStack.Pop().(ast.Expression)
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.Having = having_part
+	default:
+		logDebugGrammar("This statement does not support HAVING")
+	}
 }
 ;
 
@@ -406,7 +432,7 @@ expr AND expr {
 	logDebugGrammar("EXPR - AND")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewAndOperator([]ast.Expression{left.(ast.Expression), right.(ast.Expression)}) 
+	thisExpression := ast.NewAndOperator(ast.ExpressionList{left.(ast.Expression), right.(ast.Expression)})
 	parsingStack.Push(thisExpression)
 }
 |
@@ -414,7 +440,7 @@ expr OR expr {
 	logDebugGrammar("EXPR - OR")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewOrOperator([]ast.Expression{left.(ast.Expression), right.(ast.Expression)}) 
+	thisExpression := ast.NewOrOperator(ast.ExpressionList{left.(ast.Expression), right.(ast.Expression)})
 	parsingStack.Push(thisExpression)
 }
 |
@@ -843,13 +869,13 @@ STRING COLON expression {
 array:
 LBRACKET RBRACKET {
 	logDebugGrammar("EMPTY ARRAY")
-	thisExpression := ast.NewLiteralArray([]ast.Expression{})
+	thisExpression := ast.NewLiteralArray(ast.ExpressionList{})
 	parsingStack.Push(thisExpression)
 }
 |
 LBRACKET expression_list RBRACKET {
 	logDebugGrammar("ARRAY")
-	exp_list := parsingStack.Pop().([]ast.Expression)
+	exp_list := parsingStack.Pop().(ast.ExpressionList)
 	thisExpression := ast.NewLiteralArray(exp_list)
 	parsingStack.Push(thisExpression)
 }
@@ -858,16 +884,16 @@ LBRACKET expression_list RBRACKET {
 expression_list:
 expression {
 	logDebugGrammar("EXPRESSION LIST SINGLE")
-	exp_list := make([]ast.Expression, 0)
+	exp_list := make(ast.ExpressionList, 0)
 	exp_list = append(exp_list, parsingStack.Pop().(ast.Expression))
 	parsingStack.Push(exp_list)
 }
 |
 expression COMMA expression_list { 
 	logDebugGrammar("EXPRESSION LIST COMPOUND")
-	rest := parsingStack.Pop().([]ast.Expression)
+	rest := parsingStack.Pop().(ast.ExpressionList)
 	last := parsingStack.Pop()
-	new_list := make([]ast.Expression, 0, len(rest) + 1)
+	new_list := make(ast.ExpressionList, 0, len(rest) + 1)
 	new_list = append(new_list, last.(ast.Expression))
 	for _, v := range rest {
 		new_list = append(new_list, v)

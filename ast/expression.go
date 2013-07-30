@@ -26,3 +26,5 @@ type Expression interface {
 	// it is up to the caller to update any references it may have
 	VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error)
 }
+
+type ExpressionList []Expression

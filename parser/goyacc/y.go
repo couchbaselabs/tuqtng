@@ -32,49 +32,51 @@ const ASC = 57355
 const DESC = 57356
 const LIMIT = 57357
 const OFFSET = 57358
-const LBRACE = 57359
-const RBRACE = 57360
-const LBRACKET = 57361
-const RBRACKET = 57362
-const COMMA = 57363
-const COLON = 57364
-const TRUE = 57365
-const FALSE = 57366
-const NULL = 57367
-const INT = 57368
-const NUMBER = 57369
-const IDENTIFIER = 57370
-const STRING = 57371
-const PLUS = 57372
-const MINUS = 57373
-const MULT = 57374
-const DIV = 57375
-const CONCAT = 57376
-const AND = 57377
-const OR = 57378
-const NOT = 57379
-const EQ = 57380
-const NE = 57381
-const GT = 57382
-const GTE = 57383
-const LT = 57384
-const LTE = 57385
-const LPAREN = 57386
-const RPAREN = 57387
-const LIKE = 57388
-const IS = 57389
-const VALUED = 57390
-const MISSING = 57391
-const DOT = 57392
-const CASE = 57393
-const WHEN = 57394
-const THEN = 57395
-const ELSE = 57396
-const END = 57397
-const ANY = 57398
-const ALL = 57399
-const OVER = 57400
-const MOD = 57401
+const GROUP = 57359
+const HAVING = 57360
+const LBRACE = 57361
+const RBRACE = 57362
+const LBRACKET = 57363
+const RBRACKET = 57364
+const COMMA = 57365
+const COLON = 57366
+const TRUE = 57367
+const FALSE = 57368
+const NULL = 57369
+const INT = 57370
+const NUMBER = 57371
+const IDENTIFIER = 57372
+const STRING = 57373
+const PLUS = 57374
+const MINUS = 57375
+const MULT = 57376
+const DIV = 57377
+const CONCAT = 57378
+const AND = 57379
+const OR = 57380
+const NOT = 57381
+const EQ = 57382
+const NE = 57383
+const GT = 57384
+const GTE = 57385
+const LT = 57386
+const LTE = 57387
+const LPAREN = 57388
+const RPAREN = 57389
+const LIKE = 57390
+const IS = 57391
+const VALUED = 57392
+const MISSING = 57393
+const DOT = 57394
+const CASE = 57395
+const WHEN = 57396
+const THEN = 57397
+const ELSE = 57398
+const END = 57399
+const ANY = 57400
+const ALL = 57401
+const OVER = 57402
+const MOD = 57403
 
 var yyToknames = []string{
 	"EXPLAIN",
@@ -90,6 +92,8 @@ var yyToknames = []string{
 	"DESC",
 	"LIMIT",
 	"OFFSET",
+	"GROUP",
+	"HAVING",
 	"LBRACE",
 	"RBRACE",
 	"LBRACKET",
@@ -147,185 +151,190 @@ var yyExca = []int{
 	-2, 0,
 }
 
-const yyNprod = 113
+const yyNprod = 117
 const yyPrivate = 57344
 
 var yyTokenNames []string
 var yyStates []string
 
-const yyLast = 620
+const yyLast = 635
 
 var yyAct = []int{
 
-	34, 150, 141, 105, 146, 24, 71, 58, 101, 22,
-	64, 186, 175, 97, 133, 89, 190, 142, 143, 183,
-	63, 182, 189, 33, 61, 92, 31, 66, 166, 55,
-	136, 56, 169, 66, 73, 50, 51, 52, 53, 54,
-	40, 46, 137, 37, 147, 98, 99, 96, 65, 36,
-	95, 168, 167, 139, 138, 149, 42, 140, 67, 66,
-	100, 106, 134, 43, 67, 103, 185, 35, 44, 45,
-	156, 103, 193, 192, 110, 118, 119, 120, 121, 122,
-	123, 124, 125, 126, 127, 128, 129, 130, 131, 132,
-	67, 134, 135, 25, 160, 161, 148, 114, 151, 74,
-	75, 76, 77, 79, 93, 94, 89, 134, 63, 76,
-	77, 79, 61, 113, 89, 159, 92, 111, 112, 70,
-	73, 172, 163, 158, 92, 155, 115, 107, 78, 162,
-	157, 154, 7, 69, 164, 17, 78, 116, 117, 29,
-	28, 14, 18, 148, 148, 170, 171, 16, 108, 3,
-	32, 30, 11, 11, 10, 10, 11, 102, 177, 178,
-	49, 180, 181, 106, 179, 20, 21, 91, 2, 48,
-	47, 145, 12, 148, 144, 184, 187, 188, 74, 75,
-	76, 77, 79, 80, 81, 89, 82, 87, 85, 86,
-	83, 84, 151, 194, 88, 92, 174, 91, 90, 41,
-	191, 39, 38, 68, 27, 72, 23, 78, 74, 75,
-	76, 77, 79, 80, 81, 89, 82, 87, 85, 86,
-	83, 84, 60, 59, 88, 92, 57, 19, 90, 91,
-	165, 176, 9, 8, 15, 26, 13, 78, 6, 5,
-	74, 75, 76, 77, 79, 80, 81, 89, 82, 87,
-	85, 86, 83, 84, 4, 1, 88, 92, 0, 91,
-	90, 0, 0, 0, 0, 0, 0, 0, 0, 78,
-	74, 75, 76, 77, 79, 80, 81, 89, 82, 87,
-	85, 86, 83, 84, 0, 0, 88, 92, 0, 91,
-	90, 0, 0, 0, 0, 0, 0, 0, 153, 78,
-	74, 75, 76, 77, 79, 80, 81, 89, 82, 87,
-	85, 86, 83, 84, 0, 0, 88, 92, 0, 91,
-	90, 0, 0, 0, 0, 0, 0, 0, 152, 78,
-	74, 75, 76, 77, 79, 80, 81, 89, 82, 87,
-	85, 86, 83, 84, 0, 0, 88, 92, 0, 91,
-	90, 0, 0, 0, 0, 0, 0, 0, 0, 78,
-	74, 75, 76, 77, 79, 80, 81, 89, 82, 87,
-	85, 86, 83, 84, 0, 0, 88, 92, 0, 91,
-	173, 0, 0, 0, 0, 0, 0, 0, 0, 78,
-	74, 75, 76, 77, 79, 80, 81, 89, 82, 87,
-	85, 86, 83, 84, 0, 0, 88, 92, 0, 91,
-	109, 0, 0, 0, 0, 0, 0, 0, 0, 78,
-	74, 75, 76, 77, 79, 80, 0, 89, 82, 87,
-	85, 86, 83, 84, 0, 0, 88, 92, 0, 91,
-	90, 0, 0, 0, 0, 0, 0, 0, 0, 78,
-	74, 75, 76, 77, 79, 0, 0, 89, 82, 87,
-	85, 86, 83, 84, 0, 0, 88, 92, 0, 0,
-	90, 0, 0, 0, 55, 0, 56, 0, 0, 78,
-	50, 51, 52, 53, 54, 40, 46, 0, 37, 147,
-	0, 0, 0, 0, 36, 0, 0, 0, 0, 0,
-	0, 42, 0, 0, 0, 0, 0, 0, 43, 55,
-	0, 56, 0, 44, 45, 50, 51, 52, 53, 54,
-	40, 46, 0, 37, 62, 0, 0, 0, 0, 36,
-	0, 0, 0, 0, 0, 0, 42, 0, 0, 0,
-	0, 0, 0, 43, 55, 0, 56, 104, 44, 45,
-	50, 51, 52, 53, 54, 40, 46, 0, 37, 0,
-	0, 0, 0, 0, 36, 0, 0, 0, 0, 0,
-	0, 42, 0, 0, 0, 0, 0, 0, 43, 55,
-	0, 56, 0, 44, 45, 50, 51, 52, 53, 54,
-	40, 46, 0, 37, 0, 0, 0, 0, 0, 36,
-	0, 0, 0, 0, 0, 0, 42, 0, 0, 0,
-	0, 0, 0, 43, 0, 0, 0, 0, 44, 45,
+	35, 155, 146, 105, 24, 72, 59, 65, 194, 182,
+	101, 95, 138, 191, 190, 176, 154, 99, 107, 201,
+	64, 109, 78, 79, 80, 81, 83, 84, 85, 93,
+	86, 91, 89, 90, 87, 88, 141, 22, 92, 96,
+	173, 7, 94, 118, 199, 93, 102, 103, 142, 200,
+	104, 82, 139, 198, 31, 96, 193, 197, 139, 144,
+	143, 107, 166, 175, 174, 25, 67, 32, 165, 139,
+	67, 117, 115, 167, 76, 151, 116, 36, 71, 123,
+	124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
+	134, 135, 136, 137, 34, 62, 140, 68, 75, 122,
+	153, 68, 156, 114, 161, 74, 179, 78, 79, 80,
+	81, 83, 64, 163, 93, 97, 98, 160, 164, 100,
+	56, 119, 57, 111, 96, 168, 51, 52, 53, 54,
+	55, 41, 47, 110, 38, 152, 82, 162, 159, 171,
+	37, 80, 81, 83, 66, 170, 93, 43, 153, 153,
+	177, 178, 33, 110, 44, 70, 96, 67, 17, 45,
+	46, 28, 184, 185, 186, 120, 121, 77, 82, 29,
+	14, 18, 3, 16, 30, 11, 11, 10, 10, 112,
+	153, 11, 192, 195, 196, 188, 106, 62, 68, 20,
+	21, 95, 2, 50, 49, 74, 12, 48, 150, 149,
+	156, 202, 78, 79, 80, 81, 83, 84, 85, 93,
+	86, 91, 89, 90, 87, 88, 181, 42, 92, 96,
+	40, 39, 94, 69, 27, 183, 73, 23, 61, 60,
+	58, 82, 19, 9, 169, 8, 15, 187, 26, 110,
+	95, 172, 13, 6, 5, 4, 189, 1, 0, 0,
+	0, 78, 79, 80, 81, 83, 84, 85, 93, 86,
+	91, 89, 90, 87, 88, 0, 0, 92, 96, 0,
+	95, 94, 0, 0, 0, 0, 0, 0, 0, 0,
+	82, 78, 79, 80, 81, 83, 84, 85, 93, 86,
+	91, 89, 90, 87, 88, 0, 0, 92, 96, 0,
+	95, 94, 0, 0, 0, 0, 0, 0, 0, 158,
+	82, 78, 79, 80, 81, 83, 84, 85, 93, 86,
+	91, 89, 90, 87, 88, 0, 0, 92, 96, 0,
+	95, 94, 0, 0, 0, 0, 0, 0, 0, 157,
+	82, 78, 79, 80, 81, 83, 84, 85, 93, 86,
+	91, 89, 90, 87, 88, 0, 0, 92, 96, 0,
+	95, 94, 0, 0, 0, 0, 0, 0, 0, 0,
+	82, 78, 79, 80, 81, 83, 84, 85, 93, 86,
+	91, 89, 90, 87, 88, 0, 0, 92, 96, 0,
+	95, 180, 0, 0, 0, 0, 0, 0, 0, 0,
+	82, 78, 79, 80, 81, 83, 84, 85, 93, 86,
+	91, 89, 90, 87, 88, 0, 0, 92, 96, 0,
+	95, 113, 0, 0, 0, 0, 0, 0, 0, 0,
+	82, 78, 79, 80, 81, 83, 84, 0, 93, 86,
+	91, 89, 90, 87, 88, 0, 0, 92, 96, 0,
+	95, 94, 0, 0, 0, 0, 0, 0, 0, 0,
+	82, 78, 79, 80, 81, 83, 0, 0, 93, 86,
+	91, 89, 90, 87, 88, 147, 148, 92, 96, 0,
+	0, 94, 0, 0, 0, 0, 0, 0, 0, 56,
+	82, 57, 0, 0, 0, 51, 52, 53, 54, 55,
+	41, 47, 0, 38, 152, 0, 0, 0, 0, 37,
+	0, 0, 0, 0, 0, 0, 43, 145, 0, 0,
+	0, 0, 0, 44, 56, 0, 57, 0, 45, 46,
+	51, 52, 53, 54, 55, 41, 47, 0, 38, 63,
+	0, 0, 0, 0, 37, 0, 0, 0, 0, 0,
+	0, 43, 0, 0, 0, 0, 0, 0, 44, 56,
+	0, 57, 108, 45, 46, 51, 52, 53, 54, 55,
+	41, 47, 0, 38, 0, 0, 0, 0, 0, 37,
+	0, 0, 0, 0, 0, 0, 43, 0, 0, 0,
+	0, 0, 0, 44, 56, 0, 57, 0, 45, 46,
+	51, 52, 53, 54, 55, 41, 47, 0, 38, 0,
+	0, 0, 0, 0, 37, 0, 0, 0, 0, 0,
+	0, 43, 0, 0, 0, 0, 0, 0, 44, 0,
+	0, 0, 0, 45, 46,
 }
 var yyPact = []int{
 
-	145, -1000, -1000, 146, -1000, -1000, 130, 138, 132, 160,
-	65, -1000, -1000, 125, 127, 132, 65, 149, 562, 492,
-	-1000, -1000, -1000, -48, 40, -1000, -1000, 117, 93, 562,
-	-1000, -1000, -1000, -1000, 300, -1000, 562, 562, -1000, -1000,
-	6, -1000, 562, -39, 562, 562, -1000, -1000, -1000, -1000,
-	-1000, -1000, -1000, -1000, -1000, 42, 527, -1000, -1000, 106,
-	-1000, 140, -1000, 360, 65, 89, 92, 85, -1000, 71,
-	-1000, -1000, 105, 124, 562, 562, 562, 562, 562, 562,
-	562, 562, 562, 562, 562, 562, 562, 562, 562, -32,
-	79, 562, 5, -1000, -1000, 12, 10, 562, 270, 240,
-	-1000, 113, 104, 48, -1000, 110, 102, 492, 66, 63,
-	-1000, -1000, 109, -1000, -1000, 562, -1000, -1000, 77, 77,
-	-22, -22, -22, -22, 420, 390, 69, 69, 69, 69,
-	69, 69, 69, 562, -1000, 210, -1000, 3, -1000, -1000,
-	-1000, -13, 457, 457, 100, -1000, -1000, -1000, 330, -1000,
-	-42, 178, 65, 65, -1000, 36, 562, -1000, 562, -1000,
-	-1000, -1000, -1000, -1000, 69, -1000, -1000, -1000, -1000, -1000,
-	-24, -26, 457, 34, -44, 562, 562, 14, 8, -1000,
-	-1000, -1000, -1000, -1000, -1000, -1000, -1000, 300, 148, 45,
-	44, 562, -1000, -1000, -1000,
+	168, -1000, -1000, 169, -1000, -1000, 159, 164, 161, 184,
+	35, -1000, -1000, 146, 157, 161, 35, 135, 575, 505,
+	-1000, -1000, -1000, -53, 136, -1000, -1000, 139, 50, 575,
+	135, -1000, 174, 155, -1000, 309, -1000, 575, 575, -1000,
+	-1000, -29, -1000, 575, -44, 575, 575, -1000, -1000, -1000,
+	-1000, -1000, -1000, -1000, -1000, -1000, 30, 540, -1000, -1000,
+	100, -1000, 171, -1000, 369, 35, 42, 48, 41, -1000,
+	15, -1000, -1000, 98, 152, -1000, -1000, 575, 575, 575,
+	575, 575, 575, 575, 575, 575, 575, 575, 575, 575,
+	575, 575, 575, -36, 39, 575, 9, -1000, -1000, 470,
+	-31, 575, 279, 249, -1000, 118, 94, 80, -1000, 115,
+	90, 505, 38, 28, -1000, -1000, 51, -1000, -1000, 575,
+	-1000, -1000, 127, 107, 107, 6, 6, 6, 6, 429,
+	399, 75, 75, 75, 75, 75, 75, 75, 575, -1000,
+	219, -1000, 13, -1000, -1000, -1000, -32, 101, 101, 83,
+	-1000, -1000, -1000, 339, -1000, -47, 170, 35, 35, -1000,
+	-13, 575, -1000, 575, -1000, -1000, -1000, -1000, -1000, -1000,
+	575, 75, -1000, -1000, -1000, -1000, -1000, -33, -34, 101,
+	22, -49, 575, 575, 49, 45, -1000, -1000, -1000, -1000,
+	-1000, -1000, -1000, -1000, -1000, 309, -10, 19, -11, 575,
+	-1000, -1000, -1000,
 }
 var yyPgo = []int{
 
-	0, 255, 168, 254, 239, 238, 236, 235, 132, 234,
-	135, 233, 232, 227, 226, 7, 223, 222, 4, 0,
-	9, 206, 5, 6, 205, 204, 203, 67, 202, 201,
-	199, 1, 196, 2, 174, 171, 170, 169, 160, 8,
-	157, 3,
+	0, 247, 192, 245, 244, 243, 242, 238, 41, 236,
+	158, 67, 235, 21, 234, 75, 233, 232, 230, 6,
+	229, 228, 0, 37, 227, 4, 5, 226, 224, 223,
+	77, 221, 220, 217, 1, 216, 2, 199, 198, 197,
+	194, 193, 3, 186,
 }
 var yyR1 = []int{
 
-	0, 1, 1, 2, 3, 4, 5, 5, 8, 12,
-	13, 13, 13, 14, 15, 15, 16, 16, 16, 17,
-	17, 9, 9, 11, 20, 20, 21, 21, 10, 10,
-	6, 6, 23, 23, 24, 24, 24, 7, 7, 7,
-	25, 26, 18, 19, 19, 19, 19, 19, 19, 19,
-	19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-	19, 19, 19, 19, 19, 19, 19, 19, 27, 27,
-	27, 28, 29, 29, 29, 29, 29, 29, 29, 29,
-	29, 29, 31, 31, 32, 32, 22, 22, 22, 33,
-	33, 34, 34, 35, 35, 30, 30, 30, 30, 30,
-	30, 30, 36, 36, 37, 37, 39, 39, 40, 38,
-	38, 41, 41,
+	0, 1, 1, 2, 3, 4, 5, 5, 11, 11,
+	14, 14, 8, 16, 17, 17, 17, 18, 19, 19,
+	20, 20, 20, 21, 21, 9, 9, 12, 23, 23,
+	24, 24, 10, 10, 6, 6, 26, 26, 27, 27,
+	27, 7, 7, 7, 28, 29, 15, 22, 22, 22,
+	22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
+	22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
+	22, 22, 30, 30, 30, 31, 32, 32, 32, 32,
+	32, 32, 32, 32, 32, 32, 34, 34, 35, 35,
+	25, 25, 25, 36, 36, 37, 37, 38, 38, 33,
+	33, 33, 33, 33, 33, 33, 39, 39, 40, 40,
+	42, 42, 43, 41, 41, 13, 13,
 }
 var yyR2 = []int{
 
-	0, 1, 2, 1, 1, 3, 3, 3, 3, 1,
-	0, 1, 1, 1, 1, 3, 1, 1, 3, 1,
-	3, 0, 2, 2, 1, 3, 1, 3, 0, 2,
-	0, 3, 1, 3, 1, 2, 2, 0, 1, 2,
-	2, 2, 1, 3, 3, 3, 3, 3, 3, 3,
-	3, 3, 3, 3, 3, 3, 3, 3, 4, 3,
-	4, 3, 4, 3, 4, 3, 4, 1, 2, 2,
-	1, 1, 1, 1, 3, 5, 6, 6, 3, 4,
-	5, 5, 3, 5, 0, 2, 1, 4, 3, 1,
-	3, 1, 1, 1, 3, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 2, 3, 1, 3, 3, 2,
-	3, 1, 3,
+	0, 1, 2, 1, 1, 3, 4, 4, 0, 4,
+	0, 2, 3, 1, 0, 1, 1, 1, 1, 3,
+	1, 1, 3, 1, 3, 0, 2, 2, 1, 3,
+	1, 3, 0, 2, 0, 3, 1, 3, 1, 2,
+	2, 0, 1, 2, 2, 2, 1, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 4, 3, 4, 3, 4, 3, 4, 3,
+	4, 1, 2, 2, 1, 1, 1, 1, 3, 5,
+	6, 6, 3, 4, 5, 5, 3, 5, 0, 2,
+	1, 4, 3, 1, 3, 1, 1, 1, 3, 1,
+	1, 1, 1, 1, 1, 1, 1, 1, 2, 3,
+	1, 3, 3, 2, 3, 1, 3,
 }
 var yyChk = []int{
 
-	-1000, -1, -2, 4, -3, -4, -5, -8, -11, -12,
-	9, 7, -2, -6, 11, -9, 9, -10, 10, -13,
-	5, 6, -20, -21, -22, 28, -7, -25, 15, 12,
-	-10, -20, -8, -18, -19, -27, 37, 31, -28, -29,
-	28, -30, 44, 51, 56, 57, 29, -36, -37, -38,
-	23, 24, 25, 26, 27, 17, 19, -14, -15, -16,
-	-17, -18, 32, -19, 58, 8, 19, 50, -26, 16,
-	26, -23, -24, -18, 30, 31, 32, 33, 59, 34,
-	35, 36, 38, 42, 43, 40, 41, 39, 46, 37,
-	50, 19, 47, -27, -27, 44, -18, 52, -19, -19,
-	18, -39, -40, 29, 20, -41, -18, 21, 8, 50,
-	-20, 28, 26, 28, 26, 21, 13, 14, -19, -19,
-	-19, -19, -19, -19, -19, -19, -19, -19, -19, -19,
-	-19, -19, -19, 46, 28, -19, 25, 37, 49, 48,
-	45, -33, 5, 6, -34, -35, -18, 32, -19, 45,
-	-31, -19, 58, 58, 18, 21, 22, 20, 21, -15,
-	28, 32, 20, -23, -19, 20, 25, 49, 48, 45,
-	-33, -33, 21, 50, -32, 54, 53, -22, -22, -39,
-	-18, -41, 45, 45, -33, 32, 55, -19, -19, 8,
-	8, 52, 28, 28, -31,
+	-1000, -1, -2, 4, -3, -4, -5, -8, -12, -16,
+	9, 7, -2, -6, 11, -9, 9, -10, 10, -17,
+	5, 6, -23, -24, -25, 30, -7, -28, 15, 12,
+	-10, -23, -11, 17, -15, -22, -30, 39, 33, -31,
+	-32, 30, -33, 46, 53, 58, 59, 31, -39, -40,
+	-41, 25, 26, 27, 28, 29, 19, 21, -18, -19,
+	-20, -21, -15, 34, -22, 60, 8, 21, 52, -29,
+	16, 28, -26, -27, -15, -11, -8, 12, 32, 33,
+	34, 35, 61, 36, 37, 38, 40, 44, 45, 42,
+	43, 41, 48, 39, 52, 21, 49, -30, -30, 46,
+	-15, 54, -22, -22, 20, -42, -43, 31, 22, -13,
+	-15, 23, 8, 52, -23, 30, 28, 30, 28, 23,
+	13, 14, -13, -22, -22, -22, -22, -22, -22, -22,
+	-22, -22, -22, -22, -22, -22, -22, -22, 48, 30,
+	-22, 27, 39, 51, 50, 47, -36, 5, 6, -37,
+	-38, -15, 34, -22, 47, -34, -22, 60, 60, 20,
+	23, 24, 22, 23, -19, 30, 34, 22, -26, -14,
+	18, -22, 22, 27, 51, 50, 47, -36, -36, 23,
+	52, -35, 56, 55, -25, -25, -42, -15, -13, -15,
+	47, 47, -36, 34, 57, -22, -22, 8, 8, 54,
+	30, 30, -34,
 }
 var yyDef = []int{
 
-	0, -2, 1, 0, 3, 4, 30, 21, 28, 10,
-	0, 9, 2, 37, 0, 28, 0, 0, 0, 0,
-	11, 12, 23, 24, 26, 86, 5, 38, 0, 0,
-	6, 22, 7, 29, 42, 67, 0, 0, 70, 71,
-	72, 73, 0, 0, 0, 0, 95, 96, 97, 98,
-	99, 100, 101, 102, 103, 0, 0, 8, 13, 14,
-	16, 17, 19, 42, 0, 0, 0, 0, 39, 0,
-	40, 31, 32, 34, 0, 0, 0, 0, 0, 0,
+	0, -2, 1, 0, 3, 4, 34, 25, 32, 14,
+	0, 13, 2, 41, 0, 32, 0, 8, 0, 0,
+	15, 16, 27, 28, 30, 90, 5, 42, 0, 0,
+	8, 26, 0, 0, 33, 46, 71, 0, 0, 74,
+	75, 76, 77, 0, 0, 0, 0, 99, 100, 101,
+	102, 103, 104, 105, 106, 107, 0, 0, 12, 17,
+	18, 20, 21, 23, 46, 0, 0, 0, 0, 43,
+	0, 44, 35, 36, 38, 6, 7, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 68, 69, 0, 0, 0, 0, 0,
-	104, 0, 106, 0, 109, 0, 111, 0, 0, 0,
-	25, 27, 0, 88, 41, 0, 35, 36, 43, 44,
-	45, 46, 47, 48, 49, 50, 51, 52, 53, 54,
-	55, 56, 57, 0, 59, 0, 61, 0, 63, 65,
-	78, 0, 0, 0, 89, 91, 92, 93, 42, 74,
-	84, 0, 0, 0, 105, 0, 0, 110, 0, 15,
-	18, 20, 87, 33, 58, 60, 62, 64, 66, 79,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 107,
-	108, 112, 80, 81, 90, 94, 75, 85, 82, 0,
-	0, 0, 76, 77, 83,
+	0, 0, 0, 0, 0, 0, 0, 72, 73, 0,
+	0, 0, 0, 0, 108, 0, 110, 0, 113, 0,
+	115, 0, 0, 0, 29, 31, 0, 92, 45, 0,
+	39, 40, 10, 47, 48, 49, 50, 51, 52, 53,
+	54, 55, 56, 57, 58, 59, 60, 61, 0, 63,
+	0, 65, 0, 67, 69, 82, 0, 0, 0, 93,
+	95, 96, 97, 46, 78, 88, 0, 0, 0, 109,
+	0, 0, 114, 0, 19, 22, 24, 91, 37, 9,
+	0, 62, 64, 66, 68, 70, 83, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 111, 112, 116, 11,
+	84, 85, 94, 98, 79, 89, 86, 0, 0, 0,
+	80, 81, 87,
 }
 var yyTok1 = []int{
 
@@ -338,7 +347,7 @@ var yyTok2 = []int{
 	22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
 	32, 33, 34, 35, 36, 37, 38, 39, 40, 41,
 	42, 43, 44, 45, 46, 47, 48, 49, 50, 51,
-	52, 53, 54, 55, 56, 57, 58, 59,
+	52, 53, 54, 55, 56, 57, 58, 59, 60, 61,
 }
 var yyTok3 = []int{
 	0,
@@ -570,58 +579,83 @@ yydefault:
 	switch yynt {
 
 	case 1:
-		//line unql.y:48
+		//line unql.y:49
 		{
 		logDebugGrammar("INPUT")
 	}
 	case 2:
-		//line unql.y:52
+		//line unql.y:53
 		{
 		logDebugGrammar("INPUT - EXPLAIN")
 		parsingStatement.SetExplainOnly(true)
 	}
 	case 3:
-		//line unql.y:58
+		//line unql.y:59
 		{ 
 		logDebugGrammar("STMT")
 	}
 	case 4:
-		//line unql.y:65
+		//line unql.y:66
 		{
 		logDebugGrammar("SELECT_STMT")
 	}
 	case 5:
-		//line unql.y:71
+		//line unql.y:72
 		{
 		// future extensibility for comining queries with UNION, etc
 	logDebugGrammar("SELECT_COMPOUND") 
 	}
 	case 6:
-		//line unql.y:78
+		//line unql.y:79
 		{ 
 		logDebugGrammar("SELECT_CORE")
 	}
 	case 7:
-		//line unql.y:82
+		//line unql.y:83
 		{
 		logDebugGrammar("SELECT_CORE")
 	}
 	case 8:
-		//line unql.y:88
+		//line unql.y:89
 		{
-		logDebugGrammar("SELECT_SELECT")
 	}
 	case 9:
-		//line unql.y:94
-		{ 
-		logDebugGrammar("SELECT_SELECT_HEAD")
+		//line unql.y:92
+		{
+		
 	}
 	case 10:
-		//line unql.y:100
+		//line unql.y:98
 		{
 	}
 	case 11:
-		//line unql.y:103
+		//line unql.y:101
+		{
+		logDebugGrammar("SELECT HAVING - EXPR")
+		having_part := parsingStack.Pop().(ast.Expression)
+		switch parsingStatement := parsingStatement.(type) {
+		case *ast.SelectStatement:
+			parsingStatement.Having = having_part
+		default:
+			logDebugGrammar("This statement does not support HAVING")
+		}
+	}
+	case 12:
+		//line unql.y:114
+		{
+		logDebugGrammar("SELECT_SELECT")
+	}
+	case 13:
+		//line unql.y:120
+		{ 
+		logDebugGrammar("SELECT_SELECT_HEAD")
+	}
+	case 14:
+		//line unql.y:126
+		{
+	}
+	case 15:
+		//line unql.y:129
 		{
 		logDebugGrammar("SELECT_SELECT_QUALIFIER DISTINCT")
 		switch parsingStatement := parsingStatement.(type) {
@@ -631,8 +665,8 @@ yydefault:
 			logDebugGrammar("This statement does not support WHERE")
 		}
 	}
-	case 12:
-		//line unql.y:113
+	case 16:
+		//line unql.y:139
 		{
 		logDebugGrammar("SELECT_SELECT_QUALIFIER UNIQUE")
 		switch parsingStatement := parsingStatement.(type) {
@@ -642,8 +676,8 @@ yydefault:
 			logDebugGrammar("This statement does not support WHERE")
 		}
 	}
-	case 13:
-		//line unql.y:125
+	case 17:
+		//line unql.y:151
 		{ 
 		logDebugGrammar("SELECT SELECT TAIL - EXPR")
 		result_expr_list := parsingStack.Pop().(ast.ResultExpressionList)
@@ -655,14 +689,14 @@ yydefault:
 		}
 	
 	}
-	case 14:
-		//line unql.y:139
+	case 18:
+		//line unql.y:165
 		{
 		result_expr := parsingStack.Pop().(*ast.ResultExpression)
 		parsingStack.Push(ast.ResultExpressionList{result_expr})
 	}
-	case 15:
-		//line unql.y:144
+	case 19:
+		//line unql.y:170
 		{
 		result_expr_list := parsingStack.Pop().(ast.ResultExpressionList)
 		result_expr := parsingStack.Pop().(*ast.ResultExpression)
@@ -674,117 +708,107 @@ yydefault:
 		}
 		parsingStack.Push(new_list)
 	}
-	case 16:
-		//line unql.y:157
+	case 20:
+		//line unql.y:183
 		{
 		logDebugGrammar("RESULT STAR")
 	}
-	case 17:
-		//line unql.y:161
+	case 21:
+		//line unql.y:187
 		{ 
 		logDebugGrammar("RESULT EXPR")
 		expr_part := parsingStack.Pop().(ast.Expression)
 		result_expr := ast.NewResultExpression(expr_part)
 		parsingStack.Push(result_expr)
 	}
-	case 18:
-		//line unql.y:168
+	case 22:
+		//line unql.y:194
 		{ 
 		logDebugGrammar("SORT EXPR ASC")
 		expr_part := parsingStack.Pop().(ast.Expression)
 		result_expr := ast.NewResultExpressionWithAlias(expr_part, yyS[yypt-0].s)
 		parsingStack.Push(result_expr)
 	}
-	case 19:
-		//line unql.y:177
+	case 23:
+		//line unql.y:203
 		{
 		logDebugGrammar("STAR")
 		result_expr := ast.NewStarResultExpression()
 		parsingStack.Push(result_expr)
 	}
-	case 20:
-		//line unql.y:183
+	case 24:
+		//line unql.y:209
 		{
 		logDebugGrammar("PATH DOT STAR")
 		expr_part := parsingStack.Pop().(ast.Expression)
 		result_expr := ast.NewDotStarResultExpression(expr_part)
 		parsingStack.Push(result_expr)
 	}
-	case 21:
-		//line unql.y:191
+	case 25:
+		//line unql.y:217
 		{
 		logDebugGrammar("SELECT FROM - EMPTY")
 	}
-	case 22:
-		//line unql.y:195
-		{
-		logDebugGrammar("SELECT FROM - DATASOURCE")
-		//froms := parsingStack.Pop().([]*ast.From)
-	from := parsingStack.Pop().(*ast.From)
-		switch parsingStatement := parsingStatement.(type) {
-		case *ast.SelectStatement:
-			parsingStatement.From = from
-		default:
-			logDebugGrammar("This statement does not support WHERE")
-		}
-	}
-	case 23:
-		//line unql.y:208
-		{
-		logDebugGrammar("SELECT FROM - DATASOURCE")
-		//froms := parsingStack.Pop().([]*ast.From)
-	from := parsingStack.Pop().(*ast.From)
-		switch parsingStatement := parsingStatement.(type) {
-		case *ast.SelectStatement:
-			parsingStatement.From = from
-		default:
-			logDebugGrammar("This statement does not support WHERE")
-		}
-	}
-	case 24:
+	case 26:
 		//line unql.y:221
 		{
+		logDebugGrammar("SELECT FROM - DATASOURCE")
+		from := parsingStack.Pop().(*ast.From)
+		switch parsingStatement := parsingStatement.(type) {
+		case *ast.SelectStatement:
+			parsingStatement.From = from
+		default:
+			logDebugGrammar("This statement does not support WHERE")
+		}
+	}
+	case 27:
+		//line unql.y:233
+		{
+		logDebugGrammar("SELECT FROM - DATASOURCE")
+		from := parsingStack.Pop().(*ast.From)
+		switch parsingStatement := parsingStatement.(type) {
+		case *ast.SelectStatement:
+			parsingStatement.From = from
+		default:
+			logDebugGrammar("This statement does not support WHERE")
+		}
+	}
+	case 28:
+		//line unql.y:245
+		{
 		logDebugGrammar("FROM DATASOURCE WITHOUT OVER")
-		//from_list := make([]*ast.From, 0)
-	//from_list = append(from_list, parsingStack.Pop().(*ast.From))
-	//parsingStack.Push(from_list)
-}
-	case 25:
-		//line unql.y:228
+	}
+	case 29:
+		//line unql.y:249
 		{
 		logDebugGrammar("FROM DATASOURCE WITH OVER")
 		rest := parsingStack.Pop().(*ast.From)
 		last := parsingStack.Pop().(*ast.From)
-		//new_list := make([]*ast.From, 0, len(rest) + 1)
-	//new_list = append(new_list, last.(*ast.From))
-	//for _, v := range rest {
-	//	new_list = append(new_list, v)
-	//}
-	last.Over = rest
+		last.Over = rest
 		parsingStack.Push(last)
 	}
-	case 26:
-		//line unql.y:243
+	case 30:
+		//line unql.y:259
 		{
 		logDebugGrammar("FROM DATASOURCE")
 		proj := parsingStack.Pop().(ast.Expression)
 		parsingStack.Push(&ast.From{Projection: proj})
 	}
-	case 27:
-		//line unql.y:249
+	case 31:
+		//line unql.y:265
 		{
 	    // fixme support over as
 	logDebugGrammar("FROM DATASOURCE AS")
 		proj := parsingStack.Pop().(ast.Expression)
 		parsingStack.Push(&ast.From{Projection: proj, As: yyS[yypt-0].s})
 	}
-	case 28:
-		//line unql.y:257
+	case 32:
+		//line unql.y:273
 		{ 
 		logDebugGrammar("SELECT WHERE - EMPTY")
 	}
-	case 29:
-		//line unql.y:261
+	case 33:
+		//line unql.y:277
 		{
 		logDebugGrammar("SELECT WHERE - EXPR")
 		where_part := parsingStack.Pop().(ast.Expression)
@@ -795,23 +819,23 @@ yydefault:
 			logDebugGrammar("This statement does not support WHERE")
 		}
 	}
-	case 31:
-		//line unql.y:275
+	case 35:
+		//line unql.y:291
 		{
 		
 	}
-	case 32:
-		//line unql.y:281
+	case 36:
+		//line unql.y:297
 		{
 		
 	}
-	case 33:
-		//line unql.y:285
+	case 37:
+		//line unql.y:301
 		{
 		
 	}
-	case 34:
-		//line unql.y:290
+	case 38:
+		//line unql.y:306
 		{ 
 		logDebugGrammar("SORT EXPR")
 		expr := parsingStack.Pop()
@@ -822,8 +846,8 @@ yydefault:
 			logDebugGrammar("This statement does not support ORDER BY")
 		}
 	}
-	case 35:
-		//line unql.y:301
+	case 39:
+		//line unql.y:317
 		{ 
 		logDebugGrammar("SORT EXPR ASC")
 		expr := parsingStack.Pop()
@@ -834,8 +858,8 @@ yydefault:
 			logDebugGrammar("This statement does not support ORDER BY")
 		}
 	}
-	case 36:
-		//line unql.y:312
+	case 40:
+		//line unql.y:328
 		{ 
 		logDebugGrammar("SORT EXPR DESC")
 		expr := parsingStack.Pop()
@@ -846,23 +870,23 @@ yydefault:
 			logDebugGrammar("This statement does not support ORDER BY")
 		}
 	}
-	case 37:
-		//line unql.y:324
+	case 41:
+		//line unql.y:340
 		{
 		
 	}
-	case 38:
-		//line unql.y:328
+	case 42:
+		//line unql.y:344
 		{
 		
 	}
-	case 39:
-		//line unql.y:332
+	case 43:
+		//line unql.y:348
 		{
 		
 	}
-	case 40:
-		//line unql.y:338
+	case 44:
+		//line unql.y:354
 		{
 		logDebugGrammar("LIMIT %d", yyS[yypt-0].n)
 		switch parsingStatement := parsingStatement.(type) {
@@ -872,8 +896,8 @@ yydefault:
 			logDebugGrammar("This statement does not support LIMIT")
 		}
 	}
-	case 41:
-		//line unql.y:349
+	case 45:
+		//line unql.y:365
 		{ 
 		logDebugGrammar("OFFSET %d", yyS[yypt-0].n)
 		switch parsingStatement := parsingStatement.(type) {
@@ -883,13 +907,13 @@ yydefault:
 			logDebugGrammar("This statement does not support OFFSET")
 		}
 	}
-	case 42:
-		//line unql.y:362
+	case 46:
+		//line unql.y:378
 		{
 		logDebugGrammar("EXPRESSION")
 	}
-	case 43:
-		//line unql.y:367
+	case 47:
+		//line unql.y:383
 		{
 		logDebugGrammar("EXPR - PLUS")
 		right := parsingStack.Pop()
@@ -897,8 +921,8 @@ yydefault:
 		thisExpression := ast.NewPlusOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 44:
-		//line unql.y:375
+	case 48:
+		//line unql.y:391
 		{
 		logDebugGrammar("EXPR - MINUS")
 		right := parsingStack.Pop()
@@ -906,8 +930,8 @@ yydefault:
 		thisExpression := ast.NewSubtractOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 45:
-		//line unql.y:383
+	case 49:
+		//line unql.y:399
 		{
 		logDebugGrammar("EXPR - MULT")
 		right := parsingStack.Pop()
@@ -915,8 +939,8 @@ yydefault:
 		thisExpression := ast.NewMultiplyOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 46:
-		//line unql.y:391
+	case 50:
+		//line unql.y:407
 		{
 		logDebugGrammar("EXPR - DIV")
 		right := parsingStack.Pop()
@@ -924,8 +948,8 @@ yydefault:
 		thisExpression := ast.NewDivideOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 47:
-		//line unql.y:399
+	case 51:
+		//line unql.y:415
 		{
 		logDebugGrammar("EXPR - MOD")
 		right := parsingStack.Pop()
@@ -933,8 +957,8 @@ yydefault:
 		thisExpression := ast.NewModuloOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 48:
-		//line unql.y:407
+	case 52:
+		//line unql.y:423
 		{
 		logDebugGrammar("EXPR - CONCAT")
 		right := parsingStack.Pop()
@@ -942,26 +966,26 @@ yydefault:
 		thisExpression := ast.NewStringConcatenateOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 49:
-		//line unql.y:415
+	case 53:
+		//line unql.y:431
 		{
 		logDebugGrammar("EXPR - AND")
 		right := parsingStack.Pop()
 		left := parsingStack.Pop()
-		thisExpression := ast.NewAndOperator([]ast.Expression{left.(ast.Expression), right.(ast.Expression)}) 
+		thisExpression := ast.NewAndOperator(ast.ExpressionList{left.(ast.Expression), right.(ast.Expression)}) 
 		parsingStack.Push(thisExpression)
 	}
-	case 50:
-		//line unql.y:423
+	case 54:
+		//line unql.y:439
 		{
 		logDebugGrammar("EXPR - OR")
 		right := parsingStack.Pop()
 		left := parsingStack.Pop()
-		thisExpression := ast.NewOrOperator([]ast.Expression{left.(ast.Expression), right.(ast.Expression)}) 
+		thisExpression := ast.NewOrOperator(ast.ExpressionList{left.(ast.Expression), right.(ast.Expression)}) 
 		parsingStack.Push(thisExpression)
 	}
-	case 51:
-		//line unql.y:431
+	case 55:
+		//line unql.y:447
 		{
 		logDebugGrammar("EXPR - EQ")
 		right := parsingStack.Pop()
@@ -969,8 +993,8 @@ yydefault:
 		thisExpression := ast.NewEqualToOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 52:
-		//line unql.y:439
+	case 56:
+		//line unql.y:455
 		{
 		logDebugGrammar("EXPR - LT")
 		right := parsingStack.Pop()
@@ -978,8 +1002,8 @@ yydefault:
 		thisExpression := ast.NewLessThanOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 53:
-		//line unql.y:447
+	case 57:
+		//line unql.y:463
 		{
 		logDebugGrammar("EXPR - LTE")
 		right := parsingStack.Pop()
@@ -987,8 +1011,8 @@ yydefault:
 		thisExpression := ast.NewLessThanOrEqualOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 54:
-		//line unql.y:455
+	case 58:
+		//line unql.y:471
 		{
 		logDebugGrammar("EXPR - GT")
 		right := parsingStack.Pop()
@@ -996,8 +1020,8 @@ yydefault:
 		thisExpression := ast.NewGreaterThanOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 55:
-		//line unql.y:463
+	case 59:
+		//line unql.y:479
 		{
 		logDebugGrammar("EXPR - GTE")
 		right := parsingStack.Pop()
@@ -1005,8 +1029,8 @@ yydefault:
 		thisExpression := ast.NewGreaterThanOrEqualOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 56:
-		//line unql.y:471
+	case 60:
+		//line unql.y:487
 		{
 		logDebugGrammar("EXPR - NE")
 		right := parsingStack.Pop()
@@ -1014,8 +1038,8 @@ yydefault:
 		thisExpression := ast.NewNotEqualToOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 57:
-		//line unql.y:479
+	case 61:
+		//line unql.y:495
 		{
 		logDebugGrammar("EXPR - LIKE")
 		right := parsingStack.Pop()
@@ -1023,8 +1047,8 @@ yydefault:
 		thisExpression := ast.NewLikeOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 58:
-		//line unql.y:487
+	case 62:
+		//line unql.y:503
 		{
 		logDebugGrammar("EXPR - NOT LIKE")
 		right := parsingStack.Pop()
@@ -1032,8 +1056,8 @@ yydefault:
 		thisExpression := ast.NewNotLikeOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 59:
-		//line unql.y:495
+	case 63:
+		//line unql.y:511
 		{
 		logDebugGrammar("EXPR DOT MEMBER")
 		right := ast.NewProperty(yyS[yypt-0].s) 
@@ -1041,8 +1065,8 @@ yydefault:
 		thisExpression := ast.NewDotMemberOperator(left.(ast.Expression), right) 
 		parsingStack.Push(thisExpression)
 	}
-	case 60:
-		//line unql.y:503
+	case 64:
+		//line unql.y:519
 		{
 		logDebugGrammar("EXPR BRACKET MEMBER")
 		right := parsingStack.Pop()
@@ -1050,104 +1074,104 @@ yydefault:
 		thisExpression := ast.NewBracketMemberOperator(left.(ast.Expression), right.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 61:
-		//line unql.y:511
+	case 65:
+		//line unql.y:527
 		{
 		logDebugGrammar("SUFFIX_EXPR IS NULL")
 		operand := parsingStack.Pop()
 		thisExpression := ast.NewIsNullOperator(operand.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 62:
-		//line unql.y:518
+	case 66:
+		//line unql.y:534
 		{
 		logDebugGrammar("SUFFIX_EXPR IS NOT NULL")
 		operand := parsingStack.Pop()
 		thisExpression := ast.NewIsNotNullOperator(operand.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 63:
-		//line unql.y:525
+	case 67:
+		//line unql.y:541
 		{
 		logDebugGrammar("SUFFIX_EXPR IS MISSING")
 		operand := parsingStack.Pop()
 		thisExpression := ast.NewIsMissingOperator(operand.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 64:
-		//line unql.y:532
+	case 68:
+		//line unql.y:548
 		{
 		logDebugGrammar("SUFFIX_EXPR IS NOT MISSING")
 		operand := parsingStack.Pop()
 		thisExpression := ast.NewIsNotMissingOperator(operand.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 65:
-		//line unql.y:539
+	case 69:
+		//line unql.y:555
 		{
 		logDebugGrammar("SUFFIX_EXPR IS VALUED")
 		operand := parsingStack.Pop()
 		thisExpression := ast.NewIsValuedOperator(operand.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 66:
-		//line unql.y:546
+	case 70:
+		//line unql.y:562
 		{
 		logDebugGrammar("SUFFIX_EXPR IS NOT VALUED")
 		operand := parsingStack.Pop()
 		thisExpression := ast.NewIsNotValuedOperator(operand.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 67:
-		//line unql.y:553
+	case 71:
+		//line unql.y:569
 		{
 		
 	}
-	case 68:
-		//line unql.y:559
+	case 72:
+		//line unql.y:575
 		{
 		logDebugGrammar("EXPR - NOT")
 		operand := parsingStack.Pop()
 		thisExpression := ast.NewNotOperator(operand.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 69:
-		//line unql.y:566
+	case 73:
+		//line unql.y:582
 		{
 		logDebugGrammar("EXPR - CHANGE SIGN")
 		operand := parsingStack.Pop()
 		thisExpression := ast.NewChangeSignOperator(operand.(ast.Expression)) 
 		parsingStack.Push(thisExpression)
 	}
-	case 70:
-		//line unql.y:573
+	case 74:
+		//line unql.y:589
 		{
 		
 	}
-	case 71:
-		//line unql.y:578
+	case 75:
+		//line unql.y:594
 		{
 		logDebugGrammar("SUFFIX_EXPR")
 	}
-	case 72:
-		//line unql.y:584
+	case 76:
+		//line unql.y:600
 		{
 		logDebugGrammar("IDENTIFIER - %s", yyS[yypt-0].s)
 		thisExpression := ast.NewProperty(yyS[yypt-0].s) 
 		parsingStack.Push(thisExpression) 
 	}
-	case 73:
-		//line unql.y:590
+	case 77:
+		//line unql.y:606
 		{
 		logDebugGrammar("LITERAL")
 	}
-	case 74:
-		//line unql.y:594
+	case 78:
+		//line unql.y:610
 		{
 		logDebugGrammar("NESTED EXPR")
 	}
-	case 75:
-		//line unql.y:598
+	case 79:
+		//line unql.y:614
 		{
 		logDebugGrammar("CASE WHEN THEN ELSE END")
 		cwtee := ast.NewCaseOperator()
@@ -1164,8 +1188,8 @@ yydefault:
 		}
 		parsingStack.Push(cwtee)
 	}
-	case 76:
-		//line unql.y:615
+	case 80:
+		//line unql.y:631
 		{
 		logDebugGrammar("ANY OVER AS IDENTIFIER")
 		path := parsingStack.Pop().(ast.Expression)
@@ -1173,8 +1197,8 @@ yydefault:
 		collectionAny := ast.NewCollectionAnyOperator(condition, path, yyS[yypt-0].s)
 		parsingStack.Push(collectionAny)
 	}
-	case 77:
-		//line unql.y:623
+	case 81:
+		//line unql.y:639
 		{
 		logDebugGrammar("ALL OVER AS IDENTIFIER")
 		path := parsingStack.Pop().(ast.Expression)
@@ -1182,39 +1206,39 @@ yydefault:
 		collectionAny := ast.NewCollectionAllOperator(condition, path, yyS[yypt-0].s)
 		parsingStack.Push(collectionAny)
 	}
-	case 78:
-		//line unql.y:631
+	case 82:
+		//line unql.y:647
 		{
 		logDebugGrammar("FUNCTION EXPR NOPARAM")
 		thisExpression := ast.NewFunctionCall(yyS[yypt-2].s, ast.FunctionArgExpressionList{})
 		parsingStack.Push(thisExpression)
 	}
-	case 79:
-		//line unql.y:637
+	case 83:
+		//line unql.y:653
 		{
 		logDebugGrammar("FUNCTION EXPR PARAM")
 		funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
 		thisExpression := ast.NewFunctionCall(yyS[yypt-3].s, funarg_exp_list)
 		parsingStack.Push(thisExpression)
 	}
-	case 80:
-		//line unql.y:644
-		{
-		logDebugGrammar("FUNCTION EXPR PARAM")
-		funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
-		thisExpression := ast.NewFunctionCall(yyS[yypt-4].s, funarg_exp_list)
-		parsingStack.Push(thisExpression)
-	}
-	case 81:
-		//line unql.y:651
-		{
-		logDebugGrammar("FUNCTION EXPR PARAM")
-		funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
-		thisExpression := ast.NewFunctionCall(yyS[yypt-4].s, funarg_exp_list)
-		parsingStack.Push(thisExpression)
-	}
-	case 82:
+	case 84:
 		//line unql.y:660
+		{
+		logDebugGrammar("FUNCTION EXPR PARAM")
+		funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
+		thisExpression := ast.NewFunctionCall(yyS[yypt-4].s, funarg_exp_list)
+		parsingStack.Push(thisExpression)
+	}
+	case 85:
+		//line unql.y:667
+		{
+		logDebugGrammar("FUNCTION EXPR PARAM")
+		funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
+		thisExpression := ast.NewFunctionCall(yyS[yypt-4].s, funarg_exp_list)
+		parsingStack.Push(thisExpression)
+	}
+	case 86:
+		//line unql.y:676
 		{
 		logDebugGrammar("THEN_LIST - SINGLE")
 		when_then_list := make([]*ast.WhenThen, 0)
@@ -1222,8 +1246,8 @@ yydefault:
 		when_then_list = append(when_then_list, &when_then)
 		parsingStack.Push(when_then_list)
 	}
-	case 83:
-		//line unql.y:668
+	case 87:
+		//line unql.y:684
 		{
 		logDebugGrammar("THEN_LIST - COMPOUND")
 		rest := parsingStack.Pop().([]*ast.WhenThen)
@@ -1235,33 +1259,33 @@ yydefault:
 		}
 		parsingStack.Push(new_list)
 	}
-	case 84:
-		//line unql.y:682
+	case 88:
+		//line unql.y:698
 		{
 		logDebugGrammar("ELSE - EMPTY")
 	}
-	case 85:
-		//line unql.y:686
+	case 89:
+		//line unql.y:702
 		{
 		logDebugGrammar("ELSE - EXPR")
 	}
-	case 86:
-		//line unql.y:692
+	case 90:
+		//line unql.y:708
 		{
 		logDebugGrammar("PATH - %v", yyS[yypt-0].s)
 		thisExpression := ast.NewProperty(yyS[yypt-0].s) 
 		parsingStack.Push(thisExpression) 
 	}
-	case 87:
-		//line unql.y:698
+	case 91:
+		//line unql.y:714
 		{
 		logDebugGrammar("PATH BRACKET - %v[%v]", yyS[yypt-3].s, yyS[yypt-1].n)
 		left := parsingStack.Pop()
 		thisExpression := ast.NewBracketMemberOperator(left.(ast.Expression), ast.NewLiteralNumber(float64(yyS[yypt-1].n))) 
 		parsingStack.Push(thisExpression)
 	}
-	case 88:
-		//line unql.y:705
+	case 92:
+		//line unql.y:721
 		{
 		logDebugGrammar("PATH DOT PATH - $1.s")
 		right := ast.NewProperty(yyS[yypt-0].s) 
@@ -1269,14 +1293,14 @@ yydefault:
 		thisExpression := ast.NewDotMemberOperator(left.(ast.Expression), right) 
 		parsingStack.Push(thisExpression)
 	}
-	case 89:
-		//line unql.y:716
+	case 93:
+		//line unql.y:732
 		{
 		funarg_expr := parsingStack.Pop().(*ast.FunctionArgExpression)
 		parsingStack.Push(ast.FunctionArgExpressionList{funarg_expr})
 	}
-	case 90:
-		//line unql.y:721
+	case 94:
+		//line unql.y:737
 		{
 		funarg_expr_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
 		funarg_expr := parsingStack.Pop().(*ast.FunctionArgExpression)
@@ -1288,110 +1312,110 @@ yydefault:
 		}
 		parsingStack.Push(new_list)
 	}
-	case 91:
-		//line unql.y:735
+	case 95:
+		//line unql.y:751
 		{
 		logDebugGrammar("FUNARG STAR")
 	}
-	case 92:
-		//line unql.y:739
+	case 96:
+		//line unql.y:755
 		{
 		logDebugGrammar("FUNARG EXPR")
 		expr_part := parsingStack.Pop().(ast.Expression)
 		funarg_expr := ast.NewFunctionArgExpression(expr_part)
 		parsingStack.Push(funarg_expr)
 	}
-	case 93:
-		//line unql.y:748
+	case 97:
+		//line unql.y:764
 		{
 		logDebugGrammar("FUNSTAR")
 		funarg_expr := ast.NewStarFunctionArgExpression()
 		parsingStack.Push(funarg_expr)
 	}
-	case 94:
-		//line unql.y:754
+	case 98:
+		//line unql.y:770
 		{
 		logDebugGrammar("FUN PATH DOT STAR")
 		expr_part := parsingStack.Pop().(ast.Expression)
 		funarg_expr := ast.NewDotStarFunctionArgExpression(expr_part)
 		parsingStack.Push(funarg_expr)
 	}
-	case 95:
-		//line unql.y:764
+	case 99:
+		//line unql.y:780
 		{
 		logDebugGrammar("STRING %s", yyS[yypt-0].s)
 		thisExpression := ast.NewLiteralString(yyS[yypt-0].s) 
 		parsingStack.Push(thisExpression)
 	}
-	case 96:
-		//line unql.y:770
+	case 100:
+		//line unql.y:786
 		{
 		logDebugGrammar("NUMBER")
 	}
-	case 97:
-		//line unql.y:774
+	case 101:
+		//line unql.y:790
 		{
 		logDebugGrammar("OBJECT")
 	}
-	case 98:
-		//line unql.y:778
+	case 102:
+		//line unql.y:794
 		{
 		logDebugGrammar("ARRAY")
 	}
-	case 99:
-		//line unql.y:782
+	case 103:
+		//line unql.y:798
 		{
 		logDebugGrammar("TRUE")
 		thisExpression := ast.NewLiteralBool(true) 
 		parsingStack.Push(thisExpression)
 	}
-	case 100:
-		//line unql.y:788
+	case 104:
+		//line unql.y:804
 		{
 		logDebugGrammar("FALSE")
 		thisExpression := ast.NewLiteralBool(false) 
 		parsingStack.Push(thisExpression)
 	}
-	case 101:
-		//line unql.y:794
+	case 105:
+		//line unql.y:810
 		{
 		logDebugGrammar("NULL")
 		thisExpression := ast.NewLiteralNull()
 		parsingStack.Push(thisExpression)
 	}
-	case 102:
-		//line unql.y:802
+	case 106:
+		//line unql.y:818
 		{
 		logDebugGrammar("NUMBER %d", yyS[yypt-0].n)
 		thisExpression := ast.NewLiteralNumber(float64(yyS[yypt-0].n))
 		parsingStack.Push(thisExpression)
 	}
-	case 103:
-		//line unql.y:808
+	case 107:
+		//line unql.y:824
 		{
 		logDebugGrammar("NUMBER %f", yyS[yypt-0].f)
 		thisExpression := ast.NewLiteralNumber(yyS[yypt-0].f)
 		parsingStack.Push(thisExpression)
 	}
-	case 104:
-		//line unql.y:816
+	case 108:
+		//line unql.y:832
 		{
 		logDebugGrammar("EMPTY OBJECT")
 		emptyObject := ast.NewLiteralObject(map[string]ast.Expression{})
 		parsingStack.Push(emptyObject)
 	}
-	case 105:
-		//line unql.y:822
+	case 109:
+		//line unql.y:838
 		{
 		logDebugGrammar("OBJECT")
 	}
-	case 106:
-		//line unql.y:828
+	case 110:
+		//line unql.y:844
 		{
 		logDebugGrammar("NAMED EXPR LIST SINGLE")
 	}
-	case 107:
-		//line unql.y:832
+	case 111:
+		//line unql.y:848
 		{
 		logDebugGrammar("NAMED EXPR LIST COMPOUND")
 		last := parsingStack.Pop().(*ast.LiteralObject)
@@ -1401,8 +1425,8 @@ yydefault:
 		}
 		parsingStack.Push(rest)
 	}
-	case 108:
-		//line unql.y:844
+	case 112:
+		//line unql.y:860
 		{  
 		logDebugGrammar("NAMED EXPR SINGLE")
 		thisKey := yyS[yypt-2].s
@@ -1410,36 +1434,36 @@ yydefault:
 		thisExpression := ast.NewLiteralObject(map[string]ast.Expression{thisKey: thisValue})
 		parsingStack.Push(thisExpression) 
 	}
-	case 109:
-		//line unql.y:854
+	case 113:
+		//line unql.y:870
 		{
 		logDebugGrammar("EMPTY ARRAY")
-		thisExpression := ast.NewLiteralArray([]ast.Expression{})
+		thisExpression := ast.NewLiteralArray(ast.ExpressionList{})
 		parsingStack.Push(thisExpression)
 	}
-	case 110:
-		//line unql.y:860
+	case 114:
+		//line unql.y:876
 		{
 		logDebugGrammar("ARRAY")
-		exp_list := parsingStack.Pop().([]ast.Expression)
+		exp_list := parsingStack.Pop().(ast.ExpressionList)
 		thisExpression := ast.NewLiteralArray(exp_list)
 		parsingStack.Push(thisExpression)
 	}
-	case 111:
-		//line unql.y:869
+	case 115:
+		//line unql.y:885
 		{
 		logDebugGrammar("EXPRESSION LIST SINGLE")
-		exp_list := make([]ast.Expression, 0)
+		exp_list := make(ast.ExpressionList, 0)
 		exp_list = append(exp_list, parsingStack.Pop().(ast.Expression))
 		parsingStack.Push(exp_list)
 	}
-	case 112:
-		//line unql.y:876
+	case 116:
+		//line unql.y:892
 		{ 
 		logDebugGrammar("EXPRESSION LIST COMPOUND")
-		rest := parsingStack.Pop().([]ast.Expression)
+		rest := parsingStack.Pop().(ast.ExpressionList)
 		last := parsingStack.Pop()
-		new_list := make([]ast.Expression, 0, len(rest) + 1)
+		new_list := make(ast.ExpressionList, 0, len(rest) + 1)
 		new_list = append(new_list, last.(ast.Expression))
 		for _, v := range rest {
 			new_list = append(new_list, v)

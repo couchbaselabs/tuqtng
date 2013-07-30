@@ -17,6 +17,8 @@ type Statement interface {
 	GetResultExpressionList() ResultExpressionList
 	GetFrom() *From
 	GetWhere() Expression
+	GetGroupBy() ExpressionList
+	GetHaving() Expression
 	GetOrderBy() SortExpressionList
 	GetOffset() int
 	GetLimit() int
@@ -31,6 +33,8 @@ type SelectStatement struct {
 	Select      ResultExpressionList `json:"select"`
 	From        *From                `json:"from"`
 	Where       Expression           `json:"where"`
+	GroupBy     ExpressionList       `json:"group_by"`
+	Having      Expression           `json:"having"`
 	OrderBy     SortExpressionList   `json:"orderby"`
 	Limit       int                  `json:"limit"`
 	Offset      int                  `json:"offset"`
@@ -56,6 +60,14 @@ func (this *SelectStatement) GetFrom() *From {
 
 func (this *SelectStatement) GetWhere() Expression {
 	return this.Where
+}
+
+func (this *SelectStatement) GetGroupBy() ExpressionList {
+	return this.GroupBy
+}
+
+func (this *SelectStatement) GetHaving() Expression {
+	return this.Having
 }
 
 func (this *SelectStatement) GetOrderBy() SortExpressionList {

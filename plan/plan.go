@@ -221,3 +221,21 @@ func NewEliminateDuplicates(input PlanElement) *EliminateDuplicates {
 func (this *EliminateDuplicates) Sources() []PlanElement {
 	return []PlanElement{this.Input}
 }
+
+type Grouper struct {
+	Type  string             `json:"type"`
+	Input PlanElement        `json:"input"`
+	Group ast.ExpressionList `json:"group"`
+}
+
+func NewGroup(input PlanElement, group ast.ExpressionList) *Grouper {
+	return &Grouper{
+		Type:  "grouper",
+		Input: input,
+		Group: group,
+	}
+}
+
+func (this *Grouper) Sources() []PlanElement {
+	return []PlanElement{this.Input}
+}

@@ -91,6 +91,17 @@
 /[oO][vV][eE][rR]/{
                     logDebugTokens("OVER"); return OVER
                   }
+/[gG][rR][oO][uU][pP]/
+                  {
+                    logDebugTokens("GROUP"); return GROUP
+                  }
+/[bB][yY]/        {
+                    logDebugTokens("BY"); return BY
+                  }
+/[hH][aA][vV][iI][nN][gG]/
+                  {
+                    logDebugTokens("HAVING"); return HAVING
+                  }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }
