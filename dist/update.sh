@@ -17,6 +17,10 @@ mkversion() {
     echo "{\"version\": \"$version\"}" > $DIST/version.json
 }
 
+benchmark() {
+    go test -test.bench . > $DIST/benchmark.txt
+}
+
 build() {
     pkg=$project
     goflags="-v -ldflags '-X main.VERSION $version'"
@@ -103,4 +107,5 @@ build
 buildclient
 buildtutorial
 compress
+benchmark
 upload
