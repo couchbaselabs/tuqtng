@@ -21,11 +21,11 @@ import (
 // ****************************************************************************
 
 type AndOperator struct {
-	Type     string       `json:"type"`
-	Operands []Expression `json:"operands"`
+	Type     string         `json:"type"`
+	Operands ExpressionList `json:"operands"`
 }
 
-func NewAndOperator(operands []Expression) *AndOperator {
+func NewAndOperator(operands ExpressionList) *AndOperator {
 	return &AndOperator{
 		Type:     "and",
 		Operands: operands,
@@ -103,11 +103,11 @@ func (this *AndOperator) VerifyFormalNotation(aliases []string, defaultAlias str
 // ****************************************************************************
 
 type OrOperator struct {
-	Type     string       `json:"type"`
-	Operands []Expression `json:"operands"`
+	Type     string         `json:"type"`
+	Operands ExpressionList `json:"operands"`
 }
 
-func NewOrOperator(operands []Expression) *OrOperator {
+func NewOrOperator(operands ExpressionList) *OrOperator {
 	return &OrOperator{
 		Type:     "or",
 		Operands: operands,
