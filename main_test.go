@@ -14,7 +14,7 @@ import (
 
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
-	test "github.com/couchbaselabs/tuqtng/test"
+	"github.com/couchbaselabs/tuqtng/test"
 )
 
 func BenchmarkMock(b *testing.B) {
