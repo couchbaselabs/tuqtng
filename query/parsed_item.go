@@ -20,33 +20,33 @@ type ParsedItem struct {
 
 func NewParsedItem(contents Value, meta map[string]Value) *ParsedItem {
 	return &ParsedItem{
-		contents: convertEmtpyInterfaceToValue(contents),
+		contents: convertEmptyInterfaceToValue(contents),
 		meta:     meta,
 	}
 }
 
-func convertEmtpyInterfaceToValue(input Value) Value {
+func convertEmptyInterfaceToValue(input Value) Value {
 	switch input := input.(type) {
 	case map[string]Value:
 		for k, v := range input {
-			input[k] = convertEmtpyInterfaceToValue(v)
+			input[k] = convertEmptyInterfaceToValue(v)
 		}
 		return input
 	case map[string]interface{}:
 		rv := map[string]Value{}
 		for k, v := range input {
-			rv[k] = convertEmtpyInterfaceToValue(v)
+			rv[k] = convertEmptyInterfaceToValue(v)
 		}
 		return rv
 	case []Value:
 		for i, v := range input {
-			input[i] = convertEmtpyInterfaceToValue(v)
+			input[i] = convertEmptyInterfaceToValue(v)
 		}
 		return input
 	case []interface{}:
 		rv := make([]Value, 0)
 		for _, v := range input {
-			rv = append(rv, convertEmtpyInterfaceToValue(v))
+			rv = append(rv, convertEmptyInterfaceToValue(v))
 		}
 		return rv
 	default:
