@@ -18,6 +18,9 @@ package query
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
+
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 const (
@@ -43,35 +46,36 @@ type Error interface {
 type ErrorChannel chan Error
 
 func NewError(e error, internalMsg string) Error {
-	return &err{level: EXCEPTION, ICode: 5000, IKey: "Internal Error", ICause: e, InternalMsg: internalMsg}
+	return &err{level: EXCEPTION, ICode: 5000, IKey: "Internal Error", ICause: e, InternalMsg: internalMsg, InternalCaller: misc.CallerN(1)}
 }
 
 func NewWarning(internalMsg string) Error {
-	return &err{level: WARNING, InternalMsg: internalMsg}
+	return &err{level: WARNING, InternalMsg: internalMsg, InternalCaller: misc.CallerN(1)}
 }
 
 func NewNotice(internalMsg string) Error {
-	return &err{level: NOTICE, InternalMsg: internalMsg}
+	return &err{level: NOTICE, InternalMsg: internalMsg, InternalCaller: misc.CallerN(1)}
 }
 
 func NewInfo(internalMsg string) Error {
-	return &err{level: INFO, InternalMsg: internalMsg}
+	return &err{level: INFO, InternalMsg: internalMsg, InternalCaller: misc.CallerN(1)}
 }
 
 func NewLog(internalMsg string) Error {
-	return &err{level: LOG, InternalMsg: internalMsg}
+	return &err{level: LOG, InternalMsg: internalMsg, InternalCaller: misc.CallerN(1)}
 }
 
 func NewDebug(internalMsg string) Error {
-	return &err{level: DEBUG, InternalMsg: internalMsg}
+	return &err{level: DEBUG, InternalMsg: internalMsg, InternalCaller: misc.CallerN(1)}
 }
 
 type err struct {
-	ICode       int32
-	IKey        string
-	ICause      error
-	InternalMsg string
-	level       int
+	ICode          int32
+	IKey           string
+	ICause         error
+	InternalMsg    string
+	InternalCaller string
+	level          int
 }
 
 func (e *err) Error() string {
@@ -95,6 +99,10 @@ func (e *err) MarshalJSON() ([]byte, error) {
 	}
 	if e.ICause != nil {
 		m["cause"] = e.ICause.Error()
+	}
+	if e.InternalCaller != "" &&
+		!strings.HasPrefix("e.InternalCaller", "unknown:") {
+		m["caller"] = e.InternalCaller
 	}
 	return json.Marshal(m)
 }
@@ -123,25 +131,25 @@ func (e *err) Cause() error {
 }
 
 func NewParseError(e error, msg string) Error {
-	return &err{level: EXCEPTION, ICode: 4100, IKey: "parse_error", ICause: e, InternalMsg: msg}
+	return &err{level: EXCEPTION, ICode: 4100, IKey: "parse_error", ICause: e, InternalMsg: msg, InternalCaller: misc.CallerN(1)}
 }
 
 func NewSemanticError(e error, msg string) Error {
-	return &err{level: EXCEPTION, ICode: 4200, IKey: "semantic_error", ICause: e, InternalMsg: msg}
+	return &err{level: EXCEPTION, ICode: 4200, IKey: "semantic_error", ICause: e, InternalMsg: msg, InternalCaller: misc.CallerN(1)}
 }
 
 func NewBucketDoesNotExist(bucket string) Error {
-	return &err{level: EXCEPTION, ICode: 4040, IKey: "bucket_not_found", InternalMsg: fmt.Sprintf("Bucket %s does not exist", bucket)}
+	return &err{level: EXCEPTION, ICode: 4040, IKey: "bucket_not_found", InternalMsg: fmt.Sprintf("Bucket %s does not exist", bucket), InternalCaller: misc.CallerN(1)}
 }
 
 func NewPoolDoesNotExist(pool string) Error {
-	return &err{level: EXCEPTION, ICode: 4041, IKey: "pool_not_found", InternalMsg: fmt.Sprintf("Pool %s does not exist", pool)}
+	return &err{level: EXCEPTION, ICode: 4041, IKey: "pool_not_found", InternalMsg: fmt.Sprintf("Pool %s does not exist", pool), InternalCaller: misc.CallerN(1)}
 }
 
 func NewTotalRowsInfo(rows int) Error {
-	return &err{level: INFO, ICode: 100, IKey: "total_rows", InternalMsg: fmt.Sprintf("%d", rows)}
+	return &err{level: INFO, ICode: 100, IKey: "total_rows", InternalMsg: fmt.Sprintf("%d", rows), InternalCaller: misc.CallerN(1)}
 }
 
 func NewTotalElapsedTimeInfo(time string) Error {
-	return &err{level: INFO, ICode: 101, IKey: "total_elapsed_time", InternalMsg: fmt.Sprintf("%s", time)}
+	return &err{level: INFO, ICode: 101, IKey: "total_elapsed_time", InternalMsg: fmt.Sprintf("%s", time), InternalCaller: misc.CallerN(1)}
 }
