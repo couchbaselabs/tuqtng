@@ -17,6 +17,7 @@ import (
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/catalog/couchbase"
 	"github.com/couchbaselabs/tuqtng/catalog/file"
+	"github.com/couchbaselabs/tuqtng/catalog/mock"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/qpipeline/static"
 )
@@ -27,6 +28,9 @@ func Site(s string) (catalog.Site, error) {
 	}
 	if strings.HasPrefix(s, "dir:") {
 		return file.NewSite(s[4:])
+	}
+	if strings.HasPrefix(s, "mock:") {
+		return mock.NewSite(s)
 	}
 	return couchbase.NewSite(s)
 }
