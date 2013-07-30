@@ -28,9 +28,9 @@ func TestLiteralStringRepresentation(t *testing.T) {
 		{NewLiteralNumber(1.0), "1"},
 		{NewLiteralNumber(3.14), "3.14"},
 		{NewLiteralString("couchbase"), "\"couchbase\""},
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0)}), "[1]"},
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewLiteralBool(false)}), "[1, false]"},
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewLiteralBool(false), NewLiteralString("bob")}), "[1, false, \"bob\"]"},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0)}), "[1]"},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0), NewLiteralBool(false)}), "[1, false]"},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0), NewLiteralBool(false), NewLiteralString("bob")}), "[1, false, \"bob\"]"},
 		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), "{\"name\": \"bob\"}"},
 		{NewLiteralObject(map[string]Expression{"user": NewLiteralString("test"), "age": NewLiteralNumber(27.0)}), "{\"user\": \"test\", \"age\": 27}"},
 	}
@@ -55,9 +55,9 @@ func TestEvaluateLiteral(t *testing.T) {
 		{NewLiteralNumber(1.0), 1.0},
 		{NewLiteralNumber(3.14), 3.14},
 		{NewLiteralString("couchbase"), "couchbase"},
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0)}), []query.Value{1.0}},
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewLiteralBool(false)}), []query.Value{1.0, false}},
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewLiteralBool(false), NewLiteralString("bob")}), []query.Value{1.0, false, "bob"}},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0)}), []query.Value{1.0}},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0), NewLiteralBool(false)}), []query.Value{1.0, false}},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0), NewLiteralBool(false), NewLiteralString("bob")}), []query.Value{1.0, false, "bob"}},
 		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), map[string]query.Value{"name": "bob"}},
 		{NewLiteralObject(map[string]Expression{"user": NewLiteralString("test"), "age": NewLiteralNumber(27.0)}), map[string]query.Value{"age": 27.0, "user": "test"}},
 	}
@@ -83,7 +83,7 @@ func TestEvaluateComplexLiteralContainingMissing(t *testing.T) {
 		input  Expression
 		output query.Value
 	}{
-		{NewLiteralArray([]Expression{NewLiteralNumber(1.0), NewProperty("bob")}), []query.Value{1.0}},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0), NewProperty("bob")}), []query.Value{1.0}},
 		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob"), "cat": NewProperty("bob")}), map[string]query.Value{"name": "bob"}},
 	}
 

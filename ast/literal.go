@@ -146,11 +146,11 @@ func (this *LiteralString) VerifyFormalNotation(aliases []string, defaultAlias s
 // ****************************************************************************
 
 type LiteralArray struct {
-	Type string       `json:"type"`
-	Val  []Expression `json:"value"`
+	Type string         `json:"type"`
+	Val  ExpressionList `json:"value"`
 }
 
-func NewLiteralArray(val []Expression) *LiteralArray {
+func NewLiteralArray(val ExpressionList) *LiteralArray {
 	return &LiteralArray{
 		Type: "literal_array",
 		Val:  val,

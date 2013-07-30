@@ -160,7 +160,7 @@ func TestFunction(t *testing.T) {
 		{
 			NewFunctionCall("LENGTH", FunctionArgExpressionList{
 				NewFunctionArgExpression(
-					NewLiteralArray([]Expression{
+					NewLiteralArray(ExpressionList{
 						NewLiteralString("hello"),
 						NewLiteralString("hello")}))}),
 			2.0,
