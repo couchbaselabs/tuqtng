@@ -13,6 +13,15 @@ testpkg() {
     go vet $project/...
 }
 
+coverage() {
+    gocov test github.com/couchbaselabs/tuqtng/ast | gocov-html > $DIST/cov-ast.html
+    gocov test github.com/couchbaselabs/tuqtng/misc | gocov-html > $DIST/cov-misc.html
+    gocov test github.com/couchbaselabs/tuqtng/plan | gocov-html > $DIST/cov-plan.html
+    gocov test github.com/couchbaselabs/tuqtng/query | gocov-html > $DIST/cov-query.html
+    gocov test github.com/couchbaselabs/tuqtng/test | gocov-html > $DIST/cov-test.html
+    gocov test github.com/couchbaselabs/tuqtng/xpipeline | gocov-html > $DIST/cov-xpipeline.html
+}
+
 mkversion() {
     echo "{\"version\": \"$version\"}" > $DIST/version.json
 }
@@ -108,4 +117,5 @@ buildclient
 buildtutorial
 compress
 benchmark
+coverage
 upload
