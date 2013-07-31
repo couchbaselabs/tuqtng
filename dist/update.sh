@@ -14,12 +14,10 @@ testpkg() {
 }
 
 coverage() {
-    gocov test github.com/couchbaselabs/tuqtng/ast | gocov-html > $DIST/cov-ast.html
-    gocov test github.com/couchbaselabs/tuqtng/misc | gocov-html > $DIST/cov-misc.html
-    gocov test github.com/couchbaselabs/tuqtng/plan | gocov-html > $DIST/cov-plan.html
-    gocov test github.com/couchbaselabs/tuqtng/query | gocov-html > $DIST/cov-query.html
-    gocov test github.com/couchbaselabs/tuqtng/test | gocov-html > $DIST/cov-test.html
-    gocov test github.com/couchbaselabs/tuqtng/xpipeline | gocov-html > $DIST/cov-xpipeline.html
+    for sub in ast misc plan query test xpipeline
+    do
+        gocov test $project/$sub | gocov-html > $DIST/cov-$sub.html
+    done
 }
 
 mkversion() {
