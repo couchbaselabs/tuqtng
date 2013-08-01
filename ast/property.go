@@ -27,7 +27,7 @@ func NewProperty(path string) *Property {
 	}
 }
 
-func (this *Property) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *Property) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	if item == nil {
 		return nil, &dparval.Undefined{this.Path}
 	}

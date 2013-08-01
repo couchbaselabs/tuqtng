@@ -214,8 +214,8 @@ func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
 	return scanner, nil
 }
 
-func (b *bucket) BulkFetch(ids []string) (map[string]dparval.Value, query.Error) {
-	rv := make(map[string]dparval.Value, 0)
+func (b *bucket) BulkFetch(ids []string) (map[string]*dparval.Value, query.Error) {
+	rv := make(map[string]*dparval.Value, 0)
 	for _, id := range ids {
 		item, e := b.Fetch(id)
 		if e != nil {
@@ -226,7 +226,7 @@ func (b *bucket) BulkFetch(ids []string) (map[string]dparval.Value, query.Error)
 	return rv, nil
 }
 
-func (b *bucket) Fetch(id string) (item dparval.Value, e query.Error) {
+func (b *bucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 	path := filepath.Join(b.path(), id+".json")
 	item, e = fetch(path)
 	if e != nil {
@@ -291,14 +291,14 @@ func (fs *fullScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.Erro
 
 	for _, dirEntry := range dirEntries {
 		if !dirEntry.IsDir() {
-			doc := dparval.NewEmptyObjectValue()
+			doc := dparval.NewValue(map[string]interface{}{})
 			doc.AddMeta("meta", map[string]interface{}{"id": documentPathToId(dirEntry.Name())})
 			ch <- doc
 		}
 	}
 }
 
-func fetch(path string) (item dparval.Value, e query.Error) {
+func fetch(path string) (item *dparval.Value, e query.Error) {
 	bytes, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, query.NewError(err, "")

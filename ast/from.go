@@ -10,7 +10,7 @@
 package ast
 
 import (
-	"log"
+	"fmt"
 )
 
 type From struct {
@@ -54,8 +54,10 @@ func (this *From) GenerateAlias() {
 			// FROM bucket.propa.propb
 			// becomes FROM bucket.propa.propb AS propb
 			this.As = proj.Right.Path
+		case *BracketMemberOperator:
+			// we decided to NOT assign an alias for this type at this time
 		default:
-			log.Printf("unexpected type %T in FROM", proj)
+			panic(fmt.Sprintf("unexpected type %T in FROM", proj))
 		}
 		// in all other cases there is no alias generated
 	}

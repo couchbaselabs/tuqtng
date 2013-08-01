@@ -44,8 +44,8 @@ type Bucket interface {
 	Scanners() ([]Scanner, query.Error)
 	ScannerNames() ([]string, query.Error)
 	Scanner(name string) (Scanner, query.Error)
-	Fetch(id string) (dparval.Value, query.Error)
-	BulkFetch([]string) (map[string]dparval.Value, query.Error)
+	Fetch(id string) (*dparval.Value, query.Error)
+	BulkFetch([]string) (map[string]*dparval.Value, query.Error)
 	Release()
 }
 

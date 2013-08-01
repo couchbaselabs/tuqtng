@@ -29,8 +29,8 @@ func NewLiteralNull() *LiteralNull {
 	}
 }
 
-func (this *LiteralNull) Evaluate(item dparval.Value) (dparval.Value, error) {
-	return dparval.NewNullValue(), nil
+func (this *LiteralNull) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	return dparval.NewValue(nil), nil
 }
 
 func (this *LiteralNull) String() string {
@@ -61,8 +61,8 @@ func NewLiteralBool(val bool) *LiteralBool {
 	}
 }
 
-func (this *LiteralBool) Evaluate(item dparval.Value) (dparval.Value, error) {
-	return dparval.NewBooleanValue(this.Val), nil
+func (this *LiteralBool) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	return dparval.NewValue(this.Val), nil
 }
 
 func (this *LiteralBool) String() string {
@@ -93,8 +93,8 @@ func NewLiteralNumber(val float64) *LiteralNumber {
 	}
 }
 
-func (this *LiteralNumber) Evaluate(item dparval.Value) (dparval.Value, error) {
-	return dparval.NewNumberValue(this.Val), nil
+func (this *LiteralNumber) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	return dparval.NewValue(this.Val), nil
 }
 
 func (this *LiteralNumber) String() string {
@@ -125,8 +125,8 @@ func NewLiteralString(val string) *LiteralString {
 	}
 }
 
-func (this *LiteralString) Evaluate(item dparval.Value) (dparval.Value, error) {
-	return dparval.NewStringValue(this.Val), nil
+func (this *LiteralString) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	return dparval.NewValue(this.Val), nil
 }
 
 func (this *LiteralString) String() string {
@@ -157,7 +157,7 @@ func NewLiteralArray(val ExpressionList) *LiteralArray {
 	}
 }
 
-func (this *LiteralArray) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *LiteralArray) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	rv := make([]interface{}, 0, len(this.Val))
 	for _, v := range this.Val {
 		ev, err := v.Evaluate(item)
@@ -173,7 +173,7 @@ func (this *LiteralArray) Evaluate(item dparval.Value) (dparval.Value, error) {
 			rv = append(rv, ev)
 		}
 	}
-	return dparval.NewArrayValue(rv), nil
+	return dparval.NewValue(rv), nil
 }
 
 func (this *LiteralArray) String() string {
@@ -227,7 +227,7 @@ func NewLiteralObject(val map[string]Expression) *LiteralObject {
 	}
 }
 
-func (this *LiteralObject) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *LiteralObject) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	rv := make(map[string]interface{}, len(this.Val))
 	for k, v := range this.Val {
 		ev, err := v.Evaluate(item)
@@ -243,7 +243,7 @@ func (this *LiteralObject) Evaluate(item dparval.Value) (dparval.Value, error) {
 			rv[k] = ev
 		}
 	}
-	return dparval.NewObjectValue(rv), nil
+	return dparval.NewValue(rv), nil
 }
 
 func (this *LiteralObject) String() string {

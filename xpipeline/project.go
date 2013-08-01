@@ -47,7 +47,7 @@ func (this *Project) Run() {
 
 	go this.Source.Run()
 
-	var item dparval.Value
+	var item *dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	this.ok = true
@@ -73,7 +73,7 @@ func (this *Project) Run() {
 	}
 }
 
-func (this *Project) processItem(item dparval.Value) {
+func (this *Project) processItem(item *dparval.Value) {
 	resultMap := map[string]interface{}{}
 	for _, resultItem := range this.Result {
 		if resultItem.Star {
@@ -144,7 +144,7 @@ func (this *Project) processItem(item dparval.Value) {
 	}
 
 	// create the actual result Item
-	finalItem := dparval.NewObjectValue(resultMap)
+	finalItem := dparval.NewValue(resultMap)
 	itemMetaVal := item.Meta()
 	if itemMetaVal != nil {
 		itemMetaData, err := itemMetaVal.Path("meta")

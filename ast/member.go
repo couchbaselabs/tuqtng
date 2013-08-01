@@ -33,7 +33,7 @@ func NewDotMemberOperator(left Expression, right *Property) *DotMemberOperator {
 	}
 }
 
-func (this *DotMemberOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *DotMemberOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func NewBracketMemberOperator(left, right Expression) *BracketMemberOperator {
 	}
 }
 
-func (this *BracketMemberOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *BracketMemberOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// evaluting RHS first is more correct in case of side-effects
 	rv, err := this.Right.Evaluate(item)
 	if err != nil {

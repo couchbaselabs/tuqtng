@@ -31,7 +31,7 @@ func NewFunctionCall(name string, operands FunctionArgExpressionList) *FunctionC
 	}
 }
 
-func (this *FunctionCall) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *FunctionCall) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	functionImpl := SystemFunctionRegistry[this.Name]
 	if functionImpl != nil {
 		return functionImpl.Evaluate(item, this.Operands)
@@ -39,7 +39,7 @@ func (this *FunctionCall) Evaluate(item dparval.Value) (dparval.Value, error) {
 
 	// FIXME should never happen once we have semantic validation
 	log.Printf("no system function named %v registered", this.Name)
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionCall) Validate() error {

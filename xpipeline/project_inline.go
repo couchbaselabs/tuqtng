@@ -45,7 +45,7 @@ func (this *ProjectInline) Run() {
 
 	go this.Source.Run()
 
-	var item dparval.Value
+	var item *dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	this.ok = true
@@ -71,7 +71,7 @@ func (this *ProjectInline) Run() {
 	}
 }
 
-func (this *ProjectInline) processItem(item dparval.Value) {
+func (this *ProjectInline) processItem(item *dparval.Value) {
 	var err error
 	var res interface{}
 

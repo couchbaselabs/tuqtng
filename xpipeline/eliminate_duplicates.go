@@ -49,7 +49,7 @@ func (this *EliminateDuplicates) Run() {
 
 	go this.Source.Run()
 
-	var item dparval.Value
+	var item *dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	ok := true
@@ -94,6 +94,6 @@ func (this *EliminateDuplicates) Run() {
 	}
 }
 
-func (this *EliminateDuplicates) processItem(item dparval.Value) {
+func (this *EliminateDuplicates) processItem(item *dparval.Value) {
 	this.buffer = append(this.buffer, item)
 }

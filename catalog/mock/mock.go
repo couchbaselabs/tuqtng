@@ -184,8 +184,8 @@ func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
 	return scanner, nil
 }
 
-func (b *bucket) BulkFetch(ids []string) (map[string]dparval.Value, query.Error) {
-	rv := make(map[string]dparval.Value, 0)
+func (b *bucket) BulkFetch(ids []string) (map[string]*dparval.Value, query.Error) {
+	rv := make(map[string]*dparval.Value, 0)
 	for _, id := range ids {
 		item, e := b.Fetch(id)
 		if e != nil {
@@ -196,7 +196,7 @@ func (b *bucket) BulkFetch(ids []string) (map[string]dparval.Value, query.Error)
 	return rv, nil
 }
 
-func (b *bucket) Fetch(id string) (item dparval.Value, e query.Error) {
+func (b *bucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 	i, err := strconv.Atoi(id)
 	if err != nil {
 		return nil, query.NewError(err,
@@ -225,19 +225,19 @@ func (fs *fullScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.Erro
 	defer close(errch)
 
 	for i := 0; i < fs.bucket.nitems; i++ {
-		doc := dparval.NewEmptyObjectValue()
+		doc := dparval.NewValue(map[string]interface{}{})
 		doc.AddMeta("meta", map[string]interface{}{"id": strconv.Itoa(i)})
 		ch <- doc
 	}
 }
 
-func genItem(i int, nitems int) (dparval.Value, query.Error) {
+func genItem(i int, nitems int) (*dparval.Value, query.Error) {
 	if i < 0 || i >= nitems {
 		return nil, query.NewError(nil,
 			fmt.Sprintf("item out of mock range: %v [0,%v)", i, nitems))
 	}
 	id := strconv.Itoa(i)
-	doc := dparval.NewObjectValue(map[string]interface{}{"id": id, "i": float64(i)})
+	doc := dparval.NewValue(map[string]interface{}{"id": id, "i": float64(i)})
 	doc.AddMeta("meta", map[string]interface{}{"id": id})
 	return doc, nil
 }

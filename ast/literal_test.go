@@ -65,7 +65,7 @@ func TestEvaluateLiteral(t *testing.T) {
 func TestEvaluateComplexLiteralContainingMissing(t *testing.T) {
 
 	sampleDocument := map[string]interface{}{}
-	item := dparval.NewObjectValue(sampleDocument)
+	item := dparval.NewValue(sampleDocument)
 
 	tests := ExpressionTestSet{
 		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0), NewProperty("bob")}), []interface{}{1.0}, nil},

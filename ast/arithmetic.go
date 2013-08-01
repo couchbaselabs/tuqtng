@@ -34,7 +34,7 @@ func NewPlusOperator(left, right Expression) *PlusOperator {
 	}
 }
 
-func (this *PlusOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *PlusOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func (this *PlusOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 		}
 	}
 
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *PlusOperator) Validate() error {
@@ -112,7 +112,7 @@ func NewSubtractOperator(left, right Expression) *SubtractOperator {
 	}
 }
 
-func (this *SubtractOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *SubtractOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -134,7 +134,7 @@ func (this *SubtractOperator) Evaluate(item dparval.Value) (dparval.Value, error
 			}
 		}
 	}
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *SubtractOperator) Validate() error {
@@ -189,7 +189,7 @@ func NewMultiplyOperator(left, right Expression) *MultiplyOperator {
 	}
 }
 
-func (this *MultiplyOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *MultiplyOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -211,7 +211,7 @@ func (this *MultiplyOperator) Evaluate(item dparval.Value) (dparval.Value, error
 			}
 		}
 	}
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *MultiplyOperator) Validate() error {
@@ -266,7 +266,7 @@ func NewDivideOperator(left, right Expression) *DivideOperator {
 	}
 }
 
-func (this *DivideOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *DivideOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -288,7 +288,7 @@ func (this *DivideOperator) Evaluate(item dparval.Value) (dparval.Value, error) 
 			}
 		}
 	}
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *DivideOperator) Validate() error {
@@ -343,7 +343,7 @@ func NewModuloOperator(left, right Expression) *ModuloOperator {
 	}
 }
 
-func (this *ModuloOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *ModuloOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -365,7 +365,7 @@ func (this *ModuloOperator) Evaluate(item dparval.Value) (dparval.Value, error) 
 			}
 		}
 	}
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *ModuloOperator) Validate() error {
@@ -418,7 +418,7 @@ func NewChangeSignOperator(operand Expression) *ChangeSignOperator {
 	}
 }
 
-func (this *ChangeSignOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *ChangeSignOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -431,7 +431,7 @@ func (this *ChangeSignOperator) Evaluate(item dparval.Value) (dparval.Value, err
 			return dparval.NewValue(-ovalue), nil
 		}
 	}
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *ChangeSignOperator) Validate() error {

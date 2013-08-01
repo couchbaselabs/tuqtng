@@ -69,7 +69,7 @@ func TestDotMember(t *testing.T) {
 		{NewBracketMemberOperator(NewProperty("address"), NewLiteralString("street")), "1 recursive function", nil},
 	}
 
-	context := dparval.NewObjectValue(sampleContext)
+	context := dparval.NewValue(sampleContext)
 	context.AddMeta("meta", sampleMeta)
 
 	tests.RunWithItem(t, context)

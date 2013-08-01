@@ -24,7 +24,7 @@ type Fetch struct {
 	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
 	bucket         catalog.Bucket
-	batch          []dparval.Value
+	batch          dparval.ValueCollection
 	ok             bool
 }
 
@@ -33,7 +33,7 @@ func NewFetch(bucket catalog.Bucket) *Fetch {
 		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 		bucket:         bucket,
-		batch:          make([]dparval.Value, 0, FETCH_BATCH_SIZE),
+		batch:          make(dparval.ValueCollection, 0, FETCH_BATCH_SIZE),
 	}
 }
 
@@ -52,7 +52,7 @@ func (this *Fetch) Run() {
 
 	go this.Source.Run()
 
-	var item dparval.Value
+	var item *dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	this.ok = true
@@ -81,7 +81,7 @@ func (this *Fetch) Run() {
 	this.flushBatch()
 }
 
-func (this *Fetch) processItem(item dparval.Value) {
+func (this *Fetch) processItem(item *dparval.Value) {
 	// add this item to the batch
 	this.batch = append(this.batch, item)
 
@@ -96,7 +96,7 @@ func (this *Fetch) flushBatch() {
 	defer func() {
 		// no matter what hapens in this function
 		// clear out the batch and start a new one
-		this.batch = make([]dparval.Value, 0, FETCH_BATCH_SIZE)
+		this.batch = make(dparval.ValueCollection, 0, FETCH_BATCH_SIZE)
 	}()
 
 	// gather the ids

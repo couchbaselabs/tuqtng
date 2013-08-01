@@ -19,19 +19,19 @@ func TestStubSource(t *testing.T) {
 
 	testData := dparval.ValueCollection{}
 
-	doc := dparval.NewObjectValue(map[string]interface{}{"name": "marty"})
+	doc := dparval.NewValue(map[string]interface{}{"name": "marty"})
 	doc.AddMeta("meta", map[string]interface{}{"id": "1"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewObjectValue(map[string]interface{}{"name": "steve"})
+	doc = dparval.NewValue(map[string]interface{}{"name": "steve"})
 	doc.AddMeta("meta", map[string]interface{}{"id": "2"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewObjectValue(map[string]interface{}{"name": "gerald"})
+	doc = dparval.NewValue(map[string]interface{}{"name": "gerald"})
 	doc.AddMeta("meta", map[string]interface{}{"id": "3"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewObjectValue(map[string]interface{}{"name": "siri"})
+	doc = dparval.NewValue(map[string]interface{}{"name": "siri"})
 	doc.AddMeta("meta", map[string]interface{}{"id": "4"})
 	testData = append(testData, doc)
 

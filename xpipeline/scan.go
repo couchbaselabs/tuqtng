@@ -47,7 +47,7 @@ func (this *Scan) Run() {
 	scannerItemChannel := make(dparval.ValueChannel)
 	scannerWarnChannel := make(query.ErrorChannel)
 	scannerErrorChannel := make(query.ErrorChannel)
-	var item dparval.Value
+	var item *dparval.Value
 	var warn query.Error
 	var err query.Error
 

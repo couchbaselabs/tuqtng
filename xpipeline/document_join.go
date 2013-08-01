@@ -46,7 +46,7 @@ func (this *DocumentJoin) Run() {
 
 	go this.Source.Run()
 
-	var item dparval.Value
+	var item *dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	ok := true
@@ -72,7 +72,7 @@ func (this *DocumentJoin) Run() {
 	}
 }
 
-func (this *DocumentJoin) processItem(item dparval.Value) bool {
+func (this *DocumentJoin) processItem(item *dparval.Value) bool {
 	val, err := this.Over.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
@@ -107,7 +107,7 @@ func (this *DocumentJoin) processItem(item dparval.Value) bool {
 					this.supportChannel <- query.NewError(err, "Internal Error")
 					return false
 				}
-				finalItem := dparval.NewObjectValue(newValue)
+				finalItem := dparval.NewValue(newValue)
 				finalItem.AddMeta("meta", itemMetaData)
 				this.itemChannel <- finalItem
 			}

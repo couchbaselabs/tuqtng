@@ -33,7 +33,7 @@ func NewCaseOperator() *CaseOperator {
 	}
 }
 
-func (this *CaseOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *CaseOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// walk through the WhenThens in order
 	for _, WhenThen := range this.WhenThens {
 		// evalute the when
@@ -72,7 +72,7 @@ func (this *CaseOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 		return elseVal, nil
 	}
 	// if there was no else, return null
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *CaseOperator) Validate() error {

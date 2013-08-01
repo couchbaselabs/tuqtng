@@ -26,7 +26,7 @@ func (this *FunctionLength) Name() string {
 	return "LENGTH"
 }
 
-func (this *FunctionLength) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionLength) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -35,7 +35,7 @@ func (this *FunctionLength) Evaluate(item dparval.Value, arguments FunctionArgEx
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -53,7 +53,7 @@ func (this *FunctionLength) Evaluate(item dparval.Value, arguments FunctionArgEx
 			return dparval.NewValue(float64(len(avalue))), nil
 		}
 	}
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionLength) Validate(arguments FunctionArgExpressionList) error {

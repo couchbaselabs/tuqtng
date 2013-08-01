@@ -36,6 +36,6 @@ func (this *ExpressionEvaluatorSource) GetChannels() (dparval.ValueChannel, Pipe
 func (this *ExpressionEvaluatorSource) Run() {
 	defer close(this.itemChannel)
 	defer close(this.supportChannel)
-	item := dparval.NewEmptyObjectValue()
+	item := dparval.NewValue(map[string]interface{}{})
 	this.itemChannel <- item
 }

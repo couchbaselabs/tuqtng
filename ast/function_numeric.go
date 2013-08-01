@@ -29,7 +29,7 @@ func (this *FunctionCeil) Name() string {
 	return "CEIL"
 }
 
-func (this *FunctionCeil) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionCeil) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -39,7 +39,7 @@ func (this *FunctionCeil) Evaluate(item dparval.Value, arguments FunctionArgExpr
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -54,7 +54,7 @@ func (this *FunctionCeil) Evaluate(item dparval.Value, arguments FunctionArgExpr
 		}
 	}
 
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionCeil) Validate(arguments FunctionArgExpressionList) error {
@@ -70,7 +70,7 @@ func (this *FunctionFloor) Name() string {
 	return "FLOOR"
 }
 
-func (this *FunctionFloor) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionFloor) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -80,7 +80,7 @@ func (this *FunctionFloor) Evaluate(item dparval.Value, arguments FunctionArgExp
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -94,7 +94,7 @@ func (this *FunctionFloor) Evaluate(item dparval.Value, arguments FunctionArgExp
 			return dparval.NewValue(math.Floor(avalue)), nil
 		}
 	}
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionFloor) Validate(arguments FunctionArgExpressionList) error {
@@ -136,14 +136,14 @@ func (this *FunctionRound) Name() string {
 	return "ROUND"
 }
 
-func (this *FunctionRound) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionRound) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -158,7 +158,7 @@ func (this *FunctionRound) Evaluate(item dparval.Value, arguments FunctionArgExp
 			switch err := err.(type) {
 			case *dparval.Undefined:
 				// undefined returns null
-				return dparval.NewNullValue(), nil
+				return dparval.NewValue(nil), nil
 			default:
 				// any other error return to caller
 				return nil, err
@@ -174,7 +174,7 @@ func (this *FunctionRound) Evaluate(item dparval.Value, arguments FunctionArgExp
 			}
 		} else {
 			// FIXME log warning here?
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		}
 	}
 
@@ -187,7 +187,7 @@ func (this *FunctionRound) Evaluate(item dparval.Value, arguments FunctionArgExp
 			return dparval.NewValue(RoundFloat(avalue, precision)), nil
 		}
 	}
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionRound) Validate(arguments FunctionArgExpressionList) error {
@@ -216,14 +216,14 @@ func (this *FunctionTrunc) Name() string {
 	return "TRUNC"
 }
 
-func (this *FunctionTrunc) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionTrunc) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -240,7 +240,7 @@ func (this *FunctionTrunc) Evaluate(item dparval.Value, arguments FunctionArgExp
 			switch err := err.(type) {
 			case *dparval.Undefined:
 				// undefined returns null
-				return dparval.NewNullValue(), nil
+				return dparval.NewValue(nil), nil
 			default:
 				// any other error return to caller
 				return nil, err
@@ -255,7 +255,7 @@ func (this *FunctionTrunc) Evaluate(item dparval.Value, arguments FunctionArgExp
 			}
 		} else {
 			// FIXME log warning here?
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		}
 
 	}
@@ -269,7 +269,7 @@ func (this *FunctionTrunc) Evaluate(item dparval.Value, arguments FunctionArgExp
 			return dparval.NewValue(TruncateFloat(avalue, precision)), nil
 		}
 	}
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionTrunc) Validate(arguments FunctionArgExpressionList) error {

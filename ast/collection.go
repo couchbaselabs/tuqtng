@@ -31,14 +31,14 @@ func NewCollectionAnyOperator(condition Expression, over Expression, as string) 
 	}
 }
 
-func (this *CollectionAnyOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *CollectionAnyOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the over
 	ov, err := this.Over.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// spec says return false
-			return dparval.NewBooleanValue(false), nil
+			return dparval.NewValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
@@ -61,32 +61,33 @@ func (this *CollectionAnyOperator) Evaluate(item dparval.Value) (dparval.Value, 
 				default:
 					return nil, err
 				}
-			}
+			} else {
 
-			// create a new context with this object named as the alias
-			innerContext := dparval.NewObjectValue(map[string]interface{}{this.As: inner})
-			// now evaluate the condition in this new context
-			innerResult, err := this.Condition.Evaluate(innerContext)
-			if err != nil {
-				switch err := err.(type) {
-				case *dparval.Undefined:
-					// this is not true, keep trying
-					continue
-				default:
-					// any other error should be returned to caller
-					return nil, err
+				// create a new context with this object named as the alias
+				innerContext := dparval.NewValue(map[string]interface{}{this.As: inner})
+				// now evaluate the condition in this new context
+				innerResult, err := this.Condition.Evaluate(innerContext)
+				if err != nil {
+					switch err := err.(type) {
+					case *dparval.Undefined:
+						// this is not true, keep trying
+						continue
+					default:
+						// any other error should be returned to caller
+						return nil, err
+					}
+				}
+				innerResultVal := innerResult.Value()
+				// check to see if this value is true
+				innerBoolResult := ValueInBooleanContext(innerResultVal)
+				if innerBoolResult == true {
+					return dparval.NewValue(true), nil
 				}
 			}
-			innerResultVal := innerResult.Value()
-			// check to see if this value is true
-			innerBoolResult := ValueInBooleanContext(innerResultVal)
-			if innerBoolResult == true {
-				return dparval.NewBooleanValue(true), nil
-			}
 		}
-		return dparval.NewBooleanValue(false), nil
+		return dparval.NewValue(false), nil
 	}
-	return dparval.NewBooleanValue(false), nil
+	return dparval.NewValue(false), nil
 }
 
 func (this *CollectionAnyOperator) Validate() error {
@@ -141,14 +142,14 @@ func NewCollectionAllOperator(condition Expression, over Expression, as string) 
 	}
 }
 
-func (this *CollectionAllOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *CollectionAllOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the over
 	ov, err := this.Over.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// spec says return false
-			return dparval.NewBooleanValue(false), nil
+			return dparval.NewValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
@@ -172,33 +173,34 @@ func (this *CollectionAllOperator) Evaluate(item dparval.Value) (dparval.Value, 
 				default:
 					return nil, err
 				}
-			}
+			} else {
 
-			// create a new context with this object named as the alias
-			innerContext := dparval.NewObjectValue(map[string]interface{}{this.As: inner})
-			// now evaluate the condition in this new context
-			innerResult, err := this.Condition.Evaluate(innerContext)
-			if err != nil {
-				switch err := err.(type) {
-				case *dparval.Undefined:
-					// not true, stop looking
-					return dparval.NewBooleanValue(false), nil
-				default:
-					// any other error should be returned to caller
-					return nil, err
+				// create a new context with this object named as the alias
+				innerContext := dparval.NewValue(map[string]interface{}{this.As: inner})
+				// now evaluate the condition in this new context
+				innerResult, err := this.Condition.Evaluate(innerContext)
+				if err != nil {
+					switch err := err.(type) {
+					case *dparval.Undefined:
+						// not true, stop looking
+						return dparval.NewValue(false), nil
+					default:
+						// any other error should be returned to caller
+						return nil, err
+					}
+				}
+				innerResultVal := innerResult.Value()
+				// check to see if this value is true
+				innerBoolResult := ValueInBooleanContext(innerResultVal)
+				if innerBoolResult == false {
+					return dparval.NewValue(false), nil
 				}
 			}
-			innerResultVal := innerResult.Value()
-			// check to see if this value is true
-			innerBoolResult := ValueInBooleanContext(innerResultVal)
-			if innerBoolResult == false {
-				return dparval.NewBooleanValue(false), nil
-			}
 		}
-		return dparval.NewBooleanValue(true), nil
+		return dparval.NewValue(true), nil
 
 	}
-	return dparval.NewBooleanValue(false), nil
+	return dparval.NewValue(false), nil
 }
 
 func (this *CollectionAllOperator) Validate() error {

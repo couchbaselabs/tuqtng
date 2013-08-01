@@ -19,35 +19,35 @@ import (
 var testData = dparval.ValueCollection{}
 
 func init() {
-	doc := dparval.NewObjectValue(map[string]interface{}{"name": "mike", "age": 100.0})
+	doc := dparval.NewValue(map[string]interface{}{"name": "mike", "age": 100.0})
 	doc.AddMeta("meta", map[string]interface{}{"id": "1"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewObjectValue(map[string]interface{}{"name": "dustin"})
+	doc = dparval.NewValue(map[string]interface{}{"name": "dustin"})
 	doc.AddMeta("meta", map[string]interface{}{"id": "1"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewObjectValue(map[string]interface{}{"name": "bob", "age": nil})
+	doc = dparval.NewValue(map[string]interface{}{"name": "bob", "age": nil})
 	doc.AddMeta("meta", map[string]interface{}{"id": "1"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewObjectValue(map[string]interface{}{"name": "marty", "age": 99.0})
+	doc = dparval.NewValue(map[string]interface{}{"name": "marty", "age": 99.0})
 	doc.AddMeta("meta", map[string]interface{}{"id": "1"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewObjectValue(map[string]interface{}{"name": "steve", "age": 200.0})
+	doc = dparval.NewValue(map[string]interface{}{"name": "steve", "age": 200.0})
 	doc.AddMeta("meta", map[string]interface{}{"id": "2"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewObjectValue(map[string]interface{}{"name": "gerald", "age": 175.0})
+	doc = dparval.NewValue(map[string]interface{}{"name": "gerald", "age": 175.0})
 	doc.AddMeta("meta", map[string]interface{}{"id": "3"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewObjectValue(map[string]interface{}{"name": "siri", "age": 74.0})
+	doc = dparval.NewValue(map[string]interface{}{"name": "siri", "age": 74.0})
 	doc.AddMeta("meta", map[string]interface{}{"id": "4"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewObjectValue(map[string]interface{}{"name": "ali", "age": 100.0})
+	doc = dparval.NewValue(map[string]interface{}{"name": "ali", "age": 100.0})
 	doc.AddMeta("meta", map[string]interface{}{"id": "1"})
 	testData = append(testData, doc)
 }

@@ -27,7 +27,7 @@ func (this *FunctionMeta) Name() string {
 	return "META"
 }
 
-func (this *FunctionMeta) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionMeta) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 
 	// FIXME the commented code below wont work until we fix how we store meta
 
@@ -71,7 +71,7 @@ func (this *FunctionValue) Name() string {
 	return "VALUE"
 }
 
-func (this *FunctionValue) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionValue) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	if len(arguments) > 0 {
 		// first evaluate the argument
 		av, err := arguments[0].Expr.Evaluate(item)

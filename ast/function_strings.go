@@ -31,7 +31,7 @@ func (this *FunctionLower) Name() string {
 	return "LOWER"
 }
 
-func (this *FunctionLower) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionLower) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -41,7 +41,7 @@ func (this *FunctionLower) Evaluate(item dparval.Value, arguments FunctionArgExp
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -52,10 +52,10 @@ func (this *FunctionLower) Evaluate(item dparval.Value, arguments FunctionArgExp
 		avalue := av.Value()
 		switch avalue := avalue.(type) {
 		case string:
-			return dparval.NewStringValue(strings.ToLower(avalue)), nil
+			return dparval.NewValue(strings.ToLower(avalue)), nil
 		}
 	}
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionLower) Validate(arguments FunctionArgExpressionList) error {
@@ -72,7 +72,7 @@ func (this *FunctionUpper) Name() string {
 	return "UPPER"
 }
 
-func (this *FunctionUpper) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionUpper) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -82,7 +82,7 @@ func (this *FunctionUpper) Evaluate(item dparval.Value, arguments FunctionArgExp
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -93,10 +93,10 @@ func (this *FunctionUpper) Evaluate(item dparval.Value, arguments FunctionArgExp
 		avalue := av.Value()
 		switch avalue := avalue.(type) {
 		case string:
-			return dparval.NewStringValue(strings.ToUpper(avalue)), nil
+			return dparval.NewValue(strings.ToUpper(avalue)), nil
 		}
 	}
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionUpper) Validate(arguments FunctionArgExpressionList) error {
@@ -113,7 +113,7 @@ func (this *FunctionLTrim) Name() string {
 	return "LTRIM"
 }
 
-func (this *FunctionLTrim) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionLTrim) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -123,7 +123,7 @@ func (this *FunctionLTrim) Evaluate(item dparval.Value, arguments FunctionArgExp
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -137,7 +137,7 @@ func (this *FunctionLTrim) Evaluate(item dparval.Value, arguments FunctionArgExp
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -152,14 +152,14 @@ func (this *FunctionLTrim) Evaluate(item dparval.Value, arguments FunctionArgExp
 				cutvlal := cutlist.Value()
 				switch cutvlal := cutvlal.(type) {
 				case string:
-					return dparval.NewStringValue(strings.TrimLeft(avalue, cutvlal)), nil
+					return dparval.NewValue(strings.TrimLeft(avalue, cutvlal)), nil
 				}
 			}
 		}
 
 	}
 	// FIXME warn if cutlist wasnt string?
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionLTrim) Validate(arguments FunctionArgExpressionList) error {
@@ -176,7 +176,7 @@ func (this *FunctionRTrim) Name() string {
 	return "RTRIM"
 }
 
-func (this *FunctionRTrim) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionRTrim) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -186,7 +186,7 @@ func (this *FunctionRTrim) Evaluate(item dparval.Value, arguments FunctionArgExp
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -200,7 +200,7 @@ func (this *FunctionRTrim) Evaluate(item dparval.Value, arguments FunctionArgExp
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -215,13 +215,13 @@ func (this *FunctionRTrim) Evaluate(item dparval.Value, arguments FunctionArgExp
 				cutval := cutlist.Value()
 				switch cutval := cutval.(type) {
 				case string:
-					return dparval.NewStringValue(strings.TrimRight(avalue, cutval)), nil
+					return dparval.NewValue(strings.TrimRight(avalue, cutval)), nil
 				}
 			}
 		}
 	}
 	// FIXME warn if cutlist wasnt string?
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionRTrim) Validate(arguments FunctionArgExpressionList) error {
@@ -238,7 +238,7 @@ func (this *FunctionTrim) Name() string {
 	return "TRIM"
 }
 
-func (this *FunctionTrim) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionTrim) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -248,7 +248,7 @@ func (this *FunctionTrim) Evaluate(item dparval.Value, arguments FunctionArgExpr
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -262,7 +262,7 @@ func (this *FunctionTrim) Evaluate(item dparval.Value, arguments FunctionArgExpr
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -277,13 +277,13 @@ func (this *FunctionTrim) Evaluate(item dparval.Value, arguments FunctionArgExpr
 				cutval := cutlist.Value()
 				switch cutval := cutval.(type) {
 				case string:
-					return dparval.NewStringValue(strings.Trim(avalue, cutval)), nil
+					return dparval.NewValue(strings.Trim(avalue, cutval)), nil
 				}
 			}
 		}
 	}
 	// FIXME warn if that cutlist wasnt string?
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionTrim) Validate(arguments FunctionArgExpressionList) error {
@@ -300,7 +300,7 @@ func (this *FunctionSubStr) Name() string {
 	return "SUBSTR"
 }
 
-func (this *FunctionSubStr) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionSubStr) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -308,7 +308,7 @@ func (this *FunctionSubStr) Evaluate(item dparval.Value, arguments FunctionArgEx
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -320,7 +320,7 @@ func (this *FunctionSubStr) Evaluate(item dparval.Value, arguments FunctionArgEx
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			// undefined returns null
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -335,7 +335,7 @@ func (this *FunctionSubStr) Evaluate(item dparval.Value, arguments FunctionArgEx
 			switch err := err.(type) {
 			case *dparval.Undefined:
 				// undefined returns null
-				return dparval.NewNullValue(), nil
+				return dparval.NewValue(nil), nil
 			default:
 				// any other error return to caller
 				return nil, err
@@ -350,7 +350,7 @@ func (this *FunctionSubStr) Evaluate(item dparval.Value, arguments FunctionArgEx
 				// FIXME add checks for negative values here?
 			}
 		} else {
-			return dparval.NewNullValue(), nil
+			return dparval.NewValue(nil), nil
 		}
 
 	}
@@ -375,7 +375,7 @@ func (this *FunctionSubStr) Evaluate(item dparval.Value, arguments FunctionArgEx
 
 					if maxLen < 0 {
 						// no end limit
-						return dparval.NewStringValue(avalue[pos:]), nil
+						return dparval.NewValue(avalue[pos:]), nil
 					} else {
 						// validate that maxLen is valid
 						endPos := pos + maxLen + 1
@@ -383,14 +383,14 @@ func (this *FunctionSubStr) Evaluate(item dparval.Value, arguments FunctionArgEx
 							// FIXME add warning for invalid max len?
 							return nil, nil
 						}
-						return dparval.NewStringValue(avalue[pos:endPos]), nil
+						return dparval.NewValue(avalue[pos:endPos]), nil
 					}
 				}
 			}
 		}
 	}
 	// FIXME warn if arguments were wrong type?
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionSubStr) Validate(arguments FunctionArgExpressionList) error {

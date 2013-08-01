@@ -28,7 +28,7 @@ func (this ExpressionTestSet) Run(t *testing.T) {
 	this.RunWithItem(t, nil)
 }
 
-func (this ExpressionTestSet) RunWithItem(t *testing.T, item dparval.Value) {
+func (this ExpressionTestSet) RunWithItem(t *testing.T, item *dparval.Value) {
 	for _, x := range this {
 		resval, err := x.input.Evaluate(item)
 		if !reflect.DeepEqual(err, x.err) {

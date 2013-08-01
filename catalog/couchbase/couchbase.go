@@ -147,8 +147,8 @@ func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
 	return scanner, nil
 }
 
-func (b *bucket) BulkFetch(ids []string) (map[string]dparval.Value, query.Error) {
-	rv := make(map[string]dparval.Value, 0)
+func (b *bucket) BulkFetch(ids []string) (map[string]*dparval.Value, query.Error) {
+	rv := make(map[string]*dparval.Value, 0)
 
 	bulkResponse := b.cbbucket.GetBulk(ids)
 	for k, v := range bulkResponse {
@@ -172,7 +172,7 @@ func (b *bucket) BulkFetch(ids []string) (map[string]dparval.Value, query.Error)
 	return rv, nil
 }
 
-func (b *bucket) Fetch(id string) (dparval.Value, query.Error) {
+func (b *bucket) Fetch(id string) (*dparval.Value, query.Error) {
 	// use bulk get of single key
 	values, err := b.BulkFetch([]string{id})
 	if err != nil {
@@ -243,7 +243,7 @@ func (vs *viewScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.Erro
 		select {
 		case viewRow, ok = <-viewRowChannel:
 			if ok {
-				doc := dparval.NewEmptyObjectValue()
+				doc := dparval.NewValue(map[string]interface{}{})
 				doc.AddMeta("meta", map[string]interface{}{"id": viewRow.ID})
 				ch <- doc
 			}

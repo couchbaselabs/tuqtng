@@ -49,7 +49,7 @@ func (this *Order) Run() {
 
 	go this.Source.Run()
 
-	var item dparval.Value
+	var item *dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	ok := true
@@ -83,7 +83,7 @@ func (this *Order) Run() {
 	}
 }
 
-func (this *Order) processItem(item dparval.Value) {
+func (this *Order) processItem(item *dparval.Value) {
 	this.buffer = append(this.buffer, item)
 }
 

@@ -45,7 +45,7 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 	go root.Run()
 
 	// now execute it
-	var item dparval.Value
+	var item *dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := root.GetChannels()
 	ok := true
@@ -74,7 +74,7 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 	q.Response.NoMoreResults()
 }
 
-func (this *SimpleExecutor) processItem(q network.Query, item dparval.Value) {
+func (this *SimpleExecutor) processItem(q network.Query, item *dparval.Value) {
 	result := item.Value()
 	q.Response.SendResult(result)
 }

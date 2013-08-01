@@ -42,7 +42,7 @@ func TestEvaluateProperty(t *testing.T) {
 		{NewProperty("name"), "will", nil},
 	}
 
-	item := dparval.NewObjectValue(sampleDocument)
+	item := dparval.NewValue(sampleDocument)
 
 	tests.RunWithItem(t, item)
 

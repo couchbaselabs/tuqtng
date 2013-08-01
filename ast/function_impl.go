@@ -17,7 +17,7 @@ import (
 
 type SystemFunction interface {
 	Name() string
-	Evaluate(dparval.Value, FunctionArgExpressionList) (dparval.Value, error)
+	Evaluate(*dparval.Value, FunctionArgExpressionList) (*dparval.Value, error)
 	Validate(FunctionArgExpressionList) error
 }
 

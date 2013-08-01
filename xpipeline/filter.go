@@ -45,7 +45,7 @@ func (this *Filter) Run() {
 
 	go this.Source.Run()
 
-	var item dparval.Value
+	var item *dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	this.ok = true
@@ -71,7 +71,7 @@ func (this *Filter) Run() {
 	}
 }
 
-func (this *Filter) processItem(item dparval.Value) {
+func (this *Filter) processItem(item *dparval.Value) {
 	val, err := this.Expr.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {

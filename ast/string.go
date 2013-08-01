@@ -33,7 +33,7 @@ func NewStringConcatenateOperator(left, right Expression) *StringConcatenateOper
 	}
 }
 
-func (this *StringConcatenateOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *StringConcatenateOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -52,12 +52,12 @@ func (this *StringConcatenateOperator) Evaluate(item dparval.Value) (dparval.Val
 				switch rval := rval.(type) {
 				case string:
 					// if both values are string concatenate them
-					return dparval.NewStringValue(lval + rval), nil
+					return dparval.NewValue(lval + rval), nil
 				}
 			}
 		}
 	}
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *StringConcatenateOperator) Validate() error {

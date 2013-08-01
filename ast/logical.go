@@ -32,7 +32,7 @@ func NewAndOperator(operands ExpressionList) *AndOperator {
 	}
 }
 
-func (this *AndOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *AndOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	var rv interface{}
 	var re error
 	rv = true
@@ -54,7 +54,7 @@ func (this *AndOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 		operandValVal := operandVal.Value()
 		operandBoolVal := ValueInBooleanContext(operandValVal)
 		if operandBoolVal == false {
-			return dparval.NewBooleanValue(false), nil
+			return dparval.NewValue(false), nil
 		} else if operandBoolVal == nil && rv == true {
 			rv = operandBoolVal
 			re = nil
@@ -119,7 +119,7 @@ func NewOrOperator(operands ExpressionList) *OrOperator {
 	}
 }
 
-func (this *OrOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *OrOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	var rv interface{}
 	var re error
 	rv = false
@@ -205,7 +205,7 @@ func NewNotOperator(operand Expression) *NotOperator {
 	}
 }
 
-func (this *NotOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+func (this *NotOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -215,12 +215,12 @@ func (this *NotOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	operandBoolVal := ValueInBooleanContext(oval)
 	switch operandBoolVal := operandBoolVal.(type) {
 	case bool:
-		return dparval.NewBooleanValue(!operandBoolVal), nil
+		return dparval.NewValue(!operandBoolVal), nil
 	case nil:
-		return dparval.NewNullValue(), nil
+		return dparval.NewValue(nil), nil
 	default:
 		log.Fatalf("Unexpected type %T in NOT", operandBoolVal)
-		return dparval.NewNullValue(), nil
+		return dparval.NewValue(nil), nil
 	}
 }
 

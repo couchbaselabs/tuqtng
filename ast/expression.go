@@ -14,7 +14,7 @@ import (
 )
 
 type Expression interface {
-	Evaluate(item dparval.Value) (dparval.Value, error)
+	Evaluate(item *dparval.Value) (*dparval.Value, error)
 	Validate() error
 
 	// this method takes a list of valid aliases

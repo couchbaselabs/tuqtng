@@ -31,7 +31,7 @@ func (this *FunctionGreatest) Name() string {
 	return "GREATEST"
 }
 
-func (this *FunctionGreatest) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionGreatest) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 
 	var rv interface{} = nil
 
@@ -72,7 +72,7 @@ func (this *FunctionLeast) Name() string {
 	return "LEAST"
 }
 
-func (this *FunctionLeast) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionLeast) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 
 	var rv interface{} = nil
 	first := true
@@ -115,7 +115,7 @@ func (this *FunctionIfMissing) Name() string {
 	return "IFMISSING"
 }
 
-func (this *FunctionIfMissing) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionIfMissing) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 
 	for _, arg := range arguments {
 		av, err := arg.Expr.Evaluate(item)
@@ -135,7 +135,7 @@ func (this *FunctionIfMissing) Evaluate(item dparval.Value, arguments FunctionAr
 	}
 
 	// if all values were MISSING return NULL
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionIfMissing) Validate(arguments FunctionArgExpressionList) error {
@@ -152,7 +152,7 @@ func (this *FunctionIfNull) Name() string {
 	return "IFNULL"
 }
 
-func (this *FunctionIfNull) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionIfNull) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 
 	for _, arg := range arguments {
 		av, err := arg.Expr.Evaluate(item)
@@ -174,7 +174,7 @@ func (this *FunctionIfNull) Evaluate(item dparval.Value, arguments FunctionArgEx
 	}
 
 	// if all values were NULL return NULL
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionIfNull) Validate(arguments FunctionArgExpressionList) error {
@@ -191,7 +191,7 @@ func (this *FunctionIfMissingOrNull) Name() string {
 	return "IFMISSINGORNULL"
 }
 
-func (this *FunctionIfMissingOrNull) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionIfMissingOrNull) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 
 	for _, arg := range arguments {
 		av, err := arg.Expr.Evaluate(item)
@@ -213,7 +213,7 @@ func (this *FunctionIfMissingOrNull) Evaluate(item dparval.Value, arguments Func
 	}
 
 	// if all values were NULL or MISSING return NULL
-	return dparval.NewNullValue(), nil
+	return dparval.NewValue(nil), nil
 }
 
 func (this *FunctionIfMissingOrNull) Validate(arguments FunctionArgExpressionList) error {
@@ -230,7 +230,7 @@ func (this *FunctionMissingIf) Name() string {
 	return "MISSINGIF"
 }
 
-func (this *FunctionMissingIf) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionMissingIf) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	lav, lerr := arguments[0].Expr.Evaluate(item)
 	if lerr != nil {
@@ -280,7 +280,7 @@ func (this *FunctionNullIf) Name() string {
 	return "NULLIF"
 }
 
-func (this *FunctionNullIf) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+func (this *FunctionNullIf) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
 	// first evaluate the argument
 	lav, lerr := arguments[0].Expr.Evaluate(item)
 	if lerr != nil {
@@ -310,7 +310,7 @@ func (this *FunctionNullIf) Evaluate(item dparval.Value, arguments FunctionArgEx
 
 	compres := CollateJSON(lavalue, ravalue)
 	if compres == 0 {
-		return dparval.NewNullValue(), nil
+		return dparval.NewValue(nil), nil
 	}
 
 	//otheriwse return the left arg

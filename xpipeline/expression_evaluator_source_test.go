@@ -26,7 +26,7 @@ func TestExpressionEvaluatorSource(t *testing.T) {
 	count := 0
 	for item := range sourceItemChannel {
 		count++
-		if !reflect.DeepEqual(item, dparval.NewEmptyObjectValue()) {
+		if !reflect.DeepEqual(item, dparval.NewValue(map[string]interface{}{})) {
 			t.Errorf("Expected empty map item, got %v", item)
 		}
 	}

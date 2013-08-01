@@ -46,7 +46,7 @@ func (this *Offset) Run() {
 
 	go this.Source.Run()
 
-	var item dparval.Value
+	var item *dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	ok := true
@@ -72,7 +72,7 @@ func (this *Offset) Run() {
 	}
 }
 
-func (this *Offset) processItem(item dparval.Value) {
+func (this *Offset) processItem(item *dparval.Value) {
 	this.count++
 	if this.count <= this.Offset {
 		return

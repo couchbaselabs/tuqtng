@@ -26,7 +26,7 @@ func TestFunction(t *testing.T) {
 		"id": "first",
 	}
 
-	context := dparval.NewObjectValue(sampleContext)
+	context := dparval.NewValue(sampleContext)
 	context.AddMeta("meta", sampleMeta)
 
 	tests := ExpressionTestSet{

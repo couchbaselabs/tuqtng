@@ -46,7 +46,7 @@ func (this *Limit) Run() {
 
 	go this.Source.Run()
 
-	var item dparval.Value
+	var item *dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	ok := true
@@ -72,7 +72,7 @@ func (this *Limit) Run() {
 	}
 }
 
-func (this *Limit) processItem(item dparval.Value) {
+func (this *Limit) processItem(item *dparval.Value) {
 	this.itemChannel <- item
 	this.count++
 }
