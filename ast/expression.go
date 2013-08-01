@@ -10,11 +10,11 @@
 package ast
 
 import (
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type Expression interface {
-	Evaluate(item query.Item) (query.Value, error)
+	Evaluate(item dparval.Value) (dparval.Value, error)
 	Validate() error
 
 	// this method takes a list of valid aliases

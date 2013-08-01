@@ -10,17 +10,17 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type ExpressionEvaluatorSource struct {
-	itemChannel    query.ItemChannel
+	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
 }
 
 func NewExpressionEvaluatorSource() *ExpressionEvaluatorSource {
 	return &ExpressionEvaluatorSource{
-		itemChannel:    make(query.ItemChannel),
+		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 	}
 }
@@ -29,13 +29,13 @@ func (this *ExpressionEvaluatorSource) SetSource(source Operator) {
 	panic("Cannot set source for a datasource")
 }
 
-func (this *ExpressionEvaluatorSource) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+func (this *ExpressionEvaluatorSource) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 
 func (this *ExpressionEvaluatorSource) Run() {
 	defer close(this.itemChannel)
 	defer close(this.supportChannel)
-	item := query.NewParsedItem(map[string]query.Value{}, nil)
+	item := dparval.NewEmptyObjectValue()
 	this.itemChannel <- item
 }

@@ -12,7 +12,7 @@ package ast
 import (
 	"fmt"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type Property struct {
@@ -27,15 +27,15 @@ func NewProperty(path string) *Property {
 	}
 }
 
-func (this *Property) Evaluate(item query.Item) (query.Value, error) {
+func (this *Property) Evaluate(item dparval.Value) (dparval.Value, error) {
 	if item == nil {
-		return nil, &query.Undefined{this.Path}
+		return nil, &dparval.Undefined{this.Path}
 	}
-	rv, err := item.GetPath(this.Path)
+	pv, err := item.Path(this.Path)
 	if err != nil {
 		return nil, err
 	}
-	return rv, nil
+	return pv, nil
 }
 
 func (this *Property) String() string {

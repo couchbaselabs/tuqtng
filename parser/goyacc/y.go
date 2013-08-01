@@ -607,7 +607,7 @@ yydefault:
 	}
 	case 6:
 		//line unql.y:79
-		{ 
+		{
 		logDebugGrammar("SELECT_CORE")
 	}
 	case 7:
@@ -622,7 +622,7 @@ yydefault:
 	case 9:
 		//line unql.y:92
 		{
-		
+	
 	}
 	case 10:
 		//line unql.y:98
@@ -972,7 +972,7 @@ yydefault:
 		logDebugGrammar("EXPR - AND")
 		right := parsingStack.Pop()
 		left := parsingStack.Pop()
-		thisExpression := ast.NewAndOperator(ast.ExpressionList{left.(ast.Expression), right.(ast.Expression)}) 
+		thisExpression := ast.NewAndOperator(ast.ExpressionList{left.(ast.Expression), right.(ast.Expression)})
 		parsingStack.Push(thisExpression)
 	}
 	case 54:
@@ -981,7 +981,7 @@ yydefault:
 		logDebugGrammar("EXPR - OR")
 		right := parsingStack.Pop()
 		left := parsingStack.Pop()
-		thisExpression := ast.NewOrOperator(ast.ExpressionList{left.(ast.Expression), right.(ast.Expression)}) 
+		thisExpression := ast.NewOrOperator(ast.ExpressionList{left.(ast.Expression), right.(ast.Expression)})
 		parsingStack.Push(thisExpression)
 	}
 	case 55:

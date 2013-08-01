@@ -12,7 +12,7 @@ package ast
 import (
 	"fmt"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 // ****************************************************************************
@@ -29,8 +29,8 @@ func NewLiteralNull() *LiteralNull {
 	}
 }
 
-func (this *LiteralNull) Evaluate(item query.Item) (query.Value, error) {
-	return nil, nil
+func (this *LiteralNull) Evaluate(item dparval.Value) (dparval.Value, error) {
+	return dparval.NewNullValue(), nil
 }
 
 func (this *LiteralNull) String() string {
@@ -61,8 +61,8 @@ func NewLiteralBool(val bool) *LiteralBool {
 	}
 }
 
-func (this *LiteralBool) Evaluate(item query.Item) (query.Value, error) {
-	return this.Val, nil
+func (this *LiteralBool) Evaluate(item dparval.Value) (dparval.Value, error) {
+	return dparval.NewBooleanValue(this.Val), nil
 }
 
 func (this *LiteralBool) String() string {
@@ -93,8 +93,8 @@ func NewLiteralNumber(val float64) *LiteralNumber {
 	}
 }
 
-func (this *LiteralNumber) Evaluate(item query.Item) (query.Value, error) {
-	return this.Val, nil
+func (this *LiteralNumber) Evaluate(item dparval.Value) (dparval.Value, error) {
+	return dparval.NewNumberValue(this.Val), nil
 }
 
 func (this *LiteralNumber) String() string {
@@ -125,8 +125,8 @@ func NewLiteralString(val string) *LiteralString {
 	}
 }
 
-func (this *LiteralString) Evaluate(item query.Item) (query.Value, error) {
-	return this.Val, nil
+func (this *LiteralString) Evaluate(item dparval.Value) (dparval.Value, error) {
+	return dparval.NewStringValue(this.Val), nil
 }
 
 func (this *LiteralString) String() string {
@@ -157,13 +157,13 @@ func NewLiteralArray(val ExpressionList) *LiteralArray {
 	}
 }
 
-func (this *LiteralArray) Evaluate(item query.Item) (query.Value, error) {
-	rv := make([]query.Value, 0, len(this.Val))
+func (this *LiteralArray) Evaluate(item dparval.Value) (dparval.Value, error) {
+	rv := make([]interface{}, 0, len(this.Val))
 	for _, v := range this.Val {
 		ev, err := v.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 				// ignore (missing values do not contribute to the array contents)
 			default:
 				// any other error should be returned to caller
@@ -173,7 +173,7 @@ func (this *LiteralArray) Evaluate(item query.Item) (query.Value, error) {
 			rv = append(rv, ev)
 		}
 	}
-	return rv, nil
+	return dparval.NewArrayValue(rv), nil
 }
 
 func (this *LiteralArray) String() string {
@@ -227,13 +227,13 @@ func NewLiteralObject(val map[string]Expression) *LiteralObject {
 	}
 }
 
-func (this *LiteralObject) Evaluate(item query.Item) (query.Value, error) {
-	rv := make(map[string]query.Value, len(this.Val))
+func (this *LiteralObject) Evaluate(item dparval.Value) (dparval.Value, error) {
+	rv := make(map[string]interface{}, len(this.Val))
 	for k, v := range this.Val {
 		ev, err := v.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 				// ignore (missing values do not contribute to the object contents)
 			default:
 				// any other error should be returned to caller
@@ -243,7 +243,7 @@ func (this *LiteralObject) Evaluate(item query.Item) (query.Value, error) {
 			rv[k] = ev
 		}
 	}
-	return rv, nil
+	return dparval.NewObjectValue(rv), nil
 }
 
 func (this *LiteralObject) String() string {

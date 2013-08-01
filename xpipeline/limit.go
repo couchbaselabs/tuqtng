@@ -11,12 +11,13 @@ package xpipeline
 
 import (
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type Limit struct {
 	Source         Operator
 	Limit          int
-	itemChannel    query.ItemChannel
+	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
 	count          int
 }
@@ -24,7 +25,7 @@ type Limit struct {
 func NewLimit(limit int) *Limit {
 	return &Limit{
 		Limit:          limit,
-		itemChannel:    make(query.ItemChannel),
+		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 	}
 }
@@ -33,7 +34,7 @@ func (this *Limit) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Limit) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+func (this *Limit) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 
@@ -45,7 +46,7 @@ func (this *Limit) Run() {
 
 	go this.Source.Run()
 
-	var item query.Item
+	var item dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	ok := true
@@ -71,7 +72,7 @@ func (this *Limit) Run() {
 	}
 }
 
-func (this *Limit) processItem(item query.Item) {
+func (this *Limit) processItem(item dparval.Value) {
 	this.itemChannel <- item
 	this.count++
 }

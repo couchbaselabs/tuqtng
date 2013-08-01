@@ -10,18 +10,30 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/query"
 	"testing"
+
+	"github.com/mschoch/dparval"
 )
 
 func TestStubSource(t *testing.T) {
 
-	testData := query.ItemCollection{
-		query.NewParsedItem(map[string]query.Value{"name": "marty"}, map[string]query.Value{"id": "1"}),
-		query.NewParsedItem(map[string]query.Value{"name": "steve"}, map[string]query.Value{"id": "2"}),
-		query.NewParsedItem(map[string]query.Value{"name": "gerald"}, map[string]query.Value{"id": "3"}),
-		query.NewParsedItem(map[string]query.Value{"name": "siri"}, map[string]query.Value{"id": "4"}),
-	}
+	testData := dparval.ValueCollection{}
+
+	doc := dparval.NewObjectValue(map[string]interface{}{"name": "marty"})
+	doc.AddMeta("meta", map[string]interface{}{"id": "1"})
+	testData = append(testData, doc)
+
+	doc = dparval.NewObjectValue(map[string]interface{}{"name": "steve"})
+	doc.AddMeta("meta", map[string]interface{}{"id": "2"})
+	testData = append(testData, doc)
+
+	doc = dparval.NewObjectValue(map[string]interface{}{"name": "gerald"})
+	doc.AddMeta("meta", map[string]interface{}{"id": "3"})
+	testData = append(testData, doc)
+
+	doc = dparval.NewObjectValue(map[string]interface{}{"name": "siri"})
+	doc.AddMeta("meta", map[string]interface{}{"id": "4"})
+	testData = append(testData, doc)
 
 	stubSource := NewStubSource(testData)
 
@@ -33,12 +45,13 @@ func TestStubSource(t *testing.T) {
 	for item := range stubItemChannel {
 		count++
 
-		val, err := item.GetPath("name")
+		val, err := item.Path("name")
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
-		if count == 0 && val != "marty" {
-			t.Errorf("expected marty, got %v", val)
+		value := val.Value()
+		if count == 0 && value != "marty" {
+			t.Errorf("expected marty, got %v", value)
 		}
 	}
 

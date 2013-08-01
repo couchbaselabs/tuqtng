@@ -15,22 +15,23 @@ import (
 
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type Order struct {
 	Source         Operator
 	OrderBy        []*ast.SortExpression
-	itemChannel    query.ItemChannel
+	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
-	buffer         query.ItemCollection
+	buffer         dparval.ValueCollection
 }
 
 func NewOrder(orderBy []*ast.SortExpression) *Order {
 	return &Order{
 		OrderBy:        orderBy,
-		itemChannel:    make(query.ItemChannel),
+		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
-		buffer:         make(query.ItemCollection, 0),
+		buffer:         make(dparval.ValueCollection, 0),
 	}
 }
 
@@ -38,7 +39,7 @@ func (this *Order) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Order) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+func (this *Order) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 
@@ -48,7 +49,7 @@ func (this *Order) Run() {
 
 	go this.Source.Run()
 
-	var item query.Item
+	var item dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	ok := true
@@ -82,7 +83,7 @@ func (this *Order) Run() {
 	}
 }
 
-func (this *Order) processItem(item query.Item) {
+func (this *Order) processItem(item dparval.Value) {
 	this.buffer = append(this.buffer, item)
 }
 
@@ -98,7 +99,7 @@ func (this *Order) Less(i, j int) bool {
 		leftVal, lerr := oe.Expr.Evaluate(left)
 		if lerr != nil {
 			switch lerr := lerr.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 			default:
 				log.Printf("Error evaluating expression: %v", lerr)
 				return false
@@ -107,7 +108,7 @@ func (this *Order) Less(i, j int) bool {
 		rightVal, rerr := oe.Expr.Evaluate(right)
 		if rerr != nil {
 			switch rerr := rerr.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 			default:
 				log.Printf("Error evaluating expression: %v", rerr)
 				return false
@@ -128,8 +129,11 @@ func (this *Order) Less(i, j int) bool {
 			//ascending, left not, left is more
 			return false
 		} else if lerr == nil && rerr == nil {
+			lv := leftVal.Value()
+			rv := rightVal.Value()
+
 			// both not missing, compare values
-			result := ast.CollateJSON(leftVal, rightVal)
+			result := ast.CollateJSON(lv, rv)
 			if result != 0 {
 				if oe.Ascending && result < 0 {
 					return true

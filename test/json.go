@@ -17,7 +17,7 @@ import (
 
 type MockResponse struct {
 	err      query.Error
-	results  []query.Value
+	results  []interface{}
 	warnings []query.Error
 	done     chan bool
 }
@@ -29,7 +29,7 @@ func (this *MockResponse) SendError(err query.Error) {
 	}
 }
 
-func (this *MockResponse) SendResult(val query.Value) {
+func (this *MockResponse) SendResult(val interface{}) {
 	this.results = append(this.results, val)
 }
 
@@ -37,9 +37,9 @@ func (this *MockResponse) NoMoreResults() {
 	close(this.done)
 }
 
-func Run(qc network.QueryChannel, q string) ([]query.Value, []query.Error, query.Error) {
+func Run(qc network.QueryChannel, q string) ([]interface{}, []query.Error, query.Error) {
 	mr := &MockResponse{
-		results: []query.Value{}, warnings: []query.Error{}, done: make(chan bool),
+		results: []interface{}{}, warnings: []query.Error{}, done: make(chan bool),
 	}
 	query := network.Query{
 		Request:  network.UNQLStringQueryRequest{QueryString: q},

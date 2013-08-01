@@ -12,7 +12,7 @@ package ast
 import (
 	"fmt"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type CollectionAnyOperator struct {
@@ -31,14 +31,14 @@ func NewCollectionAnyOperator(condition Expression, over Expression, as string) 
 	}
 }
 
-func (this *CollectionAnyOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *CollectionAnyOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	// first evaluate the over
 	ov, err := this.Over.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// spec says return false
-			return false, nil
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
@@ -46,17 +46,30 @@ func (this *CollectionAnyOperator) Evaluate(item query.Item) (query.Value, error
 	}
 
 	// see if we're dealing with an array
-	switch ov := ov.(type) {
-	case []query.Value:
-		// yes, now we need to walk through the elements
-		for _, inner := range ov {
+	if ov.Type() == dparval.ARRAY {
+		// by accessing the array contents this way
+		// we avoid parsing it
+		ok := true
+		index := 0
+		for ok {
+			inner, err := ov.Index(index)
+			index = index + 1
+			if err != nil {
+				switch err := err.(type) {
+				case *dparval.Undefined:
+					ok = false
+				default:
+					return nil, err
+				}
+			}
+
 			// create a new context with this object named as the alias
-			innerContext := query.NewParsedItem(map[string]query.Value{this.As: inner}, nil)
+			innerContext := dparval.NewObjectValue(map[string]interface{}{this.As: inner})
 			// now evaluate the condition in this new context
 			innerResult, err := this.Condition.Evaluate(innerContext)
 			if err != nil {
 				switch err := err.(type) {
-				case *query.Undefined:
+				case *dparval.Undefined:
 					// this is not true, keep trying
 					continue
 				default:
@@ -64,16 +77,16 @@ func (this *CollectionAnyOperator) Evaluate(item query.Item) (query.Value, error
 					return nil, err
 				}
 			}
+			innerResultVal := innerResult.Value()
 			// check to see if this value is true
-			innerBoolResult := ValueInBooleanContext(innerResult)
+			innerBoolResult := ValueInBooleanContext(innerResultVal)
 			if innerBoolResult == true {
-				return true, nil
+				return dparval.NewBooleanValue(true), nil
 			}
 		}
-		return false, nil
-	default:
-		return false, nil
+		return dparval.NewBooleanValue(false), nil
 	}
+	return dparval.NewBooleanValue(false), nil
 }
 
 func (this *CollectionAnyOperator) Validate() error {
@@ -128,14 +141,14 @@ func NewCollectionAllOperator(condition Expression, over Expression, as string) 
 	}
 }
 
-func (this *CollectionAllOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *CollectionAllOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	// first evaluate the over
 	ov, err := this.Over.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// spec says return false
-			return false, nil
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
@@ -143,34 +156,49 @@ func (this *CollectionAllOperator) Evaluate(item query.Item) (query.Value, error
 	}
 
 	// see if we're dealing with an array
-	switch ov := ov.(type) {
-	case []query.Value:
-		// yes, now we need to walk through the elements
-		for _, inner := range ov {
+	if ov.Type() == dparval.ARRAY {
+
+		// by accessing the array contents this way
+		// we avoid parsing it
+		ok := true
+		index := 0
+		for ok {
+			inner, err := ov.Index(index)
+			index = index + 1
+			if err != nil {
+				switch err := err.(type) {
+				case *dparval.Undefined:
+					ok = false
+				default:
+					return nil, err
+				}
+			}
+
 			// create a new context with this object named as the alias
-			innerContext := query.NewParsedItem(map[string]query.Value{this.As: inner}, nil)
+			innerContext := dparval.NewObjectValue(map[string]interface{}{this.As: inner})
 			// now evaluate the condition in this new context
 			innerResult, err := this.Condition.Evaluate(innerContext)
 			if err != nil {
 				switch err := err.(type) {
-				case *query.Undefined:
+				case *dparval.Undefined:
 					// not true, stop looking
-					return false, nil
+					return dparval.NewBooleanValue(false), nil
 				default:
 					// any other error should be returned to caller
 					return nil, err
 				}
 			}
+			innerResultVal := innerResult.Value()
 			// check to see if this value is true
-			innerBoolResult := ValueInBooleanContext(innerResult)
+			innerBoolResult := ValueInBooleanContext(innerResultVal)
 			if innerBoolResult == false {
-				return false, nil
+				return dparval.NewBooleanValue(false), nil
 			}
 		}
-		return true, nil
-	default:
-		return false, nil
+		return dparval.NewBooleanValue(true), nil
+
 	}
+	return dparval.NewBooleanValue(false), nil
 }
 
 func (this *CollectionAllOperator) Validate() error {

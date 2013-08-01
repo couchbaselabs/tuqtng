@@ -10,62 +10,57 @@
 package ast
 
 import (
-	"reflect"
 	"testing"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 func TestDotMember(t *testing.T) {
 
-	sampleContext := map[string]query.Value{
-		"address": map[string]query.Value{
+	sampleContext := map[string]interface{}{
+		"address": map[string]interface{}{
 			"street": "1 recursive function",
 		},
-		"contact": map[string]query.Value{
-			"name": map[string]query.Value{
+		"contact": map[string]interface{}{
+			"name": map[string]interface{}{
 				"first": "unql",
 				"last":  "couchbase",
-				"all": []query.Value{
+				"all": []interface{}{
 					"unql",
 					"couchbase",
 				},
 			},
 		},
-		"friends": []query.Value{
+		"friends": []interface{}{
 			"a",
 			"b",
 			"c",
 		},
 		"name": "bob",
 	}
-	sampleMeta := map[string]query.Value{
+	sampleMeta := map[string]interface{}{
 		"id": "first",
 	}
 
-	tests := []struct {
-		input  Expression
-		output query.Value
-		err    error
-	}{
+	tests := ExpressionTestSet{
 		{NewDotMemberOperator(NewProperty("address"), NewProperty("street")), "1 recursive function", nil},
 		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("first")), "unql", nil},
 		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("last")), "couchbase", nil},
 
-		{NewDotMemberOperator(NewProperty("address"), NewProperty("city")), nil, &query.Undefined{"city"}},
-		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("middle")), nil, &query.Undefined{"middle"}},
-		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("namez")), NewProperty("first")), nil, &query.Undefined{"namez"}},
+		{NewDotMemberOperator(NewProperty("address"), NewProperty("city")), nil, &dparval.Undefined{"city"}},
+		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("middle")), nil, &dparval.Undefined{"middle"}},
+		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("namez")), NewProperty("first")), nil, &dparval.Undefined{"namez"}},
 
-		{NewDotMemberOperator(NewProperty("name"), NewProperty("city")), nil, &query.Undefined{"city"}},
+		{NewDotMemberOperator(NewProperty("name"), NewProperty("city")), nil, &dparval.Undefined{"city"}},
 
 		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(0.0)), "a", nil},
 		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(1.0)), "b", nil},
 		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(2.0)), "c", nil},
-		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(-1.0)), nil, &query.Undefined{}},
-		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(10.0)), nil, &query.Undefined{}},
+		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(-1.0)), nil, &dparval.Undefined{}},
+		{NewBracketMemberOperator(NewProperty("friends"), NewLiteralNumber(10.0)), nil, &dparval.Undefined{}},
 
-		{NewBracketMemberOperator(NewProperty("foo"), NewLiteralNumber(10.0)), nil, &query.Undefined{"foo"}},
-		{NewBracketMemberOperator(NewProperty("friends"), NewProperty("bar")), nil, &query.Undefined{"bar"}},
+		{NewBracketMemberOperator(NewProperty("foo"), NewLiteralNumber(10.0)), nil, &dparval.Undefined{"foo"}},
+		{NewBracketMemberOperator(NewProperty("friends"), NewProperty("bar")), nil, &dparval.Undefined{"bar"}},
 
 		//compound test
 		{NewBracketMemberOperator(NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("all")), NewLiteralNumber(0.0)), "unql", nil},
@@ -74,17 +69,9 @@ func TestDotMember(t *testing.T) {
 		{NewBracketMemberOperator(NewProperty("address"), NewLiteralString("street")), "1 recursive function", nil},
 	}
 
-	context := query.NewParsedItem(sampleContext, sampleMeta)
+	context := dparval.NewObjectValue(sampleContext)
+	context.AddMeta("meta", sampleMeta)
 
-	for _, x := range tests {
-		value, err := x.input.Evaluate(context)
-		if !reflect.DeepEqual(err, x.err) {
-			t.Errorf("Expected no error, got error: %v, %v", err, x.err)
-		}
-		if !reflect.DeepEqual(value, x.output) {
-			t.Errorf("Expected value %v, got %v", x.output, value)
-		}
-
-	}
+	tests.RunWithItem(t, context)
 
 }

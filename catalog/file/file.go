@@ -16,7 +16,6 @@ package.
 package file
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -26,6 +25,7 @@ import (
 
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 // site is the root for the file-based Site.
@@ -214,8 +214,8 @@ func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
 	return scanner, nil
 }
 
-func (b *bucket) BulkFetch(ids []string) (map[string]query.Item, query.Error) {
-	rv := make(map[string]query.Item, 0)
+func (b *bucket) BulkFetch(ids []string) (map[string]dparval.Value, query.Error) {
+	rv := make(map[string]dparval.Value, 0)
 	for _, id := range ids {
 		item, e := b.Fetch(id)
 		if e != nil {
@@ -226,7 +226,7 @@ func (b *bucket) BulkFetch(ids []string) (map[string]query.Item, query.Error) {
 	return rv, nil
 }
 
-func (b *bucket) Fetch(id string) (item query.Item, e query.Error) {
+func (b *bucket) Fetch(id string) (item dparval.Value, e query.Error) {
 	path := filepath.Join(b.path(), id+".json")
 	item, e = fetch(path)
 	if e != nil {
@@ -274,11 +274,11 @@ func (fs *fullScanner) Name() string {
 	return fs.name
 }
 
-func (fs *fullScanner) ScanAll(ch query.ItemChannel, warnch, errch query.ErrorChannel) {
+func (fs *fullScanner) ScanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	go fs.scanAll(ch, warnch, errch)
 }
 
-func (fs *fullScanner) scanAll(ch query.ItemChannel, warnch, errch query.ErrorChannel) {
+func (fs *fullScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)
@@ -291,31 +291,22 @@ func (fs *fullScanner) scanAll(ch query.ItemChannel, warnch, errch query.ErrorCh
 
 	for _, dirEntry := range dirEntries {
 		if !dirEntry.IsDir() {
-			doc := map[string]query.Value{}
-			meta := map[string]query.Value{"id": documentPathToId(dirEntry.Name())}
-			ch <- query.NewParsedItem(doc, meta)
+			doc := dparval.NewEmptyObjectValue()
+			doc.AddMeta("meta", map[string]interface{}{"id": documentPathToId(dirEntry.Name())})
+			ch <- doc
 		}
 	}
 }
 
-func fetch(path string) (item query.Item, e query.Error) {
+func fetch(path string) (item dparval.Value, e query.Error) {
 	bytes, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, query.NewError(err, "")
 	}
 
-	// convert file bytes to json
-	var doc query.Value
-	err = json.Unmarshal(bytes, &doc)
-	if err != nil {
-		return nil, query.NewError(err, "")
-	}
-
-	meta := map[string]query.Value{
-		"id": documentPathToId(path),
-	}
-
-	item = query.NewParsedItem(doc, meta)
+	doc := dparval.NewValueFromBytes(bytes)
+	doc.AddMeta("meta", map[string]interface{}{"id": documentPathToId(path)})
+	item = doc
 
 	return
 }

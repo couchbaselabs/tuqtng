@@ -20,17 +20,18 @@ package mock
 import (
 	"fmt"
 	"sort"
-	"strings"
 	"strconv"
+	"strings"
 
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 const (
-	DEFAULT_NUM_POOLS = 1
+	DEFAULT_NUM_POOLS   = 1
 	DEFAULT_NUM_BUCKETS = 1
-	DEFAULT_NUM_ITEMS = 100000
+	DEFAULT_NUM_ITEMS   = 100000
 )
 
 // NewSite creates a new mock site for the given "path".  The path has
@@ -183,8 +184,8 @@ func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
 	return scanner, nil
 }
 
-func (b *bucket) BulkFetch(ids []string) (map[string]query.Item, query.Error) {
-	rv := make(map[string]query.Item, 0)
+func (b *bucket) BulkFetch(ids []string) (map[string]dparval.Value, query.Error) {
+	rv := make(map[string]dparval.Value, 0)
 	for _, id := range ids {
 		item, e := b.Fetch(id)
 		if e != nil {
@@ -195,7 +196,7 @@ func (b *bucket) BulkFetch(ids []string) (map[string]query.Item, query.Error) {
 	return rv, nil
 }
 
-func (b *bucket) Fetch(id string) (item query.Item, e query.Error) {
+func (b *bucket) Fetch(id string) (item dparval.Value, e query.Error) {
 	i, err := strconv.Atoi(id)
 	if err != nil {
 		return nil, query.NewError(err,
@@ -214,29 +215,29 @@ func (fs *fullScanner) Name() string {
 	return fs.name
 }
 
-func (fs *fullScanner) ScanAll(ch query.ItemChannel, warnch, errch query.ErrorChannel) {
+func (fs *fullScanner) ScanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	go fs.scanAll(ch, warnch, errch)
 }
 
-func (fs *fullScanner) scanAll(ch query.ItemChannel, warnch, errch query.ErrorChannel) {
+func (fs *fullScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)
 
 	for i := 0; i < fs.bucket.nitems; i++ {
-		doc := map[string]query.Value{}
-		meta := map[string]query.Value{"id": strconv.Itoa(i)}
-		ch <- query.NewParsedItem(doc, meta)
+		doc := dparval.NewEmptyObjectValue()
+		doc.AddMeta("meta", map[string]interface{}{"id": strconv.Itoa(i)})
+		ch <- doc
 	}
 }
 
-func genItem(i int, nitems int) (query.Item, query.Error) {
+func genItem(i int, nitems int) (dparval.Value, query.Error) {
 	if i < 0 || i >= nitems {
 		return nil, query.NewError(nil,
 			fmt.Sprintf("item out of mock range: %v [0,%v)", i, nitems))
 	}
 	id := strconv.Itoa(i)
-	var doc query.Value = map[string]interface{}{"id": id, "i": i}
-	meta := map[string]query.Value{"id": id}
-	return query.NewParsedItem(doc, meta), nil
+	doc := dparval.NewObjectValue(map[string]interface{}{"id": id, "i": float64(i)})
+	doc.AddMeta("meta", map[string]interface{}{"id": id})
+	return doc, nil
 }

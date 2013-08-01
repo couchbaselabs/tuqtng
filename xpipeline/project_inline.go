@@ -12,11 +12,12 @@ package xpipeline
 import (
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type ProjectInline struct {
 	Source         Operator
-	itemChannel    query.ItemChannel
+	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
 	Result         *ast.ResultExpression
 	ok             bool
@@ -25,7 +26,7 @@ type ProjectInline struct {
 func NewProjectInline(result *ast.ResultExpression) *ProjectInline {
 	return &ProjectInline{
 		Result:         result,
-		itemChannel:    make(query.ItemChannel),
+		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 	}
 }
@@ -34,7 +35,7 @@ func (this *ProjectInline) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *ProjectInline) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+func (this *ProjectInline) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 
@@ -44,7 +45,7 @@ func (this *ProjectInline) Run() {
 
 	go this.Source.Run()
 
-	var item query.Item
+	var item dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	this.ok = true
@@ -70,23 +71,17 @@ func (this *ProjectInline) Run() {
 	}
 }
 
-func (this *ProjectInline) processItem(item query.Item) {
-	var res query.Value
+func (this *ProjectInline) processItem(item dparval.Value) {
+	var err error
+	var res interface{}
 
 	if this.Result.Star {
 		if this.Result.Expr != nil {
 			// evaluate this expression first
 			val, err := this.Result.Expr.Evaluate(item)
-			if err == nil {
-				switch val := val.(type) {
-				case map[string]query.Value:
-					// then if the result was an object
-					// then project it
-					res = val
-				}
-			} else {
+			if err != nil {
 				switch err := err.(type) {
-				case *query.Undefined:
+				case *dparval.Undefined:
 					// undefined contributes nothing to the result
 					// but otherwise is NOT an error
 					// FIXME review if this should be a warning
@@ -97,18 +92,25 @@ func (this *ProjectInline) processItem(item query.Item) {
 					return
 				}
 			}
+			if val.Type() == dparval.OBJECT {
+				valval := val.Value()
+				switch valval := valval.(type) {
+				case map[string]interface{}:
+					// then if the result was an object
+					// then project it
+					res = valval
+				}
+			}
 		} else {
 			// just a star, make item the result
-			res = item.GetValue()
+			res = item.Value()
 		}
 	} else if this.Result.Expr != nil {
 		// evaluate the expression
 		val, err := this.Result.Expr.Evaluate(item)
-		if err == nil {
-			res = val
-		} else {
+		if err != nil {
 			switch err := err.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 				// undefined contributes nothing to the result map
 				// but otherwise is NOT an error
 				// FIXME review if this should be a warning
@@ -119,10 +121,19 @@ func (this *ProjectInline) processItem(item query.Item) {
 				return
 			}
 		}
+		res = val
 	}
 
 	// create the actual result Item
-	finalItem := query.NewParsedItem(res, item.GetMeta())
+	finalItem := dparval.NewValue(res)
+	itemMetaVal := item.Meta()
+	itemMetaData, err := itemMetaVal.Path("meta")
+	if err != nil {
+		this.supportChannel <- query.NewError(err, "unable to find item metadata")
+		this.ok = false
+		return
+	}
+	finalItem.AddMeta("meta", itemMetaData)
 
 	// write this to the output
 	this.itemChannel <- finalItem

@@ -128,23 +128,10 @@ func testCaseFile(t *testing.T, fname string) {
 				resultsActual, resultsExpected, fname, i)
 			return
 		}
-		// Extra marshal/unmarshal hop is to get from query.Value to
-		// interface{} so that reflect.DeepEqual() works.
-		j, err := json.Marshal(resultsActual)
-		if err != nil {
-			t.Errorf("json marshal failed: %v", err)
-			return
-		}
-		var ra interface{}
-		err = json.Unmarshal(j, &ra)
-		if err != nil {
-			t.Errorf("json unmarshal failed: %v", err)
-			return
-		}
-		if !reflect.DeepEqual(ra, resultsExpected) {
+		if !reflect.DeepEqual(resultsActual, resultsExpected) {
 			t.Errorf("results don't match, actual: %#v, expected: %#v"+
 				", for case file: %v, index: %v",
-				ra, resultsExpected, fname, i)
+				resultsActual, resultsExpected, fname, i)
 		}
 	}
 }

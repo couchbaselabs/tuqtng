@@ -10,8 +10,9 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/ast"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/ast"
 )
 
 func TestProject(t *testing.T) {
@@ -27,7 +28,7 @@ func TestProject(t *testing.T) {
 
 	for item := range projectItemChannel {
 
-		_, err := item.GetPath("f_name")
+		_, err := item.Path("f_name")
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}

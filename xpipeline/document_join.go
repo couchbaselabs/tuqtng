@@ -12,13 +12,14 @@ package xpipeline
 import (
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type DocumentJoin struct {
 	Source         Operator
 	Over           ast.Expression
 	As             string
-	itemChannel    query.ItemChannel
+	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
 }
 
@@ -26,7 +27,7 @@ func NewDocumentJoin(over ast.Expression, as string) *DocumentJoin {
 	return &DocumentJoin{
 		Over:           over,
 		As:             as,
-		itemChannel:    make(query.ItemChannel),
+		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 	}
 }
@@ -35,7 +36,7 @@ func (this *DocumentJoin) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *DocumentJoin) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+func (this *DocumentJoin) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 
@@ -45,7 +46,7 @@ func (this *DocumentJoin) Run() {
 
 	go this.Source.Run()
 
-	var item query.Item
+	var item dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	ok := true
@@ -53,7 +54,7 @@ func (this *DocumentJoin) Run() {
 		select {
 		case item, ok = <-sourceItemChannel:
 			if ok {
-				this.processItem(item)
+				ok = this.processItem(item)
 			}
 		case obj, ok = <-supportChannel:
 			if ok {
@@ -71,40 +72,47 @@ func (this *DocumentJoin) Run() {
 	}
 }
 
-func (this *DocumentJoin) processItem(item query.Item) {
+func (this *DocumentJoin) processItem(item dparval.Value) bool {
 	val, err := this.Over.Evaluate(item)
-	if err == nil {
-		switch val := val.(type) {
-		case []query.Value:
+	if err != nil {
+		switch err := err.(type) {
+		case *dparval.Undefined:
+			return true
+		default:
+			this.supportChannel <- query.NewError(err, "Internal Error")
+			return false
+		}
+	}
+
+	if val.Type() == dparval.ARRAY {
+		overval := val.Value()
+		switch overval := overval.(type) {
+		case []interface{}:
+			// FIXME major cleanup after full converstion to dparval
 			// over expression evaluted to array
 			// now walk the array and join
-			for _, v := range val {
-				itemValue := item.GetValue()
-				newValue := map[string]query.Value{}
+			for _, v := range overval {
+				itemValue := item.Value()
+				newValue := map[string]interface{}{}
 				switch itemValue := itemValue.(type) {
-				case map[string]query.Value:
-					for itemK, itemV := range itemValue {
-						newValue[itemK] = itemV
-					}
-					newValue[this.As] = v
 				case map[string]interface{}:
 					for itemK, itemV := range itemValue {
 						newValue[itemK] = itemV
 					}
 					newValue[this.As] = v
 				}
-				itemMeta := item.GetMeta()
-				finalItem := query.NewParsedItem(newValue, itemMeta)
+				itemMetaValue := item.Meta()
+				itemMetaData, err := itemMetaValue.Path("meta")
+				if err != nil {
+					this.supportChannel <- query.NewError(err, "Internal Error")
+					return false
+				}
+				finalItem := dparval.NewObjectValue(newValue)
+				finalItem.AddMeta("meta", itemMetaData)
 				this.itemChannel <- finalItem
 			}
 		}
-	} else {
-		switch err := err.(type) {
-		case *query.Undefined:
-		//ignore these
-		default:
-			this.supportChannel <- query.NewError(err, "Internal Error")
-			return
-		}
 	}
+
+	return true
 }

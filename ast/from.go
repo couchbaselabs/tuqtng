@@ -55,7 +55,7 @@ func (this *From) GenerateAlias() {
 			// becomes FROM bucket.propa.propb AS propb
 			this.As = proj.Right.Path
 		default:
-			log.Printf("unexpected type %T", proj)
+			log.Printf("unexpected type %T in FROM", proj)
 		}
 		// in all other cases there is no alias generated
 	}

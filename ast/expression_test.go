@@ -10,28 +10,35 @@
 package ast
 
 import (
+	"reflect"
 	"testing"
+
+	"github.com/mschoch/dparval"
 )
 
-func TestValueInBooleanContext(t *testing.T) {
-	tests := []struct {
-		input  interface{}
-		output interface{}
-	}{
-		{nil, nil},
-		{true, true},
-		{false, false},
-		{0.0, false},
-		{3.14, true},
-		{"", false},
-		{"couchbase", true},
-		{[]interface{}{1.0}, true},
-		{map[string]interface{}{"name": "bob"}, true},
-	}
+type ExpressionTest struct {
+	input  Expression
+	output interface{}
+	err    error
+}
 
-	for _, x := range tests {
-		result := ValueInBooleanContext(x.input)
-		if result != x.output {
+type ExpressionTestSet []ExpressionTest
+
+func (this ExpressionTestSet) Run(t *testing.T) {
+	this.RunWithItem(t, nil)
+}
+
+func (this ExpressionTestSet) RunWithItem(t *testing.T, item dparval.Value) {
+	for _, x := range this {
+		resval, err := x.input.Evaluate(item)
+		if !reflect.DeepEqual(err, x.err) {
+			t.Fatalf("Expected error: %v, got %v for %v", x.err, err, x.input)
+		}
+		var result interface{}
+		if resval != nil {
+			result = resval.Value()
+		}
+		if !reflect.DeepEqual(result, x.output) {
 			t.Errorf("Expected %v, got %v for %v", x.output, result, x.input)
 		}
 	}

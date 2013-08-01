@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 // ****************************************************************************
@@ -32,8 +32,8 @@ func NewAndOperator(operands ExpressionList) *AndOperator {
 	}
 }
 
-func (this *AndOperator) Evaluate(item query.Item) (query.Value, error) {
-	var rv query.Value
+func (this *AndOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+	var rv interface{}
 	var re error
 	rv = true
 	re = nil
@@ -41,7 +41,7 @@ func (this *AndOperator) Evaluate(item query.Item) (query.Value, error) {
 		operandVal, err := operand.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 				rv = nil
 				re = err
 				continue
@@ -51,9 +51,10 @@ func (this *AndOperator) Evaluate(item query.Item) (query.Value, error) {
 			}
 		}
 		// now interpret the evaluated value in a boolean context
-		operandBoolVal := ValueInBooleanContext(operandVal)
+		operandValVal := operandVal.Value()
+		operandBoolVal := ValueInBooleanContext(operandValVal)
 		if operandBoolVal == false {
-			return false, nil
+			return dparval.NewBooleanValue(false), nil
 		} else if operandBoolVal == nil && rv == true {
 			rv = operandBoolVal
 			re = nil
@@ -61,7 +62,11 @@ func (this *AndOperator) Evaluate(item query.Item) (query.Value, error) {
 		// if operandBoolVal is true, do nothing
 		// rv starts as true, and should never change back to true
 	}
-	return rv, re
+	// return missing correclty with value nil
+	if re != nil {
+		return nil, re
+	}
+	return dparval.NewValue(rv), re
 }
 
 func (this *AndOperator) String() string {
@@ -114,8 +119,8 @@ func NewOrOperator(operands ExpressionList) *OrOperator {
 	}
 }
 
-func (this *OrOperator) Evaluate(item query.Item) (query.Value, error) {
-	var rv query.Value
+func (this *OrOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
+	var rv interface{}
 	var re error
 	rv = false
 	re = nil
@@ -123,7 +128,7 @@ func (this *OrOperator) Evaluate(item query.Item) (query.Value, error) {
 		operandVal, err := operand.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 				rv = nil
 				re = err
 				continue
@@ -133,9 +138,10 @@ func (this *OrOperator) Evaluate(item query.Item) (query.Value, error) {
 			}
 		}
 		// now interpret the evaluated value in a boolean context
-		operandBoolVal := ValueInBooleanContext(operandVal)
+		operandValVal := operandVal.Value()
+		operandBoolVal := ValueInBooleanContext(operandValVal)
 		if operandBoolVal == true {
-			return true, nil
+			return dparval.NewValue(true), nil
 		} else if operandBoolVal == nil && rv == false {
 			rv = operandBoolVal
 			re = nil
@@ -143,7 +149,10 @@ func (this *OrOperator) Evaluate(item query.Item) (query.Value, error) {
 		// if operandBoolVal is true, do nothing
 		// rv starts as true, and should never change back to true
 	}
-	return rv, re
+	if re != nil {
+		return nil, re
+	}
+	return dparval.NewValue(rv), re
 }
 
 func (this *OrOperator) String() string {
@@ -196,21 +205,22 @@ func NewNotOperator(operand Expression) *NotOperator {
 	}
 }
 
-func (this *NotOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *NotOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
 
-	operandBoolVal := ValueInBooleanContext(ov)
+	oval := ov.Value()
+	operandBoolVal := ValueInBooleanContext(oval)
 	switch operandBoolVal := operandBoolVal.(type) {
 	case bool:
-		return !operandBoolVal, nil
+		return dparval.NewBooleanValue(!operandBoolVal), nil
 	case nil:
-		return nil, nil
+		return dparval.NewNullValue(), nil
 	default:
 		log.Fatalf("Unexpected type %T in NOT", operandBoolVal)
-		return nil, nil
+		return dparval.NewNullValue(), nil
 	}
 }
 

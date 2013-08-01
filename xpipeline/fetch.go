@@ -14,25 +14,26 @@ import (
 
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 const FETCH_BATCH_SIZE = 1000
 
 type Fetch struct {
 	Source         Operator
-	itemChannel    query.ItemChannel
+	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
 	bucket         catalog.Bucket
-	batch          []query.Item
+	batch          []dparval.Value
 	ok             bool
 }
 
 func NewFetch(bucket catalog.Bucket) *Fetch {
 	return &Fetch{
-		itemChannel:    make(query.ItemChannel),
+		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 		bucket:         bucket,
-		batch:          make([]query.Item, 0, FETCH_BATCH_SIZE),
+		batch:          make([]dparval.Value, 0, FETCH_BATCH_SIZE),
 	}
 }
 
@@ -40,7 +41,7 @@ func (this *Fetch) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Fetch) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+func (this *Fetch) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 
@@ -51,7 +52,7 @@ func (this *Fetch) Run() {
 
 	go this.Source.Run()
 
-	var item query.Item
+	var item dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	this.ok = true
@@ -80,7 +81,7 @@ func (this *Fetch) Run() {
 	this.flushBatch()
 }
 
-func (this *Fetch) processItem(item query.Item) {
+func (this *Fetch) processItem(item dparval.Value) {
 	// add this item to the batch
 	this.batch = append(this.batch, item)
 
@@ -95,13 +96,26 @@ func (this *Fetch) flushBatch() {
 	defer func() {
 		// no matter what hapens in this function
 		// clear out the batch and start a new one
-		this.batch = make([]query.Item, 0, FETCH_BATCH_SIZE)
+		this.batch = make([]dparval.Value, 0, FETCH_BATCH_SIZE)
 	}()
 
 	// gather the ids
 	ids := make([]string, 0, FETCH_BATCH_SIZE)
 	for _, v := range this.batch {
-		meta := v.GetMeta()
+		metaVal := v.Meta()
+		metaData, err := metaVal.Path("meta")
+		if err != nil {
+			this.supportChannel <- query.NewError(err, "unable to find metadata for fetch")
+			this.ok = false
+			return
+		}
+		metaRaw := metaData.Value()
+		meta, ok := metaRaw.(map[string]interface{})
+		if !ok {
+			this.supportChannel <- query.NewError(err, "metadata value not an object")
+			this.ok = false
+			return
+		}
 		id, ok := meta["id"]
 		if !ok {
 			this.supportChannel <- query.NewError(nil, "asked to fetch an item without a key")
@@ -112,7 +126,6 @@ func (this *Fetch) flushBatch() {
 	}
 
 	// now do a bulk fetch
-
 	bulkResponse, err := this.bucket.BulkFetch(ids)
 	if err != nil {
 		this.supportChannel <- query.NewError(err, "error getting bulk response")

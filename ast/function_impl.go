@@ -12,12 +12,12 @@ package ast
 import (
 	"strings"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type SystemFunction interface {
 	Name() string
-	Evaluate(query.Item, FunctionArgExpressionList) (query.Value, error)
+	Evaluate(dparval.Value, FunctionArgExpressionList) (dparval.Value, error)
 	Validate(FunctionArgExpressionList) error
 }
 

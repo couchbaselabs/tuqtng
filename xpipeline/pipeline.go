@@ -10,7 +10,7 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type ExecutablePipeline struct {
@@ -19,7 +19,7 @@ type ExecutablePipeline struct {
 
 type Operator interface {
 	SetSource(Operator)
-	GetChannels() (query.ItemChannel, PipelineSupportChannel)
+	GetChannels() (dparval.ValueChannel, PipelineSupportChannel)
 	Run()
 }
 

@@ -25,7 +25,7 @@ import (
 
 type HttpResponse struct {
 	w        http.ResponseWriter
-	results  query.ValueChannel
+	results  chan interface{}
 	warnings []query.Error
 	info     []query.Error
 	err      query.Error
@@ -51,7 +51,7 @@ func (this *HttpResponse) SendError(err query.Error) {
 	}
 }
 
-func (this *HttpResponse) SendResult(val query.Value) {
+func (this *HttpResponse) SendResult(val interface{}) {
 	this.results <- val
 }
 
@@ -111,7 +111,7 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Query String: %v", queryString)
 	}
 
-	response := HttpResponse{w: w, results: make(query.ValueChannel)}
+	response := HttpResponse{w: w, results: make(chan interface{})}
 	q := network.Query{
 		Request:  network.UNQLStringQueryRequest{QueryString: queryString},
 		Response: &response,

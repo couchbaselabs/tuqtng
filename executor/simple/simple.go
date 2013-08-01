@@ -18,6 +18,7 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/tuqtng/xpipelinebuilder"
 	simpleBuilder "github.com/couchbaselabs/tuqtng/xpipelinebuilder/simple"
+	"github.com/mschoch/dparval"
 )
 
 type SimpleExecutor struct {
@@ -44,7 +45,7 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 	go root.Run()
 
 	// now execute it
-	var item query.Item
+	var item dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := root.GetChannels()
 	ok := true
@@ -73,7 +74,7 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 	q.Response.NoMoreResults()
 }
 
-func (this *SimpleExecutor) processItem(q network.Query, item query.Item) {
-	result := item.GetValue()
+func (this *SimpleExecutor) processItem(q network.Query, item dparval.Value) {
+	result := item.Value()
 	q.Response.SendResult(result)
 }

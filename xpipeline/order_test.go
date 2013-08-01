@@ -10,8 +10,9 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/ast"
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/ast"
 )
 
 func TestOrder(t *testing.T) {
@@ -28,15 +29,16 @@ func TestOrder(t *testing.T) {
 	count := 0
 	for item := range orderItemChannel {
 
-		val, err := item.GetPath("name")
+		val, err := item.Path("name")
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
-		if count == 0 && val != "dustin" {
-			t.Errorf("expected dustin, got %v", val)
+		value := val.Value()
+		if count == 0 && value != "dustin" {
+			t.Errorf("expected dustin, got %v", value)
 		}
-		if count == len(testData)-1 && val != "steve" {
-			t.Errorf("expected steve, got %v", val)
+		if count == len(testData)-1 && value != "steve" {
+			t.Errorf("expected steve, got %v", value)
 		}
 		count++
 	}
@@ -56,15 +58,16 @@ func TestOrderDescending(t *testing.T) {
 	count := 0
 	for item := range orderItemChannel {
 
-		val, err := item.GetPath("name")
+		val, err := item.Path("name")
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
-		if count == 0 && val != "steve" {
-			t.Errorf("expected steve, got %v", val)
+		value := val.Value()
+		if count == 0 && value != "steve" {
+			t.Errorf("expected steve, got %v", value)
 		}
-		if count == len(testData)-1 && val != "dustin" {
-			t.Errorf("expected dustin, got %v", val)
+		if count == len(testData)-1 && value != "dustin" {
+			t.Errorf("expected dustin, got %v", value)
 		}
 		count++
 	}

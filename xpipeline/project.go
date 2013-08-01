@@ -12,11 +12,12 @@ package xpipeline
 import (
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type Project struct {
 	Source         Operator
-	itemChannel    query.ItemChannel
+	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
 	Result         ast.ResultExpressionList
 	projectEmpty   bool
@@ -26,7 +27,7 @@ type Project struct {
 func NewProject(result ast.ResultExpressionList, projectEmpty bool) *Project {
 	return &Project{
 		Result:         result,
-		itemChannel:    make(query.ItemChannel),
+		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 		projectEmpty:   projectEmpty,
 	}
@@ -36,7 +37,7 @@ func (this *Project) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Project) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+func (this *Project) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 
@@ -46,7 +47,7 @@ func (this *Project) Run() {
 
 	go this.Source.Run()
 
-	var item query.Item
+	var item dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	this.ok = true
@@ -72,25 +73,16 @@ func (this *Project) Run() {
 	}
 }
 
-func (this *Project) processItem(item query.Item) {
-	resultMap := map[string]query.Value{}
+func (this *Project) processItem(item dparval.Value) {
+	resultMap := map[string]interface{}{}
 	for _, resultItem := range this.Result {
 		if resultItem.Star {
 			if resultItem.Expr != nil {
 				// evaluate this expression first
 				val, err := resultItem.Expr.Evaluate(item)
-				if err == nil {
-					switch val := val.(type) {
-					case map[string]query.Value:
-						// then if the result was an object
-						// add its contents ot the result map
-						for k, v := range val {
-							resultMap[k] = v
-						}
-					}
-				} else {
+				if err != nil {
 					switch err := err.(type) {
-					case *query.Undefined:
+					case *dparval.Undefined:
 						// undefined contributes nothing to the result map
 						// but otherwise is NOT an error
 						// FIXME review if this should be a warning
@@ -101,28 +93,37 @@ func (this *Project) processItem(item query.Item) {
 						return
 					}
 				}
-			} else {
-				// just a star, get the value, if its a map project the key/value pairs
-				val := item.GetValue()
-				switch val := val.(type) {
-				case map[string]query.Value:
-					for k, v := range val {
-						resultMap[k] = v
+
+				if val.Type() == dparval.OBJECT {
+					valval := val.Value()
+					switch valval := valval.(type) {
+					case map[string]interface{}:
+						// then if the result was an object
+						// add its contents ot the result map
+						for k, v := range valval {
+							resultMap[k] = v
+						}
 					}
-				case map[string]interface{}:
-					for k, v := range val {
-						resultMap[k] = v
+				}
+
+			} else {
+				if item.Type() == dparval.OBJECT {
+					// just a star, get the value, if its a map project the key/value pairs
+					val := item.Value()
+					switch val := val.(type) {
+					case map[string]interface{}:
+						for k, v := range val {
+							resultMap[k] = v
+						}
 					}
 				}
 			}
 		} else if resultItem.Expr != nil {
 			// evaluate the expression
 			val, err := resultItem.Expr.Evaluate(item)
-			if err == nil {
-				resultMap[resultItem.As] = val
-			} else {
+			if err != nil {
 				switch err := err.(type) {
-				case *query.Undefined:
+				case *dparval.Undefined:
 					// undefined contributes nothing to the result map
 					// but otherwise is NOT an error
 					// FIXME review if this should be a warning
@@ -133,6 +134,8 @@ func (this *Project) processItem(item query.Item) {
 					return
 				}
 			}
+			resultMap[resultItem.As] = val
+
 		}
 	}
 
@@ -141,7 +144,17 @@ func (this *Project) processItem(item query.Item) {
 	}
 
 	// create the actual result Item
-	finalItem := query.NewParsedItem(resultMap, item.GetMeta())
+	finalItem := dparval.NewObjectValue(resultMap)
+	itemMetaVal := item.Meta()
+	if itemMetaVal != nil {
+		itemMetaData, err := itemMetaVal.Path("meta")
+		if err != nil {
+			this.supportChannel <- query.NewError(err, "unable to find item metadata")
+			this.ok = false
+			return
+		}
+		finalItem.AddMeta("meta", itemMetaData)
+	}
 
 	// write this to the output
 	this.itemChannel <- finalItem

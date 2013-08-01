@@ -60,15 +60,15 @@ func TestMock(t *testing.T) {
 	if err != nil || v == nil {
 		t.Errorf("expected item 123")
 	}
-	x, gerr := v.GetPath("id")
+	x, gerr := v.Path("id")
 	if gerr != nil || x == nil {
 		t.Errorf("expected item.id")
 	}
-	x, gerr = v.GetPath("i")
+	x, gerr = v.Path("i")
 	if gerr != nil || x == nil {
 		t.Errorf("expected item.i")
 	}
-	x, gerr = v.GetPath("not-a-valid-path")
+	x, gerr = v.Path("not-a-valid-path")
 	if gerr == nil || x != nil {
 		t.Errorf("expected not-a-valid-path to err")
 	}

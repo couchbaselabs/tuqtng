@@ -11,10 +11,9 @@ package ast
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 func TestLiteralStringRepresentation(t *testing.T) {
@@ -45,56 +44,34 @@ func TestLiteralStringRepresentation(t *testing.T) {
 }
 
 func TestEvaluateLiteral(t *testing.T) {
-	tests := []struct {
-		input  Expression
-		output query.Value
-	}{
-		{NewLiteralNull(), nil},
-		{NewLiteralBool(true), true},
-		{NewLiteralBool(false), false},
-		{NewLiteralNumber(1.0), 1.0},
-		{NewLiteralNumber(3.14), 3.14},
-		{NewLiteralString("couchbase"), "couchbase"},
-		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0)}), []query.Value{1.0}},
-		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0), NewLiteralBool(false)}), []query.Value{1.0, false}},
-		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0), NewLiteralBool(false), NewLiteralString("bob")}), []query.Value{1.0, false, "bob"}},
-		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), map[string]query.Value{"name": "bob"}},
-		{NewLiteralObject(map[string]Expression{"user": NewLiteralString("test"), "age": NewLiteralNumber(27.0)}), map[string]query.Value{"age": 27.0, "user": "test"}},
+	tests := ExpressionTestSet{
+		{NewLiteralNull(), nil, nil},
+		{NewLiteralBool(true), true, nil},
+		{NewLiteralBool(false), false, nil},
+		{NewLiteralNumber(1.0), 1.0, nil},
+		{NewLiteralNumber(3.14), 3.14, nil},
+		{NewLiteralString("couchbase"), "couchbase", nil},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0)}), []interface{}{1.0}, nil},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0), NewLiteralBool(false)}), []interface{}{1.0, false}, nil},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0), NewLiteralBool(false), NewLiteralString("bob")}), []interface{}{1.0, false, "bob"}, nil},
+		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), map[string]interface{}{"name": "bob"}, nil},
+		{NewLiteralObject(map[string]Expression{"user": NewLiteralString("test"), "age": NewLiteralNumber(27.0)}), map[string]interface{}{"age": 27.0, "user": "test"}, nil},
 	}
 
-	for _, x := range tests {
-		result, err := x.input.Evaluate(nil)
-		if err != nil {
-			t.Fatalf("Error evaluating expression: %v", err)
-		}
-		if !reflect.DeepEqual(result, x.output) {
-			t.Errorf("Expected %t %v, got %t %v", x.output, x.output, result, result)
-		}
-	}
+	tests.Run(t)
 
 }
 
 func TestEvaluateComplexLiteralContainingMissing(t *testing.T) {
 
-	sampleDocument := map[string]query.Value{}
-	item := query.NewParsedItem(sampleDocument, nil)
+	sampleDocument := map[string]interface{}{}
+	item := dparval.NewObjectValue(sampleDocument)
 
-	tests := []struct {
-		input  Expression
-		output query.Value
-	}{
-		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0), NewProperty("bob")}), []query.Value{1.0}},
-		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob"), "cat": NewProperty("bob")}), map[string]query.Value{"name": "bob"}},
+	tests := ExpressionTestSet{
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0), NewProperty("bob")}), []interface{}{1.0}, nil},
+		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob"), "cat": NewProperty("bob")}), map[string]interface{}{"name": "bob"}, nil},
 	}
 
-	for _, x := range tests {
-		result, err := x.input.Evaluate(item)
-		if err != nil {
-			t.Fatalf("Error evaluating expression: %v", err)
-		}
-		if !reflect.DeepEqual(result, x.output) {
-			t.Errorf("Expected %t %v, got %t %v", x.output, x.output, result, result)
-		}
-	}
+	tests.RunWithItem(t, item)
 
 }

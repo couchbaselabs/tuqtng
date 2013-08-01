@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 func init() {
@@ -31,7 +31,7 @@ func (this *FunctionLower) Name() string {
 	return "LOWER"
 }
 
-func (this *FunctionLower) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionLower) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -39,21 +39,23 @@ func (this *FunctionLower) Evaluate(item query.Item, arguments FunctionArgExpres
 	// all other types result in NULL
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// undefined returns null
-			return nil, nil
+			return dparval.NewNullValue(), nil
 		default:
 			// any other error return to caller
 			return nil, err
 		}
 	}
 
-	switch av := av.(type) {
-	case string:
-		return strings.ToLower(av), nil
-	default:
-		return nil, nil
+	if av.Type() == dparval.STRING {
+		avalue := av.Value()
+		switch avalue := avalue.(type) {
+		case string:
+			return dparval.NewStringValue(strings.ToLower(avalue)), nil
+		}
 	}
+	return dparval.NewNullValue(), nil
 }
 
 func (this *FunctionLower) Validate(arguments FunctionArgExpressionList) error {
@@ -70,7 +72,7 @@ func (this *FunctionUpper) Name() string {
 	return "UPPER"
 }
 
-func (this *FunctionUpper) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionUpper) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -78,21 +80,23 @@ func (this *FunctionUpper) Evaluate(item query.Item, arguments FunctionArgExpres
 	// all other types result in NULL
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// undefined returns null
-			return nil, nil
+			return dparval.NewNullValue(), nil
 		default:
 			// any other error return to caller
 			return nil, err
 		}
 	}
 
-	switch av := av.(type) {
-	case string:
-		return strings.ToUpper(av), nil
-	default:
-		return nil, nil
+	if av.Type() == dparval.STRING {
+		avalue := av.Value()
+		switch avalue := avalue.(type) {
+		case string:
+			return dparval.NewStringValue(strings.ToUpper(avalue)), nil
+		}
 	}
+	return dparval.NewNullValue(), nil
 }
 
 func (this *FunctionUpper) Validate(arguments FunctionArgExpressionList) error {
@@ -109,7 +113,7 @@ func (this *FunctionLTrim) Name() string {
 	return "LTRIM"
 }
 
-func (this *FunctionLTrim) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionLTrim) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -117,9 +121,9 @@ func (this *FunctionLTrim) Evaluate(item query.Item, arguments FunctionArgExpres
 	// all other types result in NULL
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// undefined returns null
-			return nil, nil
+			return dparval.NewNullValue(), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -131,27 +135,31 @@ func (this *FunctionLTrim) Evaluate(item query.Item, arguments FunctionArgExpres
 	// the cut list MUST be a string, otherwise return null
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// undefined returns null
-			return nil, nil
+			return dparval.NewNullValue(), nil
 		default:
 			// any other error return to caller
 			return nil, err
 		}
 	}
 
-	switch av := av.(type) {
-	case string:
-		switch cutlist := cutlist.(type) {
-		case string:
-			return strings.TrimLeft(av, cutlist), nil
-		default:
-			// FIXME warn that cutlist wasn't string?
-			return nil, nil
+	if av.Type() == dparval.STRING {
+		if cutlist.Type() == dparval.STRING {
+			avalue := av.Value()
+			switch avalue := avalue.(type) {
+			case string:
+				cutvlal := cutlist.Value()
+				switch cutvlal := cutvlal.(type) {
+				case string:
+					return dparval.NewStringValue(strings.TrimLeft(avalue, cutvlal)), nil
+				}
+			}
 		}
-	default:
-		return nil, nil
+
 	}
+	// FIXME warn if cutlist wasnt string?
+	return dparval.NewNullValue(), nil
 }
 
 func (this *FunctionLTrim) Validate(arguments FunctionArgExpressionList) error {
@@ -168,7 +176,7 @@ func (this *FunctionRTrim) Name() string {
 	return "RTRIM"
 }
 
-func (this *FunctionRTrim) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionRTrim) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -176,9 +184,9 @@ func (this *FunctionRTrim) Evaluate(item query.Item, arguments FunctionArgExpres
 	// all other types result in NULL
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// undefined returns null
-			return nil, nil
+			return dparval.NewNullValue(), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -190,27 +198,30 @@ func (this *FunctionRTrim) Evaluate(item query.Item, arguments FunctionArgExpres
 	// the cut list MUST be a string, otherwise return null
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// undefined returns null
-			return nil, nil
+			return dparval.NewNullValue(), nil
 		default:
 			// any other error return to caller
 			return nil, err
 		}
 	}
 
-	switch av := av.(type) {
-	case string:
-		switch cutlist := cutlist.(type) {
-		case string:
-			return strings.TrimRight(av, cutlist), nil
-		default:
-			// FIXME warn cutlist wasnt string?
-			return nil, nil
+	if av.Type() == dparval.STRING {
+		if cutlist.Type() == dparval.STRING {
+			avalue := av.Value()
+			switch avalue := avalue.(type) {
+			case string:
+				cutval := cutlist.Value()
+				switch cutval := cutval.(type) {
+				case string:
+					return dparval.NewStringValue(strings.TrimRight(avalue, cutval)), nil
+				}
+			}
 		}
-	default:
-		return nil, nil
 	}
+	// FIXME warn if cutlist wasnt string?
+	return dparval.NewNullValue(), nil
 }
 
 func (this *FunctionRTrim) Validate(arguments FunctionArgExpressionList) error {
@@ -227,7 +238,7 @@ func (this *FunctionTrim) Name() string {
 	return "TRIM"
 }
 
-func (this *FunctionTrim) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionTrim) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
@@ -235,9 +246,9 @@ func (this *FunctionTrim) Evaluate(item query.Item, arguments FunctionArgExpress
 	// all other types result in NULL
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// undefined returns null
-			return nil, nil
+			return dparval.NewNullValue(), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -249,27 +260,30 @@ func (this *FunctionTrim) Evaluate(item query.Item, arguments FunctionArgExpress
 	// the cut list MUST be a string, otherwise return null
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// undefined returns null
-			return nil, nil
+			return dparval.NewNullValue(), nil
 		default:
 			// any other error return to caller
 			return nil, err
 		}
 	}
 
-	switch av := av.(type) {
-	case string:
-		switch cutlist := cutlist.(type) {
-		case string:
-			return strings.Trim(av, cutlist), nil
-		default:
-			// FIXME warn that cutlist wasnt string?
-			return nil, nil
+	if av.Type() == dparval.STRING {
+		if cutlist.Type() == dparval.STRING {
+			avalue := av.Value()
+			switch avalue := avalue.(type) {
+			case string:
+				cutval := cutlist.Value()
+				switch cutval := cutval.(type) {
+				case string:
+					return dparval.NewStringValue(strings.Trim(avalue, cutval)), nil
+				}
+			}
 		}
-	default:
-		return nil, nil
 	}
+	// FIXME warn if that cutlist wasnt string?
+	return dparval.NewNullValue(), nil
 }
 
 func (this *FunctionTrim) Validate(arguments FunctionArgExpressionList) error {
@@ -286,15 +300,15 @@ func (this *FunctionSubStr) Name() string {
 	return "SUBSTR"
 }
 
-func (this *FunctionSubStr) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionSubStr) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// undefined returns null
-			return nil, nil
+			return dparval.NewNullValue(), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -304,9 +318,9 @@ func (this *FunctionSubStr) Evaluate(item query.Item, arguments FunctionArgExpre
 	position, err := arguments[1].Expr.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// undefined returns null
-			return nil, nil
+			return dparval.NewNullValue(), nil
 		default:
 			// any other error return to caller
 			return nil, err
@@ -319,59 +333,64 @@ func (this *FunctionSubStr) Evaluate(item query.Item, arguments FunctionArgExpre
 		lenarg, err := arguments[1].Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 				// undefined returns null
-				return nil, nil
+				return dparval.NewNullValue(), nil
 			default:
 				// any other error return to caller
 				return nil, err
 			}
 		}
 
-		switch lenarg := lenarg.(type) {
-		case float64:
-			maxLen = int(lenarg)
-			// FIXME add checks for negative values here?
-		default:
-			return nil, nil
+		if lenarg.Type() == dparval.NUMBER {
+			lenval := lenarg.Value()
+			switch lenval := lenval.(type) {
+			case float64:
+				maxLen = int(lenval)
+				// FIXME add checks for negative values here?
+			}
+		} else {
+			return dparval.NewNullValue(), nil
 		}
+
 	}
 
 	// ensure that arg1 is a string
-	switch av := av.(type) {
-	case string:
-		// ensure that arg2 is a number
-		switch position := position.(type) {
-		case float64:
-			pos := int(position)
+	if av.Type() == dparval.STRING {
+		if position.Type() == dparval.NUMBER {
+			avalue := av.Value()
+			switch avalue := avalue.(type) {
+			case string:
+				// ensure that arg2 is a number
+				posval := position.Value()
+				switch posval := posval.(type) {
+				case float64:
+					pos := int(posval)
 
-			//validate that pos is valid
-			if pos < 0 || pos >= len(av) {
-				// FIXME add warning for invalid pos?
-				return nil, nil
-			}
+					//validate that pos is valid
+					if pos < 0 || pos >= len(avalue) {
+						// FIXME add warning for invalid pos?
+						return nil, nil
+					}
 
-			if maxLen < 0 {
-				// no end limit
-				return av[pos:], nil
-			} else {
-				// validate that maxLen is valid
-				endPos := pos + maxLen + 1
-				if endPos < pos || endPos >= len(av) {
-					// FIXME add warning for invalid max len?
-					return nil, nil
+					if maxLen < 0 {
+						// no end limit
+						return dparval.NewStringValue(avalue[pos:]), nil
+					} else {
+						// validate that maxLen is valid
+						endPos := pos + maxLen + 1
+						if endPos < pos || endPos >= len(avalue) {
+							// FIXME add warning for invalid max len?
+							return nil, nil
+						}
+						return dparval.NewStringValue(avalue[pos:endPos]), nil
+					}
 				}
-				return av[pos:endPos], nil
 			}
-		default:
-			// FIXME warn that position wasn't int?
-			return nil, nil
 		}
-	default:
-		// FIXME warn that arg1 isnt a string?
-		return nil, nil
 	}
-
+	// FIXME warn if arguments were wrong type?
+	return dparval.NewNullValue(), nil
 }
 
 func (this *FunctionSubStr) Validate(arguments FunctionArgExpressionList) error {

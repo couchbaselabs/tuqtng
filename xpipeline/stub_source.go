@@ -10,19 +10,19 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type StubSource struct {
-	data           query.ItemCollection
-	itemChannel    query.ItemChannel
+	data           dparval.ValueCollection
+	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
 }
 
-func NewStubSource(data query.ItemCollection) *StubSource {
+func NewStubSource(data dparval.ValueCollection) *StubSource {
 	return &StubSource{
 		data:           data,
-		itemChannel:    make(query.ItemChannel),
+		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 	}
 }
@@ -31,7 +31,7 @@ func (this *StubSource) SetSource(Operator) {
 	panic("stub source does not have a source")
 }
 
-func (this *StubSource) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+func (this *StubSource) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 

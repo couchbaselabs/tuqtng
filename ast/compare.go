@@ -11,11 +11,10 @@ package ast
 
 import (
 	"fmt"
-	"log"
 	"regexp"
 	"strings"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type TypeMismatch struct {
@@ -32,7 +31,7 @@ type BinaryComparisonOperator struct {
 	Right Expression `json:"right"`
 }
 
-func (this *BinaryComparisonOperator) compare(item query.Item) (query.Value, error) {
+func (this *BinaryComparisonOperator) compare(item dparval.Value) (dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		// this could either be real error, or MISSING
@@ -40,8 +39,8 @@ func (this *BinaryComparisonOperator) compare(item query.Item) (query.Value, err
 		return nil, err
 	}
 	// if either side is NULL, the result is NULL
-	if lv == nil {
-		return lv, nil
+	if lv.Type() == dparval.NULL {
+		return nil, nil
 	}
 	rv, err := this.Right.Evaluate(item)
 	if err != nil {
@@ -50,15 +49,18 @@ func (this *BinaryComparisonOperator) compare(item query.Item) (query.Value, err
 		return nil, err
 	}
 	// if either side is NULL, the result is NULL
-	if rv == nil {
-		return rv, nil
+	if rv.Type() == dparval.NULL {
+		return nil, nil
 	}
+
+	lvalue := lv.Value()
+	rvalue := rv.Value()
 
 	// if we got this far, we evaluated both sides
 	// there were no errors, and neither side was NULL or MISSING
 	// now check types (types must be the same)
-	ltype := collationType(lv)
-	rtype := collationType(rv)
+	ltype := collationType(lvalue)
+	rtype := collationType(rvalue)
 	// ugly fixups for boolean (returns different values for true/false)
 	if ltype == 2 {
 		// fixup for boolean type
@@ -72,7 +74,7 @@ func (this *BinaryComparisonOperator) compare(item query.Item) (query.Value, err
 		return nil, &TypeMismatch{ltype, rtype}
 	}
 
-	return CollateJSON(lv, rv), nil
+	return dparval.NewValue(float64(CollateJSON(lvalue, rvalue))), nil
 }
 
 func (this *BinaryComparisonOperator) validate() error {
@@ -124,26 +126,27 @@ func NewGreaterThanOperator(left, right Expression) *GreaterThanOperator {
 	}
 }
 
-func (this *GreaterThanOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *GreaterThanOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	compare, err := this.BinaryComparisonOperator.compare(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *TypeMismatch:
 			// type mismatch is false
-			return false, nil
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
 		}
 	}
-	switch compare := compare.(type) {
-	case int:
-		return compare > 0, nil
-	case nil:
-		return nil, nil
+	if compare == nil {
+		return dparval.NewNullValue(), nil
+	}
+	compareValue := compare.Value()
+	switch compareValue := compareValue.(type) {
+	case float64:
+		return dparval.NewBooleanValue(compareValue > 0), nil
 	default:
-		log.Fatalf("Unexpected result from comparison: %v", compare)
-		return nil, nil
+		panic(fmt.Sprintf("Unexpected result from comparison: %v for %v, %v", compareValue, this.Left, this.Right))
 	}
 }
 
@@ -178,26 +181,27 @@ func NewGreaterThanOrEqualOperator(left, right Expression) *GreaterThanOrEqualOp
 	}
 }
 
-func (this *GreaterThanOrEqualOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *GreaterThanOrEqualOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	compare, err := this.BinaryComparisonOperator.compare(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *TypeMismatch:
 			// type mismatch is false
-			return false, nil
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
 		}
 	}
-	switch compare := compare.(type) {
-	case int:
-		return compare >= 0, nil
-	case nil:
-		return nil, nil
+	if compare == nil {
+		return dparval.NewNullValue(), nil
+	}
+	compareValue := compare.Value()
+	switch compareValue := compareValue.(type) {
+	case float64:
+		return dparval.NewBooleanValue(compareValue >= 0), nil
 	default:
-		log.Fatalf("Unexpected result from comparison: %v", compare)
-		return nil, nil
+		panic(fmt.Sprintf("Unexpected result from comparison: %v for %v, %v", compareValue, this.Left, this.Right))
 	}
 }
 
@@ -232,26 +236,27 @@ func NewLessThanOperator(left, right Expression) *LessThanOperator {
 	}
 }
 
-func (this *LessThanOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *LessThanOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	compare, err := this.BinaryComparisonOperator.compare(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *TypeMismatch:
 			// type mismatch is false
-			return false, nil
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
 		}
 	}
-	switch compare := compare.(type) {
-	case int:
-		return compare < 0, nil
-	case nil:
-		return nil, nil
+	if compare == nil {
+		return dparval.NewNullValue(), nil
+	}
+	compareValue := compare.Value()
+	switch compareValue := compareValue.(type) {
+	case float64:
+		return dparval.NewBooleanValue(compareValue < 0), nil
 	default:
-		log.Fatalf("Unexpected result from comparison: %v", compare)
-		return nil, nil
+		panic(fmt.Sprintf("Unexpected result from comparison: %v for %v, %v", compareValue, this.Left, this.Right))
 	}
 }
 
@@ -286,26 +291,27 @@ func NewLessThanOrEqualOperator(left, right Expression) *LessThanOrEqualOperator
 	}
 }
 
-func (this *LessThanOrEqualOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *LessThanOrEqualOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	compare, err := this.BinaryComparisonOperator.compare(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *TypeMismatch:
 			// type mismatch is false
-			return false, nil
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
 		}
 	}
-	switch compare := compare.(type) {
-	case int:
-		return compare <= 0, nil
-	case nil:
-		return nil, nil
+	if compare == nil {
+		return dparval.NewNullValue(), nil
+	}
+	compareValue := compare.Value()
+	switch compareValue := compareValue.(type) {
+	case float64:
+		return dparval.NewBooleanValue(compareValue <= 0), nil
 	default:
-		log.Fatalf("Unexpected result from comparison: %v", compare)
-		return nil, nil
+		panic(fmt.Sprintf("Unexpected result from comparison: %v for %v, %v", compareValue, this.Left, this.Right))
 	}
 }
 
@@ -340,26 +346,27 @@ func NewEqualToOperator(left, right Expression) *EqualToOperator {
 	}
 }
 
-func (this *EqualToOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *EqualToOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	compare, err := this.BinaryComparisonOperator.compare(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *TypeMismatch:
 			// type mismatch is false
-			return false, nil
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
 		}
 	}
-	switch compare := compare.(type) {
-	case int:
-		return compare == 0, nil
-	case nil:
-		return nil, nil
+	if compare == nil {
+		return dparval.NewNullValue(), nil
+	}
+	compareValue := compare.Value()
+	switch compareValue := compareValue.(type) {
+	case float64:
+		return dparval.NewBooleanValue(compareValue == 0), nil
 	default:
-		log.Fatalf("Unexpected result from comparison: %v", compare)
-		return nil, nil
+		panic(fmt.Sprintf("Unexpected result from comparison: %v for %v, %v", compareValue, this.Left, this.Right))
 	}
 }
 
@@ -394,26 +401,27 @@ func NewNotEqualToOperator(left, right Expression) *NotEqualToOperator {
 	}
 }
 
-func (this *NotEqualToOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *NotEqualToOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	compare, err := this.BinaryComparisonOperator.compare(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *TypeMismatch:
 			// type mismatch is false
-			return false, nil
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
 		}
 	}
-	switch compare := compare.(type) {
-	case int:
-		return compare != 0, nil
-	case nil:
-		return nil, nil
+	if compare == nil {
+		return dparval.NewNullValue(), nil
+	}
+	compareValue := compare.Value()
+	switch compareValue := compareValue.(type) {
+	case float64:
+		return dparval.NewBooleanValue(compareValue != 0), nil
 	default:
-		log.Fatalf("Unexpected result from comparison: %v", compare)
-		return nil, nil
+		panic(fmt.Sprintf("Unexpected result from comparison: %v for %v, %v", compareValue, this.Left, this.Right))
 	}
 }
 
@@ -448,7 +456,7 @@ func NewLikeOperator(left, right Expression) *LikeOperator {
 	}
 }
 
-func (this *LikeOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *LikeOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -458,26 +466,26 @@ func (this *LikeOperator) Evaluate(item query.Item) (query.Value, error) {
 		return nil, err
 	}
 
-	switch lv := lv.(type) {
-	case string:
-		switch rv := rv.(type) {
+	if lv.Type() == rv.Type() && rv.Type() == dparval.STRING {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+		switch lvalue := lvalue.(type) {
 		case string:
-			// if both values are string we can proceed
-			pattern := strings.Replace(rv, "%", "(.*)", -1)
-			pattern = strings.Replace(pattern, "_", "(.)", -1)
-			pattern = "^" + pattern + "$"
-			re, err := regexp.Compile(pattern)
-			if err != nil {
-				return err, nil
+			switch rvalue := rvalue.(type) {
+			case string:
+				// if both values are string we can proceed
+				pattern := strings.Replace(rvalue, "%", "(.*)", -1)
+				pattern = strings.Replace(pattern, "_", "(.)", -1)
+				pattern = "^" + pattern + "$"
+				re, err := regexp.Compile(pattern)
+				if err != nil {
+					return nil, err
+				}
+				return dparval.NewBooleanValue(re.MatchString(lvalue)), nil
 			}
-			return re.MatchString(lv), nil
-
-		default:
-			return nil, nil
 		}
-	default:
-		return nil, nil
 	}
+	return dparval.NewNullValue(), nil
 }
 
 func (this *LikeOperator) Validate() error {
@@ -532,7 +540,7 @@ func NewNotLikeOperator(left, right Expression) *NotLikeOperator {
 	}
 }
 
-func (this *NotLikeOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *NotLikeOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -542,26 +550,26 @@ func (this *NotLikeOperator) Evaluate(item query.Item) (query.Value, error) {
 		return nil, err
 	}
 
-	switch lv := lv.(type) {
-	case string:
-		switch rv := rv.(type) {
+	if lv.Type() == rv.Type() && rv.Type() == dparval.STRING {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+		switch lvalue := lvalue.(type) {
 		case string:
-			// if both values are string we can proceed
-			pattern := strings.Replace(rv, "%", "(.*)", -1)
-			pattern = strings.Replace(pattern, "_", "(.)", -1)
-			pattern = "^" + pattern + "$"
-			re, err := regexp.Compile(pattern)
-			if err != nil {
-				return err, nil
+			switch rvalue := rvalue.(type) {
+			case string:
+				// if both values are string we can proceed
+				pattern := strings.Replace(rvalue, "%", "(.*)", -1)
+				pattern = strings.Replace(pattern, "_", "(.)", -1)
+				pattern = "^" + pattern + "$"
+				re, err := regexp.Compile(pattern)
+				if err != nil {
+					return nil, err
+				}
+				return dparval.NewBooleanValue(!re.MatchString(lvalue)), nil
 			}
-			return !re.MatchString(lv), nil
-
-		default:
-			return nil, nil
 		}
-	default:
-		return nil, nil
 	}
+	return dparval.NewNullValue(), nil
 }
 
 func (this *NotLikeOperator) Validate() error {
@@ -614,23 +622,23 @@ func NewIsNullOperator(operand Expression) *IsNullOperator {
 	}
 }
 
-func (this *IsNullOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *IsNullOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
-			return false, nil
+		case *dparval.Undefined:
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
 		}
 	}
 
-	if ov == nil {
-		return true, nil
+	if ov.Type() == dparval.NULL {
+		return dparval.NewBooleanValue(true), nil
 	}
 
-	return false, nil
+	return dparval.NewBooleanValue(false), nil
 }
 
 func (this *IsNullOperator) Validate() error {
@@ -672,23 +680,23 @@ func NewIsNotNullOperator(operand Expression) *IsNotNullOperator {
 	}
 }
 
-func (this *IsNotNullOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *IsNotNullOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
-			return false, nil
+		case *dparval.Undefined:
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
 		}
 	}
 
-	if ov == nil {
-		return false, nil
+	if ov.Type() == dparval.NULL {
+		return dparval.NewBooleanValue(false), nil
 	}
 
-	return true, nil
+	return dparval.NewBooleanValue(true), nil
 }
 
 func (this *IsNotNullOperator) Validate() error {
@@ -730,19 +738,19 @@ func NewIsMissingOperator(operand Expression) *IsMissingOperator {
 	}
 }
 
-func (this *IsMissingOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *IsMissingOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	_, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
-			return true, nil
+		case *dparval.Undefined:
+			return dparval.NewBooleanValue(true), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
 		}
 	}
 
-	return false, nil
+	return dparval.NewBooleanValue(false), nil
 }
 
 func (this *IsMissingOperator) Validate() error {
@@ -784,19 +792,19 @@ func NewIsNotMissingOperator(operand Expression) *IsNotMissingOperator {
 	}
 }
 
-func (this *IsNotMissingOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *IsNotMissingOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	_, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
-			return false, nil
+		case *dparval.Undefined:
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
 		}
 	}
 
-	return true, nil
+	return dparval.NewBooleanValue(true), nil
 }
 
 func (this *IsNotMissingOperator) Validate() error {
@@ -838,23 +846,23 @@ func NewIsValuedOperator(operand Expression) *IsValuedOperator {
 	}
 }
 
-func (this *IsValuedOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *IsValuedOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
-			return false, nil
+		case *dparval.Undefined:
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
 		}
 	}
 
-	if ov == nil {
-		return false, nil
+	if ov.Type() == dparval.NULL {
+		return dparval.NewBooleanValue(false), nil
 	}
 
-	return true, nil
+	return dparval.NewBooleanValue(true), nil
 }
 
 func (this *IsValuedOperator) Validate() error {
@@ -896,23 +904,23 @@ func NewIsNotValuedOperator(operand Expression) *IsNotValuedOperator {
 	}
 }
 
-func (this *IsNotValuedOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *IsNotValuedOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
-			return false, nil
+		case *dparval.Undefined:
+			return dparval.NewBooleanValue(false), nil
 		default:
 			// any other error should be returned to caller
 			return nil, err
 		}
 	}
 
-	if ov == nil {
-		return true, nil
+	if ov.Type() == dparval.NULL {
+		return dparval.NewBooleanValue(true), nil
 	}
 
-	return false, nil
+	return dparval.NewBooleanValue(false), nil
 }
 
 func (this *IsNotValuedOperator) Validate() error {

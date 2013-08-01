@@ -10,42 +10,38 @@
 package ast
 
 import (
-	"reflect"
 	"testing"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 func TestFunction(t *testing.T) {
 
-	sampleContext := map[string]query.Value{
-		"bucket": map[string]query.Value{
+	sampleContext := map[string]interface{}{
+		"bucket": map[string]interface{}{
 			"name": "will",
 		},
 	}
-	sampleMeta := map[string]query.Value{
+	sampleMeta := map[string]interface{}{
 		"id": "first",
 	}
 
-	context := query.NewParsedItem(sampleContext, sampleMeta)
+	context := dparval.NewObjectValue(sampleContext)
+	context.AddMeta("meta", sampleMeta)
 
-	tests := []struct {
-		input  Expression
-		output query.Value
-		err    error
-	}{
+	tests := ExpressionTestSet{
 		// meta/value functions
 		{
-			NewFunctionCall("META", FunctionArgExpressionList{}),
-			map[string]query.Value{
+			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
+			map[string]interface{}{
 				"id": "first",
 			},
 			nil,
 		},
 
 		{
-			NewFunctionCall("VALUE", FunctionArgExpressionList{}),
-			map[string]query.Value{
+			NewFunctionCall("VALUE", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
+			map[string]interface{}{
 				"name": "will",
 			},
 			nil,
@@ -138,7 +134,7 @@ func TestFunction(t *testing.T) {
 		{
 			NewFunctionCall("MISSINGIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello"))}),
 			nil,
-			&query.Undefined{},
+			&dparval.Undefined{},
 		},
 		{
 			NewFunctionCall("NULLIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello2"))}),
@@ -262,16 +258,6 @@ func TestFunction(t *testing.T) {
 		},
 	}
 
-	for _, x := range tests {
-		x.input.VerifyFormalNotation([]string{"bucket"}, "bucket")
-		x.input.Validate()
-		result, err := x.input.Evaluate(context)
-		if !reflect.DeepEqual(err, x.err) {
-			t.Fatalf("Expected error %v, got %v for %v", x.err, err, x.input)
-		}
-		if !reflect.DeepEqual(result, x.output) {
-			t.Errorf("Expected %v, got %v for %v", x.output, result, x.input)
-		}
-	}
+	tests.RunWithItem(t, context)
 
 }

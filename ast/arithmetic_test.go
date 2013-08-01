@@ -10,10 +10,9 @@
 package ast
 
 import (
-	"reflect"
 	"testing"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 func TestArithmetic(t *testing.T) {
@@ -25,57 +24,44 @@ func TestArithmetic(t *testing.T) {
 	stringServer := NewLiteralString("Server")
 	dneProperty := NewProperty("foo")
 
-	tests := []struct {
-		input  Expression
-		output interface{}
-		err    error
-	}{
+	tests := ExpressionTestSet{
 		{NewPlusOperator(stringCouchbase, stringServer), nil, nil}, // no longer support string concatenation, uses different operator
 
 		{NewPlusOperator(numberSeven, numberSeven), 14.0, nil},
 		{NewPlusOperator(numberSeven, stringCouchbase), nil, nil},
 		{NewPlusOperator(stringCouchbase, numberSeven), nil, nil},
-		{NewPlusOperator(dneProperty, numberSeven), nil, &query.Undefined{"foo"}},
-		{NewPlusOperator(numberSeven, dneProperty), nil, &query.Undefined{"foo"}},
+		{NewPlusOperator(dneProperty, numberSeven), nil, &dparval.Undefined{"foo"}},
+		{NewPlusOperator(numberSeven, dneProperty), nil, &dparval.Undefined{"foo"}},
 
 		{NewSubtractOperator(numberSeven, numberSeven), 0.0, nil},
 		{NewSubtractOperator(numberSeven, stringCouchbase), nil, nil},
 		{NewSubtractOperator(stringCouchbase, numberSeven), nil, nil},
-		{NewSubtractOperator(dneProperty, numberSeven), nil, &query.Undefined{"foo"}},
-		{NewSubtractOperator(numberSeven, dneProperty), nil, &query.Undefined{"foo"}},
+		{NewSubtractOperator(dneProperty, numberSeven), nil, &dparval.Undefined{"foo"}},
+		{NewSubtractOperator(numberSeven, dneProperty), nil, &dparval.Undefined{"foo"}},
 
 		{NewMultiplyOperator(numberSeven, numberSeven), 49.0, nil},
 		{NewMultiplyOperator(numberSeven, stringCouchbase), nil, nil},
 		{NewMultiplyOperator(stringCouchbase, numberSeven), nil, nil},
-		{NewMultiplyOperator(dneProperty, numberSeven), nil, &query.Undefined{"foo"}},
-		{NewMultiplyOperator(numberSeven, dneProperty), nil, &query.Undefined{"foo"}},
+		{NewMultiplyOperator(dneProperty, numberSeven), nil, &dparval.Undefined{"foo"}},
+		{NewMultiplyOperator(numberSeven, dneProperty), nil, &dparval.Undefined{"foo"}},
 
 		{NewDivideOperator(numberSeven, numberSeven), 1.0, nil},
 		{NewDivideOperator(numberSeven, stringCouchbase), nil, nil},
 		{NewDivideOperator(stringCouchbase, numberSeven), nil, nil},
-		{NewDivideOperator(dneProperty, numberSeven), nil, &query.Undefined{"foo"}},
-		{NewDivideOperator(numberSeven, dneProperty), nil, &query.Undefined{"foo"}},
+		{NewDivideOperator(dneProperty, numberSeven), nil, &dparval.Undefined{"foo"}},
+		{NewDivideOperator(numberSeven, dneProperty), nil, &dparval.Undefined{"foo"}},
 
 		{NewModuloOperator(numberSeven, numberSix), 1.0, nil},
 		{NewModuloOperator(stringCouchbase, numberSix), nil, nil},
 		{NewModuloOperator(numberSeven, stringCouchbase), nil, nil},
-		{NewModuloOperator(dneProperty, numberSix), nil, &query.Undefined{"foo"}},
-		{NewModuloOperator(numberSeven, dneProperty), nil, &query.Undefined{"foo"}},
+		{NewModuloOperator(dneProperty, numberSix), nil, &dparval.Undefined{"foo"}},
+		{NewModuloOperator(numberSeven, dneProperty), nil, &dparval.Undefined{"foo"}},
 
 		{NewChangeSignOperator(numberSeven), -7.0, nil},
 		{NewChangeSignOperator(numberNegativeSeven), 7.0, nil},
 		{NewChangeSignOperator(stringCouchbase), nil, nil},
-		{NewChangeSignOperator(dneProperty), nil, &query.Undefined{"foo"}},
+		{NewChangeSignOperator(dneProperty), nil, &dparval.Undefined{"foo"}},
 	}
 
-	for _, x := range tests {
-		result, err := x.input.Evaluate(nil)
-		if !reflect.DeepEqual(err, x.err) {
-			t.Fatalf("Expected error: %v, got %v", x.err, err)
-		}
-		if !reflect.DeepEqual(result, x.output) {
-			t.Errorf("Expected %t %v, got %t %v", x.output, x.output, result, result)
-		}
-	}
-
+	tests.Run(t)
 }

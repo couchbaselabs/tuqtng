@@ -18,7 +18,6 @@ import (
 
 	"code.google.com/p/go.exp/locale/collate"
 	"code.google.com/p/go.text/locale"
-	"github.com/couchbaselabs/tuqtng/query"
 )
 
 var icuCollator = collate.New(locale.Make("icu"))
@@ -48,8 +47,8 @@ func CollateJSON(key1, key2 interface{}) int {
 		s2 := key2.(string)
 		return icuCollator.CompareString(s1, s2)
 	case 5:
-		array1 := key1.([]query.Value)
-		array2 := key2.([]query.Value)
+		array1 := key1.([]interface{})
+		array2 := key2.([]interface{})
 		for i, item1 := range array1 {
 			if i >= len(array2) {
 				return 1
@@ -60,8 +59,8 @@ func CollateJSON(key1, key2 interface{}) int {
 		}
 		return len(array1) - len(array2)
 	case 6:
-		obj1 := key1.(map[string]query.Value)
-		obj2 := key2.(map[string]query.Value)
+		obj1 := key1.(map[string]interface{})
+		obj2 := key2.(map[string]interface{})
 
 		// first see if one object is larger than the other
 		if len(obj1) < len(obj2) {
@@ -124,9 +123,9 @@ func collationType(value interface{}) int {
 		return 3
 	case string:
 		return 4
-	case []query.Value:
+	case []interface{}:
 		return 5
-	case map[string]query.Value:
+	case map[string]interface{}:
 		return 6
 	}
 	panic(fmt.Sprintf("collationType doesn't understand %+v of type %T", value, value))

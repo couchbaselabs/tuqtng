@@ -18,6 +18,7 @@ package catalog
 
 import (
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 // Site represents a cluster or single-node server.
@@ -43,8 +44,8 @@ type Bucket interface {
 	Scanners() ([]Scanner, query.Error)
 	ScannerNames() ([]string, query.Error)
 	Scanner(name string) (Scanner, query.Error)
-	Fetch(id string) (query.Item, query.Error)
-	BulkFetch([]string) (map[string]query.Item, query.Error)
+	Fetch(id string) (dparval.Value, query.Error)
+	BulkFetch([]string) (map[string]dparval.Value, query.Error)
 	Release()
 }
 
@@ -52,8 +53,8 @@ type Bucket interface {
 // declarative btree index).
 type RangeStatistics interface {
 	Count() (int64, query.Error)
-	Min() (query.Item, query.Error)
-	Max() (query.Item, query.Error)
+	Min() (dparval.Value, query.Error)
+	Max() (dparval.Value, query.Error)
 	DistinctCount(int64, query.Error)
 	Bins() ([]Bin, query.Error)
 }
@@ -61,15 +62,15 @@ type RangeStatistics interface {
 // Bin represents a range bin within IndexStatistics.
 type Bin interface {
 	Count() (int64, query.Error)
-	Min() (query.Item, query.Error)
-	Max() (query.Item, query.Error)
+	Min() (dparval.Value, query.Error)
+	Max() (dparval.Value, query.Error)
 	DistinctCount(int64, query.Error)
 }
 
 // Scanner is the base type for all scanners.
 type Scanner interface {
 	Name() string
-	ScanAll(ch query.ItemChannel, warnch, errch query.ErrorChannel)
+	ScanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
 
 // FullScanner performs full bucket scans.

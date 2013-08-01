@@ -11,10 +11,9 @@ package ast
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 func TestBooleanStringRepresentation(t *testing.T) {
@@ -62,11 +61,7 @@ func TestBoolean(t *testing.T) {
 	booleanTrue := NewLiteralBool(true)
 	booleanFalse := NewLiteralBool(false)
 
-	tests := []struct {
-		input  Expression
-		output query.Value
-		err    error
-	}{
+	tests := ExpressionTestSet{
 		{NewAndOperator(ExpressionList{booleanTrue, booleanTrue}), true, nil},
 		{NewAndOperator(ExpressionList{booleanTrue, booleanFalse}), false, nil},
 		{NewAndOperator(ExpressionList{booleanFalse, booleanTrue}), false, nil},
@@ -95,33 +90,33 @@ func TestBoolean(t *testing.T) {
 
 		{NewAndOperator(ExpressionList{null, booleanFalse}), false, nil},
 		{NewAndOperator(ExpressionList{null, null}), nil, nil},
-		{NewAndOperator(ExpressionList{null, missingProperty}), nil, &query.Undefined{"dne"}},
+		{NewAndOperator(ExpressionList{null, missingProperty}), nil, &dparval.Undefined{"dne"}},
 		{NewAndOperator(ExpressionList{null, booleanTrue}), nil, nil},
 
 		{NewAndOperator(ExpressionList{missingProperty, booleanFalse}), false, nil},
-		{NewAndOperator(ExpressionList{missingProperty, null}), nil, &query.Undefined{"dne"}},
-		{NewAndOperator(ExpressionList{missingProperty, missingProperty}), nil, &query.Undefined{"dne"}},
-		{NewAndOperator(ExpressionList{missingProperty, booleanTrue}), nil, &query.Undefined{"dne"}},
+		{NewAndOperator(ExpressionList{missingProperty, null}), nil, &dparval.Undefined{"dne"}},
+		{NewAndOperator(ExpressionList{missingProperty, missingProperty}), nil, &dparval.Undefined{"dne"}},
+		{NewAndOperator(ExpressionList{missingProperty, booleanTrue}), nil, &dparval.Undefined{"dne"}},
 
 		{NewAndOperator(ExpressionList{booleanTrue, booleanFalse}), false, nil},
 		{NewAndOperator(ExpressionList{booleanTrue, null}), nil, nil},
-		{NewAndOperator(ExpressionList{booleanTrue, missingProperty}), nil, &query.Undefined{"dne"}},
+		{NewAndOperator(ExpressionList{booleanTrue, missingProperty}), nil, &dparval.Undefined{"dne"}},
 		{NewAndOperator(ExpressionList{booleanTrue, booleanTrue}), true, nil},
 
 		// OR
 		{NewOrOperator(ExpressionList{booleanFalse, booleanFalse}), false, nil},
 		{NewOrOperator(ExpressionList{booleanFalse, null}), nil, nil},
-		{NewOrOperator(ExpressionList{booleanFalse, missingProperty}), nil, &query.Undefined{"dne"}},
+		{NewOrOperator(ExpressionList{booleanFalse, missingProperty}), nil, &dparval.Undefined{"dne"}},
 		{NewOrOperator(ExpressionList{booleanFalse, booleanTrue}), true, nil},
 
 		{NewOrOperator(ExpressionList{null, booleanFalse}), nil, nil},
 		{NewOrOperator(ExpressionList{null, null}), nil, nil},
-		{NewOrOperator(ExpressionList{null, missingProperty}), nil, &query.Undefined{"dne"}},
+		{NewOrOperator(ExpressionList{null, missingProperty}), nil, &dparval.Undefined{"dne"}},
 		{NewOrOperator(ExpressionList{null, booleanTrue}), true, nil},
 
-		{NewOrOperator(ExpressionList{missingProperty, booleanFalse}), nil, &query.Undefined{"dne"}},
-		{NewOrOperator(ExpressionList{missingProperty, null}), nil, &query.Undefined{"dne"}},
-		{NewOrOperator(ExpressionList{missingProperty, missingProperty}), nil, &query.Undefined{"dne"}},
+		{NewOrOperator(ExpressionList{missingProperty, booleanFalse}), nil, &dparval.Undefined{"dne"}},
+		{NewOrOperator(ExpressionList{missingProperty, null}), nil, &dparval.Undefined{"dne"}},
+		{NewOrOperator(ExpressionList{missingProperty, missingProperty}), nil, &dparval.Undefined{"dne"}},
 		{NewOrOperator(ExpressionList{missingProperty, booleanTrue}), true, nil},
 
 		{NewOrOperator(ExpressionList{booleanTrue, booleanFalse}), true, nil},
@@ -132,18 +127,10 @@ func TestBoolean(t *testing.T) {
 		// NOT
 		{NewNotOperator(booleanTrue), false, nil},
 		{NewNotOperator(null), nil, nil},
-		{NewNotOperator(missingProperty), nil, &query.Undefined{"dne"}},
+		{NewNotOperator(missingProperty), nil, &dparval.Undefined{"dne"}},
 		{NewNotOperator(booleanFalse), true, nil},
 	}
 
-	for _, x := range tests {
-		result, err := x.input.Evaluate(nil)
-		if !reflect.DeepEqual(err, x.err) {
-			t.Fatalf("Expected error %v, got %v for %v", x.err, err, x.input)
-		}
-		if !reflect.DeepEqual(result, x.output) {
-			t.Errorf("Expected %v, got %v for %v", x.output, result, x.input)
-		}
-	}
+	tests.Run(t)
 
 }

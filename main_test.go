@@ -40,7 +40,7 @@ func (this *MockBenchmarkResponse) SendError(err query.Error) {
 	}
 }
 
-func (this *MockBenchmarkResponse) SendResult(val query.Value) {
+func (this *MockBenchmarkResponse) SendResult(val interface{}) {
 	this.results++
 }
 

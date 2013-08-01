@@ -12,7 +12,7 @@ package ast
 import (
 	"fmt"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 func init() {
@@ -27,10 +27,34 @@ func (this *FunctionMeta) Name() string {
 	return "META"
 }
 
-func (this *FunctionMeta) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
-	// we already checked during the VerifyFormalNotation process
-	// that this was the only allowable value
-	return item.GetMeta(), nil
+func (this *FunctionMeta) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
+
+	// FIXME the commented code below wont work until we fix how we store meta
+
+	// av, err := arguments[0].Expr.Evaluate(item)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// meta := av.Meta()
+	// if meta != nil {
+	// 	metaData, err := meta.Path("meta")
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	return metaData, nil
+	// }
+
+	meta := item.Meta()
+	if meta != nil {
+		metaData, err := meta.Path("meta")
+		if err != nil {
+			return nil, err
+		}
+		return metaData, nil
+	}
+
+	return nil, nil
 }
 
 func (this *FunctionMeta) Validate(arguments FunctionArgExpressionList) error {
@@ -47,7 +71,7 @@ func (this *FunctionValue) Name() string {
 	return "VALUE"
 }
 
-func (this *FunctionValue) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionValue) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 	if len(arguments) > 0 {
 		// first evaluate the argument
 		av, err := arguments[0].Expr.Evaluate(item)
@@ -58,7 +82,7 @@ func (this *FunctionValue) Evaluate(item query.Item, arguments FunctionArgExpres
 	} else {
 		// this mode is still relied up for projecting in the FROM clause
 		// review for cleanup
-		return item.GetValue(), nil
+		return item, nil
 	}
 }
 

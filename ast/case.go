@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type WhenThen struct {
@@ -33,14 +33,14 @@ func NewCaseOperator() *CaseOperator {
 	}
 }
 
-func (this *CaseOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *CaseOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	// walk through the WhenThens in order
 	for _, WhenThen := range this.WhenThens {
 		// evalute the when
 		whenVal, err := WhenThen.When.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 				// MISSING is not true, keep looking
 				continue
 			default:
@@ -49,7 +49,9 @@ func (this *CaseOperator) Evaluate(item query.Item) (query.Value, error) {
 			}
 		}
 
-		whenBoolVal := ValueInBooleanContext(whenVal)
+		whenValVal := whenVal.Value()
+
+		whenBoolVal := ValueInBooleanContext(whenValVal)
 		if whenBoolVal == true {
 			// evalauate the then
 			thenVal, err := WhenThen.Then.Evaluate(item)
@@ -70,7 +72,7 @@ func (this *CaseOperator) Evaluate(item query.Item) (query.Value, error) {
 		return elseVal, nil
 	}
 	// if there was no else, return null
-	return nil, nil
+	return dparval.NewNullValue(), nil
 }
 
 func (this *CaseOperator) Validate() error {

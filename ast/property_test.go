@@ -11,10 +11,9 @@ package ast
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 func TestPropertyStringRepresentation(t *testing.T) {
@@ -35,27 +34,16 @@ func TestPropertyStringRepresentation(t *testing.T) {
 }
 
 func TestEvaluateProperty(t *testing.T) {
-	sampleDocument := map[string]query.Value{
+	sampleDocument := map[string]interface{}{
 		"name": "will",
 	}
 
-	tests := []struct {
-		input  Expression
-		output query.Value
-	}{
-		{NewProperty("name"), "will"},
+	tests := ExpressionTestSet{
+		{NewProperty("name"), "will", nil},
 	}
 
-	item := query.NewParsedItem(sampleDocument, nil)
+	item := dparval.NewObjectValue(sampleDocument)
 
-	for _, x := range tests {
-		result, err := x.input.Evaluate(item)
-		if err != nil {
-			t.Fatalf("Error evaluating expression: %v", err)
-		}
-		if !reflect.DeepEqual(result, x.output) {
-			t.Errorf("Expected %t %v, got %t %v", x.output, x.output, result, result)
-		}
-	}
+	tests.RunWithItem(t, item)
 
 }

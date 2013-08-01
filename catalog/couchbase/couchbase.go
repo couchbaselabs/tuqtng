@@ -10,7 +10,6 @@
 package couchbase
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"time"
@@ -18,6 +17,7 @@ import (
 	cb "github.com/couchbaselabs/go-couchbase"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type site struct {
@@ -147,57 +147,38 @@ func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
 	return scanner, nil
 }
 
-func (b *bucket) BulkFetch(ids []string) (map[string]query.Item, query.Error) {
-	rv := make(map[string]query.Item, 0)
+func (b *bucket) BulkFetch(ids []string) (map[string]dparval.Value, query.Error) {
+	rv := make(map[string]dparval.Value, 0)
 
 	bulkResponse := b.cbbucket.GetBulk(ids)
 	for k, v := range bulkResponse {
-		var doc query.Value
-		var meta map[string]query.Value
-		err := json.Unmarshal(v.Body, &doc)
-		if err != nil {
-			// not an error, this is simply not json
-			doc = map[string]interface{}{}
-			flags := (v.Extras[0]&0xff)<<24 | (v.Extras[1]&0xff)<<16 | (v.Extras[2]&0xff)<<8 | (v.Extras[3] & 0xff)
-			meta = map[string]query.Value{
-				"id":    k,
-				"cas":   v.Cas,
-				"type":  "base64",
-				"flags": float64(flags),
-			}
-		} else {
-			flags := (v.Extras[0]&0xff)<<24 | (v.Extras[1]&0xff)<<16 | (v.Extras[2]&0xff)<<8 | (v.Extras[3] & 0xff)
-			meta = map[string]query.Value{
-				"id":    k,
-				"cas":   v.Cas,
-				"type":  "json",
-				"flags": float64(flags),
-			}
+
+		doc := dparval.NewValueFromBytes(v.Body)
+		meta_flags := (v.Extras[0]&0xff)<<24 | (v.Extras[1]&0xff)<<16 | (v.Extras[2]&0xff)<<8 | (v.Extras[3] & 0xff)
+		meta_type := "json"
+		if doc.Type() == dparval.NOT_JSON {
+			meta_type = "base64"
 		}
+		doc.AddMeta("meta", map[string]interface{}{
+			"id":    k,
+			"case":  float64(v.Cas),
+			"type":  meta_type,
+			"flags": float64(meta_flags),
+		})
 
-		item := query.NewParsedItem(doc, meta)
-
-		rv[k] = item
+		rv[k] = doc
 	}
 
 	return rv, nil
 }
 
-func (b *bucket) Fetch(id string) (query.Item, query.Error) {
-	var doc query.Value
-	err := b.cbbucket.Get(id, &doc)
-
+func (b *bucket) Fetch(id string) (dparval.Value, query.Error) {
+	// use bulk get of single key
+	values, err := b.BulkFetch([]string{id})
 	if err != nil {
-		return nil, query.NewError(err, "")
+		return nil, err
 	}
-
-	meta := map[string]query.Value{
-		"id": id,
-	}
-
-	item := query.NewParsedItem(doc, meta)
-
-	return item, nil
+	return values[id], nil
 }
 
 func newBucket(p *pool, name string) (*bucket, query.Error) {
@@ -242,11 +223,11 @@ func (vs *viewScanner) Name() string {
 	return fmt.Sprintf("_design/%s/_view/%s", vs.ddoc, vs.view)
 }
 
-func (vs *viewScanner) ScanAll(ch query.ItemChannel, warnch, errch query.ErrorChannel) {
+func (vs *viewScanner) ScanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	go vs.scanAll(ch, warnch, errch)
 }
 
-func (vs *viewScanner) scanAll(ch query.ItemChannel, warnch, errch query.ErrorChannel) {
+func (vs *viewScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)
@@ -262,9 +243,9 @@ func (vs *viewScanner) scanAll(ch query.ItemChannel, warnch, errch query.ErrorCh
 		select {
 		case viewRow, ok = <-viewRowChannel:
 			if ok {
-				doc := map[string]query.Value{}
-				meta := map[string]query.Value{"id": viewRow.ID}
-				ch <- query.NewParsedItem(doc, meta)
+				doc := dparval.NewEmptyObjectValue()
+				doc.AddMeta("meta", map[string]interface{}{"id": viewRow.ID})
+				ch <- doc
 			}
 		case err, ok = <-viewErrChannel:
 			if err != nil {

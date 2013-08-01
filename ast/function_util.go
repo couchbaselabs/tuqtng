@@ -12,7 +12,7 @@ package ast
 import (
 	"fmt"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 func init() {
@@ -26,32 +26,34 @@ func (this *FunctionLength) Name() string {
 	return "LENGTH"
 }
 
-func (this *FunctionLength) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionLength) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 	// first evaluate the argument
 	av, err := arguments[0].Expr.Evaluate(item)
 
 	// the spec does not define it to operate on missing, so return null
 	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// undefined returns null
-			return nil, nil
+			return dparval.NewNullValue(), nil
 		default:
 			// any other error return to caller
 			return nil, err
 		}
 	}
 
-	switch av := av.(type) {
-	case map[string]query.Value:
-		return float64(len(av)), nil
-	case []query.Value:
-		return float64(len(av)), nil
-	case string:
-		return float64(len(av)), nil
-	default:
-		return nil, nil
+	if av.Type() == dparval.OBJECT || av.Type() == dparval.ARRAY || av.Type() == dparval.STRING {
+		avalue := av.Value()
+		switch avalue := avalue.(type) {
+		case map[string]interface{}:
+			return dparval.NewValue(float64(len(avalue))), nil
+		case []interface{}:
+			return dparval.NewValue(float64(len(avalue))), nil
+		case string:
+			return dparval.NewValue(float64(len(avalue))), nil
+		}
 	}
+	return dparval.NewNullValue(), nil
 }
 
 func (this *FunctionLength) Validate(arguments FunctionArgExpressionList) error {

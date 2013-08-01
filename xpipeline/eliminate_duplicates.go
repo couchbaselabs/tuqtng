@@ -12,6 +12,7 @@ package xpipeline
 import (
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 // this is a terrible implementation to remove duplicates
@@ -21,16 +22,16 @@ import (
 
 type EliminateDuplicates struct {
 	Source         Operator
-	itemChannel    query.ItemChannel
+	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
-	buffer         query.ItemCollection
+	buffer         dparval.ValueCollection
 }
 
 func NewEliminateDuplicates() *EliminateDuplicates {
 	return &EliminateDuplicates{
-		itemChannel:    make(query.ItemChannel),
+		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
-		buffer:         make(query.ItemCollection, 0),
+		buffer:         make(dparval.ValueCollection, 0),
 	}
 }
 
@@ -38,7 +39,7 @@ func (this *EliminateDuplicates) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *EliminateDuplicates) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+func (this *EliminateDuplicates) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 
@@ -48,7 +49,7 @@ func (this *EliminateDuplicates) Run() {
 
 	go this.Source.Run()
 
-	var item query.Item
+	var item dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	ok := true
@@ -80,7 +81,9 @@ func (this *EliminateDuplicates) Run() {
 			if pos < len(this.buffer) {
 				// look to see if the exact same item appears later in the buffer
 				for nextpos, nextitem := range this.buffer[pos+1:] {
-					comp := ast.CollateJSON(item.GetValue(), nextitem.GetValue())
+					itemVal := item.Value()
+					nextItemVal := nextitem.Value()
+					comp := ast.CollateJSON(itemVal, nextItemVal)
 					if comp == 0 {
 						this.buffer[nextpos+1] = nil
 					}
@@ -91,6 +94,6 @@ func (this *EliminateDuplicates) Run() {
 	}
 }
 
-func (this *EliminateDuplicates) processItem(item query.Item) {
+func (this *EliminateDuplicates) processItem(item dparval.Value) {
 	this.buffer = append(this.buffer, item)
 }

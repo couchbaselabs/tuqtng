@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 // ****************************************************************************
@@ -34,7 +34,7 @@ func NewPlusOperator(left, right Expression) *PlusOperator {
 	}
 }
 
-func (this *PlusOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *PlusOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -44,18 +44,20 @@ func (this *PlusOperator) Evaluate(item query.Item) (query.Value, error) {
 		return nil, err
 	}
 
-	switch lv := lv.(type) {
-	case float64:
-		switch rv := rv.(type) {
+	if lv.Type() == rv.Type() && rv.Type() == dparval.NUMBER {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+		switch lvalue := lvalue.(type) {
 		case float64:
-			// if both values are numeric add
-			return lv + rv, nil
-		default:
-			return nil, nil
+			switch rvalue := rvalue.(type) {
+			case float64:
+				// if both values are numeric add
+				return dparval.NewValue(lvalue + rvalue), nil
+			}
 		}
-	default:
-		return nil, nil
 	}
+
+	return dparval.NewNullValue(), nil
 }
 
 func (this *PlusOperator) Validate() error {
@@ -110,7 +112,7 @@ func NewSubtractOperator(left, right Expression) *SubtractOperator {
 	}
 }
 
-func (this *SubtractOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *SubtractOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -120,18 +122,19 @@ func (this *SubtractOperator) Evaluate(item query.Item) (query.Value, error) {
 		return nil, err
 	}
 
-	switch lv := lv.(type) {
-	case float64:
-		switch rv := rv.(type) {
+	if lv.Type() == rv.Type() && rv.Type() == dparval.NUMBER {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+		switch lvalue := lvalue.(type) {
 		case float64:
-			// if both values are numeric subtract
-			return lv - rv, nil
-		default:
-			return nil, nil
+			switch rvalue := rvalue.(type) {
+			case float64:
+				// if both values are numeric subtract
+				return dparval.NewValue(lvalue - rvalue), nil
+			}
 		}
-	default:
-		return nil, nil
 	}
+	return dparval.NewNullValue(), nil
 }
 
 func (this *SubtractOperator) Validate() error {
@@ -186,7 +189,7 @@ func NewMultiplyOperator(left, right Expression) *MultiplyOperator {
 	}
 }
 
-func (this *MultiplyOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *MultiplyOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -196,18 +199,19 @@ func (this *MultiplyOperator) Evaluate(item query.Item) (query.Value, error) {
 		return nil, err
 	}
 
-	switch lv := lv.(type) {
-	case float64:
-		switch rv := rv.(type) {
+	if lv.Type() == rv.Type() && rv.Type() == dparval.NUMBER {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+		switch lvalue := lvalue.(type) {
 		case float64:
-			// if both values are numeric multiply
-			return lv * rv, nil
-		default:
-			return nil, nil
+			switch rvalue := rvalue.(type) {
+			case float64:
+				// if both values are numeric multiply
+				return dparval.NewValue(lvalue * rvalue), nil
+			}
 		}
-	default:
-		return nil, nil
 	}
+	return dparval.NewNullValue(), nil
 }
 
 func (this *MultiplyOperator) Validate() error {
@@ -262,7 +266,7 @@ func NewDivideOperator(left, right Expression) *DivideOperator {
 	}
 }
 
-func (this *DivideOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *DivideOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -272,18 +276,19 @@ func (this *DivideOperator) Evaluate(item query.Item) (query.Value, error) {
 		return nil, err
 	}
 
-	switch lv := lv.(type) {
-	case float64:
-		switch rv := rv.(type) {
+	if lv.Type() == rv.Type() && rv.Type() == dparval.NUMBER {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+		switch lvalue := lvalue.(type) {
 		case float64:
-			// if both values are numeric divide
-			return lv / rv, nil
-		default:
-			return nil, nil
+			switch rvalue := rvalue.(type) {
+			case float64:
+				// if both values are numeric divide
+				return dparval.NewValue(lvalue / rvalue), nil
+			}
 		}
-	default:
-		return nil, nil
 	}
+	return dparval.NewNullValue(), nil
 }
 
 func (this *DivideOperator) Validate() error {
@@ -338,7 +343,7 @@ func NewModuloOperator(left, right Expression) *ModuloOperator {
 	}
 }
 
-func (this *ModuloOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *ModuloOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -348,18 +353,19 @@ func (this *ModuloOperator) Evaluate(item query.Item) (query.Value, error) {
 		return nil, err
 	}
 
-	switch lv := lv.(type) {
-	case float64:
-		switch rv := rv.(type) {
+	if lv.Type() == rv.Type() && rv.Type() == dparval.NUMBER {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+		switch lvalue := lvalue.(type) {
 		case float64:
-			// if both values are numeric divide
-			return math.Mod(lv, rv), nil
-		default:
-			return nil, nil
+			switch rvalue := rvalue.(type) {
+			case float64:
+				// if both values are numeric divide
+				return dparval.NewValue(math.Mod(lvalue, rvalue)), nil
+			}
 		}
-	default:
-		return nil, nil
 	}
+	return dparval.NewNullValue(), nil
 }
 
 func (this *ModuloOperator) Validate() error {
@@ -412,18 +418,20 @@ func NewChangeSignOperator(operand Expression) *ChangeSignOperator {
 	}
 }
 
-func (this *ChangeSignOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *ChangeSignOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	ov, err := this.Operand.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
 
-	switch ov := ov.(type) {
-	case float64:
-		return -ov, nil
-	default:
-		return nil, nil
+	if ov.Type() == dparval.NUMBER {
+		ovalue := ov.Value()
+		switch ovalue := ovalue.(type) {
+		case float64:
+			return dparval.NewValue(-ovalue), nil
+		}
 	}
+	return dparval.NewNullValue(), nil
 }
 
 func (this *ChangeSignOperator) Validate() error {

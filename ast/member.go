@@ -12,7 +12,7 @@ package ast
 import (
 	"fmt"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 // ****************************************************************************
@@ -33,20 +33,18 @@ func NewDotMemberOperator(left Expression, right *Property) *DotMemberOperator {
 	}
 }
 
-func (this *DotMemberOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *DotMemberOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
 	}
 
-	switch lv := lv.(type) {
-	case map[string]query.Value:
-		innerContext := query.NewParsedItem(lv, nil)
+	if lv.Type() == dparval.OBJECT {
 		// now evaluate the property in this inner context
-		return this.Right.Evaluate(innerContext)
+		return this.Right.Evaluate(lv)
 	}
 
-	return nil, &query.Undefined{this.Right.Path}
+	return nil, &dparval.Undefined{this.Right.Path}
 }
 
 func (this *DotMemberOperator) Validate() error {
@@ -96,7 +94,7 @@ func NewBracketMemberOperator(left, right Expression) *BracketMemberOperator {
 	}
 }
 
-func (this *BracketMemberOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *BracketMemberOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	// evaluting RHS first is more correct in case of side-effects
 	rv, err := this.Right.Evaluate(item)
 	if err != nil {
@@ -108,25 +106,28 @@ func (this *BracketMemberOperator) Evaluate(item query.Item) (query.Value, error
 		return nil, err
 	}
 
-	switch lv := lv.(type) {
-	case map[string]query.Value:
-		switch rv := rv.(type) {
-		case string:
-			innerContext := query.NewParsedItem(lv, nil)
-			virtualProperty := NewProperty(rv)
-			return virtualProperty.Evaluate(innerContext)
-		}
-	case []query.Value:
-		switch rv := rv.(type) {
-		case float64:
-			index := int(rv)
-			if index >= 0 && index < len(lv) {
-				return lv[index], nil
+	if lv.Type() == dparval.OBJECT {
+		if rv.Type() == dparval.STRING {
+			rval := rv.Value()
+			switch rval := rval.(type) {
+			case string:
+				virtualProperty := NewProperty(rval)
+				return virtualProperty.Evaluate(lv)
 			}
+		}
+	} else if lv.Type() == dparval.ARRAY {
+		if rv.Type() == dparval.NUMBER {
+			rval := rv.Value()
+			switch rval := rval.(type) {
+			case float64:
+				index := int(rval)
+				return lv.Index(index)
+			}
+
 		}
 	}
 
-	return nil, &query.Undefined{}
+	return nil, &dparval.Undefined{}
 }
 
 func (this *BracketMemberOperator) Validate() error {

@@ -10,9 +10,10 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/query"
 	"reflect"
 	"testing"
+
+	"github.com/mschoch/dparval"
 )
 
 func TestExpressionEvaluatorSource(t *testing.T) {
@@ -25,7 +26,7 @@ func TestExpressionEvaluatorSource(t *testing.T) {
 	count := 0
 	for item := range sourceItemChannel {
 		count++
-		if !reflect.DeepEqual(item, query.NewParsedItem(map[string]query.Value{}, nil)) {
+		if !reflect.DeepEqual(item, dparval.NewEmptyObjectValue()) {
 			t.Errorf("Expected empty map item, got %v", item)
 		}
 	}

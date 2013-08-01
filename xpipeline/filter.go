@@ -12,12 +12,13 @@ package xpipeline
 import (
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type Filter struct {
 	Source         Operator
 	Expr           ast.Expression
-	itemChannel    query.ItemChannel
+	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
 	ok             bool
 }
@@ -25,7 +26,7 @@ type Filter struct {
 func NewFilter(expr ast.Expression) *Filter {
 	return &Filter{
 		Expr:           expr,
-		itemChannel:    make(query.ItemChannel),
+		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 	}
 }
@@ -34,7 +35,7 @@ func (this *Filter) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Filter) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+func (this *Filter) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 
@@ -44,7 +45,7 @@ func (this *Filter) Run() {
 
 	go this.Source.Run()
 
-	var item query.Item
+	var item dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	this.ok = true
@@ -70,23 +71,27 @@ func (this *Filter) Run() {
 	}
 }
 
-func (this *Filter) processItem(item query.Item) {
+func (this *Filter) processItem(item dparval.Value) {
 	val, err := this.Expr.Evaluate(item)
-	if err == nil {
-		boolVal := ast.ValueInBooleanContext(val)
-		switch boolVal := boolVal.(type) {
-		case bool:
-			if boolVal {
-				this.itemChannel <- item
-			}
-		}
-	} else {
+	if err != nil {
 		switch err := err.(type) {
-		case *query.Undefined:
-		//ignore these
+		case *dparval.Undefined:
+			//ignore these
+			return
 		default:
 			this.supportChannel <- query.NewError(err, "error evaluating filter")
 			this.ok = false
+			return
 		}
 	}
+
+	valval := val.Value()
+	boolVal := ast.ValueInBooleanContext(valval)
+	switch boolVal := boolVal.(type) {
+	case bool:
+		if boolVal {
+			this.itemChannel <- item
+		}
+	}
+
 }

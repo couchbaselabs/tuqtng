@@ -11,12 +11,13 @@ package xpipeline
 
 import (
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type Offset struct {
 	Source         Operator
 	Offset         int
-	itemChannel    query.ItemChannel
+	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
 	count          int
 }
@@ -24,7 +25,7 @@ type Offset struct {
 func NewOffset(offset int) *Offset {
 	return &Offset{
 		Offset:         offset,
-		itemChannel:    make(query.ItemChannel),
+		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 	}
 }
@@ -33,7 +34,7 @@ func (this *Offset) SetSource(source Operator) {
 	this.Source = source
 }
 
-func (this *Offset) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+func (this *Offset) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 
@@ -45,7 +46,7 @@ func (this *Offset) Run() {
 
 	go this.Source.Run()
 
-	var item query.Item
+	var item dparval.Value
 	var obj interface{}
 	sourceItemChannel, supportChannel := this.Source.GetChannels()
 	ok := true
@@ -71,7 +72,7 @@ func (this *Offset) Run() {
 	}
 }
 
-func (this *Offset) processItem(item query.Item) {
+func (this *Offset) processItem(item dparval.Value) {
 	this.count++
 	if this.count <= this.Offset {
 		return

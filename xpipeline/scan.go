@@ -12,10 +12,11 @@ package xpipeline
 import (
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 type Scan struct {
-	itemChannel    query.ItemChannel
+	itemChannel    dparval.ValueChannel
 	supportChannel PipelineSupportChannel
 	bucket         catalog.Bucket
 	scanner        catalog.Scanner
@@ -23,7 +24,7 @@ type Scan struct {
 
 func NewScan(bucket catalog.Bucket, scanner catalog.Scanner) *Scan {
 	return &Scan{
-		itemChannel:    make(query.ItemChannel),
+		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 		bucket:         bucket,
 		scanner:        scanner,
@@ -34,7 +35,7 @@ func (this *Scan) SetSource(source Operator) {
 	panic("Cannot set source for a datasource")
 }
 
-func (this *Scan) GetChannels() (query.ItemChannel, PipelineSupportChannel) {
+func (this *Scan) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 
@@ -43,10 +44,10 @@ func (this *Scan) Run() {
 	defer close(this.supportChannel)
 	defer this.bucket.Release()
 
-	scannerItemChannel := make(query.ItemChannel)
+	scannerItemChannel := make(dparval.ValueChannel)
 	scannerWarnChannel := make(query.ErrorChannel)
 	scannerErrorChannel := make(query.ErrorChannel)
-	var item query.Item
+	var item dparval.Value
 	var warn query.Error
 	var err query.Error
 

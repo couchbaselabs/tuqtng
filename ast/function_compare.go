@@ -12,7 +12,7 @@ package ast
 import (
 	"fmt"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 func init() {
@@ -31,15 +31,15 @@ func (this *FunctionGreatest) Name() string {
 	return "GREATEST"
 }
 
-func (this *FunctionGreatest) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionGreatest) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 
-	var rv query.Value = nil
+	var rv interface{} = nil
 
 	for _, arg := range arguments {
 		av, err := arg.Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 				// undefined doesn't change the result
 			default:
 				// any other error return to caller
@@ -47,14 +47,16 @@ func (this *FunctionGreatest) Evaluate(item query.Item, arguments FunctionArgExp
 			}
 		}
 
+		avalue := av.Value()
+
 		// now compare this value with rv
-		compres := CollateJSON(av, rv)
+		compres := CollateJSON(avalue, rv)
 		if compres > 0 {
-			rv = av
+			rv = avalue
 		}
 	}
 
-	return rv, nil
+	return dparval.NewValue(rv), nil
 }
 
 func (this *FunctionGreatest) Validate(arguments FunctionArgExpressionList) error {
@@ -70,16 +72,16 @@ func (this *FunctionLeast) Name() string {
 	return "LEAST"
 }
 
-func (this *FunctionLeast) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionLeast) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 
-	var rv query.Value = nil
+	var rv interface{} = nil
 	first := true
 
 	for _, arg := range arguments {
 		av, err := arg.Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 				// undefined doesn't change the result
 			default:
 				// any other error return to caller
@@ -87,15 +89,17 @@ func (this *FunctionLeast) Evaluate(item query.Item, arguments FunctionArgExpres
 			}
 		}
 
+		avalue := av.Value()
+
 		// now compare this value with rv
-		compres := CollateJSON(av, rv)
+		compres := CollateJSON(avalue, rv)
 		if compres < 0 || first {
 			first = false
-			rv = av
+			rv = avalue
 		}
 	}
 
-	return rv, nil
+	return dparval.NewValue(rv), nil
 }
 
 func (this *FunctionLeast) Validate(arguments FunctionArgExpressionList) error {
@@ -111,13 +115,13 @@ func (this *FunctionIfMissing) Name() string {
 	return "IFMISSING"
 }
 
-func (this *FunctionIfMissing) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionIfMissing) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 
 	for _, arg := range arguments {
 		av, err := arg.Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 				// do NOT return missing
 				continue
 			default:
@@ -131,7 +135,7 @@ func (this *FunctionIfMissing) Evaluate(item query.Item, arguments FunctionArgEx
 	}
 
 	// if all values were MISSING return NULL
-	return nil, nil
+	return dparval.NewNullValue(), nil
 }
 
 func (this *FunctionIfMissing) Validate(arguments FunctionArgExpressionList) error {
@@ -148,29 +152,29 @@ func (this *FunctionIfNull) Name() string {
 	return "IFNULL"
 }
 
-func (this *FunctionIfNull) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionIfNull) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 
 	for _, arg := range arguments {
 		av, err := arg.Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 				// missing is NOT null, so return it
-				return nil, err
+				return nil, err // weird, but nil, err IS the value
 			default:
 				// any other error return to caller
 				return nil, err
 			}
 		}
 
-		if av != nil {
+		if av.Type() != dparval.NULL {
 			// wasn't NULL, return the value
 			return av, nil
 		}
 	}
 
 	// if all values were NULL return NULL
-	return nil, nil
+	return dparval.NewNullValue(), nil
 }
 
 func (this *FunctionIfNull) Validate(arguments FunctionArgExpressionList) error {
@@ -187,13 +191,13 @@ func (this *FunctionIfMissingOrNull) Name() string {
 	return "IFMISSINGORNULL"
 }
 
-func (this *FunctionIfMissingOrNull) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionIfMissingOrNull) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 
 	for _, arg := range arguments {
 		av, err := arg.Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
-			case *query.Undefined:
+			case *dparval.Undefined:
 				// do not return missing
 				continue
 			default:
@@ -202,14 +206,14 @@ func (this *FunctionIfMissingOrNull) Evaluate(item query.Item, arguments Functio
 			}
 		}
 
-		if av != nil {
+		if av.Type() != dparval.NULL {
 			// wasn't NULL, return the value
 			return av, nil
 		}
 	}
 
 	// if all values were NULL or MISSING return NULL
-	return nil, nil
+	return dparval.NewNullValue(), nil
 }
 
 func (this *FunctionIfMissingOrNull) Validate(arguments FunctionArgExpressionList) error {
@@ -226,12 +230,12 @@ func (this *FunctionMissingIf) Name() string {
 	return "MISSINGIF"
 }
 
-func (this *FunctionMissingIf) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionMissingIf) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 	// first evaluate the argument
 	lav, lerr := arguments[0].Expr.Evaluate(item)
 	if lerr != nil {
 		switch lerr := lerr.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// do nothing yet
 		default:
 			// any other error return to caller
@@ -243,7 +247,7 @@ func (this *FunctionMissingIf) Evaluate(item query.Item, arguments FunctionArgEx
 	rav, rerr := arguments[1].Expr.Evaluate(item)
 	if rerr != nil {
 		switch rerr := rerr.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// do nothing yet
 		default:
 			// any other error return to caller
@@ -251,9 +255,12 @@ func (this *FunctionMissingIf) Evaluate(item query.Item, arguments FunctionArgEx
 		}
 	}
 
-	compres := CollateJSON(lav, rav)
+	lavalue := lav.Value()
+	ravalue := rav.Value()
+
+	compres := CollateJSON(lavalue, ravalue)
 	if compres == 0 {
-		return nil, &query.Undefined{}
+		return nil, &dparval.Undefined{}
 	}
 
 	//otheriwse return the left arg
@@ -273,12 +280,12 @@ func (this *FunctionNullIf) Name() string {
 	return "NULLIF"
 }
 
-func (this *FunctionNullIf) Evaluate(item query.Item, arguments FunctionArgExpressionList) (query.Value, error) {
+func (this *FunctionNullIf) Evaluate(item dparval.Value, arguments FunctionArgExpressionList) (dparval.Value, error) {
 	// first evaluate the argument
 	lav, lerr := arguments[0].Expr.Evaluate(item)
 	if lerr != nil {
 		switch lerr := lerr.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// do nothing yet
 		default:
 			// any other error return to caller
@@ -290,7 +297,7 @@ func (this *FunctionNullIf) Evaluate(item query.Item, arguments FunctionArgExpre
 	rav, rerr := arguments[1].Expr.Evaluate(item)
 	if rerr != nil {
 		switch rerr := rerr.(type) {
-		case *query.Undefined:
+		case *dparval.Undefined:
 			// do nothing yet
 		default:
 			// any other error return to caller
@@ -298,9 +305,12 @@ func (this *FunctionNullIf) Evaluate(item query.Item, arguments FunctionArgExpre
 		}
 	}
 
-	compres := CollateJSON(lav, rav)
+	lavalue := lav.Value()
+	ravalue := rav.Value()
+
+	compres := CollateJSON(lavalue, ravalue)
 	if compres == 0 {
-		return nil, nil
+		return dparval.NewNullValue(), nil
 	}
 
 	//otheriwse return the left arg

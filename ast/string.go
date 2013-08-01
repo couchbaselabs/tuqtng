@@ -12,7 +12,7 @@ package ast
 import (
 	"fmt"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 // ****************************************************************************
@@ -33,7 +33,7 @@ func NewStringConcatenateOperator(left, right Expression) *StringConcatenateOper
 	}
 }
 
-func (this *StringConcatenateOperator) Evaluate(item query.Item) (query.Value, error) {
+func (this *StringConcatenateOperator) Evaluate(item dparval.Value) (dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
 		return nil, err
@@ -43,18 +43,21 @@ func (this *StringConcatenateOperator) Evaluate(item query.Item) (query.Value, e
 		return nil, err
 	}
 
-	switch lv := lv.(type) {
-	case string:
-		switch rv := rv.(type) {
-		case string:
-			// if both values are string concatenate them
-			return lv + rv, nil
-		default:
-			return nil, nil
+	if lv.Type() == dparval.STRING {
+		if rv.Type() == dparval.STRING {
+			lval := lv.Value()
+			switch lval := lval.(type) {
+			case string:
+				rval := rv.Value()
+				switch rval := rval.(type) {
+				case string:
+					// if both values are string concatenate them
+					return dparval.NewStringValue(lval + rval), nil
+				}
+			}
 		}
-	default:
-		return nil, nil
 	}
+	return dparval.NewNullValue(), nil
 }
 
 func (this *StringConcatenateOperator) Validate() error {

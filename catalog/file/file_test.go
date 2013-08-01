@@ -14,6 +14,7 @@ import (
 	"testing"
 
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 func TestFile(t *testing.T) {
@@ -58,12 +59,12 @@ func TestFile(t *testing.T) {
 	scanner := scanners[0]
 	switch scanner := scanner.(type) {
 	case *fullScanner:
-		itemChannel := make(query.ItemChannel)
+		itemChannel := make(dparval.ValueChannel)
 		warnChannel := make(query.ErrorChannel)
 		errorChannel := make(query.ErrorChannel)
 		go scanner.ScanAll(itemChannel, warnChannel, errorChannel)
 
-		var item query.Item
+		var item dparval.Value
 		var err query.Error
 		ok := true
 		for ok {

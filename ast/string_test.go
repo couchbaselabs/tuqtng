@@ -10,10 +10,9 @@
 package ast
 
 import (
-	"reflect"
 	"testing"
 
-	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/mschoch/dparval"
 )
 
 func TestString(t *testing.T) {
@@ -23,26 +22,14 @@ func TestString(t *testing.T) {
 	stringCouchbase := NewLiteralString("Couchbase")
 	stringServer := NewLiteralString("Server")
 
-	tests := []struct {
-		input  Expression
-		output query.Value
-		err    error
-	}{
+	tests := ExpressionTestSet{
 		{NewStringConcatenateOperator(stringCouchbase, stringServer), "CouchbaseServer", nil},
 		{NewStringConcatenateOperator(numberFive, stringServer), nil, nil},
 		{NewStringConcatenateOperator(stringCouchbase, numberFive), nil, nil},
-		{NewStringConcatenateOperator(dneProperty, stringServer), nil, &query.Undefined{"foo"}},
-		{NewStringConcatenateOperator(stringCouchbase, dneProperty), nil, &query.Undefined{"foo"}},
+		{NewStringConcatenateOperator(dneProperty, stringServer), nil, &dparval.Undefined{"foo"}},
+		{NewStringConcatenateOperator(stringCouchbase, dneProperty), nil, &dparval.Undefined{"foo"}},
 	}
 
-	for _, x := range tests {
-		result, err := x.input.Evaluate(nil)
-		if !reflect.DeepEqual(err, x.err) {
-			t.Fatalf("Expected error: %v, got %v", x.err, err)
-		}
-		if !reflect.DeepEqual(result, x.output) {
-			t.Errorf("Expected %t %v, got %t %v", x.output, x.output, result, result)
-		}
-	}
+	tests.Run(t)
 
 }
