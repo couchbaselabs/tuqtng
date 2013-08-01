@@ -10,7 +10,7 @@ Another difference is that you could omit the 'AS cname' modifier in the SELECT 
 
 Try removing 'AS child' modifier.
 
-<pre id="example" class="hidden">
+<pre id="example">
 SELECT child.name AS cname
 	FROM contacts.children[0] AS child
 </pre>

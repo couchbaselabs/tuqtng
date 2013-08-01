@@ -18,6 +18,6 @@ On the right hand side, you will see a query editor. A few buckets have been pop
 
 Go ahead, run your first query now!
 
-<pre id="example" class="hidden">
+<pre id="example">
 SELECT 'Hello World' AS Greeting
 </pre>

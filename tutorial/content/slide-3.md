@@ -9,7 +9,7 @@ always refers to an attribute in the parent document or an alias. Attributes fro
 
 Try removing the 'AS cname' clause and see what happens.
 
-<pre id="example" class="hidden">
+<pre id="example">
 SELECT children[0].name AS cname
 	FROM contacts
        WHERE name='dave'

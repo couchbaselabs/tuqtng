@@ -47,7 +47,6 @@ function load(n) {
         $('#content').html(data);
 
         var sample = $('#example').html();
-        sample += '\n';
         var ie = ace.edit('iedit');
         ie.setValue(sample);
         ie.navigateFileEnd();
