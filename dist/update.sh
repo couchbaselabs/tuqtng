@@ -92,7 +92,7 @@ benchmark() {
 }
 
 coverage() {
-    for sub in ast misc plan query test xpipeline
+    for sub in ast misc plan test xpipeline
     do
         gocov test $project/$sub | gocov-html > $DIST/cov-$sub.html
     done
