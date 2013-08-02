@@ -14,7 +14,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 type FunctionCall struct {

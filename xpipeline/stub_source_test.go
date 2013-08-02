@@ -12,7 +12,7 @@ package xpipeline
 import (
 	"testing"
 
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 func TestStubSource(t *testing.T) {

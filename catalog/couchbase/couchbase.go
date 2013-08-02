@@ -17,7 +17,7 @@ import (
 	cb "github.com/couchbaselabs/go-couchbase"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 type site struct {

@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 func init() {

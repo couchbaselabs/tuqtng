@@ -10,7 +10,7 @@
 package ast
 
 import (
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 type Expression interface {

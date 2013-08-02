@@ -12,7 +12,7 @@ package ast
 import (
 	"testing"
 
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 func TestFunction(t *testing.T) {

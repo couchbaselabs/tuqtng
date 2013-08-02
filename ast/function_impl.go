@@ -12,7 +12,7 @@ package ast
 import (
 	"strings"
 
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 type SystemFunction interface {

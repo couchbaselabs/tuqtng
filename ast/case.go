@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 type WhenThen struct {

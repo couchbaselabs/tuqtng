@@ -14,7 +14,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 type TypeMismatch struct {

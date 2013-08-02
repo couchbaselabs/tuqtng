@@ -11,7 +11,7 @@ package xpipeline
 
 import (
 	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 type Limit struct {

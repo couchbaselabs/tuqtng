@@ -10,7 +10,7 @@
 package xpipeline
 
 import (
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 type StubSource struct {

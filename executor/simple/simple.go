@@ -18,7 +18,7 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/tuqtng/xpipelinebuilder"
 	simpleBuilder "github.com/couchbaselabs/tuqtng/xpipelinebuilder/simple"
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 type SimpleExecutor struct {

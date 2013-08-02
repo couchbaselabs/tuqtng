@@ -18,7 +18,7 @@ package catalog
 
 import (
 	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 // Site represents a cluster or single-node server.

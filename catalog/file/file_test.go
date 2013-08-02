@@ -14,7 +14,7 @@ import (
 	"testing"
 
 	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 func TestFile(t *testing.T) {

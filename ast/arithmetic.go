@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 // ****************************************************************************

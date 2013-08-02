@@ -13,7 +13,7 @@ import (
 	"testing"
 
 	"github.com/couchbaselabs/tuqtng/ast"
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 var testData = dparval.ValueCollection{}

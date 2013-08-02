@@ -12,7 +12,7 @@ package ast
 import (
 	"fmt"
 
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 type CollectionAnyOperator struct {

@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 func TestPropertyStringRepresentation(t *testing.T) {

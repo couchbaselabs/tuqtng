@@ -13,7 +13,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/mschoch/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 type ExpressionTest struct {
