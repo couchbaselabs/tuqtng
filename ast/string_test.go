@@ -33,3 +33,14 @@ func TestString(t *testing.T) {
 	tests.Run(t)
 
 }
+
+func TestStringStringRepresentation(t *testing.T) {
+	stringCouchbase := NewLiteralString("Couchbase")
+	stringServer := NewLiteralString("Server")
+
+	tests := ExpressionStringTestSet{
+		{NewStringConcatenateOperator(stringCouchbase, stringServer), `"Couchbase" || "Server"`},
+	}
+
+	tests.Run(t)
+}

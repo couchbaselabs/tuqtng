@@ -10,6 +10,7 @@
 package ast
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -40,6 +41,22 @@ func (this ExpressionTestSet) RunWithItem(t *testing.T, item *dparval.Value) {
 		}
 		if !reflect.DeepEqual(result, x.output) {
 			t.Errorf("Expected %v, got %v for %v", x.output, result, x.input)
+		}
+	}
+}
+
+type ExpressionStringTest struct {
+	input  fmt.Stringer
+	output string
+}
+
+type ExpressionStringTestSet []ExpressionStringTest
+
+func (this ExpressionStringTestSet) Run(t *testing.T) {
+	for _, x := range this {
+		result := x.input.String()
+		if result != x.output {
+			t.Errorf("Expected %v, got %v", x.output, result)
 		}
 	}
 }

@@ -65,3 +65,19 @@ func TestArithmetic(t *testing.T) {
 
 	tests.Run(t)
 }
+
+func TestArithmeticStringRepresentation(t *testing.T) {
+	numberSix := NewLiteralNumber(6.0)
+	numberSeven := NewLiteralNumber(7.0)
+
+	tests := ExpressionStringTestSet{
+		{NewPlusOperator(numberSeven, numberSeven), `7 + 7`},
+		{NewSubtractOperator(numberSeven, numberSeven), `7 - 7`},
+		{NewMultiplyOperator(numberSeven, numberSeven), `7 * 7`},
+		{NewDivideOperator(numberSeven, numberSeven), `7 / 7`},
+		{NewModuloOperator(numberSeven, numberSix), `7 % 6`},
+		{NewChangeSignOperator(numberSeven), `-7`},
+	}
+
+	tests.Run(t)
+}

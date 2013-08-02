@@ -10,27 +10,17 @@
 package ast
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/couchbaselabs/dparval"
 )
 
 func TestPropertyStringRepresentation(t *testing.T) {
-	tests := []struct {
-		input  fmt.Stringer
-		output string
-	}{
+	tests := ExpressionStringTestSet{
 		{NewProperty("name"), "name"},
 	}
 
-	for _, x := range tests {
-		result := x.input.String()
-		if result != x.output {
-			t.Errorf("Expected %v, got %v", x.output, result)
-		}
-	}
-
+	tests.Run(t)
 }
 
 func TestEvaluateProperty(t *testing.T) {
