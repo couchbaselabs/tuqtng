@@ -20,19 +20,19 @@ func TestStubSource(t *testing.T) {
 	testData := dparval.ValueCollection{}
 
 	doc := dparval.NewValue(map[string]interface{}{"name": "marty"})
-	doc.AddMeta("meta", map[string]interface{}{"id": "1"})
+	doc.SetAttachment("meta", map[string]interface{}{"id": "1"})
 	testData = append(testData, doc)
 
 	doc = dparval.NewValue(map[string]interface{}{"name": "steve"})
-	doc.AddMeta("meta", map[string]interface{}{"id": "2"})
+	doc.SetAttachment("meta", map[string]interface{}{"id": "2"})
 	testData = append(testData, doc)
 
 	doc = dparval.NewValue(map[string]interface{}{"name": "gerald"})
-	doc.AddMeta("meta", map[string]interface{}{"id": "3"})
+	doc.SetAttachment("meta", map[string]interface{}{"id": "3"})
 	testData = append(testData, doc)
 
 	doc = dparval.NewValue(map[string]interface{}{"name": "siri"})
-	doc.AddMeta("meta", map[string]interface{}{"id": "4"})
+	doc.SetAttachment("meta", map[string]interface{}{"id": "4"})
 	testData = append(testData, doc)
 
 	stubSource := NewStubSource(testData)

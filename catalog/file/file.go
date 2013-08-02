@@ -292,7 +292,7 @@ func (fs *fullScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.Erro
 	for _, dirEntry := range dirEntries {
 		if !dirEntry.IsDir() {
 			doc := dparval.NewValue(map[string]interface{}{})
-			doc.AddMeta("meta", map[string]interface{}{"id": documentPathToId(dirEntry.Name())})
+			doc.SetAttachment("meta", map[string]interface{}{"id": documentPathToId(dirEntry.Name())})
 			ch <- doc
 		}
 	}
@@ -305,7 +305,7 @@ func fetch(path string) (item *dparval.Value, e query.Error) {
 	}
 
 	doc := dparval.NewValueFromBytes(bytes)
-	doc.AddMeta("meta", map[string]interface{}{"id": documentPathToId(path)})
+	doc.SetAttachment("meta", map[string]interface{}{"id": documentPathToId(path)})
 	item = doc
 
 	return

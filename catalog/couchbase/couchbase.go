@@ -159,7 +159,7 @@ func (b *bucket) BulkFetch(ids []string) (map[string]*dparval.Value, query.Error
 		if doc.Type() == dparval.NOT_JSON {
 			meta_type = "base64"
 		}
-		doc.AddMeta("meta", map[string]interface{}{
+		doc.SetAttachment("meta", map[string]interface{}{
 			"id":    k,
 			"case":  float64(v.Cas),
 			"type":  meta_type,
@@ -244,7 +244,7 @@ func (vs *viewScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.Erro
 		case viewRow, ok = <-viewRowChannel:
 			if ok {
 				doc := dparval.NewValue(map[string]interface{}{})
-				doc.AddMeta("meta", map[string]interface{}{"id": viewRow.ID})
+				doc.SetAttachment("meta", map[string]interface{}{"id": viewRow.ID})
 				ch <- doc
 			}
 		case err, ok = <-viewErrChannel:

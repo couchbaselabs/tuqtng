@@ -226,7 +226,7 @@ func (fs *fullScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.Erro
 
 	for i := 0; i < fs.bucket.nitems; i++ {
 		doc := dparval.NewValue(map[string]interface{}{})
-		doc.AddMeta("meta", map[string]interface{}{"id": strconv.Itoa(i)})
+		doc.SetAttachment("meta", map[string]interface{}{"id": strconv.Itoa(i)})
 		ch <- doc
 	}
 }
@@ -238,6 +238,6 @@ func genItem(i int, nitems int) (*dparval.Value, query.Error) {
 	}
 	id := strconv.Itoa(i)
 	doc := dparval.NewValue(map[string]interface{}{"id": id, "i": float64(i)})
-	doc.AddMeta("meta", map[string]interface{}{"id": id})
+	doc.SetAttachment("meta", map[string]interface{}{"id": id})
 	return doc, nil
 }

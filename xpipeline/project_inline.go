@@ -72,7 +72,6 @@ func (this *ProjectInline) Run() {
 }
 
 func (this *ProjectInline) processItem(item *dparval.Value) {
-	var err error
 	var res interface{}
 
 	if this.Result.Star {
@@ -126,14 +125,10 @@ func (this *ProjectInline) processItem(item *dparval.Value) {
 
 	// create the actual result Item
 	finalItem := dparval.NewValue(res)
-	itemMetaVal := item.Meta()
-	itemMetaData, err := itemMetaVal.Path("meta")
-	if err != nil {
-		this.supportChannel <- query.NewError(err, "unable to find item metadata")
-		this.ok = false
-		return
+	itemMeta := item.GetAttachment("meta")
+	if itemMeta != nil {
+		finalItem.SetAttachment("meta", itemMeta)
 	}
-	finalItem.AddMeta("meta", itemMetaData)
 
 	// write this to the output
 	this.itemChannel <- finalItem

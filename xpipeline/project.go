@@ -145,15 +145,9 @@ func (this *Project) processItem(item *dparval.Value) {
 
 	// create the actual result Item
 	finalItem := dparval.NewValue(resultMap)
-	itemMetaVal := item.Meta()
-	if itemMetaVal != nil {
-		itemMetaData, err := itemMetaVal.Path("meta")
-		if err != nil {
-			this.supportChannel <- query.NewError(err, "unable to find item metadata")
-			this.ok = false
-			return
-		}
-		finalItem.AddMeta("meta", itemMetaData)
+	itemMeta := item.GetAttachment("meta")
+	if itemMeta != nil {
+		finalItem.SetAttachment("meta", itemMeta)
 	}
 
 	// write this to the output

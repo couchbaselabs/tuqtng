@@ -70,7 +70,7 @@ func TestDotMember(t *testing.T) {
 	}
 
 	context := dparval.NewValue(sampleContext)
-	context.AddMeta("meta", sampleMeta)
+	context.SetAttachment("meta", sampleMeta)
 
 	tests.RunWithItem(t, context)
 

@@ -102,26 +102,18 @@ func (this *Fetch) flushBatch() {
 	// gather the ids
 	ids := make([]string, 0, FETCH_BATCH_SIZE)
 	for _, v := range this.batch {
-		metaVal := v.Meta()
-		metaData, err := metaVal.Path("meta")
-		if err != nil {
-			this.supportChannel <- query.NewError(err, "unable to find metadata for fetch")
-			this.ok = false
-			return
-		}
-		metaRaw := metaData.Value()
-		meta, ok := metaRaw.(map[string]interface{})
-		if !ok {
-			this.supportChannel <- query.NewError(err, "metadata value not an object")
-			this.ok = false
-			return
-		}
-		id, ok := meta["id"]
-		if !ok {
-			this.supportChannel <- query.NewError(nil, "asked to fetch an item without a key")
-			this.ok = false
+		meta := v.GetAttachment("meta")
+		if meta != nil {
+			id, ok := meta.(map[string]interface{})["id"]
+			if !ok {
+				this.supportChannel <- query.NewError(nil, "asked to fetch an item without a key")
+				this.ok = false
+			} else {
+				ids = append(ids, id.(string)) //FIXME assert ids always strings
+			}
 		} else {
-			ids = append(ids, id.(string)) //FIXME assert ids always strings
+			this.supportChannel <- query.NewError(nil, "asked to fetch an item without a meta")
+			this.ok = false
 		}
 	}
 

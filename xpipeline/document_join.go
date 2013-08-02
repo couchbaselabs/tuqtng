@@ -101,14 +101,11 @@ func (this *DocumentJoin) processItem(item *dparval.Value) bool {
 					}
 					newValue[this.As] = v
 				}
-				itemMetaValue := item.Meta()
-				itemMetaData, err := itemMetaValue.Path("meta")
-				if err != nil {
-					this.supportChannel <- query.NewError(err, "Internal Error")
-					return false
-				}
+				itemMeta := item.GetAttachment("meta")
 				finalItem := dparval.NewValue(newValue)
-				finalItem.AddMeta("meta", itemMetaData)
+				if itemMeta != nil {
+					finalItem.SetAttachment("meta", itemMeta)
+				}
 				this.itemChannel <- finalItem
 			}
 		}

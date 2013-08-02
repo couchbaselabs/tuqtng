@@ -45,16 +45,9 @@ func (this *FunctionMeta) Evaluate(item *dparval.Value, arguments FunctionArgExp
 	// 	return metaData, nil
 	// }
 
-	meta := item.Meta()
-	if meta != nil {
-		metaData, err := meta.Path("meta")
-		if err != nil {
-			return nil, err
-		}
-		return metaData, nil
-	}
-
-	return nil, nil
+	meta := item.GetAttachment("meta")
+	metaValue := dparval.NewValue(meta)
+	return metaValue, nil
 }
 
 func (this *FunctionMeta) Validate(arguments FunctionArgExpressionList) error {
