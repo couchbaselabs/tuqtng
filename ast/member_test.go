@@ -75,3 +75,51 @@ func TestDotMember(t *testing.T) {
 	tests.RunWithItem(t, context)
 
 }
+
+func TestDotMemberStringRepresentation(t *testing.T) {
+
+	propChild := NewProperty("child")
+	propAge := NewProperty("age")
+	propIndex := NewLiteralNumber(1.0)
+	pathChildDotAge := NewDotMemberOperator(propChild, propAge)
+	pathChildSubOne := NewBracketMemberOperator(propChild, propIndex)
+
+	tests := ExpressionStringTestSet{
+		{pathChildDotAge, `child.age`},
+		{pathChildSubOne, `child[1]`},
+	}
+
+	tests.Run(t)
+}
+
+func TestDotMemberValidate(t *testing.T) {
+
+	propChild := NewProperty("child")
+	propAge := NewProperty("age")
+	propIndex := NewLiteralNumber(1.0)
+	pathChildDotAge := NewDotMemberOperator(propChild, propAge)
+	pathChildSubOne := NewBracketMemberOperator(propChild, propIndex)
+
+	tests := ExpressionValidateTestSet{
+		{pathChildDotAge, nil},
+		{pathChildSubOne, nil},
+	}
+
+	tests.Run(t)
+}
+
+func TestDotMemberVerifyFormalNotation(t *testing.T) {
+
+	propChild := NewProperty("child")
+	propAge := NewProperty("age")
+	propIndex := NewLiteralNumber(1.0)
+	pathChildDotAge := NewDotMemberOperator(propChild, propAge)
+	pathChildSubOne := NewBracketMemberOperator(propChild, propIndex)
+
+	tests := ExpressionVerifyFormalNotationTestSet{
+		{pathChildDotAge, nil, nil},
+		{pathChildSubOne, nil, nil},
+	}
+
+	tests.Run(t, []string{"bucket"}, "bucket")
+}

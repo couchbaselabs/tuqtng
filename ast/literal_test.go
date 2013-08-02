@@ -10,17 +10,13 @@
 package ast
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/couchbaselabs/dparval"
 )
 
 func TestLiteralStringRepresentation(t *testing.T) {
-	tests := []struct {
-		input  fmt.Stringer
-		output string
-	}{
+	tests := ExpressionStringTestSet{
 		{NewLiteralNull(), "null"},
 		{NewLiteralBool(true), "true"},
 		{NewLiteralBool(false), "false"},
@@ -34,13 +30,34 @@ func TestLiteralStringRepresentation(t *testing.T) {
 		{NewLiteralObject(map[string]Expression{"user": NewLiteralString("test"), "age": NewLiteralNumber(27.0)}), "{\"user\": \"test\", \"age\": 27}"},
 	}
 
-	for _, x := range tests {
-		result := x.input.String()
-		if result != x.output {
-			t.Errorf("Expected %v, got %v", x.output, result)
-		}
+	tests.Run(t)
+
+}
+
+func TestLiteralValidate(t *testing.T) {
+	tests := ExpressionValidateTestSet{
+		{NewLiteralNull(), nil},
+		{NewLiteralBool(true), nil},
+		{NewLiteralNumber(1.0), nil},
+		{NewLiteralString("couchbase"), nil},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0)}), nil},
+		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), nil},
 	}
 
+	tests.Run(t)
+}
+
+func TestLiteralVerifyFormalNotation(t *testing.T) {
+	tests := ExpressionVerifyFormalNotationTestSet{
+		{NewLiteralNull(), nil, nil},
+		{NewLiteralBool(true), nil, nil},
+		{NewLiteralNumber(1.0), nil, nil},
+		{NewLiteralString("couchbase"), nil, nil},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0)}), nil, nil},
+		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), nil, nil},
+	}
+
+	tests.Run(t, []string{"bucket"}, "bucket")
 }
 
 func TestEvaluateLiteral(t *testing.T) {

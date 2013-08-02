@@ -261,3 +261,148 @@ func TestFunction(t *testing.T) {
 	tests.RunWithItem(t, context)
 
 }
+
+func TestFunctionStringRepresentation(t *testing.T) {
+
+	tests := ExpressionStringTestSet{
+		{NewFunctionCall("LOWER", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("HELLO"))}),
+			`LOWER("HELLO")`,
+		},
+	}
+
+	tests.Run(t)
+}
+
+func TestFunctionArgExpressionListStringRepresentation(t *testing.T) {
+	arglist := FunctionArgExpressionList{
+		NewFunctionArgExpression(NewProperty("a")),
+		NewFunctionArgExpression(NewProperty("b")),
+		NewStarFunctionArgExpression(),
+		NewDotStarFunctionArgExpression(NewProperty("c")),
+	}
+
+	arglistString := arglist.String()
+	if arglistString != "a, b, *, c.*" {
+		t.Errorf("Expected arg list `a, b, *, c.*`, got: %v", arglistString)
+	}
+}
+
+func TestFunctionValidate(t *testing.T) {
+
+	tests := ExpressionValidateTestSet{
+		// meta/value functions
+		{
+			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
+			nil,
+		},
+
+		{
+			NewFunctionCall("VALUE", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
+			nil,
+		},
+
+		// string functions
+		{
+			NewFunctionCall("LOWER", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("HELLO"))}),
+			nil,
+		},
+		{
+			NewFunctionCall("UPPER", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			nil,
+		},
+		{
+			NewFunctionCall("LTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralString(" "))}),
+			nil,
+		},
+		{
+			NewFunctionCall("RTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralString(" "))}),
+			nil,
+		},
+		{
+			NewFunctionCall("TRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralString(" "))}),
+			nil,
+		},
+		{
+			NewFunctionCall("SUBSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			nil,
+		},
+
+		// comparison functions
+		{
+			NewFunctionCall("GREATEST", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull()), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			nil,
+		},
+		{
+			NewFunctionCall("LEAST", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull()), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			nil,
+		},
+		{
+			NewFunctionCall("IFMISSING", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			nil,
+		},
+		{
+			NewFunctionCall("IFNULL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull()), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			nil,
+		},
+		{
+			NewFunctionCall("IFMISSINGORNULL", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralNull()), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			nil,
+		},
+
+		{
+			NewFunctionCall("MISSINGIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello2"))}),
+			nil,
+		},
+		{
+			NewFunctionCall("NULLIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello2"))}),
+			nil,
+		},
+
+		// util functions
+		{
+			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			nil,
+		},
+
+		// numeric functions
+		{
+			NewFunctionCall("CEIL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
+			nil,
+		},
+		{
+			NewFunctionCall("FLOOR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
+			nil,
+		},
+		{
+			NewFunctionCall("ROUND", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
+			nil,
+		},
+
+		//trunc
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
+			nil,
+		},
+	}
+
+	tests.Run(t)
+}
+
+func TestFunctionVerifyFormalNotation(t *testing.T) {
+
+	tests := ExpressionVerifyFormalNotationTestSet{
+		{
+			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
+			nil,
+			nil,
+		},
+
+		{
+			NewFunctionCall("VALUE", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
+			nil,
+			nil,
+		},
+	}
+
+	tests.Run(t, []string{"bucket"}, "bucket")
+}

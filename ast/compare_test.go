@@ -128,6 +128,84 @@ func TestCompare(t *testing.T) {
 
 }
 
+func TestCompareStringRepresentation(t *testing.T) {
+
+	numberSixty := NewLiteralNumber(60.0)
+	stringBob := NewLiteralString("bob")
+
+	tests := ExpressionStringTestSet{
+		{NewGreaterThanOperator(numberSixty, numberSixty), "60 > 60"},
+		{NewGreaterThanOrEqualOperator(numberSixty, numberSixty), "60 >= 60"},
+		{NewLessThanOperator(numberSixty, numberSixty), "60 < 60"},
+		{NewLessThanOrEqualOperator(numberSixty, numberSixty), "60 <= 60"},
+		{NewEqualToOperator(numberSixty, numberSixty), "60 = 60"},
+		{NewNotEqualToOperator(numberSixty, numberSixty), "60 != 60"},
+		{NewLikeOperator(stringBob, stringBob), `"bob" LIKE "bob"`},
+		{NewNotLikeOperator(stringBob, stringBob), `"bob" NOT LIKE "bob"`},
+
+		{NewIsNullOperator(stringBob), `"bob" IS NULL`},
+		{NewIsNotNullOperator(stringBob), `"bob" IS NOT NULL`},
+		{NewIsMissingOperator(stringBob), `"bob" IS MISSING`},
+		{NewIsNotMissingOperator(stringBob), `"bob" IS NOT MISSING`},
+		{NewIsValuedOperator(stringBob), `"bob" IS VALUED`},
+		{NewIsNotValuedOperator(stringBob), `"bob" IS NOT VALUED`},
+	}
+
+	tests.Run(t)
+}
+
+func TestCompareValidate(t *testing.T) {
+
+	numberSixty := NewLiteralNumber(60.0)
+	stringBob := NewLiteralString("bob")
+
+	tests := ExpressionValidateTestSet{
+		{NewGreaterThanOperator(numberSixty, numberSixty), nil},
+		{NewGreaterThanOrEqualOperator(numberSixty, numberSixty), nil},
+		{NewLessThanOperator(numberSixty, numberSixty), nil},
+		{NewLessThanOrEqualOperator(numberSixty, numberSixty), nil},
+		{NewEqualToOperator(numberSixty, numberSixty), nil},
+		{NewNotEqualToOperator(numberSixty, numberSixty), nil},
+		{NewLikeOperator(stringBob, stringBob), nil},
+		{NewNotLikeOperator(stringBob, stringBob), nil},
+
+		{NewIsNullOperator(stringBob), nil},
+		{NewIsNotNullOperator(stringBob), nil},
+		{NewIsMissingOperator(stringBob), nil},
+		{NewIsNotMissingOperator(stringBob), nil},
+		{NewIsValuedOperator(stringBob), nil},
+		{NewIsNotValuedOperator(stringBob), nil},
+	}
+
+	tests.Run(t)
+}
+
+func TestCompareVerifyFormalNotation(t *testing.T) {
+
+	numberSixty := NewLiteralNumber(60.0)
+	stringBob := NewLiteralString("bob")
+
+	tests := ExpressionVerifyFormalNotationTestSet{
+		{NewGreaterThanOperator(numberSixty, numberSixty), nil, nil},
+		{NewGreaterThanOrEqualOperator(numberSixty, numberSixty), nil, nil},
+		{NewLessThanOperator(numberSixty, numberSixty), nil, nil},
+		{NewLessThanOrEqualOperator(numberSixty, numberSixty), nil, nil},
+		{NewEqualToOperator(numberSixty, numberSixty), nil, nil},
+		{NewNotEqualToOperator(numberSixty, numberSixty), nil, nil},
+		{NewLikeOperator(stringBob, stringBob), nil, nil},
+		{NewNotLikeOperator(stringBob, stringBob), nil, nil},
+
+		{NewIsNullOperator(stringBob), nil, nil},
+		{NewIsNotNullOperator(stringBob), nil, nil},
+		{NewIsMissingOperator(stringBob), nil, nil},
+		{NewIsNotMissingOperator(stringBob), nil, nil},
+		{NewIsValuedOperator(stringBob), nil, nil},
+		{NewIsNotValuedOperator(stringBob), nil, nil},
+	}
+
+	tests.Run(t, []string{"bucket"}, "bucket")
+}
+
 func TestTypeMismatchError(t *testing.T) {
 	err := TypeMismatch{4, 3}
 

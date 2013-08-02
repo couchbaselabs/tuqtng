@@ -60,3 +60,39 @@ func (this ExpressionStringTestSet) Run(t *testing.T) {
 		}
 	}
 }
+
+type ExpressionValidateTest struct {
+	input  Expression
+	output error
+}
+
+type ExpressionValidateTestSet []ExpressionValidateTest
+
+func (this ExpressionValidateTestSet) Run(t *testing.T) {
+	for _, x := range this {
+		result := x.input.Validate()
+		if !reflect.DeepEqual(result, x.output) {
+			t.Errorf("Expected %v, got %v for %v", x.output, result, x.input)
+		}
+	}
+}
+
+type ExpressionVerifyFormalNotationTest struct {
+	input  Expression
+	output Expression
+	err    error
+}
+
+type ExpressionVerifyFormalNotationTestSet []ExpressionVerifyFormalNotationTest
+
+func (this ExpressionVerifyFormalNotationTestSet) Run(t *testing.T, aliases []string, defaultAlias string) {
+	for _, x := range this {
+		result, err := x.input.VerifyFormalNotation(aliases, defaultAlias)
+		if !reflect.DeepEqual(err, x.err) {
+			t.Fatalf("Expected error: %v, got %v for %v", x.err, err, x.input)
+		}
+		if !reflect.DeepEqual(result, x.output) {
+			t.Errorf("Expected %v, got %v for %v", x.output, result, x.input)
+		}
+	}
+}

@@ -44,3 +44,27 @@ func TestStringStringRepresentation(t *testing.T) {
 
 	tests.Run(t)
 }
+
+func TestStringValidate(t *testing.T) {
+
+	stringCouchbase := NewLiteralString("Couchbase")
+	stringServer := NewLiteralString("Server")
+
+	tests := ExpressionValidateTestSet{
+		{NewStringConcatenateOperator(stringCouchbase, stringServer), nil},
+	}
+
+	tests.Run(t)
+}
+
+func TestStringVerifyFormalNotation(t *testing.T) {
+
+	stringCouchbase := NewLiteralString("Couchbase")
+	stringServer := NewLiteralString("Server")
+
+	tests := ExpressionVerifyFormalNotationTestSet{
+		{NewStringConcatenateOperator(stringCouchbase, stringServer), nil, nil},
+	}
+
+	tests.Run(t, []string{"bucket"}, "bucket")
+}

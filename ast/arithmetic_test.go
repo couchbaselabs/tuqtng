@@ -81,3 +81,37 @@ func TestArithmeticStringRepresentation(t *testing.T) {
 
 	tests.Run(t)
 }
+
+func TestArithmeticValidate(t *testing.T) {
+
+	numberSix := NewLiteralNumber(6.0)
+	numberSeven := NewLiteralNumber(7.0)
+
+	tests := ExpressionValidateTestSet{
+		{NewPlusOperator(numberSeven, numberSeven), nil},
+		{NewSubtractOperator(numberSeven, numberSeven), nil},
+		{NewMultiplyOperator(numberSeven, numberSeven), nil},
+		{NewDivideOperator(numberSeven, numberSeven), nil},
+		{NewModuloOperator(numberSeven, numberSix), nil},
+		{NewChangeSignOperator(numberSeven), nil},
+	}
+
+	tests.Run(t)
+}
+
+func TestArithmeticVerifyFormalNotation(t *testing.T) {
+
+	numberSix := NewLiteralNumber(6.0)
+	numberSeven := NewLiteralNumber(7.0)
+
+	tests := ExpressionVerifyFormalNotationTestSet{
+		{NewPlusOperator(numberSeven, numberSeven), nil, nil},
+		{NewSubtractOperator(numberSeven, numberSeven), nil, nil},
+		{NewMultiplyOperator(numberSeven, numberSeven), nil, nil},
+		{NewDivideOperator(numberSeven, numberSeven), nil, nil},
+		{NewModuloOperator(numberSeven, numberSix), nil, nil},
+		{NewChangeSignOperator(numberSeven), nil, nil},
+	}
+
+	tests.Run(t, []string{"bucket"}, "bucket")
+}

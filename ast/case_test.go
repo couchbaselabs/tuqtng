@@ -50,9 +50,15 @@ func TestCase(t *testing.T) {
 
 func TestCaseStringRepresentation(t *testing.T) {
 
+	boolTrue := NewLiteralBool(true)
 	boolFalse := NewLiteralBool(false)
 	numberSeven := NewLiteralNumber(7.5)
 	numberNine := NewLiteralNumber(9.3)
+
+	whenThenTrue := &WhenThen{
+		When: boolTrue,
+		Then: numberSeven,
+	}
 
 	whenThenFalse := &WhenThen{
 		When: boolFalse,
@@ -60,12 +66,68 @@ func TestCaseStringRepresentation(t *testing.T) {
 	}
 
 	caseTwo := NewCaseOperator()
-	caseTwo.WhenThens = []*WhenThen{whenThenFalse}
+	caseTwo.WhenThens = []*WhenThen{whenThenTrue, whenThenFalse}
 	caseTwo.Else = numberNine
 
 	tests := ExpressionStringTestSet{
-		{caseTwo, `CASE WHEN false THEN 7.5 ELSE 9.3 END`},
+		{caseTwo, `CASE WHEN true THEN 7.5 WHEN false THEN 7.5 ELSE 9.3 END`},
 	}
 
 	tests.Run(t)
+}
+
+func TestCaseValidate(t *testing.T) {
+
+	boolTrue := NewLiteralBool(true)
+	boolFalse := NewLiteralBool(false)
+	numberSeven := NewLiteralNumber(7.5)
+	numberNine := NewLiteralNumber(9.3)
+
+	whenThenTrue := &WhenThen{
+		When: boolTrue,
+		Then: numberSeven,
+	}
+
+	whenThenFalse := &WhenThen{
+		When: boolFalse,
+		Then: numberSeven,
+	}
+
+	caseTwo := NewCaseOperator()
+	caseTwo.WhenThens = []*WhenThen{whenThenTrue, whenThenFalse}
+	caseTwo.Else = numberNine
+
+	tests := ExpressionValidateTestSet{
+		{caseTwo, nil},
+	}
+
+	tests.Run(t)
+}
+
+func TestCaseVerifyFormalNotation(t *testing.T) {
+
+	boolTrue := NewLiteralBool(true)
+	boolFalse := NewLiteralBool(false)
+	numberSeven := NewLiteralNumber(7.5)
+	numberNine := NewLiteralNumber(9.3)
+
+	whenThenTrue := &WhenThen{
+		When: boolTrue,
+		Then: numberSeven,
+	}
+
+	whenThenFalse := &WhenThen{
+		When: boolFalse,
+		Then: numberSeven,
+	}
+
+	caseTwo := NewCaseOperator()
+	caseTwo.WhenThens = []*WhenThen{whenThenTrue, whenThenFalse}
+	caseTwo.Else = numberNine
+
+	tests := ExpressionVerifyFormalNotationTestSet{
+		{caseTwo, nil, nil},
+	}
+
+	tests.Run(t, []string{"bucket"}, "bucket")
 }

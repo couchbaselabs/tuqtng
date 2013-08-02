@@ -17,10 +17,13 @@ import (
 func TestSelectStatement(t *testing.T) {
 	stmt := NewSelectStatement()
 
+	stmt.Distinct = false
 	stmt.ExplainOnly = true
 	stmt.Select = ResultExpressionList{NewStarResultExpression(), NewDotStarResultExpression(NewProperty("foo")), NewResultExpression(NewProperty("bar"))}
 	stmt.From = &From{Projection: NewProperty("test")}
 	stmt.Where = NewLiteralBool(true)
+	stmt.GroupBy = ExpressionList{NewProperty("bar")}
+	stmt.Having = NewLiteralBool(true)
 	stmt.OrderBy = []*SortExpression{NewSortExpression(NewProperty("foo"), true)}
 	stmt.Limit = 10
 	stmt.Offset = 5
@@ -30,6 +33,9 @@ func TestSelectStatement(t *testing.T) {
 	if !stmt.IsExplainOnly() {
 		t.Errorf("Expected query to be explain only")
 	}
+	if stmt.IsDistinct() {
+		t.Errorf("Expected query to not be distinct")
+	}
 	if !reflect.DeepEqual(stmt.GetResultExpressionList(), ResultExpressionList{NewStarResultExpression(), NewDotStarResultExpression(NewProperty("foo")), NewResultExpression(NewProperty("bar"))}) {
 		t.Errorf("Expected star result expression")
 	}
@@ -37,10 +43,16 @@ func TestSelectStatement(t *testing.T) {
 		t.Errorf("Expected from test")
 	}
 	if !reflect.DeepEqual(stmt.GetWhere(), NewLiteralBool(true)) {
-		t.Errorf("Expected true")
+		t.Errorf("Expected where true")
 	}
 	if !reflect.DeepEqual(stmt.GetOrderBy(), SortExpressionList{NewSortExpression(NewProperty("foo"), true)}) {
 		t.Errorf("Expected order by foo ascending")
+	}
+	if !reflect.DeepEqual(stmt.GetGroupBy(), ExpressionList{NewProperty("bar")}) {
+		t.Errorf("Expected group by bar")
+	}
+	if !reflect.DeepEqual(stmt.GetHaving(), NewLiteralBool(true)) {
+		t.Errorf("Expected having true")
 	}
 	if stmt.GetLimit() != 10 {
 		t.Errorf("Expected limit 10")

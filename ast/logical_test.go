@@ -10,7 +10,6 @@
 package ast
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/couchbaselabs/dparval"
@@ -21,10 +20,7 @@ func TestBooleanStringRepresentation(t *testing.T) {
 	booleanTrue := NewLiteralBool(true)
 	booleanFalse := NewLiteralBool(false)
 
-	tests := []struct {
-		input  fmt.Stringer
-		output string
-	}{
+	tests := ExpressionStringTestSet{
 		{NewAndOperator(ExpressionList{booleanTrue, booleanTrue}), "true AND true"},
 		{NewAndOperator(ExpressionList{booleanTrue, booleanFalse}), "true AND false"},
 		{NewAndOperator(ExpressionList{booleanFalse, booleanTrue}), "false AND true"},
@@ -45,13 +41,34 @@ func TestBooleanStringRepresentation(t *testing.T) {
 		{NewNotOperator(booleanFalse), "NOT false"},
 	}
 
-	for _, x := range tests {
-		result := x.input.String()
-		if result != x.output {
-			t.Errorf("Expected %v, got %v", x.output, result)
-		}
+	tests.Run(t)
+
+}
+
+func TestBooleanValidate(t *testing.T) {
+
+	booleanTrue := NewLiteralBool(true)
+
+	tests := ExpressionValidateTestSet{
+		{NewAndOperator(ExpressionList{booleanTrue, booleanTrue}), nil},
+		{NewOrOperator(ExpressionList{booleanTrue, booleanTrue}), nil},
+		{NewNotOperator(booleanTrue), nil},
 	}
 
+	tests.Run(t)
+}
+
+func TestBooleanVerifyFormalNotation(t *testing.T) {
+
+	booleanTrue := NewLiteralBool(true)
+
+	tests := ExpressionVerifyFormalNotationTestSet{
+		{NewAndOperator(ExpressionList{booleanTrue, booleanTrue}), nil, nil},
+		{NewOrOperator(ExpressionList{booleanTrue, booleanTrue}), nil, nil},
+		{NewNotOperator(booleanTrue), nil, nil},
+	}
+
+	tests.Run(t, []string{"bucket"}, "bucket")
 }
 
 func TestBoolean(t *testing.T) {
