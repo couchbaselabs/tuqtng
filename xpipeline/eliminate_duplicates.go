@@ -10,9 +10,8 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/ast"
-	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/ast"
 )
 
 // this is a terrible implementation to remove duplicates
@@ -21,59 +20,35 @@ import (
 // FIXME improve implementation
 
 type EliminateDuplicates struct {
-	Source         Operator
-	itemChannel    dparval.ValueChannel
-	supportChannel PipelineSupportChannel
-	buffer         dparval.ValueCollection
+	Base   *BaseOperator
+	buffer dparval.ValueCollection
 }
 
 func NewEliminateDuplicates() *EliminateDuplicates {
 	return &EliminateDuplicates{
-		itemChannel:    make(dparval.ValueChannel),
-		supportChannel: make(PipelineSupportChannel),
-		buffer:         make(dparval.ValueCollection, 0),
+		Base:   NewBaseOperator(),
+		buffer: make(dparval.ValueCollection, 0),
 	}
 }
 
 func (this *EliminateDuplicates) SetSource(source Operator) {
-	this.Source = source
+	this.Base.SetSource(source)
 }
 
 func (this *EliminateDuplicates) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
-	return this.itemChannel, this.supportChannel
+	return this.Base.GetChannels()
 }
 
 func (this *EliminateDuplicates) Run() {
-	defer close(this.itemChannel)
-	defer close(this.supportChannel)
+	this.Base.RunOperator(this)
+}
 
-	go this.Source.Run()
+func (this *EliminateDuplicates) processItem(item *dparval.Value) bool {
+	this.buffer = append(this.buffer, item)
+	return true
+}
 
-	var item *dparval.Value
-	var obj interface{}
-	sourceItemChannel, supportChannel := this.Source.GetChannels()
-	ok := true
-	for ok {
-		select {
-		case item, ok = <-sourceItemChannel:
-			if ok {
-				this.processItem(item)
-			}
-		case obj, ok = <-supportChannel:
-			if ok {
-				switch obj := obj.(type) {
-				case query.Error:
-					this.supportChannel <- obj
-					if obj.IsFatal() {
-						return
-					}
-				default:
-					this.supportChannel <- obj
-				}
-			}
-		}
-	}
-
+func (this *EliminateDuplicates) afterItems() {
 	// write the output
 	for pos, item := range this.buffer {
 		// we will nil out duplicates and then skip over those entries in the buffer
@@ -89,11 +64,7 @@ func (this *EliminateDuplicates) Run() {
 					}
 				}
 			}
-			this.itemChannel <- item
+			this.Base.SendItem(item)
 		}
 	}
-}
-
-func (this *EliminateDuplicates) processItem(item *dparval.Value) {
-	this.buffer = append(this.buffer, item)
 }

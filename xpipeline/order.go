@@ -13,78 +13,49 @@ import (
 	"log"
 	"sort"
 
-	"github.com/couchbaselabs/tuqtng/ast"
-	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/ast"
 )
 
 type Order struct {
-	Source         Operator
-	OrderBy        []*ast.SortExpression
-	itemChannel    dparval.ValueChannel
-	supportChannel PipelineSupportChannel
-	buffer         dparval.ValueCollection
+	Base    *BaseOperator
+	OrderBy []*ast.SortExpression
+	buffer  dparval.ValueCollection
 }
 
 func NewOrder(orderBy []*ast.SortExpression) *Order {
 	return &Order{
-		OrderBy:        orderBy,
-		itemChannel:    make(dparval.ValueChannel),
-		supportChannel: make(PipelineSupportChannel),
-		buffer:         make(dparval.ValueCollection, 0),
+		Base:    NewBaseOperator(),
+		OrderBy: orderBy,
+		buffer:  make(dparval.ValueCollection, 0),
 	}
 }
 
 func (this *Order) SetSource(source Operator) {
-	this.Source = source
+	this.Base.SetSource(source)
 }
 
 func (this *Order) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
-	return this.itemChannel, this.supportChannel
+	return this.Base.GetChannels()
 }
 
 func (this *Order) Run() {
-	defer close(this.itemChannel)
-	defer close(this.supportChannel)
+	this.Base.RunOperator(this)
+}
 
-	go this.Source.Run()
+func (this *Order) processItem(item *dparval.Value) bool {
+	this.buffer = append(this.buffer, item)
+	return true
+}
 
-	var item *dparval.Value
-	var obj interface{}
-	sourceItemChannel, supportChannel := this.Source.GetChannels()
-	ok := true
-	for ok {
-		select {
-		case item, ok = <-sourceItemChannel:
-			if ok {
-				this.processItem(item)
-			}
-		case obj, ok = <-supportChannel:
-			if ok {
-				switch obj := obj.(type) {
-				case query.Error:
-					this.supportChannel <- obj
-					if obj.IsFatal() {
-						return
-					}
-				default:
-					this.supportChannel <- obj
-				}
-			}
-		}
-	}
-
+func (this *Order) afterItems() {
 	// sort
 	sort.Sort(this)
 
 	// write the output
 	for _, item := range this.buffer {
-		this.itemChannel <- item
+		this.Base.SendItem(item)
 	}
-}
-
-func (this *Order) processItem(item *dparval.Value) {
-	this.buffer = append(this.buffer, item)
 }
 
 // sort.Interface interface

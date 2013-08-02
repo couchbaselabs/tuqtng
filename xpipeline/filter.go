@@ -10,78 +10,44 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/couchbaselabs/dparval"
 )
 
 type Filter struct {
-	Source         Operator
-	Expr           ast.Expression
-	itemChannel    dparval.ValueChannel
-	supportChannel PipelineSupportChannel
-	ok             bool
+	Base *BaseOperator
+	Expr ast.Expression
 }
 
 func NewFilter(expr ast.Expression) *Filter {
 	return &Filter{
-		Expr:           expr,
-		itemChannel:    make(dparval.ValueChannel),
-		supportChannel: make(PipelineSupportChannel),
+		Base: NewBaseOperator(),
+		Expr: expr,
 	}
 }
 
 func (this *Filter) SetSource(source Operator) {
-	this.Source = source
+	this.Base.SetSource(source)
 }
 
 func (this *Filter) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
-	return this.itemChannel, this.supportChannel
+	return this.Base.GetChannels()
 }
 
 func (this *Filter) Run() {
-	defer close(this.itemChannel)
-	defer close(this.supportChannel)
-
-	go this.Source.Run()
-
-	var item *dparval.Value
-	var obj interface{}
-	sourceItemChannel, supportChannel := this.Source.GetChannels()
-	this.ok = true
-	for this.ok {
-		select {
-		case item, this.ok = <-sourceItemChannel:
-			if this.ok {
-				this.processItem(item)
-			}
-		case obj, this.ok = <-supportChannel:
-			if this.ok {
-				switch obj := obj.(type) {
-				case query.Error:
-					this.supportChannel <- obj
-					if obj.IsFatal() {
-						return
-					}
-				default:
-					this.supportChannel <- obj
-				}
-			}
-		}
-	}
+	this.Base.RunOperator(this)
 }
 
-func (this *Filter) processItem(item *dparval.Value) {
+func (this *Filter) processItem(item *dparval.Value) bool {
 	val, err := this.Expr.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			//ignore these
-			return
+			return true
 		default:
-			this.supportChannel <- query.NewError(err, "error evaluating filter")
-			this.ok = false
-			return
+			return this.Base.SendError(query.NewError(err, "error evaluating filter"))
 		}
 	}
 
@@ -90,8 +56,10 @@ func (this *Filter) processItem(item *dparval.Value) {
 	switch boolVal := boolVal.(type) {
 	case bool:
 		if boolVal {
-			this.itemChannel <- item
+			return this.Base.SendItem(item)
 		}
 	}
-
+	return true
 }
+
+func (this *Filter) afterItems() {}

@@ -21,6 +21,8 @@ type Operator interface {
 	SetSource(Operator)
 	GetChannels() (dparval.ValueChannel, PipelineSupportChannel)
 	Run()
+	processItem(item *dparval.Value) bool
+	afterItems()
 }
 
 type PipelineSupportChannel chan interface{}

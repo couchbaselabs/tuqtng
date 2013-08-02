@@ -39,3 +39,9 @@ func (this *ExpressionEvaluatorSource) Run() {
 	item := dparval.NewValue(map[string]interface{}{})
 	this.itemChannel <- item
 }
+
+func (this *ExpressionEvaluatorSource) processItem(item *dparval.Value) bool {
+	return true
+}
+
+func (this *ExpressionEvaluatorSource) afterItems() {}

@@ -10,9 +10,9 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/couchbaselabs/dparval"
 )
 
 type Scan struct {
@@ -71,3 +71,9 @@ func (this *Scan) Run() {
 		}
 	}
 }
+
+func (this *Scan) processItem(item *dparval.Value) bool {
+	return true
+}
+
+func (this *Scan) afterItems() {}

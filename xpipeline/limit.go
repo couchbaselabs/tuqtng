@@ -10,69 +10,41 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/dparval"
 )
 
 type Limit struct {
-	Source         Operator
-	Limit          int
-	itemChannel    dparval.ValueChannel
-	supportChannel PipelineSupportChannel
-	count          int
+	Base  *BaseOperator
+	Limit int
+	count int
 }
 
 func NewLimit(limit int) *Limit {
 	return &Limit{
-		Limit:          limit,
-		itemChannel:    make(dparval.ValueChannel),
-		supportChannel: make(PipelineSupportChannel),
+		Base:  NewBaseOperator(),
+		Limit: limit,
 	}
 }
 
 func (this *Limit) SetSource(source Operator) {
-	this.Source = source
+	this.Base.SetSource(source)
 }
 
 func (this *Limit) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
-	return this.itemChannel, this.supportChannel
+	return this.Base.GetChannels()
 }
 
 func (this *Limit) Run() {
-	defer close(this.itemChannel)
-	defer close(this.supportChannel)
-
-	this.count = 0
-
-	go this.Source.Run()
-
-	var item *dparval.Value
-	var obj interface{}
-	sourceItemChannel, supportChannel := this.Source.GetChannels()
-	ok := true
-	for ok && this.count < this.Limit {
-		select {
-		case item, ok = <-sourceItemChannel:
-			if ok {
-				this.processItem(item)
-			}
-		case obj, ok = <-supportChannel:
-			if ok {
-				switch obj := obj.(type) {
-				case query.Error:
-					this.supportChannel <- obj
-					if obj.IsFatal() {
-						return
-					}
-				default:
-					this.supportChannel <- obj
-				}
-			}
-		}
-	}
+	this.Base.RunOperator(this)
 }
 
-func (this *Limit) processItem(item *dparval.Value) {
-	this.itemChannel <- item
+func (this *Limit) processItem(item *dparval.Value) bool {
+	this.Base.SendItem(item)
 	this.count++
+	if this.count >= this.Limit {
+		return false
+	}
+	return true
 }
+
+func (this *Limit) afterItems() {}

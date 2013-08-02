@@ -10,70 +10,38 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/couchbaselabs/dparval"
 )
 
 type Project struct {
-	Source         Operator
-	itemChannel    dparval.ValueChannel
-	supportChannel PipelineSupportChannel
-	Result         ast.ResultExpressionList
-	projectEmpty   bool
-	ok             bool
+	Base         *BaseOperator
+	Result       ast.ResultExpressionList
+	projectEmpty bool
 }
 
 func NewProject(result ast.ResultExpressionList, projectEmpty bool) *Project {
 	return &Project{
-		Result:         result,
-		itemChannel:    make(dparval.ValueChannel),
-		supportChannel: make(PipelineSupportChannel),
-		projectEmpty:   projectEmpty,
+		Base:         NewBaseOperator(),
+		Result:       result,
+		projectEmpty: projectEmpty,
 	}
 }
 
 func (this *Project) SetSource(source Operator) {
-	this.Source = source
+	this.Base.SetSource(source)
 }
 
 func (this *Project) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
-	return this.itemChannel, this.supportChannel
+	return this.Base.GetChannels()
 }
 
 func (this *Project) Run() {
-	defer close(this.itemChannel)
-	defer close(this.supportChannel)
-
-	go this.Source.Run()
-
-	var item *dparval.Value
-	var obj interface{}
-	sourceItemChannel, supportChannel := this.Source.GetChannels()
-	this.ok = true
-	for this.ok {
-		select {
-		case item, this.ok = <-sourceItemChannel:
-			if this.ok {
-				this.processItem(item)
-			}
-		case obj, this.ok = <-supportChannel:
-			if this.ok {
-				switch obj := obj.(type) {
-				case query.Error:
-					this.supportChannel <- obj
-					if obj.IsFatal() {
-						return
-					}
-				default:
-					this.supportChannel <- obj
-				}
-			}
-		}
-	}
+	this.Base.RunOperator(this)
 }
 
-func (this *Project) processItem(item *dparval.Value) {
+func (this *Project) processItem(item *dparval.Value) bool {
 	resultMap := map[string]interface{}{}
 	for _, resultItem := range this.Result {
 		if resultItem.Star {
@@ -88,9 +56,7 @@ func (this *Project) processItem(item *dparval.Value) {
 						// FIXME review if this should be a warning
 						continue
 					default:
-						this.supportChannel <- query.NewError(err, "unexpected error projecting dot star expression")
-						this.ok = false
-						return
+						return this.Base.SendError(query.NewError(err, "unexpected error projecting dot star expression"))
 					}
 				}
 
@@ -129,9 +95,7 @@ func (this *Project) processItem(item *dparval.Value) {
 					// FIXME review if this should be a warning
 					continue
 				default:
-					this.supportChannel <- query.NewError(err, "unexpected error projecting expression")
-					this.ok = false
-					return
+					return this.Base.SendError(query.NewError(err, "unexpected error projecting expression"))
 				}
 			}
 			resultMap[resultItem.As] = val
@@ -140,7 +104,7 @@ func (this *Project) processItem(item *dparval.Value) {
 	}
 
 	if !this.projectEmpty && len(resultMap) == 0 {
-		return
+		return true
 	}
 
 	// create the actual result Item
@@ -151,5 +115,7 @@ func (this *Project) processItem(item *dparval.Value) {
 	}
 
 	// write this to the output
-	this.itemChannel <- finalItem
+	return this.Base.SendItem(finalItem)
 }
+
+func (this *Project) afterItems() {}

@@ -10,66 +10,35 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/couchbaselabs/dparval"
 )
 
 type DocumentJoin struct {
-	Source         Operator
-	Over           ast.Expression
-	As             string
-	itemChannel    dparval.ValueChannel
-	supportChannel PipelineSupportChannel
+	Base *BaseOperator
+	Over ast.Expression
+	As   string
 }
 
 func NewDocumentJoin(over ast.Expression, as string) *DocumentJoin {
 	return &DocumentJoin{
-		Over:           over,
-		As:             as,
-		itemChannel:    make(dparval.ValueChannel),
-		supportChannel: make(PipelineSupportChannel),
+		Base: NewBaseOperator(),
+		Over: over,
+		As:   as,
 	}
 }
 
 func (this *DocumentJoin) SetSource(source Operator) {
-	this.Source = source
+	this.Base.SetSource(source)
 }
 
 func (this *DocumentJoin) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
-	return this.itemChannel, this.supportChannel
+	return this.Base.GetChannels()
 }
 
 func (this *DocumentJoin) Run() {
-	defer close(this.itemChannel)
-	defer close(this.supportChannel)
-
-	go this.Source.Run()
-
-	var item *dparval.Value
-	var obj interface{}
-	sourceItemChannel, supportChannel := this.Source.GetChannels()
-	ok := true
-	for ok {
-		select {
-		case item, ok = <-sourceItemChannel:
-			if ok {
-				ok = this.processItem(item)
-			}
-		case obj, ok = <-supportChannel:
-			if ok {
-				switch obj := obj.(type) {
-				case query.Error:
-					this.supportChannel <- obj
-					if obj.IsFatal() {
-						return
-					}
-				default:
-					this.supportChannel <- obj
-				}
-			}
-		}
-	}
+	this.Base.RunOperator(this)
 }
 
 func (this *DocumentJoin) processItem(item *dparval.Value) bool {
@@ -79,8 +48,7 @@ func (this *DocumentJoin) processItem(item *dparval.Value) bool {
 		case *dparval.Undefined:
 			return true
 		default:
-			this.supportChannel <- query.NewError(err, "Internal Error")
-			return false
+			return this.Base.SendError(query.NewError(err, "Internal Error"))
 		}
 	}
 
@@ -106,10 +74,12 @@ func (this *DocumentJoin) processItem(item *dparval.Value) bool {
 				if itemMeta != nil {
 					finalItem.SetAttachment("meta", itemMeta)
 				}
-				this.itemChannel <- finalItem
+				this.Base.SendItem(finalItem)
 			}
 		}
 	}
 
 	return true
 }
+
+func (this *DocumentJoin) afterItems() {}

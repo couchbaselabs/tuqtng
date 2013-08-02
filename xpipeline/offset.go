@@ -10,72 +10,41 @@
 package xpipeline
 
 import (
-	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/dparval"
 )
 
 type Offset struct {
-	Source         Operator
-	Offset         int
-	itemChannel    dparval.ValueChannel
-	supportChannel PipelineSupportChannel
-	count          int
+	Base   *BaseOperator
+	Offset int
+	count  int
 }
 
 func NewOffset(offset int) *Offset {
 	return &Offset{
-		Offset:         offset,
-		itemChannel:    make(dparval.ValueChannel),
-		supportChannel: make(PipelineSupportChannel),
+		Base:   NewBaseOperator(),
+		Offset: offset,
 	}
 }
 
 func (this *Offset) SetSource(source Operator) {
-	this.Source = source
+	this.Base.SetSource(source)
 }
 
 func (this *Offset) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
-	return this.itemChannel, this.supportChannel
+	return this.Base.GetChannels()
 }
 
 func (this *Offset) Run() {
-	defer close(this.itemChannel)
-	defer close(this.supportChannel)
-
-	this.count = 0
-
-	go this.Source.Run()
-
-	var item *dparval.Value
-	var obj interface{}
-	sourceItemChannel, supportChannel := this.Source.GetChannels()
-	ok := true
-	for ok {
-		select {
-		case item, ok = <-sourceItemChannel:
-			if ok {
-				this.processItem(item)
-			}
-		case obj, ok = <-supportChannel:
-			if ok {
-				switch obj := obj.(type) {
-				case query.Error:
-					this.supportChannel <- obj
-					if obj.IsFatal() {
-						return
-					}
-				default:
-					this.supportChannel <- obj
-				}
-			}
-		}
-	}
+	this.Base.RunOperator(this)
 }
 
-func (this *Offset) processItem(item *dparval.Value) {
+func (this *Offset) processItem(item *dparval.Value) bool {
 	this.count++
 	if this.count <= this.Offset {
-		return
+		return true
 	}
-	this.itemChannel <- item
+	this.Base.SendItem(item)
+	return true
 }
+
+func (this *Offset) afterItems() {}

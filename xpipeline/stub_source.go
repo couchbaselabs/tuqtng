@@ -43,3 +43,9 @@ func (this *StubSource) Run() {
 		this.itemChannel <- item
 	}
 }
+
+func (this *StubSource) processItem(item *dparval.Value) bool {
+	return true
+}
+
+func (this *StubSource) afterItems() {}
