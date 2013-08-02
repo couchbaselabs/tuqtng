@@ -19,19 +19,19 @@ func TestStubSource(t *testing.T) {
 
 	testData := dparval.ValueCollection{}
 
-	doc := dparval.NewValue(map[string]interface{}{"name": "marty"})
+	doc := dparval.NewValue(map[string]interface{}{"name": "marty", "mentor": map[string]interface{}{"fname": "bob"}})
 	doc.SetAttachment("meta", map[string]interface{}{"id": "1"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewValue(map[string]interface{}{"name": "steve"})
+	doc = dparval.NewValue(map[string]interface{}{"name": "steve", "mentor": map[string]interface{}{"fname": "ross"}})
 	doc.SetAttachment("meta", map[string]interface{}{"id": "2"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewValue(map[string]interface{}{"name": "gerald"})
+	doc = dparval.NewValue(map[string]interface{}{"name": "gerald", "mentor": map[string]interface{}{"fname": "wendy"}})
 	doc.SetAttachment("meta", map[string]interface{}{"id": "3"})
 	testData = append(testData, doc)
 
-	doc = dparval.NewValue(map[string]interface{}{"name": "siri"})
+	doc = dparval.NewValue(map[string]interface{}{"name": "siri", "mentor": map[string]interface{}{"fname": "marley"}})
 	doc.SetAttachment("meta", map[string]interface{}{"id": "4"})
 	testData = append(testData, doc)
 
