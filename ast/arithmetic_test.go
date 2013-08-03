@@ -94,6 +94,19 @@ func TestArithmeticValidate(t *testing.T) {
 		{NewDivideOperator(numberSeven, numberSeven), nil},
 		{NewModuloOperator(numberSeven, numberSix), nil},
 		{NewChangeSignOperator(numberSeven), nil},
+		// first arg invalid
+		{NewPlusOperator(notValidExpression, numberSeven), notValidExpressionError},
+		{NewSubtractOperator(notValidExpression, numberSeven), notValidExpressionError},
+		{NewMultiplyOperator(notValidExpression, numberSeven), notValidExpressionError},
+		{NewDivideOperator(notValidExpression, numberSeven), notValidExpressionError},
+		{NewModuloOperator(notValidExpression, numberSix), notValidExpressionError},
+		{NewChangeSignOperator(notValidExpression), notValidExpressionError},
+		// second arg invalid
+		{NewPlusOperator(numberSeven, notValidExpression), notValidExpressionError},
+		{NewSubtractOperator(numberSeven, notValidExpression), notValidExpressionError},
+		{NewMultiplyOperator(numberSeven, notValidExpression), notValidExpressionError},
+		{NewDivideOperator(numberSeven, notValidExpression), notValidExpressionError},
+		{NewModuloOperator(numberSeven, notValidExpression), notValidExpressionError},
 	}
 
 	tests.Run(t)

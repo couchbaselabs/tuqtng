@@ -175,6 +175,33 @@ func TestCompareValidate(t *testing.T) {
 		{NewIsNotMissingOperator(stringBob), nil},
 		{NewIsValuedOperator(stringBob), nil},
 		{NewIsNotValuedOperator(stringBob), nil},
+
+		// first arg not valid
+		{NewGreaterThanOperator(notValidExpression, numberSixty), notValidExpressionError},
+		{NewGreaterThanOrEqualOperator(notValidExpression, numberSixty), notValidExpressionError},
+		{NewLessThanOperator(notValidExpression, numberSixty), notValidExpressionError},
+		{NewLessThanOrEqualOperator(notValidExpression, numberSixty), notValidExpressionError},
+		{NewEqualToOperator(notValidExpression, numberSixty), notValidExpressionError},
+		{NewNotEqualToOperator(notValidExpression, numberSixty), notValidExpressionError},
+		{NewLikeOperator(notValidExpression, stringBob), notValidExpressionError},
+		{NewNotLikeOperator(notValidExpression, stringBob), notValidExpressionError},
+
+		{NewIsNullOperator(notValidExpression), notValidExpressionError},
+		{NewIsNotNullOperator(notValidExpression), notValidExpressionError},
+		{NewIsMissingOperator(notValidExpression), notValidExpressionError},
+		{NewIsNotMissingOperator(notValidExpression), notValidExpressionError},
+		{NewIsValuedOperator(notValidExpression), notValidExpressionError},
+		{NewIsNotValuedOperator(notValidExpression), notValidExpressionError},
+
+		// second arg not valid
+		{NewGreaterThanOperator(numberSixty, notValidExpression), notValidExpressionError},
+		{NewGreaterThanOrEqualOperator(numberSixty, notValidExpression), notValidExpressionError},
+		{NewLessThanOperator(numberSixty, notValidExpression), notValidExpressionError},
+		{NewLessThanOrEqualOperator(numberSixty, notValidExpression), notValidExpressionError},
+		{NewEqualToOperator(numberSixty, notValidExpression), notValidExpressionError},
+		{NewNotEqualToOperator(numberSixty, notValidExpression), notValidExpressionError},
+		{NewLikeOperator(stringBob, notValidExpression), notValidExpressionError},
+		{NewNotLikeOperator(stringBob, notValidExpression), notValidExpressionError},
 	}
 
 	tests.Run(t)

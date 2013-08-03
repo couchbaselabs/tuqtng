@@ -16,6 +16,9 @@ import (
 	"github.com/couchbaselabs/dparval"
 )
 
+var notValidExpression = NewFunctionCall("LENGTH", FunctionArgExpressionList{})
+var notValidExpressionError = fmt.Errorf("the LENGTH() function requires exactly 1 argument")
+
 func TestFunction(t *testing.T) {
 
 	sampleContext := map[string]interface{}{
