@@ -58,8 +58,28 @@ func TestFunction(t *testing.T) {
 			nil,
 		},
 		{
+			NewFunctionCall("LOWER", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("LOWER", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.0))}),
+			nil,
+			nil,
+		},
+		{
 			NewFunctionCall("UPPER", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			"HELLO",
+			nil,
+		},
+		{
+			NewFunctionCall("UPPER", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("UPPER", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.0))}),
+			nil,
 			nil,
 		},
 		{
@@ -120,13 +140,33 @@ func TestFunction(t *testing.T) {
 			nil,
 		},
 		{
+			NewFunctionCall("IFMISSING", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
 			NewFunctionCall("IFNULL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull()), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
 			5.0,
 			nil,
 		},
 		{
+			NewFunctionCall("IFNULL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("IFNULL", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			&dparval.Undefined{"dne"},
+		},
+		{
 			NewFunctionCall("IFMISSINGORNULL", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralNull()), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
 			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("IFMISSINGORNULL", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralNull())}),
+			nil,
 			nil,
 		},
 
@@ -184,8 +224,28 @@ func TestFunction(t *testing.T) {
 			nil,
 		},
 		{
+			NewFunctionCall("CEIL", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("CEIL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
+			nil,
+		},
+		{
 			NewFunctionCall("FLOOR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
 			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("FLOOR", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("FLOOR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
 			nil,
 		},
 		{
@@ -223,6 +283,26 @@ func TestFunction(t *testing.T) {
 			55.36,
 			nil,
 		},
+		{
+			NewFunctionCall("ROUND", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("ROUND", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("ROUND", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("ROUND", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
+			nil,
+		},
 
 		//trunc
 		{
@@ -258,6 +338,26 @@ func TestFunction(t *testing.T) {
 		{
 			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralNumber(4))}),
 			55.36,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralNumber(4))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("bob")), NewFunctionArgExpression(NewLiteralNumber(4))}),
+			nil,
 			nil,
 		},
 	}
