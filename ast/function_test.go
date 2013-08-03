@@ -47,6 +47,11 @@ func TestFunction(t *testing.T) {
 			},
 			nil,
 		},
+		{
+			NewFunctionCall("VALUE", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			&dparval.Undefined{"dne"},
+		},
 
 		// string functions
 		{
@@ -154,6 +159,41 @@ func TestFunction(t *testing.T) {
 			"el",
 			nil,
 		},
+		{
+			NewFunctionCall("SUBSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("SUBSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("SUBSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralNumber(0.0)), NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("SUBSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralNumber(0.0)), NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("SUBSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralNumber(27.0))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("SUBSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralNumber(0.0)), NewFunctionArgExpression(NewLiteralNumber(27.0))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("SUBSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.5)), NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			nil,
+			nil,
+		},
 
 		// comparison functions
 		{
@@ -256,6 +296,16 @@ func TestFunction(t *testing.T) {
 						"val2": NewLiteralString("hello"),
 						"val3": NewLiteralString("hello")}))}),
 			3.0,
+			nil,
+		},
+		{
+			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			nil,
 			nil,
 		},
 

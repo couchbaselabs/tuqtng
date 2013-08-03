@@ -329,7 +329,7 @@ func (this *FunctionSubStr) Evaluate(item *dparval.Value, arguments FunctionArgE
 	var maxLen int = -1
 
 	if len(arguments) == 3 {
-		lenarg, err := arguments[1].Expr.Evaluate(item)
+		lenarg, err := arguments[2].Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
 			case *dparval.Undefined:
@@ -369,7 +369,7 @@ func (this *FunctionSubStr) Evaluate(item *dparval.Value, arguments FunctionArgE
 					//validate that pos is valid
 					if pos < 0 || pos >= len(avalue) {
 						// FIXME add warning for invalid pos?
-						return nil, nil
+						return dparval.NewValue(nil), nil
 					}
 
 					if maxLen < 0 {
@@ -377,10 +377,10 @@ func (this *FunctionSubStr) Evaluate(item *dparval.Value, arguments FunctionArgE
 						return dparval.NewValue(avalue[pos:]), nil
 					} else {
 						// validate that maxLen is valid
-						endPos := pos + maxLen + 1
+						endPos := pos + maxLen
 						if endPos < pos || endPos >= len(avalue) {
 							// FIXME add warning for invalid max len?
-							return nil, nil
+							return dparval.NewValue(nil), nil
 						}
 						return dparval.NewValue(avalue[pos:endPos]), nil
 					}
