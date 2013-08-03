@@ -110,13 +110,13 @@ func (this *From) ConvertToBucketFrom() {
 				case nil:
 					// if there was no previous previous node
 					// then this RHS is now the projection
-					this.Projection = rhs
+					this.Projection = NewBracketMemberOperator(NewFunctionCall("VALUE", FunctionArgExpressionList{}), rhs)
 				case *BracketMemberOperator:
 					// replace the LHS of the previous previous
-					prevprev.Left = rhs
+					prevprev.Left = NewBracketMemberOperator(NewFunctionCall("VALUE", FunctionArgExpressionList{}), rhs)
 				case *DotMemberOperator:
 					// replace the LHS of the previous previous
-					prevprev.Left = rhs
+					prevprev.Left = NewBracketMemberOperator(NewFunctionCall("VALUE", FunctionArgExpressionList{}), rhs)
 				}
 			case *DotMemberOperator:
 				// find the RHS we need push up
