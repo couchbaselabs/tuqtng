@@ -12,7 +12,7 @@ package ast
 import (
 	"testing"
 
-	//"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/dparval"
 )
 
 func TestCase(t *testing.T) {
@@ -32,6 +32,16 @@ func TestCase(t *testing.T) {
 		Then: numberSeven,
 	}
 
+	whenThenWhenMissing := &WhenThen{
+		When: NewProperty("dne"),
+		Then: numberSeven,
+	}
+
+	whenThenThenMissing := &WhenThen{
+		When: boolTrue,
+		Then: NewProperty("dne"),
+	}
+
 	caseOne := NewCaseOperator()
 	caseOne.WhenThens = []*WhenThen{whenThenTrue}
 	caseOne.Else = numberNine
@@ -40,9 +50,24 @@ func TestCase(t *testing.T) {
 	caseTwo.WhenThens = []*WhenThen{whenThenFalse}
 	caseTwo.Else = numberNine
 
+	caseThree := NewCaseOperator()
+	caseThree.WhenThens = []*WhenThen{whenThenWhenMissing}
+	caseThree.Else = numberNine
+
+	caseFour := NewCaseOperator()
+	caseFour.WhenThens = []*WhenThen{whenThenThenMissing}
+	caseFour.Else = numberNine
+
+	caseFive := NewCaseOperator()
+	caseFive.WhenThens = []*WhenThen{whenThenFalse}
+	caseFive.Else = NewProperty("dne")
+
 	tests := ExpressionTestSet{
 		{caseOne, 7.5, nil},
 		{caseTwo, 9.3, nil},
+		{caseThree, 9.3, nil},
+		{caseFour, nil, &dparval.Undefined{"dne"}},
+		{caseFive, nil, &dparval.Undefined{"dne"}},
 	}
 
 	tests.Run(t)
