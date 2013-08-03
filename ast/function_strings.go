@@ -10,7 +10,6 @@
 package ast
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/couchbaselabs/dparval"
@@ -59,10 +58,10 @@ func (this *FunctionLower) Evaluate(item *dparval.Value, arguments FunctionArgEx
 }
 
 func (this *FunctionLower) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) != 1 {
-		return fmt.Errorf("the LOWER() function expects a single argument")
+	err := ValidateArity(this, arguments, 1, 1)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }
 
@@ -100,10 +99,10 @@ func (this *FunctionUpper) Evaluate(item *dparval.Value, arguments FunctionArgEx
 }
 
 func (this *FunctionUpper) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) != 1 {
-		return fmt.Errorf("the UPPER() function expects a single argument")
+	err := ValidateArity(this, arguments, 1, 1)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }
 
@@ -163,10 +162,10 @@ func (this *FunctionLTrim) Evaluate(item *dparval.Value, arguments FunctionArgEx
 }
 
 func (this *FunctionLTrim) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) != 2 {
-		return fmt.Errorf("the LTRIM() function expects two arguments")
+	err := ValidateArity(this, arguments, 2, 2)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }
 
@@ -225,10 +224,10 @@ func (this *FunctionRTrim) Evaluate(item *dparval.Value, arguments FunctionArgEx
 }
 
 func (this *FunctionRTrim) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) != 2 {
-		return fmt.Errorf("the RTRIM() function expects two arguments")
+	err := ValidateArity(this, arguments, 2, 2)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }
 
@@ -287,10 +286,10 @@ func (this *FunctionTrim) Evaluate(item *dparval.Value, arguments FunctionArgExp
 }
 
 func (this *FunctionTrim) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) != 2 {
-		return fmt.Errorf("the TRIM() function expects two arguments")
+	err := ValidateArity(this, arguments, 2, 2)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }
 
@@ -394,9 +393,9 @@ func (this *FunctionSubStr) Evaluate(item *dparval.Value, arguments FunctionArgE
 }
 
 func (this *FunctionSubStr) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) < 2 || len(arguments) > 4 {
-		return fmt.Errorf("the SUBSTR() function expects two or three arguments")
+	err := ValidateArity(this, arguments, 2, 3)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }

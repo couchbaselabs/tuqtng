@@ -10,8 +10,6 @@
 package ast
 
 import (
-	"fmt"
-
 	"github.com/couchbaselabs/dparval"
 )
 
@@ -60,8 +58,9 @@ func (this *FunctionGreatest) Evaluate(item *dparval.Value, arguments FunctionAr
 }
 
 func (this *FunctionGreatest) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) < 1 {
-		return fmt.Errorf("the GREATEST() function expects at least one argument")
+	err := ValidateArity(this, arguments, 1, -1)
+	if err != nil {
+		return err
 	}
 	return ValidateNoStars(this, arguments)
 }
@@ -103,8 +102,9 @@ func (this *FunctionLeast) Evaluate(item *dparval.Value, arguments FunctionArgEx
 }
 
 func (this *FunctionLeast) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) < 1 {
-		return fmt.Errorf("the LEAST() function expects at least one argument")
+	err := ValidateArity(this, arguments, 1, -1)
+	if err != nil {
+		return err
 	}
 	return ValidateNoStars(this, arguments)
 }
@@ -139,10 +139,10 @@ func (this *FunctionIfMissing) Evaluate(item *dparval.Value, arguments FunctionA
 }
 
 func (this *FunctionIfMissing) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) < 1 {
-		return fmt.Errorf("the IFMISSING() function expects at least one argument")
+	err := ValidateArity(this, arguments, 1, -1)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }
 
@@ -178,10 +178,10 @@ func (this *FunctionIfNull) Evaluate(item *dparval.Value, arguments FunctionArgE
 }
 
 func (this *FunctionIfNull) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) < 1 {
-		return fmt.Errorf("the IFNULL() function expects at least one argument")
+	err := ValidateArity(this, arguments, 1, -1)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }
 
@@ -217,10 +217,10 @@ func (this *FunctionIfMissingOrNull) Evaluate(item *dparval.Value, arguments Fun
 }
 
 func (this *FunctionIfMissingOrNull) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) < 1 {
-		return fmt.Errorf("the IFMISSINGORNULL() function expects at least one argument")
+	err := ValidateArity(this, arguments, 1, -1)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }
 
@@ -268,8 +268,9 @@ func (this *FunctionMissingIf) Evaluate(item *dparval.Value, arguments FunctionA
 }
 
 func (this *FunctionMissingIf) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) != 2 {
-		return fmt.Errorf("the MISSINGIF() function expects exactly two argument")
+	err := ValidateArity(this, arguments, 2, 2)
+	if err != nil {
+		return err
 	}
 	return ValidateNoStars(this, arguments)
 }
@@ -318,8 +319,9 @@ func (this *FunctionNullIf) Evaluate(item *dparval.Value, arguments FunctionArgE
 }
 
 func (this *FunctionNullIf) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) != 2 {
-		return fmt.Errorf("the NULLIF() function expects exactly two argument")
+	err := ValidateArity(this, arguments, 2, 2)
+	if err != nil {
+		return err
 	}
 
 	return ValidateNoStars(this, arguments)

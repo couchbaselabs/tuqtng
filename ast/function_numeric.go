@@ -10,7 +10,6 @@
 package ast
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/couchbaselabs/dparval"
@@ -58,8 +57,9 @@ func (this *FunctionCeil) Evaluate(item *dparval.Value, arguments FunctionArgExp
 }
 
 func (this *FunctionCeil) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) != 1 {
-		return fmt.Errorf("the CEIL() function expects a single argument")
+	err := ValidateArity(this, arguments, 1, 1)
+	if err != nil {
+		return err
 	}
 	return ValidateNoStars(this, arguments)
 }
@@ -98,10 +98,10 @@ func (this *FunctionFloor) Evaluate(item *dparval.Value, arguments FunctionArgEx
 }
 
 func (this *FunctionFloor) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) != 1 {
-		return fmt.Errorf("the FLOOR() function expects a single argument")
+	err := ValidateArity(this, arguments, 1, 1)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }
 
@@ -191,10 +191,10 @@ func (this *FunctionRound) Evaluate(item *dparval.Value, arguments FunctionArgEx
 }
 
 func (this *FunctionRound) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) < 1 || len(arguments) > 2 {
-		return fmt.Errorf("the ROUND() function expects either one or two arguments")
+	err := ValidateArity(this, arguments, 1, 2)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }
 
@@ -273,9 +273,9 @@ func (this *FunctionTrunc) Evaluate(item *dparval.Value, arguments FunctionArgEx
 }
 
 func (this *FunctionTrunc) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) < 1 || len(arguments) > 2 {
-		return fmt.Errorf("the TRUNC() function expects either one or two arguments")
+	err := ValidateArity(this, arguments, 1, 2)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }

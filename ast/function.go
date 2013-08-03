@@ -162,3 +162,23 @@ func ValidateNoStars(function SystemFunction, arguments FunctionArgExpressionLis
 
 	return nil
 }
+
+func ValidateArity(function SystemFunction, arguments FunctionArgExpressionList, min, max int) error {
+	if min > 0 && max > 0 && min == max {
+		// check for an exact number of arguments
+		if len(arguments) != min {
+			return fmt.Errorf("the %s() function requires exactly %d arguments", function.Name(), min)
+		}
+		return nil
+	}
+
+	if min > 0 && len(arguments) < min {
+		return fmt.Errorf("the %s() function requires at least %d arguments", function.Name(), min)
+	}
+
+	if max > 0 && len(arguments) > max {
+		return fmt.Errorf("the %s() function requires no more than %d arguments", function.Name(), max)
+	}
+
+	return nil
+}

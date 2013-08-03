@@ -10,8 +10,6 @@
 package ast
 
 import (
-	"fmt"
-
 	"github.com/couchbaselabs/dparval"
 )
 
@@ -57,9 +55,9 @@ func (this *FunctionLength) Evaluate(item *dparval.Value, arguments FunctionArgE
 }
 
 func (this *FunctionLength) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) != 1 {
-		return fmt.Errorf("the LENGTH() function takes exactly one argument")
+	err := ValidateArity(this, arguments, 1, 1)
+	if err != nil {
+		return err
 	}
-
 	return ValidateNoStars(this, arguments)
 }

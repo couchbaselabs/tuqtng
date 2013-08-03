@@ -10,8 +10,6 @@
 package ast
 
 import (
-	"fmt"
-
 	"github.com/couchbaselabs/dparval"
 )
 
@@ -51,8 +49,9 @@ func (this *FunctionMeta) Evaluate(item *dparval.Value, arguments FunctionArgExp
 }
 
 func (this *FunctionMeta) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) != 1 {
-		return fmt.Errorf("the META() function takes one argument")
+	err := ValidateArity(this, arguments, 1, 1)
+	if err != nil {
+		return err
 	}
 	return ValidateNoStars(this, arguments)
 }
@@ -80,8 +79,9 @@ func (this *FunctionValue) Evaluate(item *dparval.Value, arguments FunctionArgEx
 }
 
 func (this *FunctionValue) Validate(arguments FunctionArgExpressionList) error {
-	if len(arguments) != 1 {
-		return fmt.Errorf("the VALUE() function takes one argument")
+	err := ValidateArity(this, arguments, 1, 1)
+	if err != nil {
+		return err
 	}
 	return ValidateNoStars(this, arguments)
 }
