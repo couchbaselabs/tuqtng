@@ -166,18 +166,30 @@ func ValidateNoStars(function SystemFunction, arguments FunctionArgExpressionLis
 func ValidateArity(function SystemFunction, arguments FunctionArgExpressionList, min, max int) error {
 	if min > 0 && max > 0 && min == max {
 		// check for an exact number of arguments
+		argMessage := "argument"
+		if min > 1 {
+			argMessage = "arguments"
+		}
 		if len(arguments) != min {
-			return fmt.Errorf("the %s() function requires exactly %d arguments", function.Name(), min)
+			return fmt.Errorf("the %s() function requires exactly %d %s", function.Name(), min, argMessage)
 		}
 		return nil
 	}
 
 	if min > 0 && len(arguments) < min {
-		return fmt.Errorf("the %s() function requires at least %d arguments", function.Name(), min)
+		argMessage := "argument"
+		if min > 1 {
+			argMessage = "arguments"
+		}
+		return fmt.Errorf("the %s() function requires at least %d %s", function.Name(), min, argMessage)
 	}
 
 	if max > 0 && len(arguments) > max {
-		return fmt.Errorf("the %s() function requires no more than %d arguments", function.Name(), max)
+		argMessage := "argument"
+		if max > 1 {
+			argMessage = "arguments"
+		}
+		return fmt.Errorf("the %s() function requires no more than %d %s", function.Name(), max, argMessage)
 	}
 
 	return nil

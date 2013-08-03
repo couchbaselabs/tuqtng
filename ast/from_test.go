@@ -20,7 +20,49 @@ func TestFromGenerateAlias(t *testing.T) {
 		input  *From
 		output *From
 	}{
-		{&From{Bucket: "bucket", Projection: NewProperty("b")}, &From{Bucket: "bucket", Projection: NewProperty("b"), As: "b"}},
+		{
+			&From{
+				Bucket:     "bucket",
+				Projection: NewFunctionCall("VALUE", FunctionArgExpressionList{}),
+			},
+			&From{
+				Bucket:     "bucket",
+				Projection: NewFunctionCall("VALUE", FunctionArgExpressionList{}),
+				As:         "bucket",
+			},
+		},
+		{
+			&From{
+				Bucket:     "bucket",
+				Projection: NewProperty("b"),
+			},
+			&From{
+				Bucket:     "bucket",
+				Projection: NewProperty("b"),
+				As:         "b",
+			},
+		},
+		{
+			&From{
+				Bucket:     "bucket",
+				Projection: NewDotMemberOperator(NewProperty("b"), NewProperty("c")),
+			},
+			&From{
+				Bucket:     "bucket",
+				Projection: NewDotMemberOperator(NewProperty("b"), NewProperty("c")),
+				As:         "c",
+			},
+		},
+		{
+			&From{
+				Bucket:     "bucket",
+				Projection: NewBracketMemberOperator(NewProperty("b"), NewLiteralNumber(0.0)),
+			},
+			&From{
+				Bucket:     "bucket",
+				Projection: NewBracketMemberOperator(NewProperty("b"), NewLiteralNumber(0.0)),
+			},
+		},
 	}
 
 	for _, x := range tests {
@@ -37,6 +79,18 @@ func TestGetAliases(t *testing.T) {
 		output []string
 	}{
 		{&From{Bucket: "bucket", Projection: NewProperty("b"), As: "b"}, []string{"b"}},
+		{
+			&From{
+				Bucket:     "bucket",
+				Projection: NewProperty("b"),
+				As:         "b",
+				Over: &From{
+					Projection: NewProperty("c"),
+					As:         "c",
+				},
+			},
+			[]string{"b", "c"},
+		},
 	}
 
 	for _, x := range tests {

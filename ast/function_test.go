@@ -10,6 +10,7 @@
 package ast
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/couchbaselabs/dparval"
@@ -295,10 +296,18 @@ func TestFunctionValidate(t *testing.T) {
 			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
 			nil,
 		},
+		{
+			NewFunctionCall("META", FunctionArgExpressionList{}),
+			fmt.Errorf("the META() function requires exactly 1 argument"),
+		},
 
 		{
 			NewFunctionCall("VALUE", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
 			nil,
+		},
+		{
+			NewFunctionCall("VALUE", FunctionArgExpressionList{}),
+			fmt.Errorf("the VALUE() function requires exactly 1 argument"),
 		},
 
 		// string functions
@@ -307,24 +316,48 @@ func TestFunctionValidate(t *testing.T) {
 			nil,
 		},
 		{
+			NewFunctionCall("LOWER", FunctionArgExpressionList{}),
+			fmt.Errorf("the LOWER() function requires exactly 1 argument"),
+		},
+		{
 			NewFunctionCall("UPPER", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			nil,
+		},
+		{
+			NewFunctionCall("UPPER", FunctionArgExpressionList{}),
+			fmt.Errorf("the UPPER() function requires exactly 1 argument"),
 		},
 		{
 			NewFunctionCall("LTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralString(" "))}),
 			nil,
 		},
 		{
+			NewFunctionCall("LTRIM", FunctionArgExpressionList{}),
+			fmt.Errorf("the LTRIM() function requires exactly 2 arguments"),
+		},
+		{
 			NewFunctionCall("RTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralString(" "))}),
 			nil,
+		},
+		{
+			NewFunctionCall("RTRIM", FunctionArgExpressionList{}),
+			fmt.Errorf("the RTRIM() function requires exactly 2 arguments"),
 		},
 		{
 			NewFunctionCall("TRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralString(" "))}),
 			nil,
 		},
 		{
+			NewFunctionCall("TRIM", FunctionArgExpressionList{}),
+			fmt.Errorf("the TRIM() function requires exactly 2 arguments"),
+		},
+		{
 			NewFunctionCall("SUBSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralNumber(0.0))}),
 			nil,
+		},
+		{
+			NewFunctionCall("SUBSTR", FunctionArgExpressionList{}),
+			fmt.Errorf("the SUBSTR() function requires at least 2 arguments"),
 		},
 
 		// comparison functions
@@ -333,20 +366,40 @@ func TestFunctionValidate(t *testing.T) {
 			nil,
 		},
 		{
+			NewFunctionCall("GREATEST", FunctionArgExpressionList{}),
+			fmt.Errorf("the GREATEST() function requires at least 1 argument"),
+		},
+		{
 			NewFunctionCall("LEAST", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull()), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
 			nil,
+		},
+		{
+			NewFunctionCall("LEAST", FunctionArgExpressionList{}),
+			fmt.Errorf("the LEAST() function requires at least 1 argument"),
 		},
 		{
 			NewFunctionCall("IFMISSING", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
 			nil,
 		},
 		{
+			NewFunctionCall("IFMISSING", FunctionArgExpressionList{}),
+			fmt.Errorf("the IFMISSING() function requires at least 1 argument"),
+		},
+		{
 			NewFunctionCall("IFNULL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull()), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
 			nil,
 		},
 		{
+			NewFunctionCall("IFNULL", FunctionArgExpressionList{}),
+			fmt.Errorf("the IFNULL() function requires at least 1 argument"),
+		},
+		{
 			NewFunctionCall("IFMISSINGORNULL", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralNull()), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
 			nil,
+		},
+		{
+			NewFunctionCall("IFMISSINGORNULL", FunctionArgExpressionList{}),
+			fmt.Errorf("the IFMISSINGORNULL() function requires at least 1 argument"),
 		},
 
 		{
@@ -354,14 +407,26 @@ func TestFunctionValidate(t *testing.T) {
 			nil,
 		},
 		{
+			NewFunctionCall("MISSINGIF", FunctionArgExpressionList{}),
+			fmt.Errorf("the MISSINGIF() function requires exactly 2 arguments"),
+		},
+		{
 			NewFunctionCall("NULLIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello2"))}),
 			nil,
+		},
+		{
+			NewFunctionCall("NULLIF", FunctionArgExpressionList{}),
+			fmt.Errorf("the NULLIF() function requires exactly 2 arguments"),
 		},
 
 		// util functions
 		{
 			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			nil,
+		},
+		{
+			NewFunctionCall("LENGTH", FunctionArgExpressionList{}),
+			fmt.Errorf("the LENGTH() function requires exactly 1 argument"),
 		},
 
 		// numeric functions
@@ -370,18 +435,34 @@ func TestFunctionValidate(t *testing.T) {
 			nil,
 		},
 		{
+			NewFunctionCall("CEIL", FunctionArgExpressionList{}),
+			fmt.Errorf("the CEIL() function requires exactly 1 argument"),
+		},
+		{
 			NewFunctionCall("FLOOR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
 			nil,
 		},
 		{
+			NewFunctionCall("FLOOR", FunctionArgExpressionList{}),
+			fmt.Errorf("the FLOOR() function requires exactly 1 argument"),
+		},
+		{
 			NewFunctionCall("ROUND", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
 			nil,
+		},
+		{
+			NewFunctionCall("ROUND", FunctionArgExpressionList{}),
+			fmt.Errorf("the ROUND() function requires at least 1 argument"),
 		},
 
 		//trunc
 		{
 			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),
 			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{}),
+			fmt.Errorf("the TRUNC() function requires at least 1 argument"),
 		},
 	}
 
