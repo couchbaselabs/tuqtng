@@ -127,3 +127,26 @@ func TestSelectStatementVerifyFormalNotation(t *testing.T) {
 	}
 
 }
+
+func TestSelectStatementValidate(t *testing.T) {
+
+	goodSelectStmt := NewSelectStatement()
+	goodSelectStmt.Select = ResultExpressionList{NewResultExpression(NewBracketMemberOperator(NewProperty("bucket"), NewProperty("name")))}
+	goodSelectStmt.From = &From{Bucket: "bucket", As: "bucket"}
+	goodSelectStmt.Where = NewBracketMemberOperator(NewProperty("bucket"), NewProperty("name"))
+
+	tests := []struct {
+		input  *SelectStatement
+		output error
+	}{
+		{goodSelectStmt, nil},
+	}
+
+	for _, test := range tests {
+		err := test.input.validate()
+		if !reflect.DeepEqual(err, test.output) {
+			t.Errorf("Expected error %v, got %v", test.output, err)
+		}
+	}
+
+}
