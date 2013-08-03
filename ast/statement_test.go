@@ -104,3 +104,26 @@ func TestSelectStatementDefaultNaming(t *testing.T) {
 		t.Errorf("Expected alias to be $1, got %v", stmt.Select[1].As)
 	}
 }
+
+func TestSelectStatementVerifyFormalNotation(t *testing.T) {
+
+	goodSelectStmt := NewSelectStatement()
+	goodSelectStmt.Select = ResultExpressionList{NewResultExpression(NewBracketMemberOperator(NewProperty("bucket"), NewProperty("name")))}
+	goodSelectStmt.From = &From{Bucket: "bucket", As: "bucket"}
+	goodSelectStmt.Where = NewBracketMemberOperator(NewProperty("bucket"), NewProperty("name"))
+
+	tests := []struct {
+		input  *SelectStatement
+		output error
+	}{
+		{goodSelectStmt, nil},
+	}
+
+	for _, test := range tests {
+		err := test.input.verifyFormalNotation()
+		if !reflect.DeepEqual(err, test.output) {
+			t.Errorf("Expected error %v, got %v", test.output, err)
+		}
+	}
+
+}
