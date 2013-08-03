@@ -103,6 +103,11 @@ func TestDotMemberValidate(t *testing.T) {
 	tests := ExpressionValidateTestSet{
 		{pathChildDotAge, nil},
 		{pathChildSubOne, nil},
+		// first arg invalid
+		{NewDotMemberOperator(notValidExpression, propAge), notValidExpressionError},
+		{NewBracketMemberOperator(notValidExpression, propIndex), notValidExpressionError},
+		// second arg invalid
+		{NewBracketMemberOperator(propChild, notValidExpression), notValidExpressionError},
 	}
 
 	tests.Run(t)

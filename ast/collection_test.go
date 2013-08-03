@@ -100,6 +100,12 @@ func TestCollectionValidate(t *testing.T) {
 	tests := ExpressionValidateTestSet{
 		{anyChild, nil},
 		{allChild, nil},
+		// condition invalid
+		{NewCollectionAnyOperator(notValidExpression, propChild, "child"), notValidExpressionError},
+		{NewCollectionAllOperator(notValidExpression, propChild, "child"), notValidExpressionError},
+		// over invalid
+		{NewCollectionAnyOperator(overThirty, notValidExpression, "child"), notValidExpressionError},
+		{NewCollectionAllOperator(overThirty, notValidExpression, "child"), notValidExpressionError},
 	}
 
 	tests.Run(t)

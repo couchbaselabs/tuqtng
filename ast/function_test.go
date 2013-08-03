@@ -467,6 +467,12 @@ func TestFunctionValidate(t *testing.T) {
 			NewFunctionCall("TRUNC", FunctionArgExpressionList{}),
 			fmt.Errorf("the TRUNC() function requires at least 1 argument"),
 		},
+
+		// non-existant function
+		{
+			NewFunctionCall("DOESNOTEXIST", FunctionArgExpressionList{}),
+			fmt.Errorf("no system function named DOESNOTEXIST registered"),
+		},
 	}
 
 	tests.Run(t)

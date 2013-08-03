@@ -42,6 +42,10 @@ func TestLiteralValidate(t *testing.T) {
 		{NewLiteralString("couchbase"), nil},
 		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0)}), nil},
 		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), nil},
+
+		// invalid
+		{NewLiteralArray(ExpressionList{notValidExpression}), notValidExpressionError},
+		{NewLiteralObject(map[string]Expression{"name": notValidExpression}), notValidExpressionError},
 	}
 
 	tests.Run(t)

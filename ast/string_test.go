@@ -52,6 +52,10 @@ func TestStringValidate(t *testing.T) {
 
 	tests := ExpressionValidateTestSet{
 		{NewStringConcatenateOperator(stringCouchbase, stringServer), nil},
+		// first arg invalid
+		{NewStringConcatenateOperator(notValidExpression, stringServer), notValidExpressionError},
+		// second arg invalid
+		{NewStringConcatenateOperator(stringCouchbase, notValidExpression), notValidExpressionError},
 	}
 
 	tests.Run(t)

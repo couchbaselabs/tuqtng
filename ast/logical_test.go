@@ -53,6 +53,13 @@ func TestBooleanValidate(t *testing.T) {
 		{NewAndOperator(ExpressionList{booleanTrue, booleanTrue}), nil},
 		{NewOrOperator(ExpressionList{booleanTrue, booleanTrue}), nil},
 		{NewNotOperator(booleanTrue), nil},
+		// first arg not valid
+		{NewAndOperator(ExpressionList{notValidExpression, booleanTrue}), notValidExpressionError},
+		{NewOrOperator(ExpressionList{notValidExpression, booleanTrue}), notValidExpressionError},
+		{NewNotOperator(notValidExpression), notValidExpressionError},
+		// second arg not valid
+		{NewAndOperator(ExpressionList{booleanTrue, notValidExpression}), notValidExpressionError},
+		{NewOrOperator(ExpressionList{booleanTrue, notValidExpression}), notValidExpressionError},
 	}
 
 	tests.Run(t)

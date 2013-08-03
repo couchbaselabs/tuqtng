@@ -93,12 +93,37 @@ func TestCaseValidate(t *testing.T) {
 		Then: numberSeven,
 	}
 
+	WhenThenWhenInvalid := &WhenThen{
+		When: notValidExpression,
+		Then: numberSeven,
+	}
+
+	WhenThenThenInvalid := &WhenThen{
+		When: boolFalse,
+		Then: notValidExpression,
+	}
+
 	caseTwo := NewCaseOperator()
 	caseTwo.WhenThens = []*WhenThen{whenThenTrue, whenThenFalse}
 	caseTwo.Else = numberNine
 
+	caseThree := NewCaseOperator()
+	caseThree.WhenThens = []*WhenThen{WhenThenWhenInvalid, whenThenFalse}
+	caseThree.Else = numberNine
+
+	caseFour := NewCaseOperator()
+	caseFour.WhenThens = []*WhenThen{WhenThenThenInvalid, whenThenFalse}
+	caseFour.Else = numberNine
+
+	caseFive := NewCaseOperator()
+	caseFive.WhenThens = []*WhenThen{whenThenTrue, whenThenFalse}
+	caseFive.Else = notValidExpression
+
 	tests := ExpressionValidateTestSet{
 		{caseTwo, nil},
+		{caseThree, notValidExpressionError},
+		{caseFour, notValidExpressionError},
+		{caseFive, notValidExpressionError},
 	}
 
 	tests.Run(t)
