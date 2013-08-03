@@ -73,6 +73,15 @@ func TestBooleanVerifyFormalNotation(t *testing.T) {
 		{NewAndOperator(ExpressionList{booleanTrue, booleanTrue}), nil, nil},
 		{NewOrOperator(ExpressionList{booleanTrue, booleanTrue}), nil, nil},
 		{NewNotOperator(booleanTrue), nil, nil},
+
+		// first arg not formal
+		{NewAndOperator(ExpressionList{notFormalExpression, booleanTrue}), nil, notFormalExpressionError},
+		{NewOrOperator(ExpressionList{notFormalExpression, booleanTrue}), nil, notFormalExpressionError},
+		{NewNotOperator(notFormalExpression), nil, notFormalExpressionError},
+
+		// second arg not formal
+		{NewAndOperator(ExpressionList{booleanTrue, notFormalExpression}), nil, notFormalExpressionError},
+		{NewOrOperator(ExpressionList{booleanTrue, notFormalExpression}), nil, notFormalExpressionError},
 	}
 
 	tests.Run(t, []string{"bucket"}, "bucket")

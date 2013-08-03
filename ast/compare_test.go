@@ -228,6 +228,33 @@ func TestCompareVerifyFormalNotation(t *testing.T) {
 		{NewIsNotMissingOperator(stringBob), nil, nil},
 		{NewIsValuedOperator(stringBob), nil, nil},
 		{NewIsNotValuedOperator(stringBob), nil, nil},
+
+		// first arg not formal
+		{NewGreaterThanOperator(notFormalExpression, numberSixty), nil, notFormalExpressionError},
+		{NewGreaterThanOrEqualOperator(notFormalExpression, numberSixty), nil, notFormalExpressionError},
+		{NewLessThanOperator(notFormalExpression, numberSixty), nil, notFormalExpressionError},
+		{NewLessThanOrEqualOperator(notFormalExpression, numberSixty), nil, notFormalExpressionError},
+		{NewEqualToOperator(notFormalExpression, numberSixty), nil, notFormalExpressionError},
+		{NewNotEqualToOperator(notFormalExpression, numberSixty), nil, notFormalExpressionError},
+		{NewLikeOperator(notFormalExpression, stringBob), nil, notFormalExpressionError},
+		{NewNotLikeOperator(notFormalExpression, stringBob), nil, notFormalExpressionError},
+
+		{NewIsNullOperator(notFormalExpression), nil, notFormalExpressionError},
+		{NewIsNotNullOperator(notFormalExpression), nil, notFormalExpressionError},
+		{NewIsMissingOperator(notFormalExpression), nil, notFormalExpressionError},
+		{NewIsNotMissingOperator(notFormalExpression), nil, notFormalExpressionError},
+		{NewIsValuedOperator(notFormalExpression), nil, notFormalExpressionError},
+		{NewIsNotValuedOperator(notFormalExpression), nil, notFormalExpressionError},
+
+		// second arg not formal
+		{NewGreaterThanOperator(numberSixty, notFormalExpression), nil, notFormalExpressionError},
+		{NewGreaterThanOrEqualOperator(numberSixty, notFormalExpression), nil, notFormalExpressionError},
+		{NewLessThanOperator(numberSixty, notFormalExpression), nil, notFormalExpressionError},
+		{NewLessThanOrEqualOperator(numberSixty, notFormalExpression), nil, notFormalExpressionError},
+		{NewEqualToOperator(numberSixty, notFormalExpression), nil, notFormalExpressionError},
+		{NewNotEqualToOperator(numberSixty, notFormalExpression), nil, notFormalExpressionError},
+		{NewLikeOperator(stringBob, notFormalExpression), nil, notFormalExpressionError},
+		{NewNotLikeOperator(stringBob, notFormalExpression), nil, notFormalExpressionError},
 	}
 
 	tests.Run(t, []string{"bucket"}, "bucket")

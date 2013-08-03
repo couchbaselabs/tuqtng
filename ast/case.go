@@ -11,7 +11,6 @@ package ast
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/couchbaselabs/dparval"
 )
@@ -111,9 +110,6 @@ func (this *CaseOperator) VerifyFormalNotation(aliases []string, defaultAlias st
 		}
 		if newthen != nil {
 			WhenThen.Then = newthen
-			//this.WhenThens[i] = WhenThen
-		} else {
-			log.Printf("not update then")
 		}
 	}
 	if this.Else != nil {

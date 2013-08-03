@@ -16,9 +16,6 @@ import (
 	"github.com/couchbaselabs/dparval"
 )
 
-var notValidExpression = NewFunctionCall("LENGTH", FunctionArgExpressionList{})
-var notValidExpressionError = fmt.Errorf("the LENGTH() function requires exactly 1 argument")
-
 func TestFunction(t *testing.T) {
 
 	sampleContext := map[string]interface{}{
@@ -88,13 +85,58 @@ func TestFunction(t *testing.T) {
 			nil,
 		},
 		{
+			NewFunctionCall("LTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralString(" "))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("LTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("LTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			nil,
+			nil,
+		},
+		{
 			NewFunctionCall("RTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralString(" "))}),
 			"     hello",
 			nil,
 		},
 		{
+			NewFunctionCall("RTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralString(" "))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("RTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("RTRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			nil,
+			nil,
+		},
+		{
 			NewFunctionCall("TRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralString(" "))}),
 			"hello",
+			nil,
+		},
+		{
+			NewFunctionCall("TRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralString(" "))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("TRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("TRIM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("     hello     ")), NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			nil,
 			nil,
 		},
 		{

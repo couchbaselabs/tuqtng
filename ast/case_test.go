@@ -146,12 +146,37 @@ func TestCaseVerifyFormalNotation(t *testing.T) {
 		Then: numberSeven,
 	}
 
+	WhenThenWhenNotFormal := &WhenThen{
+		When: notFormalExpression,
+		Then: numberSeven,
+	}
+
+	WhenThenThenNotFormal := &WhenThen{
+		When: boolFalse,
+		Then: notFormalExpression,
+	}
+
 	caseTwo := NewCaseOperator()
 	caseTwo.WhenThens = []*WhenThen{whenThenTrue, whenThenFalse}
 	caseTwo.Else = numberNine
 
+	caseThree := NewCaseOperator()
+	caseThree.WhenThens = []*WhenThen{WhenThenWhenNotFormal, whenThenFalse}
+	caseThree.Else = numberNine
+
+	caseFour := NewCaseOperator()
+	caseFour.WhenThens = []*WhenThen{WhenThenThenNotFormal, whenThenFalse}
+	caseFour.Else = numberNine
+
+	caseFive := NewCaseOperator()
+	caseFive.WhenThens = []*WhenThen{whenThenTrue, whenThenFalse}
+	caseFive.Else = notFormalExpression
+
 	tests := ExpressionVerifyFormalNotationTestSet{
 		{caseTwo, nil, nil},
+		{caseThree, nil, notFormalExpressionError},
+		{caseFour, nil, notFormalExpressionError},
+		{caseFive, nil, notFormalExpressionError},
 	}
 
 	tests.Run(t, []string{"bucket"}, "bucket")

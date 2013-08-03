@@ -17,6 +17,11 @@ import (
 	"github.com/couchbaselabs/dparval"
 )
 
+var notValidExpression = NewFunctionCall("LENGTH", FunctionArgExpressionList{})
+var notValidExpressionError = fmt.Errorf("the LENGTH() function requires exactly 1 argument")
+var notFormalExpression = NewProperty("property")
+var _, notFormalExpressionError = notFormalExpression.VerifyFormalNotation([]string{"bucket"}, "bucket")
+
 type ExpressionTest struct {
 	input  Expression
 	output interface{}

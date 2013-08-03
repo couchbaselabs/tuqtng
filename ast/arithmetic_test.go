@@ -124,6 +124,21 @@ func TestArithmeticVerifyFormalNotation(t *testing.T) {
 		{NewDivideOperator(numberSeven, numberSeven), nil, nil},
 		{NewModuloOperator(numberSeven, numberSix), nil, nil},
 		{NewChangeSignOperator(numberSeven), nil, nil},
+
+		// first arg not formal
+		{NewPlusOperator(notFormalExpression, numberSeven), nil, notFormalExpressionError},
+		{NewSubtractOperator(notFormalExpression, numberSeven), nil, notFormalExpressionError},
+		{NewMultiplyOperator(notFormalExpression, numberSeven), nil, notFormalExpressionError},
+		{NewDivideOperator(notFormalExpression, numberSeven), nil, notFormalExpressionError},
+		{NewModuloOperator(notFormalExpression, numberSix), nil, notFormalExpressionError},
+		{NewChangeSignOperator(notFormalExpression), nil, notFormalExpressionError},
+
+		// second arg not formal
+		{NewPlusOperator(numberSeven, notFormalExpression), nil, notFormalExpressionError},
+		{NewSubtractOperator(numberSeven, notFormalExpression), nil, notFormalExpressionError},
+		{NewMultiplyOperator(numberSeven, notFormalExpression), nil, notFormalExpressionError},
+		{NewDivideOperator(numberSeven, notFormalExpression), nil, notFormalExpressionError},
+		{NewModuloOperator(numberSeven, notFormalExpression), nil, notFormalExpressionError},
 	}
 
 	tests.Run(t, []string{"bucket"}, "bucket")

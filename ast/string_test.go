@@ -68,6 +68,10 @@ func TestStringVerifyFormalNotation(t *testing.T) {
 
 	tests := ExpressionVerifyFormalNotationTestSet{
 		{NewStringConcatenateOperator(stringCouchbase, stringServer), nil, nil},
+		// first arg not formal
+		{NewStringConcatenateOperator(notFormalExpression, stringServer), nil, notFormalExpressionError},
+		// second arg not formal
+		{NewStringConcatenateOperator(stringCouchbase, notFormalExpression), nil, notFormalExpressionError},
 	}
 
 	tests.Run(t, []string{"bucket"}, "bucket")
