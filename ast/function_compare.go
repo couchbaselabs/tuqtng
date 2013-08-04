@@ -248,11 +248,21 @@ func (this *FunctionMissingIf) Evaluate(item *dparval.Value, arguments FunctionA
 	if rerr != nil {
 		switch rerr := rerr.(type) {
 		case *dparval.Undefined:
-			// do nothing yet
+			if lerr != nil {
+				// if lerr isnt null it must also be
+				// undefined (all others returned)
+				return nil, &dparval.Undefined{}
+			}
 		default:
 			// any other error return to caller
 			return nil, rerr
 		}
+	}
+
+	if lerr != nil {
+		// lav was MISSING, but rav wasn't
+		// so return lav
+		return lav, lerr
 	}
 
 	lavalue := lav.Value()
@@ -299,11 +309,21 @@ func (this *FunctionNullIf) Evaluate(item *dparval.Value, arguments FunctionArgE
 	if rerr != nil {
 		switch rerr := rerr.(type) {
 		case *dparval.Undefined:
-			// do nothing yet
+			if lerr != nil {
+				// if lerr isnt null it must also be
+				// undefined (all others returned)
+				return dparval.NewValue(nil), nil
+			}
 		default:
 			// any other error return to caller
 			return nil, rerr
 		}
+	}
+
+	if lerr != nil {
+		// lav was MISSING, but rav wasn't
+		// so return lav
+		return lav, lerr
 	}
 
 	lavalue := lav.Value()

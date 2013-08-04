@@ -11,6 +11,7 @@ package ast
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 
 	"github.com/couchbaselabs/dparval"
@@ -263,6 +264,16 @@ func TestFunction(t *testing.T) {
 			&dparval.Undefined{},
 		},
 		{
+			NewFunctionCall("MISSINGIF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			&dparval.Undefined{},
+		},
+		{
+			NewFunctionCall("MISSINGIF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
+			&dparval.Undefined{"dne"},
+		},
+		{
 			NewFunctionCall("NULLIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello2"))}),
 			"hello",
 			nil,
@@ -271,6 +282,16 @@ func TestFunction(t *testing.T) {
 			NewFunctionCall("NULLIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello"))}),
 			nil,
 			nil,
+		},
+		{
+			NewFunctionCall("NULLIF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("NULLIF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
+			&dparval.Undefined{"dne"},
 		},
 
 		// util functions
@@ -678,13 +699,87 @@ func TestFunctionVerifyFormalNotation(t *testing.T) {
 			nil,
 			nil,
 		},
-
 		{
 			NewFunctionCall("VALUE", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(notFormalExpression)}),
+			nil,
+			notFormalExpressionError,
+		},
+	}
+
+	tests.Run(t, []string{"bucket", "child"}, "")
+
+	// single alias tests
+
+	tests = ExpressionVerifyFormalNotationTestSet{
+		{
+			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("notbucket"))}),
+			nil,
+			fmt.Errorf("invalid argument to META() function, must be bucket name/alias"),
+		},
+		{
+			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.4))}),
+			nil,
+			fmt.Errorf("invalid argument to META() function, must be bucket name/alias"),
+		},
+		{
+			NewFunctionCall("META", FunctionArgExpressionList{}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("VALUE", FunctionArgExpressionList{}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bob"))}),
 			nil,
 			nil,
 		},
 	}
 
 	tests.Run(t, []string{"bucket"}, "bucket")
+
+}
+
+func TestFunctionValidateArity(t *testing.T) {
+	tests := []struct {
+		name      string
+		arguments FunctionArgExpressionList
+		min       int
+		max       int
+		err       error
+	}{
+		{"LENGTH", FunctionArgExpressionList{
+			NewFunctionArgExpression(NewProperty("arg1")),
+			NewFunctionArgExpression(NewProperty("arg1"))},
+			0,
+			1,
+			fmt.Errorf("the LENGTH() function requires no more than 1 argument"),
+		},
+		{"LENGTH", FunctionArgExpressionList{
+			NewFunctionArgExpression(NewProperty("arg1")),
+			NewFunctionArgExpression(NewProperty("arg1")),
+			NewFunctionArgExpression(NewProperty("arg2"))},
+			0,
+			2,
+			fmt.Errorf("the LENGTH() function requires no more than 2 arguments"),
+		},
+	}
+
+	for _, test := range tests {
+		functionImpl := SystemFunctionRegistry[test.name]
+		if functionImpl == nil {
+			t.Errorf("function impl missing")
+		}
+		err := ValidateArity(functionImpl, test.arguments, test.min, test.max)
+		if !reflect.DeepEqual(err, test.err) {
+			t.Errorf("Expected error %v, got %v", test.err, err)
+		}
+	}
 }

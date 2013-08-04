@@ -124,6 +124,18 @@ func TestDotMemberVerifyFormalNotation(t *testing.T) {
 	tests := ExpressionVerifyFormalNotationTestSet{
 		{pathChildDotAge, nil, nil},
 		{pathChildSubOne, nil, nil},
+		// not formal
+		{NewDotMemberOperator(notFormalExpression, propAge), nil, notFormalExpressionError},
+		{NewBracketMemberOperator(notFormalExpression, propIndex), nil, notFormalExpressionError},
+	}
+
+	tests.Run(t, []string{"bucket", "child"}, "")
+
+	// again with single alias
+	tests = ExpressionVerifyFormalNotationTestSet{
+		// not formal
+		{NewDotMemberOperator(notFormalExpression, propAge), nil, nil},
+		{NewBracketMemberOperator(notFormalExpression, propIndex), nil, nil},
 	}
 
 	tests.Run(t, []string{"bucket"}, "bucket")

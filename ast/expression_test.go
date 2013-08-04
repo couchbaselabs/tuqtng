@@ -20,7 +20,7 @@ import (
 var notValidExpression = NewFunctionCall("LENGTH", FunctionArgExpressionList{})
 var notValidExpressionError = fmt.Errorf("the LENGTH() function requires exactly 1 argument")
 var notFormalExpression = NewProperty("property")
-var _, notFormalExpressionError = notFormalExpression.VerifyFormalNotation([]string{"bucket"}, "bucket")
+var _, notFormalExpressionError = notFormalExpression.VerifyFormalNotation([]string{"bucket", "child"}, "")
 
 type ExpressionTest struct {
 	input  Expression
@@ -100,4 +100,33 @@ func (this ExpressionVerifyFormalNotationTestSet) Run(t *testing.T, aliases []st
 			t.Errorf("Expected %v, got %v for %v", x.output, result, x.input)
 		}
 	}
+}
+
+// this type exists only so we can test that
+// expressions properly return any internal errors
+// that may occur within the evaluation process
+
+func newInternalErrorExpression() *internalErrorExpression {
+	return &internalErrorExpression{}
+}
+
+type internalErrorExpression struct {
+}
+
+var internalError = fmt.Errorf("Internal Error")
+
+func (this *internalErrorExpression) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	return nil, fmt.Errorf("Internal Error")
+}
+
+func (this *internalErrorExpression) Validate() error {
+	return nil
+}
+
+func (this *internalErrorExpression) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+	return nil, nil
+}
+
+func (this *internalErrorExpression) String() string {
+	return fmt.Sprintf("NOT_A_REAL_EXPRESSION")
 }

@@ -37,3 +37,15 @@ func TestEvaluateProperty(t *testing.T) {
 	tests.RunWithItem(t, item)
 
 }
+
+func TestPropertyVerifyFormalNotation(t *testing.T) {
+	prop := NewProperty("path")
+	newop, err := prop.VerifyFormalNotation([]string{"bucket"}, "bucket")
+	if err != nil {
+		t.Errorf("Expected no error")
+	}
+	_, ok := newop.(*DotMemberOperator)
+	if !ok {
+		t.Errorf("Expected to be converted to DotMemberOperator")
+	}
+}

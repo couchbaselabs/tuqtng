@@ -257,6 +257,39 @@ func TestCompareVerifyFormalNotation(t *testing.T) {
 		{NewNotLikeOperator(stringBob, notFormalExpression), nil, notFormalExpressionError},
 	}
 
+	tests.Run(t, []string{"bucket", "child"}, "")
+
+	// again with single bucket
+	tests = ExpressionVerifyFormalNotationTestSet{
+
+		// first arg not formal
+		{NewGreaterThanOperator(notFormalExpression, numberSixty), nil, nil},
+		{NewGreaterThanOrEqualOperator(notFormalExpression, numberSixty), nil, nil},
+		{NewLessThanOperator(notFormalExpression, numberSixty), nil, nil},
+		{NewLessThanOrEqualOperator(notFormalExpression, numberSixty), nil, nil},
+		{NewEqualToOperator(notFormalExpression, numberSixty), nil, nil},
+		{NewNotEqualToOperator(notFormalExpression, numberSixty), nil, nil},
+		{NewLikeOperator(notFormalExpression, stringBob), nil, nil},
+		{NewNotLikeOperator(notFormalExpression, stringBob), nil, nil},
+
+		{NewIsNullOperator(notFormalExpression), nil, nil},
+		{NewIsNotNullOperator(notFormalExpression), nil, nil},
+		{NewIsMissingOperator(notFormalExpression), nil, nil},
+		{NewIsNotMissingOperator(notFormalExpression), nil, nil},
+		{NewIsValuedOperator(notFormalExpression), nil, nil},
+		{NewIsNotValuedOperator(notFormalExpression), nil, nil},
+
+		// second arg not formal
+		{NewGreaterThanOperator(numberSixty, notFormalExpression), nil, nil},
+		{NewGreaterThanOrEqualOperator(numberSixty, notFormalExpression), nil, nil},
+		{NewLessThanOperator(numberSixty, notFormalExpression), nil, nil},
+		{NewLessThanOrEqualOperator(numberSixty, notFormalExpression), nil, nil},
+		{NewEqualToOperator(numberSixty, notFormalExpression), nil, nil},
+		{NewNotEqualToOperator(numberSixty, notFormalExpression), nil, nil},
+		{NewLikeOperator(stringBob, notFormalExpression), nil, nil},
+		{NewNotLikeOperator(stringBob, notFormalExpression), nil, nil},
+	}
+
 	tests.Run(t, []string{"bucket"}, "bucket")
 }
 

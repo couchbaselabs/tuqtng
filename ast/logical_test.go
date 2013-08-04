@@ -84,6 +84,20 @@ func TestBooleanVerifyFormalNotation(t *testing.T) {
 		{NewOrOperator(ExpressionList{booleanTrue, notFormalExpression}), nil, notFormalExpressionError},
 	}
 
+	tests.Run(t, []string{"bucket", "child"}, "")
+
+	// again with single bucket
+	tests = ExpressionVerifyFormalNotationTestSet{
+		// first arg not formal
+		{NewAndOperator(ExpressionList{notFormalExpression, booleanTrue}), nil, nil},
+		{NewOrOperator(ExpressionList{notFormalExpression, booleanTrue}), nil, nil},
+		{NewNotOperator(notFormalExpression), nil, nil},
+
+		// second arg not formal
+		{NewAndOperator(ExpressionList{booleanTrue, notFormalExpression}), nil, nil},
+		{NewOrOperator(ExpressionList{booleanTrue, notFormalExpression}), nil, nil},
+	}
+
 	tests.Run(t, []string{"bucket"}, "bucket")
 }
 
@@ -162,6 +176,10 @@ func TestBoolean(t *testing.T) {
 		{NewNotOperator(null), nil, nil},
 		{NewNotOperator(missingProperty), nil, &dparval.Undefined{"dne"}},
 		{NewNotOperator(booleanFalse), true, nil},
+
+		// OTHER ERRORS
+		{NewAndOperator(ExpressionList{newInternalErrorExpression(), booleanTrue}), nil, internalError},
+		{NewOrOperator(ExpressionList{newInternalErrorExpression(), booleanTrue}), nil, internalError},
 	}
 
 	tests.Run(t)

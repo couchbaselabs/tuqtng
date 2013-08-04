@@ -74,5 +74,15 @@ func TestStringVerifyFormalNotation(t *testing.T) {
 		{NewStringConcatenateOperator(stringCouchbase, notFormalExpression), nil, notFormalExpressionError},
 	}
 
+	tests.Run(t, []string{"bucket", "child"}, "")
+
+	// again with single bucket
+	tests = ExpressionVerifyFormalNotationTestSet{
+		// first arg not formal
+		{NewStringConcatenateOperator(notFormalExpression, stringServer), nil, nil},
+		// second arg not formal
+		{NewStringConcatenateOperator(stringCouchbase, notFormalExpression), nil, nil},
+	}
+
 	tests.Run(t, []string{"bucket"}, "bucket")
 }
