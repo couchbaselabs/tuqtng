@@ -25,9 +25,7 @@ func NewExpressionEvaluatorSource() *ExpressionEvaluatorSource {
 	}
 }
 
-func (this *ExpressionEvaluatorSource) SetSource(source Operator) {
-	panic("Cannot set source for a datasource")
-}
+func (this *ExpressionEvaluatorSource) SetSource(source Operator) {}
 
 func (this *ExpressionEvaluatorSource) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel

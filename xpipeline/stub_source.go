@@ -27,9 +27,7 @@ func NewStubSource(data dparval.ValueCollection) *StubSource {
 	}
 }
 
-func (this *StubSource) SetSource(Operator) {
-	panic("stub source does not have a source")
-}
+func (this *StubSource) SetSource(Operator) {}
 
 func (this *StubSource) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel

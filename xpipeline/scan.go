@@ -31,9 +31,7 @@ func NewScan(bucket catalog.Bucket, scanner catalog.Scanner) *Scan {
 	}
 }
 
-func (this *Scan) SetSource(source Operator) {
-	panic("Cannot set source for a datasource")
-}
+func (this *Scan) SetSource(source Operator) {}
 
 func (this *Scan) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
