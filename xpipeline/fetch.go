@@ -11,6 +11,7 @@ package xpipeline
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
@@ -42,6 +43,7 @@ func (this *Fetch) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) 
 }
 
 func (this *Fetch) Run() {
+	defer this.bucket.Release()
 	this.Base.RunOperator(this)
 }
 
@@ -86,10 +88,12 @@ func (this *Fetch) flushBatch() bool {
 	}
 
 	// now do a bulk fetch
+	log.Printf("doing bulk request for %d ids", len(ids))
 	bulkResponse, err := this.bucket.BulkFetch(ids)
 	if err != nil {
 		return this.Base.SendError(query.NewError(err, "error getting bulk response"))
 	}
+	log.Printf("got bulk response with %d responses", len(bulkResponse))
 
 	// now we need to emit the bulk fetched items in the correct order (from the id list)
 	for _, v := range ids {
