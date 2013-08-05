@@ -59,7 +59,6 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel, e
 				ec <- query.NewBucketDoesNotExist(from.Bucket)
 				return
 			}
-			defer bucket.Release()
 
 			// find all docs scanner
 			scanners, err := bucket.Scanners()

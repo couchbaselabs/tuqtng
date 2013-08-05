@@ -42,7 +42,6 @@ func (this *Fetch) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) 
 }
 
 func (this *Fetch) Run() {
-	defer this.bucket.Release()
 	this.Base.RunOperator(this)
 }
 

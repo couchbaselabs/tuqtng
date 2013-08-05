@@ -12,12 +12,13 @@ package couchbase
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"time"
 
+	"github.com/couchbaselabs/dparval"
 	cb "github.com/couchbaselabs/go-couchbase"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/couchbaselabs/dparval"
 )
 
 type site struct {
@@ -50,9 +51,10 @@ func NewSite(url string) (catalog.Site, query.Error) {
 }
 
 type pool struct {
-	site   *site
-	name   string
-	cbpool cb.Pool
+	site        *site
+	name        string
+	cbpool      cb.Pool
+	bucketCache map[string]catalog.Bucket
 }
 
 func (p *pool) Name() string {
@@ -68,7 +70,16 @@ func (p *pool) BucketNames() ([]string, query.Error) {
 }
 
 func (p *pool) Bucket(name string) (catalog.Bucket, query.Error) {
-	return newBucket(p, name)
+	bucket, ok := p.bucketCache[name]
+	if !ok {
+		var err query.Error
+		bucket, err = newBucket(p, name)
+		if err != nil {
+			return nil, err
+		}
+		p.bucketCache[name] = bucket
+	}
+	return bucket, nil
 }
 
 func (p *pool) refresh() {
@@ -87,9 +98,10 @@ func newPool(s *site, name string) (*pool, query.Error) {
 		return nil, query.NewError(nil, fmt.Sprintf("Pool %v not found.", name))
 	}
 	rv := pool{
-		site:   s,
-		name:   name,
-		cbpool: cbpool,
+		site:        s,
+		name:        name,
+		cbpool:      cbpool,
+		bucketCache: make(map[string]catalog.Bucket),
 	}
 	go keepPoolFresh(&rv)
 	return &rv, nil
@@ -238,6 +250,7 @@ func (vs *viewScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.Erro
 
 	var viewRow cb.ViewRow
 	var err query.Error
+	sentRows := false
 	ok := true
 	for ok {
 		select {
@@ -246,9 +259,27 @@ func (vs *viewScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.Erro
 				doc := dparval.NewValue(map[string]interface{}{})
 				doc.SetAttachment("meta", map[string]interface{}{"id": viewRow.ID})
 				ch <- doc
+				sentRows = true
 			}
 		case err, ok = <-viewErrChannel:
 			if err != nil {
+				// check to possibly detect a bucket that was already deleted
+				if !sentRows {
+					_, err := http.Get(vs.bucket.cbbucket.URI)
+					if err != nil {
+						// remove this specific bucket from the pool cache
+						delete(vs.bucket.pool.bucketCache, vs.bucket.Name())
+						// close this bucket
+						vs.bucket.Release()
+						// ask the pool to refresh
+						vs.bucket.pool.refresh()
+						// bucket doesnt exist any more
+						errch <- query.NewError(nil, fmt.Sprintf("Bucket %v not found.", vs.bucket.Name()))
+						return
+					}
+
+				}
+
 				errch <- err
 				return
 			}

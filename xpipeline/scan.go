@@ -40,12 +40,6 @@ func (this *Scan) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 func (this *Scan) Run() {
 	defer close(this.itemChannel)
 	defer close(this.supportChannel)
-	// FIXME this is pending further review
-	// a recent change to go-couchbase made this cause problems
-	// the bucket (same reference) will be closed by fetch
-	// this is NOT a safe assumption, as in the future
-	// we may NOT always need to fetch
-	//defer this.bucket.Release()
 
 	scannerItemChannel := make(dparval.ValueChannel)
 	scannerWarnChannel := make(query.ErrorChannel)
