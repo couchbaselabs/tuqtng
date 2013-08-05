@@ -44,62 +44,32 @@ func (this *Project) Run() {
 func (this *Project) processItem(item *dparval.Value) bool {
 	resultMap := map[string]interface{}{}
 	for _, resultItem := range this.Result {
+
+		val, err := projectedValueOfResultExpression(item, resultItem)
+		if err != nil {
+			switch err := err.(type) {
+			case *dparval.Undefined:
+				// undefined contributes nothing to the result map
+				continue
+			default:
+				return this.Base.SendError(query.NewError(err, "unexpected error projecting dot star expression"))
+			}
+		}
+
 		if resultItem.Star {
-			if resultItem.Expr != nil {
-				// evaluate this expression first
-				val, err := resultItem.Expr.Evaluate(item)
-				if err != nil {
-					switch err := err.(type) {
-					case *dparval.Undefined:
-						// undefined contributes nothing to the result map
-						// but otherwise is NOT an error
-						// FIXME review if this should be a warning
-						continue
-					default:
-						return this.Base.SendError(query.NewError(err, "unexpected error projecting dot star expression"))
-					}
-				}
-
-				if val.Type() == dparval.OBJECT {
-					valval := val.Value()
-					switch valval := valval.(type) {
-					case map[string]interface{}:
-						// then if the result was an object
-						// add its contents ot the result map
-						for k, v := range valval {
-							resultMap[k] = v
-						}
-					}
-				}
-
-			} else {
-				if item.Type() == dparval.OBJECT {
-					// just a star, get the value, if its a map project the key/value pairs
-					val := item.Value()
-					switch val := val.(type) {
-					case map[string]interface{}:
-						for k, v := range val {
-							resultMap[k] = v
-						}
+			if val != nil {
+				valval := val.Value()
+				switch valval := valval.(type) {
+				case map[string]interface{}:
+					// then if the result was an object
+					// add its contents ot the result map
+					for k, v := range valval {
+						resultMap[k] = v
 					}
 				}
 			}
-		} else if resultItem.Expr != nil {
-			// evaluate the expression
-			val, err := resultItem.Expr.Evaluate(item)
-			if err != nil {
-				switch err := err.(type) {
-				case *dparval.Undefined:
-					// undefined contributes nothing to the result map
-					// but otherwise is NOT an error
-					// FIXME review if this should be a warning
-					continue
-				default:
-					return this.Base.SendError(query.NewError(err, "unexpected error projecting expression"))
-				}
-			}
+		} else {
 			resultMap[resultItem.As] = val
-
 		}
 	}
 

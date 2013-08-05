@@ -42,50 +42,19 @@ func (this *ProjectInline) Run() {
 func (this *ProjectInline) processItem(item *dparval.Value) bool {
 	var res interface{}
 
-	if this.Result.Star {
-		if this.Result.Expr != nil {
-			// evaluate this expression first
-			val, err := this.Result.Expr.Evaluate(item)
-			if err != nil {
-				switch err := err.(type) {
-				case *dparval.Undefined:
-					// undefined contributes nothing to the result
-					// but otherwise is NOT an error
-					// FIXME review if this should be a warning
-					return true
-				default:
-					return this.Base.SendError(query.NewError(err, "unexpected error projecting dot star expression"))
-				}
-			}
-			if val.Type() == dparval.OBJECT {
-				valval := val.Value()
-				switch valval := valval.(type) {
-				case map[string]interface{}:
-					// then if the result was an object
-					// then project it
-					res = valval
-				}
-			}
-		} else {
-			// just a star, make item the result
-			res = item.Value()
+	val, err := projectedValueOfResultExpression(item, this.Result)
+	if err != nil {
+		switch err := err.(type) {
+		case *dparval.Undefined:
+			// undefined contributes nothing to the result map
+			// but otherwise is NOT an error
+			// FIXME review if this should be a warning
+			return true
+		default:
+			return this.Base.SendError(query.NewError(err, "unexpected error projecting expression"))
 		}
-	} else if this.Result.Expr != nil {
-		// evaluate the expression
-		val, err := this.Result.Expr.Evaluate(item)
-		if err != nil {
-			switch err := err.(type) {
-			case *dparval.Undefined:
-				// undefined contributes nothing to the result map
-				// but otherwise is NOT an error
-				// FIXME review if this should be a warning
-				return true
-			default:
-				return this.Base.SendError(query.NewError(err, "unexpected error projecting expression"))
-			}
-		}
-		res = val
 	}
+	res = val
 
 	// create the actual result Item
 	finalItem := dparval.NewValue(res)
