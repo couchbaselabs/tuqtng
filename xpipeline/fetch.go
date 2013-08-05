@@ -11,7 +11,6 @@ package xpipeline
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
