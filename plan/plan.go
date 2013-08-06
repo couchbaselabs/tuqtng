@@ -99,16 +99,18 @@ func (this *Filter) Sources() []PlanElement {
 }
 
 type Order struct {
-	Type  string                `json:"type"`
-	Input PlanElement           `json:"input"`
-	Sort  []*ast.SortExpression `json:"sort"`
+	Type            string                `json:"type"`
+	Input           PlanElement           `json:"input"`
+	Sort            []*ast.SortExpression `json:"sort"`
+	ExplicitAliases []string              `json:"explicit_aliases"`
 }
 
-func NewOrder(input PlanElement, sort []*ast.SortExpression) *Order {
+func NewOrder(input PlanElement, sort []*ast.SortExpression, explicitAliases []string) *Order {
 	return &Order{
-		Type:  "order",
-		Input: input,
-		Sort:  sort,
+		Type:            "order",
+		Input:           input,
+		Sort:            sort,
+		ExplicitAliases: explicitAliases,
 	}
 }
 

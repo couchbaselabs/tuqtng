@@ -105,7 +105,8 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel, e
 	}
 
 	if stmt.GetOrderBy() != nil {
-		lastStep = plan.NewOrder(lastStep, stmt.GetOrderBy())
+		explicitAliases := stmt.GetExplicitProjectionAliases()
+		lastStep = plan.NewOrder(lastStep, stmt.GetOrderBy(), explicitAliases)
 	}
 
 	if stmt.GetOffset() != 0 {

@@ -26,19 +26,21 @@ type Statement interface {
 	IsExplainOnly() bool
 	VerifySemantics() error
 	GetFromAliases() []string
+	GetExplicitProjectionAliases() []string
 }
 
 type SelectStatement struct {
-	Distinct    bool                 `json:"distinct"`
-	Select      ResultExpressionList `json:"select"`
-	From        *From                `json:"from"`
-	Where       Expression           `json:"where"`
-	GroupBy     ExpressionList       `json:"group_by"`
-	Having      Expression           `json:"having"`
-	OrderBy     SortExpressionList   `json:"orderby"`
-	Limit       int                  `json:"limit"`
-	Offset      int                  `json:"offset"`
-	ExplainOnly bool                 `json:"explain"`
+	Distinct                  bool                 `json:"distinct"`
+	Select                    ResultExpressionList `json:"select"`
+	From                      *From                `json:"from"`
+	Where                     Expression           `json:"where"`
+	GroupBy                   ExpressionList       `json:"group_by"`
+	Having                    Expression           `json:"having"`
+	OrderBy                   SortExpressionList   `json:"orderby"`
+	Limit                     int                  `json:"limit"`
+	Offset                    int                  `json:"offset"`
+	ExplainOnly               bool                 `json:"explain"`
+	explicitProjectionAliases []string
 }
 
 func NewSelectStatement() *SelectStatement {
@@ -98,15 +100,20 @@ func (this *SelectStatement) IsExplainOnly() bool {
 	return this.ExplainOnly
 }
 
+func (this *SelectStatement) GetExplicitProjectionAliases() []string {
+	return this.explicitProjectionAliases
+}
+
 func (this *SelectStatement) VerifySemantics() error {
+	var err error
 	// get the list of explicit projection aliases, and check it for duplicates
-	explicitProjectionAliases, err := this.GetResultExpressionList().CheckForDuplicateAliases()
+	this.explicitProjectionAliases, err = this.Select.CheckForDuplicateAliases()
 	if err != nil {
 		return err
 	}
 
 	// now apply default naming function
-	err = this.GetResultExpressionList().AssignDefaultNames(explicitProjectionAliases)
+	err = this.Select.AssignDefaultNames(this.explicitProjectionAliases)
 	if err != nil {
 		return err
 	}
@@ -118,7 +125,7 @@ func (this *SelectStatement) VerifySemantics() error {
 	}
 
 	// verify formal notations
-	err = this.verifyFormalNotation(explicitProjectionAliases)
+	err = this.verifyFormalNotation(this.explicitProjectionAliases)
 	if err != nil {
 		return err
 	}
@@ -179,8 +186,18 @@ func (this *SelectStatement) verifyFormalNotation(explicitProjectionAliases []st
 			this.Where = newwhere
 		}
 	}
+
 	// verify the order by(references to projection aliases ARE allowed)
-	err = this.OrderBy.VerifyFormalNotation([]string{}, aliases, defaultAlias)
+	// since order by CAN reference the explicit aliases, these must be added to the list
+	// passed into this phase
+	orderByAliases := make([]string, 0)
+	for _, alias := range aliases {
+		orderByAliases = append(orderByAliases, alias)
+	}
+	for _, alias := range explicitProjectionAliases {
+		orderByAliases = append(orderByAliases, alias)
+	}
+	err = this.OrderBy.VerifyFormalNotation([]string{}, orderByAliases, defaultAlias)
 	if err != nil {
 		return err
 	}

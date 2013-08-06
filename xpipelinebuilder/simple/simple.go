@@ -57,7 +57,7 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 		case *plan.Filter:
 			currentOperator = xpipeline.NewFilter(currentElement.Expr)
 		case *plan.Order:
-			currentOperator = xpipeline.NewOrder(currentElement.Sort)
+			currentOperator = xpipeline.NewOrder(currentElement.Sort, currentElement.ExplicitAliases)
 		case *plan.Limit:
 			currentOperator = xpipeline.NewLimit(currentElement.Val)
 		case *plan.Offset:

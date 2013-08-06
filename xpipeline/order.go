@@ -18,16 +18,18 @@ import (
 )
 
 type Order struct {
-	Base    *BaseOperator
-	OrderBy []*ast.SortExpression
-	buffer  dparval.ValueCollection
+	Base            *BaseOperator
+	OrderBy         []*ast.SortExpression
+	buffer          dparval.ValueCollection
+	explicitAliases []string
 }
 
-func NewOrder(orderBy []*ast.SortExpression) *Order {
+func NewOrder(orderBy []*ast.SortExpression, explicitAliases []string) *Order {
 	return &Order{
-		Base:    NewBaseOperator(),
-		OrderBy: orderBy,
-		buffer:  make(dparval.ValueCollection, 0),
+		Base:            NewBaseOperator(),
+		OrderBy:         orderBy,
+		buffer:          make(dparval.ValueCollection, 0),
+		explicitAliases: explicitAliases,
 	}
 }
 
@@ -44,6 +46,19 @@ func (this *Order) Run() {
 }
 
 func (this *Order) processItem(item *dparval.Value) bool {
+	if this.explicitAliases != nil {
+		projection := item.GetAttachment("projection")
+		projectionValue, ok := projection.(*dparval.Value)
+		if ok {
+			for _, explicitAlias := range this.explicitAliases {
+				// put the explicit alias values from the projection into the item
+				aliasedProjectedValue, err := projectionValue.Path(explicitAlias)
+				if err == nil {
+					item.SetPath(explicitAlias, aliasedProjectedValue)
+				}
+			}
+		}
+	}
 	this.buffer = append(this.buffer, item)
 	return true
 }
