@@ -23,9 +23,9 @@ func TestPlanJSON(t *testing.T) {
 		input *Plan
 	}{
 		{&Plan{NewScan("bucket", "index")}},
-		{&Plan{NewFetch(NewScan("bucket", "index"), "bucket")}},
-		{&Plan{NewFilter(NewFetch(NewScan("bucket", "index"), "bucket"), ast.NewLiteralBool(true))}},
-		{&Plan{NewFilter(NewFetch(NewScan("bucket", "index"), "bucket"), ast.NewPlusOperator(ast.NewLiteralNumber(1.0), ast.NewLiteralNumber(1.0)))}},
+		{&Plan{NewFetch(NewScan("bucket", "index"), "bucket", ast.NewFunctionCall("VALUE", ast.FunctionArgExpressionList{}), "bucket")}},
+		{&Plan{NewFilter(NewFetch(NewScan("bucket", "index"), "bucket", ast.NewFunctionCall("VALUE", ast.FunctionArgExpressionList{}), "bucket"), ast.NewLiteralBool(true))}},
+		{&Plan{NewFilter(NewFetch(NewScan("bucket", "index"), "bucket", ast.NewFunctionCall("VALUE", ast.FunctionArgExpressionList{}), "bucket"), ast.NewPlusOperator(ast.NewLiteralNumber(1.0), ast.NewLiteralNumber(1.0)))}},
 	}
 
 	for _, x := range tests {

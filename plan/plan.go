@@ -59,16 +59,20 @@ func (this *Scan) Sources() []PlanElement {
 }
 
 type Fetch struct {
-	Type   string      `json:"type"`
-	Input  PlanElement `json:"input"`
-	Bucket string      `json:"bucket"`
+	Type       string         `json:"type"`
+	Input      PlanElement    `json:"input"`
+	Bucket     string         `json:"bucket"`
+	Projection ast.Expression `json:"projection"`
+	As         string         `json:"as"`
 }
 
-func NewFetch(input PlanElement, bucket string) *Fetch {
+func NewFetch(input PlanElement, bucket string, projection ast.Expression, as string) *Fetch {
 	return &Fetch{
-		Type:   "fetch",
-		Input:  input,
-		Bucket: bucket,
+		Type:       "fetch",
+		Input:      input,
+		Bucket:     bucket,
+		Projection: projection,
+		As:         as,
 	}
 }
 

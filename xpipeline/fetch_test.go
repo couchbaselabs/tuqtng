@@ -12,6 +12,7 @@ package xpipeline
 import (
 	"testing"
 
+	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog/mock"
 )
 
@@ -35,7 +36,7 @@ func TestFetch(t *testing.T) {
 	}
 
 	scan := NewScan(bucket, scanner)
-	fetch := NewFetch(bucket)
+	fetch := NewFetch(bucket, ast.NewFunctionCall("VALUE", ast.FunctionArgExpressionList{}), "bucket")
 	fetch.SetSource(scan)
 
 	fetchItemChannel, _ := fetch.GetChannels()
@@ -44,7 +45,11 @@ func TestFetch(t *testing.T) {
 
 	count := 0
 	for item := range fetchItemChannel {
-		iValue, err := item.Path("i")
+		bucketValue, err := item.Path("bucket")
+		if err != nil {
+			t.Errorf("Expected item to contain value at path bucket")
+		}
+		iValue, err := bucketValue.Path("i")
 		if err != nil {
 			t.Errorf("Expected item to contain value at path i")
 		}

@@ -53,7 +53,7 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 			if err != nil {
 				return nil, err
 			}
-			currentOperator = xpipeline.NewFetch(bucket)
+			currentOperator = xpipeline.NewFetch(bucket, currentElement.Projection, currentElement.As)
 		case *plan.Filter:
 			currentOperator = xpipeline.NewFilter(currentElement.Expr)
 		case *plan.Order:

@@ -11,8 +11,10 @@ package xpipeline
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -20,16 +22,20 @@ import (
 const FETCH_BATCH_SIZE = 1000
 
 type Fetch struct {
-	Base   *BaseOperator
-	bucket catalog.Bucket
-	batch  dparval.ValueCollection
+	Base       *BaseOperator
+	bucket     catalog.Bucket
+	batch      dparval.ValueCollection
+	projection ast.Expression
+	as         string
 }
 
-func NewFetch(bucket catalog.Bucket) *Fetch {
+func NewFetch(bucket catalog.Bucket, projection ast.Expression, as string) *Fetch {
 	return &Fetch{
-		Base:   NewBaseOperator(),
-		bucket: bucket,
-		batch:  make(dparval.ValueCollection, 0, FETCH_BATCH_SIZE),
+		Base:       NewBaseOperator(),
+		bucket:     bucket,
+		batch:      make(dparval.ValueCollection, 0, FETCH_BATCH_SIZE),
+		projection: projection,
+		as:         as,
 	}
 }
 
@@ -97,7 +103,27 @@ func (this *Fetch) flushBatch() bool {
 		if !ok {
 			return this.Base.SendError(query.NewError(nil, fmt.Sprintf("missing value bulk response for key `%s`", v)))
 		} else {
-			this.Base.SendItem(item)
+			if this.projection != nil {
+				projectedVal, err := projectedValueOfResultExpression(item, ast.NewResultExpression(this.projection))
+				if err != nil {
+					switch err := err.(type) {
+					case *dparval.Undefined:
+						// undefined contributes nothing to the result map
+						continue
+					default:
+						log.Printf("doc is %v", item)
+						return this.Base.SendError(query.NewError(err, "unexpected error projecting fetch expression"))
+					}
+				} else {
+					if this.as != "" {
+						this.Base.SendItem(dparval.NewValue(map[string]interface{}{this.as: projectedVal}))
+					} else {
+						this.Base.SendItem(projectedVal)
+					}
+				}
+			} else {
+				panic("must have a projection now")
+			}
 		}
 	}
 	return true

@@ -72,15 +72,7 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel, e
 				switch scanner.(type) {
 				case catalog.FullScanner:
 					lastStep = plan.NewScan(bucket.Name(), scanner.Name())
-					lastStep = plan.NewFetch(lastStep, bucket.Name())
-					if from.Projection != nil {
-						if from.As == "" {
-							// insert a project-inline phase to extrac the sub-document
-							lastStep = plan.NewProjectorInline(lastStep, ast.NewResultExpression(from.Projection))
-						} else {
-							lastStep = plan.NewProjector(lastStep, ast.ResultExpressionList{ast.NewResultExpressionWithAlias(from.Projection, from.As)}, false)
-						}
-					}
+					lastStep = plan.NewFetch(lastStep, bucket.Name(), from.Projection, from.As)
 					nextFrom := from.Over
 					for nextFrom != nil {
 						// add document joins
