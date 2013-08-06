@@ -98,14 +98,14 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel, e
 		lastStep = plan.NewFilter(lastStep, stmt.GetWhere())
 	}
 
-	if stmt.GetOrderBy() != nil {
-		lastStep = plan.NewOrder(lastStep, stmt.GetOrderBy())
-	}
-
 	lastStep = plan.NewProjector(lastStep, stmt.GetResultExpressionList(), true)
 
 	if stmt.IsDistinct() {
 		lastStep = plan.NewEliminateDuplicates(lastStep)
+	}
+
+	if stmt.GetOrderBy() != nil {
+		lastStep = plan.NewOrder(lastStep, stmt.GetOrderBy())
 	}
 
 	if stmt.GetOffset() != 0 {
