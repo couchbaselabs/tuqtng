@@ -62,7 +62,8 @@ func (this ResultExpressionList) VerifyFormalNotation(aliases []string, defaultA
 // this function should be called before assigning default names
 // it should check to see if any explicitly named aliases are duplicated
 // if so, this is an error
-func (this ResultExpressionList) CheckForDuplicateAliases() error {
+func (this ResultExpressionList) CheckForDuplicateAliases() ([]string, error) {
+	rv := []string{}
 	namesInUse := map[string]bool{}
 
 	for _, resultExpr := range this {
@@ -70,39 +71,38 @@ func (this ResultExpressionList) CheckForDuplicateAliases() error {
 			_, ok := namesInUse[resultExpr.As]
 			if !ok {
 				namesInUse[resultExpr.As] = true
+				rv = append(rv, resultExpr.As)
 			} else {
 				// name is already in use
-				return &DuplicateAlias{resultExpr.As}
+				return nil, &DuplicateAlias{resultExpr.As}
 			}
 		}
 	}
 
-	return nil
+	return rv, nil
 }
 
 // this function should walk through the result expression list
 // assign names to any unnamed expressions
-func (this ResultExpressionList) AssignDefaultNames() {
-
-	namesInUse := make([]string, 0)
-
-	// first collect the names
-	for _, resultExpr := range this {
-		if resultExpr.As != "" {
-			namesInUse = append(namesInUse, resultExpr.As)
-		}
-	}
+func (this ResultExpressionList) AssignDefaultNames(namesInUse []string) error {
 
 	// now try to assign a name if expression is a property
 	for _, resultExpr := range this {
-		prop, ok := (resultExpr.Expr).(*Property)
-		if resultExpr.As == "" && ok {
-			// assign the new name
-			if candidateName, uniq := propertyName(prop, namesInUse); uniq {
+
+		// here we're only concerned with expressions not explicitly named
+		if resultExpr.As == "" {
+			// we're looking for expressions ending in a property
+			prop := expressionEndsInProperty(resultExpr.Expr)
+			if prop != nil {
 				// assign the new name
-				resultExpr.As = candidateName
-				// record that this name is used
-				namesInUse = append(namesInUse, candidateName)
+				if candidateName, uniq := propertyName(prop, namesInUse); uniq {
+					// assign the new name
+					resultExpr.As = candidateName
+					// record that this name is used
+					namesInUse = append(namesInUse, candidateName)
+				} else {
+					return &DuplicateAlias{prop.Path}
+				}
 			}
 		}
 	}
@@ -117,6 +117,18 @@ func (this ResultExpressionList) AssignDefaultNames() {
 		}
 	}
 
+	return nil
+}
+
+func (this ResultExpressionList) String() string {
+	rv := ""
+	for i, expr := range this {
+		if i != 0 {
+			rv = rv + ", "
+		}
+		rv = rv + fmt.Sprintf("%v", expr)
+	}
+	return rv
 }
 
 type ResultExpression struct {
@@ -151,6 +163,23 @@ func NewResultExpressionWithAlias(expr Expression, as string) *ResultExpression 
 		Expr: expr,
 		As:   as,
 	}
+}
+
+// if this expression ends in a Property
+// return that property
+// otherwise nil
+// this allows Expressions of the form
+// a to return the Property a
+// and
+// a.b.c to return the Property c
+func expressionEndsInProperty(expr Expression) *Property {
+	switch expr := expr.(type) {
+	case *Property:
+		return expr
+	case *DotMemberOperator:
+		return expr.Right
+	}
+	return nil
 }
 
 // this function returns (true, property path) unless the property

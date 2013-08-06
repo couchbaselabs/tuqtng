@@ -11,7 +11,7 @@
         "statements": "SELECT emp.name FROM contacts AS emp WHERE name = 'ian'",
         "results": [
             {
-                "$1": "ian"
+                "name": "ian"
             }
         ]
     },
@@ -19,7 +19,7 @@
         "statements": "SELECT contacts.name FROM contacts WHERE name = 'ian'",
         "results": [
             {
-                "$1": "ian"
+                "name": "ian"
             }
         ]
     },
@@ -77,7 +77,7 @@
         "statements": "SELECT contacts.contacts FROM contacts WHERE name = 'jane'",
         "results": [
             {
-                "$1": [
+                "contacts": [
                     {
                        "name": "fred"
                     },

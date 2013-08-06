@@ -19,13 +19,13 @@
         "statements": "SELECT pricing.list FROM catalog ORDER BY pricing.list ASC",
         "results": [
         {
-            "$1": 300
+            "list": 300
         },
         {
-            "$1": 599
+            "list": 599
         },
         {
-            "$1": 799
+            "list": 799
         }
     ]
     },
@@ -34,13 +34,13 @@
         "statements": "SELECT pricing.list FROM catalog ORDER BY pricing.list DESC",
         "results": [
         {
-            "$1": 799
+            "list": 799
         },
         {
-            "$1": 599
+            "list": 599
         },
         {
-            "$1": 300
+            "list": 300
         }
     ]
     },

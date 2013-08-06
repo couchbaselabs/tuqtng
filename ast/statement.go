@@ -99,14 +99,17 @@ func (this *SelectStatement) IsExplainOnly() bool {
 }
 
 func (this *SelectStatement) VerifySemantics() error {
-	//check for duplicate aliases in the projection
-	err := this.GetResultExpressionList().CheckForDuplicateAliases()
+	// get the list of explicit projection aliases, and check it for duplicates
+	explicitProjectionAliases, err := this.GetResultExpressionList().CheckForDuplicateAliases()
 	if err != nil {
 		return err
 	}
 
 	// now apply default naming function
-	this.GetResultExpressionList().AssignDefaultNames()
+	err = this.GetResultExpressionList().AssignDefaultNames(explicitProjectionAliases)
+	if err != nil {
+		return err
+	}
 
 	// fix up all the froms (FIXME need to refactor this into FROM/OVER clenaup)
 	if this.From != nil {

@@ -41,7 +41,10 @@ func TestAssignDefaultNames(t *testing.T) {
 	}
 
 	for _, x := range tests {
-		x.input.AssignDefaultNames()
+		err := x.input.AssignDefaultNames([]string{})
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
 		if !reflect.DeepEqual(x.input, x.output) {
 			t.Errorf("Expected %v, got %v", x.output, x.input)
 		}

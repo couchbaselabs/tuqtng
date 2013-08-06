@@ -7,48 +7,12 @@
     },
     {
         "statements": "SELECT title, name, details.format, details.title, title FROM catalog",
-        "results": [
-        {
-            "$2": "INFERNO",
-            "$3": "Inferno",
-            "title": "Inferno"
-        },
-        {
-            "$1": "DVD",
-            "$2": "ZERO DARK THIRTY",
-            "$3": "Zero Dark Thirty",
-            "title": "Zero Dark Thirty"
-        },
-        {
-            "$1": "Box Set",
-            "$2": "SHERLOCK: SERIES 1",
-            "$3": "Sherlock: Series 1",
-            "title": "Sherlock: Series 1"
-        }
-    ]
+        "error": "Semantic Error - cause: alias title is defined more than once"
     },
 
     {
         "statements": "SELECT title, details.format, name, details.title, title FROM catalog" ,
-        "results": [
-        {
-            "$2": "INFERNO",
-            "$3": "Inferno",
-            "title": "Inferno"
-        },
-        {
-            "$1": "DVD",
-            "$2": "ZERO DARK THIRTY",
-            "$3": "Zero Dark Thirty",
-            "title": "Zero Dark Thirty"
-        },
-        {
-            "$1": "Box Set",
-            "$2": "SHERLOCK: SERIES 1",
-            "$3": "Sherlock: Series 1",
-            "title": "Sherlock: Series 1"
-        }
-    ]
+        "error": "Semantic Error - cause: alias title is defined more than once"
     },
 
     {
@@ -454,7 +418,7 @@
         "statements": "SELECT catalog.title FROM catalog LIMIT 1",
         "results": [
         {
-            "$1": "Inferno"
+            "title": "Inferno"
         }
     ]
     }

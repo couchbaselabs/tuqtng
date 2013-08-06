@@ -2,14 +2,7 @@
 [
     {
         "statements": "SELECT title, details.format, details.title, title  FROM catalog WHERE pricing.list > 300 and pricing.pct_savings >20",
-        "results": [
-        {
-            "$1": "DVD",
-            "$2": "ZERO DARK THIRTY",
-            "$3": "Zero Dark Thirty",
-            "title": "Zero Dark Thirty"
-        }
-    ]
+        "error": "Semantic Error - cause: alias title is defined more than once"
     },
 
     {
@@ -138,7 +131,7 @@
         "statements": "SELECT dimensions.height FROM catalog WHERE pricing.list = 799",
         "results": [
         {
-            "$1": 1.2
+            "height": 1.2
         }
     ]
     },

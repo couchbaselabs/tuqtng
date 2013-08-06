@@ -49,8 +49,13 @@
     },
 
     {
-        "comments": "alias conflict with a column name in result expr",
+        "comments": "alias conflict with a column name in result expr, UPDATED now an error",
         "statements": "SELECT title, details.title AS title FROM catalog",
+        "error": "Semantic Error - cause: alias title is defined more than once"
+    },
+
+    {
+        "statements": "SELECT title AS `$1`, details.title FROM catalog",
         "results": [
         {
             "$1": "Inferno",
@@ -68,36 +73,18 @@
     },
 
     {
-        "statements": "SELECT title AS `$1`, details.title FROM catalog",
-        "results": [
-        {
-            "$1": "Inferno",
-            "$2": "INFERNO"
-        },
-        {
-            "$1": "Zero Dark Thirty",
-            "$2": "ZERO DARK THIRTY"
-        },
-        {
-            "$1": "Sherlock: Series 1",
-            "$2": "SHERLOCK: SERIES 1"
-        }
-    ]
-    },
-
-    {
         "statements": "SELECT title AS `$2`, details.title FROM catalog",
         "results": [
         {
-            "$1": "INFERNO",
+            "title": "INFERNO",
             "$2": "Inferno"
         },
         {
-            "$1": "ZERO DARK THIRTY",
+            "title": "ZERO DARK THIRTY",
             "$2": "Zero Dark Thirty"
         },
         {
-            "$1": "SHERLOCK: SERIES 1",
+            "title": "SHERLOCK: SERIES 1",
             "$2": "Sherlock: Series 1"
         }
     ]

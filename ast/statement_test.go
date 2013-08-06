@@ -89,7 +89,7 @@ func TestSelectStatementWithDuplicateAlias(t *testing.T) {
 func TestSelectStatementDefaultNaming(t *testing.T) {
 	stmt := NewSelectStatement()
 
-	stmt.Select = ResultExpressionList{NewResultExpression(NewProperty("foo")), NewResultExpression(NewProperty("foo"))}
+	stmt.Select = ResultExpressionList{NewResultExpression(NewProperty("foo")), NewResultExpression(NewProperty("foo2"))}
 
 	err := stmt.VerifySemantics()
 	if err != nil {
@@ -100,8 +100,8 @@ func TestSelectStatementDefaultNaming(t *testing.T) {
 		t.Errorf("Expected alias ot be foo, got %v", stmt.Select[0].As)
 	}
 
-	if stmt.Select[1].As != "$1" {
-		t.Errorf("Expected alias to be $1, got %v", stmt.Select[1].As)
+	if stmt.Select[1].As != "foo2" {
+		t.Errorf("Expected alias to be foo2, got %v", stmt.Select[1].As)
 	}
 }
 
