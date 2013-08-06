@@ -72,15 +72,15 @@ func (this *PlusOperator) Validate() error {
 	return nil
 }
 
-func (this *PlusOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
-	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+func (this *PlusOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
 	if newleft != nil {
 		this.Left = newleft
 	}
-	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	newright, err := this.Right.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
@@ -149,15 +149,15 @@ func (this *SubtractOperator) Validate() error {
 	return nil
 }
 
-func (this *SubtractOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
-	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+func (this *SubtractOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
 	if newleft != nil {
 		this.Left = newleft
 	}
-	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	newright, err := this.Right.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
@@ -226,15 +226,15 @@ func (this *MultiplyOperator) Validate() error {
 	return nil
 }
 
-func (this *MultiplyOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
-	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+func (this *MultiplyOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
 	if newleft != nil {
 		this.Left = newleft
 	}
-	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	newright, err := this.Right.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
@@ -303,15 +303,15 @@ func (this *DivideOperator) Validate() error {
 	return nil
 }
 
-func (this *DivideOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
-	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+func (this *DivideOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
 	if newleft != nil {
 		this.Left = newleft
 	}
-	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	newright, err := this.Right.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
@@ -380,15 +380,15 @@ func (this *ModuloOperator) Validate() error {
 	return nil
 }
 
-func (this *ModuloOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
-	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+func (this *ModuloOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
 	if newleft != nil {
 		this.Left = newleft
 	}
-	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	newright, err := this.Right.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
@@ -442,8 +442,8 @@ func (this *ChangeSignOperator) Validate() error {
 	return nil
 }
 
-func (this *ChangeSignOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
-	newoper, err := this.Operand.VerifyFormalNotation(aliases, defaultAlias)
+func (this *ChangeSignOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
+	newoper, err := this.Operand.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}

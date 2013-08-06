@@ -711,7 +711,7 @@ func TestFunctionVerifyFormalNotation(t *testing.T) {
 		},
 	}
 
-	tests.Run(t, []string{"bucket", "child"}, "")
+	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
 
 	// single alias tests
 
@@ -743,7 +743,7 @@ func TestFunctionVerifyFormalNotation(t *testing.T) {
 		},
 	}
 
-	tests.Run(t, []string{"bucket"}, "bucket")
+	tests.Run(t, []string{}, []string{"bucket"}, "bucket")
 
 }
 

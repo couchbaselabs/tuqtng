@@ -40,7 +40,7 @@ func TestEvaluateProperty(t *testing.T) {
 
 func TestPropertyVerifyFormalNotation(t *testing.T) {
 	prop := NewProperty("path")
-	newop, err := prop.VerifyFormalNotation([]string{"bucket"}, "bucket")
+	newop, err := prop.VerifyFormalNotation([]string{}, []string{"bucket"}, "bucket")
 	if err != nil {
 		t.Errorf("Expected no error")
 	}

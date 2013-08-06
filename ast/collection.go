@@ -102,8 +102,8 @@ func (this *CollectionAnyOperator) Validate() error {
 	return nil
 }
 
-func (this *CollectionAnyOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
-	newover, err := this.Over.VerifyFormalNotation(aliases, defaultAlias)
+func (this *CollectionAnyOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
+	newover, err := this.Over.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ func (this *CollectionAnyOperator) VerifyFormalNotation(aliases []string, defaul
 	}
 
 	updatedAliases := append(aliases, this.As)
-	newcond, err := this.Condition.VerifyFormalNotation(updatedAliases, defaultAlias)
+	newcond, err := this.Condition.VerifyFormalNotation(forbiddenAliases, updatedAliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
@@ -215,8 +215,8 @@ func (this *CollectionAllOperator) Validate() error {
 	return nil
 }
 
-func (this *CollectionAllOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
-	newover, err := this.Over.VerifyFormalNotation(aliases, defaultAlias)
+func (this *CollectionAllOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
+	newover, err := this.Over.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
@@ -225,7 +225,7 @@ func (this *CollectionAllOperator) VerifyFormalNotation(aliases []string, defaul
 	}
 
 	updatedAliases := append(aliases, this.As)
-	newcond, err := this.Condition.VerifyFormalNotation(updatedAliases, defaultAlias)
+	newcond, err := this.Condition.VerifyFormalNotation(forbiddenAliases, updatedAliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}

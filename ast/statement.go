@@ -118,7 +118,7 @@ func (this *SelectStatement) VerifySemantics() error {
 	}
 
 	// verify formal notations
-	err = this.verifyFormalNotation()
+	err = this.verifyFormalNotation(explicitProjectionAliases)
 	if err != nil {
 		return err
 	}
@@ -156,7 +156,7 @@ func (this *SelectStatement) validate() error {
 	return nil
 }
 
-func (this *SelectStatement) verifyFormalNotation() error {
+func (this *SelectStatement) verifyFormalNotation(explicitProjectionAliases []string) error {
 	// gather the list of aliases
 	aliases := this.GetFromAliases()
 	defaultAlias := ""
@@ -164,14 +164,14 @@ func (this *SelectStatement) verifyFormalNotation() error {
 		defaultAlias = aliases[0]
 	}
 
-	// verify the projection
-	err := this.Select.VerifyFormalNotation(aliases, defaultAlias)
+	// verify the projection (references to projection aliases not allowed)
+	err := this.Select.VerifyFormalNotation(explicitProjectionAliases, aliases, defaultAlias)
 	if err != nil {
 		return err
 	}
-	// verify the where
+	// verify the where (references to projection aliases not allowed)
 	if this.Where != nil {
-		newwhere, err := this.Where.VerifyFormalNotation(aliases, defaultAlias)
+		newwhere, err := this.Where.VerifyFormalNotation(explicitProjectionAliases, aliases, defaultAlias)
 		if err != nil {
 			return err
 		}
@@ -179,8 +179,8 @@ func (this *SelectStatement) verifyFormalNotation() error {
 			this.Where = newwhere
 		}
 	}
-	// verify the order by
-	err = this.OrderBy.VerifyFormalNotation(aliases, defaultAlias)
+	// verify the order by(references to projection aliases ARE allowed)
+	err = this.OrderBy.VerifyFormalNotation([]string{}, aliases, defaultAlias)
 	if err != nil {
 		return err
 	}

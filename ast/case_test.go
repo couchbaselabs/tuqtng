@@ -204,7 +204,7 @@ func TestCaseVerifyFormalNotation(t *testing.T) {
 		{caseFive, nil, notFormalExpressionError},
 	}
 
-	tests.Run(t, []string{"bucket", "child"}, "")
+	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
 
 	// again with single bucket
 	tests = ExpressionVerifyFormalNotationTestSet{
@@ -213,5 +213,5 @@ func TestCaseVerifyFormalNotation(t *testing.T) {
 		{caseFive, nil, nil},
 	}
 
-	tests.Run(t, []string{"bucket"}, "bucket")
+	tests.Run(t, []string{}, []string{"bucket"}, "bucket")
 }

@@ -127,6 +127,6 @@ func TestCollectionVerifyFormalNotation(t *testing.T) {
 		{allChild, nil, nil},
 	}
 
-	tests.Run(t, []string{"bucket"}, "bucket")
+	tests.Run(t, []string{}, []string{"bucket"}, "bucket")
 
 }

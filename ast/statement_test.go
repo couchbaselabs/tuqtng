@@ -71,7 +71,7 @@ func TestSelectStatement(t *testing.T) {
 func TestSelectStatementWithDuplicateAlias(t *testing.T) {
 	stmt := NewSelectStatement()
 
-	stmt.Select = ResultExpressionList{NewResultExpressionWithAlias(NewProperty("foo"), "foo"), NewResultExpressionWithAlias(NewProperty("foo"), "bar")}
+	stmt.Select = ResultExpressionList{NewResultExpressionWithAlias(NewProperty("foo"), "foo1"), NewResultExpressionWithAlias(NewProperty("foo"), "bar")}
 
 	err := stmt.VerifySemantics()
 	if err != nil {
@@ -108,9 +108,9 @@ func TestSelectStatementDefaultNaming(t *testing.T) {
 func TestSelectStatementVerifyFormalNotation(t *testing.T) {
 
 	goodSelectStmt := NewSelectStatement()
-	goodSelectStmt.Select = ResultExpressionList{NewResultExpression(NewBracketMemberOperator(NewProperty("bucket"), NewProperty("name")))}
+	goodSelectStmt.Select = ResultExpressionList{NewResultExpressionWithAlias(NewBracketMemberOperator(NewProperty("bucket"), NewLiteralString("name")), "the_name")}
 	goodSelectStmt.From = &From{Bucket: "bucket", As: "bucket"}
-	goodSelectStmt.Where = NewBracketMemberOperator(NewProperty("bucket"), NewProperty("name"))
+	goodSelectStmt.Where = NewBracketMemberOperator(NewProperty("bucket"), NewLiteralString("name"))
 
 	tests := []struct {
 		input  *SelectStatement
@@ -120,7 +120,7 @@ func TestSelectStatementVerifyFormalNotation(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		err := test.input.verifyFormalNotation()
+		err := test.input.verifyFormalNotation([]string{"the_name"})
 		if !reflect.DeepEqual(err, test.output) {
 			t.Errorf("Expected error %v, got %v", test.output, err)
 		}

@@ -1,13 +1,13 @@
 [
 
     {
-        "statements": "SELECT title AS T , details.author AS A , pricing.retail AS R, title AS title FROM catalog WHERE title = \"Inferno\"",
+        "statements": "SELECT title AS T , details.author AS A , pricing.retail AS R, title AS Title FROM catalog WHERE title = \"Inferno\"",
         "results": [
         {
             "A": "Dan Brown",
             "R": 270,
             "T": "Inferno",
-            "title": "Inferno"
+            "Title": "Inferno"
         }
     ]
     },

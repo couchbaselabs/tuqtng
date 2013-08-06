@@ -64,7 +64,7 @@ func TestLiteralVerifyFormalNotation(t *testing.T) {
 		{NewLiteralObject(map[string]Expression{"name": notFormalExpression}), nil, notFormalExpressionError},
 	}
 
-	tests.Run(t, []string{"bucket", "child"}, "")
+	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
 
 	// run again with single bucket
 	tests = ExpressionVerifyFormalNotationTestSet{
@@ -73,7 +73,7 @@ func TestLiteralVerifyFormalNotation(t *testing.T) {
 		{NewLiteralObject(map[string]Expression{"name": notFormalExpression}), nil, nil},
 	}
 
-	tests.Run(t, []string{"bucket"}, "bucket")
+	tests.Run(t, []string{}, []string{"bucket"}, "bucket")
 }
 
 func TestEvaluateLiteral(t *testing.T) {

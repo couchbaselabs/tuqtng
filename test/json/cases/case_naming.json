@@ -24,18 +24,18 @@
         ]
     },
     {
-        "statements": "SELECT contacts.name AS name FROM contacts WHERE name = 'ian'",
+        "statements": "SELECT contacts.name AS explicit_name FROM contacts WHERE name = 'ian'",
         "results": [
             {
-                "name": "ian"
+                "explicit_name": "ian"
             }
         ]
     },
     {
-        "statements": "SELECT emp.name AS name FROM contacts AS emp WHERE name = 'ian'",
+        "statements": "SELECT emp.name AS explicit_name FROM contacts AS emp WHERE name = 'ian'",
         "results": [
             {
-                "name": "ian"
+                "explicit_name": "ian"
             }
         ]
     },
@@ -48,7 +48,7 @@
         ]
     },
     {
-        "statements": "SELECT contacts.name AS name FROM contacts AS emp WHERE name = 'ian'",
+        "statements": "SELECT contacts.name AS explicit_name FROM contacts AS emp WHERE name = 'ian'",
         "results": [
             {
             }

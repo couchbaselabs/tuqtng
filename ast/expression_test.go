@@ -20,7 +20,7 @@ import (
 var notValidExpression = NewFunctionCall("LENGTH", FunctionArgExpressionList{})
 var notValidExpressionError = fmt.Errorf("the LENGTH() function requires exactly 1 argument")
 var notFormalExpression = NewProperty("property")
-var _, notFormalExpressionError = notFormalExpression.VerifyFormalNotation([]string{"bucket", "child"}, "")
+var _, notFormalExpressionError = notFormalExpression.VerifyFormalNotation([]string{}, []string{"bucket", "child"}, "")
 
 type ExpressionTest struct {
 	input  Expression
@@ -90,9 +90,9 @@ type ExpressionVerifyFormalNotationTest struct {
 
 type ExpressionVerifyFormalNotationTestSet []ExpressionVerifyFormalNotationTest
 
-func (this ExpressionVerifyFormalNotationTestSet) Run(t *testing.T, aliases []string, defaultAlias string) {
+func (this ExpressionVerifyFormalNotationTestSet) Run(t *testing.T, forbiddenAliases []string, aliases []string, defaultAlias string) {
 	for _, x := range this {
-		result, err := x.input.VerifyFormalNotation(aliases, defaultAlias)
+		result, err := x.input.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 		if !reflect.DeepEqual(err, x.err) {
 			t.Fatalf("Expected error: %v, got %v for %v", x.err, err, x.input)
 		}
@@ -123,7 +123,7 @@ func (this *internalErrorExpression) Validate() error {
 	return nil
 }
 
-func (this *internalErrorExpression) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+func (this *internalErrorExpression) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
 	return nil, nil
 }
 

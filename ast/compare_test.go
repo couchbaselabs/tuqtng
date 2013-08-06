@@ -257,7 +257,7 @@ func TestCompareVerifyFormalNotation(t *testing.T) {
 		{NewNotLikeOperator(stringBob, notFormalExpression), nil, notFormalExpressionError},
 	}
 
-	tests.Run(t, []string{"bucket", "child"}, "")
+	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
 
 	// again with single bucket
 	tests = ExpressionVerifyFormalNotationTestSet{
@@ -290,7 +290,7 @@ func TestCompareVerifyFormalNotation(t *testing.T) {
 		{NewNotLikeOperator(stringBob, notFormalExpression), nil, nil},
 	}
 
-	tests.Run(t, []string{"bucket"}, "bucket")
+	tests.Run(t, []string{}, []string{"bucket"}, "bucket")
 }
 
 func TestTypeMismatchError(t *testing.T) {

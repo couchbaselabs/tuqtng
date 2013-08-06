@@ -35,10 +35,10 @@ func (this SortExpressionList) Validate() error {
 	return nil
 }
 
-func (this SortExpressionList) VerifyFormalNotation(aliases []string, defaultAlias string) error {
+func (this SortExpressionList) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) error {
 	for _, orderExpr := range this {
 		if orderExpr.Expr != nil {
-			neworderexpr, err := orderExpr.Expr.VerifyFormalNotation(aliases, defaultAlias)
+			neworderexpr, err := orderExpr.Expr.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 			if err != nil {
 				return err
 			}

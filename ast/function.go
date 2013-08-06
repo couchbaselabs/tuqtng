@@ -53,7 +53,7 @@ func (this *FunctionCall) Validate() error {
 	return functionImpl.Validate(this.Operands)
 }
 
-func (this *FunctionCall) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+func (this *FunctionCall) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
 
 	// two specific checks need to be made here for special functions
 	if this.Name == "VALUE" {
@@ -81,7 +81,7 @@ func (this *FunctionCall) VerifyFormalNotation(aliases []string, defaultAlias st
 
 	for _, operand := range this.Operands {
 		if operand.Expr != nil {
-			newoper, err := operand.Expr.VerifyFormalNotation(aliases, defaultAlias)
+			newoper, err := operand.Expr.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 			if err != nil {
 				return nil, err
 			}

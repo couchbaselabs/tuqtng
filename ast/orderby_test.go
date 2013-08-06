@@ -23,7 +23,7 @@ func TestSortExpressionListVerifyFormalNotation(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		err := test.input.VerifyFormalNotation([]string{"bucket"}, "bucket")
+		err := test.input.VerifyFormalNotation([]string{}, []string{"bucket"}, "bucket")
 		if !reflect.DeepEqual(err, test.output) {
 			t.Errorf("Expected error %v, got %v", test.output, err)
 		}

@@ -129,7 +129,7 @@ func TestDotMemberVerifyFormalNotation(t *testing.T) {
 		{NewBracketMemberOperator(notFormalExpression, propIndex), nil, notFormalExpressionError},
 	}
 
-	tests.Run(t, []string{"bucket", "child"}, "")
+	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
 
 	// again with single alias
 	tests = ExpressionVerifyFormalNotationTestSet{
@@ -138,5 +138,5 @@ func TestDotMemberVerifyFormalNotation(t *testing.T) {
 		{NewBracketMemberOperator(notFormalExpression, propIndex), nil, nil},
 	}
 
-	tests.Run(t, []string{"bucket"}, "bucket")
+	tests.Run(t, []string{}, []string{"bucket"}, "bucket")
 }

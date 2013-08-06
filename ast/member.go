@@ -63,10 +63,10 @@ func (this *DotMemberOperator) String() string {
 	return fmt.Sprintf("%v.%v", this.Left, this.Right)
 }
 
-func (this *DotMemberOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+func (this *DotMemberOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
 	// dot member only performs verification of its LHS
 	// RHS is always the non-leading portion of the a.b.c form
-	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
@@ -142,15 +142,15 @@ func (this *BracketMemberOperator) Validate() error {
 	return err
 }
 
-func (this *BracketMemberOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
-	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+func (this *BracketMemberOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
 	if newleft != nil {
 		this.Left = newleft
 	}
-	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	newright, err := this.Right.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}

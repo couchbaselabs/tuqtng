@@ -11,6 +11,7 @@ package ast
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/couchbaselabs/dparval"
 )
@@ -47,7 +48,16 @@ func (this *Property) Validate() error {
 }
 
 // NOTE this should only be called on leading property references, not ones deeper in a chain (ie, for a.b.c, only a, not b or c)
-func (this *Property) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+func (this *Property) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
+	// check to see if any of the forbiddenAliases are mentioned
+	if len(forbiddenAliases) > 0 {
+		for _, forbiddenAlias := range forbiddenAliases {
+			if this.Path == forbiddenAlias {
+				log.Printf("forbiddenAliases were %v", forbiddenAliases)
+				return nil, fmt.Errorf("Alias %s cannot be referenced", this.Path)
+			}
+		}
+	}
 	// this test is not needed when there are no aliases in the from clause (expression evaluation only)
 	if len(aliases) > 0 {
 		for _, alias := range aliases {

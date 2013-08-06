@@ -84,7 +84,7 @@ func TestBooleanVerifyFormalNotation(t *testing.T) {
 		{NewOrOperator(ExpressionList{booleanTrue, notFormalExpression}), nil, notFormalExpressionError},
 	}
 
-	tests.Run(t, []string{"bucket", "child"}, "")
+	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
 
 	// again with single bucket
 	tests = ExpressionVerifyFormalNotationTestSet{
@@ -98,7 +98,7 @@ func TestBooleanVerifyFormalNotation(t *testing.T) {
 		{NewOrOperator(ExpressionList{booleanTrue, notFormalExpression}), nil, nil},
 	}
 
-	tests.Run(t, []string{"bucket"}, "bucket")
+	tests.Run(t, []string{}, []string{"bucket"}, "bucket")
 }
 
 func TestBoolean(t *testing.T) {

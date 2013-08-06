@@ -41,7 +41,7 @@ func (this *LiteralNull) Validate() error {
 	return nil
 }
 
-func (this *LiteralNull) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+func (this *LiteralNull) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
 	return nil, nil
 }
 
@@ -73,7 +73,7 @@ func (this *LiteralBool) Validate() error {
 	return nil
 }
 
-func (this *LiteralBool) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+func (this *LiteralBool) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
 	return nil, nil
 }
 
@@ -105,7 +105,7 @@ func (this *LiteralNumber) Validate() error {
 	return nil
 }
 
-func (this *LiteralNumber) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+func (this *LiteralNumber) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
 	return nil, nil
 }
 
@@ -137,7 +137,7 @@ func (this *LiteralString) Validate() error {
 	return nil
 }
 
-func (this *LiteralString) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+func (this *LiteralString) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
 	return nil, nil
 }
 
@@ -198,9 +198,9 @@ func (this *LiteralArray) Validate() error {
 	return nil
 }
 
-func (this *LiteralArray) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+func (this *LiteralArray) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
 	for i, v := range this.Val {
-		newi, err := v.VerifyFormalNotation(aliases, defaultAlias)
+		newi, err := v.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 		if err != nil {
 			return nil, err
 		}
@@ -270,9 +270,9 @@ func (this *LiteralObject) Validate() error {
 	return nil
 }
 
-func (this *LiteralObject) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+func (this *LiteralObject) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
 	for k, v := range this.Val {
-		newv, err := v.VerifyFormalNotation(aliases, defaultAlias)
+		newv, err := v.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 		if err != nil {
 			return nil, err
 		}

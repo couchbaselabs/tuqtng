@@ -94,17 +94,17 @@ func (this *CaseOperator) Validate() error {
 	return nil
 }
 
-func (this *CaseOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
+func (this *CaseOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
 
 	for _, WhenThen := range this.WhenThens {
-		newwhen, err := WhenThen.When.VerifyFormalNotation(aliases, defaultAlias)
+		newwhen, err := WhenThen.When.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 		if err != nil {
 			return nil, err
 		}
 		if newwhen != nil {
 			WhenThen.When = newwhen
 		}
-		newthen, err := WhenThen.Then.VerifyFormalNotation(aliases, defaultAlias)
+		newthen, err := WhenThen.Then.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 		if err != nil {
 			return nil, err
 		}
@@ -113,7 +113,7 @@ func (this *CaseOperator) VerifyFormalNotation(aliases []string, defaultAlias st
 		}
 	}
 	if this.Else != nil {
-		newelse, err := this.Else.VerifyFormalNotation(aliases, defaultAlias)
+		newelse, err := this.Else.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 		if err != nil {
 			return nil, err
 		}

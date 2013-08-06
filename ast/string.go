@@ -72,15 +72,15 @@ func (this *StringConcatenateOperator) Validate() error {
 	return nil
 }
 
-func (this *StringConcatenateOperator) VerifyFormalNotation(aliases []string, defaultAlias string) (Expression, error) {
-	newleft, err := this.Left.VerifyFormalNotation(aliases, defaultAlias)
+func (this *StringConcatenateOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
+	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}
 	if newleft != nil {
 		this.Left = newleft
 	}
-	newright, err := this.Right.VerifyFormalNotation(aliases, defaultAlias)
+	newright, err := this.Right.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
 	if err != nil {
 		return nil, err
 	}

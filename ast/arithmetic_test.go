@@ -141,7 +141,7 @@ func TestArithmeticVerifyFormalNotation(t *testing.T) {
 		{NewModuloOperator(numberSeven, notFormalExpression), nil, notFormalExpressionError},
 	}
 
-	tests.Run(t, []string{"bucket", "child"}, "")
+	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
 
 	// same tests again with one alias
 	tests = ExpressionVerifyFormalNotationTestSet{
@@ -161,5 +161,5 @@ func TestArithmeticVerifyFormalNotation(t *testing.T) {
 		{NewModuloOperator(numberSeven, notFormalExpression), nil, nil},
 	}
 
-	tests.Run(t, []string{"bucket"}, "bucket")
+	tests.Run(t, []string{}, []string{"bucket"}, "bucket")
 }
