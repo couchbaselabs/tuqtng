@@ -77,15 +77,14 @@ func (this *Project) processItem(item *dparval.Value) bool {
 		return true
 	}
 
-	// create the actual result Item
-	finalItem := dparval.NewValue(resultMap)
-	itemMeta := item.GetAttachment("meta")
-	if itemMeta != nil {
-		finalItem.SetAttachment("meta", itemMeta)
-	}
+	// build a Value from the projection
+	projection := dparval.NewValue(resultMap)
 
-	// write this to the output
-	return this.Base.SendItem(finalItem)
+	// store the projection as an attachment on the main item
+	item.SetAttachment("projection", projection)
+
+	// write to the output
+	return this.Base.SendItem(item)
 }
 
 func (this *Project) afterItems() {}

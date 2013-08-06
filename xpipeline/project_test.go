@@ -12,6 +12,7 @@ package xpipeline
 import (
 	"testing"
 
+	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 )
 
@@ -28,7 +29,12 @@ func TestProject(t *testing.T) {
 
 	for item := range projectItemChannel {
 
-		_, err := item.Path("f_name")
+		projection := item.GetAttachment("projection")
+		projectionValue, ok := projection.(*dparval.Value)
+		if !ok {
+			t.Errorf("Expected item projection to be type Value")
+		}
+		_, err := projectionValue.Path("f_name")
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}

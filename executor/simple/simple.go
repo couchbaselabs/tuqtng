@@ -12,13 +12,13 @@ package simple
 import (
 	"log"
 
+	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/tuqtng/xpipelinebuilder"
 	simpleBuilder "github.com/couchbaselabs/tuqtng/xpipelinebuilder/simple"
-	"github.com/couchbaselabs/dparval"
 )
 
 type SimpleExecutor struct {
@@ -53,7 +53,7 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 		select {
 		case item, ok = <-sourceItemChannel:
 			if ok {
-				this.processItem(q, item)
+				ok = this.processItem(q, item)
 			}
 		case obj, ok = <-supportChannel:
 			if ok {
@@ -74,7 +74,14 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 	q.Response.NoMoreResults()
 }
 
-func (this *SimpleExecutor) processItem(q network.Query, item *dparval.Value) {
-	result := item.Value()
+func (this *SimpleExecutor) processItem(q network.Query, item *dparval.Value) bool {
+	projection := item.GetAttachment("projection")
+	projectionValue, ok := projection.(*dparval.Value)
+	if !ok {
+		q.Response.SendError(query.NewError(nil, "Expected projection to be type Value"))
+		return false
+	}
+	result := projectionValue.Value()
 	q.Response.SendResult(result)
+	return true
 }
