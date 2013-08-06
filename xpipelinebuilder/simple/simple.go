@@ -64,8 +64,6 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 			currentOperator = xpipeline.NewOffset(currentElement.Val)
 		case *plan.Projector:
 			currentOperator = xpipeline.NewProject(currentElement.Result, currentElement.ProjectEmpty)
-		case *plan.ProjectorInline:
-			currentOperator = xpipeline.NewProjectInline(currentElement.Result)
 		case *plan.DocumentJoin:
 			currentOperator = xpipeline.NewDocumentJoin(currentElement.Over, currentElement.As)
 		case *plan.EliminateDuplicates:
