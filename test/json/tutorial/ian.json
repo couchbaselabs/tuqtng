@@ -1,0 +1,10 @@
+{"type":"contact",
+ "name":"ian",
+ "age": 56,
+ "email": "ian@gmail.com",
+ "children":[
+    {"name":"abama","age":17,"gender":"m"},
+    {"name":"bebama","age":21,"gender":"m"}
+ ],
+ "hobbies":["golf", "surfing"]
+}

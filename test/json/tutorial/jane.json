@@ -1,0 +1,13 @@
+{"type":"contact",
+ "name":"jane",
+ "age": 40,
+ "email": "jane@gmail.com",
+ "contacts": [
+   {
+    "name": "fred"
+   },
+   {
+    "name": "sheela"
+   }
+ ]
+}

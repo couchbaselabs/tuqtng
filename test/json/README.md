@@ -1,5 +1,7 @@
 Sample data for tests, demos, tutorials, etc.
 
+Please do NOT write tests against the "tutorial" dataset.  It will change over time to better support the tutorial.
+
 Note: if you modify existing data in these subdirectories, you may
 break existing "black box" test cases.  An alternative would be to
 make your own copied subdirectories.

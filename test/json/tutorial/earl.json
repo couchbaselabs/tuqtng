@@ -1,0 +1,10 @@
+{"type":"contact",
+ "name":"earl",
+ "age": 47,
+ "email": "earl@gmail.com",
+ "children":[
+        {"name":"xena","age":17,"gender":"f"},
+        {"name":"yuri","age":2,"gender":"m"}
+ ],
+ "hobbies":["surfing"]
+}
