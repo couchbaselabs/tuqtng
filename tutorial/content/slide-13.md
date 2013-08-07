@@ -6,7 +6,7 @@ In the example on the right we ask that it skip over the first 2 results and sen
 
 <pre id="example">
 SELECT name 
-    FROM contacts 
+    FROM tutorial 
         ORDER BY name 
             LIMIT 2 
                 OFFSET 2

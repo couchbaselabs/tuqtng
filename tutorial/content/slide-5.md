@@ -1,15 +1,15 @@
-## Filtering Documents with WHERE
+## Performing Simple Arithmetic
 
-In previous slides you used a WHERE clause like WHERE name = 'dave' to match a single document.  Other comparison operators can be used to match multiple documents.
+We can also perform basic arithmetic in our expressions.
 
-In the query example on the right we match game documents where the score is greater than 8.
+In this example we calcuate Dave's age in dog years by dividing their age by 7.
 
-All of the standard comparison operators are supported (>, >=, <, <=, =, and !=).  All of these comparison operators also consider the value's type, so `score > 8` will return documents containing a numeric score that is greater than 8.  Similarly, `name > 'marty'` will return documents containing a string name that is after 'marty'.
+The common arithmetic operations +, -, *, / and % are supported.
 
-Try changing the comparison from > to <.
+Try using a different arithmetic operation.
 
 <pre id="example">
-SELECT * 
-    FROM game
-        WHERE score > 8
+SELECT name, age, age/7 AS age_dog_years 
+    FROM tutorial 
+        WHERE name = 'dave'
 </pre>

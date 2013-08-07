@@ -6,7 +6,7 @@ In the example on the right we ask that it return no more than 2 results.
 
 <pre id="example">
 SELECT name 
-    FROM contacts 
+    FROM tutorial 
         ORDER BY name 
             LIMIT 2
 </pre>

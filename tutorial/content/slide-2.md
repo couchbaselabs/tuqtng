@@ -16,6 +16,6 @@ If you change the * to an element like 'children', you will see the query return
 
 <pre id="example">
 SELECT *
-  FROM contacts
+  FROM tutorial
     WHERE name = 'ian'
 </pre>
