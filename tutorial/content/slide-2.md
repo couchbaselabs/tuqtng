@@ -8,7 +8,7 @@ A basic query has three parts to it:
 * FROM - The bucket (data store) to work with
 * WHERE - Conditions the document must satisfy
 
-Only SELECT clause is required. The wildcard * selects all parts of the document. Queries can return a collection of differently shaped documents or fragments. However, they will all match the conditions you specified in the FROM clause.
+Only SELECT clause is required. The wildcard * selects all parts of the document. Queries can return a collection of differently shaped documents or fragments. However, they will all match the conditions you specified in the WHERE clause.
 
 Remember, there **IS NO SCHEMA** in Couchbase. You don't lose any flexibility you love about Couchbase.
 
