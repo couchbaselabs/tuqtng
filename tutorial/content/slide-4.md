@@ -6,7 +6,7 @@ Navigating to a sub object in the FROM clause limits the input to the SELECT por
 
 In general, when the expression involves only the '.' and the '[]' operators, you can navigate in either the SELECT or the FROM clause. However, more sophisticated expressions are allowed only in the SELECT clause.
 
-Another difference is that you could omit the 'AS cname' modifier in the SELECT clause. If you did, an auto generated name, '$1' would be used for the attribute. However, when an expression appears in the FROM clause, you must always give it an alias.
+Another difference is that you could omit the 'AS cname' modifier in the SELECT clause. If you did, an auto generated name, 'name' would be used for the attribute. However, when an expression appears in the FROM clause, you must always give it an alias.
 
 Try removing 'AS child' modifier.
 
