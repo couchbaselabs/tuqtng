@@ -59,7 +59,7 @@ func Server(version, couchbaseSite, poolName string,
 
 	// dispatch each query that comes in
 	for query := range queryChannel {
-		queryPipeline.DispatchQuery(query)
+		go queryPipeline.DispatchQuery(query)
 	}
 
 	return nil
