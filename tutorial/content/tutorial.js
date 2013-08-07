@@ -46,7 +46,7 @@ function load(n) {
         if (status != 'success') return;
         $('#content').html(data);
 
-        var sample = $('#example').html();
+        var sample = $('#example').text();
         var ie = ace.edit('iedit');
         ie.setValue(sample);
         ie.navigateFileEnd();
@@ -62,7 +62,7 @@ function load(n) {
 function run() {
 	var url = '/query';
     var ie = ace.edit('iedit');
-    var query = 'q=' + ie.getValue();
+    var query = 'q=' + encodeURIComponent(ie.getValue());
     $.post(url, query, ran).fail(failed);
 }
 
