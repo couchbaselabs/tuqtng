@@ -108,3 +108,45 @@ func TestEvaluateComplexLiteralContainingMissing(t *testing.T) {
 	tests.RunWithItem(t, item)
 
 }
+
+func TestLiteralEquivalentTo(t *testing.T) {
+
+	tests := ExpressionEquivalenceTestSet{
+		{NewLiteralNull(), NewLiteralNull(), true},
+		{NewLiteralNull(), NewLiteralBool(false), false},
+
+		{NewLiteralBool(true), NewLiteralBool(true), true},
+		{NewLiteralBool(true), NewLiteralBool(false), false},
+		{NewLiteralBool(true), NewLiteralNumber(7.5), false},
+
+		{NewLiteralNumber(7.0), NewLiteralNumber(7.0), true},
+		{NewLiteralNumber(7.0), NewLiteralNumber(9.0), false},
+		{NewLiteralNumber(7.0), NewLiteralString("test"), false},
+
+		{NewLiteralString("test"), NewLiteralString("test"), true},
+		{NewLiteralString("test"), NewLiteralString("bob"), false},
+		{NewLiteralString("test"), NewLiteralNumber(7.5), false},
+
+		{NewLiteralArray([]Expression{NewLiteralString("test")}), NewLiteralArray([]Expression{NewLiteralString("test")}), true},
+		{NewLiteralArray([]Expression{NewLiteralString("test")}), NewLiteralArray([]Expression{NewLiteralString("bob")}), false},
+		{NewLiteralArray([]Expression{NewLiteralString("test")}), NewLiteralString("bob"), false},
+
+		{
+			NewLiteralObject(map[string]Expression{"key": NewLiteralString("value")}),
+			NewLiteralObject(map[string]Expression{"key": NewLiteralString("value")}),
+			true,
+		},
+		{
+			NewLiteralObject(map[string]Expression{"key": NewLiteralString("value")}),
+			NewLiteralObject(map[string]Expression{"key": NewLiteralString("notvalue")}),
+			false,
+		},
+		{
+			NewLiteralObject(map[string]Expression{"key": NewLiteralString("value")}),
+			NewLiteralBool(true),
+			false,
+		},
+	}
+
+	tests.Run(t)
+}

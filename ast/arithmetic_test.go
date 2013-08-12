@@ -163,3 +163,27 @@ func TestArithmeticVerifyFormalNotation(t *testing.T) {
 
 	tests.Run(t, []string{}, []string{"bucket"}, "bucket")
 }
+
+func TestArithmeticEquivalentTo(t *testing.T) {
+
+	numberSix := NewLiteralNumber(6.0)
+	numberSeven := NewLiteralNumber(7.0)
+
+	tests := ExpressionEquivalenceTestSet{
+		{NewPlusOperator(numberSix, numberSeven), NewPlusOperator(numberSix, numberSeven), true},
+		{NewPlusOperator(numberSix, numberSeven), NewPlusOperator(numberSeven, numberSix), true},
+		{NewSubtractOperator(numberSix, numberSeven), NewSubtractOperator(numberSix, numberSeven), true},
+		{NewSubtractOperator(numberSix, numberSeven), NewSubtractOperator(numberSeven, numberSix), false},
+		{NewMultiplyOperator(numberSix, numberSeven), NewMultiplyOperator(numberSix, numberSeven), true},
+		{NewMultiplyOperator(numberSix, numberSeven), NewMultiplyOperator(numberSeven, numberSix), true},
+		{NewDivideOperator(numberSix, numberSeven), NewDivideOperator(numberSix, numberSeven), true},
+		{NewDivideOperator(numberSix, numberSeven), NewDivideOperator(numberSeven, numberSix), false},
+		{NewModuloOperator(numberSix, numberSeven), NewModuloOperator(numberSix, numberSeven), true},
+		{NewModuloOperator(numberSix, numberSeven), NewModuloOperator(numberSeven, numberSix), false},
+		{NewChangeSignOperator(NewLiteralNumber(7.5)), NewChangeSignOperator(NewLiteralNumber(7.5)), true},
+		{NewChangeSignOperator(NewLiteralNumber(7.5)), NewChangeSignOperator(NewLiteralNumber(4.5)), false},
+		{NewChangeSignOperator(NewLiteralNumber(7.5)), NewLiteralNumber(4.5), false},
+	}
+
+	tests.Run(t)
+}

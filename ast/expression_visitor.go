@@ -9,66 +9,18 @@
 
 package ast
 
+import ()
+
 type ExpressionVisitor interface {
 	Visit(Expression) (Expression, error)
 }
 
 // a utility function giving the default behavior
 // of visiting a nodes children
-func VisitChildren(v ExpressionVisitor, expr Expression) (Expression, error) {
+func VisitChildren(v ExpressionVisitor, e Expression) (Expression, error) {
 	var err error
-	switch expr := expr.(type) {
-	//arithmetic
-	case *PlusOperator:
-		expr.Left, err = expr.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.Right, err = expr.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *SubtractOperator:
-		expr.Left, err = expr.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.Right, err = expr.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *MultiplyOperator:
-		expr.Left, err = expr.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.Right, err = expr.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *DivideOperator:
-		expr.Left, err = expr.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.Right, err = expr.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *ModuloOperator:
-		expr.Left, err = expr.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.Right, err = expr.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *ChangeSignOperator:
-		expr.Operand, err = expr.Operand.Accept(v)
-		if err != nil {
-			return expr, err
-		}
+
+	switch expr := e.(type) {
 	//case
 	case *CaseOperator:
 		for _, wt := range expr.WhenThens {
@@ -87,128 +39,50 @@ func VisitChildren(v ExpressionVisitor, expr Expression) (Expression, error) {
 				return expr, err
 			}
 		}
-	// collections
-	case *CollectionAnyOperator:
-		expr.Over, err = expr.Over.Accept(v)
+	// handle all collection operators
+	case CollectionOperatorExpression:
+		newOver, err := expr.GetOver().Accept(v)
 		if err != nil {
-			return expr, err
+			return e, err
 		}
-		expr.Condition, err = expr.Condition.Accept(v)
+		expr.SetOver(newOver)
+		newCondition, err := expr.GetCondition().Accept(v)
 		if err != nil {
-			return expr, err
+			return e, err
 		}
-	case *CollectionAllOperator:
-		expr.Over, err = expr.Over.Accept(v)
+		expr.SetCondition(newCondition)
+
+	// handle all binary operators
+	case BinaryOperatorExpression:
+		newLeft, err := expr.GetLeft().Accept(v)
 		if err != nil {
-			return expr, err
+			return e, err
 		}
-		expr.Condition, err = expr.Condition.Accept(v)
+		expr.SetLeft(newLeft)
+		newRight, err := expr.GetRight().Accept(v)
 		if err != nil {
-			return expr, err
+			return e, err
 		}
-	// comparison
-	case *GreaterThanOperator:
-		expr.BinaryComparisonOperator.Left, err = expr.BinaryComparisonOperator.Left.Accept(v)
+		expr.SetRight(newRight)
+
+	// handle all unary operators
+	case UnaryOperatorExpression:
+		newOper, err := expr.GetOperand().Accept(v)
 		if err != nil {
-			return expr, err
+			return e, err
 		}
-		expr.BinaryComparisonOperator.Right, err = expr.BinaryComparisonOperator.Right.Accept(v)
-		if err != nil {
-			return expr, err
+		expr.SetOperand(newOper)
+
+	// handle all nary operators
+	case NaryOperatorExpression:
+		for i, oper := range expr.GetOperands() {
+			newoper, err := oper.Accept(v)
+			if err != nil {
+				return e, err
+			}
+			expr.SetOperand(i, newoper)
 		}
-	case *GreaterThanOrEqualOperator:
-		expr.BinaryComparisonOperator.Left, err = expr.BinaryComparisonOperator.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.BinaryComparisonOperator.Right, err = expr.BinaryComparisonOperator.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *LessThanOperator:
-		expr.BinaryComparisonOperator.Left, err = expr.BinaryComparisonOperator.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.BinaryComparisonOperator.Right, err = expr.BinaryComparisonOperator.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *LessThanOrEqualOperator:
-		expr.BinaryComparisonOperator.Left, err = expr.BinaryComparisonOperator.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.BinaryComparisonOperator.Right, err = expr.BinaryComparisonOperator.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *EqualToOperator:
-		expr.BinaryComparisonOperator.Left, err = expr.BinaryComparisonOperator.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.BinaryComparisonOperator.Right, err = expr.BinaryComparisonOperator.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *NotEqualToOperator:
-		expr.BinaryComparisonOperator.Left, err = expr.BinaryComparisonOperator.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.BinaryComparisonOperator.Right, err = expr.BinaryComparisonOperator.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *LikeOperator:
-		expr.Left, err = expr.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.Right, err = expr.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *NotLikeOperator:
-		expr.Left, err = expr.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.Right, err = expr.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *IsNullOperator:
-		expr.Operand, err = expr.Operand.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *IsNotNullOperator:
-		expr.Operand, err = expr.Operand.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *IsMissingOperator:
-		expr.Operand, err = expr.Operand.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *IsNotMissingOperator:
-		expr.Operand, err = expr.Operand.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *IsValuedOperator:
-		expr.Operand, err = expr.Operand.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-	case *IsNotValuedOperator:
-		expr.Operand, err = expr.Operand.Accept(v)
-		if err != nil {
-			return expr, err
-		}
+
 	// function
 	case *FunctionCall:
 		for _, arg := range expr.Operands {
@@ -238,26 +112,6 @@ func VisitChildren(v ExpressionVisitor, expr Expression) (Expression, error) {
 				return expr, err
 			}
 		}
-	// logical
-	case *AndOperator:
-		for i, oper := range expr.Operands {
-			expr.Operands[i], err = oper.Accept(v)
-			if err != nil {
-				return expr, err
-			}
-		}
-	case *OrOperator:
-		for i, oper := range expr.Operands {
-			expr.Operands[i], err = oper.Accept(v)
-			if err != nil {
-				return expr, err
-			}
-		}
-	case *NotOperator:
-		expr.Operand, err = expr.Operand.Accept(v)
-		if err != nil {
-			return expr, err
-		}
 	// member
 	case *DotMemberOperator:
 		var newProp Expression
@@ -284,16 +138,6 @@ func VisitChildren(v ExpressionVisitor, expr Expression) (Expression, error) {
 		}
 	// property
 	case *Property:
-	// string
-	case *StringConcatenateOperator:
-		expr.Left, err = expr.Left.Accept(v)
-		if err != nil {
-			return expr, err
-		}
-		expr.Right, err = expr.Right.Accept(v)
-		if err != nil {
-			return expr, err
-		}
 	}
-	return expr, nil
+	return e, nil
 }

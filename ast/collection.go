@@ -11,222 +11,73 @@ package ast
 
 import (
 	"fmt"
-
-	"github.com/couchbaselabs/dparval"
 )
 
-type CollectionAnyOperator struct {
-	Type      string     `json:"type"`
+type CollectionOperator struct {
+	operator  string
 	Condition Expression `json:"condition"`
 	Over      Expression `json:"over"`
 	As        string     `json:"as"`
 }
 
-func NewCollectionAnyOperator(condition Expression, over Expression, as string) *CollectionAnyOperator {
-	return &CollectionAnyOperator{
-		Type:      "any",
-		Condition: condition,
-		Over:      over,
-		As:        as,
-	}
+func (this *CollectionOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Over, this.Condition}
+	return rv
 }
 
-func (this *CollectionAnyOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	// first evaluate the over
-	ov, err := this.Over.Evaluate(item)
-	if err != nil {
-		switch err := err.(type) {
-		case *dparval.Undefined:
-			// spec says return false
-			return dparval.NewValue(false), nil
-		default:
-			// any other error should be returned to caller
-			return nil, err
-		}
-	}
-
-	// see if we're dealing with an array
-	if ov.Type() == dparval.ARRAY {
-		// by accessing the array contents this way
-		// we avoid parsing it
-		ok := true
-		index := 0
-		for ok {
-			inner, err := ov.Index(index)
-			index = index + 1
-			if err != nil {
-				switch err := err.(type) {
-				case *dparval.Undefined:
-					ok = false
-				default:
-					return nil, err
-				}
-			} else {
-
-				// create a new context with this object named as the alias
-				innerContext := dparval.NewValue(map[string]interface{}{this.As: inner})
-				// now evaluate the condition in this new context
-				innerResult, err := this.Condition.Evaluate(innerContext)
-				if err != nil {
-					switch err := err.(type) {
-					case *dparval.Undefined:
-						// this is not true, keep trying
-						continue
-					default:
-						// any other error should be returned to caller
-						return nil, err
-					}
-				}
-				innerResultVal := innerResult.Value()
-				// check to see if this value is true
-				innerBoolResult := ValueInBooleanContext(innerResultVal)
-				if innerBoolResult == true {
-					return dparval.NewValue(true), nil
-				}
-			}
-		}
-		return dparval.NewValue(false), nil
-	}
-	return dparval.NewValue(false), nil
-}
-
-func (this *CollectionAnyOperator) String() string {
-	return fmt.Sprintf("ANY %v OVER %v AS %s", this.Condition, this.Over, this.As)
-}
-
-func (this *CollectionAnyOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*CollectionAnyOperator)
+func (this *CollectionOperator) EquivalentTo(t Expression) bool {
+	// another collection operator?
+	that, ok := t.(CollectionOperatorExpression)
 	if !ok {
 		return false
 	}
 
-	if this.As != that.As {
+	// same type of operator?
+	if this.operator != that.Operator() {
 		return false
 	}
-	if !this.Over.EquivalentTo(that.Over) {
+
+	if this.As != that.GetAs() {
 		return false
 	}
-	if !this.Condition.EquivalentTo(that.Over) {
+	if !this.Over.EquivalentTo(that.GetOver()) {
+		return false
+	}
+	if !this.Condition.EquivalentTo(that.GetCondition()) {
 		return false
 	}
 
 	return true
 }
 
-func (this *CollectionAnyOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Over, this.Condition}
-	return rv
+func (this *CollectionOperator) String() string {
+	return fmt.Sprintf("%s %v OVER %v AS %s", this.operator, this.Condition, this.Over, this.As)
 }
 
-func (this *CollectionAnyOperator) Accept(ev ExpressionVisitor) (Expression, error) {
-	return ev.Visit(this)
+func (this *CollectionOperator) Operator() string {
+	return this.operator
 }
 
-type CollectionAllOperator struct {
-	Type      string     `json:"type"`
-	Condition Expression `json:"condition"`
-	Over      Expression `json:"over"`
-	As        string     `json:"as"`
+func (this *CollectionOperator) GetOver() Expression {
+	return this.Over
 }
 
-func NewCollectionAllOperator(condition Expression, over Expression, as string) *CollectionAllOperator {
-	return &CollectionAllOperator{
-		Type:      "all",
-		Condition: condition,
-		Over:      over,
-		As:        as,
-	}
+func (this *CollectionOperator) GetCondition() Expression {
+	return this.Condition
 }
 
-func (this *CollectionAllOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	// first evaluate the over
-	ov, err := this.Over.Evaluate(item)
-	if err != nil {
-		switch err := err.(type) {
-		case *dparval.Undefined:
-			// spec says return false
-			return dparval.NewValue(false), nil
-		default:
-			// any other error should be returned to caller
-			return nil, err
-		}
-	}
-
-	// see if we're dealing with an array
-	if ov.Type() == dparval.ARRAY {
-
-		// by accessing the array contents this way
-		// we avoid parsing it
-		ok := true
-		index := 0
-		for ok {
-			inner, err := ov.Index(index)
-			index = index + 1
-			if err != nil {
-				switch err := err.(type) {
-				case *dparval.Undefined:
-					ok = false
-				default:
-					return nil, err
-				}
-			} else {
-
-				// create a new context with this object named as the alias
-				innerContext := dparval.NewValue(map[string]interface{}{this.As: inner})
-				// now evaluate the condition in this new context
-				innerResult, err := this.Condition.Evaluate(innerContext)
-				if err != nil {
-					switch err := err.(type) {
-					case *dparval.Undefined:
-						// not true, stop looking
-						return dparval.NewValue(false), nil
-					default:
-						// any other error should be returned to caller
-						return nil, err
-					}
-				}
-				innerResultVal := innerResult.Value()
-				// check to see if this value is true
-				innerBoolResult := ValueInBooleanContext(innerResultVal)
-				if innerBoolResult == false {
-					return dparval.NewValue(false), nil
-				}
-			}
-		}
-		return dparval.NewValue(true), nil
-
-	}
-	return dparval.NewValue(false), nil
+func (this *CollectionOperator) GetAs() string {
+	return this.As
 }
 
-func (this *CollectionAllOperator) String() string {
-	return fmt.Sprintf("ALL %v OVER %v AS %s", this.Condition, this.Over, this.As)
+func (this *CollectionOperator) SetOver(over Expression) {
+	this.Over = over
 }
 
-func (this *CollectionAllOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*CollectionAnyOperator)
-	if !ok {
-		return false
-	}
-
-	if this.As != that.As {
-		return false
-	}
-	if !this.Over.EquivalentTo(that.Over) {
-		return false
-	}
-	if !this.Condition.EquivalentTo(that.Over) {
-		return false
-	}
-
-	return true
+func (this *CollectionOperator) SetCondition(condition Expression) {
+	this.Condition = condition
 }
 
-func (this *CollectionAllOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Over, this.Condition}
-	return rv
-}
-
-func (this *CollectionAllOperator) Accept(ev ExpressionVisitor) (Expression, error) {
-	return ev.Visit(this)
+func (this *CollectionOperator) SetAs(as string) {
+	this.As = as
 }

@@ -10,8 +10,6 @@
 package ast
 
 import (
-	"fmt"
-
 	"github.com/couchbaselabs/dparval"
 )
 
@@ -20,16 +18,18 @@ import (
 // ****************************************************************************
 
 type StringConcatenateOperator struct {
-	Type  string     `json:"type"`
-	Left  Expression `json:"left"`
-	Right Expression `json:"right"`
+	Type string `json:"type"`
+	BinaryOperator
 }
 
 func NewStringConcatenateOperator(left, right Expression) *StringConcatenateOperator {
 	return &StringConcatenateOperator{
-		Type:  "string_concat",
-		Left:  left,
-		Right: right,
+		"string_concat",
+		BinaryOperator{
+			operator: "||",
+			Left:     left,
+			Right:    right,
+		},
 	}
 }
 
@@ -58,31 +58,6 @@ func (this *StringConcatenateOperator) Evaluate(item *dparval.Value) (*dparval.V
 		}
 	}
 	return dparval.NewValue(nil), nil
-}
-
-func (this *StringConcatenateOperator) String() string {
-	return fmt.Sprintf("%v || %v", this.Left, this.Right)
-}
-
-func (this *StringConcatenateOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*StringConcatenateOperator)
-	if !ok {
-		return false
-	}
-
-	if !this.Left.EquivalentTo(that.Left) {
-		return false
-	}
-	if !this.Right.EquivalentTo(that.Right) {
-		return false
-	}
-
-	return true
-}
-
-func (this *StringConcatenateOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Left, this.Right}
-	return rv
 }
 
 func (this *StringConcatenateOperator) Accept(ev ExpressionVisitor) (Expression, error) {

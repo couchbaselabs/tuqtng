@@ -10,7 +10,6 @@
 package ast
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/couchbaselabs/dparval"
@@ -21,16 +20,20 @@ import (
 // ****************************************************************************
 
 type PlusOperator struct {
-	Type  string     `json:"type"`
-	Left  Expression `json:"left"`
-	Right Expression `json:"right"`
+	Type string `json:"type"`
+	CommutativeBinaryOperator
 }
 
 func NewPlusOperator(left, right Expression) *PlusOperator {
 	return &PlusOperator{
-		Type:  "plus",
-		Left:  left,
-		Right: right,
+		"plus",
+		CommutativeBinaryOperator{
+			BinaryOperator{
+				operator: "+",
+				Left:     left,
+				Right:    right,
+			},
+		},
 	}
 }
 
@@ -60,30 +63,6 @@ func (this *PlusOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) 
 	return dparval.NewValue(nil), nil
 }
 
-func (this *PlusOperator) String() string {
-	return fmt.Sprintf("%v + %v", this.Left, this.Right)
-}
-
-func (this *PlusOperator) EquivalentTo(that Expression) bool {
-	thatPlus, ok := that.(*PlusOperator)
-	if !ok {
-		return false
-	}
-
-	// for plus order doesnt matter
-	if this.Left.EquivalentTo(thatPlus.Left) && this.Right.EquivalentTo(thatPlus.Right) {
-		return true
-	} else if this.Left.EquivalentTo(thatPlus.Right) && this.Right.EquivalentTo(thatPlus.Left) {
-		return true
-	}
-	return false
-}
-
-func (this *PlusOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Left, this.Right}
-	return rv
-}
-
 func (this *PlusOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -93,16 +72,18 @@ func (this *PlusOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 // ****************************************************************************
 
 type SubtractOperator struct {
-	Type  string     `json:"type"`
-	Left  Expression `json:"left"`
-	Right Expression `json:"right"`
+	Type string `json:"type"`
+	BinaryOperator
 }
 
 func NewSubtractOperator(left, right Expression) *SubtractOperator {
 	return &SubtractOperator{
-		Type:  "minus",
-		Left:  left,
-		Right: right,
+		"minus",
+		BinaryOperator{
+			operator: "-",
+			Left:     left,
+			Right:    right,
+		},
 	}
 }
 
@@ -131,28 +112,6 @@ func (this *SubtractOperator) Evaluate(item *dparval.Value) (*dparval.Value, err
 	return dparval.NewValue(nil), nil
 }
 
-func (this *SubtractOperator) String() string {
-	return fmt.Sprintf("%v - %v", this.Left, this.Right)
-}
-
-func (this *SubtractOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*SubtractOperator)
-	if !ok {
-		return false
-	}
-
-	// for subtraction order does matter
-	if this.Left.EquivalentTo(that.Left) && this.Right.EquivalentTo(that.Right) {
-		return true
-	}
-	return false
-}
-
-func (this *SubtractOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Left, this.Right}
-	return rv
-}
-
 func (this *SubtractOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -162,16 +121,20 @@ func (this *SubtractOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 // ****************************************************************************
 
 type MultiplyOperator struct {
-	Type  string     `json:"type"`
-	Left  Expression `json:"left"`
-	Right Expression `json:"right"`
+	Type string `json:"type"`
+	CommutativeBinaryOperator
 }
 
 func NewMultiplyOperator(left, right Expression) *MultiplyOperator {
 	return &MultiplyOperator{
-		Type:  "multiply",
-		Left:  left,
-		Right: right,
+		"multiply",
+		CommutativeBinaryOperator{
+			BinaryOperator{
+				operator: "*",
+				Left:     left,
+				Right:    right,
+			},
+		},
 	}
 }
 
@@ -200,30 +163,6 @@ func (this *MultiplyOperator) Evaluate(item *dparval.Value) (*dparval.Value, err
 	return dparval.NewValue(nil), nil
 }
 
-func (this *MultiplyOperator) String() string {
-	return fmt.Sprintf("%v * %v", this.Left, this.Right)
-}
-
-func (this *MultiplyOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*MultiplyOperator)
-	if !ok {
-		return false
-	}
-
-	// for multiplication order doesnt matter
-	if this.Left.EquivalentTo(that.Left) && this.Right.EquivalentTo(that.Right) {
-		return true
-	} else if this.Left.EquivalentTo(that.Right) && this.Right.EquivalentTo(that.Left) {
-		return true
-	}
-	return false
-}
-
-func (this *MultiplyOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Left, this.Right}
-	return rv
-}
-
 func (this *MultiplyOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -233,16 +172,18 @@ func (this *MultiplyOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 // ****************************************************************************
 
 type DivideOperator struct {
-	Type  string     `json:"type"`
-	Left  Expression `json:"left"`
-	Right Expression `json:"right"`
+	Type string `json:"type"`
+	BinaryOperator
 }
 
 func NewDivideOperator(left, right Expression) *DivideOperator {
 	return &DivideOperator{
-		Type:  "divide",
-		Left:  left,
-		Right: right,
+		"divide",
+		BinaryOperator{
+			operator: "/",
+			Left:     left,
+			Right:    right,
+		},
 	}
 }
 
@@ -271,28 +212,6 @@ func (this *DivideOperator) Evaluate(item *dparval.Value) (*dparval.Value, error
 	return dparval.NewValue(nil), nil
 }
 
-func (this *DivideOperator) String() string {
-	return fmt.Sprintf("%v / %v", this.Left, this.Right)
-}
-
-func (this *DivideOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*DivideOperator)
-	if !ok {
-		return false
-	}
-
-	// for division order does matter
-	if this.Left.EquivalentTo(that.Left) && this.Right.EquivalentTo(that.Right) {
-		return true
-	}
-	return false
-}
-
-func (this *DivideOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Left, this.Right}
-	return rv
-}
-
 func (this *DivideOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -302,16 +221,18 @@ func (this *DivideOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 // ****************************************************************************
 
 type ModuloOperator struct {
-	Type  string     `json:"type"`
-	Left  Expression `json:"left"`
-	Right Expression `json:"right"`
+	Type string `json:"type"`
+	BinaryOperator
 }
 
 func NewModuloOperator(left, right Expression) *ModuloOperator {
 	return &ModuloOperator{
-		Type:  "modulo",
-		Left:  left,
-		Right: right,
+		"modulo",
+		BinaryOperator{
+			operator: "%",
+			Left:     left,
+			Right:    right,
+		},
 	}
 }
 
@@ -340,28 +261,6 @@ func (this *ModuloOperator) Evaluate(item *dparval.Value) (*dparval.Value, error
 	return dparval.NewValue(nil), nil
 }
 
-func (this *ModuloOperator) String() string {
-	return fmt.Sprintf("%v %% %v", this.Left, this.Right)
-}
-
-func (this *ModuloOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*ModuloOperator)
-	if !ok {
-		return false
-	}
-
-	// for modulo order does matter
-	if this.Left.EquivalentTo(that.Left) && this.Right.EquivalentTo(that.Right) {
-		return true
-	}
-	return false
-}
-
-func (this *ModuloOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Left, this.Right}
-	return rv
-}
-
 func (this *ModuloOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -371,14 +270,19 @@ func (this *ModuloOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 // ****************************************************************************
 
 type ChangeSignOperator struct {
-	Type    string     `json:"type"`
-	Operand Expression `json:"operand"`
+	Type string `json:"type"`
+	PrefixUnaryOperator
 }
 
 func NewChangeSignOperator(operand Expression) *ChangeSignOperator {
 	return &ChangeSignOperator{
-		Type:    "changesign",
-		Operand: operand,
+		"changesign",
+		PrefixUnaryOperator{
+			UnaryOperator{
+				operator: "-",
+				Operand:  operand,
+			},
+		},
 	}
 }
 
@@ -396,27 +300,6 @@ func (this *ChangeSignOperator) Evaluate(item *dparval.Value) (*dparval.Value, e
 		}
 	}
 	return dparval.NewValue(nil), nil
-}
-
-func (this *ChangeSignOperator) String() string {
-	return fmt.Sprintf("-%v", this.Operand)
-}
-
-func (this *ChangeSignOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*ChangeSignOperator)
-	if !ok {
-		return false
-	}
-
-	if this.Operand.EquivalentTo(that.Operand) {
-		return true
-	}
-	return false
-}
-
-func (this *ChangeSignOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Operand}
-	return rv
 }
 
 func (this *ChangeSignOperator) Accept(ev ExpressionVisitor) (Expression, error) {

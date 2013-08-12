@@ -28,3 +28,38 @@ type Expression interface {
 	// Vistor Pattern
 	Accept(ExpressionVisitor) (Expression, error)
 }
+
+type OperatorExpression interface {
+	Operator() string
+}
+
+type UnaryOperatorExpression interface {
+	OperatorExpression
+	GetOperand() Expression
+	SetOperand(Expression)
+}
+
+type BinaryOperatorExpression interface {
+	OperatorExpression
+	GetLeft() Expression
+	GetRight() Expression
+	SetLeft(Expression)
+	SetRight(Expression)
+}
+
+type NaryOperatorExpression interface {
+	OperatorExpression
+	GetOperands() ExpressionList
+	SetOperands(ExpressionList)
+	SetOperand(int, Expression)
+}
+
+type CollectionOperatorExpression interface {
+	OperatorExpression
+	GetOver() Expression
+	GetCondition() Expression
+	GetAs() string
+	SetOver(Expression)
+	SetCondition(Expression)
+	SetAs(string)
+}

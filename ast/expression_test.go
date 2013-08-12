@@ -106,6 +106,23 @@ func (this ExpressionVerifyFormalNotationTestSet) Run(t *testing.T, forbiddenAli
 	}
 }
 
+type ExpressionEquivalenceTest struct {
+	a      Expression
+	b      Expression
+	result bool
+}
+
+type ExpressionEquivalenceTestSet []ExpressionEquivalenceTest
+
+func (this ExpressionEquivalenceTestSet) Run(t *testing.T) {
+	for _, x := range this {
+		result := x.a.EquivalentTo(x.b)
+		if result != x.result {
+			t.Errorf("Expected equivalence %v, got %v for %v and %v", x.result, result, x.a, x.b)
+		}
+	}
+}
+
 // this type exists only so we can test that
 // expressions properly return any internal errors
 // that may occur within the evaluation process

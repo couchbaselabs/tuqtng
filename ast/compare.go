@@ -26,83 +26,28 @@ func (this *TypeMismatch) Error() string {
 	return fmt.Sprintf("Types do not match, %d %d", this.ltype, this.rtype)
 }
 
-type BinaryComparisonOperator struct {
-	Left  Expression `json:"left"`
-	Right Expression `json:"right"`
-}
-
-func (this *BinaryComparisonOperator) compare(item *dparval.Value) (*dparval.Value, error) {
-	lv, err := this.Left.Evaluate(item)
-	if err != nil {
-		// this could either be real error, or MISSING
-		// if either side is MISSING, the result is MISSING
-		return nil, err
-	}
-	// if either side is NULL, the result is NULL
-	if lv.Type() == dparval.NULL {
-		return nil, nil
-	}
-	rv, err := this.Right.Evaluate(item)
-	if err != nil {
-		// this could either be real error, or MISSING
-		// if either side is MISSING, the result is MISSING
-		return nil, err
-	}
-	// if either side is NULL, the result is NULL
-	if rv.Type() == dparval.NULL {
-		return nil, nil
-	}
-
-	lvalue := lv.Value()
-	rvalue := rv.Value()
-
-	// if we got this far, we evaluated both sides
-	// there were no errors, and neither side was NULL or MISSING
-	// now check types (types must be the same)
-	ltype := collationType(lvalue)
-	rtype := collationType(rvalue)
-	// ugly fixups for boolean (returns different values for true/false)
-	if ltype == 2 {
-		// fixup for boolean type
-		ltype = 1
-	}
-	if rtype == 2 {
-		rtype = 1
-	}
-
-	if ltype != rtype {
-		return nil, &TypeMismatch{ltype, rtype}
-	}
-
-	return dparval.NewValue(float64(CollateJSON(lvalue, rvalue))), nil
-}
-
-func (this *BinaryComparisonOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Left, this.Right}
-	return rv
-}
-
 // ****************************************************************************
 // Greater Than
 // ****************************************************************************
 
 type GreaterThanOperator struct {
 	Type string `json:"type"`
-	BinaryComparisonOperator
+	BinaryOperator
 }
 
 func NewGreaterThanOperator(left, right Expression) *GreaterThanOperator {
 	return &GreaterThanOperator{
 		"greater_than",
-		BinaryComparisonOperator{
-			Left:  left,
-			Right: right,
+		BinaryOperator{
+			operator: ">",
+			Left:     left,
+			Right:    right,
 		},
 	}
 }
 
 func (this *GreaterThanOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	compare, err := this.BinaryComparisonOperator.compare(item)
+	compare, err := this.compare(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *TypeMismatch:
@@ -125,24 +70,6 @@ func (this *GreaterThanOperator) Evaluate(item *dparval.Value) (*dparval.Value, 
 	}
 }
 
-func (this *GreaterThanOperator) String() string {
-	return fmt.Sprintf("%v > %v", this.Left, this.Right)
-}
-
-func (this *GreaterThanOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*GreaterThanOperator)
-	if !ok {
-		return false
-	}
-
-	if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Left) &&
-		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Right) {
-		return true
-	}
-
-	return false
-}
-
 func (this *GreaterThanOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -153,21 +80,22 @@ func (this *GreaterThanOperator) Accept(ev ExpressionVisitor) (Expression, error
 
 type GreaterThanOrEqualOperator struct {
 	Type string `json:"type"`
-	BinaryComparisonOperator
+	BinaryOperator
 }
 
 func NewGreaterThanOrEqualOperator(left, right Expression) *GreaterThanOrEqualOperator {
 	return &GreaterThanOrEqualOperator{
 		"greater_than_or_equal",
-		BinaryComparisonOperator{
-			Left:  left,
-			Right: right,
+		BinaryOperator{
+			operator: ">=",
+			Left:     left,
+			Right:    right,
 		},
 	}
 }
 
 func (this *GreaterThanOrEqualOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	compare, err := this.BinaryComparisonOperator.compare(item)
+	compare, err := this.compare(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *TypeMismatch:
@@ -190,24 +118,6 @@ func (this *GreaterThanOrEqualOperator) Evaluate(item *dparval.Value) (*dparval.
 	}
 }
 
-func (this *GreaterThanOrEqualOperator) String() string {
-	return fmt.Sprintf("%v >= %v", this.Left, this.Right)
-}
-
-func (this *GreaterThanOrEqualOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*GreaterThanOrEqualOperator)
-	if !ok {
-		return false
-	}
-
-	if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Left) &&
-		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Right) {
-		return true
-	}
-
-	return false
-}
-
 func (this *GreaterThanOrEqualOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -218,21 +128,22 @@ func (this *GreaterThanOrEqualOperator) Accept(ev ExpressionVisitor) (Expression
 
 type LessThanOperator struct {
 	Type string `json:"type"`
-	BinaryComparisonOperator
+	BinaryOperator
 }
 
 func NewLessThanOperator(left, right Expression) *LessThanOperator {
 	return &LessThanOperator{
 		"less_than",
-		BinaryComparisonOperator{
-			Left:  left,
-			Right: right,
+		BinaryOperator{
+			operator: "<",
+			Left:     left,
+			Right:    right,
 		},
 	}
 }
 
 func (this *LessThanOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	compare, err := this.BinaryComparisonOperator.compare(item)
+	compare, err := this.compare(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *TypeMismatch:
@@ -255,24 +166,6 @@ func (this *LessThanOperator) Evaluate(item *dparval.Value) (*dparval.Value, err
 	}
 }
 
-func (this *LessThanOperator) String() string {
-	return fmt.Sprintf("%v < %v", this.Left, this.Right)
-}
-
-func (this *LessThanOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*LessThanOperator)
-	if !ok {
-		return false
-	}
-
-	if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Left) &&
-		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Right) {
-		return true
-	}
-
-	return false
-}
-
 func (this *LessThanOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -283,21 +176,22 @@ func (this *LessThanOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 
 type LessThanOrEqualOperator struct {
 	Type string `json:"type"`
-	BinaryComparisonOperator
+	BinaryOperator
 }
 
 func NewLessThanOrEqualOperator(left, right Expression) *LessThanOrEqualOperator {
 	return &LessThanOrEqualOperator{
 		"less_than_or_equal",
-		BinaryComparisonOperator{
-			Left:  left,
-			Right: right,
+		BinaryOperator{
+			operator: "<=",
+			Left:     left,
+			Right:    right,
 		},
 	}
 }
 
 func (this *LessThanOrEqualOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	compare, err := this.BinaryComparisonOperator.compare(item)
+	compare, err := this.compare(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *TypeMismatch:
@@ -320,24 +214,6 @@ func (this *LessThanOrEqualOperator) Evaluate(item *dparval.Value) (*dparval.Val
 	}
 }
 
-func (this *LessThanOrEqualOperator) String() string {
-	return fmt.Sprintf("%v <= %v", this.Left, this.Right)
-}
-
-func (this *LessThanOrEqualOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*LessThanOrEqualOperator)
-	if !ok {
-		return false
-	}
-
-	if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Left) &&
-		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Right) {
-		return true
-	}
-
-	return false
-}
-
 func (this *LessThanOrEqualOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -348,21 +224,24 @@ func (this *LessThanOrEqualOperator) Accept(ev ExpressionVisitor) (Expression, e
 
 type EqualToOperator struct {
 	Type string `json:"type"`
-	BinaryComparisonOperator
+	CommutativeBinaryOperator
 }
 
 func NewEqualToOperator(left, right Expression) *EqualToOperator {
 	return &EqualToOperator{
 		"equals",
-		BinaryComparisonOperator{
-			Left:  left,
-			Right: right,
+		CommutativeBinaryOperator{
+			BinaryOperator{
+				operator: "=",
+				Left:     left,
+				Right:    right,
+			},
 		},
 	}
 }
 
 func (this *EqualToOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	compare, err := this.BinaryComparisonOperator.compare(item)
+	compare, err := this.compare(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *TypeMismatch:
@@ -385,28 +264,6 @@ func (this *EqualToOperator) Evaluate(item *dparval.Value) (*dparval.Value, erro
 	}
 }
 
-func (this *EqualToOperator) String() string {
-	return fmt.Sprintf("%v = %v", this.Left, this.Right)
-}
-
-func (this *EqualToOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*EqualToOperator)
-	if !ok {
-		return false
-	}
-
-	// equals order doesnt matter
-	if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Left) &&
-		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Right) {
-		return true
-	} else if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Right) &&
-		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Left) {
-		return true
-	}
-
-	return false
-}
-
 func (this *EqualToOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -417,21 +274,24 @@ func (this *EqualToOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 
 type NotEqualToOperator struct {
 	Type string `json:"type"`
-	BinaryComparisonOperator
+	CommutativeBinaryOperator
 }
 
 func NewNotEqualToOperator(left, right Expression) *NotEqualToOperator {
 	return &NotEqualToOperator{
 		"not_equals",
-		BinaryComparisonOperator{
-			Left:  left,
-			Right: right,
+		CommutativeBinaryOperator{
+			BinaryOperator{
+				operator: "!=",
+				Left:     left,
+				Right:    right,
+			},
 		},
 	}
 }
 
 func (this *NotEqualToOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	compare, err := this.BinaryComparisonOperator.compare(item)
+	compare, err := this.compare(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *TypeMismatch:
@@ -454,28 +314,6 @@ func (this *NotEqualToOperator) Evaluate(item *dparval.Value) (*dparval.Value, e
 	}
 }
 
-func (this *NotEqualToOperator) String() string {
-	return fmt.Sprintf("%v != %v", this.Left, this.Right)
-}
-
-func (this *NotEqualToOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*NotEqualToOperator)
-	if !ok {
-		return false
-	}
-
-	// not equals order doesnt matter
-	if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Left) &&
-		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Right) {
-		return true
-	} else if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Right) &&
-		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Left) {
-		return true
-	}
-
-	return false
-}
-
 func (this *NotEqualToOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -486,16 +324,18 @@ func (this *NotEqualToOperator) Accept(ev ExpressionVisitor) (Expression, error)
 // FIXME - optimize case where RHS is string literal, only compile
 //         the regular expression once
 type LikeOperator struct {
-	Type  string     `json:"type"`
-	Left  Expression `json:"left"`
-	Right Expression `json:"right"`
+	Type string `json:"type"`
+	BinaryOperator
 }
 
 func NewLikeOperator(left, right Expression) *LikeOperator {
 	return &LikeOperator{
-		Type:  "like",
-		Left:  left,
-		Right: right,
+		"like",
+		BinaryOperator{
+			operator: "LIKE",
+			Left:     left,
+			Right:    right,
+		},
 	}
 }
 
@@ -531,30 +371,6 @@ func (this *LikeOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) 
 	return dparval.NewValue(nil), nil
 }
 
-func (this *LikeOperator) String() string {
-	return fmt.Sprintf("%v LIKE %v", this.Left, this.Right)
-}
-
-func (this *LikeOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*LikeOperator)
-	if !ok {
-		return false
-	}
-
-	// not equals order doesnt matter
-	if this.Left.EquivalentTo(that.Left) &&
-		this.Right.EquivalentTo(that.Right) {
-		return true
-	}
-
-	return false
-}
-
-func (this *LikeOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Left, this.Right}
-	return rv
-}
-
 func (this *LikeOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -564,16 +380,18 @@ func (this *LikeOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 // ****************************************************************************
 // FIXME - consolidate common code with LIKE
 type NotLikeOperator struct {
-	Type  string     `json:"type"`
-	Left  Expression `json:"left"`
-	Right Expression `json:"right"`
+	Type string `json:"type"`
+	BinaryOperator
 }
 
 func NewNotLikeOperator(left, right Expression) *NotLikeOperator {
 	return &NotLikeOperator{
-		Type:  "not_like",
-		Left:  left,
-		Right: right,
+		"not_like",
+		BinaryOperator{
+			operator: "NOT LIKE",
+			Left:     left,
+			Right:    right,
+		},
 	}
 }
 
@@ -609,30 +427,6 @@ func (this *NotLikeOperator) Evaluate(item *dparval.Value) (*dparval.Value, erro
 	return dparval.NewValue(nil), nil
 }
 
-func (this *NotLikeOperator) String() string {
-	return fmt.Sprintf("%v NOT LIKE %v", this.Left, this.Right)
-}
-
-func (this *NotLikeOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*NotLikeOperator)
-	if !ok {
-		return false
-	}
-
-	// not equals order doesnt matter
-	if this.Left.EquivalentTo(that.Left) &&
-		this.Right.EquivalentTo(that.Right) {
-		return true
-	}
-
-	return false
-}
-
-func (this *NotLikeOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Left, this.Right}
-	return rv
-}
-
 func (this *NotLikeOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -642,14 +436,17 @@ func (this *NotLikeOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 // ****************************************************************************
 
 type IsNullOperator struct {
-	Type    string     `json:"type"`
-	Operand Expression `json:"operand"`
+	Type string `json:"type"`
+	UnaryOperator
 }
 
 func NewIsNullOperator(operand Expression) *IsNullOperator {
 	return &IsNullOperator{
-		Type:    "is_null",
-		Operand: operand,
+		"is_null",
+		UnaryOperator{
+			operator: "IS NULL",
+			Operand:  operand,
+		},
 	}
 }
 
@@ -672,28 +469,6 @@ func (this *IsNullOperator) Evaluate(item *dparval.Value) (*dparval.Value, error
 	return dparval.NewValue(false), nil
 }
 
-func (this *IsNullOperator) String() string {
-	return fmt.Sprintf("%v IS NULL", this.Operand)
-}
-
-func (this *IsNullOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*IsNullOperator)
-	if !ok {
-		return false
-	}
-
-	if this.Operand.EquivalentTo(that.Operand) {
-		return true
-	}
-
-	return false
-}
-
-func (this *IsNullOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Operand}
-	return rv
-}
-
 func (this *IsNullOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -703,14 +478,17 @@ func (this *IsNullOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 // ****************************************************************************
 
 type IsNotNullOperator struct {
-	Type    string     `json:"type"`
-	Operand Expression `json:"operand"`
+	Type string `json:"type"`
+	UnaryOperator
 }
 
 func NewIsNotNullOperator(operand Expression) *IsNotNullOperator {
 	return &IsNotNullOperator{
-		Type:    "is_not_null",
-		Operand: operand,
+		"is_not_null",
+		UnaryOperator{
+			operator: "IS NOT NULL",
+			Operand:  operand,
+		},
 	}
 }
 
@@ -733,28 +511,6 @@ func (this *IsNotNullOperator) Evaluate(item *dparval.Value) (*dparval.Value, er
 	return dparval.NewValue(true), nil
 }
 
-func (this *IsNotNullOperator) String() string {
-	return fmt.Sprintf("%v IS NOT NULL", this.Operand)
-}
-
-func (this *IsNotNullOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*IsNotNullOperator)
-	if !ok {
-		return false
-	}
-
-	if this.Operand.EquivalentTo(that.Operand) {
-		return true
-	}
-
-	return false
-}
-
-func (this *IsNotNullOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Operand}
-	return rv
-}
-
 func (this *IsNotNullOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -764,14 +520,17 @@ func (this *IsNotNullOperator) Accept(ev ExpressionVisitor) (Expression, error) 
 // ****************************************************************************
 
 type IsMissingOperator struct {
-	Type    string     `json:"type"`
-	Operand Expression `json:"operand"`
+	Type string `json:"type"`
+	UnaryOperator
 }
 
 func NewIsMissingOperator(operand Expression) *IsMissingOperator {
 	return &IsMissingOperator{
-		Type:    "is_missing",
-		Operand: operand,
+		"is_missing",
+		UnaryOperator{
+			operator: "IS MISSING",
+			Operand:  operand,
+		},
 	}
 }
 
@@ -790,28 +549,6 @@ func (this *IsMissingOperator) Evaluate(item *dparval.Value) (*dparval.Value, er
 	return dparval.NewValue(false), nil
 }
 
-func (this *IsMissingOperator) String() string {
-	return fmt.Sprintf("%v IS MISSING", this.Operand)
-}
-
-func (this *IsMissingOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*IsMissingOperator)
-	if !ok {
-		return false
-	}
-
-	if this.Operand.EquivalentTo(that.Operand) {
-		return true
-	}
-
-	return false
-}
-
-func (this *IsMissingOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Operand}
-	return rv
-}
-
 func (this *IsMissingOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -821,14 +558,17 @@ func (this *IsMissingOperator) Accept(ev ExpressionVisitor) (Expression, error) 
 // ****************************************************************************
 
 type IsNotMissingOperator struct {
-	Type    string     `json:"type"`
-	Operand Expression `json:"operand"`
+	Type string `json:"type"`
+	UnaryOperator
 }
 
 func NewIsNotMissingOperator(operand Expression) *IsNotMissingOperator {
 	return &IsNotMissingOperator{
-		Type:    "is_not_missing",
-		Operand: operand,
+		"is_not_missing",
+		UnaryOperator{
+			operator: "IS NOT MISSING",
+			Operand:  operand,
+		},
 	}
 }
 
@@ -847,28 +587,6 @@ func (this *IsNotMissingOperator) Evaluate(item *dparval.Value) (*dparval.Value,
 	return dparval.NewValue(true), nil
 }
 
-func (this *IsNotMissingOperator) String() string {
-	return fmt.Sprintf("%v IS NOT MISSING", this.Operand)
-}
-
-func (this *IsNotMissingOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*IsNotMissingOperator)
-	if !ok {
-		return false
-	}
-
-	if this.Operand.EquivalentTo(that.Operand) {
-		return true
-	}
-
-	return false
-}
-
-func (this *IsNotMissingOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Operand}
-	return rv
-}
-
 func (this *IsNotMissingOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -878,14 +596,17 @@ func (this *IsNotMissingOperator) Accept(ev ExpressionVisitor) (Expression, erro
 // ****************************************************************************
 
 type IsValuedOperator struct {
-	Type    string     `json:"type"`
-	Operand Expression `json:"operand"`
+	Type string `json:"type"`
+	UnaryOperator
 }
 
 func NewIsValuedOperator(operand Expression) *IsValuedOperator {
 	return &IsValuedOperator{
-		Type:    "is_valued",
-		Operand: operand,
+		"is_valued",
+		UnaryOperator{
+			operator: "IS VALUED",
+			Operand:  operand,
+		},
 	}
 }
 
@@ -908,28 +629,6 @@ func (this *IsValuedOperator) Evaluate(item *dparval.Value) (*dparval.Value, err
 	return dparval.NewValue(true), nil
 }
 
-func (this *IsValuedOperator) String() string {
-	return fmt.Sprintf("%v IS VALUED", this.Operand)
-}
-
-func (this *IsValuedOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*IsValuedOperator)
-	if !ok {
-		return false
-	}
-
-	if this.Operand.EquivalentTo(that.Operand) {
-		return true
-	}
-
-	return false
-}
-
-func (this *IsValuedOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Operand}
-	return rv
-}
-
 func (this *IsValuedOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -939,14 +638,17 @@ func (this *IsValuedOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 // ****************************************************************************
 
 type IsNotValuedOperator struct {
-	Type    string     `json:"type"`
-	Operand Expression `json:"operand"`
+	Type string `json:"type"`
+	UnaryOperator
 }
 
 func NewIsNotValuedOperator(operand Expression) *IsNotValuedOperator {
 	return &IsNotValuedOperator{
-		Type:    "is_not_valued",
-		Operand: operand,
+		"is_not_valued",
+		UnaryOperator{
+			operator: "IS NOT VALUED",
+			Operand:  operand,
+		},
 	}
 }
 
@@ -967,28 +669,6 @@ func (this *IsNotValuedOperator) Evaluate(item *dparval.Value) (*dparval.Value, 
 	}
 
 	return dparval.NewValue(false), nil
-}
-
-func (this *IsNotValuedOperator) String() string {
-	return fmt.Sprintf("%v IS NOT VALUED", this.Operand)
-}
-
-func (this *IsNotValuedOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*IsNotValuedOperator)
-	if !ok {
-		return false
-	}
-
-	if this.Operand.EquivalentTo(that.Operand) {
-		return true
-	}
-
-	return false
-}
-
-func (this *IsNotValuedOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Operand}
-	return rv
 }
 
 func (this *IsNotValuedOperator) Accept(ev ExpressionVisitor) (Expression, error) {

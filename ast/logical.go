@@ -10,7 +10,6 @@
 package ast
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/couchbaselabs/dparval"
@@ -21,14 +20,17 @@ import (
 // ****************************************************************************
 
 type AndOperator struct {
-	Type     string         `json:"type"`
-	Operands ExpressionList `json:"operands"`
+	Type string `json:"type"`
+	NaryOperator
 }
 
 func NewAndOperator(operands ExpressionList) *AndOperator {
 	return &AndOperator{
-		Type:     "and",
-		Operands: operands,
+		"and",
+		NaryOperator{
+			operator: "AND",
+			Operands: operands,
+		},
 	}
 }
 
@@ -69,59 +71,6 @@ func (this *AndOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	return dparval.NewValue(rv), re
 }
 
-func (this *AndOperator) String() string {
-	inside := ""
-	for i, oper := range this.Operands {
-		if i != 0 {
-			inside = inside + " AND "
-		}
-		inside = inside + fmt.Sprintf("%v", oper)
-	}
-	return inside
-}
-
-func (this *AndOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*AndOperator)
-	if !ok {
-		return false
-	}
-
-	if len(this.Operands) != len(that.Operands) {
-		return false
-	}
-
-	found := make([]bool, len(this.Operands))
-	for _, thisOper := range this.Operands {
-		for j, thatOper := range that.Operands {
-			if thisOper.EquivalentTo(thatOper) {
-				if !found[j] {
-					// we cant match the same target item more than once
-					found[j] = true
-				}
-			}
-		}
-	}
-
-	// now walk the found list and see if anything wasnt found
-	for _, fi := range found {
-		if !fi {
-			return false
-		}
-	}
-
-	return false
-}
-
-func (this *AndOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{}
-
-	for _, oper := range this.Operands {
-		rv = append(rv, oper)
-	}
-
-	return rv
-}
-
 func (this *AndOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -131,14 +80,17 @@ func (this *AndOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 // ****************************************************************************
 
 type OrOperator struct {
-	Type     string         `json:"type"`
-	Operands ExpressionList `json:"operands"`
+	Type string `json:"type"`
+	NaryOperator
 }
 
 func NewOrOperator(operands ExpressionList) *OrOperator {
 	return &OrOperator{
-		Type:     "or",
-		Operands: operands,
+		"or",
+		NaryOperator{
+			operator: "OR",
+			Operands: operands,
+		},
 	}
 }
 
@@ -178,59 +130,6 @@ func (this *OrOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	return dparval.NewValue(rv), re
 }
 
-func (this *OrOperator) String() string {
-	inside := ""
-	for i, oper := range this.Operands {
-		if i != 0 {
-			inside = inside + " OR "
-		}
-		inside = inside + fmt.Sprintf("%v", oper)
-	}
-	return inside
-}
-
-func (this *OrOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*OrOperator)
-	if !ok {
-		return false
-	}
-
-	if len(this.Operands) != len(that.Operands) {
-		return false
-	}
-
-	found := make([]bool, len(this.Operands))
-	for _, thisOper := range this.Operands {
-		for j, thatOper := range that.Operands {
-			if thisOper.EquivalentTo(thatOper) {
-				if !found[j] {
-					// we cant match the same target item more than once
-					found[j] = true
-				}
-			}
-		}
-	}
-
-	// now walk the found list and see if anything wasnt found
-	for _, fi := range found {
-		if !fi {
-			return false
-		}
-	}
-
-	return false
-}
-
-func (this *OrOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{}
-
-	for _, oper := range this.Operands {
-		rv = append(rv, oper)
-	}
-
-	return rv
-}
-
 func (this *OrOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
@@ -240,14 +139,19 @@ func (this *OrOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 // ****************************************************************************
 
 type NotOperator struct {
-	Type    string     `json:"type"`
-	Operand Expression `json:"operand"`
+	Type string `json:"type"`
+	PrefixUnaryOperator
 }
 
 func NewNotOperator(operand Expression) *NotOperator {
 	return &NotOperator{
-		Type:    "not",
-		Operand: operand,
+		"not",
+		PrefixUnaryOperator{
+			UnaryOperator{
+				operator: "NOT ",
+				Operand:  operand,
+			},
+		},
 	}
 }
 
@@ -268,28 +172,6 @@ func (this *NotOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 		log.Fatalf("Unexpected type %T in NOT", operandBoolVal)
 		return dparval.NewValue(nil), nil
 	}
-}
-
-func (this *NotOperator) String() string {
-	return fmt.Sprintf("NOT %v", this.Operand)
-}
-
-func (this *NotOperator) EquivalentTo(t Expression) bool {
-	that, ok := t.(*NotOperator)
-	if !ok {
-		return false
-	}
-
-	if !this.Operand.EquivalentTo(that.Operand) {
-		return false
-	}
-
-	return true
-}
-
-func (this *NotOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Operand}
-	return rv
 }
 
 func (this *NotOperator) Accept(ev ExpressionVisitor) (Expression, error) {
