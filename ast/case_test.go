@@ -198,19 +198,19 @@ func TestCaseVerifyFormalNotation(t *testing.T) {
 	caseFive.Else = notFormalExpression
 
 	tests := ExpressionVerifyFormalNotationTestSet{
-		{caseTwo, nil, nil},
-		{caseThree, nil, notFormalExpressionError},
-		{caseFour, nil, notFormalExpressionError},
-		{caseFive, nil, notFormalExpressionError},
+		{caseTwo, caseTwo, nil},
+		{caseThree, caseThree, notFormalExpressionError},
+		{caseFour, caseFour, notFormalExpressionError},
+		{caseFive, caseFive, notFormalExpressionError},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
 
 	// again with single bucket
 	tests = ExpressionVerifyFormalNotationTestSet{
-		{caseThree, nil, nil},
-		{caseFour, nil, nil},
-		{caseFive, nil, nil},
+		{caseThree, caseThree, nil},
+		{caseFour, caseFour, nil},
+		{caseFive, caseFive, nil},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket"}, "bucket")

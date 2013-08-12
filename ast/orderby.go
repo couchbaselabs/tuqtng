@@ -24,9 +24,11 @@ func NewSortExpression(expr Expression, asc bool) *SortExpression {
 type SortExpressionList []*SortExpression
 
 func (this SortExpressionList) Validate() error {
+	var err error
+	validator := NewExpressionValidator()
 	for _, orderExpr := range this {
 		if orderExpr.Expr != nil {
-			err := orderExpr.Expr.Validate()
+			orderExpr.Expr, err = orderExpr.Expr.Accept(validator)
 			if err != nil {
 				return err
 			}
@@ -36,16 +38,36 @@ func (this SortExpressionList) Validate() error {
 }
 
 func (this SortExpressionList) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) error {
+	var err error
+	formalNotation := NewExpressionFormalNotationConverter(forbiddenAliases, aliases, defaultAlias)
 	for _, orderExpr := range this {
 		if orderExpr.Expr != nil {
-			neworderexpr, err := orderExpr.Expr.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
+			orderExpr.Expr, err = orderExpr.Expr.Accept(formalNotation)
 			if err != nil {
 				return err
-			}
-			if neworderexpr != nil {
-				orderExpr.Expr = neworderexpr
 			}
 		}
 	}
 	return nil
+}
+
+func (this SortExpressionList) VerifyAllAggregateFunctionsOrInThisList(groupBy ExpressionList) error {
+	for _, orderExpr := range this {
+		if orderExpr.Expr != nil {
+			fdc := NewExpressionFunctionalDependencyChecker(groupBy)
+			_, err := orderExpr.Expr.Accept(fdc)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func (this SortExpressionList) findAggregateFunctionReferences() ExpressionList {
+	af := NewExpressionAggregateFinder()
+	for _, orderExpr := range this {
+		orderExpr.Expr.Accept(af)
+	}
+	return af.GetAggregates()
 }

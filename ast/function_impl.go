@@ -19,6 +19,12 @@ type SystemFunction interface {
 	Name() string
 	Evaluate(*dparval.Value, FunctionArgExpressionList) (*dparval.Value, error)
 	Validate(FunctionArgExpressionList) error
+	IsAggregate() bool
+}
+
+type AggregateFunction interface {
+	UpdateAggregate(group *dparval.Value, item *dparval.Value, arguments FunctionArgExpressionList) error
+	DefaultAggregate(group *dparval.Value, arguments FunctionArgExpressionList) error
 }
 
 var SystemFunctionRegistry map[string]SystemFunction

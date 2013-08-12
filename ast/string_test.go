@@ -67,11 +67,11 @@ func TestStringVerifyFormalNotation(t *testing.T) {
 	stringServer := NewLiteralString("Server")
 
 	tests := ExpressionVerifyFormalNotationTestSet{
-		{NewStringConcatenateOperator(stringCouchbase, stringServer), nil, nil},
+		{NewStringConcatenateOperator(stringCouchbase, stringServer), NewStringConcatenateOperator(stringCouchbase, stringServer), nil},
 		// first arg not formal
-		{NewStringConcatenateOperator(notFormalExpression, stringServer), nil, notFormalExpressionError},
+		{NewStringConcatenateOperator(notFormalExpression, stringServer), NewStringConcatenateOperator(notFormalExpression, stringServer), notFormalExpressionError},
 		// second arg not formal
-		{NewStringConcatenateOperator(stringCouchbase, notFormalExpression), nil, notFormalExpressionError},
+		{NewStringConcatenateOperator(stringCouchbase, notFormalExpression), NewStringConcatenateOperator(stringCouchbase, notFormalExpression), notFormalExpressionError},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
@@ -79,9 +79,9 @@ func TestStringVerifyFormalNotation(t *testing.T) {
 	// again with single bucket
 	tests = ExpressionVerifyFormalNotationTestSet{
 		// first arg not formal
-		{NewStringConcatenateOperator(notFormalExpression, stringServer), nil, nil},
+		{NewStringConcatenateOperator(notFormalExpression, stringServer), NewStringConcatenateOperator(notFormalExpressionAfter, stringServer), nil},
 		// second arg not formal
-		{NewStringConcatenateOperator(stringCouchbase, notFormalExpression), nil, nil},
+		{NewStringConcatenateOperator(stringCouchbase, notFormalExpression), NewStringConcatenateOperator(stringCouchbase, notFormalExpressionAfter), nil},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket"}, "bucket")

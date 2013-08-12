@@ -37,12 +37,17 @@ func (this *LiteralNull) String() string {
 	return fmt.Sprintf("null")
 }
 
-func (this *LiteralNull) Validate() error {
-	return nil
+func (this *LiteralNull) EquivalentTo(t Expression) bool {
+	_, ok := t.(*LiteralNull)
+	return ok
 }
 
-func (this *LiteralNull) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	return nil, nil
+func (this *LiteralNull) Dependencies() ExpressionList {
+	return ExpressionList{}
+}
+
+func (this *LiteralNull) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -69,12 +74,25 @@ func (this *LiteralBool) String() string {
 	return fmt.Sprintf("%v", this.Val)
 }
 
-func (this *LiteralBool) Validate() error {
-	return nil
+func (this *LiteralBool) EquivalentTo(t Expression) bool {
+	that, ok := t.(*LiteralBool)
+	if !ok {
+		return false
+	}
+
+	if this.Val == that.Val {
+		return true
+	}
+
+	return false
 }
 
-func (this *LiteralBool) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	return nil, nil
+func (this *LiteralBool) Dependencies() ExpressionList {
+	return ExpressionList{}
+}
+
+func (this *LiteralBool) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -101,12 +119,25 @@ func (this *LiteralNumber) String() string {
 	return fmt.Sprintf("%v", this.Val)
 }
 
-func (this *LiteralNumber) Validate() error {
-	return nil
+func (this *LiteralNumber) EquivalentTo(t Expression) bool {
+	that, ok := t.(*LiteralNumber)
+	if !ok {
+		return false
+	}
+
+	if this.Val == that.Val {
+		return true
+	}
+
+	return false
 }
 
-func (this *LiteralNumber) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	return nil, nil
+func (this *LiteralNumber) Dependencies() ExpressionList {
+	return ExpressionList{}
+}
+
+func (this *LiteralNumber) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -133,12 +164,25 @@ func (this *LiteralString) String() string {
 	return fmt.Sprintf("\"%s\"", this.Val)
 }
 
-func (this *LiteralString) Validate() error {
-	return nil
+func (this *LiteralString) EquivalentTo(t Expression) bool {
+	that, ok := t.(*LiteralString)
+	if !ok {
+		return false
+	}
+
+	if this.Val == that.Val {
+		return true
+	}
+
+	return false
 }
 
-func (this *LiteralString) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	return nil, nil
+func (this *LiteralString) Dependencies() ExpressionList {
+	return ExpressionList{}
+}
+
+func (this *LiteralString) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -188,27 +232,35 @@ func (this *LiteralArray) String() string {
 	return inside
 }
 
-func (this *LiteralArray) Validate() error {
-	for _, v := range this.Val {
-		err := v.Validate()
-		if err != nil {
-			return err
+func (this *LiteralArray) EquivalentTo(t Expression) bool {
+	that, ok := t.(*LiteralArray)
+	if !ok {
+		return false
+	}
+
+	if len(this.Val) != len(that.Val) {
+		return false
+	}
+	for i, thisVal := range this.Val {
+		thatVal := that.Val[i]
+		if !thisVal.EquivalentTo(thatVal) {
+			return false
 		}
 	}
-	return nil
+
+	return true
 }
 
-func (this *LiteralArray) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	for i, v := range this.Val {
-		newi, err := v.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-		if err != nil {
-			return nil, err
-		}
-		if newi != nil {
-			this.Val[i] = newi
-		}
+func (this *LiteralArray) Dependencies() ExpressionList {
+	rv := ExpressionList{}
+	for _, thisVal := range this.Val {
+		rv = append(rv, thisVal)
 	}
-	return nil, nil
+	return rv
+}
+
+func (this *LiteralArray) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -260,25 +312,36 @@ func (this *LiteralObject) String() string {
 	return inside
 }
 
-func (this *LiteralObject) Validate() error {
-	for _, v := range this.Val {
-		err := v.Validate()
-		if err != nil {
-			return err
+func (this *LiteralObject) EquivalentTo(t Expression) bool {
+	that, ok := t.(*LiteralObject)
+	if !ok {
+		return false
+	}
+
+	if len(this.Val) != len(that.Val) {
+		return false
+	}
+	for key, thisVal := range this.Val {
+		thatVal, ok := that.Val[key]
+		if !ok {
+			return false
+		}
+		if !thisVal.EquivalentTo(thatVal) {
+			return false
 		}
 	}
-	return nil
+
+	return true
 }
 
-func (this *LiteralObject) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	for k, v := range this.Val {
-		newv, err := v.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-		if err != nil {
-			return nil, err
-		}
-		if newv != nil {
-			this.Val[k] = newv
-		}
+func (this *LiteralObject) Dependencies() ExpressionList {
+	rv := ExpressionList{}
+	for _, thisVal := range this.Val {
+		rv = append(rv, thisVal)
 	}
-	return nil, nil
+	return rv
+}
+
+func (this *LiteralObject) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

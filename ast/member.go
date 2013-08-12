@@ -47,33 +47,41 @@ func (this *DotMemberOperator) Evaluate(item *dparval.Value) (*dparval.Value, er
 	return nil, &dparval.Undefined{this.Right.Path}
 }
 
-func (this *DotMemberOperator) Validate() error {
-	err := this.Left.Validate()
-	if err != nil {
-		return err
-	}
-	err = this.Right.Validate()
-	if err != nil {
-		return err
-	}
-	return err
-}
-
 func (this *DotMemberOperator) String() string {
 	return fmt.Sprintf("%v.%v", this.Left, this.Right)
 }
 
-func (this *DotMemberOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	// dot member only performs verification of its LHS
-	// RHS is always the non-leading portion of the a.b.c form
-	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
+func (this *DotMemberOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*DotMemberOperator)
+	if !ok {
+		return false
 	}
-	if newleft != nil {
-		this.Left = newleft
+
+	if !this.Left.EquivalentTo(that.Left) {
+		return false
 	}
-	return nil, nil
+
+	if !this.Right.EquivalentTo(that.Right) {
+		return false
+	}
+
+	return true
+}
+
+// sliglty confusingly, a dot-member expression does not
+// actually depend on its RHS
+// a.b could be rewritten as a["b"] and since b is literal string
+// it is not a dependency
+// other way to look at it is that we're looking side what the LHS
+// gave us, not the outer context, so we don't depend on the outside
+// world at all
+func (this *DotMemberOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Left}
+	return rv
+}
+
+func (this *DotMemberOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -130,36 +138,32 @@ func (this *BracketMemberOperator) Evaluate(item *dparval.Value) (*dparval.Value
 	return nil, &dparval.Undefined{}
 }
 
-func (this *BracketMemberOperator) Validate() error {
-	err := this.Left.Validate()
-	if err != nil {
-		return err
-	}
-	err = this.Right.Validate()
-	if err != nil {
-		return err
-	}
-	return err
-}
-
-func (this *BracketMemberOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newleft != nil {
-		this.Left = newleft
-	}
-	newright, err := this.Right.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newright != nil {
-		this.Right = newright
-	}
-	return nil, nil
-}
-
 func (this *BracketMemberOperator) String() string {
 	return fmt.Sprintf("%v[%v]", this.Left, this.Right)
+}
+
+func (this *BracketMemberOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*BracketMemberOperator)
+	if !ok {
+		return false
+	}
+
+	if !this.Left.EquivalentTo(that.Left) {
+		return false
+	}
+
+	if !this.Right.EquivalentTo(that.Right) {
+		return false
+	}
+
+	return true
+}
+
+func (this *BracketMemberOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Left, this.Right}
+	return rv
+}
+
+func (this *BracketMemberOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

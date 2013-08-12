@@ -68,6 +68,8 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 			currentOperator = xpipeline.NewDocumentJoin(currentElement.Over, currentElement.As)
 		case *plan.EliminateDuplicates:
 			currentOperator = xpipeline.NewEliminateDuplicates()
+		case *plan.Grouper:
+			currentOperator = xpipeline.NewGrouper(currentElement.Group, currentElement.Aggregates)
 		}
 
 		//link root of xpipeline

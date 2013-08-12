@@ -23,10 +23,46 @@ func (this *DuplicateAlias) Error() string {
 
 type ResultExpressionList []*ResultExpression
 
-func (this ResultExpressionList) Validate() error {
+func (this ResultExpressionList) ContainsAggregateFunctionCall() bool {
 	for _, resultExpr := range this {
 		if resultExpr.Expr != nil {
-			err := resultExpr.Expr.Validate()
+			functionCall, ok := resultExpr.Expr.(*FunctionCall)
+			if ok {
+				aggregate := functionCall.IsAggregate()
+				if aggregate {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+func (this ResultExpressionList) VerifyAllAggregateFunctionsOrInThisList(groupBy ExpressionList) error {
+	for _, resultExpr := range this {
+		if resultExpr.Star {
+			// cannot group by a * construct
+			// so we don't even have to check this list
+			return fmt.Errorf("%v is not in the GROUP BY clause", resultExpr.Expr)
+		}
+		if resultExpr.Expr != nil {
+
+			fdc := NewExpressionFunctionalDependencyChecker(groupBy)
+			_, err := resultExpr.Expr.Accept(fdc)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func (this ResultExpressionList) Validate() error {
+	var err error
+	validator := NewExpressionValidator()
+	for _, resultExpr := range this {
+		if resultExpr.Expr != nil {
+			resultExpr.Expr, err = resultExpr.Expr.Accept(validator)
 			if err != nil {
 				return err
 			}
@@ -36,14 +72,13 @@ func (this ResultExpressionList) Validate() error {
 }
 
 func (this ResultExpressionList) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) error {
+	var err error
+	formalNotation := NewExpressionFormalNotationConverter(forbiddenAliases, aliases, defaultAlias)
 	for _, resultExpr := range this {
 		if resultExpr.Expr != nil {
-			newres, err := resultExpr.Expr.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
+			resultExpr.Expr, err = resultExpr.Expr.Accept(formalNotation)
 			if err != nil {
 				return err
-			}
-			if newres != nil {
-				resultExpr.Expr = newres
 			}
 		}
 		if resultExpr.Star && resultExpr.Expr == nil {
@@ -51,12 +86,17 @@ func (this ResultExpressionList) VerifyFormalNotation(forbiddenAliases []string,
 			if defaultAlias != "" {
 				resultExpr.Expr = NewProperty(defaultAlias)
 			}
-			// else {
-			// 	return fmt.Errorf("* is missing qualifier bucket/alias")
-			// }
 		}
 	}
 	return nil
+}
+
+func (this ResultExpressionList) findAggregateFunctionReferences() ExpressionList {
+	af := NewExpressionAggregateFinder()
+	for _, resultExpr := range this {
+		resultExpr.Expr.Accept(af)
+	}
+	return af.GetAggregates()
 }
 
 // this function should be called before assigning default names

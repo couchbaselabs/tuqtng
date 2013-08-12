@@ -75,6 +75,10 @@ func (this *From) GenerateAlias() {
 // the top-level FROM should have bucket "person" and projection "friends"
 // the second level FROM has no bucket and projection "contacts"
 func (this *From) ConvertToBucketFrom() {
+	if this.Bucket != "" {
+		// already converted
+		return
+	}
 	// walk the Projection Expression
 	// there are only 3 valid types in this limited cae
 	// dot memeber, bracket memeber, and property

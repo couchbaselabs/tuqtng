@@ -98,6 +98,14 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel, e
 		lastStep = plan.NewFilter(lastStep, stmt.GetWhere())
 	}
 
+	if stmt.GetGroupBy() != nil {
+		lastStep = plan.NewGroup(lastStep, stmt.GetGroupBy(), stmt.GetAggregateReferences())
+	}
+
+	if stmt.GetHaving() != nil {
+		lastStep = plan.NewFilter(lastStep, stmt.GetHaving())
+	}
+
 	lastStep = plan.NewProjector(lastStep, stmt.GetResultExpressionList(), true)
 
 	if stmt.IsDistinct() {

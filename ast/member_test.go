@@ -122,11 +122,11 @@ func TestDotMemberVerifyFormalNotation(t *testing.T) {
 	pathChildSubOne := NewBracketMemberOperator(propChild, propIndex)
 
 	tests := ExpressionVerifyFormalNotationTestSet{
-		{pathChildDotAge, nil, nil},
-		{pathChildSubOne, nil, nil},
+		{pathChildDotAge, pathChildDotAge, nil},
+		{pathChildSubOne, pathChildSubOne, nil},
 		// not formal
-		{NewDotMemberOperator(notFormalExpression, propAge), nil, notFormalExpressionError},
-		{NewBracketMemberOperator(notFormalExpression, propIndex), nil, notFormalExpressionError},
+		{NewDotMemberOperator(notFormalExpression, propAge), NewDotMemberOperator(notFormalExpression, propAge), notFormalExpressionError},
+		{NewBracketMemberOperator(notFormalExpression, propIndex), NewBracketMemberOperator(notFormalExpression, propIndex), notFormalExpressionError},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
@@ -134,8 +134,8 @@ func TestDotMemberVerifyFormalNotation(t *testing.T) {
 	// again with single alias
 	tests = ExpressionVerifyFormalNotationTestSet{
 		// not formal
-		{NewDotMemberOperator(notFormalExpression, propAge), nil, nil},
-		{NewBracketMemberOperator(notFormalExpression, propIndex), nil, nil},
+		{NewDotMemberOperator(notFormalExpression, propAge), NewDotMemberOperator(notFormalExpressionAfter, propAge), nil},
+		{NewBracketMemberOperator(notFormalExpression, propIndex), NewBracketMemberOperator(notFormalExpressionAfter, propIndex), nil},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket"}, "bucket")

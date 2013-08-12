@@ -118,27 +118,27 @@ func TestArithmeticVerifyFormalNotation(t *testing.T) {
 	numberSeven := NewLiteralNumber(7.0)
 
 	tests := ExpressionVerifyFormalNotationTestSet{
-		{NewPlusOperator(numberSeven, numberSeven), nil, nil},
-		{NewSubtractOperator(numberSeven, numberSeven), nil, nil},
-		{NewMultiplyOperator(numberSeven, numberSeven), nil, nil},
-		{NewDivideOperator(numberSeven, numberSeven), nil, nil},
-		{NewModuloOperator(numberSeven, numberSix), nil, nil},
-		{NewChangeSignOperator(numberSeven), nil, nil},
+		{NewPlusOperator(numberSeven, numberSeven), NewPlusOperator(numberSeven, numberSeven), nil},
+		{NewSubtractOperator(numberSeven, numberSeven), NewSubtractOperator(numberSeven, numberSeven), nil},
+		{NewMultiplyOperator(numberSeven, numberSeven), NewMultiplyOperator(numberSeven, numberSeven), nil},
+		{NewDivideOperator(numberSeven, numberSeven), NewDivideOperator(numberSeven, numberSeven), nil},
+		{NewModuloOperator(numberSeven, numberSix), NewModuloOperator(numberSeven, numberSix), nil},
+		{NewChangeSignOperator(numberSeven), NewChangeSignOperator(numberSeven), nil},
 
 		// first arg not formal
-		{NewPlusOperator(notFormalExpression, numberSeven), nil, notFormalExpressionError},
-		{NewSubtractOperator(notFormalExpression, numberSeven), nil, notFormalExpressionError},
-		{NewMultiplyOperator(notFormalExpression, numberSeven), nil, notFormalExpressionError},
-		{NewDivideOperator(notFormalExpression, numberSeven), nil, notFormalExpressionError},
-		{NewModuloOperator(notFormalExpression, numberSix), nil, notFormalExpressionError},
-		{NewChangeSignOperator(notFormalExpression), nil, notFormalExpressionError},
+		{NewPlusOperator(notFormalExpression, numberSeven), NewPlusOperator(notFormalExpression, numberSeven), notFormalExpressionError},
+		{NewSubtractOperator(notFormalExpression, numberSeven), NewSubtractOperator(notFormalExpression, numberSeven), notFormalExpressionError},
+		{NewMultiplyOperator(notFormalExpression, numberSeven), NewMultiplyOperator(notFormalExpression, numberSeven), notFormalExpressionError},
+		{NewDivideOperator(notFormalExpression, numberSeven), NewDivideOperator(notFormalExpression, numberSeven), notFormalExpressionError},
+		{NewModuloOperator(notFormalExpression, numberSix), NewModuloOperator(notFormalExpression, numberSix), notFormalExpressionError},
+		{NewChangeSignOperator(notFormalExpression), NewChangeSignOperator(notFormalExpression), notFormalExpressionError},
 
 		// second arg not formal
-		{NewPlusOperator(numberSeven, notFormalExpression), nil, notFormalExpressionError},
-		{NewSubtractOperator(numberSeven, notFormalExpression), nil, notFormalExpressionError},
-		{NewMultiplyOperator(numberSeven, notFormalExpression), nil, notFormalExpressionError},
-		{NewDivideOperator(numberSeven, notFormalExpression), nil, notFormalExpressionError},
-		{NewModuloOperator(numberSeven, notFormalExpression), nil, notFormalExpressionError},
+		{NewPlusOperator(numberSeven, notFormalExpression), NewPlusOperator(numberSeven, notFormalExpression), notFormalExpressionError},
+		{NewSubtractOperator(numberSeven, notFormalExpression), NewSubtractOperator(numberSeven, notFormalExpression), notFormalExpressionError},
+		{NewMultiplyOperator(numberSeven, notFormalExpression), NewMultiplyOperator(numberSeven, notFormalExpression), notFormalExpressionError},
+		{NewDivideOperator(numberSeven, notFormalExpression), NewDivideOperator(numberSeven, notFormalExpression), notFormalExpressionError},
+		{NewModuloOperator(numberSeven, notFormalExpression), NewModuloOperator(numberSeven, notFormalExpression), notFormalExpressionError},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
@@ -146,19 +146,19 @@ func TestArithmeticVerifyFormalNotation(t *testing.T) {
 	// same tests again with one alias
 	tests = ExpressionVerifyFormalNotationTestSet{
 		// first arg not formal
-		{NewPlusOperator(notFormalExpression, numberSeven), nil, nil},
-		{NewSubtractOperator(notFormalExpression, numberSeven), nil, nil},
-		{NewMultiplyOperator(notFormalExpression, numberSeven), nil, nil},
-		{NewDivideOperator(notFormalExpression, numberSeven), nil, nil},
-		{NewModuloOperator(notFormalExpression, numberSix), nil, nil},
-		{NewChangeSignOperator(notFormalExpression), nil, nil},
+		{NewPlusOperator(notFormalExpression, numberSeven), NewPlusOperator(notFormalExpressionAfter, numberSeven), nil},
+		{NewSubtractOperator(notFormalExpression, numberSeven), NewSubtractOperator(notFormalExpressionAfter, numberSeven), nil},
+		{NewMultiplyOperator(notFormalExpression, numberSeven), NewMultiplyOperator(notFormalExpressionAfter, numberSeven), nil},
+		{NewDivideOperator(notFormalExpression, numberSeven), NewDivideOperator(notFormalExpressionAfter, numberSeven), nil},
+		{NewModuloOperator(notFormalExpression, numberSix), NewModuloOperator(notFormalExpressionAfter, numberSix), nil},
+		{NewChangeSignOperator(notFormalExpression), NewChangeSignOperator(notFormalExpressionAfter), nil},
 
 		// second arg not formal
-		{NewPlusOperator(numberSeven, notFormalExpression), nil, nil},
-		{NewSubtractOperator(numberSeven, notFormalExpression), nil, nil},
-		{NewMultiplyOperator(numberSeven, notFormalExpression), nil, nil},
-		{NewDivideOperator(numberSeven, notFormalExpression), nil, nil},
-		{NewModuloOperator(numberSeven, notFormalExpression), nil, nil},
+		{NewPlusOperator(numberSeven, notFormalExpression), NewPlusOperator(numberSeven, notFormalExpressionAfter), nil},
+		{NewSubtractOperator(numberSeven, notFormalExpression), NewSubtractOperator(numberSeven, notFormalExpressionAfter), nil},
+		{NewMultiplyOperator(numberSeven, notFormalExpression), NewMultiplyOperator(numberSeven, notFormalExpressionAfter), nil},
+		{NewDivideOperator(numberSeven, notFormalExpression), NewDivideOperator(numberSeven, notFormalExpressionAfter), nil},
+		{NewModuloOperator(numberSeven, notFormalExpression), NewModuloOperator(numberSeven, notFormalExpressionAfter), nil},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket"}, "bucket")

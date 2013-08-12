@@ -64,6 +64,10 @@ func (this *FunctionCeil) Validate(arguments FunctionArgExpressionList) error {
 	return ValidateNoStars(this, arguments)
 }
 
+func (this *FunctionCeil) IsAggregate() bool {
+	return false
+}
+
 type FunctionFloor struct{}
 
 func (this *FunctionFloor) Name() string {
@@ -103,6 +107,10 @@ func (this *FunctionFloor) Validate(arguments FunctionArgExpressionList) error {
 		return err
 	}
 	return ValidateNoStars(this, arguments)
+}
+
+func (this *FunctionFloor) IsAggregate() bool {
+	return false
 }
 
 func RoundFloat(x float64, prec int) float64 {
@@ -198,6 +206,10 @@ func (this *FunctionRound) Validate(arguments FunctionArgExpressionList) error {
 	return ValidateNoStars(this, arguments)
 }
 
+func (this *FunctionRound) IsAggregate() bool {
+	return false
+}
+
 func TruncateFloat(x float64, prec int) float64 {
 
 	var rounder float64
@@ -278,4 +290,8 @@ func (this *FunctionTrunc) Validate(arguments FunctionArgExpressionList) error {
 		return err
 	}
 	return ValidateNoStars(this, arguments)
+}
+
+func (this *FunctionTrunc) IsAggregate() bool {
+	return false
 }

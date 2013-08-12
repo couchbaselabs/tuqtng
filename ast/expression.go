@@ -10,23 +10,21 @@
 package ast
 
 import (
+	"fmt"
 	"github.com/couchbaselabs/dparval"
 )
 
 type Expression interface {
+	fmt.Stringer
+
 	Evaluate(item *dparval.Value) (*dparval.Value, error)
-	Validate() error
 
-	// this method takes a list of valid aliases
-	// if there are any forbidden Aliases
-	// all property refereces MUST NOT start with one of these aliases
-	// if there is more than 1 alias in the list
-	// all property references MUST start with one of these aliases
-	// if not, an appropriate error is returned
-	// if there is only 1 alias, and the reference can be converted
-	// a new expression with the proper reference is returned
-	// it is up to the caller to update any references it may have
-	VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error)
+	// Is this Expresion equivalent to that Expression?
+	EquivalentTo(Expression) bool
+
+	// A list of other Expressions up on which this depends
+	Dependencies() ExpressionList
+
+	// Vistor Pattern
+	Accept(ExpressionVisitor) (Expression, error)
 }
-
-type ExpressionList []Expression

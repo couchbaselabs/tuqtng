@@ -61,3 +61,7 @@ func (this *FunctionLength) Validate(arguments FunctionArgExpressionList) error 
 	}
 	return ValidateNoStars(this, arguments)
 }
+
+func (this *FunctionLength) IsAggregate() bool {
+	return false
+}

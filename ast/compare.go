@@ -77,34 +77,9 @@ func (this *BinaryComparisonOperator) compare(item *dparval.Value) (*dparval.Val
 	return dparval.NewValue(float64(CollateJSON(lvalue, rvalue))), nil
 }
 
-func (this *BinaryComparisonOperator) validate() error {
-	err := this.Left.Validate()
-	if err != nil {
-		return err
-	}
-	err = this.Right.Validate()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *BinaryComparisonOperator) verifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newleft != nil {
-		this.Left = newleft
-	}
-	newright, err := this.Right.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newright != nil {
-		this.Right = newright
-	}
-	return nil, nil
+func (this *BinaryComparisonOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Left, this.Right}
+	return rv
 }
 
 // ****************************************************************************
@@ -150,16 +125,26 @@ func (this *GreaterThanOperator) Evaluate(item *dparval.Value) (*dparval.Value, 
 	}
 }
 
-func (this *GreaterThanOperator) Validate() error {
-	return this.BinaryComparisonOperator.validate()
-}
-
-func (this *GreaterThanOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	return this.BinaryComparisonOperator.verifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-}
-
 func (this *GreaterThanOperator) String() string {
 	return fmt.Sprintf("%v > %v", this.Left, this.Right)
+}
+
+func (this *GreaterThanOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*GreaterThanOperator)
+	if !ok {
+		return false
+	}
+
+	if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Left) &&
+		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Right) {
+		return true
+	}
+
+	return false
+}
+
+func (this *GreaterThanOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -205,16 +190,26 @@ func (this *GreaterThanOrEqualOperator) Evaluate(item *dparval.Value) (*dparval.
 	}
 }
 
-func (this *GreaterThanOrEqualOperator) Validate() error {
-	return this.BinaryComparisonOperator.validate()
-}
-
-func (this *GreaterThanOrEqualOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	return this.BinaryComparisonOperator.verifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-}
-
 func (this *GreaterThanOrEqualOperator) String() string {
 	return fmt.Sprintf("%v >= %v", this.Left, this.Right)
+}
+
+func (this *GreaterThanOrEqualOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*GreaterThanOrEqualOperator)
+	if !ok {
+		return false
+	}
+
+	if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Left) &&
+		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Right) {
+		return true
+	}
+
+	return false
+}
+
+func (this *GreaterThanOrEqualOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -260,16 +255,26 @@ func (this *LessThanOperator) Evaluate(item *dparval.Value) (*dparval.Value, err
 	}
 }
 
-func (this *LessThanOperator) Validate() error {
-	return this.BinaryComparisonOperator.validate()
-}
-
-func (this *LessThanOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	return this.BinaryComparisonOperator.verifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-}
-
 func (this *LessThanOperator) String() string {
 	return fmt.Sprintf("%v < %v", this.Left, this.Right)
+}
+
+func (this *LessThanOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*LessThanOperator)
+	if !ok {
+		return false
+	}
+
+	if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Left) &&
+		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Right) {
+		return true
+	}
+
+	return false
+}
+
+func (this *LessThanOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -315,16 +320,26 @@ func (this *LessThanOrEqualOperator) Evaluate(item *dparval.Value) (*dparval.Val
 	}
 }
 
-func (this *LessThanOrEqualOperator) Validate() error {
-	return this.BinaryComparisonOperator.validate()
-}
-
-func (this *LessThanOrEqualOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	return this.BinaryComparisonOperator.verifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-}
-
 func (this *LessThanOrEqualOperator) String() string {
 	return fmt.Sprintf("%v <= %v", this.Left, this.Right)
+}
+
+func (this *LessThanOrEqualOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*LessThanOrEqualOperator)
+	if !ok {
+		return false
+	}
+
+	if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Left) &&
+		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Right) {
+		return true
+	}
+
+	return false
+}
+
+func (this *LessThanOrEqualOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -370,16 +385,30 @@ func (this *EqualToOperator) Evaluate(item *dparval.Value) (*dparval.Value, erro
 	}
 }
 
-func (this *EqualToOperator) Validate() error {
-	return this.BinaryComparisonOperator.validate()
-}
-
-func (this *EqualToOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	return this.BinaryComparisonOperator.verifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-}
-
 func (this *EqualToOperator) String() string {
 	return fmt.Sprintf("%v = %v", this.Left, this.Right)
+}
+
+func (this *EqualToOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*EqualToOperator)
+	if !ok {
+		return false
+	}
+
+	// equals order doesnt matter
+	if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Left) &&
+		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Right) {
+		return true
+	} else if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Right) &&
+		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Left) {
+		return true
+	}
+
+	return false
+}
+
+func (this *EqualToOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -425,16 +454,30 @@ func (this *NotEqualToOperator) Evaluate(item *dparval.Value) (*dparval.Value, e
 	}
 }
 
-func (this *NotEqualToOperator) Validate() error {
-	return this.BinaryComparisonOperator.validate()
-}
-
-func (this *NotEqualToOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	return this.BinaryComparisonOperator.verifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-}
-
 func (this *NotEqualToOperator) String() string {
 	return fmt.Sprintf("%v != %v", this.Left, this.Right)
+}
+
+func (this *NotEqualToOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*NotEqualToOperator)
+	if !ok {
+		return false
+	}
+
+	// not equals order doesnt matter
+	if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Left) &&
+		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Right) {
+		return true
+	} else if this.BinaryComparisonOperator.Left.EquivalentTo(that.BinaryComparisonOperator.Right) &&
+		this.BinaryComparisonOperator.Right.EquivalentTo(that.BinaryComparisonOperator.Left) {
+		return true
+	}
+
+	return false
+}
+
+func (this *NotEqualToOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -488,38 +531,32 @@ func (this *LikeOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) 
 	return dparval.NewValue(nil), nil
 }
 
-func (this *LikeOperator) Validate() error {
-	err := this.Left.Validate()
-	if err != nil {
-		return err
-	}
-	err = this.Right.Validate()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *LikeOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newleft != nil {
-		this.Left = newleft
-	}
-	newright, err := this.Right.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newright != nil {
-		this.Right = newright
-	}
-	return nil, nil
-}
-
 func (this *LikeOperator) String() string {
 	return fmt.Sprintf("%v LIKE %v", this.Left, this.Right)
+}
+
+func (this *LikeOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*LikeOperator)
+	if !ok {
+		return false
+	}
+
+	// not equals order doesnt matter
+	if this.Left.EquivalentTo(that.Left) &&
+		this.Right.EquivalentTo(that.Right) {
+		return true
+	}
+
+	return false
+}
+
+func (this *LikeOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Left, this.Right}
+	return rv
+}
+
+func (this *LikeOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -572,38 +609,32 @@ func (this *NotLikeOperator) Evaluate(item *dparval.Value) (*dparval.Value, erro
 	return dparval.NewValue(nil), nil
 }
 
-func (this *NotLikeOperator) Validate() error {
-	err := this.Left.Validate()
-	if err != nil {
-		return err
-	}
-	err = this.Right.Validate()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *NotLikeOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newleft != nil {
-		this.Left = newleft
-	}
-	newright, err := this.Right.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newright != nil {
-		this.Right = newright
-	}
-	return nil, nil
-}
-
 func (this *NotLikeOperator) String() string {
 	return fmt.Sprintf("%v NOT LIKE %v", this.Left, this.Right)
+}
+
+func (this *NotLikeOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*NotLikeOperator)
+	if !ok {
+		return false
+	}
+
+	// not equals order doesnt matter
+	if this.Left.EquivalentTo(that.Left) &&
+		this.Right.EquivalentTo(that.Right) {
+		return true
+	}
+
+	return false
+}
+
+func (this *NotLikeOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Left, this.Right}
+	return rv
+}
+
+func (this *NotLikeOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -641,27 +672,30 @@ func (this *IsNullOperator) Evaluate(item *dparval.Value) (*dparval.Value, error
 	return dparval.NewValue(false), nil
 }
 
-func (this *IsNullOperator) Validate() error {
-	err := this.Operand.Validate()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *IsNullOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newoper, err := this.Operand.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newoper != nil {
-		this.Operand = newoper
-	}
-	return nil, nil
-}
-
 func (this *IsNullOperator) String() string {
 	return fmt.Sprintf("%v IS NULL", this.Operand)
+}
+
+func (this *IsNullOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*IsNullOperator)
+	if !ok {
+		return false
+	}
+
+	if this.Operand.EquivalentTo(that.Operand) {
+		return true
+	}
+
+	return false
+}
+
+func (this *IsNullOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Operand}
+	return rv
+}
+
+func (this *IsNullOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -699,27 +733,30 @@ func (this *IsNotNullOperator) Evaluate(item *dparval.Value) (*dparval.Value, er
 	return dparval.NewValue(true), nil
 }
 
-func (this *IsNotNullOperator) Validate() error {
-	err := this.Operand.Validate()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *IsNotNullOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newoper, err := this.Operand.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newoper != nil {
-		this.Operand = newoper
-	}
-	return nil, nil
-}
-
 func (this *IsNotNullOperator) String() string {
 	return fmt.Sprintf("%v IS NOT NULL", this.Operand)
+}
+
+func (this *IsNotNullOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*IsNotNullOperator)
+	if !ok {
+		return false
+	}
+
+	if this.Operand.EquivalentTo(that.Operand) {
+		return true
+	}
+
+	return false
+}
+
+func (this *IsNotNullOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Operand}
+	return rv
+}
+
+func (this *IsNotNullOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -753,27 +790,30 @@ func (this *IsMissingOperator) Evaluate(item *dparval.Value) (*dparval.Value, er
 	return dparval.NewValue(false), nil
 }
 
-func (this *IsMissingOperator) Validate() error {
-	err := this.Operand.Validate()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *IsMissingOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newoper, err := this.Operand.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newoper != nil {
-		this.Operand = newoper
-	}
-	return nil, nil
-}
-
 func (this *IsMissingOperator) String() string {
 	return fmt.Sprintf("%v IS MISSING", this.Operand)
+}
+
+func (this *IsMissingOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*IsMissingOperator)
+	if !ok {
+		return false
+	}
+
+	if this.Operand.EquivalentTo(that.Operand) {
+		return true
+	}
+
+	return false
+}
+
+func (this *IsMissingOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Operand}
+	return rv
+}
+
+func (this *IsMissingOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -807,27 +847,30 @@ func (this *IsNotMissingOperator) Evaluate(item *dparval.Value) (*dparval.Value,
 	return dparval.NewValue(true), nil
 }
 
-func (this *IsNotMissingOperator) Validate() error {
-	err := this.Operand.Validate()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *IsNotMissingOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newoper, err := this.Operand.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newoper != nil {
-		this.Operand = newoper
-	}
-	return nil, nil
-}
-
 func (this *IsNotMissingOperator) String() string {
 	return fmt.Sprintf("%v IS NOT MISSING", this.Operand)
+}
+
+func (this *IsNotMissingOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*IsNotMissingOperator)
+	if !ok {
+		return false
+	}
+
+	if this.Operand.EquivalentTo(that.Operand) {
+		return true
+	}
+
+	return false
+}
+
+func (this *IsNotMissingOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Operand}
+	return rv
+}
+
+func (this *IsNotMissingOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -865,27 +908,30 @@ func (this *IsValuedOperator) Evaluate(item *dparval.Value) (*dparval.Value, err
 	return dparval.NewValue(true), nil
 }
 
-func (this *IsValuedOperator) Validate() error {
-	err := this.Operand.Validate()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *IsValuedOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newoper, err := this.Operand.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newoper != nil {
-		this.Operand = newoper
-	}
-	return nil, nil
-}
-
 func (this *IsValuedOperator) String() string {
 	return fmt.Sprintf("%v IS VALUED", this.Operand)
+}
+
+func (this *IsValuedOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*IsValuedOperator)
+	if !ok {
+		return false
+	}
+
+	if this.Operand.EquivalentTo(that.Operand) {
+		return true
+	}
+
+	return false
+}
+
+func (this *IsValuedOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Operand}
+	return rv
+}
+
+func (this *IsValuedOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -923,25 +969,28 @@ func (this *IsNotValuedOperator) Evaluate(item *dparval.Value) (*dparval.Value, 
 	return dparval.NewValue(false), nil
 }
 
-func (this *IsNotValuedOperator) Validate() error {
-	err := this.Operand.Validate()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *IsNotValuedOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newoper, err := this.Operand.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newoper != nil {
-		this.Operand = newoper
-	}
-	return nil, nil
-}
-
 func (this *IsNotValuedOperator) String() string {
 	return fmt.Sprintf("%v IS NOT VALUED", this.Operand)
+}
+
+func (this *IsNotValuedOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*IsNotValuedOperator)
+	if !ok {
+		return false
+	}
+
+	if this.Operand.EquivalentTo(that.Operand) {
+		return true
+	}
+
+	return false
+}
+
+func (this *IsNotValuedOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Operand}
+	return rv
+}
+
+func (this *IsNotValuedOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

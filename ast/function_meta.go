@@ -56,6 +56,10 @@ func (this *FunctionMeta) Validate(arguments FunctionArgExpressionList) error {
 	return ValidateNoStars(this, arguments)
 }
 
+func (this *FunctionMeta) IsAggregate() bool {
+	return false
+}
+
 type FunctionValue struct {
 }
 
@@ -84,4 +88,8 @@ func (this *FunctionValue) Validate(arguments FunctionArgExpressionList) error {
 		return err
 	}
 	return ValidateNoStars(this, arguments)
+}
+
+func (this *FunctionValue) IsAggregate() bool {
+	return false
 }

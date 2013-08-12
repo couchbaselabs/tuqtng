@@ -65,6 +65,10 @@ func (this *FunctionGreatest) Validate(arguments FunctionArgExpressionList) erro
 	return ValidateNoStars(this, arguments)
 }
 
+func (this *FunctionGreatest) IsAggregate() bool {
+	return false
+}
+
 type FunctionLeast struct{}
 
 func (this *FunctionLeast) Name() string {
@@ -109,6 +113,10 @@ func (this *FunctionLeast) Validate(arguments FunctionArgExpressionList) error {
 	return ValidateNoStars(this, arguments)
 }
 
+func (this *FunctionLeast) IsAggregate() bool {
+	return false
+}
+
 type FunctionIfMissing struct{}
 
 func (this *FunctionIfMissing) Name() string {
@@ -144,6 +152,10 @@ func (this *FunctionIfMissing) Validate(arguments FunctionArgExpressionList) err
 		return err
 	}
 	return ValidateNoStars(this, arguments)
+}
+
+func (this *FunctionIfMissing) IsAggregate() bool {
+	return false
 }
 
 type FunctionIfNull struct{}
@@ -185,6 +197,10 @@ func (this *FunctionIfNull) Validate(arguments FunctionArgExpressionList) error 
 	return ValidateNoStars(this, arguments)
 }
 
+func (this *FunctionIfNull) IsAggregate() bool {
+	return false
+}
+
 type FunctionIfMissingOrNull struct{}
 
 func (this *FunctionIfMissingOrNull) Name() string {
@@ -222,6 +238,10 @@ func (this *FunctionIfMissingOrNull) Validate(arguments FunctionArgExpressionLis
 		return err
 	}
 	return ValidateNoStars(this, arguments)
+}
+
+func (this *FunctionIfMissingOrNull) IsAggregate() bool {
+	return false
 }
 
 type FunctionMissingIf struct{}
@@ -285,6 +305,10 @@ func (this *FunctionMissingIf) Validate(arguments FunctionArgExpressionList) err
 	return ValidateNoStars(this, arguments)
 }
 
+func (this *FunctionMissingIf) IsAggregate() bool {
+	return false
+}
+
 type FunctionNullIf struct{}
 
 func (this *FunctionNullIf) Name() string {
@@ -345,4 +369,8 @@ func (this *FunctionNullIf) Validate(arguments FunctionArgExpressionList) error 
 	}
 
 	return ValidateNoStars(this, arguments)
+}
+
+func (this *FunctionNullIf) IsAggregate() bool {
+	return false
 }

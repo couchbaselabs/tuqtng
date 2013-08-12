@@ -123,8 +123,8 @@ func TestCollectionVerifyFormalNotation(t *testing.T) {
 	allChild := NewCollectionAllOperator(overThirty, propChildren, "child")
 
 	tests := ExpressionVerifyFormalNotationTestSet{
-		{anyChild, nil, nil},
-		{allChild, nil, nil},
+		{anyChild, anyChild, nil},
+		{allChild, allChild, nil},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket"}, "bucket")

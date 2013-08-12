@@ -10,6 +10,7 @@
 package ast
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -86,6 +87,31 @@ func TestSelectStatementWithDuplicateAlias(t *testing.T) {
 	}
 }
 
+func TestSelectStatementWithAggregates(t *testing.T) {
+	var expectedError error = nil
+	stmt := NewSelectStatement()
+
+	groupExpr := NewProperty("bar")
+	stmt.Select = ResultExpressionList{NewResultExpression(groupExpr)}
+	stmt.From = &From{Projection: NewProperty("bucket")}
+	stmt.GroupBy = ExpressionList{groupExpr}
+
+	err := stmt.VerifySemantics()
+	if !reflect.DeepEqual(err, expectedError) {
+		t.Errorf("expected %v, got %v", expectedError, err)
+	}
+
+	projectionExpr := NewProperty("foo")
+	stmt.Select = ResultExpressionList{NewResultExpression(projectionExpr)}
+
+	err = stmt.VerifySemantics()
+	// expected error is calculated after, because it mutates the structure for formalization
+	expectedError = fmt.Errorf("The expression bucket is not satisfied by these dependencies")
+	if !reflect.DeepEqual(err, expectedError) {
+		t.Errorf("expected %v, got %v", expectedError, err)
+	}
+}
+
 func TestSelectStatementDefaultNaming(t *testing.T) {
 	stmt := NewSelectStatement()
 
@@ -149,4 +175,31 @@ func TestSelectStatementValidate(t *testing.T) {
 		}
 	}
 
+}
+
+func TestSelectStatementIsAggregate(t *testing.T) {
+
+	// no aggregate function or group by
+	selectStmt := NewSelectStatement()
+	selectStmt.From = &From{Bucket: "bucket", As: "bucket"}
+	selectStmt.Where = NewBracketMemberOperator(NewProperty("bucket"), NewProperty("name"))
+	agg := selectStmt.IsAggregate()
+	if agg {
+		t.Errorf("expected not an aggregate: %v", selectStmt)
+	}
+
+	// contains group by
+	selectStmt.GroupBy = ExpressionList{NewBracketMemberOperator(NewProperty("bucket"), NewProperty("name"))}
+	agg = selectStmt.IsAggregate()
+	if !agg {
+		t.Errorf("expected an aggregate: %v", selectStmt)
+	}
+
+	// aggregate function, no group by
+	selectStmt.GroupBy = nil
+	selectStmt.Select = ResultExpressionList{NewResultExpression(NewFunctionCall("COUNT", FunctionArgExpressionList{NewStarFunctionArgExpression()}))}
+	agg = selectStmt.IsAggregate()
+	if !agg {
+		t.Errorf("expected an aggregate: %v", selectStmt)
+	}
 }

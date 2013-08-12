@@ -42,60 +42,74 @@ func (this *FunctionCall) Evaluate(item *dparval.Value) (*dparval.Value, error) 
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionCall) Validate() error {
-	// validate the function name is valid
-	functionImpl := SystemFunctionRegistry[this.Name]
-	if functionImpl == nil {
-		return fmt.Errorf("no system function named %v registered", this.Name)
+func (this *FunctionCall) EquivalentTo(t Expression) bool {
+	that, ok := t.(*FunctionCall)
+	if !ok {
+		return false
 	}
 
-	// ask the implementation to validate the arguments
-	return functionImpl.Validate(this.Operands)
+	if this.Name != that.Name {
+		return false
+	}
+
+	if len(this.Operands) != len(that.Operands) {
+		return false
+	}
+
+	for i, thisOperand := range this.Operands {
+		thatOperand := that.Operands[i]
+		if !thisOperand.EquivalentTo(thatOperand) {
+			return false
+		}
+	}
+
+	return true
 }
 
-func (this *FunctionCall) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-
-	// two specific checks need to be made here for special functions
-	if this.Name == "VALUE" {
-		// VALUE() with 0 args is converted to VALUE(defaultAlias) when there is one
-		if len(this.Operands) == 0 && defaultAlias != "" {
-			this.Operands = append(this.Operands, NewFunctionArgExpression(NewProperty(defaultAlias)))
-		}
+func (this *FunctionCall) IsAggregate() bool {
+	functionImpl := SystemFunctionRegistry[this.Name]
+	if functionImpl != nil {
+		return functionImpl.IsAggregate()
 	}
-	if this.Name == "META" {
-		// META() with 0 args is converted to META(defaultAlias) when there is one
-		if len(this.Operands) == 0 && defaultAlias != "" {
-			this.Operands = append(this.Operands, NewFunctionArgExpression(NewProperty(defaultAlias)))
-		} else if len(this.Operands) > 0 {
-			// check to see that the correct bucket is referenced (currently always aliases[0])
-			switch operexpr := this.Operands[0].Expr.(type) {
-			case *Property:
-				if operexpr.Path != aliases[0] {
-					return nil, fmt.Errorf("invalid argument to META() function, must be bucket name/alias")
-				}
-			default:
-				return nil, fmt.Errorf("invalid argument to META() function, must be bucket name/alias")
-			}
-		}
-	}
+	return false
+}
 
-	for _, operand := range this.Operands {
-		if operand.Expr != nil {
-			newoper, err := operand.Expr.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-			if err != nil {
-				return nil, err
-			}
-			if newoper != nil {
-				operand.Expr = newoper
-			}
-		}
+func (this *FunctionCall) UpdateAggregate(group *dparval.Value, item *dparval.Value) error {
+	functionImpl := SystemFunctionRegistry[this.Name]
+	switch functionImpl := functionImpl.(type) {
+	case AggregateFunction:
+		return functionImpl.UpdateAggregate(group, item, this.Operands)
 	}
+	return fmt.Errorf("Not an aggregate function %T", functionImpl)
+}
 
-	return nil, nil
+func (this *FunctionCall) DefaultAggregate(group *dparval.Value) error {
+	functionImpl := SystemFunctionRegistry[this.Name]
+	switch functionImpl := functionImpl.(type) {
+	case AggregateFunction:
+		return functionImpl.DefaultAggregate(group, this.Operands)
+	}
+	return fmt.Errorf("Not an aggregate function %T", functionImpl)
 }
 
 func (this *FunctionCall) String() string {
 	return fmt.Sprintf("%s(%v)", this.Name, this.Operands)
+}
+
+func (this *FunctionCall) Dependencies() ExpressionList {
+	rv := ExpressionList{}
+
+	for _, operand := range this.Operands {
+		if operand.Expr != nil {
+			rv = append(rv, operand.Expr)
+		}
+	}
+
+	return rv
+}
+
+func (this *FunctionCall) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // function arguments
@@ -131,6 +145,16 @@ func (this *FunctionArgExpression) String() string {
 		}
 	}
 	return inside
+}
+
+func (this *FunctionArgExpression) EquivalentTo(that *FunctionArgExpression) bool {
+	if this.Star != that.Star {
+		return false
+	}
+	if !this.Expr.EquivalentTo(that.Expr) {
+		return false
+	}
+	return true
 }
 
 func NewStarFunctionArgExpression() *FunctionArgExpression {

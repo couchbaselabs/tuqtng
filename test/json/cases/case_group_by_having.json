@@ -1,0 +1,80 @@
+
+[
+    {
+        "description": "reference a field in the projection not in the group by",
+        "statements": "SELECT title, type, COUNT(*) AS count FROM catalog GROUP BY type",
+        "error": "Semantic Error - cause: The expression catalog is not satisfied by these dependencies"
+    },
+
+    {
+        "description": "simple group by usage",
+        "statements": "SELECT type, COUNT(*) AS count FROM catalog GROUP BY type",
+        "results": [
+        {
+            "count": 1,
+            "type": "Book"
+        },
+        {
+            "count": 2,
+            "type": "Movies&TV"
+        }
+    ]
+    },
+
+    {
+        "description": "use all aggregate functions, no group by",
+        "statements": "SELECT MIN(pricing.list) AS min, MAX(pricing.list) AS max, AVG(pricing.list) AS avg, SUM(pricing.list) AS sum, COUNT(pricing.list) AS count FROM catalog",
+        "results": [
+        {
+            "avg": 566,
+            "count": 3,
+            "max": 799,
+            "min": 300,
+            "sum": 1698
+        }
+    ]
+    },
+
+    {
+        "description": "use all aggregate functions, this type with group by",
+        "statements": "SELECT type, MIN(pricing.list) AS min, MAX(pricing.list) AS max, AVG(pricing.list) AS avg, SUM(pricing.list) AS sum, COUNT(pricing.list) AS count FROM catalog GROUP BY type",
+        "results": [
+        {
+            "avg": 300,
+            "count": 1,
+            "max": 300,
+            "min": 300,
+            "sum": 300,
+            "type": "Book"
+        },
+        {
+            "avg": 699,
+            "count": 2,
+            "max": 799,
+            "min": 599,
+            "sum": 1398,
+            "type": "Movies&TV"
+        }
+    ]
+    },
+
+    {
+        "description": "use all aggregate functions, with group by and having",
+        "statements": "SELECT type, MIN(pricing.list) AS min, MAX(pricing.list) AS max, AVG(pricing.list) AS avg, SUM(pricing.list) AS sum, COUNT(pricing.list) AS count FROM catalog GROUP BY type HAVING count(pricing.list) > 1",
+        "results": [
+        {
+            "avg": 699,
+            "count": 2,
+            "max": 799,
+            "min": 599,
+            "sum": 1398,
+            "type": "Movies&TV"
+        }
+    ]
+    }
+
+
+
+
+
+]

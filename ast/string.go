@@ -60,36 +60,31 @@ func (this *StringConcatenateOperator) Evaluate(item *dparval.Value) (*dparval.V
 	return dparval.NewValue(nil), nil
 }
 
-func (this *StringConcatenateOperator) Validate() error {
-	err := this.Left.Validate()
-	if err != nil {
-		return err
-	}
-	err = this.Right.Validate()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *StringConcatenateOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newleft, err := this.Left.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newleft != nil {
-		this.Left = newleft
-	}
-	newright, err := this.Right.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newright != nil {
-		this.Right = newright
-	}
-	return nil, nil
-}
-
 func (this *StringConcatenateOperator) String() string {
 	return fmt.Sprintf("%v || %v", this.Left, this.Right)
+}
+
+func (this *StringConcatenateOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*StringConcatenateOperator)
+	if !ok {
+		return false
+	}
+
+	if !this.Left.EquivalentTo(that.Left) {
+		return false
+	}
+	if !this.Right.EquivalentTo(that.Right) {
+		return false
+	}
+
+	return true
+}
+
+func (this *StringConcatenateOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Left, this.Right}
+	return rv
+}
+
+func (this *StringConcatenateOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

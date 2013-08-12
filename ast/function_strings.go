@@ -65,6 +65,10 @@ func (this *FunctionLower) Validate(arguments FunctionArgExpressionList) error {
 	return ValidateNoStars(this, arguments)
 }
 
+func (this *FunctionLower) IsAggregate() bool {
+	return false
+}
+
 type FunctionUpper struct{}
 
 func (this *FunctionUpper) Name() string {
@@ -104,6 +108,10 @@ func (this *FunctionUpper) Validate(arguments FunctionArgExpressionList) error {
 		return err
 	}
 	return ValidateNoStars(this, arguments)
+}
+
+func (this *FunctionUpper) IsAggregate() bool {
+	return false
 }
 
 type FunctionLTrim struct{}
@@ -169,6 +177,10 @@ func (this *FunctionLTrim) Validate(arguments FunctionArgExpressionList) error {
 	return ValidateNoStars(this, arguments)
 }
 
+func (this *FunctionLTrim) IsAggregate() bool {
+	return false
+}
+
 type FunctionRTrim struct{}
 
 func (this *FunctionRTrim) Name() string {
@@ -231,6 +243,10 @@ func (this *FunctionRTrim) Validate(arguments FunctionArgExpressionList) error {
 	return ValidateNoStars(this, arguments)
 }
 
+func (this *FunctionRTrim) IsAggregate() bool {
+	return false
+}
+
 type FunctionTrim struct{}
 
 func (this *FunctionTrim) Name() string {
@@ -291,6 +307,10 @@ func (this *FunctionTrim) Validate(arguments FunctionArgExpressionList) error {
 		return err
 	}
 	return ValidateNoStars(this, arguments)
+}
+
+func (this *FunctionTrim) IsAggregate() bool {
+	return false
 }
 
 type FunctionSubStr struct{}
@@ -398,4 +418,8 @@ func (this *FunctionSubStr) Validate(arguments FunctionArgExpressionList) error 
 		return err
 	}
 	return ValidateNoStars(this, arguments)
+}
+
+func (this *FunctionSubStr) IsAggregate() bool {
+	return false
 }

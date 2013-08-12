@@ -696,17 +696,17 @@ func TestFunctionVerifyFormalNotation(t *testing.T) {
 	tests := ExpressionVerifyFormalNotationTestSet{
 		{
 			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
-			nil,
+			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
 			nil,
 		},
 		{
 			NewFunctionCall("VALUE", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
-			nil,
+			NewFunctionCall("VALUE", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
 			nil,
 		},
 		{
 			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(notFormalExpression)}),
-			nil,
+			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(notFormalExpression)}),
 			notFormalExpressionError,
 		},
 	}
@@ -718,27 +718,27 @@ func TestFunctionVerifyFormalNotation(t *testing.T) {
 	tests = ExpressionVerifyFormalNotationTestSet{
 		{
 			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("notbucket"))}),
-			nil,
+			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewDotMemberOperator(NewProperty("bucket"), NewProperty("notbucket")))}),
 			fmt.Errorf("invalid argument to META() function, must be bucket name/alias"),
 		},
 		{
 			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.4))}),
-			nil,
+			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.4))}),
 			fmt.Errorf("invalid argument to META() function, must be bucket name/alias"),
 		},
 		{
 			NewFunctionCall("META", FunctionArgExpressionList{}),
-			nil,
+			NewFunctionCall("META", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
 			nil,
 		},
 		{
 			NewFunctionCall("VALUE", FunctionArgExpressionList{}),
-			nil,
+			NewFunctionCall("VALUE", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bucket"))}),
 			nil,
 		},
 		{
 			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("bob"))}),
-			nil,
+			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(NewDotMemberOperator(NewProperty("bucket"), NewProperty("bob")))}),
 			nil,
 		},
 	}

@@ -20,7 +20,8 @@ import (
 var notValidExpression = NewFunctionCall("LENGTH", FunctionArgExpressionList{})
 var notValidExpressionError = fmt.Errorf("the LENGTH() function requires exactly 1 argument")
 var notFormalExpression = NewProperty("property")
-var _, notFormalExpressionError = notFormalExpression.VerifyFormalNotation([]string{}, []string{"bucket", "child"}, "")
+var notFormalExpressionAfter = NewDotMemberOperator(NewProperty("bucket"), NewProperty("property"))
+var notFormalExpressionError = fmt.Errorf("Property reference property missing qualifier bucket/alias")
 
 type ExpressionTest struct {
 	input  Expression
@@ -74,8 +75,10 @@ type ExpressionValidateTest struct {
 type ExpressionValidateTestSet []ExpressionValidateTest
 
 func (this ExpressionValidateTestSet) Run(t *testing.T) {
+
 	for _, x := range this {
-		result := x.input.Validate()
+		validator := NewExpressionValidator()
+		_, result := x.input.Accept(validator)
 		if !reflect.DeepEqual(result, x.output) {
 			t.Errorf("Expected %v, got %v for %v", x.output, result, x.input)
 		}
@@ -92,7 +95,8 @@ type ExpressionVerifyFormalNotationTestSet []ExpressionVerifyFormalNotationTest
 
 func (this ExpressionVerifyFormalNotationTestSet) Run(t *testing.T, forbiddenAliases []string, aliases []string, defaultAlias string) {
 	for _, x := range this {
-		result, err := x.input.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
+		formalNotation := NewExpressionFormalNotationConverter(forbiddenAliases, aliases, defaultAlias)
+		result, err := x.input.Accept(formalNotation)
 		if !reflect.DeepEqual(err, x.err) {
 			t.Fatalf("Expected error: %v, got %v for %v", x.err, err, x.input)
 		}
@@ -129,4 +133,18 @@ func (this *internalErrorExpression) VerifyFormalNotation(forbiddenAliases []str
 
 func (this *internalErrorExpression) String() string {
 	return fmt.Sprintf("NOT_A_REAL_EXPRESSION")
+}
+
+func (this *internalErrorExpression) EquivalentTo(t Expression) bool {
+	_, ok := t.(*internalErrorExpression)
+	return ok
+}
+
+func (this *internalErrorExpression) Dependencies() ExpressionList {
+	rv := ExpressionList{}
+	return rv
+}
+
+func (this *internalErrorExpression) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

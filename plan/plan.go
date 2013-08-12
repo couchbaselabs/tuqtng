@@ -229,16 +229,18 @@ func (this *EliminateDuplicates) Sources() []PlanElement {
 }
 
 type Grouper struct {
-	Type  string             `json:"type"`
-	Input PlanElement        `json:"input"`
-	Group ast.ExpressionList `json:"group"`
+	Type       string             `json:"type"`
+	Input      PlanElement        `json:"input"`
+	Group      ast.ExpressionList `json:"group"`
+	Aggregates ast.ExpressionList `json:"aggregates"`
 }
 
-func NewGroup(input PlanElement, group ast.ExpressionList) *Grouper {
+func NewGroup(input PlanElement, group ast.ExpressionList, agg ast.ExpressionList) *Grouper {
 	return &Grouper{
-		Type:  "grouper",
-		Input: input,
-		Group: group,
+		Type:       "grouper",
+		Input:      input,
+		Group:      group,
+		Aggregates: agg,
 	}
 }
 

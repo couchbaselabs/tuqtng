@@ -90,40 +90,36 @@ func (this *CollectionAnyOperator) Evaluate(item *dparval.Value) (*dparval.Value
 	return dparval.NewValue(false), nil
 }
 
-func (this *CollectionAnyOperator) Validate() error {
-	err := this.Condition.Validate()
-	if err != nil {
-		return err
-	}
-	err = this.Over.Validate()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *CollectionAnyOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newover, err := this.Over.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newover != nil {
-		this.Over = newover
-	}
-
-	updatedAliases := append(aliases, this.As)
-	newcond, err := this.Condition.VerifyFormalNotation(forbiddenAliases, updatedAliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newcond != nil {
-		this.Condition = newcond
-	}
-	return nil, nil
-}
-
 func (this *CollectionAnyOperator) String() string {
 	return fmt.Sprintf("ANY %v OVER %v AS %s", this.Condition, this.Over, this.As)
+}
+
+func (this *CollectionAnyOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*CollectionAnyOperator)
+	if !ok {
+		return false
+	}
+
+	if this.As != that.As {
+		return false
+	}
+	if !this.Over.EquivalentTo(that.Over) {
+		return false
+	}
+	if !this.Condition.EquivalentTo(that.Over) {
+		return false
+	}
+
+	return true
+}
+
+func (this *CollectionAnyOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Over, this.Condition}
+	return rv
+}
+
+func (this *CollectionAnyOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 type CollectionAllOperator struct {
@@ -203,38 +199,34 @@ func (this *CollectionAllOperator) Evaluate(item *dparval.Value) (*dparval.Value
 	return dparval.NewValue(false), nil
 }
 
-func (this *CollectionAllOperator) Validate() error {
-	err := this.Condition.Validate()
-	if err != nil {
-		return err
-	}
-	err = this.Over.Validate()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *CollectionAllOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newover, err := this.Over.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newover != nil {
-		this.Over = newover
-	}
-
-	updatedAliases := append(aliases, this.As)
-	newcond, err := this.Condition.VerifyFormalNotation(forbiddenAliases, updatedAliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newcond != nil {
-		this.Condition = newcond
-	}
-	return nil, nil
-}
-
 func (this *CollectionAllOperator) String() string {
 	return fmt.Sprintf("ALL %v OVER %v AS %s", this.Condition, this.Over, this.As)
+}
+
+func (this *CollectionAllOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*CollectionAnyOperator)
+	if !ok {
+		return false
+	}
+
+	if this.As != that.As {
+		return false
+	}
+	if !this.Over.EquivalentTo(that.Over) {
+		return false
+	}
+	if !this.Condition.EquivalentTo(that.Over) {
+		return false
+	}
+
+	return true
+}
+
+func (this *CollectionAllOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Over, this.Condition}
+	return rv
+}
+
+func (this *CollectionAllOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

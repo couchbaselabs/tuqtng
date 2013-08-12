@@ -74,56 +74,6 @@ func (this *CaseOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) 
 	return dparval.NewValue(nil), nil
 }
 
-func (this *CaseOperator) Validate() error {
-	for _, WhenThen := range this.WhenThens {
-		err := WhenThen.When.Validate()
-		if err != nil {
-			return err
-		}
-		err = WhenThen.Then.Validate()
-		if err != nil {
-			return err
-		}
-	}
-	if this.Else != nil {
-		err := this.Else.Validate()
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (this *CaseOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-
-	for _, WhenThen := range this.WhenThens {
-		newwhen, err := WhenThen.When.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-		if err != nil {
-			return nil, err
-		}
-		if newwhen != nil {
-			WhenThen.When = newwhen
-		}
-		newthen, err := WhenThen.Then.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-		if err != nil {
-			return nil, err
-		}
-		if newthen != nil {
-			WhenThen.Then = newthen
-		}
-	}
-	if this.Else != nil {
-		newelse, err := this.Else.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-		if err != nil {
-			return nil, err
-		}
-		if newelse != nil {
-			this.Else = newelse
-		}
-	}
-	return nil, nil
-}
-
 func (this *CaseOperator) String() string {
 	inside := ""
 	for i, wt := range this.WhenThens {
@@ -136,4 +86,51 @@ func (this *CaseOperator) String() string {
 		inside = inside + fmt.Sprintf(" ELSE %v", this.Else)
 	}
 	return fmt.Sprintf("CASE %v END", inside)
+}
+
+func (this *CaseOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*CaseOperator)
+	if !ok {
+		return false
+	}
+
+	// order of the when/the conditions does matter
+	// for now, insist on the exact same order
+	if len(this.WhenThens) != len(that.WhenThens) {
+		return false
+	}
+	for i, thisWT := range this.WhenThens {
+		thatWT := that.WhenThens[i]
+		if !thisWT.When.EquivalentTo(thatWT.When) {
+			return false
+		}
+		if !thatWT.Then.EquivalentTo(thatWT.Then) {
+			return false
+		}
+	}
+	if this.Else != nil && that.Else != nil {
+		if !this.Else.EquivalentTo(that.Else) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (this *CaseOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{}
+
+	for _, WhenThen := range this.WhenThens {
+		rv = append(rv, WhenThen.When)
+		rv = append(rv, WhenThen.Then)
+	}
+	if this.Else != nil {
+		rv = append(rv, this.Else)
+	}
+
+	return rv
+}
+
+func (this *CaseOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

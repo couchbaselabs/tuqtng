@@ -11,7 +11,6 @@ package ast
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/couchbaselabs/dparval"
 )
@@ -43,33 +42,24 @@ func (this *Property) String() string {
 	return fmt.Sprintf("%s", this.Path)
 }
 
-func (this *Property) Validate() error {
-	return nil
+func (this *Property) EquivalentTo(t Expression) bool {
+	that, ok := t.(*Property)
+	if !ok {
+		return false
+	}
+
+	if this.Path != that.Path {
+		return false
+	}
+
+	return true
 }
 
-// NOTE this should only be called on leading property references, not ones deeper in a chain (ie, for a.b.c, only a, not b or c)
-func (this *Property) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	// check to see if any of the forbiddenAliases are mentioned
-	if len(forbiddenAliases) > 0 {
-		for _, forbiddenAlias := range forbiddenAliases {
-			if this.Path == forbiddenAlias {
-				log.Printf("forbiddenAliases were %v", forbiddenAliases)
-				return nil, fmt.Errorf("Alias %s cannot be referenced", this.Path)
-			}
-		}
-	}
-	// this test is not needed when there are no aliases in the from clause (expression evaluation only)
-	if len(aliases) > 0 {
-		for _, alias := range aliases {
-			if this.Path == alias {
-				return nil, nil
-			}
-		}
-		if defaultAlias != "" {
-			return NewDotMemberOperator(NewProperty(defaultAlias), this), nil
-		} else {
-			return nil, fmt.Errorf("Property reference %s missing qualifier bucket/alias", this.Path)
-		}
-	}
-	return nil, nil
+func (this *Property) Dependencies() ExpressionList {
+	rv := ExpressionList{}
+	return rv
+}
+
+func (this *Property) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

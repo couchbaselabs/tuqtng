@@ -90,7 +90,13 @@ select_group_having:
 }
 |
 GROUP BY expression_list having {
-
+	group_by := parsingStack.Pop().(ast.ExpressionList)
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.GroupBy = group_by
+	default:
+		logDebugGrammar("This statement does not support GROUP BY")
+	}
 }
 ;
 

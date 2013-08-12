@@ -70,18 +70,18 @@ func TestBooleanVerifyFormalNotation(t *testing.T) {
 	booleanTrue := NewLiteralBool(true)
 
 	tests := ExpressionVerifyFormalNotationTestSet{
-		{NewAndOperator(ExpressionList{booleanTrue, booleanTrue}), nil, nil},
-		{NewOrOperator(ExpressionList{booleanTrue, booleanTrue}), nil, nil},
-		{NewNotOperator(booleanTrue), nil, nil},
+		{NewAndOperator(ExpressionList{booleanTrue, booleanTrue}), NewAndOperator(ExpressionList{booleanTrue, booleanTrue}), nil},
+		{NewOrOperator(ExpressionList{booleanTrue, booleanTrue}), NewOrOperator(ExpressionList{booleanTrue, booleanTrue}), nil},
+		{NewNotOperator(booleanTrue), NewNotOperator(booleanTrue), nil},
 
 		// first arg not formal
-		{NewAndOperator(ExpressionList{notFormalExpression, booleanTrue}), nil, notFormalExpressionError},
-		{NewOrOperator(ExpressionList{notFormalExpression, booleanTrue}), nil, notFormalExpressionError},
-		{NewNotOperator(notFormalExpression), nil, notFormalExpressionError},
+		{NewAndOperator(ExpressionList{notFormalExpression, booleanTrue}), NewAndOperator(ExpressionList{notFormalExpression, booleanTrue}), notFormalExpressionError},
+		{NewOrOperator(ExpressionList{notFormalExpression, booleanTrue}), NewOrOperator(ExpressionList{notFormalExpression, booleanTrue}), notFormalExpressionError},
+		{NewNotOperator(notFormalExpression), NewNotOperator(notFormalExpression), notFormalExpressionError},
 
 		// second arg not formal
-		{NewAndOperator(ExpressionList{booleanTrue, notFormalExpression}), nil, notFormalExpressionError},
-		{NewOrOperator(ExpressionList{booleanTrue, notFormalExpression}), nil, notFormalExpressionError},
+		{NewAndOperator(ExpressionList{booleanTrue, notFormalExpression}), NewAndOperator(ExpressionList{booleanTrue, notFormalExpression}), notFormalExpressionError},
+		{NewOrOperator(ExpressionList{booleanTrue, notFormalExpression}), NewOrOperator(ExpressionList{booleanTrue, notFormalExpression}), notFormalExpressionError},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
@@ -89,13 +89,13 @@ func TestBooleanVerifyFormalNotation(t *testing.T) {
 	// again with single bucket
 	tests = ExpressionVerifyFormalNotationTestSet{
 		// first arg not formal
-		{NewAndOperator(ExpressionList{notFormalExpression, booleanTrue}), nil, nil},
-		{NewOrOperator(ExpressionList{notFormalExpression, booleanTrue}), nil, nil},
-		{NewNotOperator(notFormalExpression), nil, nil},
+		{NewAndOperator(ExpressionList{notFormalExpression, booleanTrue}), NewAndOperator(ExpressionList{notFormalExpressionAfter, booleanTrue}), nil},
+		{NewOrOperator(ExpressionList{notFormalExpression, booleanTrue}), NewOrOperator(ExpressionList{notFormalExpressionAfter, booleanTrue}), nil},
+		{NewNotOperator(notFormalExpression), NewNotOperator(notFormalExpressionAfter), nil},
 
 		// second arg not formal
-		{NewAndOperator(ExpressionList{booleanTrue, notFormalExpression}), nil, nil},
-		{NewOrOperator(ExpressionList{booleanTrue, notFormalExpression}), nil, nil},
+		{NewAndOperator(ExpressionList{booleanTrue, notFormalExpression}), NewAndOperator(ExpressionList{booleanTrue, notFormalExpressionAfter}), nil},
+		{NewOrOperator(ExpressionList{booleanTrue, notFormalExpression}), NewOrOperator(ExpressionList{booleanTrue, notFormalExpressionAfter}), nil},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket"}, "bucket")

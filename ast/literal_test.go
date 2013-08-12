@@ -53,15 +53,15 @@ func TestLiteralValidate(t *testing.T) {
 
 func TestLiteralVerifyFormalNotation(t *testing.T) {
 	tests := ExpressionVerifyFormalNotationTestSet{
-		{NewLiteralNull(), nil, nil},
-		{NewLiteralBool(true), nil, nil},
-		{NewLiteralNumber(1.0), nil, nil},
-		{NewLiteralString("couchbase"), nil, nil},
-		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0)}), nil, nil},
-		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), nil, nil},
+		{NewLiteralNull(), NewLiteralNull(), nil},
+		{NewLiteralBool(true), NewLiteralBool(true), nil},
+		{NewLiteralNumber(1.0), NewLiteralNumber(1.0), nil},
+		{NewLiteralString("couchbase"), NewLiteralString("couchbase"), nil},
+		{NewLiteralArray(ExpressionList{NewLiteralNumber(1.0)}), NewLiteralArray(ExpressionList{NewLiteralNumber(1.0)}), nil},
+		{NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), NewLiteralObject(map[string]Expression{"name": NewLiteralString("bob")}), nil},
 		// contents not formal
-		{NewLiteralArray(ExpressionList{notFormalExpression}), nil, notFormalExpressionError},
-		{NewLiteralObject(map[string]Expression{"name": notFormalExpression}), nil, notFormalExpressionError},
+		{NewLiteralArray(ExpressionList{notFormalExpression}), NewLiteralArray(ExpressionList{notFormalExpression}), notFormalExpressionError},
+		{NewLiteralObject(map[string]Expression{"name": notFormalExpression}), NewLiteralObject(map[string]Expression{"name": notFormalExpression}), notFormalExpressionError},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket", "child"}, "")
@@ -69,8 +69,8 @@ func TestLiteralVerifyFormalNotation(t *testing.T) {
 	// run again with single bucket
 	tests = ExpressionVerifyFormalNotationTestSet{
 		// contents not formal
-		{NewLiteralArray(ExpressionList{notFormalExpression}), nil, nil},
-		{NewLiteralObject(map[string]Expression{"name": notFormalExpression}), nil, nil},
+		{NewLiteralArray(ExpressionList{notFormalExpression}), NewLiteralArray(ExpressionList{notFormalExpressionAfter}), nil},
+		{NewLiteralObject(map[string]Expression{"name": notFormalExpression}), NewLiteralObject(map[string]Expression{"name": notFormalExpressionAfter}), nil},
 	}
 
 	tests.Run(t, []string{}, []string{"bucket"}, "bucket")

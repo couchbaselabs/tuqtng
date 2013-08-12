@@ -80,27 +80,50 @@ func (this *AndOperator) String() string {
 	return inside
 }
 
-func (this *AndOperator) Validate() error {
-	for _, o := range this.Operands {
-		err := o.Validate()
-		if err != nil {
-			return err
+func (this *AndOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*AndOperator)
+	if !ok {
+		return false
+	}
+
+	if len(this.Operands) != len(that.Operands) {
+		return false
+	}
+
+	found := make([]bool, len(this.Operands))
+	for _, thisOper := range this.Operands {
+		for j, thatOper := range that.Operands {
+			if thisOper.EquivalentTo(thatOper) {
+				if !found[j] {
+					// we cant match the same target item more than once
+					found[j] = true
+				}
+			}
 		}
 	}
-	return nil
+
+	// now walk the found list and see if anything wasnt found
+	for _, fi := range found {
+		if !fi {
+			return false
+		}
+	}
+
+	return false
 }
 
-func (this *AndOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	for i, oper := range this.Operands {
-		newoper, err := oper.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-		if err != nil {
-			return nil, err
-		}
-		if newoper != nil {
-			this.Operands[i] = newoper
-		}
+func (this *AndOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{}
+
+	for _, oper := range this.Operands {
+		rv = append(rv, oper)
 	}
-	return nil, nil
+
+	return rv
+}
+
+func (this *AndOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -166,27 +189,50 @@ func (this *OrOperator) String() string {
 	return inside
 }
 
-func (this *OrOperator) Validate() error {
-	for _, o := range this.Operands {
-		err := o.Validate()
-		if err != nil {
-			return err
+func (this *OrOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*OrOperator)
+	if !ok {
+		return false
+	}
+
+	if len(this.Operands) != len(that.Operands) {
+		return false
+	}
+
+	found := make([]bool, len(this.Operands))
+	for _, thisOper := range this.Operands {
+		for j, thatOper := range that.Operands {
+			if thisOper.EquivalentTo(thatOper) {
+				if !found[j] {
+					// we cant match the same target item more than once
+					found[j] = true
+				}
+			}
 		}
 	}
-	return nil
+
+	// now walk the found list and see if anything wasnt found
+	for _, fi := range found {
+		if !fi {
+			return false
+		}
+	}
+
+	return false
 }
 
-func (this *OrOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	for i, oper := range this.Operands {
-		newoper, err := oper.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-		if err != nil {
-			return nil, err
-		}
-		if newoper != nil {
-			this.Operands[i] = newoper
-		}
+func (this *OrOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{}
+
+	for _, oper := range this.Operands {
+		rv = append(rv, oper)
 	}
-	return nil, nil
+
+	return rv
+}
+
+func (this *OrOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 // ****************************************************************************
@@ -228,18 +274,24 @@ func (this *NotOperator) String() string {
 	return fmt.Sprintf("NOT %v", this.Operand)
 }
 
-func (this *NotOperator) Validate() error {
-	err := this.Operand.Validate()
-	return err
+func (this *NotOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*NotOperator)
+	if !ok {
+		return false
+	}
+
+	if !this.Operand.EquivalentTo(that.Operand) {
+		return false
+	}
+
+	return true
 }
 
-func (this *NotOperator) VerifyFormalNotation(forbiddenAliases []string, aliases []string, defaultAlias string) (Expression, error) {
-	newoper, err := this.Operand.VerifyFormalNotation(forbiddenAliases, aliases, defaultAlias)
-	if err != nil {
-		return nil, err
-	}
-	if newoper != nil {
-		this.Operand = newoper
-	}
-	return nil, nil
+func (this *NotOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Operand}
+	return rv
+}
+
+func (this *NotOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
