@@ -84,12 +84,12 @@ func VisitChildren(v ExpressionVisitor, e Expression) (Expression, error) {
 		}
 
 	// function
-	case *FunctionCall:
-		for _, arg := range expr.Operands {
+	case FunctionCallExpression:
+		for _, arg := range expr.GetOperands() {
 			if arg.Expr != nil {
 				arg.Expr, err = arg.Expr.Accept(v)
 				if err != nil {
-					return expr, err
+					return e, err
 				}
 			}
 		}

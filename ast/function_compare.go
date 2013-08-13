@@ -13,27 +13,27 @@ import (
 	"github.com/couchbaselabs/dparval"
 )
 
-func init() {
-	registerSystemFunction(&FunctionGreatest{})
-	registerSystemFunction(&FunctionLeast{})
-	registerSystemFunction(&FunctionIfMissing{})
-	registerSystemFunction(&FunctionIfNull{})
-	registerSystemFunction(&FunctionIfMissingOrNull{})
-	registerSystemFunction(&FunctionMissingIf{})
-	registerSystemFunction(&FunctionNullIf{})
+type FunctionCallGreatest struct {
+	FunctionCall
 }
 
-type FunctionGreatest struct{}
-
-func (this *FunctionGreatest) Name() string {
-	return "GREATEST"
+func NewFunctionCallGreatest(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallGreatest{
+		FunctionCall{
+			Type:     "function",
+			Name:     "GREATEST",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  -1,
+		},
+	}
 }
 
-func (this *FunctionGreatest) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallGreatest) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 
 	var rv interface{} = nil
 
-	for _, arg := range arguments {
+	for _, arg := range this.Operands {
 		av, err := arg.Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
@@ -57,30 +57,32 @@ func (this *FunctionGreatest) Evaluate(item *dparval.Value, arguments FunctionAr
 	return dparval.NewValue(rv), nil
 }
 
-func (this *FunctionGreatest) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, -1)
-	if err != nil {
-		return err
+func (this *FunctionCallGreatest) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallLeast struct {
+	FunctionCall
+}
+
+func NewFunctionCallLeast(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallLeast{
+		FunctionCall{
+			Type:     "function",
+			Name:     "LEAST",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  -1,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionGreatest) IsAggregate() bool {
-	return false
-}
-
-type FunctionLeast struct{}
-
-func (this *FunctionLeast) Name() string {
-	return "LEAST"
-}
-
-func (this *FunctionLeast) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallLeast) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 
 	var rv interface{} = nil
 	first := true
 
-	for _, arg := range arguments {
+	for _, arg := range this.Operands {
 		av, err := arg.Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
@@ -105,27 +107,28 @@ func (this *FunctionLeast) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	return dparval.NewValue(rv), nil
 }
 
-func (this *FunctionLeast) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, -1)
-	if err != nil {
-		return err
+func (this *FunctionCallLeast) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallIfMissing struct {
+	FunctionCall
+}
+
+func NewFunctionCallIfMissing(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallIfMissing{
+		FunctionCall{
+			Type:     "function",
+			Name:     "IFMISSING",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  -1,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionLeast) IsAggregate() bool {
-	return false
-}
-
-type FunctionIfMissing struct{}
-
-func (this *FunctionIfMissing) Name() string {
-	return "IFMISSING"
-}
-
-func (this *FunctionIfMissing) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
-
-	for _, arg := range arguments {
+func (this *FunctionCallIfMissing) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	for _, arg := range this.Operands {
 		av, err := arg.Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
@@ -146,27 +149,29 @@ func (this *FunctionIfMissing) Evaluate(item *dparval.Value, arguments FunctionA
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionIfMissing) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, -1)
-	if err != nil {
-		return err
+func (this *FunctionCallIfMissing) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallIfNull struct {
+	FunctionCall
+}
+
+func NewFunctionCallIfNull(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallIfNull{
+		FunctionCall{
+			Type:     "function",
+			Name:     "IFNULL",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  -1,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionIfMissing) IsAggregate() bool {
-	return false
-}
+func (this *FunctionCallIfNull) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 
-type FunctionIfNull struct{}
-
-func (this *FunctionIfNull) Name() string {
-	return "IFNULL"
-}
-
-func (this *FunctionIfNull) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
-
-	for _, arg := range arguments {
+	for _, arg := range this.Operands {
 		av, err := arg.Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
@@ -189,27 +194,28 @@ func (this *FunctionIfNull) Evaluate(item *dparval.Value, arguments FunctionArgE
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionIfNull) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, -1)
-	if err != nil {
-		return err
+func (this *FunctionCallIfNull) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallIfMissingOrNull struct {
+	FunctionCall
+}
+
+func NewFunctionCallIfMissingOrNull(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallIfMissingOrNull{
+		FunctionCall{
+			Type:     "function",
+			Name:     "IFMISSINGORNULL",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  -1,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionIfNull) IsAggregate() bool {
-	return false
-}
-
-type FunctionIfMissingOrNull struct{}
-
-func (this *FunctionIfMissingOrNull) Name() string {
-	return "IFMISSINGORNULL"
-}
-
-func (this *FunctionIfMissingOrNull) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
-
-	for _, arg := range arguments {
+func (this *FunctionCallIfMissingOrNull) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	for _, arg := range this.Operands {
 		av, err := arg.Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
@@ -232,27 +238,29 @@ func (this *FunctionIfMissingOrNull) Evaluate(item *dparval.Value, arguments Fun
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionIfMissingOrNull) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, -1)
-	if err != nil {
-		return err
+func (this *FunctionCallIfMissingOrNull) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallMissingIf struct {
+	FunctionCall
+}
+
+func NewFunctionCallMissingIf(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallMissingIf{
+		FunctionCall{
+			Type:     "function",
+			Name:     "MISSINGIF",
+			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionIfMissingOrNull) IsAggregate() bool {
-	return false
-}
-
-type FunctionMissingIf struct{}
-
-func (this *FunctionMissingIf) Name() string {
-	return "MISSINGIF"
-}
-
-func (this *FunctionMissingIf) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallMissingIf) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	lav, lerr := arguments[0].Expr.Evaluate(item)
+	lav, lerr := this.Operands[0].Expr.Evaluate(item)
 	if lerr != nil {
 		switch lerr := lerr.(type) {
 		case *dparval.Undefined:
@@ -264,7 +272,7 @@ func (this *FunctionMissingIf) Evaluate(item *dparval.Value, arguments FunctionA
 	}
 
 	// next evaluate the second argument
-	rav, rerr := arguments[1].Expr.Evaluate(item)
+	rav, rerr := this.Operands[1].Expr.Evaluate(item)
 	if rerr != nil {
 		switch rerr := rerr.(type) {
 		case *dparval.Undefined:
@@ -297,27 +305,29 @@ func (this *FunctionMissingIf) Evaluate(item *dparval.Value, arguments FunctionA
 	return lav, nil
 }
 
-func (this *FunctionMissingIf) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 2, 2)
-	if err != nil {
-		return err
+func (this *FunctionCallMissingIf) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallNullIf struct {
+	FunctionCall
+}
+
+func NewFunctionCallNullIf(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallNullIf{
+		FunctionCall{
+			Type:     "function",
+			Name:     "NULLIF",
+			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionMissingIf) IsAggregate() bool {
-	return false
-}
-
-type FunctionNullIf struct{}
-
-func (this *FunctionNullIf) Name() string {
-	return "NULLIF"
-}
-
-func (this *FunctionNullIf) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallNullIf) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	lav, lerr := arguments[0].Expr.Evaluate(item)
+	lav, lerr := this.Operands[0].Expr.Evaluate(item)
 	if lerr != nil {
 		switch lerr := lerr.(type) {
 		case *dparval.Undefined:
@@ -329,7 +339,7 @@ func (this *FunctionNullIf) Evaluate(item *dparval.Value, arguments FunctionArgE
 	}
 
 	// next evaluate the second argument
-	rav, rerr := arguments[1].Expr.Evaluate(item)
+	rav, rerr := this.Operands[1].Expr.Evaluate(item)
 	if rerr != nil {
 		switch rerr := rerr.(type) {
 		case *dparval.Undefined:
@@ -362,15 +372,6 @@ func (this *FunctionNullIf) Evaluate(item *dparval.Value, arguments FunctionArgE
 	return lav, nil
 }
 
-func (this *FunctionNullIf) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 2, 2)
-	if err != nil {
-		return err
-	}
-
-	return ValidateNoStars(this, arguments)
-}
-
-func (this *FunctionNullIf) IsAggregate() bool {
-	return false
+func (this *FunctionCallNullIf) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

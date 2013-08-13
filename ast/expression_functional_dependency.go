@@ -29,7 +29,7 @@ func NewExpressionFunctionalDependencyChecker(deps ExpressionList) *ExpressionFu
 
 func (this *ExpressionFunctionalDependencyChecker) Visit(expr Expression) (Expression, error) {
 	// first let scalar literals pass, they do not depend on anything
-	switch expr := expr.(type) {
+	switch expr.(type) {
 	case *LiteralNull:
 		return nil, nil
 	case *LiteralBool:
@@ -38,12 +38,8 @@ func (this *ExpressionFunctionalDependencyChecker) Visit(expr Expression) (Expre
 		return nil, nil
 	case *LiteralString:
 		return nil, nil
-	case *FunctionCall:
-		// the contents of aggregate functions
-		// do not count as dependencies here
-		if expr.IsAggregate() {
-			return nil, nil
-		}
+	case AggregateFunctionCallExpression:
+		return nil, nil
 	}
 
 	// next see if this expression is directly equivalent

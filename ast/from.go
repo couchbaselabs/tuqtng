@@ -38,7 +38,7 @@ func (this *From) GenerateAlias() {
 	// try to generate one
 	if this.As == "" {
 		switch proj := this.Projection.(type) {
-		case *FunctionCall:
+		case FunctionCallExpression:
 			// empty projection was converted to function call to VALUE() in previous step
 			// in this case the bucket name is the alias
 			// FROM bucket

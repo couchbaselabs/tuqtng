@@ -11,85 +11,64 @@ package ast
 
 import (
 	"fmt"
-	"log"
 	"strings"
-
-	"github.com/couchbaselabs/dparval"
 )
 
 type FunctionCall struct {
 	Type     string                    `json:"type"`
 	Name     string                    `json:"name"`
 	Operands FunctionArgExpressionList `json:"operands"`
+	minArgs  int
+	maxArgs  int
 }
 
-func NewFunctionCall(name string, operands FunctionArgExpressionList) *FunctionCall {
-	return &FunctionCall{
-		Type:     "function",
-		Name:     strings.ToUpper(name),
-		Operands: operands,
+func NewFunctionCall(name string, operands FunctionArgExpressionList) Expression {
+	functionConstructor := SystemFunctionRegistry[strings.ToUpper(name)]
+	if functionConstructor != nil {
+		return functionConstructor(operands)
+	} else {
+		return NewFunctionCallUnknown(operands, name)
 	}
 }
 
-func (this *FunctionCall) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	functionImpl := SystemFunctionRegistry[this.Name]
-	if functionImpl != nil {
-		return functionImpl.Evaluate(item, this.Operands)
-	}
+func (this *FunctionCall) GetName() string {
+	return this.Name
+}
 
-	// FIXME should never happen once we have semantic validation
-	log.Printf("no system function named %v registered", this.Name)
-	return dparval.NewValue(nil), nil
+func (this *FunctionCall) GetOperands() FunctionArgExpressionList {
+	return this.Operands
+}
+
+func (this *FunctionCall) SetOperands(operands FunctionArgExpressionList) {
+	this.Operands = operands
 }
 
 func (this *FunctionCall) EquivalentTo(t Expression) bool {
-	that, ok := t.(*FunctionCall)
+	// another function call expression?
+	that, ok := t.(FunctionCallExpression)
 	if !ok {
 		return false
 	}
 
-	if this.Name != that.Name {
+	// same name?
+	if this.Name != that.GetName() {
 		return false
 	}
 
-	if len(this.Operands) != len(that.Operands) {
+	// same number of operands?
+	if len(this.Operands) != len(that.GetOperands()) {
 		return false
 	}
 
+	// operands are equivalent?
 	for i, thisOperand := range this.Operands {
-		thatOperand := that.Operands[i]
+		thatOperand := that.GetOperands()[i]
 		if !thisOperand.EquivalentTo(thatOperand) {
 			return false
 		}
 	}
 
 	return true
-}
-
-func (this *FunctionCall) IsAggregate() bool {
-	functionImpl := SystemFunctionRegistry[this.Name]
-	if functionImpl != nil {
-		return functionImpl.IsAggregate()
-	}
-	return false
-}
-
-func (this *FunctionCall) UpdateAggregate(group *dparval.Value, item *dparval.Value) error {
-	functionImpl := SystemFunctionRegistry[this.Name]
-	switch functionImpl := functionImpl.(type) {
-	case AggregateFunction:
-		return functionImpl.UpdateAggregate(group, item, this.Operands)
-	}
-	return fmt.Errorf("Not an aggregate function %T", functionImpl)
-}
-
-func (this *FunctionCall) DefaultAggregate(group *dparval.Value) error {
-	functionImpl := SystemFunctionRegistry[this.Name]
-	switch functionImpl := functionImpl.(type) {
-	case AggregateFunction:
-		return functionImpl.DefaultAggregate(group, this.Operands)
-	}
-	return fmt.Errorf("Not an aggregate function %T", functionImpl)
 }
 
 func (this *FunctionCall) String() string {
@@ -108,112 +87,43 @@ func (this *FunctionCall) Dependencies() ExpressionList {
 	return rv
 }
 
-func (this *FunctionCall) Accept(ev ExpressionVisitor) (Expression, error) {
-	return ev.Visit(this)
-}
-
-// function arguments
-
-type FunctionArgExpressionList []*FunctionArgExpression
-
-func (this FunctionArgExpressionList) String() string {
-	inside := ""
-	for i, arg := range this {
-		if i != 0 {
-			inside = inside + ", "
-		}
-		inside = inside + fmt.Sprintf("%v", arg)
-	}
-	return inside
-}
-
-type FunctionArgExpression struct {
-	Star bool       `json:"star"`
-	Expr Expression `json:"expr"`
-}
-
-func (this *FunctionArgExpression) String() string {
-	inside := ""
-	if this.Expr != nil {
-		inside = fmt.Sprintf("%v", this.Expr)
-	}
-	if this.Star {
-		if inside != "" {
-			inside = inside + ".*"
-		} else {
-			inside = "*"
-		}
-	}
-	return inside
-}
-
-func (this *FunctionArgExpression) EquivalentTo(that *FunctionArgExpression) bool {
-	if this.Star != that.Star {
-		return false
-	}
-	if !this.Expr.EquivalentTo(that.Expr) {
-		return false
-	}
-	return true
-}
-
-func NewStarFunctionArgExpression() *FunctionArgExpression {
-	return &FunctionArgExpression{
-		Star: true,
-	}
-}
-
-func NewDotStarFunctionArgExpression(expr Expression) *FunctionArgExpression {
-	return &FunctionArgExpression{
-		Star: true,
-		Expr: expr,
-	}
-}
-
-func NewFunctionArgExpression(expr Expression) *FunctionArgExpression {
-	return &FunctionArgExpression{
-		Star: false,
-		Expr: expr,
-	}
-}
-
-func ValidateNoStars(function SystemFunction, arguments FunctionArgExpressionList) error {
-	for _, arg := range arguments {
+func (this *FunctionCall) ValidateStars() error {
+	for _, arg := range this.Operands {
 		if arg.Star == true {
-			return fmt.Errorf("the %s() function does not support *", function.Name())
+			return fmt.Errorf("the %s() function does not support *", this.Name)
 		}
 	}
 
 	return nil
 }
 
-func ValidateArity(function SystemFunction, arguments FunctionArgExpressionList, min, max int) error {
-	if min > 0 && max > 0 && min == max {
+func (this *FunctionCall) ValidateArity() error {
+	if this.minArgs > 0 && this.maxArgs > 0 && this.minArgs == this.maxArgs {
 		// check for an exact number of arguments
 		argMessage := "argument"
-		if min > 1 {
+		if this.minArgs > 1 {
 			argMessage = "arguments"
 		}
-		if len(arguments) != min {
-			return fmt.Errorf("the %s() function requires exactly %d %s", function.Name(), min, argMessage)
+		if len(this.Operands) != this.minArgs {
+			return fmt.Errorf("the %s() function requires exactly %d %s", this.Name, this.minArgs, argMessage)
 		}
 		return nil
 	}
 
-	if min > 0 && len(arguments) < min {
+	if this.minArgs > 0 && len(this.Operands) < this.minArgs {
 		argMessage := "argument"
-		if min > 1 {
+		if this.minArgs > 1 {
 			argMessage = "arguments"
 		}
-		return fmt.Errorf("the %s() function requires at least %d %s", function.Name(), min, argMessage)
+		return fmt.Errorf("the %s() function requires at least %d %s", this.Name, this.minArgs, argMessage)
 	}
 
-	if max > 0 && len(arguments) > max {
+	if this.maxArgs > 0 && len(this.Operands) > this.maxArgs {
 		argMessage := "argument"
-		if max > 1 {
+		if this.maxArgs > 1 {
 			argMessage = "arguments"
 		}
-		return fmt.Errorf("the %s() function requires no more than %d %s", function.Name(), max, argMessage)
+		return fmt.Errorf("the %s() function requires no more than %d %s", this.Name, this.maxArgs, argMessage)
 	}
 
 	return nil

@@ -26,12 +26,9 @@ type ResultExpressionList []*ResultExpression
 func (this ResultExpressionList) ContainsAggregateFunctionCall() bool {
 	for _, resultExpr := range this {
 		if resultExpr.Expr != nil {
-			functionCall, ok := resultExpr.Expr.(*FunctionCall)
+			_, ok := resultExpr.Expr.(AggregateFunctionCallExpression)
 			if ok {
-				aggregate := functionCall.IsAggregate()
-				if aggregate {
-					return true
-				}
+				return true
 			}
 		}
 	}

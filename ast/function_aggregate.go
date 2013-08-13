@@ -15,116 +15,32 @@ import (
 	"github.com/couchbaselabs/dparval"
 )
 
-func init() {
-	registerSystemFunction(&FunctionCount{})
-	registerSystemFunction(&FunctionSum{})
-	registerSystemFunction(&FunctionAvg{})
-	registerSystemFunction(&FunctionMin{})
-	registerSystemFunction(&FunctionMax{})
+type FunctionCallCount struct {
+	AggregateFunctionCall
 }
 
-// create a unique key where the current value for this
-// aggregate function will be stored
-func aggregateKey(f SystemFunction, arg *FunctionArgExpression) string {
-	return fmt.Sprintf("%s-%t-%v", f.Name(), arg.Star, arg.Expr)
-}
-
-// lookup the current value of the aggregate stored
-// at the specified key
-func aggregateValue(item *dparval.Value, key string) (*dparval.Value, error) {
-	aggregates := item.GetAttachment("aggregates")
-	aggregatesMap, ok := aggregates.(map[string]interface{})
-	if ok {
-		value := aggregatesMap[key]
-		valuedparval, ok := value.(*dparval.Value)
-		if ok {
-			return valuedparval, nil
-		}
+func NewFunctionCallCount(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallCount{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "COUNT",
+				Operands: operands,
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
 	}
-	return nil, fmt.Errorf("Unable to find aggregate")
 }
 
-func setAggregateValue(item *dparval.Value, key string, val *dparval.Value) {
-	aggregates := item.GetAttachment("aggregates")
-	aggregatesMap, ok := aggregates.(map[string]interface{})
-	if !ok {
-		// create a new aggregates map
-		aggregatesMap = map[string]interface{}{}
-		item.SetAttachment("aggregates", aggregatesMap)
-	}
-	aggregatesMap[key] = val
-}
-
-func eliminateNullMissing(val *dparval.Value, err error) (*dparval.Value, error) {
-	if err != nil {
-		switch err := err.(type) {
-		case *dparval.Undefined:
-			// missing elimination
-			return nil, nil
-		default:
-			return nil, err
-		}
-	}
-	if val.Type() == dparval.NULL {
-		// null elimination
-		return nil, nil
-	}
-	return val, nil
-}
-
-func eliminateNonNumber(val *dparval.Value, err error) (*dparval.Value, error) {
-	val, err = eliminateNullMissing(val, err)
-	if err != nil {
-		return nil, err
-	}
-	if val != nil {
-		if val.Type() == dparval.NUMBER {
-			return val, nil
-		}
-	}
-	return nil, nil
-}
-
-func eliminateNonObject(val *dparval.Value, err error) (*dparval.Value, error) {
-	val, err = eliminateNullMissing(val, err)
-	if err != nil {
-		return nil, err
-	}
-	if val != nil {
-		if val.Type() == dparval.OBJECT {
-			return val, nil
-		}
-	}
-	return nil, nil
-}
-
-type FunctionCount struct {
-}
-
-func (this *FunctionCount) Name() string {
-	return "COUNT"
-}
-
-func (this *FunctionCount) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
-	aggregate_key := aggregateKey(this, arguments[0])
+func (this *FunctionCallCount) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	aggregate_key := this.Key()
 	val, err := aggregateValue(item, aggregate_key)
 	return val, err
 }
 
-func (this *FunctionCount) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 1)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *FunctionCount) IsAggregate() bool {
-	return true
-}
-
-func (this *FunctionCount) DefaultAggregate(group *dparval.Value, arguments FunctionArgExpressionList) error {
-	aggregate_key := aggregateKey(this, arguments[0])
+func (this *FunctionCallCount) DefaultAggregate(group *dparval.Value) error {
+	aggregate_key := this.Key()
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
 		currentVal = dparval.NewValue(0.0)
@@ -134,8 +50,8 @@ func (this *FunctionCount) DefaultAggregate(group *dparval.Value, arguments Func
 	return nil
 }
 
-func (this *FunctionCount) UpdateAggregate(group *dparval.Value, item *dparval.Value, arguments FunctionArgExpressionList) error {
-	aggregate_key := aggregateKey(this, arguments[0])
+func (this *FunctionCallCount) UpdateAggregate(group *dparval.Value, item *dparval.Value) error {
+	aggregate_key := this.Key()
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
 		return fmt.Errorf("group defaults not set correctly")
@@ -145,12 +61,12 @@ func (this *FunctionCount) UpdateAggregate(group *dparval.Value, item *dparval.V
 	if !ok {
 		return fmt.Errorf("count value not a number")
 	}
-	if arguments[0].Star && arguments[0].Expr == nil {
+	if this.Operands[0].Star && this.Operands[0].Expr == nil {
 		// pure star
 		setAggregateValue(group, aggregate_key, dparval.NewValue(currentFloat+1))
-	} else if arguments[0].Star && arguments[0].Expr != nil {
+	} else if this.Operands[0].Star && this.Operands[0].Expr != nil {
 		// dot star
-		val, err := arguments[0].Expr.Evaluate(item)
+		val, err := this.Operands[0].Expr.Evaluate(item)
 		val, err = eliminateNonObject(val, err)
 		if err != nil {
 			return err
@@ -158,9 +74,9 @@ func (this *FunctionCount) UpdateAggregate(group *dparval.Value, item *dparval.V
 		if val != nil {
 			setAggregateValue(group, aggregate_key, dparval.NewValue(currentFloat+1))
 		}
-	} else if !arguments[0].Star && arguments[0].Expr != nil {
+	} else if !this.Operands[0].Star && this.Operands[0].Expr != nil {
 		// no star
-		val, err := arguments[0].Expr.Evaluate(item)
+		val, err := this.Operands[0].Expr.Evaluate(item)
 		val, err = eliminateNullMissing(val, err)
 		if err != nil {
 			return err
@@ -172,32 +88,35 @@ func (this *FunctionCount) UpdateAggregate(group *dparval.Value, item *dparval.V
 	return nil
 }
 
-type FunctionSum struct {
+func (this *FunctionCallCount) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
-func (this *FunctionSum) Name() string {
-	return "SUM"
+type FunctionCallSum struct {
+	AggregateFunctionCall
 }
 
-func (this *FunctionSum) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
-	aggregate_key := aggregateKey(this, arguments[0])
+func NewFunctionCallSum(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallSum{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "SUM",
+				Operands: operands,
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
+	}
+}
+
+func (this *FunctionCallSum) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	aggregate_key := this.Key()
 	return aggregateValue(item, aggregate_key)
 }
 
-func (this *FunctionSum) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 1)
-	if err != nil {
-		return err
-	}
-	return ValidateNoStars(this, arguments)
-}
-
-func (this *FunctionSum) IsAggregate() bool {
-	return true
-}
-
-func (this *FunctionSum) DefaultAggregate(group *dparval.Value, arguments FunctionArgExpressionList) error {
-	aggregate_key := aggregateKey(this, arguments[0])
+func (this *FunctionCallSum) DefaultAggregate(group *dparval.Value) error {
+	aggregate_key := this.Key()
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
 		currentVal = dparval.NewValue(nil)
@@ -207,15 +126,15 @@ func (this *FunctionSum) DefaultAggregate(group *dparval.Value, arguments Functi
 	return nil
 }
 
-func (this *FunctionSum) UpdateAggregate(group *dparval.Value, item *dparval.Value, arguments FunctionArgExpressionList) error {
-	aggregate_key := aggregateKey(this, arguments[0])
+func (this *FunctionCallSum) UpdateAggregate(group *dparval.Value, item *dparval.Value) error {
+	aggregate_key := this.Key()
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
 		return fmt.Errorf("group defaults not set correctly")
 	}
 
-	if arguments[0].Expr != nil {
-		val, err := arguments[0].Expr.Evaluate(item)
+	if this.Operands[0].Expr != nil {
+		val, err := this.Operands[0].Expr.Evaluate(item)
 		val, err = eliminateNonNumber(val, err)
 		if err != nil {
 			return err
@@ -236,32 +155,35 @@ func (this *FunctionSum) UpdateAggregate(group *dparval.Value, item *dparval.Val
 	return nil
 }
 
-type FunctionAvg struct {
+func (this *FunctionCallSum) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
-func (this *FunctionAvg) Name() string {
-	return "AVG"
+type FunctionCallAvg struct {
+	AggregateFunctionCall
 }
 
-func (this *FunctionAvg) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
-	aggregate_key := aggregateKey(this, arguments[0])
+func NewFunctionCallAvg(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallAvg{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "AVG",
+				Operands: operands,
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
+	}
+}
+
+func (this *FunctionCallAvg) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	aggregate_key := this.Key()
 	return aggregateValue(item, aggregate_key)
 }
 
-func (this *FunctionAvg) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 1)
-	if err != nil {
-		return err
-	}
-	return ValidateNoStars(this, arguments)
-}
-
-func (this *FunctionAvg) IsAggregate() bool {
-	return true
-}
-
-func (this *FunctionAvg) DefaultAggregate(group *dparval.Value, arguments FunctionArgExpressionList) error {
-	aggregate_key := aggregateKey(this, arguments[0])
+func (this *FunctionCallAvg) DefaultAggregate(group *dparval.Value) error {
+	aggregate_key := this.Key()
 	// avg needs to track sum and count to produce its value
 	count_key := aggregate_key + "_count"
 	sum_key := aggregate_key + "_sum"
@@ -287,8 +209,8 @@ func (this *FunctionAvg) DefaultAggregate(group *dparval.Value, arguments Functi
 	return nil
 }
 
-func (this *FunctionAvg) UpdateAggregate(group *dparval.Value, item *dparval.Value, arguments FunctionArgExpressionList) error {
-	aggregate_key := aggregateKey(this, arguments[0])
+func (this *FunctionCallAvg) UpdateAggregate(group *dparval.Value, item *dparval.Value) error {
+	aggregate_key := this.Key()
 	// avg needs to track sum and count to produce its value
 	count_key := aggregate_key + "_count"
 	sum_key := aggregate_key + "_sum"
@@ -307,8 +229,8 @@ func (this *FunctionAvg) UpdateAggregate(group *dparval.Value, item *dparval.Val
 		return fmt.Errorf("group defaults not set correctly")
 	}
 
-	if arguments[0].Expr != nil {
-		val, err := arguments[0].Expr.Evaluate(item)
+	if this.Operands[0].Expr != nil {
+		val, err := this.Operands[0].Expr.Evaluate(item)
 		val, err = eliminateNonNumber(val, err)
 		if err != nil {
 			return err
@@ -344,32 +266,35 @@ func (this *FunctionAvg) UpdateAggregate(group *dparval.Value, item *dparval.Val
 	return nil
 }
 
-type FunctionMin struct {
+func (this *FunctionCallAvg) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
-func (this *FunctionMin) Name() string {
-	return "MIN"
+type FunctionCallMin struct {
+	AggregateFunctionCall
 }
 
-func (this *FunctionMin) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
-	aggregate_key := aggregateKey(this, arguments[0])
+func NewFunctionCallMin(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallMin{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "MIN",
+				Operands: operands,
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
+	}
+}
+
+func (this *FunctionCallMin) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	aggregate_key := this.Key()
 	return aggregateValue(item, aggregate_key)
 }
 
-func (this *FunctionMin) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 1)
-	if err != nil {
-		return err
-	}
-	return ValidateNoStars(this, arguments)
-}
-
-func (this *FunctionMin) IsAggregate() bool {
-	return true
-}
-
-func (this *FunctionMin) DefaultAggregate(group *dparval.Value, arguments FunctionArgExpressionList) error {
-	aggregate_key := aggregateKey(this, arguments[0])
+func (this *FunctionCallMin) DefaultAggregate(group *dparval.Value) error {
+	aggregate_key := this.Key()
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
 		currentVal = dparval.NewValue(nil)
@@ -379,15 +304,15 @@ func (this *FunctionMin) DefaultAggregate(group *dparval.Value, arguments Functi
 	return nil
 }
 
-func (this *FunctionMin) UpdateAggregate(group *dparval.Value, item *dparval.Value, arguments FunctionArgExpressionList) error {
-	aggregate_key := aggregateKey(this, arguments[0])
+func (this *FunctionCallMin) UpdateAggregate(group *dparval.Value, item *dparval.Value) error {
+	aggregate_key := this.Key()
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
 		return fmt.Errorf("group defaults not set correctly")
 	}
 
-	if arguments[0].Expr != nil {
-		val, err := arguments[0].Expr.Evaluate(item)
+	if this.Operands[0].Expr != nil {
+		val, err := this.Operands[0].Expr.Evaluate(item)
 		val, err = eliminateNullMissing(val, err)
 		if err != nil {
 			return err
@@ -412,32 +337,35 @@ func (this *FunctionMin) UpdateAggregate(group *dparval.Value, item *dparval.Val
 	return nil
 }
 
-type FunctionMax struct {
+func (this *FunctionCallMin) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
-func (this *FunctionMax) Name() string {
-	return "MAX"
+type FunctionCallMax struct {
+	AggregateFunctionCall
 }
 
-func (this *FunctionMax) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
-	aggregate_key := aggregateKey(this, arguments[0])
+func NewFunctionCallMax(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallMax{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "MAX",
+				Operands: operands,
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
+	}
+}
+
+func (this *FunctionCallMax) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	aggregate_key := this.Key()
 	return aggregateValue(item, aggregate_key)
 }
 
-func (this *FunctionMax) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 1)
-	if err != nil {
-		return err
-	}
-	return ValidateNoStars(this, arguments)
-}
-
-func (this *FunctionMax) IsAggregate() bool {
-	return true
-}
-
-func (this *FunctionMax) DefaultAggregate(group *dparval.Value, arguments FunctionArgExpressionList) error {
-	aggregate_key := aggregateKey(this, arguments[0])
+func (this *FunctionCallMax) DefaultAggregate(group *dparval.Value) error {
+	aggregate_key := this.Key()
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
 		currentVal = dparval.NewValue(nil)
@@ -447,15 +375,15 @@ func (this *FunctionMax) DefaultAggregate(group *dparval.Value, arguments Functi
 	return nil
 }
 
-func (this *FunctionMax) UpdateAggregate(group *dparval.Value, item *dparval.Value, arguments FunctionArgExpressionList) error {
-	aggregate_key := aggregateKey(this, arguments[0])
+func (this *FunctionCallMax) UpdateAggregate(group *dparval.Value, item *dparval.Value) error {
+	aggregate_key := this.Key()
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
 		return fmt.Errorf("group defaults not set correctly")
 	}
 
-	if arguments[0].Expr != nil {
-		val, err := arguments[0].Expr.Evaluate(item)
+	if this.Operands[0].Expr != nil {
+		val, err := this.Operands[0].Expr.Evaluate(item)
 		val, err = eliminateNullMissing(val, err)
 		if err != nil {
 			return err
@@ -474,4 +402,8 @@ func (this *FunctionMax) UpdateAggregate(group *dparval.Value, item *dparval.Val
 		}
 	}
 	return nil
+}
+
+func (this *FunctionCallMax) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

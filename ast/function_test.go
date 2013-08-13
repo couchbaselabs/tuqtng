@@ -11,7 +11,6 @@ package ast
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 
 	"github.com/couchbaselabs/dparval"
@@ -745,41 +744,4 @@ func TestFunctionVerifyFormalNotation(t *testing.T) {
 
 	tests.Run(t, []string{}, []string{"bucket"}, "bucket")
 
-}
-
-func TestFunctionValidateArity(t *testing.T) {
-	tests := []struct {
-		name      string
-		arguments FunctionArgExpressionList
-		min       int
-		max       int
-		err       error
-	}{
-		{"LENGTH", FunctionArgExpressionList{
-			NewFunctionArgExpression(NewProperty("arg1")),
-			NewFunctionArgExpression(NewProperty("arg1"))},
-			0,
-			1,
-			fmt.Errorf("the LENGTH() function requires no more than 1 argument"),
-		},
-		{"LENGTH", FunctionArgExpressionList{
-			NewFunctionArgExpression(NewProperty("arg1")),
-			NewFunctionArgExpression(NewProperty("arg1")),
-			NewFunctionArgExpression(NewProperty("arg2"))},
-			0,
-			2,
-			fmt.Errorf("the LENGTH() function requires no more than 2 arguments"),
-		},
-	}
-
-	for _, test := range tests {
-		functionImpl := SystemFunctionRegistry[test.name]
-		if functionImpl == nil {
-			t.Errorf("function impl missing")
-		}
-		err := ValidateArity(functionImpl, test.arguments, test.min, test.max)
-		if !reflect.DeepEqual(err, test.err) {
-			t.Errorf("Expected error %v, got %v", test.err, err)
-		}
-	}
 }

@@ -88,7 +88,7 @@ func (this *Grouper) setGroupDefaults(group *dparval.Value) {
 	// here we should ask each aggregate function to initialize default values for the group
 	for _, agg := range this.Aggregates {
 		switch agg := agg.(type) {
-		case *ast.FunctionCall:
+		case ast.AggregateFunctionCallExpression:
 			err := agg.DefaultAggregate(group)
 			if err != nil {
 				this.Base.SendError(query.NewError(err, "error setting group defaults"))
@@ -101,7 +101,7 @@ func (this *Grouper) updateGroup(group *dparval.Value, val *dparval.Value) {
 	// here we should update aggregate functions with this new item
 	for _, agg := range this.Aggregates {
 		switch agg := agg.(type) {
-		case *ast.FunctionCall:
+		case ast.AggregateFunctionCallExpression:
 			err := agg.UpdateAggregate(group, val)
 			if err != nil {
 				this.Base.SendError(query.NewError(err, "error updating group info"))

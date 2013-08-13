@@ -9,6 +9,10 @@
 
 package ast
 
+import (
+	"fmt"
+)
+
 type SortExpression struct {
 	Expr      Expression `json:"expr"`
 	Ascending bool       `json:"asc"`
@@ -70,4 +74,15 @@ func (this SortExpressionList) findAggregateFunctionReferences() ExpressionList 
 		orderExpr.Expr.Accept(af)
 	}
 	return af.GetAggregates()
+}
+
+func (this SortExpressionList) String() string {
+	rv := ""
+	for i, expr := range this {
+		if i != 0 {
+			rv = rv + ", "
+		}
+		rv = rv + fmt.Sprintf("%v", expr)
+	}
+	return rv
 }

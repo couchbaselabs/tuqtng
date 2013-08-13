@@ -30,38 +30,44 @@ func NewExpressionValidatorNoAggregates() *ExpressionValidator {
 	}
 }
 
-func (this *ExpressionValidator) Visit(expr Expression) (Expression, error) {
-	switch expr := expr.(type) {
-	case *FunctionCall:
-		if expr.IsAggregate() {
-			if !this.allowAggregates {
-				return expr, fmt.Errorf("Aggregate function not allowed here")
-			}
-			if this.insideAggregate {
-				return expr, fmt.Errorf("Cannot use aggregate function inside another aggregate function")
-			}
-			this.insideAggregate = true
+func (this *ExpressionValidator) Visit(e Expression) (Expression, error) {
+	switch expr := e.(type) {
+	case *FunctionCallUnknown:
+		return e, fmt.Errorf("no system function named %s registered", expr.GetName())
+	case AggregateFunctionCallExpression:
+		if !this.allowAggregates {
+			return e, fmt.Errorf("Aggregate function not allowed here")
 		}
-		return this.ValidateFunctionCall(expr)
+		if this.insideAggregate {
+			return e, fmt.Errorf("Cannot use aggregate function inside another aggregate function")
+		}
+		this.insideAggregate = true
+		err := this.ValidateFunctionCall(expr)
+		this.insideAggregate = false
+		return e, err
+	case FunctionCallExpression:
+		err := this.ValidateFunctionCall(expr)
+		if err != nil {
+			return e, err
+		}
+		return VisitChildren(this, e)
 	default:
-		return VisitChildren(this, expr)
+		return VisitChildren(this, e)
 	}
 }
 
-func (this *ExpressionValidator) ValidateFunctionCall(expr *FunctionCall) (Expression, error) {
-	// validate the function name is valid
-	functionImpl := SystemFunctionRegistry[expr.Name]
-	if functionImpl == nil {
-		return expr, fmt.Errorf("no system function named %v registered", expr.Name)
+func (this *ExpressionValidator) ValidateFunctionCall(expr FunctionCallExpression) error {
+	err := expr.ValidateArity()
+	if err != nil {
+		return err
 	}
 
-	// ask the implementation to validate the arguments
-	operError := functionImpl.Validate(expr.Operands)
-	if operError != nil {
-		return expr, operError
+	// an exception, COUNT allows *
+	if expr.GetName() != "COUNT" {
+		err = expr.ValidateStars()
+		if err != nil {
+			return err
+		}
 	}
-
-	e, err := VisitChildren(this, expr)
-	this.insideAggregate = false
-	return e, err
+	return nil
 }

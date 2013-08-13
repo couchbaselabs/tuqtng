@@ -63,3 +63,18 @@ type CollectionOperatorExpression interface {
 	SetCondition(Expression)
 	SetAs(string)
 }
+
+type FunctionCallExpression interface {
+	GetName() string
+	GetOperands() FunctionArgExpressionList
+	SetOperands(FunctionArgExpressionList)
+	ValidateArity() error
+	ValidateStars() error
+}
+
+type AggregateFunctionCallExpression interface {
+	FunctionCallExpression
+	UpdateAggregate(group *dparval.Value, item *dparval.Value) error
+	DefaultAggregate(group *dparval.Value) error
+	Key() string
+}

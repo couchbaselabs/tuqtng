@@ -89,21 +89,87 @@ func TestSelectStatementWithDuplicateAlias(t *testing.T) {
 
 func TestSelectStatementWithAggregates(t *testing.T) {
 	var expectedError error = nil
-	stmt := NewSelectStatement()
 
+	// first test a valid group by
+	stmt := NewSelectStatement()
 	groupExpr := NewProperty("bar")
 	stmt.Select = ResultExpressionList{NewResultExpression(groupExpr)}
 	stmt.From = &From{Projection: NewProperty("bucket")}
 	stmt.GroupBy = ExpressionList{groupExpr}
-
 	err := stmt.VerifySemantics()
 	if !reflect.DeepEqual(err, expectedError) {
 		t.Errorf("expected %v, got %v", expectedError, err)
 	}
 
+	// now test a group by with an invalid projection
 	projectionExpr := NewProperty("foo")
 	stmt.Select = ResultExpressionList{NewResultExpression(projectionExpr)}
+	err = stmt.VerifySemantics()
+	// expected error is calculated after, because it mutates the structure for formalization
+	expectedError = fmt.Errorf("The expression bucket is not satisfied by these dependencies")
+	if !reflect.DeepEqual(err, expectedError) {
+		t.Errorf("expected %v, got %v", expectedError, err)
+	}
 
+	// now test a group by with an invalid having
+	stmt.Select = ResultExpressionList{NewResultExpression(groupExpr)}
+	stmt.Having = projectionExpr
+	err = stmt.VerifySemantics()
+	// expected error is calculated after, because it mutates the structure for formalization
+	expectedError = fmt.Errorf("The expression bucket is not satisfied by these dependencies")
+	if !reflect.DeepEqual(err, expectedError) {
+		t.Errorf("expected %v, got %v", expectedError, err)
+	}
+
+	// now test a group by with an invalid order by
+	stmt.Select = ResultExpressionList{NewResultExpression(groupExpr)}
+	stmt.Having = nil
+	stmt.OrderBy = SortExpressionList{NewSortExpression(projectionExpr, true)}
+	err = stmt.VerifySemantics()
+	// expected error is calculated after, because it mutates the structure for formalization
+	expectedError = fmt.Errorf("The expression bucket is not satisfied by these dependencies")
+	if !reflect.DeepEqual(err, expectedError) {
+		t.Errorf("expected %v, got %v", expectedError, err)
+	}
+
+	// now test a group without an aggregate
+	countStarExpr := NewFunctionCall("COUNT", FunctionArgExpressionList{NewStarFunctionArgExpression()})
+	stmt.GroupBy = nil
+	stmt.Select = ResultExpressionList{NewResultExpression(countStarExpr)}
+	stmt.Having = countStarExpr
+	stmt.OrderBy = SortExpressionList{NewSortExpression(countStarExpr, true)}
+	err = stmt.VerifySemantics()
+	// expected error is calculated after, because it mutates the structure for formalization
+	expectedError = nil
+	if !reflect.DeepEqual(err, expectedError) {
+		t.Errorf("expected %v, got %v", expectedError, err)
+	}
+
+	// now with an invalid order by
+	stmt.OrderBy = SortExpressionList{NewSortExpression(projectionExpr, true)}
+	stmt.GroupBy = nil
+	err = stmt.VerifySemantics()
+	// expected error is calculated after, because it mutates the structure for formalization
+	expectedError = fmt.Errorf("The expression bucket is not satisfied by these dependencies")
+	if !reflect.DeepEqual(err, expectedError) {
+		t.Errorf("expected %v, got %v", expectedError, err)
+	}
+
+	// now with an invalid having
+	stmt.Having = projectionExpr
+	stmt.OrderBy = nil
+	stmt.GroupBy = nil
+	err = stmt.VerifySemantics()
+	// expected error is calculated after, because it mutates the structure for formalization
+	expectedError = fmt.Errorf("The expression bucket is not satisfied by these dependencies")
+	if !reflect.DeepEqual(err, expectedError) {
+		t.Errorf("expected %v, got %v", expectedError, err)
+	}
+
+	// and finally, with an invalid projection
+	stmt.Select = ResultExpressionList{NewResultExpression(countStarExpr), NewResultExpression(projectionExpr)}
+	stmt.Having = nil
+	stmt.GroupBy = nil
 	err = stmt.VerifySemantics()
 	// expected error is calculated after, because it mutates the structure for formalization
 	expectedError = fmt.Errorf("The expression bucket is not satisfied by these dependencies")

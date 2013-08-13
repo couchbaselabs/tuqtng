@@ -13,20 +13,25 @@ import (
 	"github.com/couchbaselabs/dparval"
 )
 
-func init() {
-	registerSystemFunction(&FunctionLength{})
+type FunctionCallLength struct {
+	FunctionCall
 }
 
-type FunctionLength struct {
+func NewFunctionCallLength(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallLength{
+		FunctionCall{
+			Type:     "function",
+			Name:     "LENGTH",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
 }
 
-func (this *FunctionLength) Name() string {
-	return "LENGTH"
-}
-
-func (this *FunctionLength) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallLength) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	av, err := arguments[0].Expr.Evaluate(item)
+	av, err := this.Operands[0].Expr.Evaluate(item)
 
 	// the spec does not define it to operate on missing, so return null
 	if err != nil {
@@ -54,14 +59,6 @@ func (this *FunctionLength) Evaluate(item *dparval.Value, arguments FunctionArgE
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionLength) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 1)
-	if err != nil {
-		return err
-	}
-	return ValidateNoStars(this, arguments)
-}
-
-func (this *FunctionLength) IsAggregate() bool {
-	return false
+func (this *FunctionCallLength) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

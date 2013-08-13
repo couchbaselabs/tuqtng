@@ -13,19 +13,23 @@ import (
 	"github.com/couchbaselabs/dparval"
 )
 
-func init() {
-	registerSystemFunction(&FunctionMeta{})
-	registerSystemFunction(&FunctionValue{})
+type FunctionCallMeta struct {
+	FunctionCall
 }
 
-type FunctionMeta struct {
+func NewFunctionCallMeta(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallMeta{
+		FunctionCall{
+			Type:     "function",
+			Name:     "META",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
 }
 
-func (this *FunctionMeta) Name() string {
-	return "META"
-}
-
-func (this *FunctionMeta) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallMeta) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 
 	// FIXME the commented code below wont work until we fix how we store meta
 
@@ -48,29 +52,30 @@ func (this *FunctionMeta) Evaluate(item *dparval.Value, arguments FunctionArgExp
 	return metaValue, nil
 }
 
-func (this *FunctionMeta) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 1)
-	if err != nil {
-		return err
+func (this *FunctionCallMeta) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallValue struct {
+	FunctionCall
+}
+
+func NewFunctionCallValue(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallValue{
+		FunctionCall{
+			Type:     "function",
+			Name:     "VALUE",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  1,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionMeta) IsAggregate() bool {
-	return false
-}
-
-type FunctionValue struct {
-}
-
-func (this *FunctionValue) Name() string {
-	return "VALUE"
-}
-
-func (this *FunctionValue) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
-	if len(arguments) > 0 {
+func (this *FunctionCallValue) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	if len(this.Operands) > 0 {
 		// first evaluate the argument
-		av, err := arguments[0].Expr.Evaluate(item)
+		av, err := this.Operands[0].Expr.Evaluate(item)
 		if err != nil {
 			return nil, err
 		}
@@ -82,14 +87,6 @@ func (this *FunctionValue) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	}
 }
 
-func (this *FunctionValue) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 1)
-	if err != nil {
-		return err
-	}
-	return ValidateNoStars(this, arguments)
-}
-
-func (this *FunctionValue) IsAggregate() bool {
-	return false
+func (this *FunctionCallValue) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

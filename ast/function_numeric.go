@@ -15,22 +15,25 @@ import (
 	"github.com/couchbaselabs/dparval"
 )
 
-func init() {
-	registerSystemFunction(&FunctionCeil{})
-	registerSystemFunction(&FunctionFloor{})
-	registerSystemFunction(&FunctionRound{})
-	registerSystemFunction(&FunctionTrunc{})
+type FunctionCallCeil struct {
+	FunctionCall
 }
 
-type FunctionCeil struct{}
-
-func (this *FunctionCeil) Name() string {
-	return "CEIL"
+func NewFunctionCallCeil(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallCeil{
+		FunctionCall{
+			Type:     "function",
+			Name:     "CEIL",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
 }
 
-func (this *FunctionCeil) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallCeil) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	av, err := arguments[0].Expr.Evaluate(item)
+	av, err := this.Operands[0].Expr.Evaluate(item)
 
 	// the spec defines this functin to ONLY operate on numeric values
 	// all other types result in NULL
@@ -56,27 +59,29 @@ func (this *FunctionCeil) Evaluate(item *dparval.Value, arguments FunctionArgExp
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionCeil) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 1)
-	if err != nil {
-		return err
+func (this *FunctionCallCeil) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallFloor struct {
+	FunctionCall
+}
+
+func NewFunctionCallFloor(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallFloor{
+		FunctionCall{
+			Type:     "function",
+			Name:     "FLOOR",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  1,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionCeil) IsAggregate() bool {
-	return false
-}
-
-type FunctionFloor struct{}
-
-func (this *FunctionFloor) Name() string {
-	return "FLOOR"
-}
-
-func (this *FunctionFloor) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallFloor) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	av, err := arguments[0].Expr.Evaluate(item)
+	av, err := this.Operands[0].Expr.Evaluate(item)
 
 	// the spec defines this functin to ONLY operate on numeric values
 	// all other types result in NULL
@@ -101,16 +106,8 @@ func (this *FunctionFloor) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionFloor) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 1)
-	if err != nil {
-		return err
-	}
-	return ValidateNoStars(this, arguments)
-}
-
-func (this *FunctionFloor) IsAggregate() bool {
-	return false
+func (this *FunctionCallFloor) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 func RoundFloat(x float64, prec int) float64 {
@@ -138,15 +135,25 @@ func RoundFloat(x float64, prec int) float64 {
 	return rounder / pow * sign
 }
 
-type FunctionRound struct{}
-
-func (this *FunctionRound) Name() string {
-	return "ROUND"
+type FunctionCallRound struct {
+	FunctionCall
 }
 
-func (this *FunctionRound) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func NewFunctionCallRound(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallRound{
+		FunctionCall{
+			Type:     "function",
+			Name:     "ROUND",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallRound) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	av, err := arguments[0].Expr.Evaluate(item)
+	av, err := this.Operands[0].Expr.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
@@ -159,9 +166,9 @@ func (this *FunctionRound) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	}
 
 	precision := 0
-	if len(arguments) > 1 {
+	if len(this.Operands) > 1 {
 		// evaluate the second argument
-		pv, err := arguments[1].Expr.Evaluate(item)
+		pv, err := this.Operands[1].Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
 			case *dparval.Undefined:
@@ -198,16 +205,8 @@ func (this *FunctionRound) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionRound) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 2)
-	if err != nil {
-		return err
-	}
-	return ValidateNoStars(this, arguments)
-}
-
-func (this *FunctionRound) IsAggregate() bool {
-	return false
+func (this *FunctionCallRound) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
 
 func TruncateFloat(x float64, prec int) float64 {
@@ -222,15 +221,25 @@ func TruncateFloat(x float64, prec int) float64 {
 	return rv
 }
 
-type FunctionTrunc struct{}
-
-func (this *FunctionTrunc) Name() string {
-	return "TRUNC"
+type FunctionCallTrunc struct {
+	FunctionCall
 }
 
-func (this *FunctionTrunc) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func NewFunctionCallTrunc(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallTrunc{
+		FunctionCall{
+			Type:     "function",
+			Name:     "TRUNC",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallTrunc) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	av, err := arguments[0].Expr.Evaluate(item)
+	av, err := this.Operands[0].Expr.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
@@ -243,9 +252,9 @@ func (this *FunctionTrunc) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	}
 
 	precision := 0
-	if len(arguments) > 1 {
+	if len(this.Operands) > 1 {
 		// evaluate the second argument
-		pv, err := arguments[1].Expr.Evaluate(item)
+		pv, err := this.Operands[1].Expr.Evaluate(item)
 
 		// we need precision to be an integer
 		if err != nil {
@@ -284,14 +293,6 @@ func (this *FunctionTrunc) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionTrunc) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 2)
-	if err != nil {
-		return err
-	}
-	return ValidateNoStars(this, arguments)
-}
-
-func (this *FunctionTrunc) IsAggregate() bool {
-	return false
+func (this *FunctionCallTrunc) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }

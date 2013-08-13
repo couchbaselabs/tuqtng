@@ -36,9 +36,9 @@ func NewExpressionFormalNotationConverter(forbiddenAliases []string, aliases []s
 	}
 }
 
-func (this *ExpressionFormalNotationConverter) Visit(expr Expression) (Expression, error) {
+func (this *ExpressionFormalNotationConverter) Visit(e Expression) (Expression, error) {
 	var err error
-	switch expr := expr.(type) {
+	switch expr := e.(type) {
 	// override recursive behavior for some types
 	case *DotMemberOperator:
 		_, err = this.VisitDotMemberChild(expr)
@@ -56,21 +56,22 @@ func (this *ExpressionFormalNotationConverter) Visit(expr Expression) (Expressio
 			return expr, err
 		}
 	// and add custom behavior to others (with default recursion)
-	case *FunctionCall:
+	case FunctionCallExpression:
 		// default processing of children
-		_, err = VisitChildren(this, expr)
+		_, err = VisitChildren(this, e)
 		if err != nil {
-			return expr, err
+			return e, err
 		}
 		// now custom processing at this node
-		return this.VisitFunctionCall(expr)
+		err = this.VisitFunctionCall(expr)
+		return e, err
 	case *Property:
 		// has no children anyway
 		return this.VisitProperty(expr)
 	default:
 		return VisitChildren(this, expr)
 	}
-	return expr, nil
+	return e, nil
 }
 
 func (this *ExpressionFormalNotationConverter) VisitDotMemberChild(expr *DotMemberOperator) (Expression, error) {
@@ -112,31 +113,31 @@ func (this *ExpressionFormalNotationConverter) VisitCollectionAllChild(expr *Col
 	return expr, err
 }
 
-func (this *ExpressionFormalNotationConverter) VisitFunctionCall(expr *FunctionCall) (Expression, error) {
+func (this *ExpressionFormalNotationConverter) VisitFunctionCall(expr FunctionCallExpression) error {
 	// two specific checks need to be made here for special functions
-	if expr.Name == "VALUE" {
+	if expr.GetName() == "VALUE" {
 		// VALUE() with 0 args is converted to VALUE(defaultAlias) when there is one
-		if len(expr.Operands) == 0 && this.defaultAlias != "" {
-			expr.Operands = append(expr.Operands, NewFunctionArgExpression(NewProperty(this.defaultAlias)))
+		if len(expr.GetOperands()) == 0 && this.defaultAlias != "" {
+			expr.SetOperands(FunctionArgExpressionList{NewFunctionArgExpression(NewProperty(this.defaultAlias))})
 		}
 	}
-	if expr.Name == "META" {
+	if expr.GetName() == "META" {
 		// META() with 0 args is converted to META(defaultAlias) when there is one
-		if len(expr.Operands) == 0 && this.defaultAlias != "" {
-			expr.Operands = append(expr.Operands, NewFunctionArgExpression(NewProperty(this.defaultAlias)))
-		} else if len(expr.Operands) > 0 {
+		if len(expr.GetOperands()) == 0 && this.defaultAlias != "" {
+			expr.SetOperands(FunctionArgExpressionList{NewFunctionArgExpression(NewProperty(this.defaultAlias))})
+		} else if len(expr.GetOperands()) > 0 {
 			// check to see that the correct bucket is referenced (currently always aliases[0])
-			switch operexpr := expr.Operands[0].Expr.(type) {
+			switch operexpr := expr.GetOperands()[0].Expr.(type) {
 			case *Property:
 				if operexpr.Path != this.aliases[0] {
-					return expr, fmt.Errorf("invalid argument to META() function, must be bucket name/alias")
+					return fmt.Errorf("invalid argument to META() function, must be bucket name/alias")
 				}
 			default:
-				return expr, fmt.Errorf("invalid argument to META() function, must be bucket name/alias")
+				return fmt.Errorf("invalid argument to META() function, must be bucket name/alias")
 			}
 		}
 	}
-	return expr, nil
+	return nil
 }
 
 func (this *ExpressionFormalNotationConverter) VisitProperty(expr *Property) (Expression, error) {

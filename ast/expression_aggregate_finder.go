@@ -29,14 +29,12 @@ func (this *ExpressionAggregateFinder) GetAggregates() ExpressionList {
 	return this.aggregates
 }
 
-func (this *ExpressionAggregateFinder) Visit(expr Expression) (Expression, error) {
-	switch expr := expr.(type) {
-	case *FunctionCall:
-		if expr.IsAggregate() {
-			this.aggregates = append(this.aggregates, expr)
-		}
-		return expr, nil
+func (this *ExpressionAggregateFinder) Visit(e Expression) (Expression, error) {
+	switch e.(type) {
+	case AggregateFunctionCallExpression:
+		this.aggregates = append(this.aggregates, e)
+		return e, nil
 	default:
-		return VisitChildren(this, expr)
+		return VisitChildren(this, e)
 	}
 }

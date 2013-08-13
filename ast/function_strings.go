@@ -15,24 +15,25 @@ import (
 	"github.com/couchbaselabs/dparval"
 )
 
-func init() {
-	registerSystemFunction(&FunctionLower{})
-	registerSystemFunction(&FunctionUpper{})
-	registerSystemFunction(&FunctionLTrim{})
-	registerSystemFunction(&FunctionRTrim{})
-	registerSystemFunction(&FunctionTrim{})
-	registerSystemFunction(&FunctionSubStr{})
+type FunctionCallLower struct {
+	FunctionCall
 }
 
-type FunctionLower struct{}
-
-func (this *FunctionLower) Name() string {
-	return "LOWER"
+func NewFunctionCallLower(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallLower{
+		FunctionCall{
+			Type:     "function",
+			Name:     "LOWER",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
 }
 
-func (this *FunctionLower) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallLower) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	av, err := arguments[0].Expr.Evaluate(item)
+	av, err := this.Operands[0].Expr.Evaluate(item)
 
 	// the spec defines this functin to ONLY operate on strings
 	// all other types result in NULL
@@ -57,27 +58,29 @@ func (this *FunctionLower) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionLower) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 1)
-	if err != nil {
-		return err
+func (this *FunctionCallLower) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallUpper struct {
+	FunctionCall
+}
+
+func NewFunctionCallUpper(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallUpper{
+		FunctionCall{
+			Type:     "function",
+			Name:     "UPPER",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  1,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionLower) IsAggregate() bool {
-	return false
-}
-
-type FunctionUpper struct{}
-
-func (this *FunctionUpper) Name() string {
-	return "UPPER"
-}
-
-func (this *FunctionUpper) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallUpper) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	av, err := arguments[0].Expr.Evaluate(item)
+	av, err := this.Operands[0].Expr.Evaluate(item)
 
 	// the spec defines this functin to ONLY operate on strings
 	// all other types result in NULL
@@ -102,27 +105,29 @@ func (this *FunctionUpper) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionUpper) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 1, 1)
-	if err != nil {
-		return err
+func (this *FunctionCallUpper) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallLTrim struct {
+	FunctionCall
+}
+
+func NewFunctionCallLTrim(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallLTrim{
+		FunctionCall{
+			Type:     "function",
+			Name:     "LTRIM",
+			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionUpper) IsAggregate() bool {
-	return false
-}
-
-type FunctionLTrim struct{}
-
-func (this *FunctionLTrim) Name() string {
-	return "LTRIM"
-}
-
-func (this *FunctionLTrim) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallLTrim) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	av, err := arguments[0].Expr.Evaluate(item)
+	av, err := this.Operands[0].Expr.Evaluate(item)
 
 	// the spec defines this functin to ONLY operate on strings
 	// all other types result in NULL
@@ -138,7 +143,7 @@ func (this *FunctionLTrim) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	}
 
 	// evaluate the second argument
-	cutlist, err := arguments[1].Expr.Evaluate(item)
+	cutlist, err := this.Operands[1].Expr.Evaluate(item)
 	// the cut list MUST be a string, otherwise return null
 	if err != nil {
 		switch err := err.(type) {
@@ -169,27 +174,29 @@ func (this *FunctionLTrim) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionLTrim) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 2, 2)
-	if err != nil {
-		return err
+func (this *FunctionCallLTrim) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallRTrim struct {
+	FunctionCall
+}
+
+func NewFunctionCallRTrim(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallRTrim{
+		FunctionCall{
+			Type:     "function",
+			Name:     "RTRIM",
+			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionLTrim) IsAggregate() bool {
-	return false
-}
-
-type FunctionRTrim struct{}
-
-func (this *FunctionRTrim) Name() string {
-	return "RTRIM"
-}
-
-func (this *FunctionRTrim) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallRTrim) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	av, err := arguments[0].Expr.Evaluate(item)
+	av, err := this.Operands[0].Expr.Evaluate(item)
 
 	// the spec defines this functin to ONLY operate on strings
 	// all other types result in NULL
@@ -205,7 +212,7 @@ func (this *FunctionRTrim) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	}
 
 	// evaluate the second argument
-	cutlist, err := arguments[1].Expr.Evaluate(item)
+	cutlist, err := this.Operands[1].Expr.Evaluate(item)
 	// the cut list MUST be a string, otherwise return null
 	if err != nil {
 		switch err := err.(type) {
@@ -235,27 +242,29 @@ func (this *FunctionRTrim) Evaluate(item *dparval.Value, arguments FunctionArgEx
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionRTrim) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 2, 2)
-	if err != nil {
-		return err
+func (this *FunctionCallRTrim) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallTrim struct {
+	FunctionCall
+}
+
+func NewFunctionCallTrim(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallTrim{
+		FunctionCall{
+			Type:     "function",
+			Name:     "TRIM",
+			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionRTrim) IsAggregate() bool {
-	return false
-}
-
-type FunctionTrim struct{}
-
-func (this *FunctionTrim) Name() string {
-	return "TRIM"
-}
-
-func (this *FunctionTrim) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallTrim) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	av, err := arguments[0].Expr.Evaluate(item)
+	av, err := this.Operands[0].Expr.Evaluate(item)
 
 	// the spec defines this functin to ONLY operate on strings
 	// all other types result in NULL
@@ -271,7 +280,7 @@ func (this *FunctionTrim) Evaluate(item *dparval.Value, arguments FunctionArgExp
 	}
 
 	// evaluate the second argument
-	cutlist, err := arguments[1].Expr.Evaluate(item)
+	cutlist, err := this.Operands[1].Expr.Evaluate(item)
 	// the cut list MUST be a string, otherwise return null
 	if err != nil {
 		switch err := err.(type) {
@@ -301,27 +310,29 @@ func (this *FunctionTrim) Evaluate(item *dparval.Value, arguments FunctionArgExp
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionTrim) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 2, 2)
-	if err != nil {
-		return err
+func (this *FunctionCallTrim) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallSubStr struct {
+	FunctionCall
+}
+
+func NewFunctionCallSubStr(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallSubStr{
+		FunctionCall{
+			Type:     "function",
+			Name:     "SUBSTR",
+			Operands: operands,
+			minArgs:  2,
+			maxArgs:  3,
+		},
 	}
-	return ValidateNoStars(this, arguments)
 }
 
-func (this *FunctionTrim) IsAggregate() bool {
-	return false
-}
-
-type FunctionSubStr struct{}
-
-func (this *FunctionSubStr) Name() string {
-	return "SUBSTR"
-}
-
-func (this *FunctionSubStr) Evaluate(item *dparval.Value, arguments FunctionArgExpressionList) (*dparval.Value, error) {
+func (this *FunctionCallSubStr) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
-	av, err := arguments[0].Expr.Evaluate(item)
+	av, err := this.Operands[0].Expr.Evaluate(item)
 
 	if err != nil {
 		switch err := err.(type) {
@@ -334,7 +345,7 @@ func (this *FunctionSubStr) Evaluate(item *dparval.Value, arguments FunctionArgE
 		}
 	}
 
-	position, err := arguments[1].Expr.Evaluate(item)
+	position, err := this.Operands[1].Expr.Evaluate(item)
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
@@ -348,8 +359,8 @@ func (this *FunctionSubStr) Evaluate(item *dparval.Value, arguments FunctionArgE
 
 	var maxLen int = -1
 
-	if len(arguments) == 3 {
-		lenarg, err := arguments[2].Expr.Evaluate(item)
+	if len(this.Operands) == 3 {
+		lenarg, err := this.Operands[2].Expr.Evaluate(item)
 		if err != nil {
 			switch err := err.(type) {
 			case *dparval.Undefined:
@@ -412,14 +423,6 @@ func (this *FunctionSubStr) Evaluate(item *dparval.Value, arguments FunctionArgE
 	return dparval.NewValue(nil), nil
 }
 
-func (this *FunctionSubStr) Validate(arguments FunctionArgExpressionList) error {
-	err := ValidateArity(this, arguments, 2, 3)
-	if err != nil {
-		return err
-	}
-	return ValidateNoStars(this, arguments)
-}
-
-func (this *FunctionSubStr) IsAggregate() bool {
-	return false
+func (this *FunctionCallSubStr) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
 }
