@@ -2,5 +2,6 @@
  "name":"fred",
  "age": 18,
  "email": "fred@gmail.com",
- "hobbies":["golf","surfing"]
+ "hobbies":["golf","surfing"],
+ "relation": "coworker"
 }

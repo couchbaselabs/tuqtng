@@ -6,5 +6,6 @@
     {"name":"abama","age":17,"gender":"m"},
     {"name":"bebama","age":21,"gender":"m"}
  ],
- "hobbies":["golf", "surfing"]
+ "hobbies":["golf", "surfing"],
+ "relation": "cousin"
 }
