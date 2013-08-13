@@ -21,25 +21,14 @@ type BinaryOperator struct {
 	Right    Expression `json:"right"`
 }
 
-func (this *BinaryOperator) compare(item *dparval.Value) (*dparval.Value, error) {
-	lv, err := this.Left.Evaluate(item)
+func (this *BinaryOperator) compare(context *dparval.Value) (*dparval.Value, error) {
+	lv, rv, err := this.EvaluateBoth(context)
 	if err != nil {
-		// this could either be real error, or MISSING
-		// if either side is MISSING, the result is MISSING
 		return nil, err
 	}
+
 	// if either side is NULL, the result is NULL
-	if lv.Type() == dparval.NULL {
-		return nil, nil
-	}
-	rv, err := this.Right.Evaluate(item)
-	if err != nil {
-		// this could either be real error, or MISSING
-		// if either side is MISSING, the result is MISSING
-		return nil, err
-	}
-	// if either side is NULL, the result is NULL
-	if rv.Type() == dparval.NULL {
+	if lv.Type() == dparval.NULL || rv.Type() == dparval.NULL {
 		return nil, nil
 	}
 
@@ -115,4 +104,16 @@ func (this *BinaryOperator) EquivalentTo(t Expression) bool {
 	}
 
 	return false
+}
+
+func (this *BinaryOperator) EvaluateBoth(context *dparval.Value) (*dparval.Value, *dparval.Value, error) {
+	lv, err := this.Left.Evaluate(context)
+	if err != nil {
+		return nil, nil, err
+	}
+	rv, err := this.Right.Evaluate(context)
+	if err != nil {
+		return nil, nil, err
+	}
+	return lv, rv, nil
 }

@@ -33,12 +33,8 @@ func NewStringConcatenateOperator(left, right Expression) *StringConcatenateOper
 	}
 }
 
-func (this *StringConcatenateOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	lv, err := this.Left.Evaluate(item)
-	if err != nil {
-		return nil, err
-	}
-	rv, err := this.Right.Evaluate(item)
+func (this *StringConcatenateOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	lv, rv, err := this.EvaluateBoth(context)
 	if err != nil {
 		return nil, err
 	}

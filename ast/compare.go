@@ -339,12 +339,8 @@ func NewLikeOperator(left, right Expression) *LikeOperator {
 	}
 }
 
-func (this *LikeOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	lv, err := this.Left.Evaluate(item)
-	if err != nil {
-		return nil, err
-	}
-	rv, err := this.Right.Evaluate(item)
+func (this *LikeOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	lv, rv, err := this.EvaluateBoth(context)
 	if err != nil {
 		return nil, err
 	}
@@ -395,12 +391,8 @@ func NewNotLikeOperator(left, right Expression) *NotLikeOperator {
 	}
 }
 
-func (this *NotLikeOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	lv, err := this.Left.Evaluate(item)
-	if err != nil {
-		return nil, err
-	}
-	rv, err := this.Right.Evaluate(item)
+func (this *NotLikeOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	lv, rv, err := this.EvaluateBoth(context)
 	if err != nil {
 		return nil, err
 	}

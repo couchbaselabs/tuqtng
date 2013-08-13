@@ -37,12 +37,8 @@ func NewPlusOperator(left, right Expression) *PlusOperator {
 	}
 }
 
-func (this *PlusOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	lv, err := this.Left.Evaluate(item)
-	if err != nil {
-		return nil, err
-	}
-	rv, err := this.Right.Evaluate(item)
+func (this *PlusOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	lv, rv, err := this.EvaluateBoth(context)
 	if err != nil {
 		return nil, err
 	}
@@ -87,12 +83,8 @@ func NewSubtractOperator(left, right Expression) *SubtractOperator {
 	}
 }
 
-func (this *SubtractOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	lv, err := this.Left.Evaluate(item)
-	if err != nil {
-		return nil, err
-	}
-	rv, err := this.Right.Evaluate(item)
+func (this *SubtractOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	lv, rv, err := this.EvaluateBoth(context)
 	if err != nil {
 		return nil, err
 	}
@@ -138,12 +130,8 @@ func NewMultiplyOperator(left, right Expression) *MultiplyOperator {
 	}
 }
 
-func (this *MultiplyOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	lv, err := this.Left.Evaluate(item)
-	if err != nil {
-		return nil, err
-	}
-	rv, err := this.Right.Evaluate(item)
+func (this *MultiplyOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	lv, rv, err := this.EvaluateBoth(context)
 	if err != nil {
 		return nil, err
 	}
@@ -187,12 +175,8 @@ func NewDivideOperator(left, right Expression) *DivideOperator {
 	}
 }
 
-func (this *DivideOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	lv, err := this.Left.Evaluate(item)
-	if err != nil {
-		return nil, err
-	}
-	rv, err := this.Right.Evaluate(item)
+func (this *DivideOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	lv, rv, err := this.EvaluateBoth(context)
 	if err != nil {
 		return nil, err
 	}
@@ -236,12 +220,8 @@ func NewModuloOperator(left, right Expression) *ModuloOperator {
 	}
 }
 
-func (this *ModuloOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	lv, err := this.Left.Evaluate(item)
-	if err != nil {
-		return nil, err
-	}
-	rv, err := this.Right.Evaluate(item)
+func (this *ModuloOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	lv, rv, err := this.EvaluateBoth(context)
 	if err != nil {
 		return nil, err
 	}
