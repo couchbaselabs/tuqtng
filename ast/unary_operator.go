@@ -11,6 +11,8 @@ package ast
 
 import (
 	"fmt"
+
+	"github.com/couchbaselabs/dparval"
 )
 
 type UnaryOperator struct {
@@ -57,4 +59,36 @@ func (this *UnaryOperator) EquivalentTo(t Expression) bool {
 	}
 
 	return false
+}
+
+func (this *UnaryOperator) EvaluateFlagMissing(context *dparval.Value) (*dparval.Value, bool, error) {
+	ov, err := this.Operand.Evaluate(context)
+	if err != nil {
+		switch err := err.(type) {
+		case *dparval.Undefined:
+			return nil, true, err
+		default:
+			// any other error should be returned to caller
+			return nil, false, err
+		}
+	}
+
+	return ov, false, nil
+}
+
+func (this *UnaryOperator) EvaluateRequireNumber(context *dparval.Value) (float64, bool, error) {
+	ov, err := this.Operand.Evaluate(context)
+	if err != nil {
+		return 0.0, true, err
+	}
+
+	if ov.Type() == dparval.NUMBER {
+		ovalue := ov.Value()
+		switch ovalue := ovalue.(type) {
+		case float64:
+			return ovalue, true, nil
+		}
+	}
+
+	return 0.0, false, nil
 }

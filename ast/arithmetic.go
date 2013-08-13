@@ -220,20 +220,17 @@ func NewChangeSignOperator(operand Expression) *ChangeSignOperator {
 	}
 }
 
-func (this *ChangeSignOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	ov, err := this.Operand.Evaluate(item)
+func (this *ChangeSignOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	var result interface{} = nil
+	ov, isNumber, err := this.EvaluateRequireNumber(context)
 	if err != nil {
 		return nil, err
 	}
 
-	if ov.Type() == dparval.NUMBER {
-		ovalue := ov.Value()
-		switch ovalue := ovalue.(type) {
-		case float64:
-			return dparval.NewValue(-ovalue), nil
-		}
+	if isNumber {
+		result = -ov
 	}
-	return dparval.NewValue(nil), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *ChangeSignOperator) Accept(ev ExpressionVisitor) (Expression, error) {
