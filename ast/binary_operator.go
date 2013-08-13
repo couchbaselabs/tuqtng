@@ -117,3 +117,45 @@ func (this *BinaryOperator) EvaluateBoth(context *dparval.Value) (*dparval.Value
 	}
 	return lv, rv, nil
 }
+
+func (this *BinaryOperator) EvaluateBothRequireNumber(context *dparval.Value) (float64, float64, bool, error) {
+	lv, rv, err := this.EvaluateBoth(context)
+	if err != nil {
+		return 0.0, 0.0, true, err
+	}
+
+	if lv.Type() == rv.Type() && rv.Type() == dparval.NUMBER {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+		switch lvalue := lvalue.(type) {
+		case float64:
+			switch rvalue := rvalue.(type) {
+			case float64:
+				return lvalue, rvalue, true, nil
+			}
+		}
+	}
+
+	return 0.0, 0.0, false, nil
+}
+
+func (this *BinaryOperator) EvaluateBothRequireString(context *dparval.Value) (string, string, bool, error) {
+	lv, rv, err := this.EvaluateBoth(context)
+	if err != nil {
+		return "", "", true, err
+	}
+
+	if lv.Type() == rv.Type() && rv.Type() == dparval.STRING {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+		switch lvalue := lvalue.(type) {
+		case string:
+			switch rvalue := rvalue.(type) {
+			case string:
+				return lvalue, rvalue, true, nil
+			}
+		}
+	}
+
+	return "", "", false, nil
+}

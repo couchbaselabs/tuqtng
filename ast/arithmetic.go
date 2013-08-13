@@ -38,25 +38,15 @@ func NewPlusOperator(left, right Expression) *PlusOperator {
 }
 
 func (this *PlusOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
-	lv, rv, err := this.EvaluateBoth(context)
+	var result interface{} = nil
+	lv, rv, bothNumeric, err := this.EvaluateBothRequireNumber(context)
 	if err != nil {
 		return nil, err
 	}
-
-	if lv.Type() == rv.Type() && rv.Type() == dparval.NUMBER {
-		lvalue := lv.Value()
-		rvalue := rv.Value()
-		switch lvalue := lvalue.(type) {
-		case float64:
-			switch rvalue := rvalue.(type) {
-			case float64:
-				// if both values are numeric add
-				return dparval.NewValue(lvalue + rvalue), nil
-			}
-		}
+	if bothNumeric {
+		result = lv + rv
 	}
-
-	return dparval.NewValue(nil), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *PlusOperator) Accept(ev ExpressionVisitor) (Expression, error) {
@@ -84,24 +74,15 @@ func NewSubtractOperator(left, right Expression) *SubtractOperator {
 }
 
 func (this *SubtractOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
-	lv, rv, err := this.EvaluateBoth(context)
+	var result interface{} = nil
+	lv, rv, bothNumeric, err := this.EvaluateBothRequireNumber(context)
 	if err != nil {
 		return nil, err
 	}
-
-	if lv.Type() == rv.Type() && rv.Type() == dparval.NUMBER {
-		lvalue := lv.Value()
-		rvalue := rv.Value()
-		switch lvalue := lvalue.(type) {
-		case float64:
-			switch rvalue := rvalue.(type) {
-			case float64:
-				// if both values are numeric subtract
-				return dparval.NewValue(lvalue - rvalue), nil
-			}
-		}
+	if bothNumeric {
+		result = lv - rv
 	}
-	return dparval.NewValue(nil), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *SubtractOperator) Accept(ev ExpressionVisitor) (Expression, error) {
@@ -131,24 +112,15 @@ func NewMultiplyOperator(left, right Expression) *MultiplyOperator {
 }
 
 func (this *MultiplyOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
-	lv, rv, err := this.EvaluateBoth(context)
+	var result interface{} = nil
+	lv, rv, bothNumeric, err := this.EvaluateBothRequireNumber(context)
 	if err != nil {
 		return nil, err
 	}
-
-	if lv.Type() == rv.Type() && rv.Type() == dparval.NUMBER {
-		lvalue := lv.Value()
-		rvalue := rv.Value()
-		switch lvalue := lvalue.(type) {
-		case float64:
-			switch rvalue := rvalue.(type) {
-			case float64:
-				// if both values are numeric multiply
-				return dparval.NewValue(lvalue * rvalue), nil
-			}
-		}
+	if bothNumeric {
+		result = lv * rv
 	}
-	return dparval.NewValue(nil), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *MultiplyOperator) Accept(ev ExpressionVisitor) (Expression, error) {
@@ -176,24 +148,15 @@ func NewDivideOperator(left, right Expression) *DivideOperator {
 }
 
 func (this *DivideOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
-	lv, rv, err := this.EvaluateBoth(context)
+	var result interface{} = nil
+	lv, rv, bothNumeric, err := this.EvaluateBothRequireNumber(context)
 	if err != nil {
 		return nil, err
 	}
-
-	if lv.Type() == rv.Type() && rv.Type() == dparval.NUMBER {
-		lvalue := lv.Value()
-		rvalue := rv.Value()
-		switch lvalue := lvalue.(type) {
-		case float64:
-			switch rvalue := rvalue.(type) {
-			case float64:
-				// if both values are numeric divide
-				return dparval.NewValue(lvalue / rvalue), nil
-			}
-		}
+	if bothNumeric {
+		result = lv / rv
 	}
-	return dparval.NewValue(nil), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *DivideOperator) Accept(ev ExpressionVisitor) (Expression, error) {
@@ -221,24 +184,15 @@ func NewModuloOperator(left, right Expression) *ModuloOperator {
 }
 
 func (this *ModuloOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
-	lv, rv, err := this.EvaluateBoth(context)
+	var result interface{} = nil
+	lv, rv, bothNumeric, err := this.EvaluateBothRequireNumber(context)
 	if err != nil {
 		return nil, err
 	}
-
-	if lv.Type() == rv.Type() && rv.Type() == dparval.NUMBER {
-		lvalue := lv.Value()
-		rvalue := rv.Value()
-		switch lvalue := lvalue.(type) {
-		case float64:
-			switch rvalue := rvalue.(type) {
-			case float64:
-				// if both values are numeric divide
-				return dparval.NewValue(math.Mod(lvalue, rvalue)), nil
-			}
-		}
+	if bothNumeric {
+		result = math.Mod(lv, rv)
 	}
-	return dparval.NewValue(nil), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *ModuloOperator) Accept(ev ExpressionVisitor) (Expression, error) {

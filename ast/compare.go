@@ -340,31 +340,22 @@ func NewLikeOperator(left, right Expression) *LikeOperator {
 }
 
 func (this *LikeOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
-	lv, rv, err := this.EvaluateBoth(context)
+	var result interface{} = nil
+	lv, rv, bothString, err := this.EvaluateBothRequireString(context)
 	if err != nil {
 		return nil, err
 	}
-
-	if lv.Type() == rv.Type() && rv.Type() == dparval.STRING {
-		lvalue := lv.Value()
-		rvalue := rv.Value()
-		switch lvalue := lvalue.(type) {
-		case string:
-			switch rvalue := rvalue.(type) {
-			case string:
-				// if both values are string we can proceed
-				pattern := strings.Replace(rvalue, "%", "(.*)", -1)
-				pattern = strings.Replace(pattern, "_", "(.)", -1)
-				pattern = "^" + pattern + "$"
-				re, err := regexp.Compile(pattern)
-				if err != nil {
-					return nil, err
-				}
-				return dparval.NewValue(re.MatchString(lvalue)), nil
-			}
+	if bothString {
+		pattern := strings.Replace(rv, "%", "(.*)", -1)
+		pattern = strings.Replace(pattern, "_", "(.)", -1)
+		pattern = "^" + pattern + "$"
+		re, err := regexp.Compile(pattern)
+		if err != nil {
+			return nil, err
 		}
+		result = re.MatchString(lv)
 	}
-	return dparval.NewValue(nil), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *LikeOperator) Accept(ev ExpressionVisitor) (Expression, error) {
@@ -392,31 +383,22 @@ func NewNotLikeOperator(left, right Expression) *NotLikeOperator {
 }
 
 func (this *NotLikeOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
-	lv, rv, err := this.EvaluateBoth(context)
+	var result interface{} = nil
+	lv, rv, bothString, err := this.EvaluateBothRequireString(context)
 	if err != nil {
 		return nil, err
 	}
-
-	if lv.Type() == rv.Type() && rv.Type() == dparval.STRING {
-		lvalue := lv.Value()
-		rvalue := rv.Value()
-		switch lvalue := lvalue.(type) {
-		case string:
-			switch rvalue := rvalue.(type) {
-			case string:
-				// if both values are string we can proceed
-				pattern := strings.Replace(rvalue, "%", "(.*)", -1)
-				pattern = strings.Replace(pattern, "_", "(.)", -1)
-				pattern = "^" + pattern + "$"
-				re, err := regexp.Compile(pattern)
-				if err != nil {
-					return nil, err
-				}
-				return dparval.NewValue(!re.MatchString(lvalue)), nil
-			}
+	if bothString {
+		pattern := strings.Replace(rv, "%", "(.*)", -1)
+		pattern = strings.Replace(pattern, "_", "(.)", -1)
+		pattern = "^" + pattern + "$"
+		re, err := regexp.Compile(pattern)
+		if err != nil {
+			return nil, err
 		}
+		result = !re.MatchString(lv)
 	}
-	return dparval.NewValue(nil), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *NotLikeOperator) Accept(ev ExpressionVisitor) (Expression, error) {

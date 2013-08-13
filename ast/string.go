@@ -34,26 +34,16 @@ func NewStringConcatenateOperator(left, right Expression) *StringConcatenateOper
 }
 
 func (this *StringConcatenateOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
-	lv, rv, err := this.EvaluateBoth(context)
+	var result interface{} = nil
+	lv, rv, bothString, err := this.EvaluateBothRequireString(context)
 	if err != nil {
 		return nil, err
 	}
 
-	if lv.Type() == dparval.STRING {
-		if rv.Type() == dparval.STRING {
-			lval := lv.Value()
-			switch lval := lval.(type) {
-			case string:
-				rval := rv.Value()
-				switch rval := rval.(type) {
-				case string:
-					// if both values are string concatenate them
-					return dparval.NewValue(lval + rval), nil
-				}
-			}
-		}
+	if bothString {
+		result = lv + rv
 	}
-	return dparval.NewValue(nil), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *StringConcatenateOperator) Accept(ev ExpressionVisitor) (Expression, error) {
