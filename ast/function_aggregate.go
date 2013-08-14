@@ -19,7 +19,7 @@ type FunctionCallCount struct {
 	AggregateFunctionCall
 }
 
-func NewFunctionCallCount(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallCount(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallCount{
 		AggregateFunctionCall{
 			FunctionCall{
@@ -96,7 +96,7 @@ type FunctionCallSum struct {
 	AggregateFunctionCall
 }
 
-func NewFunctionCallSum(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallSum(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallSum{
 		AggregateFunctionCall{
 			FunctionCall{
@@ -163,7 +163,7 @@ type FunctionCallAvg struct {
 	AggregateFunctionCall
 }
 
-func NewFunctionCallAvg(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallAvg(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallAvg{
 		AggregateFunctionCall{
 			FunctionCall{
@@ -274,7 +274,7 @@ type FunctionCallMin struct {
 	AggregateFunctionCall
 }
 
-func NewFunctionCallMin(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallMin(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallMin{
 		AggregateFunctionCall{
 			FunctionCall{
@@ -345,7 +345,7 @@ type FunctionCallMax struct {
 	AggregateFunctionCall
 }
 
-func NewFunctionCallMax(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallMax(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallMax{
 		AggregateFunctionCall{
 			FunctionCall{
@@ -410,9 +410,10 @@ func (this *FunctionCallMax) Accept(ev ExpressionVisitor) (Expression, error) {
 
 type FunctionCallArrayAgg struct {
 	AggregateFunctionCall
+	unique map[string]bool
 }
 
-func NewFunctionCallArrayAgg(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallArrayAgg(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallArrayAgg{
 		AggregateFunctionCall{
 			FunctionCall{
@@ -423,6 +424,7 @@ func NewFunctionCallArrayAgg(operands FunctionArgExpressionList) Expression {
 				maxArgs:  1,
 			},
 		},
+		nil,
 	}
 }
 
@@ -432,6 +434,9 @@ func (this *FunctionCallArrayAgg) Evaluate(item *dparval.Value) (*dparval.Value,
 }
 
 func (this *FunctionCallArrayAgg) DefaultAggregate(group *dparval.Value) error {
+	if this.Distinct {
+		this.unique = make(map[string]bool)
+	}
 	aggregate_key := this.Key()
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
@@ -458,6 +463,19 @@ func (this *FunctionCallArrayAgg) UpdateAggregate(group *dparval.Value, item *dp
 		if val != nil {
 
 			nextVal := val.Value()
+
+			if this.Distinct {
+				// check to see if we already have this value
+				valkey := string(val.Bytes())
+				_, ok := this.unique[valkey]
+				if ok {
+					return nil
+				} else {
+					this.unique[valkey] = true
+					// and allow it to continue
+				}
+			}
+
 			currVal := currentVal.Value()
 
 			currValArray, ok := currVal.([]interface{})

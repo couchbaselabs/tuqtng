@@ -17,7 +17,7 @@ type FunctionCallMeta struct {
 	FunctionCall
 }
 
-func NewFunctionCallMeta(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallMeta(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallMeta{
 		FunctionCall{
 			Type:     "function",
@@ -60,7 +60,7 @@ type FunctionCallValue struct {
 	FunctionCall
 }
 
-func NewFunctionCallValue(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallValue(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallValue{
 		FunctionCall{
 			Type:     "function",

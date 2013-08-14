@@ -11,7 +11,7 @@ package ast
 
 import ()
 
-type FunctionCallConstructor func(operands FunctionArgExpressionList) Expression
+type FunctionCallConstructor func(operands FunctionArgExpressionList) FunctionCallExpression
 
 var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]FunctionCallConstructor{
 	// utility functions

@@ -69,5 +69,12 @@ func (this *ExpressionValidator) ValidateFunctionCall(expr FunctionCallExpressio
 			return err
 		}
 	}
+	// an exception for COUNT and ARRAY_AGG
+	if expr.GetName() != "COUNT" && expr.GetName() != "ARRAY_AGG" {
+		err = expr.ValidateDistinct()
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }

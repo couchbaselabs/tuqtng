@@ -19,7 +19,7 @@ type FunctionCallLower struct {
 	FunctionCall
 }
 
-func NewFunctionCallLower(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallLower(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallLower{
 		FunctionCall{
 			Type:     "function",
@@ -66,7 +66,7 @@ type FunctionCallUpper struct {
 	FunctionCall
 }
 
-func NewFunctionCallUpper(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallUpper(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallUpper{
 		FunctionCall{
 			Type:     "function",
@@ -113,7 +113,7 @@ type FunctionCallLTrim struct {
 	FunctionCall
 }
 
-func NewFunctionCallLTrim(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallLTrim(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallLTrim{
 		FunctionCall{
 			Type:     "function",
@@ -182,7 +182,7 @@ type FunctionCallRTrim struct {
 	FunctionCall
 }
 
-func NewFunctionCallRTrim(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallRTrim(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallRTrim{
 		FunctionCall{
 			Type:     "function",
@@ -250,7 +250,7 @@ type FunctionCallTrim struct {
 	FunctionCall
 }
 
-func NewFunctionCallTrim(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallTrim(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallTrim{
 		FunctionCall{
 			Type:     "function",
@@ -318,7 +318,7 @@ type FunctionCallSubStr struct {
 	FunctionCall
 }
 
-func NewFunctionCallSubStr(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallSubStr(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallSubStr{
 		FunctionCall{
 			Type:     "function",

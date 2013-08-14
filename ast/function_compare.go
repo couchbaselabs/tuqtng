@@ -17,7 +17,7 @@ type FunctionCallGreatest struct {
 	FunctionCall
 }
 
-func NewFunctionCallGreatest(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallGreatest(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallGreatest{
 		FunctionCall{
 			Type:     "function",
@@ -65,7 +65,7 @@ type FunctionCallLeast struct {
 	FunctionCall
 }
 
-func NewFunctionCallLeast(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallLeast(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallLeast{
 		FunctionCall{
 			Type:     "function",
@@ -115,7 +115,7 @@ type FunctionCallIfMissing struct {
 	FunctionCall
 }
 
-func NewFunctionCallIfMissing(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallIfMissing(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallIfMissing{
 		FunctionCall{
 			Type:     "function",
@@ -157,7 +157,7 @@ type FunctionCallIfNull struct {
 	FunctionCall
 }
 
-func NewFunctionCallIfNull(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallIfNull(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallIfNull{
 		FunctionCall{
 			Type:     "function",
@@ -202,7 +202,7 @@ type FunctionCallIfMissingOrNull struct {
 	FunctionCall
 }
 
-func NewFunctionCallIfMissingOrNull(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallIfMissingOrNull(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallIfMissingOrNull{
 		FunctionCall{
 			Type:     "function",
@@ -246,7 +246,7 @@ type FunctionCallMissingIf struct {
 	FunctionCall
 }
 
-func NewFunctionCallMissingIf(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallMissingIf(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallMissingIf{
 		FunctionCall{
 			Type:     "function",
@@ -313,7 +313,7 @@ type FunctionCallNullIf struct {
 	FunctionCall
 }
 
-func NewFunctionCallNullIf(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallNullIf(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallNullIf{
 		FunctionCall{
 			Type:     "function",

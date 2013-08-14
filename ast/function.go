@@ -18,11 +18,12 @@ type FunctionCall struct {
 	Type     string                    `json:"type"`
 	Name     string                    `json:"name"`
 	Operands FunctionArgExpressionList `json:"operands"`
+	Distinct bool                      `json:"distinct"`
 	minArgs  int
 	maxArgs  int
 }
 
-func NewFunctionCall(name string, operands FunctionArgExpressionList) Expression {
+func NewFunctionCall(name string, operands FunctionArgExpressionList) FunctionCallExpression {
 	functionConstructor := SystemFunctionRegistry[strings.ToUpper(name)]
 	if functionConstructor != nil {
 		return functionConstructor(operands)
@@ -41,6 +42,13 @@ func (this *FunctionCall) GetOperands() FunctionArgExpressionList {
 
 func (this *FunctionCall) SetOperands(operands FunctionArgExpressionList) {
 	this.Operands = operands
+}
+
+func (this *FunctionCall) IsDistinct() bool {
+	return this.Distinct
+}
+func (this *FunctionCall) SetDistinct(distinct bool) {
+	this.Distinct = distinct
 }
 
 func (this *FunctionCall) EquivalentTo(t Expression) bool {
@@ -94,6 +102,13 @@ func (this *FunctionCall) ValidateStars() error {
 		}
 	}
 
+	return nil
+}
+
+func (this *FunctionCall) ValidateDistinct() error {
+	if this.Distinct {
+		return fmt.Errorf("the %s() function does not support DISTINCT", this.Name)
+	}
 	return nil
 }
 

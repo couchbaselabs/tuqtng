@@ -720,10 +720,11 @@ IDENTIFIER LPAREN function_arg_list RPAREN {
 }
 |
 IDENTIFIER LPAREN DISTINCT function_arg_list RPAREN {
-	logDebugGrammar("FUNCTION EXPR PARAM")
+	logDebugGrammar("FUNCTION DISTINCT EXPR PARAM")
 	funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
-	thisExpression := ast.NewFunctionCall($1.s, funarg_exp_list)
-	parsingStack.Push(thisExpression)
+	function := ast.NewFunctionCall($1.s, funarg_exp_list)
+	function.SetDistinct(true)
+	parsingStack.Push(function)
 }
 |
 IDENTIFIER LPAREN UNIQUE function_arg_list RPAREN {
