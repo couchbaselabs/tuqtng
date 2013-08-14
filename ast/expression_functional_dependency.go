@@ -73,24 +73,14 @@ func (this *ExpressionFunctionalDependencyChecker) Visit(expr Expression) (Expre
 
 func (this *ExpressionFunctionalDependencyChecker) getAppropriateCheckerForDeps(expr Expression) *ExpressionFunctionalDependencyChecker {
 	switch expr := expr.(type) {
-	case *CollectionAnyOperator:
+	case CollectionOperatorExpression:
 		// add the collection AS value
 		// as a new satisifed dependency before checking
 		newDeps := make(ExpressionList, len(this.Dependencies)+1)
 		for i, dep := range this.Dependencies {
 			newDeps[i] = dep
 		}
-		newDeps[len(this.Dependencies)] = NewProperty(expr.As)
-		colDepChecker := NewExpressionFunctionalDependencyChecker(newDeps)
-		return colDepChecker
-	case *CollectionAllOperator:
-		// add the collection AS value
-		// as a new satisifed dependency before checking
-		newDeps := make(ExpressionList, len(this.Dependencies)+1)
-		for i, dep := range this.Dependencies {
-			newDeps[i] = dep
-		}
-		newDeps[len(this.Dependencies)] = NewProperty(expr.As)
+		newDeps[len(this.Dependencies)] = NewProperty(expr.GetAs())
 		colDepChecker := NewExpressionFunctionalDependencyChecker(newDeps)
 		return colDepChecker
 	default:

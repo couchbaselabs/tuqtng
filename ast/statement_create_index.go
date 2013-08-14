@@ -11,9 +11,26 @@ package ast
 
 import ()
 
-// Statement is the abstract representation of an UNQL statement
-type Statement interface {
-	SetExplainOnly(bool)
-	IsExplainOnly() bool
-	VerifySemantics() error
+type CreateIndexStatement struct {
+	View        bool           `json:"view"`
+	Name        string         `json:"name"`
+	ExplainOnly bool           `json:"explain"`
+	Bucket      string         `json:"bucket"`
+	On          ExpressionList `json:"on"`
+}
+
+func NewCreateIndexStatement() *CreateIndexStatement {
+	return &CreateIndexStatement{}
+}
+
+func (this *CreateIndexStatement) SetExplainOnly(only bool) {
+	this.ExplainOnly = only
+}
+
+func (this *CreateIndexStatement) IsExplainOnly() bool {
+	return this.ExplainOnly
+}
+
+func (this *CreateIndexStatement) VerifySemantics() error {
+	return nil
 }

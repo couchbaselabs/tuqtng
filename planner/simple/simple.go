@@ -38,10 +38,7 @@ func (this *SimplePlanner) Plan(stmt ast.Statement) (plan.PlanChannel, query.Err
 	return pc, ec
 }
 
-func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel, ec query.ErrorChannel) {
-	defer close(pc)
-	defer close(ec)
-
+func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, pc plan.PlanChannel, ec query.ErrorChannel) {
 	from := stmt.GetFrom()
 
 	var lastStep plan.PlanElement
@@ -126,4 +123,21 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel, e
 	}
 
 	pc <- plan.Plan{Root: lastStep}
+}
+
+func (this *SimplePlanner) buildCreateIndexStatementPlans(stmt *ast.CreateIndexStatement, pc plan.PlanChannel, ec query.ErrorChannel) {
+	ec <- query.NewError(nil, fmt.Sprintf("I don't know how to create indexes yet"))
+	return
+}
+
+func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel, ec query.ErrorChannel) {
+	defer close(pc)
+	defer close(ec)
+	switch stmt := stmt.(type) {
+	case *ast.SelectStatement:
+		this.buildSelectStatementPlans(stmt, pc, ec)
+	case *ast.CreateIndexStatement:
+		this.buildCreateIndexStatementPlans(stmt, pc, ec)
+	}
+
 }

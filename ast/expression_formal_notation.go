@@ -45,15 +45,10 @@ func (this *ExpressionFormalNotationConverter) Visit(e Expression) (Expression, 
 		if err != nil {
 			return expr, err
 		}
-	case *CollectionAnyOperator:
-		_, err = this.VisitCollectionAnyChild(expr)
+	case CollectionOperatorExpression:
+		err = this.VisitCollectionChild(expr)
 		if err != nil {
-			return expr, err
-		}
-	case *CollectionAllOperator:
-		_, err = this.VisitCollectionAllChild(expr)
-		if err != nil {
-			return expr, err
+			return e, err
 		}
 	// and add custom behavior to others (with default recursion)
 	case FunctionCallExpression:
@@ -83,34 +78,23 @@ func (this *ExpressionFormalNotationConverter) VisitDotMemberChild(expr *DotMemb
 	return expr, nil
 }
 
-func (this *ExpressionFormalNotationConverter) VisitCollectionAnyChild(expr *CollectionAnyOperator) (Expression, error) {
+func (this *ExpressionFormalNotationConverter) VisitCollectionChild(expr CollectionOperatorExpression) error {
 	var err error
-	expr.Over, err = expr.Over.Accept(this)
+	newOver, err := expr.GetOver().Accept(this)
 	if err != nil {
-		return expr, err
+		return err
 	}
+	expr.SetOver(newOver)
 
 	updatedAliases := make([]string, len(this.aliases)+1)
-	copy(this.aliases, updatedAliases)
-	updatedAliases[len(this.aliases)] = expr.As
-	childVisitor := NewExpressionFormalNotationConverter(this.forbiddenAliases, updatedAliases, this.defaultAlias)
-	expr.Condition, err = expr.Condition.Accept(childVisitor)
-	return expr, err
-}
-
-func (this *ExpressionFormalNotationConverter) VisitCollectionAllChild(expr *CollectionAllOperator) (Expression, error) {
-	var err error
-	expr.Over, err = expr.Over.Accept(this)
-	if err != nil {
-		return expr, err
+	for i, alias := range this.aliases {
+		updatedAliases[i] = alias
 	}
-
-	updatedAliases := make([]string, len(this.aliases)+1)
-	copy(this.aliases, updatedAliases)
-	updatedAliases[len(this.aliases)] = expr.As
+	updatedAliases[len(this.aliases)] = expr.GetAs()
 	childVisitor := NewExpressionFormalNotationConverter(this.forbiddenAliases, updatedAliases, this.defaultAlias)
-	expr.Condition, err = expr.Condition.Accept(childVisitor)
-	return expr, err
+	newCond, err := expr.GetCondition().Accept(childVisitor)
+	expr.SetCondition(newCond)
+	return err
 }
 
 func (this *ExpressionFormalNotationConverter) VisitFunctionCall(expr FunctionCallExpression) error {
