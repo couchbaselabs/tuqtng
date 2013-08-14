@@ -18,11 +18,12 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	"LENGTH": NewFunctionCallLength,
 
 	// aggregate functions
-	"COUNT": NewFunctionCallCount,
-	"SUM":   NewFunctionCallSum,
-	"AVG":   NewFunctionCallAvg,
-	"MIN":   NewFunctionCallMin,
-	"MAX":   NewFunctionCallMax,
+	"COUNT":     NewFunctionCallCount,
+	"SUM":       NewFunctionCallSum,
+	"AVG":       NewFunctionCallAvg,
+	"MIN":       NewFunctionCallMin,
+	"MAX":       NewFunctionCallMax,
+	"ARRAY_AGG": NewFunctionCallArrayAgg,
 
 	// comparison functions
 	"GREATEST":        NewFunctionCallGreatest,

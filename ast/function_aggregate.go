@@ -407,3 +407,70 @@ func (this *FunctionCallMax) UpdateAggregate(group *dparval.Value, item *dparval
 func (this *FunctionCallMax) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
+
+type FunctionCallArrayAgg struct {
+	AggregateFunctionCall
+}
+
+func NewFunctionCallArrayAgg(operands FunctionArgExpressionList) Expression {
+	return &FunctionCallArrayAgg{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "ARRAY_AGG",
+				Operands: operands,
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
+	}
+}
+
+func (this *FunctionCallArrayAgg) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	aggregate_key := this.Key()
+	return aggregateValue(item, aggregate_key)
+}
+
+func (this *FunctionCallArrayAgg) DefaultAggregate(group *dparval.Value) error {
+	aggregate_key := this.Key()
+	currentVal, err := aggregateValue(group, aggregate_key)
+	if err != nil {
+		currentVal = dparval.NewValue([]interface{}{})
+		// store this, so that even if all values are eliminated we return null
+		setAggregateValue(group, aggregate_key, dparval.NewValue(currentVal))
+	}
+	return nil
+}
+
+func (this *FunctionCallArrayAgg) UpdateAggregate(group *dparval.Value, item *dparval.Value) error {
+	aggregate_key := this.Key()
+	currentVal, err := aggregateValue(group, aggregate_key)
+	if err != nil {
+		return fmt.Errorf("group defaults not set correctly")
+	}
+
+	if this.Operands[0].Expr != nil {
+		val, err := this.Operands[0].Expr.Evaluate(item)
+		if err != nil {
+			// only eliminate missing
+			return err
+		}
+		if val != nil {
+
+			nextVal := val.Value()
+			currVal := currentVal.Value()
+
+			currValArray, ok := currVal.([]interface{})
+			if ok {
+				currValArray = append(currValArray, nextVal)
+			}
+			setAggregateValue(group, aggregate_key, dparval.NewValue(currValArray))
+
+		}
+	}
+	return nil
+}
+
+func (this *FunctionCallArrayAgg) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
