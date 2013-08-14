@@ -17,6 +17,7 @@ import (
 
 type FunctionCallCount struct {
 	AggregateFunctionCall
+	unique map[string]bool
 }
 
 func NewFunctionCallCount(operands FunctionArgExpressionList) FunctionCallExpression {
@@ -30,6 +31,7 @@ func NewFunctionCallCount(operands FunctionArgExpressionList) FunctionCallExpres
 				maxArgs:  1,
 			},
 		},
+		nil,
 	}
 }
 
@@ -40,6 +42,9 @@ func (this *FunctionCallCount) Evaluate(item *dparval.Value) (*dparval.Value, er
 }
 
 func (this *FunctionCallCount) DefaultAggregate(group *dparval.Value) error {
+	if this.Distinct {
+		this.unique = make(map[string]bool)
+	}
 	aggregate_key := this.Key()
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
@@ -61,6 +66,7 @@ func (this *FunctionCallCount) UpdateAggregate(group *dparval.Value, item *dparv
 	if !ok {
 		return fmt.Errorf("count value not a number")
 	}
+
 	if this.Operands[0].Star && this.Operands[0].Expr == nil {
 		// pure star
 		setAggregateValue(group, aggregate_key, dparval.NewValue(currentFloat+1))
@@ -72,6 +78,19 @@ func (this *FunctionCallCount) UpdateAggregate(group *dparval.Value, item *dparv
 			return err
 		}
 		if val != nil {
+
+			if this.Distinct {
+				// check to see if we already have this value
+				valkey := string(val.Bytes())
+				_, ok := this.unique[valkey]
+				if ok {
+					return nil
+				} else {
+					this.unique[valkey] = true
+					// and allow it to continue
+				}
+			}
+
 			setAggregateValue(group, aggregate_key, dparval.NewValue(currentFloat+1))
 		}
 	} else if !this.Operands[0].Star && this.Operands[0].Expr != nil {
@@ -82,6 +101,19 @@ func (this *FunctionCallCount) UpdateAggregate(group *dparval.Value, item *dparv
 			return err
 		}
 		if val != nil {
+
+			if this.Distinct {
+				// check to see if we already have this value
+				valkey := string(val.Bytes())
+				_, ok := this.unique[valkey]
+				if ok {
+					return nil
+				} else {
+					this.unique[valkey] = true
+					// and allow it to continue
+				}
+			}
+
 			setAggregateValue(group, aggregate_key, dparval.NewValue(currentFloat+1))
 		}
 	}
