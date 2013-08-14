@@ -120,6 +120,7 @@ var validQueries = []string{
 	`CREATE VIEW INDEX abv_idx ON beer-sample(abv)`,
 	`CREATE INDEX abv_idx ON beer-sample(abv, ibu)`,
 	`CREATE VIEW INDEX abv_idx ON beer-sample(abv, ibu)`,
+	`SELECT ARRAY child.name WHEN child.age > 20 OVER contacts.children AS child FROM contacts`,
 }
 
 var invalidQueries = []string{

@@ -46,11 +46,22 @@ func VisitChildren(v ExpressionVisitor, e Expression) (Expression, error) {
 			return e, err
 		}
 		expr.SetOver(newOver)
-		newCondition, err := expr.GetCondition().Accept(v)
-		if err != nil {
-			return e, err
+
+		if expr.GetCondition() != nil {
+			newCondition, err := expr.GetCondition().Accept(v)
+			if err != nil {
+				return e, err
+			}
+			expr.SetCondition(newCondition)
 		}
-		expr.SetCondition(newCondition)
+
+		if expr.GetOutput() != nil {
+			newOutput, err := expr.GetOutput().Accept(v)
+			if err != nil {
+				return e, err
+			}
+			expr.SetOutput(newOutput)
+		}
 
 	// handle all binary operators
 	case BinaryOperatorExpression:

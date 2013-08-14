@@ -92,8 +92,23 @@ func (this *ExpressionFormalNotationConverter) VisitCollectionChild(expr Collect
 	}
 	updatedAliases[len(this.aliases)] = expr.GetAs()
 	childVisitor := NewExpressionFormalNotationConverter(this.forbiddenAliases, updatedAliases, this.defaultAlias)
-	newCond, err := expr.GetCondition().Accept(childVisitor)
-	expr.SetCondition(newCond)
+
+	if expr.GetCondition() != nil {
+		newCond, err := expr.GetCondition().Accept(childVisitor)
+		if err != nil {
+			return err
+		}
+		expr.SetCondition(newCond)
+	}
+
+	if expr.GetOutput() != nil {
+		newOutput, err := expr.GetOutput().Accept(childVisitor)
+		if err != nil {
+			return err
+		}
+		expr.SetOutput(newOutput)
+	}
+
 	return err
 }
 

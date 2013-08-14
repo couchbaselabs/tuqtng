@@ -120,6 +120,10 @@
                   {
                     logDebugTokens("ON"); return ON
                   }
+/[aA][rR][rR][aA][yY]/
+                  {
+                    logDebugTokens("ARRAY"); return ARRAY
+                  }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }

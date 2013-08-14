@@ -62,6 +62,8 @@ type CollectionOperatorExpression interface {
 	SetOver(Expression)
 	SetCondition(Expression)
 	SetAs(string)
+	GetOutput() Expression
+	SetOutput(Expression)
 }
 
 type FunctionCallExpression interface {

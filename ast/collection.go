@@ -18,10 +18,17 @@ type CollectionOperator struct {
 	Condition Expression `json:"condition"`
 	Over      Expression `json:"over"`
 	As        string     `json:"as"`
+	Output    Expression `json:"output"`
 }
 
 func (this *CollectionOperator) Dependencies() ExpressionList {
-	rv := ExpressionList{this.Over, this.Condition}
+	rv := ExpressionList{this.Over}
+	if this.Condition != nil {
+		rv = append(rv, this.Condition)
+	}
+	if this.Output != nil {
+		rv = append(rv, this.Output)
+	}
 	return rv
 }
 
@@ -43,7 +50,16 @@ func (this *CollectionOperator) EquivalentTo(t Expression) bool {
 	if !this.Over.EquivalentTo(that.GetOver()) {
 		return false
 	}
+	if this.Condition == nil && that.GetCondition() != nil {
+		return false
+	}
 	if !this.Condition.EquivalentTo(that.GetCondition()) {
+		return false
+	}
+	if this.Output == nil && that.GetOutput() != nil {
+		return false
+	}
+	if !this.Output.EquivalentTo(that.GetOutput()) {
 		return false
 	}
 
@@ -51,7 +67,16 @@ func (this *CollectionOperator) EquivalentTo(t Expression) bool {
 }
 
 func (this *CollectionOperator) String() string {
-	return fmt.Sprintf("%s %v OVER %v AS %s", this.operator, this.Condition, this.Over, this.As)
+	rv := this.operator
+	if this.Output != nil {
+		rv = rv + fmt.Sprintf(" %v", this.Output)
+		if this.Condition != nil {
+			rv = rv + fmt.Sprintf(" WHEN %v", this.Condition)
+		}
+	} else if this.Condition != nil {
+		rv = rv + fmt.Sprintf(" %v", this.Condition)
+	}
+	return rv + fmt.Sprintf(" OVER %v AS %s", this.Over, this.As)
 }
 
 func (this *CollectionOperator) Operator() string {
@@ -80,4 +105,12 @@ func (this *CollectionOperator) SetCondition(condition Expression) {
 
 func (this *CollectionOperator) SetAs(as string) {
 	this.As = as
+}
+
+func (this *CollectionOperator) GetOutput() Expression {
+	return this.Output
+}
+
+func (this *CollectionOperator) SetOutput(output Expression) {
+	this.Output = output
 }

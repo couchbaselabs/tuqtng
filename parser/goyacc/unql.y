@@ -34,7 +34,7 @@ f float64}
 %token LIKE IS VALUED MISSING
 %token DOT
 %token CASE WHEN THEN ELSE END
-%token ANY ALL OVER FIRST
+%token ANY ALL OVER FIRST ARRAY
 %left OR
 %left AND 
 %left DOT LBRACKET
@@ -687,6 +687,23 @@ FIRST expr OVER path AS IDENTIFIER {
 	condition := parsingStack.Pop().(ast.Expression)
 	collectionFirst := ast.NewCollectionFirstOperator(condition, path, $6.s)
 	parsingStack.Push(collectionFirst)
+}
+|
+ARRAY expr WHEN expr OVER path AS IDENTIFIER {
+	logDebugGrammar("ARRAY WHEN OVER AS IDENTIFIER")
+	path := parsingStack.Pop().(ast.Expression)
+	condition := parsingStack.Pop().(ast.Expression)
+	output := parsingStack.Pop().(ast.Expression)
+	collectionArray := ast.NewCollectionArrayOperator(condition, path, $8.s, output)
+	parsingStack.Push(collectionArray)
+}
+|
+ARRAY expr OVER path AS IDENTIFIER {
+	logDebugGrammar("ARRAY OVER AS IDENTIFIER")
+	path := parsingStack.Pop().(ast.Expression)
+	output := parsingStack.Pop().(ast.Expression)
+	collectionArray := ast.NewCollectionArrayOperator(nil, path, $6.s, output)
+	parsingStack.Push(collectionArray)
 }
 |
 IDENTIFIER LPAREN RPAREN {
