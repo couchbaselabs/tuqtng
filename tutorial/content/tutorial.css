@@ -8,6 +8,11 @@
 	position: fixed;
 }
 
+h1, h2, h3, h4 {
+	color: #a30a0a;
+	font-size: 18px;
+}
+
 #info {
 	position: fixed;
 	top: 0;
@@ -31,20 +36,15 @@
 	position: absolute;
 	height: 40px;
 	width: 100%;
-	padding-top: 10px;
-	padding-left: 10px;
+	padding: 20px;
 	margin-bottom: 5px;
   	text-align: center;
 	border-bottom: 1px dotted;
 	border-color: #gray;
 	background: url('logo.png');
 	background-repeat: no-repeat;
-	background-position: center left;
+	background-position: 40px 25px;
     color: black;
-}
-
-#header img {
-	margin-left: 10px;
 }
 
 #footer {
@@ -73,9 +73,11 @@
 }	
 
 #title {
-  font-size: 22px;
+	color: #a30a0a;
+  font-size: 24px;
   font-weight: bold;
   text-decoration: none;
+	margin-top: 10px;
 }
 
 #input {
@@ -130,16 +132,15 @@
 }
 
 #run a {
-  background: #06c;
-  padding: 5px 8px;
   color: #fff; 
   font-size: 14px; 
   font-weight: bold; 
   text-decoration: none;
+
 }
 
 #run a:hover { 
-  background: #f00; 
+
 }
 
 #max {
@@ -175,24 +176,22 @@
   padding: 5px 0px 0px 2%;
 }
 
-#prev a {
-  padding: 5px 8px;
-  color: #fff; 
-  font-size: 14px; 
-  font-weight: bold; 
-  text-decoration: none;
-}
-
 #next {
   float: right;
   padding: 5px 2% 0px 0px;
 }
 
-#next a {
-  padding: 5px 10px;
-  color: #fff; 
-  font-size: 14px; 
-  font-weight: bold; 
-  text-decoration: none;
+
+.button a {
+	  font-weight: bold;
+	  text-decoration: none;
+	 font-size: 14px; 
+	 color: white;
+	 padding: 5px 10px;
+	 border-radius: 5px;
+	 background: #a30a0a;
 }
 
+.button a:hover {
+	  background: #a8a8a8; 
+} 
