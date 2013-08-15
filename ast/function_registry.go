@@ -35,8 +35,9 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	"NULLIF":          NewFunctionCallNullIf,
 
 	// meta/value functions
-	"META":  NewFunctionCallMeta,
-	"VALUE": NewFunctionCallValue,
+	"META":         NewFunctionCallMeta,
+	"VALUE":        NewFunctionCallValue,
+	"BASE64_VALUE": NewFunctionCallBase64Value,
 
 	// numeric functions
 	"CEIL":  NewFunctionCallCeil,

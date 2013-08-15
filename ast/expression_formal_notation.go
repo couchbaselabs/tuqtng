@@ -120,6 +120,12 @@ func (this *ExpressionFormalNotationConverter) VisitFunctionCall(expr FunctionCa
 			expr.SetOperands(FunctionArgExpressionList{NewFunctionArgExpression(NewProperty(this.defaultAlias))})
 		}
 	}
+	if expr.GetName() == "BASE64_VALUE" {
+		// BASE64_VALUE() with 0 args is converted to BASE64_VALUE(defaultAlias) when there is one
+		if len(expr.GetOperands()) == 0 && this.defaultAlias != "" {
+			expr.SetOperands(FunctionArgExpressionList{NewFunctionArgExpression(NewProperty(this.defaultAlias))})
+		}
+	}
 	if expr.GetName() == "META" {
 		// META() with 0 args is converted to META(defaultAlias) when there is one
 		if len(expr.GetOperands()) == 0 && this.defaultAlias != "" {
