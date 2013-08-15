@@ -110,10 +110,10 @@
     },
 
     {
-        "statements": "SELECT name FROM tags WHERE length(name) > 5",
+        "statements": "SELECT name FROM tags WHERE length(name) > 10",
         "results": [
         {
-            "name": "hitler"
+            "name": "threemusketeers"
         }
     ]
     },
