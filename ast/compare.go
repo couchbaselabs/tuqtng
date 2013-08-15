@@ -424,23 +424,17 @@ func NewIsNullOperator(operand Expression) *IsNullOperator {
 	}
 }
 
-func (this *IsNullOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	ov, err := this.Operand.Evaluate(item)
-	if err != nil {
-		switch err := err.(type) {
-		case *dparval.Undefined:
-			return dparval.NewValue(false), nil
-		default:
-			// any other error should be returned to caller
-			return nil, err
-		}
+func (this *IsNullOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	var result interface{} = false
+	ov, isMissing, err := this.EvaluateFlagMissing(context)
+	if err != nil && !isMissing {
+		return nil, err
 	}
 
-	if ov.Type() == dparval.NULL {
-		return dparval.NewValue(true), nil
+	if ov != nil && ov.Type() == dparval.NULL {
+		result = true
 	}
-
-	return dparval.NewValue(false), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *IsNullOperator) Accept(ev ExpressionVisitor) (Expression, error) {
@@ -466,23 +460,17 @@ func NewIsNotNullOperator(operand Expression) *IsNotNullOperator {
 	}
 }
 
-func (this *IsNotNullOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	ov, err := this.Operand.Evaluate(item)
-	if err != nil {
-		switch err := err.(type) {
-		case *dparval.Undefined:
-			return dparval.NewValue(false), nil
-		default:
-			// any other error should be returned to caller
-			return nil, err
-		}
+func (this *IsNotNullOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	var result interface{} = true
+	ov, isMissing, err := this.EvaluateFlagMissing(context)
+	if err != nil && !isMissing {
+		return nil, err
 	}
 
-	if ov.Type() == dparval.NULL {
-		return dparval.NewValue(false), nil
+	if isMissing || ov.Type() == dparval.NULL {
+		result = false
 	}
-
-	return dparval.NewValue(true), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *IsNotNullOperator) Accept(ev ExpressionVisitor) (Expression, error) {
@@ -508,19 +496,17 @@ func NewIsMissingOperator(operand Expression) *IsMissingOperator {
 	}
 }
 
-func (this *IsMissingOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	_, err := this.Operand.Evaluate(item)
-	if err != nil {
-		switch err := err.(type) {
-		case *dparval.Undefined:
-			return dparval.NewValue(true), nil
-		default:
-			// any other error should be returned to caller
-			return nil, err
-		}
+func (this *IsMissingOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	var result interface{} = false
+	_, isMissing, err := this.EvaluateFlagMissing(context)
+	if err != nil && !isMissing {
+		return nil, err
 	}
 
-	return dparval.NewValue(false), nil
+	if isMissing {
+		result = true
+	}
+	return dparval.NewValue(result), nil
 }
 
 func (this *IsMissingOperator) Accept(ev ExpressionVisitor) (Expression, error) {
@@ -546,19 +532,17 @@ func NewIsNotMissingOperator(operand Expression) *IsNotMissingOperator {
 	}
 }
 
-func (this *IsNotMissingOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	_, err := this.Operand.Evaluate(item)
-	if err != nil {
-		switch err := err.(type) {
-		case *dparval.Undefined:
-			return dparval.NewValue(false), nil
-		default:
-			// any other error should be returned to caller
-			return nil, err
-		}
+func (this *IsNotMissingOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	var result interface{} = true
+	_, isMissing, err := this.EvaluateFlagMissing(context)
+	if err != nil && !isMissing {
+		return nil, err
 	}
 
-	return dparval.NewValue(true), nil
+	if isMissing {
+		result = false
+	}
+	return dparval.NewValue(result), nil
 }
 
 func (this *IsNotMissingOperator) Accept(ev ExpressionVisitor) (Expression, error) {
@@ -584,23 +568,17 @@ func NewIsValuedOperator(operand Expression) *IsValuedOperator {
 	}
 }
 
-func (this *IsValuedOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	ov, err := this.Operand.Evaluate(item)
-	if err != nil {
-		switch err := err.(type) {
-		case *dparval.Undefined:
-			return dparval.NewValue(false), nil
-		default:
-			// any other error should be returned to caller
-			return nil, err
-		}
+func (this *IsValuedOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	var result interface{} = true
+	ov, isMissing, err := this.EvaluateFlagMissing(context)
+	if err != nil && !isMissing {
+		return nil, err
 	}
 
-	if ov.Type() == dparval.NULL {
-		return dparval.NewValue(false), nil
+	if isMissing || ov.Type() == dparval.NULL {
+		result = false
 	}
-
-	return dparval.NewValue(true), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *IsValuedOperator) Accept(ev ExpressionVisitor) (Expression, error) {
@@ -626,23 +604,17 @@ func NewIsNotValuedOperator(operand Expression) *IsNotValuedOperator {
 	}
 }
 
-func (this *IsNotValuedOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	ov, err := this.Operand.Evaluate(item)
-	if err != nil {
-		switch err := err.(type) {
-		case *dparval.Undefined:
-			return dparval.NewValue(false), nil
-		default:
-			// any other error should be returned to caller
-			return nil, err
-		}
+func (this *IsNotValuedOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+	var result interface{} = false
+	ov, isMissing, err := this.EvaluateFlagMissing(context)
+	if err != nil && !isMissing {
+		return nil, err
 	}
 
-	if ov.Type() == dparval.NULL {
-		return dparval.NewValue(true), nil
+	if ov != nil && ov.Type() == dparval.NULL {
+		result = true
 	}
-
-	return dparval.NewValue(false), nil
+	return dparval.NewValue(result), nil
 }
 
 func (this *IsNotValuedOperator) Accept(ev ExpressionVisitor) (Expression, error) {

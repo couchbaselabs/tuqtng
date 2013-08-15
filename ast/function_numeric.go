@@ -19,7 +19,7 @@ type FunctionCallCeil struct {
 	FunctionCall
 }
 
-func NewFunctionCallCeil(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallCeil(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallCeil{
 		FunctionCall{
 			Type:     "function",
@@ -67,7 +67,7 @@ type FunctionCallFloor struct {
 	FunctionCall
 }
 
-func NewFunctionCallFloor(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallFloor(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallFloor{
 		FunctionCall{
 			Type:     "function",
@@ -139,7 +139,7 @@ type FunctionCallRound struct {
 	FunctionCall
 }
 
-func NewFunctionCallRound(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallRound(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallRound{
 		FunctionCall{
 			Type:     "function",
@@ -225,7 +225,7 @@ type FunctionCallTrunc struct {
 	FunctionCall
 }
 
-func NewFunctionCallTrunc(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallTrunc(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallTrunc{
 		FunctionCall{
 			Type:     "function",

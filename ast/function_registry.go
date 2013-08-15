@@ -11,18 +11,19 @@ package ast
 
 import ()
 
-type FunctionCallConstructor func(operands FunctionArgExpressionList) Expression
+type FunctionCallConstructor func(operands FunctionArgExpressionList) FunctionCallExpression
 
 var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]FunctionCallConstructor{
 	// utility functions
 	"LENGTH": NewFunctionCallLength,
 
 	// aggregate functions
-	"COUNT": NewFunctionCallCount,
-	"SUM":   NewFunctionCallSum,
-	"AVG":   NewFunctionCallAvg,
-	"MIN":   NewFunctionCallMin,
-	"MAX":   NewFunctionCallMax,
+	"COUNT":     NewFunctionCallCount,
+	"SUM":       NewFunctionCallSum,
+	"AVG":       NewFunctionCallAvg,
+	"MIN":       NewFunctionCallMin,
+	"MAX":       NewFunctionCallMax,
+	"ARRAY_AGG": NewFunctionCallArrayAgg,
 
 	// comparison functions
 	"GREATEST":        NewFunctionCallGreatest,
@@ -34,8 +35,9 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	"NULLIF":          NewFunctionCallNullIf,
 
 	// meta/value functions
-	"META":  NewFunctionCallMeta,
-	"VALUE": NewFunctionCallValue,
+	"META":         NewFunctionCallMeta,
+	"VALUE":        NewFunctionCallValue,
+	"BASE64_VALUE": NewFunctionCallBase64Value,
 
 	// numeric functions
 	"CEIL":  NewFunctionCallCeil,

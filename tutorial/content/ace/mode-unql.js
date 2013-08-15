@@ -28,7 +28,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/mode/sql', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/sql_highlight_rules', 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/unql', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/sql_highlight_rules', 'ace/range'], function(require, exports, module) {
 
 
 var oop = require("../lib/oop");
@@ -62,11 +62,12 @@ var SqlHighlightRules = function() {
 
     var keywords = (
         "select|insert|update|delete|from|where|and|or|group|by|order|limit|offset|having|as|case|" +
-        "when|else|end|type|left|right|join|on|outer|desc|asc"
+        "when|else|end|type|left|right|join|on|outer|desc|asc|" +
+        "over|any|all|is"
     );
 
     var builtinConstants = (
-        "true|false|null"
+        "true|false|null|missing"
     );
 
     var builtinFunctions = (

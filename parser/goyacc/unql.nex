@@ -1,13 +1,11 @@
 /\"((\\\")|(\\\\)|(\\\/)|(\\b)|(\\f)|(\\n)|(\\r)|(\\t)|(\\u[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F])|[^\"])*\"/     { 
                     lval.s = yylex.Text()[1:len(yylex.Text())-1]
-                    logDebugTokens("%s", lval.s)
-                    logDebugTokens("STRING"); 
+                    logDebugTokens("STRING - %s", lval.s);
                     return STRING 
                   }
 /'((\\\")|(\\\\)|(\\\/)|(\\b)|(\\f)|(\\n)|(\\r)|(\\t)|(\\u[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F])|[^''])*'/     {
                     lval.s = yylex.Text()[1:len(yylex.Text())-1]
-                    logDebugTokens("%s", lval.s)
-                    logDebugTokens("STRING");
+                    logDebugTokens("STRING - %s", lval.s);
                     return STRING
                   }
 /\./              { logDebugTokens("DOT"); return DOT }
@@ -85,6 +83,10 @@
 /[aA][nN][yY]/    {
                     logDebugTokens("ANY"); return ANY
                   }
+/[fF][iI][rR][sS][tT]/
+                  {
+                    logDebugTokens("FIRST"); return FIRST
+                  }
 /[aA][lL][lL]/    {
                     logDebugTokens("ALL"); return ALL
                   }
@@ -101,6 +103,26 @@
 /[hH][aA][vV][iI][nN][gG]/
                   {
                     logDebugTokens("HAVING"); return HAVING
+                  }
+/[cC][rR][eE][aA][tT][eE]/
+                  {
+                    logDebugTokens("CREATE"); return CREATE
+                  }
+/[vV][iI][eE][wW]/
+                  {
+                    logDebugTokens("VIEW"); return VIEW
+                  }
+/[iI][nN][dD][eE][xX]/
+                  {
+                    logDebugTokens("INDEX"); return INDEX
+                  }
+/[oO][nN]/
+                  {
+                    logDebugTokens("ON"); return ON
+                  }
+/[aA][rR][rR][aA][yY]/
+                  {
+                    logDebugTokens("ARRAY"); return ARRAY
                   }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
@@ -123,36 +145,32 @@
                   // instead of 1 with two optional components
                   // to differntiate it from plan INT
                     lval.f,_ = strconv.ParseFloat(yylex.Text(), 64);
-                    logDebugTokens("%f", lval.f)
-                    logDebugTokens("NUMBER"); 
+                    logDebugTokens("NUMBER - %f", lval.f);
                     return NUMBER 
                   }
 /-?([0-9]|[1-9][0-9]*)(\.[0-9][0-9]*)?([eE][+\-]?[0-9][0-9]*)/
                   { 
                     lval.f,_ = strconv.ParseFloat(yylex.Text(), 64);
-                    logDebugTokens("%f", lval.f)
-                    logDebugTokens("NUMBER"); 
+                    logDebugTokens("NUMBER - %f", lval.f);
                     return NUMBER 
                   }
 /-?[0-9]|[1-9][0-9]*/
                   { 
                     lval.n,_ = strconv.Atoi(yylex.Text());
-                    logDebugTokens("INT %d", lval.n); 
+                    logDebugTokens("INT - %d", lval.n);
                     return INT 
                   }
 /[ \t\n]+/        { logDebugTokens("WHITESPACE (count=%d)", len(yylex.Text())) /* eat up whitespace */ }
 /[a-zA-Z_][a-zA-Z0-9\-_]*/     { 
                     lval.s = yylex.Text();
-                    logDebugTokens("%s", lval.s)
-                    logDebugTokens("IDENTIFIER"); 
+                    logDebugTokens("IDENTIFIER - %s", lval.s);
                     return IDENTIFIER 
                   }
 /`((\\\")|(\\\\)|(\\\/)|(\\b)|(\\f)|(\\n)|(\\r)|(\\t)|(\\u[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F])|[^`])+`/
                   {
                     //this rule allows for a wider range of identifiers by escaping them
                     lval.s = yylex.Text()[1:len(yylex.Text())-1]
-                    logDebugTokens("%s", lval.s)
-                    logDebugTokens("IDENTIFIER"); 
+                    logDebugTokens("IDENTIFIER - %s", lval.s);
                     return IDENTIFIER 
                   }
 //

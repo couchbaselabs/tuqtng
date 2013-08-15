@@ -68,7 +68,7 @@ var validQueries = []string{
 	`SELECT someone NOT LIKE me`,
 	`SELECT -abv`,
 	`SELECT contact.name`,
-	`SELECT contact.name.first`,
+	`SELECT contact.name.firstn`,
 	`SELECT {"bob": "wood"}.wood`,
 	`SELECT family["father"]`,
 	`SELECT [a,b,c][0]`,
@@ -115,6 +115,12 @@ var validQueries = []string{
 	`SELECT COUNT(DISTINCT name) FROM bucket`,
 	`SELECT COUNT(UNIQUE name) FROM bucket`,
 	`SELECT * FROM contacts WHERE ANY child.age > 14 AND child.gender IS NOT NULL OVER children AS child`,
+	`SELECT * FROM bucket WHERE FIRST child.age > 25 OVER children AS child`,
+	`CREATE INDEX abv_idx ON beer-sample(abv)`,
+	`CREATE VIEW INDEX abv_idx ON beer-sample(abv)`,
+	`CREATE INDEX abv_idx ON beer-sample(abv, ibu)`,
+	`CREATE VIEW INDEX abv_idx ON beer-sample(abv, ibu)`,
+	`SELECT ARRAY child.name WHEN child.age > 20 OVER contacts.children AS child FROM contacts`,
 }
 
 var invalidQueries = []string{
@@ -126,6 +132,13 @@ var invalidQueries = []string{
 	`SELECT * WHERE true AND`,
 	`SELECT * WHERE true ORDER BY DESC`,
 	`SELECT "a`,
+	`CREATE *`,
+	`CREATE INDEX abv`,
+	`CREATE INDEX abv ON beer-sample`,
+	`CREATE INDEX abv ON beer-sample()`,
+	`CREATE VIEW INDEX abv`,
+	`CREATE VIEW INDEX abv ON beer-sample`,
+	`CREATE VIEW INDEX abv ON beer-sample()`,
 	// these are me trying to understand code coverage in the parser
 	`\`,
 	`\r`,
@@ -179,7 +192,7 @@ func TestParserASTOutput(t *testing.T) {
 
 	tests := []struct {
 		input  string
-		output *ast.SelectStatement
+		output ast.Statement
 	}{
 		{"SELECT * FROM test WHERE true",
 			&ast.SelectStatement{
@@ -249,6 +262,22 @@ func TestParserASTOutput(t *testing.T) {
 				From:     nil,
 				Where:    nil,
 				Limit:    -1,
+			},
+		},
+		{"CREATE VIEW INDEX abv_idx ON beer-sample(abv)",
+			&ast.CreateIndexStatement{
+				View:   true,
+				Bucket: "beer-sample",
+				Name:   "abv_idx",
+				On:     ast.ExpressionList{ast.NewProperty("abv")},
+			},
+		},
+		{"CREATE INDEX abv_idx ON beer-sample(abv)",
+			&ast.CreateIndexStatement{
+				View:   false,
+				Bucket: "beer-sample",
+				Name:   "abv_idx",
+				On:     ast.ExpressionList{ast.NewProperty("abv")},
 			},
 		},
 	}

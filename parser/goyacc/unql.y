@@ -16,6 +16,7 @@ n int
 f float64}
 
 %token EXPLAIN
+%token CREATE VIEW INDEX ON
 %token DISTINCT UNIQUE
 %token SELECT AS FROM WHERE
 %token ORDER BY ASC DESC
@@ -33,7 +34,7 @@ f float64}
 %token LIKE IS VALUED MISSING
 %token DOT
 %token CASE WHEN THEN ELSE END
-%token ANY ALL OVER
+%token ANY ALL OVER FIRST ARRAY
 %left OR
 %left AND 
 %left DOT LBRACKET
@@ -57,11 +58,41 @@ EXPLAIN stmt {
 
 stmt:
 select_stmt { 
-	logDebugGrammar("STMT")
+	logDebugGrammar("STMT - SELECT")
+}
+|
+create_index_stmt {
+	logDebugGrammar("STMT - CREATE INDEX")
 }
 ;
 
-//STATEMENT
+// CREATE INDEX STATEMENT
+create_index_stmt:
+CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN {
+	on := parsingStack.Pop().(ast.ExpressionList)
+	bucket := $6.s
+	name := $4.s
+	createIndexStmt := ast.NewCreateIndexStatement()
+	createIndexStmt.On = on
+	createIndexStmt.Bucket = bucket
+	createIndexStmt.Name = name
+	parsingStatement = createIndexStmt
+}
+|
+CREATE VIEW INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN {
+	on := parsingStack.Pop().(ast.ExpressionList)
+	bucket := $6.s
+	name := $4.s
+	createIndexStmt := ast.NewCreateIndexStatement()
+	createIndexStmt.View = true
+	createIndexStmt.On = on
+	createIndexStmt.Bucket = bucket
+	createIndexStmt.Name = name
+	parsingStatement = createIndexStmt
+}
+;
+
+// SELECT STATEMENT
 select_stmt:
 select_compound  {
 	logDebugGrammar("SELECT_STMT")
@@ -650,6 +681,31 @@ ALL expr OVER path AS IDENTIFIER {
 	parsingStack.Push(collectionAny)
 }
 |
+FIRST expr OVER path AS IDENTIFIER {
+	logDebugGrammar("FIRST OVER AS IDENTIFIER")
+	path := parsingStack.Pop().(ast.Expression)
+	condition := parsingStack.Pop().(ast.Expression)
+	collectionFirst := ast.NewCollectionFirstOperator(condition, path, $6.s)
+	parsingStack.Push(collectionFirst)
+}
+|
+ARRAY expr WHEN expr OVER path AS IDENTIFIER {
+	logDebugGrammar("ARRAY WHEN OVER AS IDENTIFIER")
+	path := parsingStack.Pop().(ast.Expression)
+	condition := parsingStack.Pop().(ast.Expression)
+	output := parsingStack.Pop().(ast.Expression)
+	collectionArray := ast.NewCollectionArrayOperator(condition, path, $8.s, output)
+	parsingStack.Push(collectionArray)
+}
+|
+ARRAY expr OVER path AS IDENTIFIER {
+	logDebugGrammar("ARRAY OVER AS IDENTIFIER")
+	path := parsingStack.Pop().(ast.Expression)
+	output := parsingStack.Pop().(ast.Expression)
+	collectionArray := ast.NewCollectionArrayOperator(nil, path, $6.s, output)
+	parsingStack.Push(collectionArray)
+}
+|
 IDENTIFIER LPAREN RPAREN {
 	logDebugGrammar("FUNCTION EXPR NOPARAM")
 	thisExpression := ast.NewFunctionCall($1.s, ast.FunctionArgExpressionList{})
@@ -664,10 +720,11 @@ IDENTIFIER LPAREN function_arg_list RPAREN {
 }
 |
 IDENTIFIER LPAREN DISTINCT function_arg_list RPAREN {
-	logDebugGrammar("FUNCTION EXPR PARAM")
+	logDebugGrammar("FUNCTION DISTINCT EXPR PARAM")
 	funarg_exp_list := parsingStack.Pop().(ast.FunctionArgExpressionList)
-	thisExpression := ast.NewFunctionCall($1.s, funarg_exp_list)
-	parsingStack.Push(thisExpression)
+	function := ast.NewFunctionCall($1.s, funarg_exp_list)
+	function.SetDistinct(true)
+	parsingStack.Push(function)
 }
 |
 IDENTIFIER LPAREN UNIQUE function_arg_list RPAREN {

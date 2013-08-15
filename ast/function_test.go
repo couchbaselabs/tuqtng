@@ -18,17 +18,21 @@ import (
 
 func TestFunction(t *testing.T) {
 
-	sampleContext := map[string]interface{}{
-		"bucket": map[string]interface{}{
-			"name": "will",
-		},
+	sampleDocument := map[string]interface{}{
+		"name": "will",
 	}
+	documentValue := dparval.NewValue(sampleDocument)
+
 	sampleMeta := map[string]interface{}{
 		"id": "first",
 	}
+	documentValue.SetAttachment("meta", sampleMeta)
+
+	sampleContext := map[string]interface{}{
+		"bucket": documentValue,
+	}
 
 	context := dparval.NewValue(sampleContext)
-	context.SetAttachment("meta", sampleMeta)
 
 	tests := ExpressionTestSet{
 		// meta/value functions

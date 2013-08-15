@@ -1,5 +1,6 @@
 {"type":"contact",
  "name":"harry",
  "age": 20,
- "email": "harry@yahoo.com"
+ "email": "harry@yahoo.com",
+ "relation": "parent"
 }

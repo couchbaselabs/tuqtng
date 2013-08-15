@@ -23,11 +23,11 @@ func TestFromGenerateAlias(t *testing.T) {
 		{
 			&From{
 				Bucket:     "bucket",
-				Projection: NewFunctionCall("VALUE", FunctionArgExpressionList{}),
+				Projection: nil,
 			},
 			&From{
 				Bucket:     "bucket",
-				Projection: NewFunctionCall("VALUE", FunctionArgExpressionList{}),
+				Projection: nil,
 				As:         "bucket",
 			},
 		},
@@ -107,57 +107,70 @@ func TestConvertToBucketFrom(t *testing.T) {
 		output *From
 	}{
 		// bucket should become "bucket"
-		{&From{
-			Projection: NewProperty("bucket")},
+		{
 			&From{
-				Bucket: "bucket",
-				Projection: NewFunctionCall("VALUE",
-					FunctionArgExpressionList{}),
+				Projection: NewProperty("bucket"),
+			},
+			&From{
+				Bucket:     "bucket",
+				Projection: nil,
 			},
 		},
 		// bucket.nest should become "bucket" and project "nest"
-		{&From{
-			Projection: NewDotMemberOperator(NewProperty("bucket"), NewProperty("nest"))},
+		{
+			&From{
+				Projection: NewDotMemberOperator(NewProperty("bucket"), NewProperty("nest")),
+			},
 			&From{
 				Bucket:     "bucket",
 				Projection: NewProperty("nest"),
 			},
 		},
 		// bucket.nest.nest2 "bucket" and project "nest.nest2"
-		{&From{
-			Projection: NewDotMemberOperator(NewDotMemberOperator(NewProperty("bucket"), NewProperty("nest")), NewProperty("nest2"))},
+		{
+			&From{
+				Projection: NewDotMemberOperator(NewDotMemberOperator(NewProperty("bucket"), NewProperty("nest")), NewProperty("nest2")),
+			},
 			&From{
 				Bucket:     "bucket",
 				Projection: NewDotMemberOperator(NewProperty("nest"), NewProperty("nest2")),
 			},
 		},
 		// bucket[0].nest should become "bucket" and project VALUE()[0].nest
-		{&From{
-			Projection: NewDotMemberOperator(NewBracketMemberOperator(NewProperty("bucket"), NewLiteralNumber(0.0)), NewProperty("nest"))},
+		{
+			&From{
+				Projection: NewDotMemberOperator(NewBracketMemberOperator(NewProperty("bucket"), NewLiteralNumber(0.0)), NewProperty("nest")),
+			},
 			&From{
 				Bucket:     "bucket",
-				Projection: NewDotMemberOperator(NewBracketMemberOperator(NewFunctionCall("VALUE", FunctionArgExpressionList{}), NewLiteralNumber(0.0)), NewProperty("nest")),
+				Projection: NewDotMemberOperator(NewBracketMemberOperator(NewProperty("bucket"), NewLiteralNumber(0.0)), NewProperty("nest")),
 			},
 		},
 		// bucket[0] should be come "bucket" and project VALUE()[0]
-		{&From{
-			Projection: NewBracketMemberOperator(NewProperty("bucket"), NewLiteralNumber(0.0))},
+		{
+			&From{
+				Projection: NewBracketMemberOperator(NewProperty("bucket"), NewLiteralNumber(0.0)),
+			},
 			&From{
 				Bucket:     "bucket",
-				Projection: NewBracketMemberOperator(NewFunctionCall("VALUE", FunctionArgExpressionList{}), NewLiteralNumber(0.0)),
+				Projection: NewBracketMemberOperator(NewProperty("bucket"), NewLiteralNumber(0.0)),
 			},
 		},
 		// bucket[0][1] should be come "bucket" and project VALUE()[0][1]
-		{&From{
-			Projection: NewBracketMemberOperator(NewBracketMemberOperator(NewProperty("bucket"), NewLiteralNumber(0.0)), NewLiteralNumber(1.0))},
+		{
+			&From{
+				Projection: NewBracketMemberOperator(NewBracketMemberOperator(NewProperty("bucket"), NewLiteralNumber(0.0)), NewLiteralNumber(1.0)),
+			},
 			&From{
 				Bucket:     "bucket",
-				Projection: NewBracketMemberOperator(NewBracketMemberOperator(NewFunctionCall("VALUE", FunctionArgExpressionList{}), NewLiteralNumber(0.0)), NewLiteralNumber(1.0)),
+				Projection: NewBracketMemberOperator(NewBracketMemberOperator(NewProperty("bucket"), NewLiteralNumber(0.0)), NewLiteralNumber(1.0)),
 			},
 		},
 		// bucket.nest[0] should become "bucket" and project "nest[0]"
-		{&From{
-			Projection: NewBracketMemberOperator(NewDotMemberOperator(NewProperty("bucket"), NewProperty("nest")), NewLiteralNumber(0.0))},
+		{
+			&From{
+				Projection: NewBracketMemberOperator(NewDotMemberOperator(NewProperty("bucket"), NewProperty("nest")), NewLiteralNumber(0.0)),
+			},
 			&From{
 				Bucket:     "bucket",
 				Projection: NewBracketMemberOperator(NewProperty("nest"), NewLiteralNumber(0.0)),

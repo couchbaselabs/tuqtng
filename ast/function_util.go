@@ -17,7 +17,7 @@ type FunctionCallLength struct {
 	FunctionCall
 }
 
-func NewFunctionCallLength(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallLength(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallLength{
 		FunctionCall{
 			Type:     "function",

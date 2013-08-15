@@ -19,7 +19,7 @@ type FunctionCallUnknown struct {
 	FunctionCall
 }
 
-func NewFunctionCallUnknown(operands FunctionArgExpressionList, name string) Expression {
+func NewFunctionCallUnknown(operands FunctionArgExpressionList, name string) FunctionCallExpression {
 	return &FunctionCallUnknown{
 		FunctionCall{
 			Type:     "function",

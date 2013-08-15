@@ -10,6 +10,8 @@
 package ast
 
 import (
+	"encoding/base64"
+
 	"github.com/couchbaselabs/dparval"
 )
 
@@ -17,7 +19,7 @@ type FunctionCallMeta struct {
 	FunctionCall
 }
 
-func NewFunctionCallMeta(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallMeta(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallMeta{
 		FunctionCall{
 			Type:     "function",
@@ -31,25 +33,13 @@ func NewFunctionCallMeta(operands FunctionArgExpressionList) Expression {
 
 func (this *FunctionCallMeta) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 
-	// FIXME the commented code below wont work until we fix how we store meta
+	av, err := this.Operands[0].Expr.Evaluate(item)
+	if err != nil {
+		return nil, err
+	}
 
-	// av, err := arguments[0].Expr.Evaluate(item)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// meta := av.Meta()
-	// if meta != nil {
-	// 	metaData, err := meta.Path("meta")
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	return metaData, nil
-	// }
-
-	meta := item.GetAttachment("meta")
-	metaValue := dparval.NewValue(meta)
-	return metaValue, nil
+	meta := av.GetAttachment("meta")
+	return dparval.NewValue(meta), nil
 }
 
 func (this *FunctionCallMeta) Accept(ev ExpressionVisitor) (Expression, error) {
@@ -60,7 +50,7 @@ type FunctionCallValue struct {
 	FunctionCall
 }
 
-func NewFunctionCallValue(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallValue(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallValue{
 		FunctionCall{
 			Type:     "function",
@@ -73,20 +63,47 @@ func NewFunctionCallValue(operands FunctionArgExpressionList) Expression {
 }
 
 func (this *FunctionCallValue) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	if len(this.Operands) > 0 {
-		// first evaluate the argument
-		av, err := this.Operands[0].Expr.Evaluate(item)
-		if err != nil {
-			return nil, err
-		}
-		return av, nil
-	} else {
-		// this mode is still relied up for projecting in the FROM clause
-		// review for cleanup
-		return item, nil
+	// first evaluate the argument
+	av, err := this.Operands[0].Expr.Evaluate(item)
+	if err != nil {
+		return nil, err
 	}
+	return av, nil
 }
 
 func (this *FunctionCallValue) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallBase64Value struct {
+	FunctionCall
+}
+
+func NewFunctionCallBase64Value(operands FunctionArgExpressionList) FunctionCallExpression {
+	return &FunctionCallBase64Value{
+		FunctionCall{
+			Type:     "function",
+			Name:     "BASE64_VALUE",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
+func (this *FunctionCallBase64Value) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	// first evaluate the argument
+	av, err := this.Operands[0].Expr.Evaluate(item)
+	if err != nil {
+		return nil, err
+	}
+
+	rawBytes := av.Bytes()
+	base64Str := base64.StdEncoding.EncodeToString(rawBytes)
+
+	return dparval.NewValue(base64Str), nil
+}
+
+func (this *FunctionCallBase64Value) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }

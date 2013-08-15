@@ -62,14 +62,20 @@ type CollectionOperatorExpression interface {
 	SetOver(Expression)
 	SetCondition(Expression)
 	SetAs(string)
+	GetOutput() Expression
+	SetOutput(Expression)
 }
 
 type FunctionCallExpression interface {
+	Expression
 	GetName() string
 	GetOperands() FunctionArgExpressionList
 	SetOperands(FunctionArgExpressionList)
 	ValidateArity() error
 	ValidateStars() error
+	ValidateDistinct() error
+	IsDistinct() bool
+	SetDistinct(bool)
 }
 
 type AggregateFunctionCallExpression interface {

@@ -17,9 +17,10 @@ import (
 
 type FunctionCallCount struct {
 	AggregateFunctionCall
+	unique map[string]bool
 }
 
-func NewFunctionCallCount(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallCount(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallCount{
 		AggregateFunctionCall{
 			FunctionCall{
@@ -30,6 +31,7 @@ func NewFunctionCallCount(operands FunctionArgExpressionList) Expression {
 				maxArgs:  1,
 			},
 		},
+		nil,
 	}
 }
 
@@ -40,6 +42,9 @@ func (this *FunctionCallCount) Evaluate(item *dparval.Value) (*dparval.Value, er
 }
 
 func (this *FunctionCallCount) DefaultAggregate(group *dparval.Value) error {
+	if this.Distinct {
+		this.unique = make(map[string]bool)
+	}
 	aggregate_key := this.Key()
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
@@ -61,6 +66,7 @@ func (this *FunctionCallCount) UpdateAggregate(group *dparval.Value, item *dparv
 	if !ok {
 		return fmt.Errorf("count value not a number")
 	}
+
 	if this.Operands[0].Star && this.Operands[0].Expr == nil {
 		// pure star
 		setAggregateValue(group, aggregate_key, dparval.NewValue(currentFloat+1))
@@ -72,6 +78,19 @@ func (this *FunctionCallCount) UpdateAggregate(group *dparval.Value, item *dparv
 			return err
 		}
 		if val != nil {
+
+			if this.Distinct {
+				// check to see if we already have this value
+				valkey := string(val.Bytes())
+				_, ok := this.unique[valkey]
+				if ok {
+					return nil
+				} else {
+					this.unique[valkey] = true
+					// and allow it to continue
+				}
+			}
+
 			setAggregateValue(group, aggregate_key, dparval.NewValue(currentFloat+1))
 		}
 	} else if !this.Operands[0].Star && this.Operands[0].Expr != nil {
@@ -82,6 +101,19 @@ func (this *FunctionCallCount) UpdateAggregate(group *dparval.Value, item *dparv
 			return err
 		}
 		if val != nil {
+
+			if this.Distinct {
+				// check to see if we already have this value
+				valkey := string(val.Bytes())
+				_, ok := this.unique[valkey]
+				if ok {
+					return nil
+				} else {
+					this.unique[valkey] = true
+					// and allow it to continue
+				}
+			}
+
 			setAggregateValue(group, aggregate_key, dparval.NewValue(currentFloat+1))
 		}
 	}
@@ -96,7 +128,7 @@ type FunctionCallSum struct {
 	AggregateFunctionCall
 }
 
-func NewFunctionCallSum(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallSum(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallSum{
 		AggregateFunctionCall{
 			FunctionCall{
@@ -163,7 +195,7 @@ type FunctionCallAvg struct {
 	AggregateFunctionCall
 }
 
-func NewFunctionCallAvg(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallAvg(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallAvg{
 		AggregateFunctionCall{
 			FunctionCall{
@@ -274,7 +306,7 @@ type FunctionCallMin struct {
 	AggregateFunctionCall
 }
 
-func NewFunctionCallMin(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallMin(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallMin{
 		AggregateFunctionCall{
 			FunctionCall{
@@ -345,7 +377,7 @@ type FunctionCallMax struct {
 	AggregateFunctionCall
 }
 
-func NewFunctionCallMax(operands FunctionArgExpressionList) Expression {
+func NewFunctionCallMax(operands FunctionArgExpressionList) FunctionCallExpression {
 	return &FunctionCallMax{
 		AggregateFunctionCall{
 			FunctionCall{
@@ -405,5 +437,90 @@ func (this *FunctionCallMax) UpdateAggregate(group *dparval.Value, item *dparval
 }
 
 func (this *FunctionCallMax) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallArrayAgg struct {
+	AggregateFunctionCall
+	unique map[string]bool
+}
+
+func NewFunctionCallArrayAgg(operands FunctionArgExpressionList) FunctionCallExpression {
+	return &FunctionCallArrayAgg{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "ARRAY_AGG",
+				Operands: operands,
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
+		nil,
+	}
+}
+
+func (this *FunctionCallArrayAgg) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	aggregate_key := this.Key()
+	return aggregateValue(item, aggregate_key)
+}
+
+func (this *FunctionCallArrayAgg) DefaultAggregate(group *dparval.Value) error {
+	if this.Distinct {
+		this.unique = make(map[string]bool)
+	}
+	aggregate_key := this.Key()
+	currentVal, err := aggregateValue(group, aggregate_key)
+	if err != nil {
+		currentVal = dparval.NewValue([]interface{}{})
+		// store this, so that even if all values are eliminated we return null
+		setAggregateValue(group, aggregate_key, dparval.NewValue(currentVal))
+	}
+	return nil
+}
+
+func (this *FunctionCallArrayAgg) UpdateAggregate(group *dparval.Value, item *dparval.Value) error {
+	aggregate_key := this.Key()
+	currentVal, err := aggregateValue(group, aggregate_key)
+	if err != nil {
+		return fmt.Errorf("group defaults not set correctly")
+	}
+
+	if this.Operands[0].Expr != nil {
+		val, err := this.Operands[0].Expr.Evaluate(item)
+		if err != nil {
+			// only eliminate missing
+			return err
+		}
+		if val != nil {
+
+			nextVal := val.Value()
+
+			if this.Distinct {
+				// check to see if we already have this value
+				valkey := string(val.Bytes())
+				_, ok := this.unique[valkey]
+				if ok {
+					return nil
+				} else {
+					this.unique[valkey] = true
+					// and allow it to continue
+				}
+			}
+
+			currVal := currentVal.Value()
+
+			currValArray, ok := currVal.([]interface{})
+			if ok {
+				currValArray = append(currValArray, nextVal)
+			}
+			setAggregateValue(group, aggregate_key, dparval.NewValue(currValArray))
+
+		}
+	}
+	return nil
+}
+
+func (this *FunctionCallArrayAgg) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
