@@ -213,6 +213,50 @@
             "$1": "lock: Series 1"
         }
     ]
+    },
+
+    {
+        "statements": "SELECT  META().id FROM catalog",
+        "results": [
+        {
+            "id": "book1"
+        },
+        {
+            "id": "movie1"
+        },
+        {
+            "id": "tvshow1"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT  META().id FROM contacts AS contact OVER contact.children AS child",
+        "error": "the META() function requires exactly 1 argument"
+    },
+
+    {
+        "statements": "SELECT  META(contact).id FROM contacts AS contact OVER contact.children AS child",
+        "results": [
+        {
+            "id": "dave"
+        },
+        {
+            "id": "dave"
+        },
+        {
+            "id": "earl"
+        },
+        {
+            "id": "earl"
+        },
+        {
+            "id": "ian"
+        },
+        {
+            "id": "ian"
+        }
+    ]
     }
 
 ]

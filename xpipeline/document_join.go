@@ -53,28 +53,23 @@ func (this *DocumentJoin) processItem(item *dparval.Value) bool {
 	}
 
 	if val.Type() == dparval.ARRAY {
-		overval := val.Value()
-		switch overval := overval.(type) {
-		case []interface{}:
-			// FIXME major cleanup after full converstion to dparval
-			// over expression evaluted to array
-			// now walk the array and join
-			for _, v := range overval {
-				itemValue := item.Value()
-				newValue := map[string]interface{}{}
-				switch itemValue := itemValue.(type) {
-				case map[string]interface{}:
-					for itemK, itemV := range itemValue {
-						newValue[itemK] = itemV
-					}
-					newValue[this.As] = v
+		ok := true
+		index := 0
+		for ok {
+			inner, err := val.Index(index)
+			index = index + 1
+			if err != nil {
+				switch err := err.(type) {
+				case *dparval.Undefined:
+					ok = false
+				default:
+					this.Base.SendError(query.NewError(err, "Internal Error"))
+					return false
 				}
-				itemMeta := item.GetAttachment("meta")
-				finalItem := dparval.NewValue(newValue)
-				if itemMeta != nil {
-					finalItem.SetAttachment("meta", itemMeta)
-				}
-				this.Base.SendItem(finalItem)
+			} else {
+				newItem := item.Duplicate()
+				newItem.SetPath(this.As, inner)
+				this.Base.SendItem(newItem)
 			}
 		}
 	}

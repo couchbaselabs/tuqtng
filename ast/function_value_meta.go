@@ -33,25 +33,13 @@ func NewFunctionCallMeta(operands FunctionArgExpressionList) FunctionCallExpress
 
 func (this *FunctionCallMeta) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 
-	// FIXME the commented code below wont work until we fix how we store meta
+	av, err := this.Operands[0].Expr.Evaluate(item)
+	if err != nil {
+		return nil, err
+	}
 
-	// av, err := arguments[0].Expr.Evaluate(item)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// meta := av.Meta()
-	// if meta != nil {
-	// 	metaData, err := meta.Path("meta")
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	return metaData, nil
-	// }
-
-	meta := item.GetAttachment("meta")
-	metaValue := dparval.NewValue(meta)
-	return metaValue, nil
+	meta := av.GetAttachment("meta")
+	return dparval.NewValue(meta), nil
 }
 
 func (this *FunctionCallMeta) Accept(ev ExpressionVisitor) (Expression, error) {
