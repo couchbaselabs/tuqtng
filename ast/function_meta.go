@@ -73,18 +73,12 @@ func NewFunctionCallValue(operands FunctionArgExpressionList) FunctionCallExpres
 }
 
 func (this *FunctionCallValue) Evaluate(item *dparval.Value) (*dparval.Value, error) {
-	if len(this.Operands) > 0 {
-		// first evaluate the argument
-		av, err := this.Operands[0].Expr.Evaluate(item)
-		if err != nil {
-			return nil, err
-		}
-		return av, nil
-	} else {
-		// this mode is still relied up for projecting in the FROM clause
-		// review for cleanup
-		return item, nil
+	// first evaluate the argument
+	av, err := this.Operands[0].Expr.Evaluate(item)
+	if err != nil {
+		return nil, err
 	}
+	return av, nil
 }
 
 func (this *FunctionCallValue) Accept(ev ExpressionVisitor) (Expression, error) {

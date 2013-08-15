@@ -12,7 +12,6 @@ package xpipeline
 import (
 	"testing"
 
-	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog/mock"
 )
 
@@ -36,7 +35,7 @@ func TestFetch(t *testing.T) {
 	}
 
 	scan := NewScan(bucket, scanner)
-	fetch := NewFetch(bucket, ast.NewFunctionCall("VALUE", ast.FunctionArgExpressionList{}), "bucket")
+	fetch := NewFetch(bucket, nil, "bucket")
 	fetch.SetSource(scan)
 
 	fetchItemChannel, _ := fetch.GetChannels()

@@ -122,7 +122,11 @@ func (this *Fetch) flushBatch() bool {
 					}
 				}
 			} else {
-				panic("must have a projection now")
+				if this.as != "" {
+					this.Base.SendItem(dparval.NewValue(map[string]interface{}{this.as: item}))
+				} else {
+					this.Base.SendItem(item)
+				}
 			}
 		}
 	}

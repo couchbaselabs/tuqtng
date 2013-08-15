@@ -38,9 +38,9 @@ func (this *From) GenerateAlias() {
 	// try to generate one
 	if this.As == "" {
 		switch proj := this.Projection.(type) {
-		case FunctionCallExpression:
-			// empty projection was converted to function call to VALUE() in previous step
-			// in this case the bucket name is the alias
+		case nil:
+			// empty projection
+			// bucket name is the alias
 			// FROM bucket
 			// becomes FROM bucket AS bucket
 			this.As = this.Bucket
@@ -104,9 +104,8 @@ func (this *From) ConvertToBucketFrom() {
 			case nil:
 				// if there was no previous node
 				// then it was a single property
-				// this became the bucket
-				// so now set projection to VALUE()
-				this.Projection = NewFunctionCall("VALUE", FunctionArgExpressionList{})
+				// this became the bucket, set to nil
+				this.Projection = nil
 			case *BracketMemberOperator:
 				// find the RHS we need push up
 				rhs := prev.Right
@@ -114,13 +113,13 @@ func (this *From) ConvertToBucketFrom() {
 				case nil:
 					// if there was no previous previous node
 					// then this RHS is now the projection
-					this.Projection = NewBracketMemberOperator(NewFunctionCall("VALUE", FunctionArgExpressionList{}), rhs)
+					this.Projection = NewBracketMemberOperator(NewProperty(curri.Path), rhs)
 				case *BracketMemberOperator:
 					// replace the LHS of the previous previous
-					prevprev.Left = NewBracketMemberOperator(NewFunctionCall("VALUE", FunctionArgExpressionList{}), rhs)
+					prevprev.Left = NewBracketMemberOperator(NewProperty(curri.Path), rhs)
 				case *DotMemberOperator:
 					// replace the LHS of the previous previous
-					prevprev.Left = NewBracketMemberOperator(NewFunctionCall("VALUE", FunctionArgExpressionList{}), rhs)
+					prevprev.Left = NewBracketMemberOperator(NewProperty(curri.Path), rhs)
 				}
 			case *DotMemberOperator:
 				// find the RHS we need push up
