@@ -23,8 +23,8 @@
 	bottom: 0;
 	left: 50%;
 	width: 50%;
-	border-left: 1px solid;
-	border-color: #D03030;
+	border-left: 1px dotted;
+	border-color: gray;
 }
 
 #header {
@@ -32,14 +32,19 @@
 	height: 40px;
 	width: 100%;
 	padding-top: 10px;
+	padding-left: 10px;
 	margin-bottom: 5px;
   	text-align: center;
-	border-bottom: 1px solid;
-	border-color: #D03030;
+	border-bottom: 1px dotted;
+	border-color: #gray;
 	background: url('logo.png');
 	background-repeat: no-repeat;
 	background-position: center left;
-    color: #646464;
+    color: black;
+}
+
+#header img {
+	margin-left: 10px;
 }
 
 #footer {
@@ -49,8 +54,8 @@
 	width: 100%;
 	padding-top: 10px;
 	padding-bottom: 5px;
-	border-top: 1px solid;
-	border-color: #D03030;
+	border-top: 1px dotted;
+	border-color: gray;
     color: #646464;
 }
 
@@ -64,7 +69,7 @@
 
 #content {
 	position: absolute;
-	padding: 5px 5px 5px 5px;
+	padding: 20px;
 }	
 
 #title {
@@ -98,8 +103,8 @@
 }
 
 #result {
-	border-top: 1px solid;
-	border-color: #D03030;
+	border-top: 1px dotted;
+	border-color: gray;
 	height: 70%;
     width: 100%;
     margin-top: 10px;
