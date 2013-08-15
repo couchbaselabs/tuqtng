@@ -72,7 +72,7 @@ compress() {
     do
         if [ -f $DIST/tuq_tutorial.$i ]; then
             tar zcf $DIST/tuq_tutorial.$i.tar.gz    \
-              -C $top test \
+              -C $top test/json/tutorial \
               -C $top/tutorial content \
               -C $DIST tuq_tutorial.$i
             rm -f $DIST/tuq_tutorial.$i
