@@ -135,6 +135,11 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "        %v", string(body))
 		}
 		count++
+
+		// flush response so client receives rows as soon as possible
+		if f, ok := w.(http.Flusher); ok {
+			f.Flush()
+		}
 	}
 
 	if response.err == nil {
