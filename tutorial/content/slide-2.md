@@ -1,18 +1,20 @@
 ## A friendly language
 
-If you know SQL, you already know a lot of Couchbase Query Language.
+If you know SQL then Couchbase Query Language will be familiar to you.
 
 A basic query has three parts to it:
 
-* SELECT - Portions of document to return
-* FROM - The bucket (data store) to work with
+* SELECT - Parts of document to return
+* FROM - The data bucket, or data store to work with
 * WHERE - Conditions the document must satisfy
 
-Only SELECT clause is required. The wildcard * selects all parts of the document. Queries can return a collection of differently shaped documents or fragments. However, they will all match the conditions you specified in the WHERE clause.
+Only a SELECT clause is required in a query. The wildcard * selects all parts of the document. Queries can return a collection of different document structures or fragments. However, they will all match the conditions in the WHERE clause.
 
-Remember, there **IS NO SCHEMA** in Couchbase. You don't lose any flexibility you love about Couchbase.
+Remember there **IS NO SCHEMA** in Couchbase. You don't lose any flexibility you love about Couchbase.
 
-If you change the * to an element like 'children', you will see the query return a collection of appropriate fragments of each document.
+If you change the * to a document field such as 'children', you will see the query return a collection of appropriate fragments of each document.
+
+Try the next sample query where we find all documents where the name is 'ian.'
 
 <pre id="example">
 SELECT *
