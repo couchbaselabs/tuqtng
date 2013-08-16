@@ -86,7 +86,7 @@ func (p *pool) refresh() {
 	// trigger refresh of this pool
 	newpool, err := p.site.client.GetPool(p.name)
 	if err != nil {
-		clog.Warn("Error updating pool: %v", err)
+		clog.Warnf("Error updating pool: %v", err)
 		return
 	}
 	p.cbpool = newpool

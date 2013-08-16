@@ -87,7 +87,7 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 		sources := currentElement.Sources()
 		if len(sources) > 1 {
 			// FIXME future operators like JOIN will have more than one source
-			clog.Fatal("multiple sources not yet supported")
+			clog.Fatalf("multiple sources not yet supported")
 		} else if len(sources) == 1 {
 			currentElement = sources[0]
 		} else {

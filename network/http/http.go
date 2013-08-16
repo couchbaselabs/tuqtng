@@ -76,7 +76,7 @@ func NewHttpEndpoint(address string) *HttpEndpoint {
 	go func() {
 		err := http.ListenAndServe(address, r)
 		if err != nil {
-			clog.Fatal("ListenAndServe: ", err)
+			clog.Fatalf("ListenAndServe: ", err)
 		}
 	}()
 

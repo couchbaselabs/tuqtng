@@ -17,6 +17,7 @@ import (
 	"syscall"
 
 	"github.com/couchbaselabs/clog"
+	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/network/http"
 	"github.com/couchbaselabs/tuqtng/server"
@@ -28,11 +29,17 @@ var addr = flag.String("addr", ":8093", "HTTP listen address")
 var couchbaseSite = flag.String("couchbase", "", "Couchbase Cluster Address (http://...) or dir:PATH")
 var poolName = flag.String("pool", "default", "Pool")
 var logKeys = flag.String("log", "", "Log keywords, comma separated")
+var devMode = flag.Bool("dev", false, "Developer Mode")
 
 func main() {
 	flag.Parse()
 
 	clog.ParseLogFlag(*logKeys)
+
+	if *devMode {
+		ast.EnableDeveloperFunctions()
+		clog.Log("Developer Mode Enabled")
+	}
 
 	go dumpOnSignal(syscall.SIGUSR2)
 
@@ -45,7 +52,7 @@ func main() {
 
 	err := server.Server(VERSION, *couchbaseSite, *poolName, queryChannel)
 	if err != nil {
-		clog.Fatal("Unable to run server, err: %v", err)
+		clog.Fatalf("Unable to run server, err: %v", err)
 	}
 }
 

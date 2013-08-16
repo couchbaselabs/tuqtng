@@ -80,7 +80,7 @@ func main() {
 	}
 
 	if err := filepath.Walk("./content/", walker); err != nil {
-		clog.Fatal("Filewalk %v", err)
+		clog.Fatalf("Filewalk %v", err)
 	}
 
 	clog.Log("Running at http:///localhost:8000/")
@@ -102,6 +102,6 @@ func main() {
 	http.Handle("/tutorial/", http.StripPrefix("/tutorial/", fs))
 
 	if err := http.ListenAndServe(":8000", nil); err != nil {
-		clog.Fatal("ListenAndServe", err)
+		clog.Fatalf("ListenAndServe %v", err)
 	}
 }

@@ -168,7 +168,7 @@ func (this *NotOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	case nil:
 		return dparval.NewValue(nil), nil
 	default:
-		clog.Fatal("Unexpected type %T in NOT", operandBoolVal)
+		clog.Fatalf("Unexpected type %T in NOT", operandBoolVal)
 		return dparval.NewValue(nil), nil
 	}
 }
