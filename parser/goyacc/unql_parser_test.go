@@ -11,7 +11,6 @@ package goyacc
 
 import (
 	"encoding/json"
-	"log"
 	"reflect"
 	"testing"
 
@@ -161,21 +160,12 @@ var invalidQueries = []string{
 }
 
 func TestParser(t *testing.T) {
-	DebugTokens = false
-	DebugGrammar = false
 	unqlParser := NewUnqlParser()
 
 	for _, v := range validQueries {
 		_, err := unqlParser.Parse(v)
 		if err != nil {
 			t.Errorf("Valid Query Parse Failed: %v - %v", v, err)
-			//enable debugging and run it again
-			log.Printf("Debug for input: %v", v)
-			DebugTokens = true
-			DebugGrammar = true
-			unqlParser.Parse(v)
-			DebugTokens = false
-			DebugGrammar = false
 		}
 	}
 
@@ -282,8 +272,6 @@ func TestParserASTOutput(t *testing.T) {
 		},
 	}
 
-	DebugTokens = false
-	DebugGrammar = false
 	unqlParser := NewUnqlParser()
 
 	for _, v := range tests {
@@ -297,12 +285,12 @@ func TestParserASTOutput(t *testing.T) {
 
 			js, err := json.MarshalIndent(v.output, "", "  ")
 			if err == nil {
-				log.Printf("Expected %v", string(js))
+				t.Logf("Expected %v", string(js))
 			}
 
 			js, err = json.MarshalIndent(query, "", "  ")
 			if err == nil {
-				log.Printf("Got %v", string(js))
+				t.Logf("Got %v", string(js))
 			}
 
 		}

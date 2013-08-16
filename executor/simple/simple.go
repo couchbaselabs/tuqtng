@@ -10,10 +10,10 @@
 package simple
 
 import (
-	"log"
-
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
+	"github.com/couchbaselabs/tuqtng/executor"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/query"
@@ -35,6 +35,8 @@ func NewSimpleExecutor(pool catalog.Pool) *SimpleExecutor {
 
 func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 
+	clog.To(executor.CHANNEL, "simple executor started")
+
 	// first make the plan excutable
 	executablePipeline, berr := this.xpipelinebuilder.Build(optimalPlan)
 	if berr != nil {
@@ -54,24 +56,24 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 		case item, ok = <-sourceItemChannel:
 			if ok {
 				ok = this.processItem(q, item)
+				clog.To(executor.CHANNEL, "simple executor sent client item: %v", item)
 			}
 		case obj, ok = <-supportChannel:
 			if ok {
 				switch obj := obj.(type) {
 				case query.Error:
-					log.Printf("Sending client error: %v", obj)
 					q.Response.SendError(obj)
+					clog.To(executor.CHANNEL, "simple executor sent client error: %v", obj)
 					if obj.IsFatal() {
 						return
 					}
-				default:
-					log.Printf("Unexpected object tyep on the support channel %T", obj)
 				}
 			}
 		}
 	}
 
 	q.Response.NoMoreResults()
+	clog.To(executor.CHANNEL, "simple executor finished")
 }
 
 func (this *SimpleExecutor) processItem(q network.Query, item *dparval.Value) bool {

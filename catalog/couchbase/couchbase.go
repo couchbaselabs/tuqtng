@@ -11,10 +11,10 @@ package couchbase
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	cb "github.com/couchbaselabs/go-couchbase"
 	"github.com/couchbaselabs/tuqtng/catalog"
@@ -86,7 +86,7 @@ func (p *pool) refresh() {
 	// trigger refresh of this pool
 	newpool, err := p.site.client.GetPool(p.name)
 	if err != nil {
-		log.Printf("Error updating pool: %v", err)
+		clog.Warn("Error updating pool: %v", err)
 		return
 	}
 	p.cbpool = newpool

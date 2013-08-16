@@ -10,9 +10,9 @@
 package xpipeline
 
 import (
-	"log"
 	"sort"
 
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 )
@@ -87,7 +87,7 @@ func (this *Order) Less(i, j int) bool {
 			switch lerr := lerr.(type) {
 			case *dparval.Undefined:
 			default:
-				log.Printf("Error evaluating expression: %v", lerr)
+				clog.Error(lerr)
 				return false
 			}
 		}
@@ -96,7 +96,7 @@ func (this *Order) Less(i, j int) bool {
 			switch rerr := rerr.(type) {
 			case *dparval.Undefined:
 			default:
-				log.Printf("Error evaluating expression: %v", rerr)
+				clog.Error(rerr)
 				return false
 			}
 		}

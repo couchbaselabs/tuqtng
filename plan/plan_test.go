@@ -11,7 +11,6 @@ package plan
 
 import (
 	"encoding/json"
-	"log"
 	"testing"
 
 	"github.com/couchbaselabs/tuqtng/ast"
@@ -23,17 +22,17 @@ func TestPlanJSON(t *testing.T) {
 		input *Plan
 	}{
 		{&Plan{NewScan("bucket", "index")}},
-		{&Plan{NewFetch(NewScan("bucket", "index"), "bucket", ast.NewFunctionCall("VALUE", ast.FunctionArgExpressionList{}), "bucket")}},
-		{&Plan{NewFilter(NewFetch(NewScan("bucket", "index"), "bucket", ast.NewFunctionCall("VALUE", ast.FunctionArgExpressionList{}), "bucket"), ast.NewLiteralBool(true))}},
-		{&Plan{NewFilter(NewFetch(NewScan("bucket", "index"), "bucket", ast.NewFunctionCall("VALUE", ast.FunctionArgExpressionList{}), "bucket"), ast.NewPlusOperator(ast.NewLiteralNumber(1.0), ast.NewLiteralNumber(1.0)))}},
+		{&Plan{NewFetch(NewScan("bucket", "index"), "bucket", nil, "bucket")}},
+		{&Plan{NewFilter(NewFetch(NewScan("bucket", "index"), "bucket", nil, "bucket"), ast.NewLiteralBool(true))}},
+		{&Plan{NewFilter(NewFetch(NewScan("bucket", "index"), "bucket", nil, "bucket"), ast.NewPlusOperator(ast.NewLiteralNumber(1.0), ast.NewLiteralNumber(1.0)))}},
 	}
 
 	for _, x := range tests {
-		json, err := json.MarshalIndent(x.input, "", "    ")
-		if err == nil {
-			log.Printf("%v", string(json))
+		_, err := json.MarshalIndent(x.input, "", "    ")
+		if err != nil {
+			t.Errorf("error serializing json: %v", err)
 		}
-
+		// FIXME test doesn't actually assert anything
 	}
 
 }

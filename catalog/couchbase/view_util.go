@@ -10,11 +10,12 @@
 package couchbase
 
 import (
-	"log"
-
+	"github.com/couchbaselabs/clog"
 	cb "github.com/couchbaselabs/go-couchbase"
 	"github.com/couchbaselabs/tuqtng/query"
 )
+
+const CHANNEL = "NETWORK"
 
 func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *cb.Bucket,
 	ddoc string, view string, options map[string]interface{}, batchSize int) {
@@ -25,7 +26,7 @@ func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *
 	options["limit"] = batchSize + 1
 	logURL, err := bucket.ViewURL(ddoc, view, options)
 	if err == nil {
-		log.Printf("Request View: %v", logURL)
+		clog.To(CHANNEL, "Request View: %v", logURL)
 	}
 	vres, err := bucket.View(ddoc, view, options)
 
@@ -51,7 +52,7 @@ func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *
 
 		logURL, err := bucket.ViewURL(ddoc, view, options)
 		if err == nil {
-			log.Printf("Request View: %v", logURL)
+			clog.To(CHANNEL, "Request View: %v", logURL)
 		}
 		vres, err = bucket.View(ddoc, view, options)
 		if err != nil {

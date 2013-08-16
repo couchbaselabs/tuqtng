@@ -10,11 +10,10 @@
 package file
 
 import (
-	"log"
 	"testing"
 
-	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 func TestFile(t *testing.T) {
@@ -64,28 +63,22 @@ func TestFile(t *testing.T) {
 		errorChannel := make(query.ErrorChannel)
 		go scanner.ScanAll(itemChannel, warnChannel, errorChannel)
 
-		var item *dparval.Value
 		var err query.Error
 		ok := true
 		for ok {
 			select {
-			case item, ok = <-itemChannel:
-				log.Printf("got item %v", item)
+			case _, ok = <-itemChannel:
 			case err, ok = <-errorChannel:
 				if err != nil {
 					t.Errorf("got error while scanning: %v", err)
 				}
 			}
 		}
-	default:
-		log.Printf("not full scanner %T", scanner)
 	}
 
-	doc, err := bucket.Fetch("fred")
+	_, err = bucket.Fetch("fred")
 	if err != nil {
 		t.Errorf("failed to fetch fred: %v", err)
 	}
-
-	log.Printf("%v", doc)
 
 }

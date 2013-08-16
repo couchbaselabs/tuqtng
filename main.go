@@ -11,12 +11,12 @@ package main
 
 import (
 	"flag"
-	"log"
 	"os"
 	"os/signal"
 	"runtime/pprof"
 	"syscall"
 
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/network/http"
 	"github.com/couchbaselabs/tuqtng/server"
@@ -27,9 +27,12 @@ var VERSION = "0.0.0" // Build-time overriddable.
 var addr = flag.String("addr", ":8093", "HTTP listen address")
 var couchbaseSite = flag.String("couchbase", "", "Couchbase Cluster Address (http://...) or dir:PATH")
 var poolName = flag.String("pool", "default", "Pool")
+var logKeys = flag.String("log", "", "Log keywords, comma separated")
 
 func main() {
 	flag.Parse()
+
+	clog.ParseLogFlag(*logKeys)
 
 	go dumpOnSignal(syscall.SIGUSR2)
 
@@ -42,7 +45,7 @@ func main() {
 
 	err := server.Server(VERSION, *couchbaseSite, *poolName, queryChannel)
 	if err != nil {
-		log.Fatalf("Unable to run server, err: %v", err)
+		clog.Fatal("Unable to run server, err: %v", err)
 	}
 }
 

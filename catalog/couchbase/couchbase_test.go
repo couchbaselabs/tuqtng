@@ -10,11 +10,10 @@
 package couchbase
 
 import (
-	"log"
 	"testing"
 
-	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 // not named like a proper test function
@@ -66,30 +65,21 @@ func notTestCouchbase(t *testing.T) {
 		errorChannel := make(query.ErrorChannel)
 		go scanner.ScanAll(itemChannel, warnChannel, errorChannel)
 
-		var item *dparval.Value
 		var err query.Error
 		ok := true
 		for ok {
 			select {
-			case item, ok = <-itemChannel:
-				if ok {
-					log.Printf("got item %v", item)
-				}
+			case _, ok = <-itemChannel:
 			case err, ok = <-errorChannel:
 				if err != nil {
 					t.Errorf("got error while scanning: %v", err)
 				}
 			}
 		}
-	default:
-		log.Printf("not full scanner %T", scanner)
 	}
 
-	doc, err := bucket.Fetch("21st_amendment_brewery_cafe-watermelon_wheat")
+	_, err = bucket.Fetch("21st_amendment_brewery_cafe-watermelon_wheat")
 	if err != nil {
 		t.Errorf("failed to fetch 21st_amendment_brewery_cafe-watermelon_wheat: %v", err)
 	}
-
-	log.Printf("%v", doc)
-
 }

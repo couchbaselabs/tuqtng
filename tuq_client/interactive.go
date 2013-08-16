@@ -10,19 +10,21 @@
 package main
 
 import (
-	"github.com/sbinet/liner"
-	"log"
+	"fmt"
 	"os"
 	"os/signal"
 	"os/user"
 	"syscall"
+
+	"github.com/couchbaselabs/clog"
+	"github.com/sbinet/liner"
 )
 
 func HandleInteractiveMode(tiServer string) {
 
 	currentUser, err := user.Current()
 	if err != nil {
-		log.Printf("Unable to determine home directory, history file disabled")
+		fmt.Println("Unable to determine home directory, history file disabled")
 	}
 
 	var liner = liner.NewLiner()
@@ -45,7 +47,7 @@ func HandleInteractiveMode(tiServer string) {
 		UpdateHistory(liner, currentUser, line)
 		err = execute_internal(tiServer, line, os.Stdout)
 		if err != nil {
-			log.Printf("%v", err)
+			clog.Error(err)
 		}
 	}
 

@@ -10,8 +10,6 @@
 package xpipeline
 
 import (
-	"log"
-
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/query"
@@ -64,7 +62,6 @@ func (this *Grouper) processItem(item *dparval.Value) bool {
 				// FIXME better way?
 				groupkey.SetIndex(i, "__tuqtng__MISSING__")
 			default:
-				log.Printf("internal error is: %v", err)
 				return this.Base.SendError(query.NewError(err, "error evaluating group by"))
 			}
 		}

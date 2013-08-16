@@ -176,11 +176,10 @@
 //
 package goyacc
 
-import("log")
+import("github.com/couchbaselabs/clog")
+import "github.com/couchbaselabs/tuqtng/parser"
 import("strconv")
 
 func logDebugTokens(format string, v ...interface{}) {
-    if DebugTokens {
-        log.Printf("DEBUG TOKEN " + format, v...)
-    }
+    clog.To(parser.SCANNER_CHANNEL, format, v...)
 }

@@ -18,3 +18,6 @@ import (
 type Parser interface {
 	Parse(input string) (ast.Statement, error)
 }
+
+const SCANNER_CHANNEL = "SCANNER"
+const PARSER_CHANNEL = "PARSER"

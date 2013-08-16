@@ -14,14 +14,16 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/gorilla/mux"
 )
+
+const CHANNEL = "HTTP"
 
 type HttpResponse struct {
 	w        http.ResponseWriter
@@ -37,7 +39,7 @@ func (this *HttpResponse) SendError(err query.Error) {
 		this.err = err
 		errBytes, err := json.MarshalIndent(this.err, "        ", "    ")
 		if err != nil {
-			log.Printf("could not serialize error to JSON")
+			clog.Error(err)
 		}
 		showError(this.w, fmt.Sprintf("{\n    \"error\":\n        %v\n}", string(errBytes)), 500)
 	case query.WARNING:
@@ -74,7 +76,7 @@ func NewHttpEndpoint(address string) *HttpEndpoint {
 	go func() {
 		err := http.ListenAndServe(address, r)
 		if err != nil {
-			log.Fatal("ListenAndServe: ", err)
+			clog.Fatal("ListenAndServe: ", err)
 		}
 	}()
 
@@ -93,7 +95,7 @@ func welcome(w http.ResponseWriter, r *http.Request) {
 }
 
 func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
+	clog.To(CHANNEL, "request received")
 	startTime := time.Now()
 
 	queryString := r.FormValue("q")
@@ -108,7 +110,7 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		showError(w, "Missing required query string", 500)
 		return
 	} else {
-		log.Printf("Query String: %v", queryString)
+		clog.To(CHANNEL, "query string: %v", queryString)
 	}
 
 	response := HttpResponse{w: w, results: make(chan interface{})}
@@ -130,7 +132,7 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		body, err := json.MarshalIndent(val, "        ", "    ")
 		if err != nil {
-			log.Printf("Unable to format result to display %#v, %v", val, err)
+			clog.Error(err)
 		} else {
 			fmt.Fprintf(w, "        %v", string(body))
 		}
@@ -153,7 +155,7 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			for i, warning := range response.warnings {
 				warnBytes, err := json.MarshalIndent(warning, "        ", "    ")
 				if err != nil {
-					log.Printf("could not serialize warn to json")
+					clog.Error(err)
 				}
 				fmt.Fprintf(w, "\n        %v", string(warnBytes))
 				if i < len(response.warnings)-1 {
@@ -171,7 +173,7 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			for i, info := range response.info {
 				infoBytes, err := json.MarshalIndent(info, "        ", "    ")
 				if err != nil {
-					log.Printf("could not serialize info to json")
+					clog.Error(err)
 				}
 				fmt.Fprintf(w, "\n        %v", string(infoBytes))
 				if i < len(response.info)-1 {
@@ -182,6 +184,7 @@ func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Fprint(w, "\n}\n")
 	}
+	clog.To(CHANNEL, "response sent")
 }
 
 func mustEncode(w io.Writer, i interface{}) {
@@ -197,6 +200,6 @@ func mustEncode(w io.Writer, i interface{}) {
 }
 
 func showError(w http.ResponseWriter, msg string, code int) {
-	log.Printf("Reporting error %v/%v", code, msg)
+	clog.To(CHANNEL, "reporting error %v/%v", code, msg)
 	http.Error(w, msg, code)
 }

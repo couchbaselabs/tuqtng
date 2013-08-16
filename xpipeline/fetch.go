@@ -11,7 +11,6 @@ package xpipeline
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
@@ -111,7 +110,6 @@ func (this *Fetch) flushBatch() bool {
 						// undefined contributes nothing to the result map
 						continue
 					default:
-						log.Printf("doc is %v", item)
 						return this.Base.SendError(query.NewError(err, "unexpected error projecting fetch expression"))
 					}
 				} else {

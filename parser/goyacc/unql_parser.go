@@ -17,9 +17,6 @@ import (
 	"github.com/couchbaselabs/tuqtng/ast"
 )
 
-var DebugTokens = false
-var DebugGrammar = false
-
 var parsingStack *Stack
 var parsingStatement ast.Statement
 var crashHard = false

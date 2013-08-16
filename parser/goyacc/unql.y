@@ -1,12 +1,11 @@
 %{
 package goyacc
-import "log"
+import "github.com/couchbaselabs/clog"
+import "github.com/couchbaselabs/tuqtng/parser"
 import "github.com/couchbaselabs/tuqtng/ast"
 
 func logDebugGrammar(format string, v ...interface{}) {
-	if DebugGrammar {
-    	log.Printf("DEBUG GRAMMAR " + format, v...)
-    }
+    clog.To(parser.PARSER_CHANNEL, format, v...)
 }
 %}
 

@@ -10,7 +10,9 @@
 package static
 
 import (
-	"log"
+	"fmt"
+
+	"github.com/couchbaselabs/clog"
 
 	// interfaces
 	"github.com/couchbaselabs/tuqtng/catalog"
@@ -88,6 +90,6 @@ func (this *StaticPipeline) DispatchQuery(q network.Query) {
 		}
 
 	default:
-		log.Printf("Unsupported Request Type %T", request)
+		clog.Error(fmt.Errorf("Unsupported Request Type %T", request))
 	}
 }

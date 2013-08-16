@@ -10,8 +10,7 @@
 package ast
 
 import (
-	"log"
-
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 )
 
@@ -169,7 +168,7 @@ func (this *NotOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	case nil:
 		return dparval.NewValue(nil), nil
 	default:
-		log.Fatalf("Unexpected type %T in NOT", operandBoolVal)
+		clog.Fatal("Unexpected type %T in NOT", operandBoolVal)
 		return dparval.NewValue(nil), nil
 	}
 }

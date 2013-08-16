@@ -11,10 +11,11 @@ package main
 
 import (
 	"bufio"
-	"github.com/sbinet/liner"
-	"log"
+	"fmt"
 	"os"
 	"os/user"
+
+	"github.com/sbinet/liner"
 )
 
 func LoadHistory(liner *liner.State, currentUser *user.User) {
@@ -42,7 +43,7 @@ func WriteHistoryToFile(liner *liner.State, path string) {
 	writer := bufio.NewWriter(f)
 	_, err = liner.WriteHistory(writer)
 	if err != nil {
-		log.Printf("Error updating .tuq_history file: %v", err)
+		fmt.Printf("Error updating .tuq_history file: %v\n", err)
 	} else {
 		writer.Flush()
 	}

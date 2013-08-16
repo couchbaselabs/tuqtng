@@ -17,3 +17,5 @@ import (
 type Executor interface {
 	Execute(*plan.Plan, network.Query)
 }
+
+const CHANNEL = "EXECUTOR"

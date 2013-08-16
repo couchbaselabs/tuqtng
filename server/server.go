@@ -11,7 +11,6 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/couchbaselabs/tuqtng/catalog"
@@ -20,6 +19,8 @@ import (
 	"github.com/couchbaselabs/tuqtng/catalog/mock"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/qpipeline/static"
+
+	"github.com/couchbaselabs/clog"
 )
 
 func Site(s string) (catalog.Site, error) {
@@ -53,9 +54,9 @@ func Server(version, couchbaseSite, poolName string,
 	// create a StaticQueryPipeline we use to process queries
 	queryPipeline := static.NewStaticPipeline(pool)
 
-	log.Printf("tuqtng started...")
-	log.Printf("version: %s", version)
-	log.Printf("site: %s", couchbaseSite)
+	clog.Log("tuqtng started...")
+	clog.Log("version: %s", version)
+	clog.Log("site: %s", couchbaseSite)
 
 	// dispatch each query that comes in
 	for query := range queryChannel {

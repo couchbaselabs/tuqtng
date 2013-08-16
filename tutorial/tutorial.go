@@ -1,9 +1,7 @@
 package main
 
 import (
-	"github.com/russross/blackfriday"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -12,6 +10,9 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/couchbaselabs/clog"
+	"github.com/russross/blackfriday"
 )
 
 func setup(cacheDir string, src string, srcF os.FileInfo, err error) error {
@@ -33,9 +34,9 @@ func setup(cacheDir string, src string, srcF os.FileInfo, err error) error {
 
 	// copy to cache
 	if os.IsNotExist(dstE) {
-		log.Println("Copying", srcF.Name())
+		clog.Log("Copying %s", srcF.Name())
 	} else {
-		log.Println("Updating", srcF.Name())
+		clog.Log("Updating %s", srcF.Name())
 	}
 
 	if srcF.IsDir() {
@@ -64,14 +65,14 @@ func main() {
 	tempDir, _ := ioutil.TempDir("", "tut")
 	tempDir += string(os.PathSeparator)
 	defer os.RemoveAll(tempDir)
-	log.Println("Workdir", tempDir)
+	clog.Log("Workdir %s", tempDir)
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		<-c
 		os.RemoveAll(tempDir)
-		log.Fatalln("Stopped")
+		clog.Fatal("Stopped")
 	}()
 
 	walker := func(src string, f os.FileInfo, err error) error {
@@ -79,10 +80,10 @@ func main() {
 	}
 
 	if err := filepath.Walk("./content/", walker); err != nil {
-		log.Fatalln("Filewalk", err)
+		clog.Fatal("Filewalk %v", err)
 	}
 
-	log.Println("Running at http:///localhost:8000/")
+	clog.Log("Running at http:///localhost:8000/")
 
 	go func() {
 		for {
@@ -101,6 +102,6 @@ func main() {
 	http.Handle("/tutorial/", http.StripPrefix("/tutorial/", fs))
 
 	if err := http.ListenAndServe(":8000", nil); err != nil {
-		log.Fatalln("ListenAndServe", err)
+		clog.Fatal("ListenAndServe", err)
 	}
 }
