@@ -142,13 +142,13 @@ func (this *FunctionCallPanic) Evaluate(item *dparval.Value) (*dparval.Value, er
 
 		boolVal := ValueInBooleanContext(av.Value())
 		if boolVal == true {
-			panic("PANIC_IF evaluated true")
+			panic("PANIC() called, argument evaluated true")
 		}
 
 		return dparval.NewValue(boolVal), nil
 	}
 	// otherwise just panic
-	panic("PANIC_IF evaluated true")
+	panic("PANIC() called")
 	return dparval.NewValue(true), nil
 }
 
