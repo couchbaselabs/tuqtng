@@ -389,6 +389,9 @@ select_limit select_offset {
 select_limit:
 LIMIT INT {
 	logDebugGrammar("LIMIT %d", $2.n)
+	if $2.n < 0 {
+		panic("LIMIT cannot be negative")
+	}
 	switch parsingStatement := parsingStatement.(type) {
 	case *ast.SelectStatement:
 		parsingStatement.Limit = $2.n
@@ -400,6 +403,9 @@ LIMIT INT {
 select_offset:
 OFFSET INT { 
 	logDebugGrammar("OFFSET %d", $2.n)
+	if $2.n < 0 {
+		panic("OFFSET cannot be negative")
+	}
 	switch parsingStatement := parsingStatement.(type) {
 	case *ast.SelectStatement:
 		parsingStatement.Offset = $2.n

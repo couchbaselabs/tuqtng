@@ -37,3 +37,26 @@ func TestLimit(t *testing.T) {
 	}
 
 }
+
+func TestLimitZero(t *testing.T) {
+
+	stubSource := NewStubSource(testData)
+
+	limit := NewLimit(0)
+	limit.SetSource(stubSource)
+
+	limitItemChannel, _ := limit.GetChannels()
+
+	stopChannel := make(misc.StopChannel)
+	go limit.Run(stopChannel)
+
+	count := 0
+	for _ = range limitItemChannel {
+		count++
+	}
+
+	if count != 0 {
+		t.Errorf("Expected %d items, got %d", 0, count)
+	}
+
+}

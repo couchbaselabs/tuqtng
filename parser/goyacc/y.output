@@ -303,7 +303,7 @@ state 28
 state 29
 	path:  IDENTIFIER.    (96)
 
-	.  reduce 96 (src line 769)
+	.  reduce 96 (src line 775)
 
 
 state 30
@@ -459,13 +459,13 @@ state 41
 	IS  shift 106
 	DOT  shift 104
 	MOD  shift 92
-	.  reduce 49 (src line 413)
+	.  reduce 49 (src line 419)
 
 
 state 42
 	expr:  prefix_expr.    (74)
 
-	.  reduce 74 (src line 604)
+	.  reduce 74 (src line 610)
 
 
 state 43
@@ -531,13 +531,13 @@ state 44
 state 45
 	prefix_expr:  suffix_expr.    (77)
 
-	.  reduce 77 (src line 624)
+	.  reduce 77 (src line 630)
 
 
 state 46
 	suffix_expr:  atom.    (78)
 
-	.  reduce 78 (src line 629)
+	.  reduce 78 (src line 635)
 
 
 state 47
@@ -548,13 +548,13 @@ state 47
 	atom:  IDENTIFIER.LPAREN UNIQUE function_arg_list RPAREN 
 
 	LPAREN  shift 109
-	.  reduce 79 (src line 635)
+	.  reduce 79 (src line 641)
 
 
 state 48
 	atom:  literal_value.    (80)
 
-	.  reduce 80 (src line 641)
+	.  reduce 80 (src line 647)
 
 
 state 49
@@ -724,55 +724,55 @@ state 54
 state 55
 	literal_value:  STRING.    (105)
 
-	.  reduce 105 (src line 841)
+	.  reduce 105 (src line 847)
 
 
 state 56
 	literal_value:  number.    (106)
 
-	.  reduce 106 (src line 847)
+	.  reduce 106 (src line 853)
 
 
 state 57
 	literal_value:  object.    (107)
 
-	.  reduce 107 (src line 851)
+	.  reduce 107 (src line 857)
 
 
 state 58
 	literal_value:  array.    (108)
 
-	.  reduce 108 (src line 855)
+	.  reduce 108 (src line 861)
 
 
 state 59
 	literal_value:  TRUE.    (109)
 
-	.  reduce 109 (src line 859)
+	.  reduce 109 (src line 865)
 
 
 state 60
 	literal_value:  FALSE.    (110)
 
-	.  reduce 110 (src line 865)
+	.  reduce 110 (src line 871)
 
 
 state 61
 	literal_value:  NULL.    (111)
 
-	.  reduce 111 (src line 871)
+	.  reduce 111 (src line 877)
 
 
 state 62
 	number:  INT.    (112)
 
-	.  reduce 112 (src line 879)
+	.  reduce 112 (src line 885)
 
 
 state 63
 	number:  NUMBER.    (113)
 
-	.  reduce 113 (src line 885)
+	.  reduce 113 (src line 891)
 
 
 state 64
@@ -908,7 +908,7 @@ state 72
 	IS  shift 106
 	DOT  shift 125
 	MOD  shift 92
-	.  reduce 49 (src line 413)
+	.  reduce 49 (src line 419)
 
 
 state 73
@@ -1572,13 +1572,13 @@ state 106
 state 107
 	prefix_expr:  NOT prefix_expr.    (75)
 
-	.  reduce 75 (src line 610)
+	.  reduce 75 (src line 616)
 
 
 state 108
 	prefix_expr:  MINUS prefix_expr.    (76)
 
-	.  reduce 76 (src line 617)
+	.  reduce 76 (src line 623)
 
 
 state 109
@@ -1867,7 +1867,7 @@ state 115
 state 116
 	object:  LBRACE RBRACE.    (114)
 
-	.  reduce 114 (src line 893)
+	.  reduce 114 (src line 899)
 
 
 state 117
@@ -1882,7 +1882,7 @@ state 118
 	named_expression_list:  named_expression_single.COMMA named_expression_list 
 
 	COMMA  shift 177
-	.  reduce 116 (src line 905)
+	.  reduce 116 (src line 911)
 
 
 state 119
@@ -1895,7 +1895,7 @@ state 119
 state 120
 	array:  LBRACKET RBRACKET.    (119)
 
-	.  reduce 119 (src line 931)
+	.  reduce 119 (src line 937)
 
 
 state 121
@@ -1910,7 +1910,7 @@ state 122
 	expression_list:  expression.COMMA expression_list 
 
 	COMMA  shift 180
-	.  reduce 121 (src line 946)
+	.  reduce 121 (src line 952)
 
 
 state 123
@@ -1987,7 +1987,7 @@ state 128
 state 129
 	path:  path DOT IDENTIFIER.    (98)
 
-	.  reduce 98 (src line 782)
+	.  reduce 98 (src line 788)
 
 
 state 130
@@ -2007,7 +2007,7 @@ state 131
 state 132
 	select_offset:  OFFSET INT.    (48)
 
-	.  reduce 48 (src line 400)
+	.  reduce 48 (src line 403)
 
 
 state 133
@@ -2098,7 +2098,7 @@ state 137
 	NOT  shift 103
 	IS  shift 106
 	MOD  shift 92
-	.  reduce 50 (src line 418)
+	.  reduce 50 (src line 424)
 
 
 state 138
@@ -2134,7 +2134,7 @@ state 138
 	NOT  shift 103
 	IS  shift 106
 	MOD  shift 92
-	.  reduce 51 (src line 426)
+	.  reduce 51 (src line 432)
 
 
 state 139
@@ -2166,7 +2166,7 @@ state 139
 
 	NOT  shift 103
 	IS  shift 106
-	.  reduce 52 (src line 434)
+	.  reduce 52 (src line 440)
 
 
 state 140
@@ -2198,7 +2198,7 @@ state 140
 
 	NOT  shift 103
 	IS  shift 106
-	.  reduce 53 (src line 442)
+	.  reduce 53 (src line 448)
 
 
 state 141
@@ -2230,7 +2230,7 @@ state 141
 
 	NOT  shift 103
 	IS  shift 106
-	.  reduce 54 (src line 450)
+	.  reduce 54 (src line 456)
 
 
 state 142
@@ -2262,7 +2262,7 @@ state 142
 
 	NOT  shift 103
 	IS  shift 106
-	.  reduce 55 (src line 458)
+	.  reduce 55 (src line 464)
 
 
 state 143
@@ -2309,7 +2309,7 @@ state 143
 	IS  shift 106
 	DOT  shift 104
 	MOD  shift 92
-	.  reduce 56 (src line 466)
+	.  reduce 56 (src line 472)
 
 
 state 144
@@ -2357,7 +2357,7 @@ state 144
 	IS  shift 106
 	DOT  shift 104
 	MOD  shift 92
-	.  reduce 57 (src line 474)
+	.  reduce 57 (src line 480)
 
 
 state 145
@@ -2395,7 +2395,7 @@ state 145
 	NOT  shift 103
 	IS  shift 106
 	MOD  shift 92
-	.  reduce 58 (src line 482)
+	.  reduce 58 (src line 488)
 
 
 state 146
@@ -2433,7 +2433,7 @@ state 146
 	NOT  shift 103
 	IS  shift 106
 	MOD  shift 92
-	.  reduce 59 (src line 490)
+	.  reduce 59 (src line 496)
 
 
 state 147
@@ -2471,7 +2471,7 @@ state 147
 	NOT  shift 103
 	IS  shift 106
 	MOD  shift 92
-	.  reduce 60 (src line 498)
+	.  reduce 60 (src line 504)
 
 
 state 148
@@ -2509,7 +2509,7 @@ state 148
 	NOT  shift 103
 	IS  shift 106
 	MOD  shift 92
-	.  reduce 61 (src line 506)
+	.  reduce 61 (src line 512)
 
 
 state 149
@@ -2547,7 +2547,7 @@ state 149
 	NOT  shift 103
 	IS  shift 106
 	MOD  shift 92
-	.  reduce 62 (src line 514)
+	.  reduce 62 (src line 520)
 
 
 state 150
@@ -2585,7 +2585,7 @@ state 150
 	NOT  shift 103
 	IS  shift 106
 	MOD  shift 92
-	.  reduce 63 (src line 522)
+	.  reduce 63 (src line 528)
 
 
 state 151
@@ -2623,7 +2623,7 @@ state 151
 	NOT  shift 103
 	IS  shift 106
 	MOD  shift 92
-	.  reduce 64 (src line 530)
+	.  reduce 64 (src line 536)
 
 
 state 152
@@ -2660,7 +2660,7 @@ state 152
 state 153
 	expr:  expr DOT IDENTIFIER.    (66)
 
-	.  reduce 66 (src line 546)
+	.  reduce 66 (src line 552)
 
 
 state 154
@@ -2716,7 +2716,7 @@ state 154
 state 155
 	expr:  expr IS NULL.    (68)
 
-	.  reduce 68 (src line 562)
+	.  reduce 68 (src line 568)
 
 
 state 156
@@ -2733,19 +2733,19 @@ state 156
 state 157
 	expr:  expr IS MISSING.    (70)
 
-	.  reduce 70 (src line 576)
+	.  reduce 70 (src line 582)
 
 
 state 158
 	expr:  expr IS VALUED.    (72)
 
-	.  reduce 72 (src line 590)
+	.  reduce 72 (src line 596)
 
 
 state 159
 	atom:  IDENTIFIER LPAREN RPAREN.    (88)
 
-	.  reduce 88 (src line 707)
+	.  reduce 88 (src line 713)
 
 
 state 160
@@ -2832,25 +2832,25 @@ state 163
 	function_arg_list:  function_arg_single.COMMA function_arg_list 
 
 	COMMA  shift 198
-	.  reduce 99 (src line 793)
+	.  reduce 99 (src line 799)
 
 
 state 164
 	function_arg_single:  fun_dotted_path_star.    (101)
 
-	.  reduce 101 (src line 812)
+	.  reduce 101 (src line 818)
 
 
 state 165
 	function_arg_single:  expression.    (102)
 
-	.  reduce 102 (src line 816)
+	.  reduce 102 (src line 822)
 
 
 state 166
 	fun_dotted_path_star:  MULT.    (103)
 
-	.  reduce 103 (src line 825)
+	.  reduce 103 (src line 831)
 
 
 state 167
@@ -2900,13 +2900,13 @@ state 167
 	IS  shift 106
 	DOT  shift 199
 	MOD  shift 92
-	.  reduce 49 (src line 413)
+	.  reduce 49 (src line 419)
 
 
 state 168
 	atom:  LPAREN expression RPAREN.    (81)
 
-	.  reduce 81 (src line 645)
+	.  reduce 81 (src line 651)
 
 
 state 169
@@ -2914,7 +2914,7 @@ state 169
 	else_expr: .    (94)
 
 	ELSE  shift 201
-	.  reduce 94 (src line 759)
+	.  reduce 94 (src line 765)
 
 	else_expr  goto 200
 
@@ -3035,7 +3035,7 @@ state 175
 state 176
 	object:  LBRACE named_expression_list RBRACE.    (115)
 
-	.  reduce 115 (src line 899)
+	.  reduce 115 (src line 905)
 
 
 state 177
@@ -3082,7 +3082,7 @@ state 178
 state 179
 	array:  LBRACKET expression_list RBRACKET.    (120)
 
-	.  reduce 120 (src line 937)
+	.  reduce 120 (src line 943)
 
 
 state 180
@@ -3139,7 +3139,7 @@ state 183
 state 184
 	path:  path LBRACKET INT RBRACKET.    (97)
 
-	.  reduce 97 (src line 775)
+	.  reduce 97 (src line 781)
 
 
 state 185
@@ -3261,37 +3261,37 @@ state 190
 	NOT  shift 103
 	IS  shift 106
 	MOD  shift 92
-	.  reduce 65 (src line 538)
+	.  reduce 65 (src line 544)
 
 
 state 191
 	expr:  expr LBRACKET expr RBRACKET.    (67)
 
-	.  reduce 67 (src line 554)
+	.  reduce 67 (src line 560)
 
 
 state 192
 	expr:  expr IS NOT NULL.    (69)
 
-	.  reduce 69 (src line 569)
+	.  reduce 69 (src line 575)
 
 
 state 193
 	expr:  expr IS NOT MISSING.    (71)
 
-	.  reduce 71 (src line 583)
+	.  reduce 71 (src line 589)
 
 
 state 194
 	expr:  expr IS NOT VALUED.    (73)
 
-	.  reduce 73 (src line 597)
+	.  reduce 73 (src line 603)
 
 
 state 195
 	atom:  IDENTIFIER LPAREN function_arg_list RPAREN.    (89)
 
-	.  reduce 89 (src line 713)
+	.  reduce 89 (src line 719)
 
 
 state 196
@@ -3520,19 +3520,19 @@ state 207
 state 208
 	named_expression_list:  named_expression_single COMMA named_expression_list.    (117)
 
-	.  reduce 117 (src line 909)
+	.  reduce 117 (src line 915)
 
 
 state 209
 	named_expression_single:  STRING COLON expression.    (118)
 
-	.  reduce 118 (src line 921)
+	.  reduce 118 (src line 927)
 
 
 state 210
 	expression_list:  expression COMMA expression_list.    (122)
 
-	.  reduce 122 (src line 953)
+	.  reduce 122 (src line 959)
 
 
 state 211
@@ -3584,31 +3584,31 @@ state 213
 state 214
 	atom:  IDENTIFIER LPAREN DISTINCT function_arg_list RPAREN.    (90)
 
-	.  reduce 90 (src line 720)
+	.  reduce 90 (src line 726)
 
 
 state 215
 	atom:  IDENTIFIER LPAREN UNIQUE function_arg_list RPAREN.    (91)
 
-	.  reduce 91 (src line 728)
+	.  reduce 91 (src line 734)
 
 
 state 216
 	function_arg_list:  function_arg_single COMMA function_arg_list.    (100)
 
-	.  reduce 100 (src line 798)
+	.  reduce 100 (src line 804)
 
 
 state 217
 	fun_dotted_path_star:  expr DOT MULT.    (104)
 
-	.  reduce 104 (src line 831)
+	.  reduce 104 (src line 837)
 
 
 state 218
 	atom:  CASE WHEN then_list else_expr END.    (82)
 
-	.  reduce 82 (src line 649)
+	.  reduce 82 (src line 655)
 
 
 state 219
@@ -3657,7 +3657,7 @@ state 219
 	IS  shift 106
 	DOT  shift 104
 	MOD  shift 92
-	.  reduce 95 (src line 763)
+	.  reduce 95 (src line 769)
 
 
 state 220
@@ -3708,7 +3708,7 @@ state 220
 	DOT  shift 104
 	WHEN  shift 228
 	MOD  shift 92
-	.  reduce 92 (src line 737)
+	.  reduce 92 (src line 743)
 
 
 state 221
@@ -3795,19 +3795,19 @@ state 228
 state 229
 	atom:  ANY expr OVER path AS IDENTIFIER.    (83)
 
-	.  reduce 83 (src line 666)
+	.  reduce 83 (src line 672)
 
 
 state 230
 	atom:  ALL expr OVER path AS IDENTIFIER.    (84)
 
-	.  reduce 84 (src line 674)
+	.  reduce 84 (src line 680)
 
 
 state 231
 	atom:  FIRST expr OVER path AS IDENTIFIER.    (85)
 
-	.  reduce 85 (src line 682)
+	.  reduce 85 (src line 688)
 
 
 state 232
@@ -3824,7 +3824,7 @@ state 232
 state 233
 	atom:  ARRAY expr OVER path AS IDENTIFIER.    (87)
 
-	.  reduce 87 (src line 699)
+	.  reduce 87 (src line 705)
 
 
 state 234
@@ -3836,7 +3836,7 @@ state 234
 state 235
 	then_list:  expr THEN expr WHEN then_list.    (93)
 
-	.  reduce 93 (src line 745)
+	.  reduce 93 (src line 751)
 
 
 state 236
@@ -3849,7 +3849,7 @@ state 236
 state 237
 	atom:  ARRAY expr WHEN expr OVER path AS IDENTIFIER.    (86)
 
-	.  reduce 86 (src line 690)
+	.  reduce 86 (src line 696)
 
 
 67 terminals, 45 nonterminals

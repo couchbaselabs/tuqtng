@@ -43,11 +43,11 @@ func (this *Limit) Run(stopChannel misc.StopChannel) {
 }
 
 func (this *Limit) processItem(item *dparval.Value) bool {
-	this.Base.SendItem(item)
 	this.count++
-	if this.count >= this.Limit {
+	if this.count > this.Limit {
 		return false
 	}
+	this.Base.SendItem(item)
 	return true
 }
 
