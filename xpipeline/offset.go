@@ -10,6 +10,7 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/misc"
 )
@@ -36,7 +37,9 @@ func (this *Offset) GetChannels() (dparval.ValueChannel, PipelineSupportChannel)
 }
 
 func (this *Offset) Run(stopChannel misc.StopChannel) {
+	clog.To(CHANNEL, "offset operator starting")
 	this.Base.RunOperator(this, stopChannel)
+	clog.To(CHANNEL, "offset operator finished")
 }
 
 func (this *Offset) processItem(item *dparval.Value) bool {

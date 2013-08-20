@@ -10,6 +10,7 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/misc"
@@ -48,7 +49,9 @@ func (this *Grouper) GetChannels() (dparval.ValueChannel, PipelineSupportChannel
 }
 
 func (this *Grouper) Run(stopChannel misc.StopChannel) {
+	clog.To(CHANNEL, "group operator starting")
 	this.Base.RunOperator(this, stopChannel)
+	clog.To(CHANNEL, "group operator finished")
 }
 
 func (this *Grouper) processItem(item *dparval.Value) bool {

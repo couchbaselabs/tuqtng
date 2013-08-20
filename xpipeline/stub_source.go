@@ -10,6 +10,7 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/misc"
 )
@@ -35,12 +36,15 @@ func (this *StubSource) GetChannels() (dparval.ValueChannel, PipelineSupportChan
 }
 
 func (this *StubSource) Run(stopChannel misc.StopChannel) {
+	clog.To(CHANNEL, "stub source operator starting")
 	defer close(this.itemChannel)
 	defer close(this.supportChannel)
 
 	for _, item := range this.data {
 		this.itemChannel <- item
 	}
+
+	clog.To(CHANNEL, "stub source operator finished")
 }
 
 func (this *StubSource) processItem(item *dparval.Value) bool {

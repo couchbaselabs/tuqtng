@@ -10,6 +10,7 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/misc"
@@ -41,7 +42,9 @@ func (this *EliminateDuplicates) GetChannels() (dparval.ValueChannel, PipelineSu
 }
 
 func (this *EliminateDuplicates) Run(stopChannel misc.StopChannel) {
+	clog.To(CHANNEL, "eliminate duplicates operator starting")
 	this.Base.RunOperator(this, stopChannel)
+	clog.To(CHANNEL, "eliminate duplicates operator finished")
 }
 
 func (this *EliminateDuplicates) processItem(item *dparval.Value) bool {

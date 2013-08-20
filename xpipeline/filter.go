@@ -10,6 +10,7 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/misc"
@@ -37,7 +38,9 @@ func (this *Filter) GetChannels() (dparval.ValueChannel, PipelineSupportChannel)
 }
 
 func (this *Filter) Run(stopChannel misc.StopChannel) {
+	clog.To(CHANNEL, "filter operator starting")
 	this.Base.RunOperator(this, stopChannel)
+	clog.To(CHANNEL, "filter operator finished")
 }
 
 func (this *Filter) processItem(item *dparval.Value) bool {

@@ -10,6 +10,7 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/misc"
@@ -39,7 +40,9 @@ func (this *DocumentJoin) GetChannels() (dparval.ValueChannel, PipelineSupportCh
 }
 
 func (this *DocumentJoin) Run(stopChannel misc.StopChannel) {
+	clog.To(CHANNEL, "document join operator starting")
 	this.Base.RunOperator(this, stopChannel)
+	clog.To(CHANNEL, "document join operator finished")
 }
 
 func (this *DocumentJoin) processItem(item *dparval.Value) bool {

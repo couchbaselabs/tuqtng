@@ -10,6 +10,7 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/misc"
 )
@@ -33,10 +34,12 @@ func (this *ExpressionEvaluatorSource) GetChannels() (dparval.ValueChannel, Pipe
 }
 
 func (this *ExpressionEvaluatorSource) Run(stopChannel misc.StopChannel) {
+	clog.To(CHANNEL, "expression evaluator source operator starting")
 	defer close(this.itemChannel)
 	defer close(this.supportChannel)
 	item := dparval.NewValue(map[string]interface{}{})
 	this.itemChannel <- item
+	clog.To(CHANNEL, "expression evaluator source operator finished")
 }
 
 func (this *ExpressionEvaluatorSource) processItem(item *dparval.Value) bool {

@@ -43,7 +43,9 @@ func (this *Order) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) 
 }
 
 func (this *Order) Run(stopChannel misc.StopChannel) {
+	clog.To(CHANNEL, "order operator starting")
 	this.Base.RunOperator(this, stopChannel)
+	clog.To(CHANNEL, "order operator finished")
 }
 
 func (this *Order) processItem(item *dparval.Value) bool {
