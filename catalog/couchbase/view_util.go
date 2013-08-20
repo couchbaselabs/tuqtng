@@ -24,37 +24,15 @@ func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *
 	defer close(errs)
 
 	options["limit"] = batchSize + 1
-	logURL, err := bucket.ViewURL(ddoc, view, options)
-	if err == nil {
-		clog.To(CHANNEL, "Request View: %v", logURL)
-	}
-	vres, err := bucket.View(ddoc, view, options)
 
-	if err != nil {
-		errs <- query.NewError(err, "Unable to access view")
-		return
-	}
-
-	for i, row := range vres.Rows {
-		if i < batchSize {
-			// dont process the last row, its just used to see if we
-			// need to continue processing
-			result <- row
-		}
-	}
-
-	// as long as we continue to get batchSize + 1 results back we have to keep going
-	for len(vres.Rows) > batchSize {
-		skey := vres.Rows[batchSize].Key
-		skeydocid := vres.Rows[batchSize].ID
-		options["startkey"] = skey
-		options["startkey_docid"] = cb.DocId(skeydocid)
+	ok := true
+	for ok {
 
 		logURL, err := bucket.ViewURL(ddoc, view, options)
 		if err == nil {
 			clog.To(CHANNEL, "Request View: %v", logURL)
 		}
-		vres, err = bucket.View(ddoc, view, options)
+		vres, err := bucket.View(ddoc, view, options)
 		if err != nil {
 			errs <- query.NewError(err, "Unable to access view")
 			return
@@ -66,6 +44,17 @@ func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *
 				// need to continue processing
 				result <- row
 			}
+		}
+
+		if len(vres.Rows) > batchSize {
+			// prepare for next run
+			skey := vres.Rows[batchSize].Key
+			skeydocid := vres.Rows[batchSize].ID
+			options["startkey"] = skey
+			options["startkey_docid"] = cb.DocId(skeydocid)
+		} else {
+			// stop
+			ok = false
 		}
 	}
 }
