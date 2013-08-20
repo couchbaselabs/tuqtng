@@ -15,7 +15,7 @@ n int
 f float64}
 
 %token EXPLAIN
-%token CREATE VIEW INDEX ON
+%token CREATE VIEW INDEX ON USING
 %token DISTINCT UNIQUE
 %token SELECT AS FROM WHERE
 %token ORDER BY ASC DESC
@@ -69,8 +69,8 @@ create_index_stmt {
 create_index_stmt:
 CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN {
 	on := parsingStack.Pop().(ast.ExpressionList)
-	bucket := $6.s
-	name := $4.s
+	bucket := $5.s
+	name := $3.s
 	createIndexStmt := ast.NewCreateIndexStatement()
 	createIndexStmt.On = on
 	createIndexStmt.Bucket = bucket
@@ -78,18 +78,31 @@ CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN {
 	parsingStatement = createIndexStmt
 }
 |
-CREATE VIEW INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN {
+CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN USING VIEW {
 	on := parsingStack.Pop().(ast.ExpressionList)
-	bucket := $6.s
-	name := $4.s
+	bucket := $5.s
+	name := $3.s
 	createIndexStmt := ast.NewCreateIndexStatement()
-	createIndexStmt.View = true
 	createIndexStmt.On = on
 	createIndexStmt.Bucket = bucket
 	createIndexStmt.Name = name
+	createIndexStmt.Method = "view"
+	parsingStatement = createIndexStmt
+}
+|
+CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN USING IDENTIFIER {
+	on := parsingStack.Pop().(ast.ExpressionList)
+	bucket := $5.s
+	name := $3.s
+	createIndexStmt := ast.NewCreateIndexStatement()
+	createIndexStmt.On = on
+	createIndexStmt.Bucket = bucket
+	createIndexStmt.Name = name
+	createIndexStmt.Method = $10.s
 	parsingStatement = createIndexStmt
 }
 ;
+
 
 // SELECT STATEMENT
 select_stmt:

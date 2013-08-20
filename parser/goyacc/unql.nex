@@ -112,6 +112,10 @@
                   {
                     logDebugTokens("VIEW"); return VIEW
                   }
+/[uU][sS][iI][nN][gG]/
+                  {
+                    logDebugTokens("USING"); return USING
+                  }
 /[iI][nN][dD][eE][xX]/
                   {
                     logDebugTokens("INDEX"); return INDEX

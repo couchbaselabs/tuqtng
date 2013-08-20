@@ -12,7 +12,7 @@ package ast
 import ()
 
 type CreateIndexStatement struct {
-	View        bool           `json:"view"`
+	Method      string         `json:"method"`
 	Name        string         `json:"name"`
 	ExplainOnly bool           `json:"explain"`
 	Bucket      string         `json:"bucket"`
