@@ -10,6 +10,8 @@
 package ast
 
 import (
+	"fmt"
+
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 )
@@ -20,12 +22,14 @@ import (
 func EnableDeveloperFunctions() {
 	SystemFunctionRegistry["ENABLE_LOG"] = NewFunctionCallEnableLog
 	SystemFunctionRegistry["DISABLE_LOG"] = NewFunctionCallDisableLog
+	SystemFunctionRegistry["ERROR"] = NewFunctionCallError
 	SystemFunctionRegistry["PANIC"] = NewFunctionCallPanic
 }
 
 func DisableDeveloperFunctions() {
 	delete(SystemFunctionRegistry, "ENABLE_LOG")
 	delete(SystemFunctionRegistry, "DISABLE_LOG")
+	delete(SystemFunctionRegistry, "ERROR")
 	delete(SystemFunctionRegistry, "PANIC")
 }
 
@@ -108,6 +112,50 @@ func (this *FunctionCallDisableLog) Evaluate(item *dparval.Value) (*dparval.Valu
 }
 
 func (this *FunctionCallDisableLog) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallError struct {
+	FunctionCall
+}
+
+func NewFunctionCallError(operands FunctionArgExpressionList) FunctionCallExpression {
+	return &FunctionCallError{
+		FunctionCall{
+			Type:     "function",
+			Name:     "ERROR",
+			Operands: operands,
+			minArgs:  -1,
+			maxArgs:  1,
+		},
+	}
+}
+
+func (this *FunctionCallError) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	// if there was an argument, see if it evaluates to true
+	if len(this.Operands) == 1 {
+
+		// first evaluate the argument
+		av, err := this.Operands[0].Expr.Evaluate(item)
+
+		// the spec defines this functin to ONLY operate on numeric values
+		// all other types result in NULL
+		if err != nil {
+			return nil, err
+		}
+
+		boolVal := ValueInBooleanContext(av.Value())
+		if boolVal == true {
+			return nil, fmt.Errorf("ERROR() called, argument evaluated true")
+		}
+
+		return dparval.NewValue(boolVal), nil
+	}
+	// otherwise just error
+	return nil, fmt.Errorf("ERROR() called")
+}
+
+func (this *FunctionCallError) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
 
