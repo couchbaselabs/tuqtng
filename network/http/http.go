@@ -11,55 +11,15 @@ package http
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
-	"time"
 
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/tuqtng/network"
-	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/gorilla/mux"
 )
 
 const CHANNEL = "HTTP"
-
-type HttpResponse struct {
-	w        http.ResponseWriter
-	results  chan interface{}
-	warnings []query.Error
-	info     []query.Error
-	err      query.Error
-}
-
-func (this *HttpResponse) SendError(err query.Error) {
-	switch err.Level() {
-	case query.EXCEPTION:
-		this.err = err
-		errBytes, err := json.MarshalIndent(this.err, "        ", "    ")
-		if err != nil {
-			clog.Error(err)
-		}
-		showError(this.w, fmt.Sprintf("{\n    \"error\":\n        %v\n}", string(errBytes)), 500)
-	case query.WARNING:
-		this.warnings = append(this.warnings, err)
-	case query.INFO:
-		this.info = append(this.info, err)
-	}
-
-	if err.IsFatal() {
-		close(this.results)
-	}
-}
-
-func (this *HttpResponse) SendResult(val interface{}) {
-	this.results <- val
-}
-
-func (this *HttpResponse) NoMoreResults() {
-	close(this.results)
-}
 
 type HttpEndpoint struct {
 	queryChannel network.QueryChannel
@@ -96,95 +56,9 @@ func welcome(w http.ResponseWriter, r *http.Request) {
 
 func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	clog.To(CHANNEL, "request received")
-	startTime := time.Now()
-
-	queryString := r.FormValue("q")
-	if queryString == "" && r.Method == "POST" {
-		queryStringBytes, err := ioutil.ReadAll(r.Body)
-		if err == nil {
-			queryString = string(queryStringBytes)
-		}
-	}
-
-	if queryString == "" {
-		showError(w, "Missing required query string", 500)
-		return
-	} else {
-		clog.To(CHANNEL, "query string: %v", queryString)
-	}
-
-	response := HttpResponse{w: w, results: make(chan interface{})}
-	q := network.Query{
-		Request:  network.UNQLStringQueryRequest{QueryString: queryString},
-		Response: &response,
-	}
-
+	q := NewHttpQuery(w, r)
 	this.queryChannel <- q
-
-	count := 0
-	for val := range response.results {
-		if count == 0 {
-			// open up our response
-			fmt.Fprint(w, "{\n")
-			fmt.Fprint(w, "    \"resultset\": [\n")
-		} else {
-			fmt.Fprint(w, ",\n")
-		}
-		body, err := json.MarshalIndent(val, "        ", "    ")
-		if err != nil {
-			clog.Error(err)
-		} else {
-			fmt.Fprintf(w, "        %v", string(body))
-		}
-		count++
-
-		// flush response so client receives rows as soon as possible
-		if f, ok := w.(http.Flusher); ok {
-			f.Flush()
-		}
-	}
-
-	if response.err == nil {
-		if count == 0 {
-			fmt.Fprint(w, "{\n")
-			fmt.Fprint(w, "    \"resultset\": [")
-		}
-		fmt.Fprint(w, "\n    ]")
-		if len(response.warnings) > 0 {
-			fmt.Fprintf(w, ",\n    \"warnings\": [")
-			for i, warning := range response.warnings {
-				warnBytes, err := json.MarshalIndent(warning, "        ", "    ")
-				if err != nil {
-					clog.Error(err)
-				}
-				fmt.Fprintf(w, "\n        %v", string(warnBytes))
-				if i < len(response.warnings)-1 {
-					fmt.Fprintf(w, ",")
-				}
-			}
-			fmt.Fprintf(w, "\n    ]")
-		}
-		// forcibly generate some infos
-		response.SendError(query.NewTotalRowsInfo(count))
-		elapsed_duration := time.Since(startTime)
-		response.SendError(query.NewTotalElapsedTimeInfo(elapsed_duration.String()))
-		if len(response.info) > 0 {
-			fmt.Fprintf(w, ",\n    \"info\": [")
-			for i, info := range response.info {
-				infoBytes, err := json.MarshalIndent(info, "        ", "    ")
-				if err != nil {
-					clog.Error(err)
-				}
-				fmt.Fprintf(w, "\n        %v", string(infoBytes))
-				if i < len(response.info)-1 {
-					fmt.Fprintf(w, ",")
-				}
-			}
-			fmt.Fprintf(w, "\n    ]")
-		}
-		fmt.Fprint(w, "\n}\n")
-	}
-	clog.To(CHANNEL, "response sent")
+	q.Process()
 }
 
 func mustEncode(w io.Writer, i interface{}) {

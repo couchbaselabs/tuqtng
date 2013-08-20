@@ -11,19 +11,23 @@ package xpipeline
 
 import (
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type BaseOperator struct {
-	Source         Operator
-	itemChannel    dparval.ValueChannel
-	supportChannel PipelineSupportChannel
+	Source                Operator
+	itemChannel           dparval.ValueChannel
+	supportChannel        PipelineSupportChannel
+	upstreamStopChannel   misc.StopChannel
+	downstreamStopChannel misc.StopChannel
 }
 
 func NewBaseOperator() *BaseOperator {
 	return &BaseOperator{
-		itemChannel:    make(dparval.ValueChannel),
-		supportChannel: make(PipelineSupportChannel),
+		itemChannel:         make(dparval.ValueChannel),
+		supportChannel:      make(PipelineSupportChannel),
+		upstreamStopChannel: make(misc.StopChannel),
 	}
 }
 
@@ -36,28 +40,59 @@ func (this *BaseOperator) GetChannels() (dparval.ValueChannel, PipelineSupportCh
 }
 
 func (this *BaseOperator) SendItem(item *dparval.Value) bool {
-	this.itemChannel <- item
-	return true
+	ok := true
+	for ok {
+		select {
+		case this.itemChannel <- item:
+			return true
+		case _, ok = <-this.downstreamStopChannel:
+			// someone closed the stop channel
+		}
+	}
+	return ok
 }
 
 func (this *BaseOperator) SendError(err query.Error) bool {
-	this.supportChannel <- err
-	if err.IsFatal() {
-		return false
+	ok := true
+	for ok {
+		select {
+		case this.supportChannel <- err:
+			if err.IsFatal() {
+				return false
+			}
+			return true
+		case _, ok = <-this.downstreamStopChannel:
+			// someone closed the stop channel
+		}
 	}
-	return true
+	return false
 }
 
 func (this *BaseOperator) SendOther(obj interface{}) bool {
-	this.supportChannel <- obj
-	return true
+	ok := true
+	for ok {
+		select {
+		case this.supportChannel <- obj:
+			return true
+		case _, ok = <-this.downstreamStopChannel:
+			// someone closed the stop channel
+		}
+	}
+	return false
 }
 
-func (this *BaseOperator) RunOperator(oper Operator) {
+// func (this *BaseOperator) StopUpstream() {
+// 	close(this.stopChannel)
+// }
+
+func (this *BaseOperator) RunOperator(oper Operator, stopChannel misc.StopChannel) {
 	defer close(this.itemChannel)
 	defer close(this.supportChannel)
+	defer close(this.upstreamStopChannel)
 
-	go this.Source.Run()
+	this.downstreamStopChannel = stopChannel
+
+	go this.Source.Run(this.upstreamStopChannel)
 
 	var item *dparval.Value
 	var obj interface{}
@@ -78,6 +113,8 @@ func (this *BaseOperator) RunOperator(oper Operator) {
 					ok = this.SendOther(obj)
 				}
 			}
+		case _, ok = <-stopChannel:
+			// downstream has asked us to stop
 		}
 	}
 

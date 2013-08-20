@@ -14,6 +14,7 @@ import (
 
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 var joinerTestData = dparval.ValueCollection{}
@@ -57,7 +58,8 @@ func TestDocumentJoin(t *testing.T) {
 
 	joinerItemChannel, _ := joiner.GetChannels()
 
-	go joiner.Run()
+	stopChannel := make(misc.StopChannel)
+	go joiner.Run(stopChannel)
 
 	count := 0
 	for item := range joinerItemChannel {

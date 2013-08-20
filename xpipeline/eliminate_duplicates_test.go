@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 var duplicateTestData = dparval.ValueCollection{}
@@ -40,7 +41,8 @@ func TestEliminateDuplicates(t *testing.T) {
 
 	edItemChannel, _ := ed.GetChannels()
 
-	go ed.Run()
+	stopChannel := make(misc.StopChannel)
+	go ed.Run(stopChannel)
 
 	count := 0
 	for _ = range edItemChannel {

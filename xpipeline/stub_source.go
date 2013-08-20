@@ -11,6 +11,7 @@ package xpipeline
 
 import (
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 type StubSource struct {
@@ -33,7 +34,7 @@ func (this *StubSource) GetChannels() (dparval.ValueChannel, PipelineSupportChan
 	return this.itemChannel, this.supportChannel
 }
 
-func (this *StubSource) Run() {
+func (this *StubSource) Run(stopChannel misc.StopChannel) {
 	defer close(this.itemChannel)
 	defer close(this.supportChannel)
 

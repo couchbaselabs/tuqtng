@@ -7,24 +7,8 @@
 //  either express or implied. See the License for the specific language governing permissions
 //  and limitations under the License.
 
-package simple
+package misc
 
-import (
-	"github.com/couchbaselabs/tuqtng/network"
-	"github.com/couchbaselabs/tuqtng/plan"
-)
-
-type ExplainerExecutor struct {
-}
-
-func NewExplainerExecutor() *ExplainerExecutor {
-	return &ExplainerExecutor{}
-}
-
-func (this *ExplainerExecutor) Execute(optimalPlan *plan.Plan, query network.Query) {
-
-	query.Response().SendResult(optimalPlan)
-	query.Response().NoMoreResults()
-
-	return
-}
+// a generic channel which can be closed when you
+// want someone to stop doing something
+type StopChannel chan bool

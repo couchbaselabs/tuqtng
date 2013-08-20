@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"github.com/couchbaselabs/tuqtng/catalog/mock"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 func TestScan(t *testing.T) {
@@ -38,7 +39,8 @@ func TestScan(t *testing.T) {
 
 	scanItemChannel, _ := scan.GetChannels()
 
-	go scan.Run()
+	stopChannel := make(misc.StopChannel)
+	go scan.Run(stopChannel)
 
 	count := 0
 	for item := range scanItemChannel {

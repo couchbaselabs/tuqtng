@@ -10,7 +10,9 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 type Limit struct {
@@ -34,8 +36,10 @@ func (this *Limit) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) 
 	return this.Base.GetChannels()
 }
 
-func (this *Limit) Run() {
-	this.Base.RunOperator(this)
+func (this *Limit) Run(stopChannel misc.StopChannel) {
+	clog.To(CHANNEL, "limit operator starting")
+	this.Base.RunOperator(this, stopChannel)
+	clog.To(CHANNEL, "limit operator finished")
 }
 
 func (this *Limit) processItem(item *dparval.Value) bool {

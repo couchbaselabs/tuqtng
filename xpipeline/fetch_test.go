@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"github.com/couchbaselabs/tuqtng/catalog/mock"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 func TestFetch(t *testing.T) {
@@ -40,7 +41,8 @@ func TestFetch(t *testing.T) {
 
 	fetchItemChannel, _ := fetch.GetChannels()
 
-	go fetch.Run()
+	stopChannel := make(misc.StopChannel)
+	go fetch.Run(stopChannel)
 
 	count := 0
 	for item := range fetchItemChannel {

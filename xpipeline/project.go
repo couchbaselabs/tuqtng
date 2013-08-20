@@ -10,8 +10,10 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -37,8 +39,10 @@ func (this *Project) GetChannels() (dparval.ValueChannel, PipelineSupportChannel
 	return this.Base.GetChannels()
 }
 
-func (this *Project) Run() {
-	this.Base.RunOperator(this)
+func (this *Project) Run(stopChannel misc.StopChannel) {
+	clog.To(CHANNEL, "project operator starting")
+	this.Base.RunOperator(this, stopChannel)
+	clog.To(CHANNEL, "project operator finished")
 }
 
 func (this *Project) processItem(item *dparval.Value) bool {

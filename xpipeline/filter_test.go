@@ -12,8 +12,9 @@ package xpipeline
 import (
 	"testing"
 
-	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 var testData = dparval.ValueCollection{}
@@ -61,7 +62,8 @@ func TestFilterTrue(t *testing.T) {
 
 	filterItemChannel, _ := filter.GetChannels()
 
-	go filter.Run()
+	stopChannel := make(misc.StopChannel)
+	go filter.Run(stopChannel)
 
 	count := 0
 	for _ = range filterItemChannel {
@@ -83,7 +85,8 @@ func TestFilterFalse(t *testing.T) {
 
 	filterItemChannel, _ := filter.GetChannels()
 
-	go filter.Run()
+	stopChannel := make(misc.StopChannel)
+	go filter.Run(stopChannel)
 
 	count := 0
 	for _ = range filterItemChannel {
@@ -105,7 +108,8 @@ func TestFilterSome(t *testing.T) {
 
 	filterItemChannel, _ := filter.GetChannels()
 
-	go filter.Run()
+	stopChannel := make(misc.StopChannel)
+	go filter.Run(stopChannel)
 
 	count := 0
 	for _ = range filterItemChannel {

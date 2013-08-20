@@ -11,6 +11,8 @@ package xpipeline
 
 import (
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 func TestLimit(t *testing.T) {
@@ -22,7 +24,8 @@ func TestLimit(t *testing.T) {
 
 	limitItemChannel, _ := limit.GetChannels()
 
-	go limit.Run()
+	stopChannel := make(misc.StopChannel)
+	go limit.Run(stopChannel)
 
 	count := 0
 	for _ = range limitItemChannel {

@@ -11,6 +11,7 @@ package xpipeline
 
 import (
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 type ExecutablePipeline struct {
@@ -20,9 +21,11 @@ type ExecutablePipeline struct {
 type Operator interface {
 	SetSource(Operator)
 	GetChannels() (dparval.ValueChannel, PipelineSupportChannel)
-	Run()
+	Run(misc.StopChannel)
 	processItem(item *dparval.Value) bool
 	afterItems()
 }
 
 type PipelineSupportChannel chan interface{}
+
+const CHANNEL = "PIPELINE"

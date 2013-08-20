@@ -12,6 +12,7 @@ package xpipeline
 import (
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 // this is a terrible implementation to remove duplicates
@@ -39,8 +40,8 @@ func (this *EliminateDuplicates) GetChannels() (dparval.ValueChannel, PipelineSu
 	return this.Base.GetChannels()
 }
 
-func (this *EliminateDuplicates) Run() {
-	this.Base.RunOperator(this)
+func (this *EliminateDuplicates) Run(stopChannel misc.StopChannel) {
+	this.Base.RunOperator(this, stopChannel)
 }
 
 func (this *EliminateDuplicates) processItem(item *dparval.Value) bool {

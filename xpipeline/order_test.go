@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 func TestOrder(t *testing.T) {
@@ -24,7 +25,8 @@ func TestOrder(t *testing.T) {
 
 	orderItemChannel, _ := order.GetChannels()
 
-	go order.Run()
+	stopChannel := make(misc.StopChannel)
+	go order.Run(stopChannel)
 
 	count := 0
 	for item := range orderItemChannel {
@@ -53,7 +55,8 @@ func TestOrderDescending(t *testing.T) {
 
 	orderItemChannel, _ := order.GetChannels()
 
-	go order.Run()
+	stopChannel := make(misc.StopChannel)
+	go order.Run(stopChannel)
 
 	count := 0
 	for item := range orderItemChannel {

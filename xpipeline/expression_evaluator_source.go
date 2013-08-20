@@ -11,6 +11,7 @@ package xpipeline
 
 import (
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 type ExpressionEvaluatorSource struct {
@@ -31,7 +32,7 @@ func (this *ExpressionEvaluatorSource) GetChannels() (dparval.ValueChannel, Pipe
 	return this.itemChannel, this.supportChannel
 }
 
-func (this *ExpressionEvaluatorSource) Run() {
+func (this *ExpressionEvaluatorSource) Run(stopChannel misc.StopChannel) {
 	defer close(this.itemChannel)
 	defer close(this.supportChannel)
 	item := dparval.NewValue(map[string]interface{}{})

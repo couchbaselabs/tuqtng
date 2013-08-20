@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 func TestStubSource(t *testing.T) {
@@ -39,7 +40,8 @@ func TestStubSource(t *testing.T) {
 
 	stubItemChannel, _ := stubSource.GetChannels()
 
-	go stubSource.Run()
+	stopChannel := make(misc.StopChannel)
+	go stubSource.Run(stopChannel)
 
 	count := 0
 	for item := range stubItemChannel {

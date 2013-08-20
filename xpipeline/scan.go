@@ -10,16 +10,19 @@
 package xpipeline
 
 import (
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
+	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type Scan struct {
-	itemChannel    dparval.ValueChannel
-	supportChannel PipelineSupportChannel
-	bucket         catalog.Bucket
-	scanner        catalog.Scanner
+	itemChannel           dparval.ValueChannel
+	supportChannel        PipelineSupportChannel
+	bucket                catalog.Bucket
+	scanner               catalog.Scanner
+	downstreamStopChannel misc.StopChannel
 }
 
 func NewScan(bucket catalog.Bucket, scanner catalog.Scanner) *Scan {
@@ -37,7 +40,9 @@ func (this *Scan) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.itemChannel, this.supportChannel
 }
 
-func (this *Scan) Run() {
+func (this *Scan) Run(stopChannel misc.StopChannel) {
+	this.downstreamStopChannel = stopChannel
+	clog.To(CHANNEL, "scan operator starting")
 	defer close(this.itemChannel)
 	defer close(this.supportChannel)
 
@@ -55,18 +60,21 @@ func (this *Scan) Run() {
 		select {
 		case item, ok = <-scannerItemChannel:
 			if ok {
-				this.itemChannel <- item
+				this.SendItem(item)
 			}
 		case warn, ok = <-scannerWarnChannel:
 			if warn != nil {
-				this.supportChannel <- warn
+				this.SendError(warn)
 			}
 		case err, ok = <-scannerErrorChannel:
 			if err != nil {
-				this.supportChannel <- err
+				this.SendError(warn)
 			}
+		case _, ok = <-stopChannel:
+			// downstream has asked us to stop
 		}
 	}
+	clog.To(CHANNEL, "scan operator finished")
 }
 
 func (this *Scan) processItem(item *dparval.Value) bool {
@@ -74,3 +82,32 @@ func (this *Scan) processItem(item *dparval.Value) bool {
 }
 
 func (this *Scan) afterItems() {}
+
+func (this *Scan) SendItem(item *dparval.Value) bool {
+	ok := true
+	for ok {
+		select {
+		case this.itemChannel <- item:
+			return true
+		case _, ok = <-this.downstreamStopChannel:
+			// someone closed the stop channel
+		}
+	}
+	return ok
+}
+
+func (this *Scan) SendError(err query.Error) bool {
+	ok := true
+	for ok {
+		select {
+		case this.supportChannel <- err:
+			if err.IsFatal() {
+				return false
+			}
+			return true
+		case _, ok = <-this.downstreamStopChannel:
+			// someone closed the stop channel
+		}
+	}
+	return false
+}

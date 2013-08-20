@@ -56,11 +56,11 @@ func NewStaticPipeline(pool catalog.Pool) *StaticPipeline {
 // ie, an UNQLASTQueryRequest could bypass the parser
 // or an UNQLPlanRequest could bypass parser, planner, and optimizer
 func (this *StaticPipeline) DispatchQuery(q network.Query) {
-	request := q.Request
-	response := q.Response
+	request := q.Request()
+	response := q.Response()
 
 	switch request := request.(type) {
-	case network.UNQLStringQueryRequest:
+	case network.StringQueryRequest:
 		ast, err := this.parser.Parse(request.QueryString)
 		if err != nil {
 			response.SendError(query.NewParseError(err, "Parse Error"))

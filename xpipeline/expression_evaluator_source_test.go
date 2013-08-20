@@ -14,6 +14,7 @@ import (
 	"testing"
 
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 func TestExpressionEvaluatorSource(t *testing.T) {
@@ -21,7 +22,8 @@ func TestExpressionEvaluatorSource(t *testing.T) {
 
 	sourceItemChannel, _ := source.GetChannels()
 
-	go source.Run()
+	stopChannel := make(misc.StopChannel)
+	go source.Run(stopChannel)
 
 	count := 0
 	for item := range sourceItemChannel {

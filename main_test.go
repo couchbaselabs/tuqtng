@@ -12,10 +12,29 @@ package main
 import (
 	"testing"
 
+	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/tuqtng/test"
 )
+
+type BenchmarkMockQuery struct {
+	request     network.QueryRequest
+	response    *MockBenchmarkResponse
+	stopChannel misc.StopChannel
+}
+
+func (this *BenchmarkMockQuery) Request() network.QueryRequest {
+	return this.request
+}
+
+func (this *BenchmarkMockQuery) Response() network.QueryResponse {
+	return this.response
+}
+
+func (this *BenchmarkMockQuery) SetStopChannel(stopChannel misc.StopChannel) {
+	this.stopChannel = stopChannel
+}
 
 func BenchmarkMock(b *testing.B) {
 	qc := test.Start("mock:items=10000", "p0")
@@ -50,11 +69,11 @@ func (this *MockBenchmarkResponse) NoMoreResults() {
 
 func runBenchmarkMock(qc network.QueryChannel, q string) (int, []query.Error, query.Error) {
 	mr := &MockBenchmarkResponse{warnings: []query.Error{}, done: make(chan bool)}
-	query := network.Query{
-		Request:  network.UNQLStringQueryRequest{QueryString: q},
-		Response: mr,
+	query := BenchmarkMockQuery{
+		request:  network.StringQueryRequest{QueryString: q},
+		response: mr,
 	}
-	qc <- query
+	qc <- &query
 	<-mr.done
 	return mr.results, mr.warnings, mr.err
 }

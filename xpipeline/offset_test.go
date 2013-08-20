@@ -11,6 +11,8 @@ package xpipeline
 
 import (
 	"testing"
+
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 func TestOffset(t *testing.T) {
@@ -22,7 +24,8 @@ func TestOffset(t *testing.T) {
 
 	offsetItemChannel, _ := offset.GetChannels()
 
-	go offset.Run()
+	stopChannel := make(misc.StopChannel)
+	go offset.Run(stopChannel)
 
 	count := 0
 	for _ = range offsetItemChannel {

@@ -14,6 +14,7 @@ import (
 
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 func TestProject(t *testing.T) {
@@ -25,7 +26,8 @@ func TestProject(t *testing.T) {
 
 	projectItemChannel, _ := project.GetChannels()
 
-	go project.Run()
+	stopChannel := make(misc.StopChannel)
+	go project.Run(stopChannel)
 
 	for item := range projectItemChannel {
 

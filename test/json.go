@@ -10,10 +10,29 @@
 package test
 
 import (
+	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/tuqtng/server"
 )
+
+type MockQuery struct {
+	request     network.QueryRequest
+	response    *MockResponse
+	stopChannel misc.StopChannel
+}
+
+func (this *MockQuery) Request() network.QueryRequest {
+	return this.request
+}
+
+func (this *MockQuery) Response() network.QueryResponse {
+	return this.response
+}
+
+func (this *MockQuery) SetStopChannel(stopChannel misc.StopChannel) {
+	this.stopChannel = stopChannel
+}
 
 type MockResponse struct {
 	err      query.Error
@@ -41,11 +60,12 @@ func Run(qc network.QueryChannel, q string) ([]interface{}, []query.Error, query
 	mr := &MockResponse{
 		results: []interface{}{}, warnings: []query.Error{}, done: make(chan bool),
 	}
-	query := network.Query{
-		Request:  network.UNQLStringQueryRequest{QueryString: q},
-		Response: mr,
+
+	query := MockQuery{
+		request:  network.StringQueryRequest{QueryString: q},
+		response: mr,
 	}
-	qc <- query
+	qc <- &query
 	<-mr.done
 	return mr.results, mr.warnings, mr.err
 }

@@ -12,9 +12,11 @@ package xpipeline
 import (
 	"fmt"
 
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
+	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -46,8 +48,10 @@ func (this *Fetch) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) 
 	return this.Base.GetChannels()
 }
 
-func (this *Fetch) Run() {
-	this.Base.RunOperator(this)
+func (this *Fetch) Run(stopChannel misc.StopChannel) {
+	clog.To(CHANNEL, "fetch operator starting")
+	this.Base.RunOperator(this, stopChannel)
+	clog.To(CHANNEL, "fetch operator finished")
 }
 
 func (this *Fetch) processItem(item *dparval.Value) bool {

@@ -12,6 +12,7 @@ package xpipeline
 import (
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -37,8 +38,8 @@ func (this *DocumentJoin) GetChannels() (dparval.ValueChannel, PipelineSupportCh
 	return this.Base.GetChannels()
 }
 
-func (this *DocumentJoin) Run() {
-	this.Base.RunOperator(this)
+func (this *DocumentJoin) Run(stopChannel misc.StopChannel) {
+	this.Base.RunOperator(this, stopChannel)
 }
 
 func (this *DocumentJoin) processItem(item *dparval.Value) bool {

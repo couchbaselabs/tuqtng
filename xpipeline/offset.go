@@ -11,6 +11,7 @@ package xpipeline
 
 import (
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 type Offset struct {
@@ -34,8 +35,8 @@ func (this *Offset) GetChannels() (dparval.ValueChannel, PipelineSupportChannel)
 	return this.Base.GetChannels()
 }
 
-func (this *Offset) Run() {
-	this.Base.RunOperator(this)
+func (this *Offset) Run(stopChannel misc.StopChannel) {
+	this.Base.RunOperator(this, stopChannel)
 }
 
 func (this *Offset) processItem(item *dparval.Value) bool {

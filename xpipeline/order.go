@@ -15,6 +15,7 @@ import (
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/misc"
 )
 
 type Order struct {
@@ -41,8 +42,8 @@ func (this *Order) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) 
 	return this.Base.GetChannels()
 }
 
-func (this *Order) Run() {
-	this.Base.RunOperator(this)
+func (this *Order) Run(stopChannel misc.StopChannel) {
+	this.Base.RunOperator(this, stopChannel)
 }
 
 func (this *Order) processItem(item *dparval.Value) bool {

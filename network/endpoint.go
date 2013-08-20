@@ -10,13 +10,14 @@
 package network
 
 import (
+	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
 type QueryRequest interface {
 }
 
-type UNQLStringQueryRequest struct {
+type StringQueryRequest struct {
 	QueryString string
 }
 
@@ -26,9 +27,10 @@ type QueryResponse interface {
 	NoMoreResults()
 }
 
-type Query struct {
-	Request  QueryRequest
-	Response QueryResponse
+type Query interface {
+	Request() QueryRequest
+	Response() QueryResponse
+	SetStopChannel(misc.StopChannel)
 }
 
 type QueryChannel chan Query
