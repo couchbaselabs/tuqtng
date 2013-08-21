@@ -1,6 +1,6 @@
 [
     {
-        "statements": "SELECT name FROM contacts WHERE ANY child.age > 14 AND child.gender = \"m\" OVER children AS child",
+        "statements": "SELECT name FROM contacts WHERE ANY child.age > 14 AND child.gender = \"m\" OVER child IN children END",
         "results": [
           {
             "name": "dave"
@@ -11,7 +11,7 @@
         ]
     },
     {
-        "statements": "SELECT name FROM contacts WHERE ANY child.age > 14 OVER children AS child",
+        "statements": "SELECT name FROM contacts WHERE ANY child.age > 14 OVER child IN children END",
         "results": [
           {
             "name": "dave"
@@ -25,7 +25,7 @@
         ]
     },
     {
-        "statements": "SELECT name FROM contacts WHERE ANY child.age > 14 OVER children AS child AND ANY hobby = \"golf\" OVER hobbies as hobby",
+        "statements": "SELECT name FROM contacts WHERE ANY child.age > 14 OVER child IN children END AND ANY hobby = \"golf\" OVER hobby IN hobbies END",
         "results": [
           {
             "name": "dave"

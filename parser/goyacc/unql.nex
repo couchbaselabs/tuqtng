@@ -34,6 +34,7 @@
 /[sS][eE][lL][eE][cC][tT]/
                   { logDebugTokens("SELECT"); return SELECT }
 /[aA][sS]/        { logDebugTokens("AS"); return AS }
+/[iI][nN]/        { logDebugTokens("IN"); return IN }
 /[fF][rR][oO][mM]/
                   { logDebugTokens("FROM"); return FROM }
 /[wW][hH][eE][rR][eE]/

@@ -148,7 +148,7 @@
     },
 
     {
-        "statements": "SELECT title FROM catalog WHERE (ANY genre = \"Crime\" OVER details.genre AS genre AND ANY tags = \"english\" OVER tags AS tags) AND  pricing.pct_savings > 10.55",
+        "statements": "SELECT title FROM catalog WHERE (ANY genre = \"Crime\" OVER genre IN details.genre END AND ANY tags = \"english\" OVER tags IN tags END) AND  pricing.pct_savings > 10.55",
         "results": [
         {
             "title": "Sherlock: Series 1"
@@ -157,7 +157,7 @@
     },
 
    {
-        "statements": "SELECT title FROM catalog WHERE (ALL length(genre) > 5 OVER details.genre AS genre)",
+        "statements": "SELECT title FROM catalog WHERE (ALL length(genre) > 5 OVER genre IN details.genre END)",
         "results": [
         {
             "title": "Inferno"
@@ -169,7 +169,7 @@
     },
 
     {
-        "statements": "SELECT title FROM catalog WHERE (ANY genre = \"Crime\" OVER details.genre AS genre AND ANY tags = \"english\" OVER tags AS tags) AND  NOT (pricing.pct_savings < 15)",
+        "statements": "SELECT title FROM catalog WHERE (ANY genre = \"Crime\" OVER genre IN details.genre END AND ANY tags = \"english\" OVER tags IN tags END) AND  NOT (pricing.pct_savings < 15)",
         "results": [
         {
             "title": "Sherlock: Series 1"

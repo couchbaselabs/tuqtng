@@ -33,7 +33,7 @@ f float64}
 %token LIKE IS VALUED MISSING
 %token DOT
 %token CASE WHEN THEN ELSE END
-%token ANY ALL OVER FIRST ARRAY
+%token ANY ALL OVER FIRST ARRAY IN
 %left OR
 %left AND 
 %left DOT LBRACKET
@@ -698,19 +698,19 @@ CASE WHEN then_list else_expr END {
 	parsingStack.Push(cwtee)
 }
 |
-ANY expr OVER path AS IDENTIFIER {
-	logDebugGrammar("ANY OVER AS IDENTIFIER")
-	path := parsingStack.Pop().(ast.Expression)
+ANY expr OVER IDENTIFIER IN expr END {
+	logDebugGrammar("ANY OVER")
+	sub := parsingStack.Pop().(ast.Expression)
 	condition := parsingStack.Pop().(ast.Expression)
-	collectionAny := ast.NewCollectionAnyOperator(condition, path, $6.s)
+	collectionAny := ast.NewCollectionAnyOperator(condition, sub, $4.s)
 	parsingStack.Push(collectionAny)
 }
 |
-ALL expr OVER path AS IDENTIFIER {
-	logDebugGrammar("ALL OVER AS IDENTIFIER")
-	path := parsingStack.Pop().(ast.Expression)
+ALL expr OVER IDENTIFIER IN expr END {
+	logDebugGrammar("ALL OVER")
+	sub := parsingStack.Pop().(ast.Expression)
 	condition := parsingStack.Pop().(ast.Expression)
-	collectionAny := ast.NewCollectionAllOperator(condition, path, $6.s)
+	collectionAny := ast.NewCollectionAllOperator(condition, sub, $4.s)
 	parsingStack.Push(collectionAny)
 }
 |
