@@ -1,0 +1,86 @@
+[
+    {
+        "statements": "SELECT ARRAY child OVER child IN children END AS all_children FROM contacts",
+        "results": [
+        {
+            "all_children": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "aiden"
+                },
+                {
+                    "age": 2,
+                    "gender": "f",
+                    "name": "bill"
+                }
+            ]
+        },
+        {
+            "all_children": [
+                {
+                    "age": 17,
+                    "gender": "f",
+                    "name": "xena"
+                },
+                {
+                    "age": 2,
+                    "gender": "m",
+                    "name": "yuri"
+                }
+            ]
+        },
+        {},
+        {},
+        {
+            "all_children": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "abama"
+                },
+                {
+                    "age": 21,
+                    "gender": "m",
+                    "name": "bebama"
+                }
+            ]
+        },
+        {}
+        ]
+    },
+    {
+        "statements": "SELECT ARRAY child OVER child IN children WHEN child.age > 14 AND child.gender = \"m\" END AS all_males_over_14 FROM contacts",
+        "results": [
+        {
+            "all_males_over_14": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "aiden"
+                }
+            ]
+        },
+        {
+            "all_males_over_14": []
+        },
+        {},
+        {},
+        {
+            "all_males_over_14": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "abama"
+                },
+                {
+                    "age": 21,
+                    "gender": "m",
+                    "name": "bebama"
+                }
+            ]
+        },
+        {}
+        ]
+    }
+]

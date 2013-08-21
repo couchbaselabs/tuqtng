@@ -714,28 +714,37 @@ ALL expr OVER IDENTIFIER IN expr END {
 	parsingStack.Push(collectionAny)
 }
 |
-FIRST expr OVER path AS IDENTIFIER {
-	logDebugGrammar("FIRST OVER AS IDENTIFIER")
-	path := parsingStack.Pop().(ast.Expression)
+FIRST expr OVER IDENTIFIER IN expr WHEN expr END {
+	logDebugGrammar("FIRST OVER")
 	condition := parsingStack.Pop().(ast.Expression)
-	collectionFirst := ast.NewCollectionFirstOperator(condition, path, $6.s)
+	sub := parsingStack.Pop().(ast.Expression)
+	output := parsingStack.Pop().(ast.Expression)
+	collectionFirst := ast.NewCollectionFirstOperator(condition, sub, $4.s, output)
 	parsingStack.Push(collectionFirst)
 }
 |
-ARRAY expr WHEN expr OVER path AS IDENTIFIER {
-	logDebugGrammar("ARRAY WHEN OVER AS IDENTIFIER")
-	path := parsingStack.Pop().(ast.Expression)
-	condition := parsingStack.Pop().(ast.Expression)
+FIRST expr OVER IDENTIFIER IN expr END {
+	logDebugGrammar("FIRST OVER")
+	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
-	collectionArray := ast.NewCollectionArrayOperator(condition, path, $8.s, output)
+	collectionFirst := ast.NewCollectionFirstOperator(nil, sub, $4.s, output)
+	parsingStack.Push(collectionFirst)
+}
+|
+ARRAY expr OVER IDENTIFIER IN expr WHEN expr END {
+	logDebugGrammar("ARRAY OVER WHEN")
+	condition := parsingStack.Pop().(ast.Expression)
+	sub := parsingStack.Pop().(ast.Expression)
+	output := parsingStack.Pop().(ast.Expression)
+	collectionArray := ast.NewCollectionArrayOperator(condition, sub, $4.s, output)
 	parsingStack.Push(collectionArray)
 }
 |
-ARRAY expr OVER path AS IDENTIFIER {
-	logDebugGrammar("ARRAY OVER AS IDENTIFIER")
-	path := parsingStack.Pop().(ast.Expression)
+ARRAY expr OVER IDENTIFIER IN expr END {
+	logDebugGrammar("ARRAY OVER")
+	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
-	collectionArray := ast.NewCollectionArrayOperator(nil, path, $6.s, output)
+	collectionArray := ast.NewCollectionArrayOperator(nil, sub, $4.s, output)
 	parsingStack.Push(collectionArray)
 }
 |

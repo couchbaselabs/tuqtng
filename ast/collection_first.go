@@ -18,7 +18,7 @@ type CollectionFirstOperator struct {
 	CollectionOperator
 }
 
-func NewCollectionFirstOperator(condition Expression, over Expression, as string) *CollectionFirstOperator {
+func NewCollectionFirstOperator(condition Expression, over Expression, as string, output Expression) *CollectionFirstOperator {
 	return &CollectionFirstOperator{
 		"first",
 		CollectionOperator{
@@ -26,6 +26,7 @@ func NewCollectionFirstOperator(condition Expression, over Expression, as string
 			Condition: condition,
 			Over:      over,
 			As:        as,
+			Output:    output,
 		},
 	}
 }
@@ -57,23 +58,31 @@ func (this *CollectionFirstOperator) Evaluate(item *dparval.Value) (*dparval.Val
 
 				// create a new context with this object named as the alias
 				innerContext := dparval.NewValue(map[string]interface{}{this.As: inner})
-				// now evaluate the condition in this new context
-				innerResult, err := this.Condition.Evaluate(innerContext)
-				if err != nil {
-					switch err := err.(type) {
-					case *dparval.Undefined:
-						// this is not true, keep trying
-						continue
-					default:
-						// any other error should be returned to caller
-						return nil, err
+				if this.Condition != nil {
+					// now evaluate the condition in this new context
+					innerResult, err := this.Condition.Evaluate(innerContext)
+					if err != nil {
+						switch err := err.(type) {
+						case *dparval.Undefined:
+							// this is not true, keep trying
+							continue
+						default:
+							// any other error should be returned to caller
+							return nil, err
+						}
 					}
-				}
-				innerResultVal := innerResult.Value()
-				// check to see if this value is true
-				innerBoolResult := ValueInBooleanContext(innerResultVal)
-				if innerBoolResult == true {
-					return inner, nil
+					innerResultVal := innerResult.Value()
+					// check to see if this value is true
+					innerBoolResult := ValueInBooleanContext(innerResultVal)
+					if innerBoolResult == true {
+						// now we have to evaluate the output expression
+						outputResult, err := this.Output.Evaluate(innerContext)
+						return outputResult, err
+					}
+				} else {
+					// now we have to evaluate the output expression
+					outputResult, err := this.Output.Evaluate(innerContext)
+					return outputResult, err
 				}
 			}
 		}

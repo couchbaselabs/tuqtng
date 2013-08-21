@@ -1,0 +1,54 @@
+[
+    {
+        "statements": "SELECT FIRST child OVER child IN children END AS first_child FROM contacts",
+        "results": [
+        {
+            "first_child": {
+                "age": 17,
+                "gender": "m",
+                "name": "aiden"
+            }
+        },
+        {
+            "first_child": {
+                "age": 17,
+                "gender": "f",
+                "name": "xena"
+            }
+        },
+        {},
+        {},
+        {
+            "first_child": {
+                "age": 17,
+                "gender": "m",
+                "name": "abama"
+            }
+        },
+        {}
+        ]
+    },
+    {
+        "statements": "SELECT FIRST child OVER child IN children WHEN child.age > 14 AND child.gender = \"m\" END AS first_male_over_14 FROM contacts",
+        "results": [
+        {
+            "first_male_over_14": {
+                "age": 17,
+                "gender": "m",
+                "name": "aiden"
+            }
+        },
+        {},
+        {},
+        {},
+        {
+            "first_male_over_14": {
+                "age": 17,
+                "gender": "m",
+                "name": "abama"
+            }
+        },
+        {}
+        ]
+    }
+]
