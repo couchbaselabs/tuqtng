@@ -36,27 +36,19 @@ func Site(s string) (catalog.Site, error) {
 	return couchbase.NewSite(s)
 }
 
-func Server(version, couchbaseSite, poolName string,
+func Server(version, siteName, defaultPoolName string,
 	queryChannel network.QueryChannel) error {
-	site, err := Site(couchbaseSite)
+	site, err := Site(siteName)
 	if err != nil {
-		return fmt.Errorf("Unable to access site %s, err: %v", couchbaseSite, err)
-	}
-
-	var pool catalog.Pool
-	if site != nil {
-		pool, err = site.Pool(poolName)
-		if err != nil {
-			return fmt.Errorf("Unable to access pool %v in the site: %v", poolName, err)
-		}
+		return fmt.Errorf("Unable to access site %s, err: %v", site, err)
 	}
 
 	// create a StaticQueryPipeline we use to process queries
-	queryPipeline := static.NewStaticPipeline(pool)
+	queryPipeline := static.NewStaticPipeline(site, defaultPoolName)
 
 	clog.Log("tuqtng started...")
 	clog.Log("version: %s", version)
-	clog.Log("site: %s", couchbaseSite)
+	clog.Log("site: %s", siteName)
 
 	// dispatch each query that comes in
 	for query := range queryChannel {

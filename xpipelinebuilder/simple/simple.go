@@ -17,12 +17,14 @@ import (
 )
 
 type SimpleExecutablePipelineBuilder struct {
-	pool catalog.Pool
+	site        catalog.Site
+	defaultPool string
 }
 
-func NewSimpleExecutablePipelineBuilder(pool catalog.Pool) *SimpleExecutablePipelineBuilder {
+func NewSimpleExecutablePipelineBuilder(site catalog.Site, defaultPool string) *SimpleExecutablePipelineBuilder {
 	return &SimpleExecutablePipelineBuilder{
-		pool: pool,
+		site:        site,
+		defaultPool: defaultPool,
 	}
 }
 
@@ -36,7 +38,11 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 		var currentOperator xpipeline.Operator = nil
 		switch currentElement := currentElement.(type) {
 		case *plan.Scan:
-			bucket, err := this.pool.Bucket(currentElement.Bucket)
+			pool, err := this.site.Pool(currentElement.Pool)
+			if err != nil {
+				return nil, err
+			}
+			bucket, err := pool.Bucket(currentElement.Bucket)
 			if err != nil {
 				return nil, err
 			}
@@ -48,7 +54,11 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 		case *plan.ExpressionEvaluator:
 			currentOperator = xpipeline.NewExpressionEvaluatorSource()
 		case *plan.Fetch:
-			bucket, err := this.pool.Bucket(currentElement.Bucket)
+			pool, err := this.site.Pool(currentElement.Pool)
+			if err != nil {
+				return nil, err
+			}
+			bucket, err := pool.Bucket(currentElement.Bucket)
 			if err != nil {
 				return nil, err
 			}

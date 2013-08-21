@@ -22,12 +22,14 @@ import (
 )
 
 type SimplePlanner struct {
-	pool catalog.Pool
+	site        catalog.Site
+	defaultPool string
 }
 
-func NewSimplePlanner(pool catalog.Pool) *SimplePlanner {
+func NewSimplePlanner(site catalog.Site, defaultPool string) *SimplePlanner {
 	return &SimplePlanner{
-		pool: pool,
+		site:        site,
+		defaultPool: defaultPool,
 	}
 }
 
@@ -48,47 +50,53 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 		lastStep = plan.NewExpressionEvaluator()
 
 	} else {
+		// get the pool
+		poolName := from.Pool
+		if poolName == "" {
+			poolName = this.defaultPool
+		}
 
-		// see if the bucket exists
-		if this.pool != nil {
-			bucket, err := this.pool.Bucket(from.Bucket)
-			if err != nil {
-				ec <- query.NewBucketDoesNotExist(from.Bucket)
-				return
-			}
-
-			// find all docs scanner
-			scanners, err := bucket.Scanners()
-			if err != nil {
-				ec <- query.NewError(err, fmt.Sprintf("No usable scanner found for bucket %v", from.Bucket))
-				return
-			}
-
-			foundUsableScanner := false
-			for _, scanner := range scanners {
-				switch scanner.(type) {
-				case catalog.FullScanner:
-					lastStep = plan.NewScan(bucket.Name(), scanner.Name())
-					lastStep = plan.NewFetch(lastStep, bucket.Name(), from.Projection, from.As)
-					nextFrom := from.Over
-					for nextFrom != nil {
-						// add document joins
-						lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
-						nextFrom = nextFrom.Over
-					}
-					foundUsableScanner = true
-					break
-				}
-			}
-
-			if !foundUsableScanner {
-				ec <- query.NewError(nil, fmt.Sprintf("No usable scanner found for bucket %v", from.Bucket))
-				return
-			}
-		} else {
-			ec <- query.NewPoolDoesNotExist(this.pool.Name())
+		pool, err := this.site.Pool(poolName)
+		if err != nil {
+			ec <- query.NewPoolDoesNotExist(poolName)
 			return
 		}
+
+		bucket, err := pool.Bucket(from.Bucket)
+		if err != nil {
+			ec <- query.NewBucketDoesNotExist(from.Bucket)
+			return
+		}
+
+		// find all docs scanner
+		scanners, err := bucket.Scanners()
+		if err != nil {
+			ec <- query.NewError(err, fmt.Sprintf("No usable scanner found for bucket %v", from.Bucket))
+			return
+		}
+
+		foundUsableScanner := false
+		for _, scanner := range scanners {
+			switch scanner.(type) {
+			case catalog.FullScanner:
+				lastStep = plan.NewScan(pool.Name(), bucket.Name(), scanner.Name())
+				lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
+				nextFrom := from.Over
+				for nextFrom != nil {
+					// add document joins
+					lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+					nextFrom = nextFrom.Over
+				}
+				foundUsableScanner = true
+				break
+			}
+		}
+
+		if !foundUsableScanner {
+			ec <- query.NewError(nil, fmt.Sprintf("No usable scanner found for bucket %v", from.Bucket))
+			return
+		}
+
 	}
 
 	if stmt.GetWhere() != nil {

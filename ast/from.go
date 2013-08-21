@@ -14,6 +14,7 @@ import (
 )
 
 type From struct {
+	Pool       string
 	Bucket     string
 	Projection Expression
 	As         string

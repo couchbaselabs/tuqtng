@@ -122,6 +122,10 @@ var validQueries = []string{
 	`CREATE INDEX abv_idx ON beer-sample(abv, ibu) USING VIEW`,
 	`CREATE INDEX abv_idx ON beer-sample(abv, ibu) USING magic`,
 	`SELECT ARRAY child.name WHEN child.age > 20 OVER contacts.children AS child FROM contacts`,
+	`SELECT * FROM :pool.bucket`,
+	`SELECT * FROM :pool.bucket.prop`,
+	`SELECT * FROM :pool.bucket[3]`,
+	`SELECT * FROM :pool.bucket.prop[4]`,
 }
 
 var invalidQueries = []string{
@@ -196,6 +200,17 @@ func TestParserASTOutput(t *testing.T) {
 				},
 				Distinct: false,
 				From:     &ast.From{Projection: ast.NewProperty("test")},
+				Where:    ast.NewLiteralBool(true),
+				Limit:    -1,
+			},
+		},
+		{"SELECT * FROM :pool.test WHERE true",
+			&ast.SelectStatement{
+				Select: ast.ResultExpressionList{
+					ast.NewStarResultExpression(),
+				},
+				Distinct: false,
+				From:     &ast.From{Pool: "pool", Projection: ast.NewProperty("test")},
 				Where:    ast.NewLiteralBool(true),
 				Limit:    -1,
 			},

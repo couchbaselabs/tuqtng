@@ -261,6 +261,7 @@ expr DOT MULT {
 	result_expr := ast.NewDotStarResultExpression(expr_part)
 	parsingStack.Push(result_expr)
 }
+;
 
 select_from:
 /* empty */ {
@@ -277,6 +278,19 @@ FROM data_source_over {
 		logDebugGrammar("This statement does not support WHERE")
 	}
 }
+|
+FROM COLON IDENTIFIER DOT data_source_over {
+	logDebugGrammar("SELECT FROM - DATASOURCE")
+	from := parsingStack.Pop().(*ast.From)
+	from.Pool = $3.s
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.From = from
+	default:
+		logDebugGrammar("This statement does not support WHERE")
+	}
+}
+;
 
 select_from_required:
 FROM data_source_over {
@@ -289,6 +303,7 @@ FROM data_source_over {
 		logDebugGrammar("This statement does not support WHERE")
 	}
 }
+;
 
 data_source_over:
 data_source {

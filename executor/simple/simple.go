@@ -24,13 +24,13 @@ import (
 
 type SimpleExecutor struct {
 	xpipelinebuilder xpipelinebuilder.ExecutablePipelineBuilder
-	pool             catalog.Pool
+	site             catalog.Site
 }
 
-func NewSimpleExecutor(pool catalog.Pool) *SimpleExecutor {
+func NewSimpleExecutor(site catalog.Site, defaultPool string) *SimpleExecutor {
 	return &SimpleExecutor{
-		xpipelinebuilder: simpleBuilder.NewSimpleExecutablePipelineBuilder(pool),
-		pool:             pool,
+		xpipelinebuilder: simpleBuilder.NewSimpleExecutablePipelineBuilder(site, defaultPool),
+		site:             site,
 	}
 }
 

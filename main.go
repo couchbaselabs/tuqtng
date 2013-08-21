@@ -27,7 +27,7 @@ var VERSION = "0.0.0" // Build-time overriddable.
 
 var addr = flag.String("addr", ":8093", "HTTP listen address")
 var couchbaseSite = flag.String("couchbase", "", "Couchbase Cluster Address (http://...) or dir:PATH")
-var poolName = flag.String("pool", "default", "Pool")
+var defaultPoolName = flag.String("pool", "default", "Default Pool")
 var logKeys = flag.String("log", "", "Log keywords, comma separated")
 var devMode = flag.Bool("dev", false, "Developer Mode")
 
@@ -50,7 +50,7 @@ func main() {
 	httpEndpoint := http.NewHttpEndpoint(*addr)
 	httpEndpoint.SendQueriesTo(queryChannel)
 
-	err := server.Server(VERSION, *couchbaseSite, *poolName, queryChannel)
+	err := server.Server(VERSION, *couchbaseSite, *defaultPoolName, queryChannel)
 	if err != nil {
 		clog.Fatalf("Unable to run server, err: %v", err)
 	}

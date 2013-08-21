@@ -44,11 +44,13 @@ type Scan struct {
 	Type    string `json:"type"`
 	Scanner string `json:"scanner"`
 	Bucket  string `json:"bucket"`
+	Pool    string `json:"pool"`
 }
 
-func NewScan(bucket string, scanner string) *Scan {
+func NewScan(pool string, bucket string, scanner string) *Scan {
 	return &Scan{
 		Type:    "scan",
+		Pool:    pool,
 		Bucket:  bucket,
 		Scanner: scanner,
 	}
@@ -62,14 +64,16 @@ type Fetch struct {
 	Type       string         `json:"type"`
 	Input      PlanElement    `json:"input"`
 	Bucket     string         `json:"bucket"`
+	Pool       string         `json:"pool"`
 	Projection ast.Expression `json:"projection"`
 	As         string         `json:"as"`
 }
 
-func NewFetch(input PlanElement, bucket string, projection ast.Expression, as string) *Fetch {
+func NewFetch(input PlanElement, pool string, bucket string, projection ast.Expression, as string) *Fetch {
 	return &Fetch{
 		Type:       "fetch",
 		Input:      input,
+		Pool:       pool,
 		Bucket:     bucket,
 		Projection: projection,
 		As:         as,

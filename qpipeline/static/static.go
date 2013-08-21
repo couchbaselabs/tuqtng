@@ -32,22 +32,24 @@ import (
 )
 
 type StaticPipeline struct {
-	pool      catalog.Pool
-	parser    parser.Parser
-	planner   planner.Planner
-	optimizer optimizer.Optimizer
-	executor  executor.Executor
-	explainer executor.Executor
+	site            catalog.Site
+	defaultPoolName string
+	parser          parser.Parser
+	planner         planner.Planner
+	optimizer       optimizer.Optimizer
+	executor        executor.Executor
+	explainer       executor.Executor
 }
 
-func NewStaticPipeline(pool catalog.Pool) *StaticPipeline {
+func NewStaticPipeline(site catalog.Site, defaultPoolName string) *StaticPipeline {
 	return &StaticPipeline{
-		pool:      pool,
-		parser:    yaccParser.NewUnqlParser(),
-		planner:   simplePlanner.NewSimplePlanner(pool),
-		optimizer: simpleOptimizer.NewSimpleOptimizer(),
-		executor:  simpleExecutor.NewSimpleExecutor(pool),
-		explainer: explainerExecutor.NewExplainerExecutor(),
+		site:            site,
+		defaultPoolName: defaultPoolName,
+		parser:          yaccParser.NewUnqlParser(),
+		planner:         simplePlanner.NewSimplePlanner(site, defaultPoolName),
+		optimizer:       simpleOptimizer.NewSimpleOptimizer(),
+		executor:        simpleExecutor.NewSimpleExecutor(site, defaultPoolName),
+		explainer:       explainerExecutor.NewExplainerExecutor(),
 	}
 }
 
