@@ -21,14 +21,18 @@ var duplicateTestData = dparval.ValueCollection{}
 func init() {
 	doc := dparval.NewValue(map[string]interface{}{
 		"name": "mike",
+		"age":  27.0,
 	})
 	doc.SetAttachment("meta", map[string]interface{}{"id": "1"})
+	doc.SetAttachment("projection", dparval.NewValue(map[string]interface{}{"name": "mike"}))
 	duplicateTestData = append(duplicateTestData, doc)
 
 	doc = dparval.NewValue(map[string]interface{}{
 		"name": "mike",
+		"age":  31.0,
 	})
 	doc.SetAttachment("meta", map[string]interface{}{"id": "1"})
+	doc.SetAttachment("projection", dparval.NewValue(map[string]interface{}{"name": "mike"}))
 	duplicateTestData = append(duplicateTestData, doc)
 }
 

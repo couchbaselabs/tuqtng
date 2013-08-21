@@ -16,6 +16,8 @@ import (
 	"github.com/couchbaselabs/tuqtng/misc"
 )
 
+const DEBUG_DUP_CHANNEL = "OP_DUP"
+
 // this is a terrible implementation to remove duplicates
 // it stores the entire result set in memory
 // and compares each document against the remaining documents
@@ -60,14 +62,23 @@ func (this *EliminateDuplicates) afterItems() {
 			if pos < len(this.buffer) {
 				// look to see if the exact same item appears later in the buffer
 				for nextpos, nextitem := range this.buffer[pos+1:] {
-					itemVal := item.Value()
-					nextItemVal := nextitem.Value()
-					comp := ast.CollateJSON(itemVal, nextItemVal)
-					if comp == 0 {
-						this.buffer[nextpos+1] = nil
+					itemProj, ok := item.GetAttachment("projection").(*dparval.Value)
+					if ok {
+						itemVal := itemProj.Value()
+						if nextitem != nil {
+							nextItemProj, ok := nextitem.GetAttachment("projection").(*dparval.Value)
+							if ok {
+								nextItemVal := nextItemProj.Value()
+								comp := ast.CollateJSON(itemVal, nextItemVal)
+								if comp == 0 {
+									this.buffer[pos+nextpos+1] = nil
+								}
+							}
+						}
 					}
 				}
 			}
+			clog.To(DEBUG_DUP_CHANNEL, "distinct: %v", item)
 			this.Base.SendItem(item)
 		}
 	}

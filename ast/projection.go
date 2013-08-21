@@ -23,6 +23,18 @@ func (this *DuplicateAlias) Error() string {
 
 type ResultExpressionList []*ResultExpression
 
+// return all the expressions in the projection as an ExpressionList
+// will leave out * and path.* expressions
+func (this ResultExpressionList) ExpressionList() ExpressionList {
+	rv := make(ExpressionList, 0)
+	for _, resultExpr := range this {
+		if !resultExpr.Star && resultExpr.Expr != nil {
+			rv = append(rv, resultExpr.Expr)
+		}
+	}
+	return rv
+}
+
 func (this ResultExpressionList) ContainsAggregateFunctionCall() bool {
 	for _, resultExpr := range this {
 		if resultExpr.Expr != nil {

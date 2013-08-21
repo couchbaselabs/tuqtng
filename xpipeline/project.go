@@ -17,6 +17,8 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
+const DEBUG_PROJECT_CHANNEL = "OP_PROJECT"
+
 type Project struct {
 	Base         *BaseOperator
 	Result       ast.ResultExpressionList
@@ -86,6 +88,8 @@ func (this *Project) processItem(item *dparval.Value) bool {
 
 	// store the projection as an attachment on the main item
 	item.SetAttachment("projection", projection)
+
+	clog.To(DEBUG_PROJECT_CHANNEL, "projecting: %v", item)
 
 	// write to the output
 	return this.Base.SendItem(item)

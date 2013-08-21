@@ -185,6 +185,15 @@ func (this *SelectStatement) VerifySemantics() error {
 		this.aggregateReferences = this.findAggregateFunctionReferences()
 	}
 
+	// if you combine DISTINCT with ORDER BY we have to do an additional validation
+	if this.Distinct && this.OrderBy != nil {
+		// every Order By expression MUST be equivalent to one in the projection
+		err := this.OrderBy.VerifyAllEquivalentToThisList(this.Select.ExpressionList())
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 

@@ -68,6 +68,19 @@ func (this SortExpressionList) VerifyAllAggregateFunctionsOrInThisList(groupBy E
 	return nil
 }
 
+func (this SortExpressionList) VerifyAllEquivalentToThisList(exprs ExpressionList) error {
+	for _, orderExpr := range this {
+		if orderExpr.Expr != nil {
+			fdc := NewExpressionEquivalenceChecker(exprs)
+			_, err := orderExpr.Expr.Accept(fdc)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 func (this SortExpressionList) findAggregateFunctionReferences() ExpressionList {
 	af := NewExpressionAggregateFinder()
 	for _, orderExpr := range this {
