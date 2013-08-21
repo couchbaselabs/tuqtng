@@ -275,19 +275,19 @@ FROM data_source_over {
 	case *ast.SelectStatement:
 		parsingStatement.From = from
 	default:
-		logDebugGrammar("This statement does not support WHERE")
+		logDebugGrammar("This statement does not support FROM")
 	}
 }
 |
 FROM COLON IDENTIFIER DOT data_source_over {
-	logDebugGrammar("SELECT FROM - DATASOURCE")
+	logDebugGrammar("SELECT FROM - DATASOURCE WITH POOL")
 	from := parsingStack.Pop().(*ast.From)
 	from.Pool = $3.s
 	switch parsingStatement := parsingStatement.(type) {
 	case *ast.SelectStatement:
 		parsingStatement.From = from
 	default:
-		logDebugGrammar("This statement does not support WHERE")
+		logDebugGrammar("This statement does not support FROM")
 	}
 }
 ;
@@ -300,7 +300,19 @@ FROM data_source_over {
 	case *ast.SelectStatement:
 		parsingStatement.From = from
 	default:
-		logDebugGrammar("This statement does not support WHERE")
+		logDebugGrammar("This statement does not support FROM")
+	}
+}
+|
+FROM COLON IDENTIFIER DOT data_source_over {
+	logDebugGrammar("SELECT FROM - DATASOURCE WITH POOL")
+	from := parsingStack.Pop().(*ast.From)
+	from.Pool = $3.s
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.From = from
+	default:
+		logDebugGrammar("This statement does not support FROM")
 	}
 }
 ;
