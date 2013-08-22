@@ -40,7 +40,7 @@ func Server(version, siteName, defaultPoolName string,
 	queryChannel network.QueryChannel) error {
 	site, err := Site(siteName)
 	if err != nil {
-		return fmt.Errorf("Unable to access site %s, err: %v", site, err)
+		return fmt.Errorf("Unable to access site %s, err: %v", siteName, err)
 	}
 
 	// create a StaticQueryPipeline we use to process queries
