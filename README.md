@@ -15,8 +15,7 @@
     $ cd $GOPATH/src/github.com/couchbaselabs
     $ git clone git@github.com:couchbaselabs/tuqtng.git
     $ cd tuqtng
-    $ go get code.google.com/p/go.exp/locale/collate
-    $ go get github.com/gorilla/mux
+    $ go get -d -v ./...
     $ go build
     $ ./tuqtng -couchbase http://localhost:8091
 
