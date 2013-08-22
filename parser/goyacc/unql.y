@@ -322,12 +322,27 @@ data_source {
 	logDebugGrammar("FROM DATASOURCE WITHOUT OVER")
 }
 |
-data_source OVER data_source_over {
+data_source over_source {
 	logDebugGrammar("FROM DATASOURCE WITH OVER")
 	rest := parsingStack.Pop().(*ast.From)
 	last := parsingStack.Pop().(*ast.From)
 	last.Over = rest
 	parsingStack.Push(last)
+}
+;
+
+over_source:
+OVER IDENTIFIER IN path {
+	logDebugGrammar("OVER IN")
+	proj := parsingStack.Pop().(ast.Expression)
+	parsingStack.Push(&ast.From{Projection: proj, As: $2.s})
+}
+|
+OVER IDENTIFIER IN path over_source {
+	logDebugGrammar("OVER IN nested")
+	rest := parsingStack.Pop().(*ast.From)
+	proj := parsingStack.Pop().(ast.Expression)
+	parsingStack.Push(&ast.From{Projection: proj, As: $2.s, Over:rest})
 }
 ;
 

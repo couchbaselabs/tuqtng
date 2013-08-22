@@ -106,11 +106,11 @@ var validQueries = []string{
 	"SELECT * FROM bucket WHERE ALL child.age > 25 OVER child IN `all`.my.children END",
 	`SELECT * FROM bucket WHERE ANY child.age > 25 OVER child IN children END AND age > 65 OR color = "blue"`,
 
+	// from clause
 	`SELECT * FROM bucket AS buck`,
-	`SELECT * FROM bucket AS buck OVER buck.addresses`,
-	`SELECT * FROM bucket AS buck OVER buck.addresses AS address`,
-	`SELECT * FROM bucket AS buck OVER buck.addresses AS address OVER address.lines`,
-	`SELECT * FROM bucket AS buck OVER buck.addresses AS address OVER address.lines AS line`,
+	`SELECT * FROM bucket AS buck OVER address IN buck.addresses`,
+	`SELECT * FROM bucket AS buck OVER address IN buck.addresses OVER line IN address.lines`,
+
 	`SELECT DISTINCT name from bucket`,
 	`SELECT UNIQUE name from bucket`,
 	`SELECT COUNT(DISTINCT name) FROM bucket`,

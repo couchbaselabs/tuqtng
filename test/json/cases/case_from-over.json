@@ -1,6 +1,6 @@
 [
     {
-        "statements": "SELECT * FROM contacts AS contact OVER contact.children AS child",
+        "statements": "SELECT * FROM contacts AS contact OVER child IN contact.children",
         "results": [
         {
             "child": {
@@ -166,7 +166,7 @@
     },
 
     {
-        "statements": "SELECT * FROM contacts AS contact OVER contact.children AS child WHERE child.name = \"aiden\"",
+        "statements": "SELECT * FROM contacts AS contact OVER child IN contact.children WHERE child.name = \"aiden\"",
         "results": [
         {
             "child": {
@@ -199,7 +199,7 @@
     },
 
     {
-        "statements": "SELECT child FROM contacts AS contact OVER contact.children AS child WHERE child.name = \"aiden\"",
+        "statements": "SELECT child FROM contacts AS contact OVER child IN contact.children WHERE child.name = \"aiden\"",
         "results": [
         {
             "child": {
@@ -212,7 +212,7 @@
     },
 
     {
-        "statements": "SELECT contact FROM contacts AS contact OVER contact.children AS child WHERE child.name = \"aiden\"",
+        "statements": "SELECT contact FROM contacts AS contact OVER child IN contact.children WHERE child.name = \"aiden\"",
         "results": [
         {
             "contact": {
@@ -240,7 +240,7 @@
     },
 
     {
-        "statements": "SELECT contact.* FROM contacts AS contact OVER contact.children AS child WHERE child.name = \"aiden\"",
+        "statements": "SELECT contact.* FROM contacts AS contact OVER child IN contact.children WHERE child.name = \"aiden\"",
         "results": [
         {
                 "children": [

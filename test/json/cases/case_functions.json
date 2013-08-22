@@ -231,12 +231,12 @@
     },
 
     {
-        "statements": "SELECT  META().id FROM contacts AS contact OVER contact.children AS child",
+        "statements": "SELECT  META().id FROM contacts AS contact OVER child IN contact.children",
         "error": "the META() function requires exactly 1 argument"
     },
 
     {
-        "statements": "SELECT  META(contact).id FROM contacts AS contact OVER contact.children AS child",
+        "statements": "SELECT  META(contact).id FROM contacts AS contact OVER child IN contact.children",
         "results": [
         {
             "id": "dave"
