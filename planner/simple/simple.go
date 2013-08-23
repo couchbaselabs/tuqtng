@@ -130,6 +130,10 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 		lastStep = plan.NewLimit(lastStep, stmt.GetLimit())
 	}
 
+	if stmt.ExplainOnly {
+		lastStep = plan.NewExplain(lastStep)
+	}
+
 	pc <- plan.Plan{Root: lastStep}
 }
 

@@ -24,7 +24,6 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 
 	// implementations
-	explainerExecutor "github.com/couchbaselabs/tuqtng/executor/explainer"
 	simpleExecutor "github.com/couchbaselabs/tuqtng/executor/simple"
 	simpleOptimizer "github.com/couchbaselabs/tuqtng/optimizer/simple"
 	yaccParser "github.com/couchbaselabs/tuqtng/parser/goyacc"
@@ -38,7 +37,6 @@ type StaticPipeline struct {
 	planner         planner.Planner
 	optimizer       optimizer.Optimizer
 	executor        executor.Executor
-	explainer       executor.Executor
 }
 
 func NewStaticPipeline(site catalog.Site, defaultPoolName string) *StaticPipeline {
@@ -49,7 +47,6 @@ func NewStaticPipeline(site catalog.Site, defaultPoolName string) *StaticPipelin
 		planner:         simplePlanner.NewSimplePlanner(site, defaultPoolName),
 		optimizer:       simpleOptimizer.NewSimpleOptimizer(),
 		executor:        simpleExecutor.NewSimpleExecutor(site, defaultPoolName),
-		explainer:       explainerExecutor.NewExplainerExecutor(),
 	}
 }
 
@@ -84,12 +81,7 @@ func (this *StaticPipeline) DispatchQuery(q network.Query) {
 			return
 		}
 
-		if ast.IsExplainOnly() {
-			this.explainer.Execute(optimalPlan, q)
-
-		} else {
-			this.executor.Execute(optimalPlan, q)
-		}
+		this.executor.Execute(optimalPlan, q)
 
 	default:
 		clog.Error(fmt.Errorf("Unsupported Request Type %T", request))

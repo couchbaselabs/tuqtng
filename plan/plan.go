@@ -40,6 +40,22 @@ func (this *ExpressionEvaluator) Sources() []PlanElement {
 	return []PlanElement{}
 }
 
+type Explain struct {
+	Type  string      `json:"type"`
+	Input PlanElement `json:"input"`
+}
+
+func NewExplain(input PlanElement) *Explain {
+	return &Explain{
+		Type:  "explain",
+		Input: input,
+	}
+}
+
+func (this *Explain) Sources() []PlanElement {
+	return []PlanElement{}
+}
+
 type Scan struct {
 	Type    string `json:"type"`
 	Scanner string `json:"scanner"`

@@ -85,12 +85,12 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 
 func (this *SimpleExecutor) processItem(q network.Query, item *dparval.Value) bool {
 	projection := item.GetAttachment("projection")
-	projectionValue, ok := projection.(*dparval.Value)
-	if !ok {
-		q.Response().SendError(query.NewError(nil, "Expected projection to be type Value"))
-		return false
+	switch projection := projection.(type) {
+	case *dparval.Value:
+		result := projection.Value()
+		q.Response().SendResult(result)
+	default:
+		q.Response().SendResult(projection)
 	}
-	result := projectionValue.Value()
-	q.Response().SendResult(result)
 	return true
 }
