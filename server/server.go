@@ -19,6 +19,7 @@ import (
 	"github.com/couchbaselabs/tuqtng/catalog/couchbase"
 	"github.com/couchbaselabs/tuqtng/catalog/file"
 	"github.com/couchbaselabs/tuqtng/catalog/mock"
+	"github.com/couchbaselabs/tuqtng/catalog/system"
 	"github.com/couchbaselabs/tuqtng/compiler"
 	"github.com/couchbaselabs/tuqtng/executor"
 	"github.com/couchbaselabs/tuqtng/network"
@@ -47,9 +48,14 @@ func Server(version, siteName, defaultPoolName string,
 		return fmt.Errorf("Unable to access site %s, err: %v", siteName, err)
 	}
 
+	systemProxySite, err := system.NewSite(site)
+	if err != nil {
+		return fmt.Errorf("Unable to instantiate system catalog: %v", err)
+	}
+
 	// create a StaticQueryPipeline we use to process queries
-	comp := standardCompiler.NewCompiler(site, defaultPoolName)
-	exec := interpretedExecutor.NewExecutor(site, defaultPoolName)
+	comp := standardCompiler.NewCompiler(systemProxySite, defaultPoolName)
+	exec := interpretedExecutor.NewExecutor(systemProxySite, defaultPoolName)
 
 	clog.Log("tuqtng started...")
 	clog.Log("version: %s", version)
