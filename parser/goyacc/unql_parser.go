@@ -29,6 +29,11 @@ func NewUnqlParser() *UnqlParser {
 	return &UnqlParser{}
 }
 
+func NewUnqlParserWithDebug(debug int) *UnqlParser {
+	yyDebug = debug
+	return &UnqlParser{}
+}
+
 func (u *UnqlParser) Parse(input string) (returnStatement ast.Statement, err error) {
 	u.mutex.Lock()
 	defer u.mutex.Unlock()
