@@ -7,12 +7,13 @@
 //  either express or implied. See the License for the specific language governing permissions
 //  and limitations under the License.
 
-package qpipeline
+package compiler
 
 import (
-	"github.com/couchbaselabs/tuqtng/network"
+	"github.com/couchbaselabs/tuqtng/plan"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
-type QueryPipeline interface {
-	DispatchQuery(query network.Query)
+type Compiler interface {
+	Compile(queryString string) (*plan.Plan, query.Error)
 }

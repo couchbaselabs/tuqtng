@@ -13,14 +13,18 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/couchbaselabs/clog"
+
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/catalog/couchbase"
 	"github.com/couchbaselabs/tuqtng/catalog/file"
 	"github.com/couchbaselabs/tuqtng/catalog/mock"
+	"github.com/couchbaselabs/tuqtng/compiler"
+	"github.com/couchbaselabs/tuqtng/executor"
 	"github.com/couchbaselabs/tuqtng/network"
-	"github.com/couchbaselabs/tuqtng/qpipeline/static"
 
-	"github.com/couchbaselabs/clog"
+	standardCompiler "github.com/couchbaselabs/tuqtng/compiler/standard"
+	interpretedExecutor "github.com/couchbaselabs/tuqtng/executor/interpreted"
 )
 
 func Site(s string) (catalog.Site, error) {
@@ -44,7 +48,8 @@ func Server(version, siteName, defaultPoolName string,
 	}
 
 	// create a StaticQueryPipeline we use to process queries
-	queryPipeline := static.NewStaticPipeline(site, defaultPoolName)
+	comp := standardCompiler.NewCompiler(site, defaultPoolName)
+	exec := interpretedExecutor.NewExecutor(site, defaultPoolName)
 
 	clog.Log("tuqtng started...")
 	clog.Log("version: %s", version)
@@ -52,8 +57,23 @@ func Server(version, siteName, defaultPoolName string,
 
 	// dispatch each query that comes in
 	for query := range queryChannel {
-		go queryPipeline.DispatchQuery(query)
+		go Dispatch(query, comp, exec)
 	}
 
 	return nil
+}
+
+func Dispatch(q network.Query, comp compiler.Compiler, exec executor.Executor) {
+	request := q.Request()
+	response := q.Response()
+
+	switch request := request.(type) {
+	case network.StringQueryRequest:
+		plan, err := comp.Compile(request.QueryString)
+		if err != nil {
+			response.SendError(err)
+			return
+		}
+		exec.Execute(plan, q)
+	}
 }
