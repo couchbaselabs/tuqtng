@@ -24,7 +24,7 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 
 	// implementations
-	simpleExecutor "github.com/couchbaselabs/tuqtng/executor/simple"
+	interpretedExecutor "github.com/couchbaselabs/tuqtng/executor/interpreted"
 	simpleOptimizer "github.com/couchbaselabs/tuqtng/optimizer/simple"
 	yaccParser "github.com/couchbaselabs/tuqtng/parser/goyacc"
 	simplePlanner "github.com/couchbaselabs/tuqtng/planner/simple"
@@ -46,7 +46,7 @@ func NewStaticPipeline(site catalog.Site, defaultPoolName string) *StaticPipelin
 		parser:          yaccParser.NewUnqlParser(),
 		planner:         simplePlanner.NewSimplePlanner(site, defaultPoolName),
 		optimizer:       simpleOptimizer.NewSimpleOptimizer(),
-		executor:        simpleExecutor.NewSimpleExecutor(site, defaultPoolName),
+		executor:        interpretedExecutor.NewExecutor(site, defaultPoolName),
 	}
 }
 

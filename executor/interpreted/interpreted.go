@@ -7,7 +7,7 @@
 //  either express or implied. See the License for the specific language governing permissions
 //  and limitations under the License.
 
-package simple
+package interpreted
 
 import (
 	"github.com/couchbaselabs/clog"
@@ -22,19 +22,19 @@ import (
 	simpleBuilder "github.com/couchbaselabs/tuqtng/xpipelinebuilder/simple"
 )
 
-type SimpleExecutor struct {
+type InterpretedExecutor struct {
 	xpipelinebuilder xpipelinebuilder.ExecutablePipelineBuilder
 	site             catalog.Site
 }
 
-func NewSimpleExecutor(site catalog.Site, defaultPool string) *SimpleExecutor {
-	return &SimpleExecutor{
+func NewExecutor(site catalog.Site, defaultPool string) *InterpretedExecutor {
+	return &InterpretedExecutor{
 		xpipelinebuilder: simpleBuilder.NewSimpleExecutablePipelineBuilder(site, defaultPool),
 		site:             site,
 	}
 }
 
-func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
+func (this *InterpretedExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 
 	clog.To(executor.CHANNEL, "simple executor started")
 
@@ -83,7 +83,7 @@ func (this *SimpleExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
 	clog.To(executor.CHANNEL, "simple executor finished")
 }
 
-func (this *SimpleExecutor) processItem(q network.Query, item *dparval.Value) bool {
+func (this *InterpretedExecutor) processItem(q network.Query, item *dparval.Value) bool {
 	projection := item.GetAttachment("projection")
 	switch projection := projection.(type) {
 	case *dparval.Value:
