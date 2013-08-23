@@ -23,9 +23,9 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/couchbaselabs/dparval"
 )
 
 // site is the root for the file-based Site.
@@ -275,10 +275,6 @@ func (fs *fullScanner) Name() string {
 }
 
 func (fs *fullScanner) ScanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
-	go fs.scanAll(ch, warnch, errch)
-}
-
-func (fs *fullScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)

@@ -236,10 +236,6 @@ func (vs *viewScanner) Name() string {
 }
 
 func (vs *viewScanner) ScanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
-	go vs.scanAll(ch, warnch, errch)
-}
-
-func (vs *viewScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)
@@ -285,7 +281,6 @@ func (vs *viewScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.Erro
 			}
 		}
 	}
-
 }
 
 func newViewScanner(b *bucket, ddoc string, view string) (*viewScanner, query.Error) {

@@ -10,6 +10,9 @@
 package couchbase
 
 import (
+	"fmt"
+	"runtime/debug"
+
 	"github.com/couchbaselabs/clog"
 	cb "github.com/couchbaselabs/go-couchbase"
 	"github.com/couchbaselabs/tuqtng/query"
@@ -22,6 +25,14 @@ func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *
 
 	defer close(result)
 	defer close(errs)
+
+	defer func() {
+		r := recover()
+		if r != nil {
+			clog.Error(fmt.Errorf("View Walking Panic: %v\n%s", r, debug.Stack()))
+			errs <- query.NewError(nil, "Panic In View Walking")
+		}
+	}()
 
 	options["limit"] = batchSize + 1
 

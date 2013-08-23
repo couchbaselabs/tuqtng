@@ -10,6 +10,10 @@
 package xpipeline
 
 import (
+	"fmt"
+	"runtime/debug"
+
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/query"
@@ -81,14 +85,12 @@ func (this *BaseOperator) SendOther(obj interface{}) bool {
 	return false
 }
 
-// func (this *BaseOperator) StopUpstream() {
-// 	close(this.stopChannel)
-// }
-
 func (this *BaseOperator) RunOperator(oper Operator, stopChannel misc.StopChannel) {
 	defer close(this.itemChannel)
 	defer close(this.supportChannel)
 	defer close(this.upstreamStopChannel)
+	// this MUST be here so that it runs before the channels are closed
+	defer this.RecoverPanic()
 
 	this.downstreamStopChannel = stopChannel
 
@@ -119,4 +121,12 @@ func (this *BaseOperator) RunOperator(oper Operator, stopChannel misc.StopChanne
 	}
 
 	oper.afterItems()
+}
+
+func (this *BaseOperator) RecoverPanic() {
+	r := recover()
+	if r != nil {
+		clog.Error(fmt.Errorf("Query Execution Panic: %v\n%s", r, debug.Stack()))
+		this.SendError(query.NewError(nil, "Panic In Exeuction Pipeline"))
+	}
 }

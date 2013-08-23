@@ -10,6 +10,9 @@
 package xpipeline
 
 import (
+	"fmt"
+	"runtime/debug"
+
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
@@ -41,10 +44,13 @@ func (this *Scan) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 }
 
 func (this *Scan) Run(stopChannel misc.StopChannel) {
-	this.downstreamStopChannel = stopChannel
-	clog.To(CHANNEL, "scan operator starting")
 	defer close(this.itemChannel)
 	defer close(this.supportChannel)
+	// this MUST be here so that it runs before the channels are closed
+	defer this.RecoverPanic()
+
+	this.downstreamStopChannel = stopChannel
+	clog.To(CHANNEL, "scan operator starting")
 
 	scannerItemChannel := make(dparval.ValueChannel)
 	scannerWarnChannel := make(query.ErrorChannel)
@@ -110,4 +116,12 @@ func (this *Scan) SendError(err query.Error) bool {
 		}
 	}
 	return false
+}
+
+func (this *Scan) RecoverPanic() {
+	r := recover()
+	if r != nil {
+		clog.Error(fmt.Errorf("Query Execution Panic: %v\n%s", r, debug.Stack()))
+		this.SendError(query.NewError(nil, "Panic In Exeuction Pipeline"))
+	}
 }
