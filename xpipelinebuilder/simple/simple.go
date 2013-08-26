@@ -38,27 +38,28 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 		var currentOperator xpipeline.Operator = nil
 		switch currentElement := currentElement.(type) {
 		case *plan.Scan:
-			pool, err := this.site.Pool(currentElement.Pool)
+			pool, err := this.site.PoolByName(currentElement.Pool)
 			if err != nil {
 				return nil, err
 			}
-			bucket, err := pool.Bucket(currentElement.Bucket)
+			bucket, err := pool.BucketByName(currentElement.Bucket)
 			if err != nil {
 				return nil, err
 			}
-			scanner, err := bucket.Scanner(currentElement.Scanner)
+			index, err := bucket.IndexByName(currentElement.ScanIndex)
 			if err != nil {
 				return nil, err
 			}
-			currentOperator = xpipeline.NewScan(bucket, scanner)
+			scanIndex := index.(catalog.ScanIndex) // FIXME: need static type safety
+			currentOperator = xpipeline.NewScan(bucket, scanIndex)
 		case *plan.ExpressionEvaluator:
 			currentOperator = xpipeline.NewExpressionEvaluatorSource()
 		case *plan.Fetch:
-			pool, err := this.site.Pool(currentElement.Pool)
+			pool, err := this.site.PoolByName(currentElement.Pool)
 			if err != nil {
 				return nil, err
 			}
-			bucket, err := pool.Bucket(currentElement.Bucket)
+			bucket, err := pool.BucketByName(currentElement.Bucket)
 			if err != nil {
 				return nil, err
 			}

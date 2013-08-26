@@ -12,6 +12,7 @@ package xpipeline
 import (
 	"testing"
 
+	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/catalog/mock"
 	"github.com/couchbaselabs/tuqtng/misc"
 )
@@ -22,20 +23,21 @@ func TestScan(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error creating mock site")
 	}
-	pool, err := mocksite.Pool("p0")
+	pool, err := mocksite.PoolByName("p0")
 	if err != nil {
 		t.Errorf("Error accessing pool p0")
 	}
-	bucket, err := pool.Bucket("b0")
+	bucket, err := pool.BucketByName("b0")
 	if err != nil {
 		t.Errorf("Error accessing bucket b0")
 	}
-	scanner, err := bucket.Scanner("all_docs")
+	index, err := bucket.IndexByName("all_docs")
 	if err != nil {
 		t.Errorf("Error accessing scanner all_docs")
 	}
 
-	scan := NewScan(bucket, scanner)
+	scanIndex := index.(catalog.ScanIndex)
+	scan := NewScan(bucket, scanIndex)
 
 	scanItemChannel, _ := scan.GetChannels()
 

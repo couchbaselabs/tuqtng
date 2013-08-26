@@ -56,30 +56,30 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 			poolName = this.defaultPool
 		}
 
-		pool, err := this.site.Pool(poolName)
+		pool, err := this.site.PoolByName(poolName)
 		if err != nil {
 			ec <- query.NewPoolDoesNotExist(poolName)
 			return
 		}
 
-		bucket, err := pool.Bucket(from.Bucket)
+		bucket, err := pool.BucketByName(from.Bucket)
 		if err != nil {
 			ec <- query.NewBucketDoesNotExist(from.Bucket)
 			return
 		}
 
-		// find all docs scanner
-		scanners, err := bucket.Scanners()
+		// find all docs index
+		indexes, err := bucket.Indexes()
 		if err != nil {
-			ec <- query.NewError(err, fmt.Sprintf("No usable scanner found for bucket %v", from.Bucket))
+			ec <- query.NewError(err, fmt.Sprintf("No usable index found for bucket %v", from.Bucket))
 			return
 		}
 
-		foundUsableScanner := false
-		for _, scanner := range scanners {
-			switch scanner.(type) {
-			case catalog.FullScanner:
-				lastStep = plan.NewScan(pool.Name(), bucket.Name(), scanner.Name())
+		foundUsableIndex := false
+		for _, index := range indexes {
+			switch index.(type) {
+			case catalog.PrimaryIndex:
+				lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name())
 				lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
 				nextFrom := from.Over
 				for nextFrom != nil {
@@ -87,13 +87,13 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 					lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
 					nextFrom = nextFrom.Over
 				}
-				foundUsableScanner = true
+				foundUsableIndex = true
 				break
 			}
 		}
 
-		if !foundUsableScanner {
-			ec <- query.NewError(nil, fmt.Sprintf("No usable scanner found for bucket %v", from.Bucket))
+		if !foundUsableIndex {
+			ec <- query.NewError(nil, fmt.Sprintf("No usable index found for bucket %v", from.Bucket))
 			return
 		}
 

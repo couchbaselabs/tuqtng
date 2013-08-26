@@ -14,12 +14,27 @@ import (
 
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/couchbaselabs/tuqtng/catalog"
 )
 
 func TestFile(t *testing.T) {
 	site, err := NewSite("../../test")
 	if err != nil {
 		t.Errorf("failed to create site: %v", err)
+	}
+
+	poolIds, err := site.PoolIds()
+	if err != nil {
+		t.Errorf("failed to get pool ids: %v", err)
+	}
+
+	if len(poolIds) != 1 || poolIds[0] != "json" {
+		t.Errorf("expected 1 pool id'd json")
+	}
+
+	pool, err := site.PoolById("json")
+	if err != nil {
+		t.Errorf("failed to get pool: %v", err)
 	}
 
 	poolNames, err := site.PoolNames()
@@ -31,9 +46,19 @@ func TestFile(t *testing.T) {
 		t.Errorf("expected 1 pool named json")
 	}
 
-	pool, err := site.Pool("json")
+	pool, err = site.PoolByName("json")
 	if err != nil {
 		t.Errorf("failed to get pool: %v", err)
+	}
+
+	_, err = pool.BucketIds()
+	if err != nil {
+		t.Errorf("failed to get bucket ids: %v", err)
+	}
+
+	bucket, err := pool.BucketById("contacts")
+	if err != nil {
+		t.Errorf("failed to get bucket by id: contacts")
 	}
 
 	_, err = pool.BucketNames()
@@ -41,27 +66,28 @@ func TestFile(t *testing.T) {
 		t.Errorf("failed to get bucket names: %v", err)
 	}
 
-	bucket, err := pool.Bucket("contacts")
+	bucket, err = pool.BucketByName("contacts")
 	if err != nil {
-		t.Errorf("failed to get bucket contacts")
+		t.Errorf("failed to get bucket by name: contacts")
 	}
 
-	scanners, err := bucket.Scanners()
+	indexes, err := bucket.Indexes()
 	if err != nil {
-		t.Errorf("failed ot get scanners")
+		t.Errorf("failed ot get indexes")
 	}
 
-	if len(scanners) < 1 {
-		t.Errorf("Expected at least 1 scanner for bucket")
+	if len(indexes) < 1 {
+		t.Errorf("Expected at least 1 index for bucket")
 	}
 
-	scanner := scanners[0]
-	switch scanner := scanner.(type) {
-	case *fullScanner:
+	index := indexes[0]
+	switch index := index.(type) {
+	case catalog.ScanIndex:
+	        si := index.(catalog.ScanIndex)
 		itemChannel := make(dparval.ValueChannel)
 		warnChannel := make(query.ErrorChannel)
 		errorChannel := make(query.ErrorChannel)
-		go scanner.ScanAll(itemChannel, warnChannel, errorChannel)
+		go si.ScanEntries(itemChannel, warnChannel, errorChannel)
 
 		var err query.Error
 		ok := true

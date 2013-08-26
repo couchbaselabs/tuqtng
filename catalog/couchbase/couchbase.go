@@ -25,8 +25,17 @@ type site struct {
 	client cb.Client
 }
 
+func (s *site) Id() string {
+	return s.URL()
+}
+
 func (s *site) URL() string {
 	return s.client.BaseURL.String()
+}
+
+func (s *site) PoolIds() ([]string, query.Error) {
+	// FIXME discover couchbase pools
+	return s.PoolNames()
 }
 
 func (s *site) PoolNames() ([]string, query.Error) {
@@ -34,11 +43,15 @@ func (s *site) PoolNames() ([]string, query.Error) {
 	return []string{"default"}, nil
 }
 
-func (s *site) Pool(name string) (p catalog.Pool, e query.Error) {
+func (s *site) PoolById(id string) (p catalog.Pool, e query.Error) {
+	return s.PoolByName(id)
+}
+
+func (s *site) PoolByName(name string) (p catalog.Pool, e query.Error) {
 	return newPool(s, name)
 }
 
-// NewSite creates a new file-based site for the given filepath.
+// NewSite creates a new Couchbase site for the given url.
 func NewSite(url string) (catalog.Site, query.Error) {
 
 	client, err := cb.Connect(url)
@@ -57,8 +70,20 @@ type pool struct {
 	bucketCache map[string]catalog.Bucket
 }
 
+func (p *pool) SiteId() string {
+	return p.site.Id()
+}
+
+func (p *pool) Id() string {
+	return p.Name()
+}
+
 func (p *pool) Name() string {
 	return p.name
+}
+
+func (p *pool) BucketIds() ([]string, query.Error) {
+        return p.BucketNames()
 }
 
 func (p *pool) BucketNames() ([]string, query.Error) {
@@ -69,7 +94,11 @@ func (p *pool) BucketNames() ([]string, query.Error) {
 	return rv, nil
 }
 
-func (p *pool) Bucket(name string) (catalog.Bucket, query.Error) {
+func (p *pool) BucketById(id string) (catalog.Bucket, query.Error) {
+	return p.BucketByName(id)
+}
+
+func (p *pool) BucketByName(name string) (catalog.Bucket, query.Error) {
 	bucket, ok := p.bucketCache[name]
 	if !ok {
 		var err query.Error
@@ -119,12 +148,21 @@ func keepPoolFresh(p *pool) {
 type bucket struct {
 	pool     *pool
 	name     string
-	scanners map[string]catalog.Scanner
+	indexes  map[string]catalog.Index
+	primary  catalog.PrimaryIndex
 	cbbucket *cb.Bucket
 }
 
 func (b *bucket) Release() {
 	b.cbbucket.Close()
+}
+
+func (b *bucket) PoolId() string {
+	return b.pool.Id()
+}
+
+func (b *bucket) Id() string {
+	return b.Name()
 }
 
 func (b *bucket) Name() string {
@@ -135,28 +173,40 @@ func (b *bucket) Count() (int64, query.Error) {
 	return 0, query.NewError(nil, fmt.Sprintf("Count not supported on Couchbase at this time"))
 }
 
-func (b *bucket) ScannerNames() ([]string, query.Error) {
-	rv := make([]string, 0, len(b.scanners))
-	for name, _ := range b.scanners {
+func (b *bucket) IndexIds() ([]string, query.Error) {
+	return b.IndexNames()
+}
+
+func (b *bucket) IndexNames() ([]string, query.Error) {
+	rv := make([]string, 0, len(b.indexes))
+	for name, _ := range b.indexes {
 		rv = append(rv, name)
 	}
 	return rv, nil
 }
 
-func (b *bucket) Scanners() ([]catalog.Scanner, query.Error) {
-	rv := make([]catalog.Scanner, 0, len(b.scanners))
-	for _, scanner := range b.scanners {
-		rv = append(rv, scanner)
-	}
-	return rv, nil
+func (b *bucket) IndexById(id string) (catalog.Index, query.Error) {
+	return b.IndexByName(id)
 }
 
-func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
-	scanner, ok := b.scanners[name]
+func (b *bucket) IndexByName(name string) (catalog.Index, query.Error) {
+	index, ok := b.indexes[name]
 	if !ok {
-		return nil, query.NewError(nil, fmt.Sprintf("Scanner %v not found.", name))
+		return nil, query.NewError(nil, fmt.Sprintf("Index %v not found.", name))
 	}
-	return scanner, nil
+	return index, nil
+}
+
+func (b *bucket) IndexByPrimary() (catalog.PrimaryIndex, query.Error) {
+	return b.primary, nil
+}
+
+func (b *bucket) Indexes() ([]catalog.Index, query.Error) {
+	rv := make([]catalog.Index, 0, len(b.indexes))
+	for _, index := range b.indexes {
+		rv = append(rv, index)
+	}
+	return rv, nil
 }
 
 func (b *bucket) BulkFetch(ids []string) (map[string]*dparval.Value, query.Error) {
@@ -214,35 +264,53 @@ func newBucket(p *pool, name string) (*bucket, query.Error) {
 		cbbucket: cbbucket,
 	}
 
-	rv.scanners = make(map[string]catalog.Scanner, 1)
-	// build scanner
-	allDocsScanner, err := newViewScanner(rv, "", "_all_docs")
+	rv.indexes = make(map[string]catalog.Index, 1)
+	// build index
+	pi, err := newPrimaryIndex(rv, "", "_all_docs")
 	if err != nil {
 		return nil, query.NewError(err, "")
 	}
-	rv.scanners[allDocsScanner.Name()] = allDocsScanner
+	rv.indexes[pi.Name()] = pi
+	rv.primary = pi
 
 	return rv, nil
 }
 
-type viewScanner struct {
+type viewIndex struct {
 	ddoc   string
 	view   string
 	bucket *bucket
 }
 
-func (vs *viewScanner) Name() string {
-	return fmt.Sprintf("_design/%s/_view/%s", vs.ddoc, vs.view)
+func (vi *viewIndex) BucketId() string {
+	return vi.bucket.Id()
 }
 
-func (vs *viewScanner) ScanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (vi *viewIndex) Id() string {
+	return vi.Name()
+}
+
+func (vi *viewIndex) Name() string {
+	return fmt.Sprintf("_design/%s/_view/%s", vi.ddoc, vi.view)
+}
+
+func (vi *viewIndex) Type() string {
+	return ("view")
+}
+
+func (vi *viewIndex) Key() []string {
+        // FIXME
+	return nil
+}
+
+func (vi *viewIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)
 
 	viewRowChannel := make(chan cb.ViewRow)
 	viewErrChannel := make(query.ErrorChannel)
-	go WalkViewInBatches(viewRowChannel, viewErrChannel, vs.bucket.cbbucket, vs.ddoc, vs.view, map[string]interface{}{}, 1000)
+	go WalkViewInBatches(viewRowChannel, viewErrChannel, vi.bucket.cbbucket, vi.ddoc, vi.view, map[string]interface{}{}, 1000)
 
 	var viewRow cb.ViewRow
 	var err query.Error
@@ -261,16 +329,16 @@ func (vs *viewScanner) ScanAll(ch dparval.ValueChannel, warnch, errch query.Erro
 			if err != nil {
 				// check to possibly detect a bucket that was already deleted
 				if !sentRows {
-					_, err := http.Get(vs.bucket.cbbucket.URI)
+					_, err := http.Get(vi.bucket.cbbucket.URI)
 					if err != nil {
 						// remove this specific bucket from the pool cache
-						delete(vs.bucket.pool.bucketCache, vs.bucket.Name())
+						delete(vi.bucket.pool.bucketCache, vi.bucket.Name())
 						// close this bucket
-						vs.bucket.Release()
+						vi.bucket.Release()
 						// ask the pool to refresh
-						vs.bucket.pool.refresh()
+						vi.bucket.pool.refresh()
 						// bucket doesnt exist any more
-						errch <- query.NewError(nil, fmt.Sprintf("Bucket %v not found.", vs.bucket.Name()))
+						errch <- query.NewError(nil, fmt.Sprintf("Bucket %v not found.", vi.bucket.Name()))
 						return
 					}
 
@@ -283,10 +351,32 @@ func (vs *viewScanner) ScanAll(ch dparval.ValueChannel, warnch, errch query.Erro
 	}
 }
 
-func newViewScanner(b *bucket, ddoc string, view string) (*viewScanner, query.Error) {
-	return &viewScanner{
+func newViewIndex(b *bucket, ddoc string, view string) (*viewIndex, query.Error) {
+	return &viewIndex{
 		bucket: b,
 		view:   view,
 		ddoc:   ddoc,
+	}, nil
+}
+
+type primaryIndex struct {
+        viewIndex
+}
+
+func (pi *primaryIndex) Type() string {
+	return ("primary")
+}
+
+func (pi *primaryIndex) Key() []string {
+	return []string{"meta().id"}
+}
+
+func newPrimaryIndex(b *bucket, ddoc string, view string) (*primaryIndex, query.Error) {
+	return &primaryIndex{
+	        viewIndex {
+			bucket: b,
+			view:   view,
+			ddoc:   ddoc,
+		},
 	}, nil
 }

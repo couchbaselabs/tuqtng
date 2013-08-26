@@ -71,8 +71,10 @@ func NewSite(path string) (catalog.Site, query.Error) {
 		p := &pool{site: s, name: "p" + strconv.Itoa(i), buckets: map[string]*bucket{}}
 		for j := 0; j < nbuckets; j++ {
 			b := &bucket{pool: p, name: "b" + strconv.Itoa(j), nitems: nitems,
-				scanners: map[string]catalog.Scanner{}}
-			b.scanners["all_docs"] = &fullScanner{site: s, name: "all_docs", bucket: b}
+				indexes: map[string]catalog.Index{}}
+			pi := &primaryIndex{site: s, name: "all_docs", bucket: b}
+			b.primary = pi
+			b.indexes["all_docs"] = pi
 			p.buckets[b.name] = b
 		}
 		s.pools[p.name] = p
@@ -104,11 +106,20 @@ type bucket struct {
 	pool     *pool
 	name     string
 	nitems   int
-	scanners map[string]catalog.Scanner
+	indexes  map[string]catalog.Index
+	primary  catalog.PrimaryIndex
+}
+
+func (s *site) Id() string {
+	return s.URL()
 }
 
 func (s *site) URL() string {
 	return "mock:" + s.path
+}
+
+func (s *site) PoolIds() ([]string, query.Error) {
+	return s.PoolNames()
 }
 
 func (s *site) PoolNames() ([]string, query.Error) {
@@ -120,7 +131,11 @@ func (s *site) PoolNames() ([]string, query.Error) {
 	return names, nil
 }
 
-func (s *site) Pool(name string) (p catalog.Pool, e query.Error) {
+func (s *site) PoolById(id string) (p catalog.Pool, e query.Error) {
+	return s.PoolByName(id)
+}
+
+func (s *site) PoolByName(name string) (p catalog.Pool, e query.Error) {
 	p, ok := s.pools[name]
 	if !ok {
 		return nil, query.NewError(nil, "Pool "+name+" not found.")
@@ -128,8 +143,20 @@ func (s *site) Pool(name string) (p catalog.Pool, e query.Error) {
 	return p, nil
 }
 
+func (p *pool) SiteId() string {
+	return p.site.Id()
+}
+
+func (p *pool) Id() string {
+	return p.Name()
+}
+
 func (p *pool) Name() string {
 	return p.name
+}
+
+func (p *pool) BucketIds() ([]string, query.Error) {
+	return p.BucketNames()
 }
 
 func (p *pool) BucketNames() ([]string, query.Error) {
@@ -141,7 +168,11 @@ func (p *pool) BucketNames() ([]string, query.Error) {
 	return names, nil
 }
 
-func (p *pool) Bucket(name string) (b catalog.Bucket, e query.Error) {
+func (p *pool) BucketById(id string) (b catalog.Bucket, e query.Error) {
+	return p.BucketByName(id)
+}
+
+func (p *pool) BucketByName(name string) (b catalog.Bucket, e query.Error) {
 	b, ok := p.buckets[name]
 	if !ok {
 		return nil, query.NewError(nil, "Bucket "+name+" not found.")
@@ -152,6 +183,14 @@ func (p *pool) Bucket(name string) (b catalog.Bucket, e query.Error) {
 func (b *bucket) Release() {
 }
 
+func (b *bucket) PoolId() string {
+	return b.pool.Id()
+}
+
+func (b *bucket) Id() string {
+	return b.Name()
+}
+
 func (b *bucket) Name() string {
 	return b.name
 }
@@ -160,28 +199,40 @@ func (b *bucket) Count() (int64, query.Error) {
 	return int64(b.nitems), nil
 }
 
-func (b *bucket) ScannerNames() ([]string, query.Error) {
-	rv := make([]string, 0, len(b.scanners))
-	for name, _ := range b.scanners {
+func (b *bucket) IndexIds() ([]string, query.Error) {
+	return b.IndexNames()
+}
+
+func (b *bucket) IndexNames() ([]string, query.Error) {
+	rv := make([]string, 0, len(b.indexes))
+	for name, _ := range b.indexes {
 		rv = append(rv, name)
 	}
 	return rv, nil
 }
 
-func (b *bucket) Scanners() ([]catalog.Scanner, query.Error) {
-	rv := make([]catalog.Scanner, 0, len(b.scanners))
-	for _, scanner := range b.scanners {
-		rv = append(rv, scanner)
-	}
-	return rv, nil
+func (b *bucket) IndexById(id string) (catalog.Index, query.Error) {
+	return b.IndexByName(id)
 }
 
-func (b *bucket) Scanner(name string) (catalog.Scanner, query.Error) {
-	scanner, ok := b.scanners[name]
+func (b *bucket) IndexByName(name string) (catalog.Index, query.Error) {
+	index, ok := b.indexes[name]
 	if !ok {
-		return nil, query.NewError(nil, fmt.Sprintf("Scanner %v not found.", name))
+		return nil, query.NewError(nil, fmt.Sprintf("Index %v not found.", name))
 	}
-	return scanner, nil
+	return index, nil
+}
+
+func (b *bucket) IndexByPrimary() (catalog.PrimaryIndex, query.Error) {
+	return b.primary, nil
+}
+
+func (b *bucket) Indexes() ([]catalog.Index, query.Error) {
+	rv := make([]catalog.Index, 0, len(b.indexes))
+	for _, index := range b.indexes {
+		rv = append(rv, index)
+	}
+	return rv, nil
 }
 
 func (b *bucket) BulkFetch(ids []string) (map[string]*dparval.Value, query.Error) {
@@ -205,26 +256,42 @@ func (b *bucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 	return genItem(i, b.nitems)
 }
 
-type fullScanner struct {
+type primaryIndex struct {
 	site   *site
 	name   string
 	bucket *bucket
 }
 
-func (fs *fullScanner) Name() string {
-	return fs.name
+func (pi *primaryIndex) BucketId() string {
+	return pi.bucket.Id()
 }
 
-func (fs *fullScanner) ScanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
-	go fs.scanAll(ch, warnch, errch)
+func (pi *primaryIndex) Id() string {
+	return pi.Name()
 }
 
-func (fs *fullScanner) scanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (pi *primaryIndex) Name() string {
+	return pi.name
+}
+
+func (pi *primaryIndex) Type() string {
+	return "primary"
+}
+
+func (pi *primaryIndex) Key() []string {
+	return []string{"meta().id"}
+}
+
+func (pi *primaryIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+	go pi.scanEntries(ch, warnch, errch)
+}
+
+func (pi *primaryIndex) scanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)
 
-	for i := 0; i < fs.bucket.nitems; i++ {
+	for i := 0; i < pi.bucket.nitems; i++ {
 		doc := dparval.NewValue(map[string]interface{}{})
 		doc.SetAttachment("meta", map[string]interface{}{"id": strconv.Itoa(i)})
 		ch <- doc

@@ -10,8 +10,8 @@
 /*
 
 Package catalog provides a common catalog abstraction over all storage
-engines, such as Couchbase server, file, mobile, CBGB, 3rd-party
-storage engines, etc.
+engines, such as Couchbase server, cloud, mobile, file, 3rd-party
+databases and storage engines, etc.
 
 */
 package catalog
@@ -23,34 +23,88 @@ import (
 
 // Site represents a cluster or single-node server.
 type Site interface {
+	Id() string
 	URL() string
+	PoolIds() ([]string, query.Error)
 	PoolNames() ([]string, query.Error)
-	Pool(name string) (Pool, query.Error)
+	PoolById(id string) (Pool, query.Error)
+	PoolByName(name string) (Pool, query.Error)
 }
 
 // Pool represents a logical authentication, query, and resource
 // allocation boundary, as well as a grouping of buckets.
 type Pool interface {
+	SiteId() string
+	Id() string
 	Name() string
+	BucketIds() ([]string, query.Error)
 	BucketNames() ([]string, query.Error)
-	Bucket(name string) (Bucket, query.Error)
+	BucketById(name string) (Bucket, query.Error)
+	BucketByName(name string) (Bucket, query.Error)
 }
 
 // Bucket is a collection of key-value entries (typically
 // key-document, but not always).
 type Bucket interface {
+	PoolId() string
+	Id() string
 	Name() string
 	Count() (int64, query.Error)
-	Scanners() ([]Scanner, query.Error)
-	ScannerNames() ([]string, query.Error)
-	Scanner(name string) (Scanner, query.Error)
+	IndexIds() ([]string, query.Error)
+	IndexNames() ([]string, query.Error)
+	IndexById(id string) (Index, query.Error)
+	IndexByName(name string) (Index, query.Error)
+	IndexByPrimary() (PrimaryIndex, query.Error)
+	Indexes() ([]Index, query.Error)
 	Fetch(id string) (*dparval.Value, query.Error)
 	BulkFetch([]string) (map[string]*dparval.Value, query.Error)
 	Release()
 }
 
-// RangeStatistics captures statistics for a range index (view or
-// declarative btree index).
+// Index is the base type for all indexes.
+type Index interface {
+	BucketId() string
+	Id() string
+	Name() string
+	Type() string
+	Key() []string
+}
+
+// ScanIndex represents scanning indexes.
+type ScanIndex interface {
+        Index
+	ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+}
+
+// PrimaryIndex represents primary key indexes.
+type PrimaryIndex interface {
+        ScanIndex
+}
+
+// Direction represents ASC and DESC
+// TODO: Is this needed?
+type Direction int
+
+const (
+	ASC  Direction = 1
+	DESC           = 2
+)
+
+// RangeIndex represents range scan indexes.
+type RangeIndex interface {
+	ScanIndex
+	Direction() Direction
+	Statistics() (RangeStatistics, query.Error)
+	ScanRange(ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+}
+
+// SearchIndex represents full text search indexes.
+type SearchIndex interface {
+	Index
+	Search(ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+}
+
+// RangeStatistics captures statistics for a range index.
 type RangeStatistics interface {
 	Count() (int64, query.Error)
 	Min() (dparval.Value, query.Error)
@@ -65,48 +119,4 @@ type Bin interface {
 	Min() (dparval.Value, query.Error)
 	Max() (dparval.Value, query.Error)
 	DistinctCount(int64, query.Error)
-}
-
-// Scanner is the base type for all scanners.
-type Scanner interface {
-	Name() string
-	ScanAll(ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
-}
-
-// FullScanner performs full bucket scans.
-type FullScanner interface {
-	Scanner
-}
-
-// Direction represents ASC and DESC
-// TODO: Is this needed?
-type Direction int
-
-const (
-	ASC  Direction = 1
-	DESC           = 2
-)
-
-// RangeScanner is the base type for view and declarative index
-// scanners.
-type RangeScanner interface {
-	Scanner
-	Key() []string
-	Direction() Direction
-	Statistics() (RangeStatistics, query.Error)
-}
-
-// ViewScanner represents Couchbase views.
-type ViewScanner interface {
-	RangeScanner
-}
-
-// IndexScanner represents declarative btree indexes.
-type IndexScanner interface {
-	RangeScanner
-}
-
-// SearchScanner represents full text search indexes.
-type SearchScanner interface {
-	Scanner
 }

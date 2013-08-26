@@ -58,17 +58,17 @@ func (this *Explain) Sources() []PlanElement {
 
 type Scan struct {
 	Type    string `json:"type"`
-	Scanner string `json:"scanner"`
+	ScanIndex string `json:"index"`
 	Bucket  string `json:"bucket"`
 	Pool    string `json:"pool"`
 }
 
-func NewScan(pool string, bucket string, scanner string) *Scan {
+func NewScan(pool string, bucket string, index string) *Scan {
 	return &Scan{
 		Type:    "scan",
 		Pool:    pool,
 		Bucket:  bucket,
-		Scanner: scanner,
+		ScanIndex: index,
 	}
 }
 

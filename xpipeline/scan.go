@@ -24,16 +24,16 @@ type Scan struct {
 	itemChannel           dparval.ValueChannel
 	supportChannel        PipelineSupportChannel
 	bucket                catalog.Bucket
-	scanner               catalog.Scanner
+	index                 catalog.ScanIndex
 	downstreamStopChannel misc.StopChannel
 }
 
-func NewScan(bucket catalog.Bucket, scanner catalog.Scanner) *Scan {
+func NewScan(bucket catalog.Bucket, index catalog.ScanIndex) *Scan {
 	return &Scan{
 		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 		bucket:         bucket,
-		scanner:        scanner,
+		index:          index,
 	}
 }
 
@@ -52,27 +52,27 @@ func (this *Scan) Run(stopChannel misc.StopChannel) {
 	this.downstreamStopChannel = stopChannel
 	clog.To(CHANNEL, "scan operator starting")
 
-	scannerItemChannel := make(dparval.ValueChannel)
-	scannerWarnChannel := make(query.ErrorChannel)
-	scannerErrorChannel := make(query.ErrorChannel)
+	indexItemChannel := make(dparval.ValueChannel)
+	indexWarnChannel := make(query.ErrorChannel)
+	indexErrorChannel := make(query.ErrorChannel)
 	var item *dparval.Value
 	var warn query.Error
 	var err query.Error
 
-	go this.scanner.ScanAll(scannerItemChannel, scannerWarnChannel, scannerErrorChannel)
+	go this.index.ScanEntries(indexItemChannel, indexWarnChannel, indexErrorChannel)
 
 	ok := true
 	for ok {
 		select {
-		case item, ok = <-scannerItemChannel:
+		case item, ok = <-indexItemChannel:
 			if ok {
 				this.SendItem(item)
 			}
-		case warn, ok = <-scannerWarnChannel:
+		case warn, ok = <-indexWarnChannel:
 			if warn != nil {
 				this.SendError(warn)
 			}
-		case err, ok = <-scannerErrorChannel:
+		case err, ok = <-indexErrorChannel:
 			if err != nil {
 				this.SendError(warn)
 			}
