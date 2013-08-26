@@ -17,9 +17,9 @@ import (
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	cb "github.com/couchbaselabs/go-couchbase"
+	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/couchbaselabs/tuqtng/ast"
 )
 
 type site struct {
@@ -84,7 +84,7 @@ func (p *pool) Name() string {
 }
 
 func (p *pool) BucketIds() ([]string, query.Error) {
-        return p.BucketNames()
+	return p.BucketNames()
 }
 
 func (p *pool) BucketNames() ([]string, query.Error) {
@@ -246,16 +246,16 @@ func (b *bucket) Fetch(id string) (*dparval.Value, query.Error) {
 
 // FIXME
 func (b *bucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
-        if b.primary != nil {
-	        return b.primary, nil
+	if b.primary != nil {
+		return b.primary, nil
 	}
 
-        return nil, query.NewError(nil, "Not yet implemented.")
+	return nil, query.NewError(nil, "Not yet implemented.")
 }
 
 // FIXME
 func (b *bucket) CreateIndex(name string, key []ast.Expression, using string) (catalog.Index, query.Error) {
-        return nil, query.NewError(nil, "Not yet implemented.")
+	return nil, query.NewError(nil, "Not yet implemented.")
 }
 
 func newBucket(p *pool, name string) (*bucket, query.Error) {
@@ -314,23 +314,30 @@ func (vi *viewIndex) Type() string {
 }
 
 func (vi *viewIndex) Key() catalog.IndexKey {
-        // FIXME
+	// FIXME
 	return nil
 }
 
 func (vi *viewIndex) Drop() query.Error {
-        // FIXME
+	// FIXME
 	return query.NewError(nil, "Not yet implemented.")
 }
 
 func (vi *viewIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+	vi.ScanRange(nil, nil, catalog.Both, ch, warnch, errch)
+}
+
+func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue, inclusion catalog.RangeInclusion, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+
+	viewOptions := generateViewOptions(low, high, inclusion)
+
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)
 
 	viewRowChannel := make(chan cb.ViewRow)
 	viewErrChannel := make(query.ErrorChannel)
-	go WalkViewInBatches(viewRowChannel, viewErrChannel, vi.bucket.cbbucket, vi.ddoc, vi.view, map[string]interface{}{}, 1000)
+	go WalkViewInBatches(viewRowChannel, viewErrChannel, vi.bucket.cbbucket, vi.ddoc, vi.view, viewOptions, 1000)
 
 	var viewRow cb.ViewRow
 	var err query.Error
@@ -380,7 +387,7 @@ func newViewIndex(b *bucket, ddoc string, view string) (*viewIndex, query.Error)
 }
 
 type primaryIndex struct {
-        viewIndex
+	viewIndex
 }
 
 func (pi *primaryIndex) Type() string {
@@ -397,7 +404,7 @@ func (pi *primaryIndex) Drop() query.Error {
 
 func newPrimaryIndex(b *bucket, ddoc string, view string) (*primaryIndex, query.Error) {
 	return &primaryIndex{
-	        viewIndex {
+		viewIndex{
 			bucket: b,
 			view:   view,
 			ddoc:   ddoc,

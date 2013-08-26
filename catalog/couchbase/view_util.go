@@ -12,13 +12,25 @@ package couchbase
 import (
 	"fmt"
 	"runtime/debug"
+	"strings"
 
 	"github.com/couchbaselabs/clog"
 	cb "github.com/couchbaselabs/go-couchbase"
+	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
 const CHANNEL = "NETWORK"
+
+const TYPE_NULL = 64
+const TYPE_BOOLEAN = 96
+const TYPE_NUMBER = 128
+const TYPE_STRING = 160
+const TYPE_ARRAY = 92
+const TYPE_OBJECT = 224
+
+var MIN_ID = cb.DocId("")
+var MAX_ID = cb.DocId(strings.Repeat(string([]byte{0xff}), 251))
 
 func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *cb.Bucket,
 	ddoc string, view string, options map[string]interface{}, batchSize int) {
@@ -68,4 +80,48 @@ func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *
 			ok = false
 		}
 	}
+}
+
+func generateViewOptions(low catalog.LookupValue, high catalog.LookupValue, inclusion catalog.RangeInclusion) map[string]interface{} {
+	viewOptions := map[string]interface{}{}
+
+	if low != nil {
+		viewOptions["startkey"] = encodeValueAsMapKey(low)
+		if inclusion == catalog.Neither || inclusion == catalog.High {
+			viewOptions["startkey_docid"] = MAX_ID
+		}
+	}
+
+	if high != nil {
+		viewOptions["endkey"] = encodeValueAsMapKey(high)
+		if inclusion == catalog.Neither || inclusion == catalog.Low {
+			viewOptions["endkey_docid"] = MIN_ID
+		}
+	}
+
+	return viewOptions
+}
+
+func encodeValueAsMapKey(keys catalog.LookupValue) interface{} {
+	rv := make([]interface{}, len(keys))
+	for i, lv := range keys {
+		val := lv.Value()
+		switch val := val.(type) {
+		case nil:
+			rv[i] = []interface{}{TYPE_NULL}
+		case bool:
+			rv[i] = []interface{}{TYPE_BOOLEAN, val}
+		case float64:
+			rv[i] = []interface{}{TYPE_NUMBER, val}
+		case string:
+			rv[i] = []interface{}{TYPE_STRING, val}
+		case []interface{}:
+			rv[i] = []interface{}{TYPE_ARRAY, val}
+		case map[string]interface{}:
+			rv[i] = []interface{}{TYPE_OBJECT, val}
+		default:
+			panic(fmt.Sprintf("Unable to encode type %T to map key", val))
+		}
+	}
+	return rv
 }
