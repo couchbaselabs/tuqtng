@@ -12,7 +12,6 @@ package ast
 import ()
 
 type DropIndexStatement struct {
-	Method      string         `json:"method"`
 	Name        string         `json:"name"`
 	ExplainOnly bool           `json:"explain"`
 	Bucket      string         `json:"bucket"`
