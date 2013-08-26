@@ -63,13 +63,15 @@ type Bucket interface {
 	CreateIndex(name string, key []string, using string) (Index, query.Error)
 }
 
+type IndexKey []interface{}
+
 // Index is the base type for all indexes.
 type Index interface {
 	BucketId() string
 	Id() string
 	Name() string
 	Type() string
-	Key() []string
+	Key() IndexKey
 	Drop() query.Error // PrimaryIndexes cannot be dropped
 }
 
@@ -93,12 +95,24 @@ const (
 	DESC           = 2
 )
 
+// Inclusion controls how the boundaries values of a range are treated
+type RangeInclusion int
+
+const (
+	Neither RangeInclusion = iota
+	Left
+	Right
+	Both
+)
+
+type LookupValue []interface{}
+
 // RangeIndex represents range scan indexes.
 type RangeIndex interface {
 	ScanIndex
 	Direction() Direction
 	Statistics() (RangeStatistics, query.Error)
-	ScanRange(ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	ScanRange(low LookupValue, high LookupValue, RangeInclusion, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
 
 // SearchIndex represents full text search indexes.

@@ -291,8 +291,8 @@ func (pi *siteIndex) Type() string {
 	return "primary"
 }
 
-func (pi *siteIndex) Key() []string {
-	return []string{"meta().id"}
+func (pi *siteIndex) Key() catalog.IndexKey {
+	return catalog.IndexKey{"meta().id"}
 }
 
 func (pi *siteIndex) Drop() query.Error {
@@ -428,8 +428,8 @@ func (pi *poolIndex) Type() string {
 	return "primary"
 }
 
-func (pi *poolIndex) Key() []string {
-	return []string{"meta().id"}
+func (pi *poolIndex) Key() catalog.IndexKey {
+	return catalog.IndexKey{"meta().id"}
 }
 
 func (pi *poolIndex) Drop() query.Error {
@@ -575,8 +575,8 @@ func (pi *bucketIndex) Type() string {
 	return "primary"
 }
 
-func (pi *bucketIndex) Key() []string {
-	return []string{"meta().id"}
+func (pi *bucketIndex) Key() catalog.IndexKey {
+	return catalog.IndexKey{"meta().id"}
 }
 
 func (pi *bucketIndex) Drop() query.Error {

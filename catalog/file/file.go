@@ -352,8 +352,8 @@ func (pi *primaryIndex) Type() string {
 	return "primary"
 }
 
-func (pi *primaryIndex) Key() []string {
-	return []string{"meta().id"}
+func (pi *primaryIndex) Key() catalog.IndexKey {
+	return catalog.IndexKey{"meta().id"}
 }
 
 func (pi *primaryIndex) Drop() query.Error {
