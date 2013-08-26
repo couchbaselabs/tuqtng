@@ -128,6 +128,12 @@ var validQueries = []string{
 	`SELECT * FROM :pool.bucket.prop`,
 	`SELECT * FROM :pool.bucket[3]`,
 	`SELECT * FROM :pool.bucket.prop[4]`,
+
+	// index statements
+	`CREATE INDEX name ON bucket(field) USING VIEW`,
+	`CREATE INDEX name ON bucket(field1, field2) USING VIEW`,
+	`CREATE INDEX name ON bucket(field)`,
+	`DROP INDEX bucket.name`,
 }
 
 var invalidQueries = []string{
@@ -149,6 +155,8 @@ var invalidQueries = []string{
 	`CREATE INDEX abv USING magic`,
 	`CREATE INDEX abv ON beer-sample USING magic`,
 	`CREATE INDEX abv ON beer-sample() USING magic`,
+	`DROP INDEX name`,
+	`DROP INDEX bucket.*`,
 	// these are me trying to understand code coverage in the parser
 	`\`,
 	`\r`,

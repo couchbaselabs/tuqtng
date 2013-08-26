@@ -15,7 +15,7 @@ n int
 f float64}
 
 %token EXPLAIN
-%token CREATE VIEW INDEX ON USING
+%token CREATE DROP VIEW INDEX ON USING
 %token DISTINCT UNIQUE
 %token SELECT AS FROM WHERE
 %token ORDER BY ASC DESC
@@ -63,6 +63,10 @@ select_stmt {
 create_index_stmt {
 	logDebugGrammar("STMT - CREATE INDEX")
 }
+|
+drop_index_stmt {
+	logDebugGrammar("STMT - DROP INDEX")
+}
 ;
 
 // CREATE INDEX STATEMENT
@@ -103,6 +107,17 @@ CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN USING IDENTI
 }
 ;
 
+// DROP INDEX
+drop_index_stmt:
+DROP INDEX IDENTIFIER DOT IDENTIFIER {
+	bucket := $3.s
+	name := $5.s
+	dropIndexStmt := ast.NewDropIndexStatement()
+	dropIndexStmt.Bucket = bucket
+	dropIndexStmt.Name = name
+	parsingStatement = dropIndexStmt
+}
+;
 
 // SELECT STATEMENT
 select_stmt:
