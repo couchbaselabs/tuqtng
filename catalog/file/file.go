@@ -289,6 +289,18 @@ func (b *bucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 	return
 }
 
+func (b *bucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
+        if b.primary != nil {
+	        return b.primary, nil
+	}
+
+        return nil, query.NewError(nil, "Not supported.")
+}
+
+func (b *bucket) CreateIndex(name string, key []string, using string) (catalog.Index, query.Error) {
+        return nil, query.NewError(nil, "Not supported.")
+}
+
 func (b *bucket) path() string {
 	return filepath.Join(b.pool.path(), b.name)
 }

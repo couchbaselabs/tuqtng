@@ -243,6 +243,20 @@ func (b *bucket) Fetch(id string) (*dparval.Value, query.Error) {
 	return values[id], nil
 }
 
+// FIXME
+func (b *bucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
+        if b.primary != nil {
+	        return b.primary, nil
+	}
+
+        return nil, query.NewError(nil, "Not yet implemented.")
+}
+
+// FIXME
+func (b *bucket) CreateIndex(name string, key []string, using string) (catalog.Index, query.Error) {
+        return nil, query.NewError(nil, "Not yet implemented.")
+}
+
 func newBucket(p *pool, name string) (*bucket, query.Error) {
 	cbbucket, err := p.cbpool.GetBucket(name)
 	if err != nil {

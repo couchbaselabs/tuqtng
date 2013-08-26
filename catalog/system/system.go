@@ -248,6 +248,18 @@ func (b *sitebucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 	return nil, query.NewError(nil, "Not Found")
 }
 
+func (b *sitebucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
+        if b.primary != nil {
+	        return b.primary, nil
+	}
+
+        return nil, query.NewError(nil, "Not supported.")
+}
+
+func (b *sitebucket) CreateIndex(name string, key []string, using string) (catalog.Index, query.Error) {
+        return nil, query.NewError(nil, "Not supported.")
+}
+
 func newSitesBucket(p *pool) (*sitebucket, query.Error) {
 	b := new(sitebucket)
 	b.pool = p
@@ -367,6 +379,18 @@ func (b *poolbucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 		return dparval.NewValue(doc), nil
 	}
 	return nil, err
+}
+
+func (b *poolbucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
+        if b.primary != nil {
+	        return b.primary, nil
+	}
+
+        return nil, query.NewError(nil, "Not supported.")
+}
+
+func (b *poolbucket) CreateIndex(name string, key []string, using string) (catalog.Index, query.Error) {
+        return nil, query.NewError(nil, "Not supported.")
 }
 
 func newPoolsBucket(p *pool) (*poolbucket, query.Error) {
@@ -498,6 +522,18 @@ func (b *bucketbucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 		}
 	}
 	return nil, err
+}
+
+func (b *bucketbucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
+        if b.primary != nil {
+	        return b.primary, nil
+	}
+
+        return nil, query.NewError(nil, "Not supported.")
+}
+
+func (b *bucketbucket) CreateIndex(name string, key []string, using string) (catalog.Index, query.Error) {
+        return nil, query.NewError(nil, "Not supported.")
 }
 
 func newBucketsBucket(p *pool) (*bucketbucket, query.Error) {

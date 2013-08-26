@@ -59,6 +59,8 @@ type Bucket interface {
 	Fetch(id string) (*dparval.Value, query.Error)
 	BulkFetch([]string) (map[string]*dparval.Value, query.Error)
 	Release()
+	CreatePrimaryIndex() (PrimaryIndex, query.Error)
+	CreateIndex(name string, key []string, using string) (Index, query.Error)
 }
 
 // Index is the base type for all indexes.
