@@ -13,6 +13,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"net/http/pprof"
 
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/tuqtng/network"
@@ -25,13 +26,20 @@ type HttpEndpoint struct {
 	queryChannel network.QueryChannel
 }
 
-func NewHttpEndpoint(address string) *HttpEndpoint {
+func NewHttpEndpoint(address string, includeProfileHandlers bool) *HttpEndpoint {
 	rv := &HttpEndpoint{}
 
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", welcome).Methods("GET")
 	r.Handle("/query", rv).Methods("GET", "POST")
+
+	if includeProfileHandlers {
+		r.Handle("/debug/pprof/", http.HandlerFunc(pprof.Index))
+		r.Handle("/debug/pprof/cmdline", http.HandlerFunc(pprof.Cmdline))
+		r.Handle("/debug/pprof/profile", http.HandlerFunc(pprof.Profile))
+		r.Handle("/debug/pprof/symbol", http.HandlerFunc(pprof.Symbol))
+	}
 
 	go func() {
 		err := http.ListenAndServe(address, r)
