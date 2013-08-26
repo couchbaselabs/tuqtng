@@ -295,6 +295,10 @@ func (pi *siteIndex) Key() []string {
 	return []string{"meta().id"}
 }
 
+func (pi *siteIndex) Drop() query.Error {
+	return query.NewError(nil, "Primary index cannot be dropped.")
+}
+
 func (pi *siteIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
@@ -426,6 +430,10 @@ func (pi *poolIndex) Type() string {
 
 func (pi *poolIndex) Key() []string {
 	return []string{"meta().id"}
+}
+
+func (pi *poolIndex) Drop() query.Error {
+	return query.NewError(nil, "Primary index cannot be dropped.")
 }
 
 func (pi *poolIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
@@ -569,6 +577,10 @@ func (pi *bucketIndex) Type() string {
 
 func (pi *bucketIndex) Key() []string {
 	return []string{"meta().id"}
+}
+
+func (pi *bucketIndex) Drop() query.Error {
+	return query.NewError(nil, "Primary index cannot be dropped.")
 }
 
 func (pi *bucketIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {

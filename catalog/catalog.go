@@ -70,6 +70,7 @@ type Index interface {
 	Name() string
 	Type() string
 	Key() []string
+	Drop() query.Error // PrimaryIndexes cannot be dropped
 }
 
 // ScanIndex represents scanning indexes.

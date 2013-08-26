@@ -294,6 +294,10 @@ func (pi *primaryIndex) Key() []string {
 	return []string{"meta().id"}
 }
 
+func (pi *primaryIndex) Drop() query.Error {
+	return query.NewError(nil, "Primary index cannot be dropped.")
+}
+
 func (pi *primaryIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	go pi.scanEntries(ch, warnch, errch)
 }

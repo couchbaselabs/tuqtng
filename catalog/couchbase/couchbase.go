@@ -317,6 +317,11 @@ func (vi *viewIndex) Key() []string {
 	return nil
 }
 
+func (vi *viewIndex) Drop() query.Error {
+        // FIXME
+	return query.NewError(nil, "Not yet implemented.")
+}
+
 func (vi *viewIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
@@ -383,6 +388,10 @@ func (pi *primaryIndex) Type() string {
 
 func (pi *primaryIndex) Key() []string {
 	return []string{"meta().id"}
+}
+
+func (pi *primaryIndex) Drop() query.Error {
+	return query.NewError(nil, "Primary index cannot be dropped.")
 }
 
 func newPrimaryIndex(b *bucket, ddoc string, view string) (*primaryIndex, query.Error) {
