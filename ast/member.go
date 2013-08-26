@@ -10,6 +10,7 @@
 package ast
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/couchbaselabs/dparval"
@@ -82,6 +83,41 @@ func (this *DotMemberOperator) Dependencies() ExpressionList {
 
 func (this *DotMemberOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
+}
+
+func (this *DotMemberOperator) UnmarshalJSON(data []byte) error {
+	var temp struct {
+		Type  string          `json:"type"`
+		Left  json.RawMessage `json:"left"`
+		Right json.RawMessage `json:"right"`
+	}
+
+	err := json.Unmarshal(data, &temp)
+	if err != nil {
+		return err
+	}
+
+	if temp.Type != "dot_member" {
+		return fmt.Errorf("Attempt to unmarshal type %v into dot-member", temp.Type)
+	}
+
+	this.Type = temp.Type
+	this.Left, err = UnmarshalExpression(temp.Left)
+	if err != nil {
+		return err
+	}
+	rightExpr, err := UnmarshalExpression(temp.Right)
+	if err != nil {
+		return err
+	}
+
+	var ok bool
+	this.Right, ok = rightExpr.(*Property)
+	if !ok {
+		return fmt.Errorf("Right-hand side of dot_member must be type Property")
+	}
+
+	return nil
 }
 
 // ****************************************************************************
@@ -166,4 +202,33 @@ func (this *BracketMemberOperator) Dependencies() ExpressionList {
 
 func (this *BracketMemberOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
+}
+
+func (this *BracketMemberOperator) UnmarshalJSON(data []byte) error {
+	var temp struct {
+		Type  string          `json:"type"`
+		Left  json.RawMessage `json:"left"`
+		Right json.RawMessage `json:"right"`
+	}
+
+	err := json.Unmarshal(data, &temp)
+	if err != nil {
+		return err
+	}
+
+	if temp.Type != "bracket_member" {
+		return fmt.Errorf("Attempt to unmarshal type %v into bracket_member", temp.Type)
+	}
+
+	this.Type = temp.Type
+	this.Left, err = UnmarshalExpression(temp.Left)
+	if err != nil {
+		return err
+	}
+	this.Right, err = UnmarshalExpression(temp.Right)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
