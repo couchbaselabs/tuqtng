@@ -62,6 +62,20 @@ func (this ResultExpressionList) VerifyAllAggregateFunctionsOrInThisList(groupBy
 	return nil
 }
 
+func (this ResultExpressionList) Simplify() error {
+	var err error
+	es := NewExpressionSimplifier()
+	for _, resultExpr := range this {
+		if resultExpr.Expr != nil {
+			resultExpr.Expr, err = resultExpr.Expr.Accept(es)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 func (this ResultExpressionList) Validate() error {
 	var err error
 	validator := NewExpressionValidator()

@@ -34,3 +34,7 @@ func (this *CreateIndexStatement) IsExplainOnly() bool {
 func (this *CreateIndexStatement) VerifySemantics() error {
 	return nil
 }
+
+func (this *CreateIndexStatement) Simplify() error {
+	return nil
+}

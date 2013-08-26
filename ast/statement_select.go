@@ -334,3 +334,43 @@ func (this *SelectStatement) findAggregateFunctionReferences() ExpressionList {
 
 	return rv
 }
+
+func (this *SelectStatement) Simplify() error {
+	err := this.Select.Simplify()
+	if err != nil {
+		return err
+	}
+
+	if this.Where != nil {
+		es := NewExpressionSimplifier()
+		this.Where, err = this.Where.Accept(es)
+		if err != nil {
+			return err
+		}
+	}
+
+	// validate the order by
+	err = this.OrderBy.Simplify()
+	if err != nil {
+		return err
+	}
+
+	// validate the group by
+	if this.GroupBy != nil {
+		err = this.GroupBy.Simplify()
+		if err != nil {
+			return err
+		}
+	}
+
+	// validate the having
+	if this.Having != nil {
+		es := NewExpressionSimplifier()
+		this.Having, err = this.Having.Accept(es)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

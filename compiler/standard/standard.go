@@ -56,6 +56,12 @@ func (this *StandardCompiler) Compile(queryString string) (*plan.Plan, query.Err
 		return nil, query.NewSemanticError(err, "Semantic Error")
 	}
 
+	// simplify the statement
+	err = ast.Simplify()
+	if err != nil {
+		return nil, query.NewError(err, "Error Simplifying Expression")
+	}
+
 	planChannel, planErrChannel := this.planner.Plan(ast)
 
 	optimalPlan, err := this.optimizer.Optimize(planChannel, planErrChannel)

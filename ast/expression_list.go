@@ -13,6 +13,20 @@ import ()
 
 type ExpressionList []Expression
 
+func (this ExpressionList) Simplify() error {
+	var err error
+	es := NewExpressionSimplifier()
+	for _, expr := range this {
+		if expr != nil {
+			expr, err = expr.Accept(es)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 func (this ExpressionList) Validate() error {
 	var err error
 	validator := NewExpressionValidatorNoAggregates()

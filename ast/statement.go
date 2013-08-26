@@ -16,4 +16,5 @@ type Statement interface {
 	SetExplainOnly(bool)
 	IsExplainOnly() bool
 	VerifySemantics() error
+	Simplify() error
 }

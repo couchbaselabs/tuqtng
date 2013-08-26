@@ -27,6 +27,20 @@ func NewSortExpression(expr Expression, asc bool) *SortExpression {
 
 type SortExpressionList []*SortExpression
 
+func (this SortExpressionList) Simplify() error {
+	var err error
+	es := NewExpressionSimplifier()
+	for _, orderExpr := range this {
+		if orderExpr.Expr != nil {
+			orderExpr.Expr, err = orderExpr.Expr.Accept(es)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 func (this SortExpressionList) Validate() error {
 	var err error
 	validator := NewExpressionValidator()

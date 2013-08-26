@@ -12,9 +12,9 @@ package ast
 import ()
 
 type DropIndexStatement struct {
-	Name        string         `json:"name"`
-	ExplainOnly bool           `json:"explain"`
-	Bucket      string         `json:"bucket"`
+	Name        string `json:"name"`
+	ExplainOnly bool   `json:"explain"`
+	Bucket      string `json:"bucket"`
 }
 
 func NewDropIndexStatement() *DropIndexStatement {
@@ -30,5 +30,9 @@ func (this *DropIndexStatement) IsExplainOnly() bool {
 }
 
 func (this *DropIndexStatement) VerifySemantics() error {
+	return nil
+}
+
+func (this *DropIndexStatement) Simplify() error {
 	return nil
 }

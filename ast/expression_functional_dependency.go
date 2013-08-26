@@ -18,12 +18,21 @@ import (
 // specified dependencies, or if it instead
 // has other dependencies
 type ExpressionFunctionalDependencyChecker struct {
-	Dependencies ExpressionList
+	Dependencies        ExpressionList
+	AggregatesSatisfied bool
 }
 
 func NewExpressionFunctionalDependencyChecker(deps ExpressionList) *ExpressionFunctionalDependencyChecker {
 	return &ExpressionFunctionalDependencyChecker{
-		Dependencies: deps,
+		Dependencies:        deps,
+		AggregatesSatisfied: true,
+	}
+}
+
+func NewExpressionFunctionalDependencyCheckerFull(deps ExpressionList) *ExpressionFunctionalDependencyChecker {
+	return &ExpressionFunctionalDependencyChecker{
+		Dependencies:        deps,
+		AggregatesSatisfied: false,
 	}
 }
 
@@ -39,7 +48,13 @@ func (this *ExpressionFunctionalDependencyChecker) Visit(expr Expression) (Expre
 	case *LiteralString:
 		return nil, nil
 	case AggregateFunctionCallExpression:
-		return nil, nil
+		if this.AggregatesSatisfied {
+			return nil, nil
+		} else {
+			// aggregates actually depend on the aggregate having been caclulated
+			// this can't actually be represented by the dep list
+			return nil, fmt.Errorf("The expression %v is not satisfied by these dependencies", expr)
+		}
 	}
 
 	// next see if this expression is directly equivalent
