@@ -100,8 +100,8 @@ type RangeInclusion int
 
 const (
 	Neither RangeInclusion = iota
-	Left
-	Right
+	Low
+	High
 	Both
 )
 
