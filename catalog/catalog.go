@@ -106,7 +106,7 @@ const (
 	Both
 )
 
-type LookupValue []interface{}
+type LookupValue []*dparval.Value
 
 // RangeIndex represents range scan indexes.
 type RangeIndex interface {
