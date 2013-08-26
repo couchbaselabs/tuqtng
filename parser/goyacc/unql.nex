@@ -109,6 +109,10 @@
                   {
                     logDebugTokens("CREATE"); return CREATE
                   }
+/[dD][rR][oO][pP]/
+                  {
+                    logDebugTokens("DROP"); return DROP
+                  }
 /[vV][iI][eE][wW]/
                   {
                     logDebugTokens("VIEW"); return VIEW
