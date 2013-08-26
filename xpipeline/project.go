@@ -58,7 +58,7 @@ func (this *Project) processItem(item *dparval.Value) bool {
 				// undefined contributes nothing to the result map
 				continue
 			default:
-				return this.Base.SendError(query.NewError(err, "unexpected error projecting dot star expression"))
+				return this.Base.SendError(query.NewError(err, "unexpected error projecting expression"))
 			}
 		}
 

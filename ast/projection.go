@@ -36,13 +36,9 @@ func (this ResultExpressionList) ExpressionList() ExpressionList {
 }
 
 func (this ResultExpressionList) ContainsAggregateFunctionCall() bool {
-	for _, resultExpr := range this {
-		if resultExpr.Expr != nil {
-			_, ok := resultExpr.Expr.(AggregateFunctionCallExpression)
-			if ok {
-				return true
-			}
-		}
+	aggs := this.findAggregateFunctionReferences()
+	if len(aggs) > 0 {
+		return true
 	}
 	return false
 }
@@ -103,7 +99,9 @@ func (this ResultExpressionList) VerifyFormalNotation(forbiddenAliases []string,
 func (this ResultExpressionList) findAggregateFunctionReferences() ExpressionList {
 	af := NewExpressionAggregateFinder()
 	for _, resultExpr := range this {
-		resultExpr.Expr.Accept(af)
+		if resultExpr.Expr != nil {
+			resultExpr.Expr.Accept(af)
+		}
 	}
 	return af.GetAggregates()
 }
