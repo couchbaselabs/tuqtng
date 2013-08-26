@@ -19,6 +19,7 @@ import (
 	cb "github.com/couchbaselabs/go-couchbase"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/couchbaselabs/tuqtng/ast"
 )
 
 type site struct {
@@ -253,7 +254,7 @@ func (b *bucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
 }
 
 // FIXME
-func (b *bucket) CreateIndex(name string, key []string, using string) (catalog.Index, query.Error) {
+func (b *bucket) CreateIndex(name string, key []ast.Expression, using string) (catalog.Index, query.Error) {
         return nil, query.NewError(nil, "Not yet implemented.")
 }
 

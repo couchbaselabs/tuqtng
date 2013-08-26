@@ -18,6 +18,7 @@ package catalog
 
 import (
 	"github.com/couchbaselabs/tuqtng/query"
+	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/dparval"
 )
 
@@ -60,10 +61,10 @@ type Bucket interface {
 	BulkFetch([]string) (map[string]*dparval.Value, query.Error)
 	Release()
 	CreatePrimaryIndex() (PrimaryIndex, query.Error)
-	CreateIndex(name string, key []string, using string) (Index, query.Error)
+	CreateIndex(name string, key []ast.Expression, using string) (Index, query.Error)
 }
 
-type IndexKey []interface{}
+type IndexKey []interface{} // FIXME: Should this be ast.Expression?
 
 // Index is the base type for all indexes.
 type Index interface {
