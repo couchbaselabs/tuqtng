@@ -289,4 +289,3 @@ func newBucket(p *pool, name string) (*bucket, query.Error) {
 
 	return rv, nil
 }
-

@@ -23,10 +23,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/couchbaselabs/tuqtng/catalog"
-	"github.com/couchbaselabs/tuqtng/query"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/catalog"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 const (
@@ -104,11 +104,11 @@ type pool struct {
 }
 
 type bucket struct {
-	pool     *pool
-	name     string
-	nitems   int
-	indexes  map[string]catalog.Index
-	primary  catalog.PrimaryIndex
+	pool    *pool
+	name    string
+	nitems  int
+	indexes map[string]catalog.Index
+	primary catalog.PrimaryIndex
 }
 
 func (s *site) Id() string {
@@ -258,15 +258,15 @@ func (b *bucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 }
 
 func (b *bucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
-        if b.primary != nil {
-	        return b.primary, nil
+	if b.primary != nil {
+		return b.primary, nil
 	}
 
-        return nil, query.NewError(nil, "Not supported.")
+	return nil, query.NewError(nil, "Not supported.")
 }
 
 func (b *bucket) CreateIndex(name string, key []ast.Expression, using string) (catalog.Index, query.Error) {
-        return nil, query.NewError(nil, "Not supported.")
+	return nil, query.NewError(nil, "Not supported.")
 }
 
 type primaryIndex struct {
@@ -287,12 +287,13 @@ func (pi *primaryIndex) Name() string {
 	return pi.name
 }
 
-func (pi *primaryIndex) Type() string {
-	return "primary"
+func (pi *primaryIndex) Type() catalog.IndexType {
+	return catalog.PRIMARY
 }
 
 func (pi *primaryIndex) Key() catalog.IndexKey {
-	return catalog.IndexKey{"meta().id"}
+	// FIXME
+	return nil
 }
 
 func (pi *primaryIndex) Drop() query.Error {

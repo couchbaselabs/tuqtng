@@ -17,9 +17,9 @@ databases and storage engines, etc.
 package catalog
 
 import (
-	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/query"
 )
 
 // Site represents a cluster or single-node server.
@@ -64,27 +64,47 @@ type Bucket interface {
 	CreateIndex(name string, key []ast.Expression, using string) (Index, query.Error)
 }
 
-type IndexKey []interface{} // FIXME: Should this be ast.Expression?
+type IndexType string
+
+const (
+	PRIMARY IndexType = "primary"
+	VIEW    IndexType = "view"
+)
+
+type IndexKey []ast.Expression
 
 // Index is the base type for all indexes.
 type Index interface {
 	BucketId() string
 	Id() string
 	Name() string
-	Type() string
+	Type() IndexType
 	Key() IndexKey
 	Drop() query.Error // PrimaryIndexes cannot be dropped
 }
 
 // ScanIndex represents scanning indexes.
 type ScanIndex interface {
-        Index
 	ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
 
 // PrimaryIndex represents primary key indexes.
 type PrimaryIndex interface {
-        ScanIndex
+	Index
+	ScanIndex
+}
+
+type LookupValue []*dparval.Value
+
+// ExistenceIndex represents existence indexes.
+type ExistenceIndex interface {
+	Check(value LookupValue, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+}
+
+// LookupIndex represents lookup indexes.
+type LookupIndex interface {
+	ExistenceIndex
+	Lookup(value LookupValue, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
 
 // Direction represents ASC and DESC
@@ -106,11 +126,11 @@ const (
 	Both
 )
 
-type LookupValue []*dparval.Value
-
 // RangeIndex represents range scan indexes.
 type RangeIndex interface {
+	Index
 	ScanIndex
+	LookupIndex
 	Direction() Direction
 	Statistics() (RangeStatistics, query.Error)
 	ScanRange(low LookupValue, high LookupValue, RangeInclusion, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
@@ -119,7 +139,7 @@ type RangeIndex interface {
 // SearchIndex represents full text search indexes.
 type SearchIndex interface {
 	Index
-	Search(ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	Search(value string, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
 
 // RangeStatistics captures statistics for a range index.

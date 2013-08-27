@@ -14,12 +14,12 @@ import (
 	"strings"
 
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
-	"github.com/couchbaselabs/tuqtng/ast"
 )
 
-const POOL_ID   = "sys_catalog"
+const POOL_ID = "sys_catalog"
 const POOL_NAME = "sys_catalog"
 const BUCKET_NAME_SITES = "sites"
 const BUCKET_NAME_POOLS = "pools"
@@ -250,15 +250,15 @@ func (b *sitebucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 }
 
 func (b *sitebucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
-        if b.primary != nil {
-	        return b.primary, nil
+	if b.primary != nil {
+		return b.primary, nil
 	}
 
-        return nil, query.NewError(nil, "Not supported.")
+	return nil, query.NewError(nil, "Not supported.")
 }
 
 func (b *sitebucket) CreateIndex(name string, key []ast.Expression, using string) (catalog.Index, query.Error) {
-        return nil, query.NewError(nil, "Not supported.")
+	return nil, query.NewError(nil, "Not supported.")
 }
 
 func newSitesBucket(p *pool) (*sitebucket, query.Error) {
@@ -288,12 +288,13 @@ func (pi *siteIndex) Name() string {
 	return pi.name
 }
 
-func (pi *siteIndex) Type() string {
-	return "primary"
+func (pi *siteIndex) Type() catalog.IndexType {
+	return catalog.PRIMARY
 }
 
 func (pi *siteIndex) Key() catalog.IndexKey {
-	return catalog.IndexKey{"meta().id"}
+	// FIXME
+	return nil
 }
 
 func (pi *siteIndex) Drop() query.Error {
@@ -387,15 +388,15 @@ func (b *poolbucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 }
 
 func (b *poolbucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
-        if b.primary != nil {
-	        return b.primary, nil
+	if b.primary != nil {
+		return b.primary, nil
 	}
 
-        return nil, query.NewError(nil, "Not supported.")
+	return nil, query.NewError(nil, "Not supported.")
 }
 
 func (b *poolbucket) CreateIndex(name string, key []ast.Expression, using string) (catalog.Index, query.Error) {
-        return nil, query.NewError(nil, "Not supported.")
+	return nil, query.NewError(nil, "Not supported.")
 }
 
 func newPoolsBucket(p *pool) (*poolbucket, query.Error) {
@@ -425,12 +426,13 @@ func (pi *poolIndex) Name() string {
 	return pi.name
 }
 
-func (pi *poolIndex) Type() string {
-	return "primary"
+func (pi *poolIndex) Type() catalog.IndexType {
+	return catalog.PRIMARY
 }
 
 func (pi *poolIndex) Key() catalog.IndexKey {
-	return catalog.IndexKey{"meta().id"}
+	// FIXME
+	return nil
 }
 
 func (pi *poolIndex) Drop() query.Error {
@@ -534,15 +536,15 @@ func (b *bucketbucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 }
 
 func (b *bucketbucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
-        if b.primary != nil {
-	        return b.primary, nil
+	if b.primary != nil {
+		return b.primary, nil
 	}
 
-        return nil, query.NewError(nil, "Not supported.")
+	return nil, query.NewError(nil, "Not supported.")
 }
 
 func (b *bucketbucket) CreateIndex(name string, key []ast.Expression, using string) (catalog.Index, query.Error) {
-        return nil, query.NewError(nil, "Not supported.")
+	return nil, query.NewError(nil, "Not supported.")
 }
 
 func newBucketsBucket(p *pool) (*bucketbucket, query.Error) {
@@ -572,12 +574,13 @@ func (pi *bucketIndex) Name() string {
 	return pi.name
 }
 
-func (pi *bucketIndex) Type() string {
-	return "primary"
+func (pi *bucketIndex) Type() catalog.IndexType {
+	return catalog.PRIMARY
 }
 
 func (pi *bucketIndex) Key() catalog.IndexKey {
-	return catalog.IndexKey{"meta().id"}
+	// FIXME
+	return nil
 }
 
 func (pi *bucketIndex) Drop() query.Error {

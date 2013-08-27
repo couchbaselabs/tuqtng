@@ -37,8 +37,8 @@ func (vi *viewIndex) Name() string {
 	return fmt.Sprintf("_design/%s/_view/%s", vi.ddoc, vi.view)
 }
 
-func (vi *viewIndex) Type() string {
-	return ("view")
+func (vi *viewIndex) Type() catalog.IndexType {
+	return catalog.VIEW
 }
 
 func (vi *viewIndex) Key() catalog.IndexKey {
@@ -118,12 +118,13 @@ type primaryIndex struct {
 	viewIndex
 }
 
-func (pi *primaryIndex) Type() string {
-	return ("primary")
+func (pi *primaryIndex) Type() catalog.IndexType {
+	return catalog.PRIMARY
 }
 
 func (pi *primaryIndex) Key() catalog.IndexKey {
-	return catalog.IndexKey{"meta().id"}
+	// FIXME
+	return nil
 }
 
 func (pi *primaryIndex) Drop() query.Error {
