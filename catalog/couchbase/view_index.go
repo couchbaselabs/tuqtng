@@ -54,6 +54,10 @@ func (vi *viewIndex) Type() catalog.IndexType {
 	return vi.using
 }
 
+func (vi *viewIndex) IsPrimary() bool {
+	return false
+}
+
 func (vi *viewIndex) Key() catalog.IndexKey {
 	return vi.on
 }
@@ -152,4 +156,12 @@ func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue
 			}
 		}
 	}
+}
+
+func (pi *primaryIndex) IsPrimary() bool {
+	return true
+}
+
+func (pi *primaryIndex) ScanBucket(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+	pi.ScanEntries(ch, warnch, errch)
 }

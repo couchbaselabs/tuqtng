@@ -70,7 +70,7 @@ type Bucket interface {
 type IndexType string
 
 const (
-	PRIMARY IndexType = "primary"
+	PRIMARY IndexType = "primary" // not used by view_index
 	VIEW    IndexType = "view"
 )
 
@@ -82,6 +82,7 @@ type Index interface {
 	Id() string
 	Name() string
 	Type() IndexType
+	IsPrimary() bool
 	Key() IndexKey
 	Drop() query.Error // PrimaryIndexes cannot be dropped
 }
@@ -95,6 +96,7 @@ type ScanIndex interface {
 type PrimaryIndex interface {
 	Index
 	ScanIndex
+	ScanBucket(ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
 
 type LookupValue []*dparval.Value

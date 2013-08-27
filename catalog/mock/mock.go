@@ -290,6 +290,10 @@ func (pi *primaryIndex) Type() catalog.IndexType {
 	return catalog.PRIMARY
 }
 
+func (pi *primaryIndex) IsPrimary() bool {
+	return true
+}
+
 func (pi *primaryIndex) Key() catalog.IndexKey {
 	// FIXME
 	return nil
@@ -297,6 +301,10 @@ func (pi *primaryIndex) Key() catalog.IndexKey {
 
 func (pi *primaryIndex) Drop() query.Error {
 	return query.NewError(nil, "Primary index cannot be dropped.")
+}
+
+func (pi *primaryIndex) ScanBucket(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+	pi.ScanEntries(ch, warnch, errch)
 }
 
 func (pi *primaryIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
