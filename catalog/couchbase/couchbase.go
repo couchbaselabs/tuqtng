@@ -266,6 +266,9 @@ func (b *bucket) CreateIndex(name string, key catalog.IndexKey, using catalog.In
 	switch using {
 
 	case catalog.VIEW:
+		if _, exists := b.indexes[name]; exists {
+			return nil, query.NewError(nil, fmt.Sprintf("Index already exists: %s", name))
+		}
 		idx, err := b.createViewIndex(name, key)
 		if err != nil {
 			return nil, err
