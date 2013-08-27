@@ -26,20 +26,6 @@ type PlanElement interface {
 	Sources() []PlanElement
 }
 
-type ExpressionEvaluator struct {
-	Type string `json:"type"`
-}
-
-func NewExpressionEvaluator() *ExpressionEvaluator {
-	return &ExpressionEvaluator{
-		Type: "expr_evaluator",
-	}
-}
-
-func (this *ExpressionEvaluator) Sources() []PlanElement {
-	return []PlanElement{}
-}
-
 type Explain struct {
 	Type  string      `json:"type"`
 	Input PlanElement `json:"input"`

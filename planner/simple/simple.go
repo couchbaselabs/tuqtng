@@ -17,6 +17,7 @@ import (
 
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
+	"github.com/couchbaselabs/tuqtng/catalog/system"
 	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -41,100 +42,106 @@ func (this *SimplePlanner) Plan(stmt ast.Statement) (plan.PlanChannel, query.Err
 }
 
 func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, pc plan.PlanChannel, ec query.ErrorChannel) {
+
+	var planHeads []plan.PlanElement
+
 	from := stmt.GetFrom()
-
-	var lastStep plan.PlanElement
-
 	if from == nil {
-		// simple expression evaluation
-		lastStep = plan.NewExpressionEvaluator()
+		// point to :system.dual
+		from = &ast.From{Pool: system.POOL_NAME, Bucket: system.BUCKET_NAME_DUAL}
+	}
 
-	} else {
-		// get the pool
-		poolName := from.Pool
-		if poolName == "" {
-			poolName = this.defaultPool
-		}
+	// get the pool
+	poolName := from.Pool
+	if poolName == "" {
+		poolName = this.defaultPool
+	}
 
-		pool, err := this.site.PoolByName(poolName)
-		if err != nil {
-			ec <- query.NewPoolDoesNotExist(poolName)
-			return
-		}
+	pool, err := this.site.PoolByName(poolName)
+	if err != nil {
+		ec <- query.NewPoolDoesNotExist(poolName)
+		return
+	}
 
-		bucket, err := pool.BucketByName(from.Bucket)
-		if err != nil {
-			ec <- query.NewBucketDoesNotExist(from.Bucket)
-			return
-		}
+	bucket, err := pool.BucketByName(from.Bucket)
+	if err != nil {
+		ec <- query.NewBucketDoesNotExist(from.Bucket)
+		return
+	}
 
-		// find all docs index
-		indexes, err := bucket.Indexes()
-		if err != nil {
-			ec <- query.NewError(err, fmt.Sprintf("No usable index found for bucket %v", from.Bucket))
-			return
-		}
+	// find all docs index
+	indexes, err := bucket.Indexes()
+	if err != nil {
+		ec <- query.NewError(err, fmt.Sprintf("No indexes found for bucket %v", from.Bucket))
+		return
+	}
 
-		foundUsableIndex := false
-		for _, index := range indexes {
-			switch index.(type) {
-			case catalog.PrimaryIndex:
-				lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name())
-				lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
-				nextFrom := from.Over
-				for nextFrom != nil {
-					// add document joins
-					lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
-					nextFrom = nextFrom.Over
-				}
-				foundUsableIndex = true
-				break
+	foundUsableIndex := false
+	for _, index := range indexes {
+		var lastStep plan.PlanElement
+		switch index.(type) {
+		case catalog.PrimaryIndex:
+			lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name())
+			lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
+			nextFrom := from.Over
+			for nextFrom != nil {
+				// add document joins
+				lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+				nextFrom = nextFrom.Over
 			}
-		}
-
-		if !foundUsableIndex {
-			ec <- query.NewError(nil, fmt.Sprintf("No usable index found for bucket %v", from.Bucket))
-			return
+			planHeads = append(planHeads, lastStep)
+			foundUsableIndex = true
 		}
 
 	}
 
-	if stmt.GetWhere() != nil {
-		lastStep = plan.NewFilter(lastStep, stmt.GetWhere())
+	if !foundUsableIndex {
+		ec <- query.NewError(nil, fmt.Sprintf("No usable indexes found for bucket %v", from.Bucket))
+		return
 	}
 
-	if stmt.GetGroupBy() != nil {
-		lastStep = plan.NewGroup(lastStep, stmt.GetGroupBy(), stmt.GetAggregateReferences())
+	// now for all the plan heads, create a full plan
+	for _, lastStep := range planHeads {
+
+		if stmt.GetWhere() != nil {
+			lastStep = plan.NewFilter(lastStep, stmt.GetWhere())
+		}
+
+		if stmt.GetGroupBy() != nil {
+			lastStep = plan.NewGroup(lastStep, stmt.GetGroupBy(), stmt.GetAggregateReferences())
+		}
+
+		if stmt.GetHaving() != nil {
+			lastStep = plan.NewFilter(lastStep, stmt.GetHaving())
+		}
+
+		lastStep = plan.NewProjector(lastStep, stmt.GetResultExpressionList(), true)
+
+		if stmt.IsDistinct() {
+			lastStep = plan.NewEliminateDuplicates(lastStep)
+		}
+
+		if stmt.GetOrderBy() != nil {
+			explicitAliases := stmt.GetExplicitProjectionAliases()
+			lastStep = plan.NewOrder(lastStep, stmt.GetOrderBy(), explicitAliases)
+		}
+
+		if stmt.GetOffset() != 0 {
+			lastStep = plan.NewOffset(lastStep, stmt.GetOffset())
+		}
+
+		if stmt.GetLimit() >= 0 {
+			lastStep = plan.NewLimit(lastStep, stmt.GetLimit())
+		}
+
+		if stmt.ExplainOnly {
+			lastStep = plan.NewExplain(lastStep)
+		}
+
+		pc <- plan.Plan{Root: lastStep}
+
 	}
 
-	if stmt.GetHaving() != nil {
-		lastStep = plan.NewFilter(lastStep, stmt.GetHaving())
-	}
-
-	lastStep = plan.NewProjector(lastStep, stmt.GetResultExpressionList(), true)
-
-	if stmt.IsDistinct() {
-		lastStep = plan.NewEliminateDuplicates(lastStep)
-	}
-
-	if stmt.GetOrderBy() != nil {
-		explicitAliases := stmt.GetExplicitProjectionAliases()
-		lastStep = plan.NewOrder(lastStep, stmt.GetOrderBy(), explicitAliases)
-	}
-
-	if stmt.GetOffset() != 0 {
-		lastStep = plan.NewOffset(lastStep, stmt.GetOffset())
-	}
-
-	if stmt.GetLimit() >= 0 {
-		lastStep = plan.NewLimit(lastStep, stmt.GetLimit())
-	}
-
-	if stmt.ExplainOnly {
-		lastStep = plan.NewExplain(lastStep)
-	}
-
-	pc <- plan.Plan{Root: lastStep}
 }
 
 func (this *SimplePlanner) buildCreateIndexStatementPlans(stmt *ast.CreateIndexStatement, pc plan.PlanChannel, ec query.ErrorChannel) {
