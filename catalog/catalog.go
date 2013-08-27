@@ -22,6 +22,9 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
+// log channel for the catalog lifecycle
+const CHANNEL = "CATALOG"
+
 // Site represents a cluster or single-node server.
 type Site interface {
 	Id() string

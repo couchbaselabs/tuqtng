@@ -21,7 +21,8 @@ import (
 )
 
 type site struct {
-	client cb.Client
+	client    cb.Client
+	poolCache map[string]catalog.Pool
 }
 
 func (s *site) Id() string {
@@ -47,19 +48,31 @@ func (s *site) PoolById(id string) (p catalog.Pool, e query.Error) {
 }
 
 func (s *site) PoolByName(name string) (p catalog.Pool, e query.Error) {
-	return newPool(s, name)
+	pool, ok := s.poolCache[name]
+	if !ok {
+		var err query.Error
+		pool, err = newPool(s, name)
+		if err != nil {
+			return nil, err
+		}
+		s.poolCache[name] = pool
+	}
+	return pool, nil
 }
 
 // NewSite creates a new Couchbase site for the given url.
 func NewSite(url string) (catalog.Site, query.Error) {
-
+	clog.To(catalog.CHANNEL, "Created New Site %s", url)
 	client, err := cb.Connect(url)
 
 	if err != nil {
 		return nil, query.NewError(err, "")
 	}
 
-	return &site{client: client}, nil
+	return &site{
+		client:    client,
+		poolCache: make(map[string]catalog.Pool),
+	}, nil
 }
 
 type pool struct {
@@ -112,6 +125,7 @@ func (p *pool) BucketByName(name string) (catalog.Bucket, query.Error) {
 
 func (p *pool) refresh() {
 	// trigger refresh of this pool
+	clog.To(catalog.CHANNEL, "Refreshing Pool %s", p.name)
 	newpool, err := p.site.client.GetPool(p.name)
 	if err != nil {
 		clog.Warnf("Error updating pool: %v", err)
@@ -121,6 +135,7 @@ func (p *pool) refresh() {
 }
 
 func newPool(s *site, name string) (*pool, query.Error) {
+	clog.To(catalog.CHANNEL, "Created New Pool %s", name)
 	cbpool, err := s.client.GetPool(name)
 	if err != nil {
 		return nil, query.NewError(nil, fmt.Sprintf("Pool %v not found.", name))
@@ -258,6 +273,7 @@ func (b *bucket) CreateIndex(name string, key catalog.IndexKey, using catalog.In
 }
 
 func newBucket(p *pool, name string) (*bucket, query.Error) {
+	clog.To(catalog.CHANNEL, "Created New Bucket %s", name)
 	cbbucket, err := p.cbpool.GetBucket(name)
 	if err != nil {
 		// go-couchbase caches the buckets

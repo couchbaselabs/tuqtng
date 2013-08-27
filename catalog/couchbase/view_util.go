@@ -20,7 +20,7 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
-const CHANNEL = "NETWORK"
+const NETWORK_CHANNEL = "NETWORK"
 
 const TYPE_NULL = 64
 const TYPE_BOOLEAN = 96
@@ -53,7 +53,7 @@ func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *
 
 		logURL, err := bucket.ViewURL(ddoc, view, options)
 		if err == nil {
-			clog.To(CHANNEL, "Request View: %v", logURL)
+			clog.To(NETWORK_CHANNEL, "Request View: %v", logURL)
 		}
 		vres, err := bucket.View(ddoc, view, options)
 		if err != nil {
