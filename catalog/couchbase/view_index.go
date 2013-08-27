@@ -67,7 +67,6 @@ func (idx *viewIndex) ViewName() string {
 }
 
 func (b *bucket) createViewIndex(name string, key catalog.IndexKey) (catalog.Index, query.Error) {
-
 	idx, err := newViewIndex(name, key, b)
 	if err != nil {
 		return nil, query.NewError(err, fmt.Sprintf("Cannot create index %s", name))
@@ -76,7 +75,7 @@ func (b *bucket) createViewIndex(name string, key catalog.IndexKey) (catalog.Ind
 }
 
 func (vi *viewIndex) Drop() query.Error {
-
+	bucket := vi.bucket
 	if vi.using == catalog.PRIMARY {
 		return query.NewError(nil, "Primary index cannot be dropped.")
 	}
@@ -84,11 +83,11 @@ func (vi *viewIndex) Drop() query.Error {
 	if err != nil {
 		return query.NewError(err, fmt.Sprintf("Cannot drop index %s", vi.Name()))
 	}
+	delete(bucket.indexes, vi.name)
 	return nil
 }
 
 func (b *bucket) LoadViewIndexes() query.Error {
-
 	// put in indicative entry for primary index
 	pi, err := newPrimaryIndex(b, "", "_all_docs")
 	if err != nil {

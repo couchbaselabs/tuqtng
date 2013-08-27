@@ -264,8 +264,14 @@ func (b *bucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
 func (b *bucket) CreateIndex(name string, key catalog.IndexKey, using catalog.IndexType) (catalog.Index, query.Error) {
 
 	switch using {
+
 	case catalog.VIEW:
-		return b.createViewIndex(name, key)
+		idx, err := b.createViewIndex(name, key)
+		if err != nil {
+			return nil, err
+		}
+		b.indexes[idx.Name()] = idx
+		return idx, nil
 
 	default:
 		return nil, query.NewError(nil, "Not yet implemented.")
