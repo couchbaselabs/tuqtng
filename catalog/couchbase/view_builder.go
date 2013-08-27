@@ -63,7 +63,7 @@ func newDesignDoc(idxname string, on catalog.IndexKey) (*designdoc, error) {
 func newPrimaryIndex(b *bucket, ddname string, view string) (*primaryIndex, error) {
 	meta := ast.NewFunctionCall("meta", ast.FunctionArgExpressionList{})
 	mdid := ast.NewDotMemberOperator(meta, ast.NewProperty("id"))
-	name := b.name + "/primary"
+	name := "#primary"
 	ddoc := designdoc{name: ddname, viewname: view}
 	idx := primaryIndex{
 		viewIndex{
@@ -117,7 +117,6 @@ func generateMap(on catalog.IndexKey, doc *designdoc) error {
 	fmt.Fprint(buf, templEnd)
 	doc.mapfn = buf.String()
 
-	fmt.Println(doc.mapfn)
 	return nil
 }
 
@@ -135,7 +134,6 @@ func (idx *viewIndex) putDesignDoc() error {
 	put.Views[idx.name] = view
 	put.IndexChecksum = checksum(idx.ddoc)
 
-	fmt.Printf("Putting: %v\n", put)
 	if err := idx.bucket.cbbucket.PutDDoc(idx.DDocName(), &put); err != nil {
 		return err
 	}
@@ -160,8 +158,6 @@ func (idx *viewIndex) checkDesignDoc() error {
 	if err := idx.bucket.cbbucket.GetDDoc(idx.DDocName(), &ddoc); err != nil {
 		return err
 	}
-
-	fmt.Printf("Getting: %v\n", ddoc)
 
 	if ddoc.IndexChecksum != checksum(idx.ddoc) {
 		return api.DDocChanged
