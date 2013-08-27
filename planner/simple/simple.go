@@ -76,7 +76,6 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 		return
 	}
 
-	foundUsableIndex := false
 	for _, index := range indexes {
 		var lastStep plan.PlanElement
 		switch index.(type) {
@@ -90,12 +89,11 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 				nextFrom = nextFrom.Over
 			}
 			planHeads = append(planHeads, lastStep)
-			foundUsableIndex = true
 		}
 
 	}
 
-	if !foundUsableIndex {
+	if len(planHeads) == 0 {
 		ec <- query.NewError(nil, fmt.Sprintf("No usable indexes found for bucket %v", from.Bucket))
 		return
 	}
