@@ -21,3 +21,5 @@ import (
 type Planner interface {
 	Plan(ast.Statement) (plan.PlanChannel, query.ErrorChannel)
 }
+
+const CHANNEL = "PLANNER"

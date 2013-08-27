@@ -75,11 +75,7 @@ func (this *CreateIndex) Run(stopChannel misc.StopChannel) {
 			})
 			this.SendItem(item)
 		} else {
-			item := dparval.NewValue(map[string]interface{}{})
-			item.SetAttachment("projection", map[string]interface{}{
-				"status": "no error, but index is nil",
-			})
-			this.SendItem(item)
+			clog.Warn("Successfully created index, but index was nil")
 		}
 	}
 	clog.To(CHANNEL, "create_index operator finished")

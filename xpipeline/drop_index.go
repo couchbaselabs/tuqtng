@@ -53,9 +53,11 @@ func (this *DropIndex) Run(stopChannel misc.StopChannel) {
 	if err != nil {
 		this.SendError(err)
 	} else {
-		this.SendItem(dparval.NewValue(map[string]interface{}{
+		item := dparval.NewValue(map[string]interface{}{})
+		item.SetAttachment("projection", map[string]interface{}{
 			"dropped": true,
-		}))
+		})
+		this.SendItem(item)
 	}
 	clog.To(CHANNEL, "drop_index operator finished")
 }

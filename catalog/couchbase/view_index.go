@@ -165,3 +165,19 @@ func (pi *primaryIndex) IsPrimary() bool {
 func (pi *primaryIndex) ScanBucket(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	pi.ScanEntries(ch, warnch, errch)
 }
+
+func (vi *viewIndex) Check(value catalog.LookupValue, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+	vi.ScanRange(value, value, catalog.Both, ch, warnch, errch)
+}
+
+func (vi *viewIndex) Lookup(value catalog.LookupValue, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+	vi.ScanRange(value, value, catalog.Both, ch, warnch, errch)
+}
+
+func (vi *viewIndex) Statistics() (catalog.RangeStatistics, query.Error) {
+	return nil, query.NewError(nil, "statistics not implemented")
+}
+
+func (vi *viewIndex) Direction() catalog.Direction {
+	return catalog.ASC
+}

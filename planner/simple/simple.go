@@ -15,10 +15,12 @@ package simple
 import (
 	"fmt"
 
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/catalog/system"
 	"github.com/couchbaselabs/tuqtng/plan"
+	"github.com/couchbaselabs/tuqtng/planner"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -76,21 +78,30 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 		return
 	}
 
+	clog.To(planner.CHANNEL, "Indexes in bucket %v", indexes)
+
 	for _, index := range indexes {
 		var lastStep plan.PlanElement
 		switch index.(type) {
 		case catalog.PrimaryIndex:
+			clog.To(planner.CHANNEL, "See primary index %v", index.Name())
 			lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name())
-			lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
-			nextFrom := from.Over
-			for nextFrom != nil {
-				// add document joins
-				lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
-				nextFrom = nextFrom.Over
-			}
-			planHeads = append(planHeads, lastStep)
+		case catalog.RangeIndex:
+			// see if this index can be used
+			clog.To(planner.CHANNEL, "See index %v", index.Name())
+			continue
+		default:
+			clog.To(planner.CHANNEL, "Unsupported type of index %T", index)
+			continue
 		}
-
+		lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
+		nextFrom := from.Over
+		for nextFrom != nil {
+			// add document joins
+			lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+			nextFrom = nextFrom.Over
+		}
+		planHeads = append(planHeads, lastStep)
 	}
 
 	if len(planHeads) == 0 {
