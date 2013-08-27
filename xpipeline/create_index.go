@@ -56,7 +56,7 @@ func (this *CreateIndex) Run(stopChannel misc.StopChannel) {
 	defer this.RecoverPanic()
 
 	indexType := catalog.IndexType(strings.ToLower(this.index_type))
-	indexOn := make(catalog.IndexKey, len(this.index_type))
+	indexOn := make(catalog.IndexKey, len(this.on))
 	for pos, key := range this.on {
 		indexOn[pos] = key
 	}
@@ -67,10 +67,20 @@ func (this *CreateIndex) Run(stopChannel misc.StopChannel) {
 	if err != nil {
 		this.SendError(err)
 	} else {
-		this.SendItem(dparval.NewValue(map[string]interface{}{
-			"id":   index.Id(),
-			"name": index.Name(),
-		}))
+		if index != nil {
+			item := dparval.NewValue(map[string]interface{}{})
+			item.SetAttachment("projection", map[string]interface{}{
+				"id":   index.Id(),
+				"name": index.Name(),
+			})
+			this.SendItem(item)
+		} else {
+			item := dparval.NewValue(map[string]interface{}{})
+			item.SetAttachment("projection", map[string]interface{}{
+				"status": "no error, but index is nil",
+			})
+			this.SendItem(item)
+		}
 	}
 	clog.To(CHANNEL, "create_index operator finished")
 }
