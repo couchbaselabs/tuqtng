@@ -61,7 +61,7 @@ type Bucket interface {
 	BulkFetch([]string) (map[string]*dparval.Value, query.Error)
 	Release()
 	CreatePrimaryIndex() (PrimaryIndex, query.Error)
-	CreateIndex(name string, key []ast.Expression, using string) (Index, query.Error)
+	CreateIndex(name string, key IndexKey, using IndexType) (Index, query.Error)
 }
 
 type IndexType string

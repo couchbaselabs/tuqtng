@@ -24,7 +24,6 @@ import (
 	"strings"
 
 	"github.com/couchbaselabs/dparval"
-	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -298,7 +297,7 @@ func (b *bucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
 	return nil, query.NewError(nil, "Not supported.")
 }
 
-func (b *bucket) CreateIndex(name string, key []ast.Expression, using string) (catalog.Index, query.Error) {
+func (b *bucket) CreateIndex(name string, key catalog.IndexKey, using catalog.IndexType) (catalog.Index, query.Error) {
 	return nil, query.NewError(nil, "Not supported.")
 }
 

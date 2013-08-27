@@ -12,6 +12,7 @@ package xpipeline
 import (
 	"fmt"
 	"runtime/debug"
+	"strings"
 
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
@@ -54,9 +55,15 @@ func (this *CreateIndex) Run(stopChannel misc.StopChannel) {
 	// this MUST be here so that it runs before the channels are closed
 	defer this.RecoverPanic()
 
+	indexType := catalog.IndexType(strings.ToLower(this.index_type))
+	indexOn := make(catalog.IndexKey, len(this.index_type))
+	for pos, key := range this.on {
+		indexOn[pos] = key
+	}
+
 	this.downstreamStopChannel = stopChannel
 	clog.To(CHANNEL, "create_index operator starting")
-	index, err := this.bucket.CreateIndex(this.name, this.on, this.index_type)
+	index, err := this.bucket.CreateIndex(this.name, indexOn, indexType)
 	if err != nil {
 		this.SendError(err)
 	} else {

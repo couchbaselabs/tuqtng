@@ -15,6 +15,7 @@ import (
 
 	"github.com/couchbaselabs/dparval"
 	cb "github.com/couchbaselabs/go-couchbase"
+	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -23,6 +24,32 @@ type viewIndex struct {
 	ddoc   string
 	view   string
 	bucket *bucket
+}
+
+func (rv *bucket) LoadViewIndexes() query.Error {
+	rv.indexes = make(map[string]catalog.Index, 1)
+
+	// build index
+	pi, err := newPrimaryIndex(rv, "", "_all_docs")
+	if err != nil {
+		return query.NewError(err, "")
+	}
+	rv.indexes[pi.Name()] = pi
+	rv.primary = pi
+
+	return nil
+}
+
+func (b *bucket) createViewIndex(name string, key []ast.Expression) (catalog.Index, query.Error) {
+	return nil, nil
+}
+
+func newViewIndex(b *bucket, ddoc string, view string) (*viewIndex, query.Error) {
+	return &viewIndex{
+		bucket: b,
+		view:   view,
+		ddoc:   ddoc,
+	}, nil
 }
 
 func (vi *viewIndex) BucketId() string {
@@ -106,20 +133,12 @@ func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue
 	}
 }
 
-func newViewIndex(b *bucket, ddoc string, view string) (*viewIndex, query.Error) {
-	return &viewIndex{
-		bucket: b,
-		view:   view,
-		ddoc:   ddoc,
-	}, nil
-}
-
 type primaryIndex struct {
 	viewIndex
 }
 
 func (pi *primaryIndex) Type() catalog.IndexType {
-	return catalog.PRIMARY
+	return pi.viewIndex.Type()
 }
 
 func (pi *primaryIndex) Key() catalog.IndexKey {

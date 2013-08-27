@@ -16,7 +16,6 @@ import (
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	cb "github.com/couchbaselabs/go-couchbase"
-	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -243,18 +242,19 @@ func (b *bucket) Fetch(id string) (*dparval.Value, query.Error) {
 	return values[id], nil
 }
 
-// FIXME
 func (b *bucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
-	if b.primary != nil {
-		return b.primary, nil
-	}
-
-	return nil, query.NewError(nil, "Not yet implemented.")
+	return nil, query.NewError(nil, "Primary index cannot created as it uses _all_docs.")
 }
 
-// FIXME
-func (b *bucket) CreateIndex(name string, key []ast.Expression, using string) (catalog.Index, query.Error) {
-	return nil, query.NewError(nil, "Not yet implemented.")
+func (b *bucket) CreateIndex(name string, key catalog.IndexKey, using catalog.IndexType) (catalog.Index, query.Error) {
+
+	switch using {
+	case catalog.VIEW:
+		return b.createViewIndex(name, key)
+
+	default:
+		return nil, query.NewError(nil, "Not yet implemented.")
+	}
 }
 
 func newBucket(p *pool, name string) (*bucket, query.Error) {
@@ -278,14 +278,10 @@ func newBucket(p *pool, name string) (*bucket, query.Error) {
 		cbbucket: cbbucket,
 	}
 
-	rv.indexes = make(map[string]catalog.Index, 1)
-	// build index
-	pi, err := newPrimaryIndex(rv, "", "_all_docs")
+	ierr := rv.LoadViewIndexes()
 	if err != nil {
-		return nil, query.NewError(err, "")
+		return nil, ierr
 	}
-	rv.indexes[pi.Name()] = pi
-	rv.primary = pi
 
 	return rv, nil
 }
