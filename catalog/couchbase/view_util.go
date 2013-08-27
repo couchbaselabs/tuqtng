@@ -26,7 +26,7 @@ const TYPE_NULL = 64
 const TYPE_BOOLEAN = 96
 const TYPE_NUMBER = 128
 const TYPE_STRING = 160
-const TYPE_ARRAY = 92
+const TYPE_ARRAY = 192
 const TYPE_OBJECT = 224
 
 var MIN_ID = cb.DocId("")
