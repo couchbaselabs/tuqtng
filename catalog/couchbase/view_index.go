@@ -21,20 +21,21 @@ import (
 
 type viewIndex struct {
 	name   string
+	using  catalog.IndexType
 	on     catalog.IndexKey
 	ddoc   *designdoc
 	bucket *bucket
 }
 
-type designdoc struct {
-	mapfn    string
-	reducefn string
+type primaryIndex struct {
+	viewIndex
 }
 
-type ddocJSON struct {
-	cb.DDocJSON
-	indexOn       string  `json:"indexOn"`
-	indexChecksum int     `json:"indexChecksum"`
+type designdoc struct {
+	name     string
+	viewname string
+	mapfn    string
+	reducefn string
 }
 
 func (vi *viewIndex) BucketId() string {
@@ -42,47 +43,51 @@ func (vi *viewIndex) BucketId() string {
 }
 
 func (vi *viewIndex) Id() string {
-	return vi.Name()
+	return vi.name
 }
 
 func (vi *viewIndex) Name() string {
-	return fmt.Sprintf("%s/%s", vi.bucket.name, vi.name)
+	return vi.name
 }
 
 func (vi *viewIndex) Type() catalog.IndexType {
-	return catalog.VIEW
+	return vi.using
 }
 
 func (vi *viewIndex) Key() catalog.IndexKey {
 	return vi.on
 }
 
+func (idx *viewIndex) DDocName() string {
+	return idx.ddoc.name
+}
+
+func (idx *viewIndex) ViewName() string {
+	return idx.ddoc.viewname
+}
+
 func (b *bucket) createViewIndex(name string, key catalog.IndexKey) (catalog.Index, query.Error) {
+
 	idx, err := newViewIndex(name, key, b)
-	if (idx != nil) {
+	if err != nil {
 		return nil, query.NewError(err, fmt.Sprintf("Cannot create index %s", name))
 	}
 	return idx, nil
 }
 
 func (vi *viewIndex) Drop() query.Error {
-	err := vi.Drop()
+
+	if vi.using == catalog.PRIMARY {
+		return query.NewError(nil, "Primary index cannot be dropped.")
+	}
+	err := vi.DropViewIndex()
 	if err != nil {
 		return query.NewError(err, fmt.Sprintf("Cannot drop index %s", vi.Name()))
 	}
 	return nil
 }
 
-func (idx *viewIndex) DDocName() string {
-	return "query_" + idx.Name()
-}
-
-func (idx *viewIndex) ViewName() string {
-	return "autogen"
-}
-
 func (b *bucket) LoadViewIndexes() query.Error {
-	b.indexes = make(map[string]catalog.Index, 1)
 
 	// put in indicative entry for primary index
 	pi, err := newPrimaryIndex(b, "", "_all_docs")
@@ -94,7 +99,6 @@ func (b *bucket) LoadViewIndexes() query.Error {
 
 	return nil
 }
-
 
 func (vi *viewIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	vi.ScanRange(nil, nil, catalog.Both, ch, warnch, errch)
@@ -149,40 +153,4 @@ func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue
 			}
 		}
 	}
-}
-
-type primaryIndex struct {
-	viewIndex
-}
-
-func (pi *primaryIndex) Type() catalog.IndexType {
-	return catalog.PRIMARY
-}
-
-func (pi *primaryIndex) Key() catalog.IndexKey {
-	return pi.on
-}
-
-func (pi *primaryIndex) Drop() query.Error {
-	return query.NewError(nil, "Primary index cannot be dropped.")
-}
-
-func (pi *primaryIndex) DDocName() string {
-	return ""
-}
-
-func (pi *primaryIndex) ViewName() string {
-	return "_all_docs"
-}
-
-func newPrimaryIndex(b *bucket, ddoc string, view string) (*primaryIndex, query.Error) {
-	// FIXME
-	return &primaryIndex{
-		viewIndex{
-			name:   "primary",
-			on:     make(catalog.IndexKey, 0),
-			ddoc:   nil,
-			bucket: b,
-		},
-	}, nil
 }

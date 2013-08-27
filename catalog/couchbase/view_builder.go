@@ -3,7 +3,7 @@ package couchbase
 import (
 	"bytes"
 	"fmt"
-	"github.com/couchbaselabs/go-couchbase"
+	cb "github.com/couchbaselabs/go-couchbase"
 	"github.com/couchbaselabs/indexing/api"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
@@ -12,15 +12,22 @@ import (
 	"strings"
 )
 
+type ddocJSON struct {
+	cb.DDocJSON
+	IndexOn       string `json:"indexOn"`
+	IndexChecksum int    `json:"indexChecksum"`
+}
+
 func newViewIndex(name string, on catalog.IndexKey, bkt *bucket) (*viewIndex, error) {
 
-	doc, err := newDesignDoc(on)
+	doc, err := newDesignDoc(name, on)
 	if err != nil {
 		return nil, err
 	}
 
 	inst := viewIndex{
 		name:   name,
+		using:  catalog.VIEW,
 		on:     on,
 		ddoc:   doc,
 		bucket: bkt,
@@ -34,8 +41,11 @@ func newViewIndex(name string, on catalog.IndexKey, bkt *bucket) (*viewIndex, er
 	return &inst, nil
 }
 
-func newDesignDoc(on catalog.IndexKey) (*designdoc, error) {
+func newDesignDoc(idxname string, on catalog.IndexKey) (*designdoc, error) {
 	var doc designdoc
+
+	doc.name = "ddl_" + idxname
+	doc.viewname = "autogen"
 
 	err := generateMap(on, &doc)
 	if err != nil {
@@ -48,6 +58,23 @@ func newDesignDoc(on catalog.IndexKey) (*designdoc, error) {
 	}
 
 	return &doc, nil
+}
+
+func newPrimaryIndex(b *bucket, ddname string, view string) (*primaryIndex, error) {
+	meta := ast.NewFunctionCall("meta", ast.FunctionArgExpressionList{})
+	mdid := ast.NewDotMemberOperator(meta, ast.NewProperty("id"))
+	name := b.name + "/primary"
+	ddoc := designdoc{name: ddname, viewname: view}
+	idx := primaryIndex{
+		viewIndex{
+			name:   name,
+			using:  catalog.PRIMARY,
+			on:     catalog.IndexKey{mdid},
+			ddoc:   &ddoc,
+			bucket: b,
+		},
+	}
+	return &idx, nil
 }
 
 func generateMap(on catalog.IndexKey, doc *designdoc) error {
@@ -95,20 +122,20 @@ func generateMap(on catalog.IndexKey, doc *designdoc) error {
 }
 
 func generateReduce(on catalog.IndexKey, doc *designdoc) error {
-	// TODO
 	doc.reducefn = ""
 	return nil
 }
 
 func (idx *viewIndex) putDesignDoc() error {
-	var view couchbase.ViewDefinition
+	var view cb.ViewDefinition
 	view.Map = idx.ddoc.mapfn
 
 	var put ddocJSON
-	put.Views = make(map[string]couchbase.ViewDefinition)
-	put.Views[idx.ViewName()] = view
-	put.indexChecksum = idx.checksum()
+	put.Views = make(map[string]cb.ViewDefinition)
+	put.Views[idx.name] = view
+	put.IndexChecksum = checksum(idx.ddoc)
 
+	fmt.Printf("Putting: %v\n", put)
 	if err := idx.bucket.cbbucket.PutDDoc(idx.DDocName(), &put); err != nil {
 		return err
 	}
@@ -121,9 +148,9 @@ func (idx *viewIndex) putDesignDoc() error {
 	return nil
 }
 
-func (idx *viewIndex) checksum() int {
-	mapSum := crc32.ChecksumIEEE([]byte(idx.ddoc.mapfn))
-	reduceSum := crc32.ChecksumIEEE([]byte(idx.ddoc.reducefn))
+func checksum(ddoc *designdoc) int {
+	mapSum := crc32.ChecksumIEEE([]byte(ddoc.mapfn))
+	reduceSum := crc32.ChecksumIEEE([]byte(ddoc.reducefn))
 	return int(mapSum + reduceSum)
 }
 
@@ -134,7 +161,9 @@ func (idx *viewIndex) checkDesignDoc() error {
 		return err
 	}
 
-	if ddoc.indexChecksum != idx.checksum() {
+	fmt.Printf("Getting: %v\n", ddoc)
+
+	if ddoc.IndexChecksum != checksum(idx.ddoc) {
 		return api.DDocChanged
 	}
 

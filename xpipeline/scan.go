@@ -74,7 +74,7 @@ func (this *Scan) Run(stopChannel misc.StopChannel) {
 			}
 		case err, ok = <-indexErrorChannel:
 			if err != nil {
-				this.SendError(warn)
+				this.SendError(err)
 			}
 		case _, ok = <-stopChannel:
 			// downstream has asked us to stop

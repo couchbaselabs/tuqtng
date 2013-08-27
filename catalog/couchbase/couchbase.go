@@ -276,7 +276,7 @@ func newBucket(p *pool, name string) (*bucket, query.Error) {
 		pool:     p,
 		name:     name,
 		cbbucket: cbbucket,
-		indexes:  make(map[string]catalog.Index, 0),
+		indexes:  make(map[string]catalog.Index),
 	}
 
 	ierr := rv.LoadViewIndexes()
