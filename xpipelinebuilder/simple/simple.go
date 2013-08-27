@@ -82,6 +82,30 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 			currentOperator = xpipeline.NewGrouper(currentElement.Group, currentElement.Aggregates)
 		case *plan.Explain:
 			currentOperator = xpipeline.NewExplain(currentElement.Input)
+		case *plan.CreateIndex:
+			pool, err := this.site.PoolByName(currentElement.Pool)
+			if err != nil {
+				return nil, err
+			}
+			bucket, err := pool.BucketByName(currentElement.Bucket)
+			if err != nil {
+				return nil, err
+			}
+			currentOperator = xpipeline.NewCreateIndex(bucket, currentElement.Name, currentElement.IndexType, currentElement.On)
+		case *plan.DropIndex:
+			pool, err := this.site.PoolByName(currentElement.Pool)
+			if err != nil {
+				return nil, err
+			}
+			bucket, err := pool.BucketByName(currentElement.Bucket)
+			if err != nil {
+				return nil, err
+			}
+			index, err := bucket.IndexByName(currentElement.Name)
+			if err != nil {
+				return nil, err
+			}
+			currentOperator = xpipeline.NewDropIndex(index)
 		}
 
 		//link root of xpipeline

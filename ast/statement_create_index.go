@@ -16,6 +16,7 @@ type CreateIndexStatement struct {
 	Name        string         `json:"name"`
 	ExplainOnly bool           `json:"explain"`
 	Bucket      string         `json:"bucket"`
+	Pool        string         `json:"pool"`
 	On          ExpressionList `json:"on"`
 }
 

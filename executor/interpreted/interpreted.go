@@ -42,8 +42,8 @@ func (this *InterpretedExecutor) Execute(optimalPlan *plan.Plan, q network.Query
 	executablePipeline, berr := this.xpipelinebuilder.Build(optimalPlan)
 	if berr != nil {
 		q.Response().SendError(query.NewError(berr, ""))
+		return
 	}
-
 	root := executablePipeline.Root
 
 	// create a stop channel

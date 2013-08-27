@@ -57,17 +57,17 @@ func (this *Explain) Sources() []PlanElement {
 }
 
 type Scan struct {
-	Type    string `json:"type"`
+	Type      string `json:"type"`
 	ScanIndex string `json:"index"`
-	Bucket  string `json:"bucket"`
-	Pool    string `json:"pool"`
+	Bucket    string `json:"bucket"`
+	Pool      string `json:"pool"`
 }
 
 func NewScan(pool string, bucket string, index string) *Scan {
 	return &Scan{
-		Type:    "scan",
-		Pool:    pool,
-		Bucket:  bucket,
+		Type:      "scan",
+		Pool:      pool,
+		Bucket:    bucket,
 		ScanIndex: index,
 	}
 }
@@ -266,4 +266,48 @@ func NewGroup(input PlanElement, group ast.ExpressionList, agg ast.ExpressionLis
 
 func (this *Grouper) Sources() []PlanElement {
 	return []PlanElement{this.Input}
+}
+
+type CreateIndex struct {
+	Type      string             `json:"type"`
+	Pool      string             `json:"pool"`
+	Bucket    string             `json:"bucket"`
+	Name      string             `json:"name"`
+	IndexType string             `json:"index_type"`
+	On        ast.ExpressionList `json:"on"`
+}
+
+func NewCreateIndex(pool string, bucket string, name string, index_type string, on ast.ExpressionList) *CreateIndex {
+	return &CreateIndex{
+		Type:      "create_index",
+		Pool:      pool,
+		Bucket:    bucket,
+		Name:      name,
+		IndexType: index_type,
+		On:        on,
+	}
+}
+
+func (this *CreateIndex) Sources() []PlanElement {
+	return []PlanElement{}
+}
+
+type DropIndex struct {
+	Type   string `json:"type"`
+	Pool   string `json:"pool"`
+	Bucket string `json:"bucket"`
+	Name   string `json:"name"`
+}
+
+func NewDropIndex(pool string, bucket string, name string) *DropIndex {
+	return &DropIndex{
+		Type:   "drop_index",
+		Pool:   pool,
+		Bucket: bucket,
+		Name:   name,
+	}
+}
+
+func (this *DropIndex) Sources() []PlanElement {
+	return []PlanElement{}
 }

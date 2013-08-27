@@ -15,6 +15,7 @@ type DropIndexStatement struct {
 	Name        string `json:"name"`
 	ExplainOnly bool   `json:"explain"`
 	Bucket      string `json:"bucket"`
+	Pool        string `json:"pool"`
 }
 
 func NewDropIndexStatement() *DropIndexStatement {

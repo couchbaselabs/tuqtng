@@ -82,19 +82,21 @@ CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN {
 	parsingStatement = createIndexStmt
 }
 |
-CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN USING VIEW {
+CREATE INDEX IDENTIFIER ON COLON IDENTIFIER DOT IDENTIFIER LPAREN expression_list RPAREN {
 	on := parsingStack.Pop().(ast.ExpressionList)
-	bucket := $5.s
+	bucket := $8.s
+	pool := $6.s
 	name := $3.s
 	createIndexStmt := ast.NewCreateIndexStatement()
 	createIndexStmt.On = on
+	createIndexStmt.Pool = pool
 	createIndexStmt.Bucket = bucket
 	createIndexStmt.Name = name
-	createIndexStmt.Method = "view"
 	parsingStatement = createIndexStmt
 }
 |
-CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN USING IDENTIFIER {
+CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN USING view_using {
+	method := parsingStack.Pop().(string)
 	on := parsingStack.Pop().(ast.ExpressionList)
 	bucket := $5.s
 	name := $3.s
@@ -102,10 +104,34 @@ CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN USING IDENTI
 	createIndexStmt.On = on
 	createIndexStmt.Bucket = bucket
 	createIndexStmt.Name = name
-	createIndexStmt.Method = $10.s
+	createIndexStmt.Method = method
+	parsingStatement = createIndexStmt
+}
+|
+CREATE INDEX IDENTIFIER ON COLON IDENTIFIER DOT IDENTIFIER LPAREN expression_list RPAREN USING view_using {
+	method := parsingStack.Pop().(string)
+	on := parsingStack.Pop().(ast.ExpressionList)
+	bucket := $8.s
+	pool := $6.s
+	name := $3.s
+	createIndexStmt := ast.NewCreateIndexStatement()
+	createIndexStmt.On = on
+	createIndexStmt.Pool = pool
+	createIndexStmt.Bucket = bucket
+	createIndexStmt.Name = name
+	createIndexStmt.Method = method
 	parsingStatement = createIndexStmt
 }
 ;
+
+view_using:
+VIEW {
+	parsingStack.Push("view")
+}
+|
+IDENTIFIER {
+	parsingStack.Push($1.s)
+}
 
 // DROP INDEX
 drop_index_stmt:
@@ -113,6 +139,17 @@ DROP INDEX IDENTIFIER DOT IDENTIFIER {
 	bucket := $3.s
 	name := $5.s
 	dropIndexStmt := ast.NewDropIndexStatement()
+	dropIndexStmt.Bucket = bucket
+	dropIndexStmt.Name = name
+	parsingStatement = dropIndexStmt
+}
+|
+DROP INDEX COLON IDENTIFIER DOT IDENTIFIER DOT IDENTIFIER {
+	bucket := $6.s
+	pool := $4.s
+	name := $8.s
+	dropIndexStmt := ast.NewDropIndexStatement()
+	dropIndexStmt.Pool = pool
 	dropIndexStmt.Bucket = bucket
 	dropIndexStmt.Name = name
 	parsingStatement = dropIndexStmt

@@ -138,7 +138,62 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 }
 
 func (this *SimplePlanner) buildCreateIndexStatementPlans(stmt *ast.CreateIndexStatement, pc plan.PlanChannel, ec query.ErrorChannel) {
-	ec <- query.NewError(nil, fmt.Sprintf("I don't know how to create indexes yet"))
+
+	poolName := stmt.Pool
+	if poolName == "" {
+		poolName = this.defaultPool
+	}
+
+	pool, err := this.site.PoolByName(poolName)
+	if err != nil {
+		ec <- query.NewPoolDoesNotExist(this.defaultPool)
+		return
+	}
+
+	bucket, err := pool.BucketByName(stmt.Bucket)
+	if err != nil {
+		ec <- query.NewBucketDoesNotExist(stmt.Bucket)
+		return
+	}
+
+	var lastStep plan.PlanElement
+
+	lastStep = plan.NewCreateIndex(pool.Name(), bucket.Name(), stmt.Name, stmt.Method, stmt.On)
+	if stmt.ExplainOnly {
+		lastStep = plan.NewExplain(lastStep)
+	}
+
+	pc <- plan.Plan{Root: lastStep}
+	return
+}
+
+func (this *SimplePlanner) buildDropIndexStatementPlans(stmt *ast.DropIndexStatement, pc plan.PlanChannel, ec query.ErrorChannel) {
+
+	poolName := stmt.Pool
+	if poolName == "" {
+		poolName = this.defaultPool
+	}
+
+	pool, err := this.site.PoolByName(poolName)
+	if err != nil {
+		ec <- query.NewPoolDoesNotExist(this.defaultPool)
+		return
+	}
+
+	bucket, err := pool.BucketByName(stmt.Bucket)
+	if err != nil {
+		ec <- query.NewBucketDoesNotExist(stmt.Bucket)
+		return
+	}
+
+	var lastStep plan.PlanElement
+
+	lastStep = plan.NewDropIndex(pool.Name(), bucket.Name(), stmt.Name)
+	if stmt.ExplainOnly {
+		lastStep = plan.NewExplain(lastStep)
+	}
+
+	pc <- plan.Plan{Root: lastStep}
 	return
 }
 
@@ -150,6 +205,8 @@ func (this *SimplePlanner) buildPlans(stmt ast.Statement, pc plan.PlanChannel, e
 		this.buildSelectStatementPlans(stmt, pc, ec)
 	case *ast.CreateIndexStatement:
 		this.buildCreateIndexStatementPlans(stmt, pc, ec)
+	case *ast.DropIndexStatement:
+		this.buildDropIndexStatementPlans(stmt, pc, ec)
 	}
 
 }
