@@ -136,7 +136,7 @@ type RangeIndex interface {
 	LookupIndex
 	Direction() Direction
 	Statistics() (RangeStatistics, query.Error)
-	ScanRange(low LookupValue, high LookupValue, RangeInclusion, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	ScanRange(low LookupValue, high LookupValue, inclusion RangeInclusion, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
 
 // SearchIndex represents full text search indexes.
