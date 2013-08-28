@@ -91,17 +91,25 @@ func (vi *viewIndex) Drop() query.Error {
 	return nil
 }
 
-func (b *bucket) LoadViewIndexes() query.Error {
+func (b *bucket) loadIndexes() query.Error {
 	// put in indicative entry for primary index
-	pi, err := newPrimaryIndex(b, "", "_all_docs")
-	if err != nil {
-		return query.NewError(err, "")
-	}
-	b.indexes[pi.Name()] = pi
+	pi := newPrimaryIndex(b, "", "_all_docs")
+	b.indexes[pi.name] = pi
 	b.primary = pi
-
+	
+	// and recreate remaining from ddocs
+	indexes, err := loadViewIndexes(b)
+	if err != nil {
+		return query.NewError(err, "Error loading indexes")
+	}
+	
+	for _, index := range indexes {
+		b.indexes[index.name] = index
+	}
+	
 	return nil
 }
+
 
 func (vi *viewIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	vi.ScanRange(nil, nil, catalog.Both, ch, warnch, errch)

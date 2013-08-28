@@ -304,7 +304,7 @@ func newBucket(p *pool, name string) (*bucket, query.Error) {
 		indexes:  make(map[string]catalog.Index),
 	}
 
-	ierr := rv.LoadViewIndexes()
+	ierr := rv.loadIndexes()
 	if err != nil {
 		return nil, ierr
 	}

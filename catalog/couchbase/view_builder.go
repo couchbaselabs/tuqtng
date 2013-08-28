@@ -14,8 +14,8 @@ import (
 
 type ddocJSON struct {
 	cb.DDocJSON
-	IndexOn       string `json:"indexOn"`
-	IndexChecksum int    `json:"indexChecksum"`
+	IndexOn       []string `json:"indexOn"`
+	IndexChecksum int      `json:"indexChecksum"`
 }
 
 func newViewIndex(name string, on catalog.IndexKey, bkt *bucket) (*viewIndex, error) {
@@ -60,7 +60,56 @@ func newDesignDoc(idxname string, on catalog.IndexKey) (*designdoc, error) {
 	return &doc, nil
 }
 
-func newPrimaryIndex(b *bucket, ddname string, view string) (*primaryIndex, error) {
+func loadViewIndexes(b *bucket) ([]*viewIndex, error) {
+
+	rows, err := b.cbbucket.GetDDocs()
+	if err != nil {
+		return nil, err
+	}
+
+	inames := make([]string, 0, len(rows.Rows))
+	for _, row := range rows.Rows {
+		cdoc := row.DDoc
+		id := cdoc.Meta["id"].(string)
+		if !strings.HasPrefix(id, "_design/ddl_") {
+			continue
+		}
+		iname := strings.TrimPrefix(id, "_design/ddl_")
+		inames = append(inames, iname)
+	}
+	
+	indexes := make([]*viewIndex, 0, len(inames))
+	for _, iname := range inames {
+		ddname := "ddl_" + iname
+		jdoc, err := getDesignDoc(b, ddname)
+		if err != nil {
+			fmt.Println("Warning - cannot fetch index: ", iname)
+		}
+		jview, ok := jdoc.Views[iname]
+		if !ok {
+			fmt.Println("Warning - missing view for index: ", iname)
+		}
+		ddoc := designdoc {
+			name:     ddname,
+			viewname: iname,
+			mapfn:    jview.Map,
+			reducefn: jview.Reduce,
+		}
+		if ddoc.checksum() != jdoc.IndexChecksum {
+			fmt.Println("Warning - checksum failed on index: ", iname)
+		}
+		vidx := viewIndex {
+			name:   iname,
+			bucket: b,
+			using:  catalog.VIEW,
+			ddoc:   &ddoc,
+		}
+		indexes = append(indexes, &vidx)
+	}
+	return indexes, nil
+}
+
+func newPrimaryIndex(b *bucket, ddname string, view string) (*primaryIndex) {
 	meta := ast.NewFunctionCall("meta", ast.FunctionArgExpressionList{})
 	mdid := ast.NewDotMemberOperator(meta, ast.NewProperty("id"))
 	name := "#primary"
@@ -74,7 +123,7 @@ func newPrimaryIndex(b *bucket, ddname string, view string) (*primaryIndex, erro
 			bucket: b,
 		},
 	}
-	return &idx, nil
+	return &idx
 }
 
 func generateMap(on catalog.IndexKey, doc *designdoc) error {
@@ -132,38 +181,38 @@ func (idx *viewIndex) putDesignDoc() error {
 	var put ddocJSON
 	put.Views = make(map[string]cb.ViewDefinition)
 	put.Views[idx.name] = view
-	put.IndexChecksum = checksum(idx.ddoc)
-
+	put.IndexChecksum = idx.ddoc.checksum()
+	
+	put.IndexOn = make([]string, len(idx.on))
+	for idx, expr := range idx.on {
+		put.IndexOn[idx] = expr.String()
+	}
+	
 	if err := idx.bucket.cbbucket.PutDDoc(idx.DDocName(), &put); err != nil {
 		return err
 	}
 
-	err := idx.checkDesignDoc()
-	if err != nil {
+	saved, err := getDesignDoc(idx.bucket, idx.DDocName())
+	if err != nil || saved.IndexChecksum != idx.ddoc.checksum() {
 		return errors.New("Index creation failed, checksum mismatch: " + idx.name)
 	}
 
 	return nil
 }
 
-func checksum(ddoc *designdoc) int {
+func (ddoc *designdoc) checksum() int {
 	mapSum := crc32.ChecksumIEEE([]byte(ddoc.mapfn))
 	reduceSum := crc32.ChecksumIEEE([]byte(ddoc.reducefn))
 	return int(mapSum + reduceSum)
 }
 
-func (idx *viewIndex) checkDesignDoc() error {
+func getDesignDoc(b *bucket, ddocname string) (*ddocJSON, error) {
 	var ddoc ddocJSON
-
-	if err := idx.bucket.cbbucket.GetDDoc(idx.DDocName(), &ddoc); err != nil {
-		return err
+	err := b.cbbucket.GetDDoc(ddocname, &ddoc)
+	if err != nil {
+		return nil, err
 	}
-
-	if ddoc.IndexChecksum != checksum(idx.ddoc) {
-		return errors.New("Index verification failed, checksum mismatch: " + idx.name)
-	}
-
-	return nil
+	return &ddoc, nil
 }
 
 func (idx *viewIndex) DropViewIndex() error {
