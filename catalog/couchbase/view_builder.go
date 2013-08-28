@@ -3,8 +3,8 @@ package couchbase
 import (
 	"bytes"
 	"fmt"
+	"errors"
 	cb "github.com/couchbaselabs/go-couchbase"
-	"github.com/couchbaselabs/indexing/api"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"hash/crc32"
@@ -140,7 +140,7 @@ func (idx *viewIndex) putDesignDoc() error {
 
 	err := idx.checkDesignDoc()
 	if err != nil {
-		return api.DDocCreateFailed
+		return errors.New("Index creation failed, checksum mismatch: " + idx.name)
 	}
 
 	return nil
@@ -160,7 +160,7 @@ func (idx *viewIndex) checkDesignDoc() error {
 	}
 
 	if ddoc.IndexChecksum != checksum(idx.ddoc) {
-		return api.DDocChanged
+		return errors.New("Index verification failed, checksum mismatch: " + idx.name)
 	}
 
 	return nil
@@ -233,7 +233,7 @@ func (this *JsStatement) Visit(e ast.Expression) (ast.Expression, error) {
 		this.js.WriteString(expr.Val)
 
 	default:
-		return e, api.ExprNotSupported
+		return e, errors.New("Expression is not supported by indexing currently: " + e.String())
 
 	}
 	return e, nil
