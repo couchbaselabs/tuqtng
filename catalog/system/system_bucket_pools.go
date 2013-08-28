@@ -129,7 +129,7 @@ func (pi *poolIndex) Name() string {
 }
 
 func (pi *poolIndex) Type() catalog.IndexType {
-	return catalog.PRIMARY
+	return catalog.UNSPECIFIED
 }
 
 func (pi *poolIndex) IsPrimary() bool {

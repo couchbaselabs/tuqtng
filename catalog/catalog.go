@@ -70,8 +70,8 @@ type Bucket interface {
 type IndexType string
 
 const (
-	PRIMARY IndexType = "primary" // not used by view_index
-	VIEW    IndexType = "view"
+	UNSPECIFIED IndexType = "unspecified" // used by non-view primary_indexes
+	VIEW        IndexType = "view"
 )
 
 type IndexKey []ast.Expression

@@ -349,7 +349,7 @@ func (pi *primaryIndex) Name() string {
 }
 
 func (pi *primaryIndex) Type() catalog.IndexType {
-	return catalog.PRIMARY
+	return catalog.UNSPECIFIED
 }
 
 func (pi *primaryIndex) IsPrimary() bool {

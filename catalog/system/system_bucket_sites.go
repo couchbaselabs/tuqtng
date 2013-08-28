@@ -127,7 +127,7 @@ func (pi *siteIndex) Name() string {
 }
 
 func (pi *siteIndex) Type() catalog.IndexType {
-	return catalog.PRIMARY
+	return catalog.UNSPECIFIED
 }
 
 func (pi *siteIndex) IsPrimary() bool {

@@ -68,7 +68,7 @@ func newPrimaryIndex(b *bucket, ddname string, view string) (*primaryIndex, erro
 	idx := primaryIndex{
 		viewIndex{
 			name:   name,
-			using:  catalog.PRIMARY,
+			using:  catalog.UNSPECIFIED,
 			on:     catalog.IndexKey{mdid},
 			ddoc:   &ddoc,
 			bucket: b,

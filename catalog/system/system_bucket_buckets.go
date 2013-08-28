@@ -138,7 +138,7 @@ func (pi *bucketIndex) Name() string {
 }
 
 func (pi *bucketIndex) Type() catalog.IndexType {
-	return catalog.PRIMARY
+	return catalog.UNSPECIFIED
 }
 
 func (pi *bucketIndex) IsPrimary() bool {

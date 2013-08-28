@@ -121,7 +121,7 @@ func (pi *dualIndex) Name() string {
 }
 
 func (pi *dualIndex) Type() catalog.IndexType {
-	return catalog.PRIMARY
+	return catalog.UNSPECIFIED
 }
 
 func (pi *dualIndex) IsPrimary() bool {

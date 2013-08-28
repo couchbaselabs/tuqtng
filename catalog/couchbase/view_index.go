@@ -80,7 +80,7 @@ func (b *bucket) createViewIndex(name string, key catalog.IndexKey) (catalog.Ind
 
 func (vi *viewIndex) Drop() query.Error {
 	bucket := vi.bucket
-	if vi.using == catalog.PRIMARY {
+	if vi.IsPrimary() {
 		return query.NewError(nil, "Primary index cannot be dropped.")
 	}
 	err := vi.DropViewIndex()
