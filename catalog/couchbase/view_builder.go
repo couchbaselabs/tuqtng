@@ -2,14 +2,16 @@ package couchbase
 
 import (
 	"bytes"
-	"fmt"
+	"encoding/json"
 	"errors"
-	cb "github.com/couchbaselabs/go-couchbase"
-	"github.com/couchbaselabs/tuqtng/ast"
-	"github.com/couchbaselabs/tuqtng/catalog"
+	"fmt"
 	"hash/crc32"
 	"strconv"
 	"strings"
+
+	cb "github.com/couchbaselabs/go-couchbase"
+	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/catalog"
 )
 
 type ddocJSON struct {
@@ -39,6 +41,16 @@ func newViewIndex(name string, on catalog.IndexKey, bkt *bucket) (*viewIndex, er
 	}
 
 	return &inst, nil
+}
+
+func (vi *viewIndex) String() string {
+	var buf bytes.Buffer
+	buf.WriteString(fmt.Sprintf("name: %v ", vi.name))
+	buf.WriteString(fmt.Sprintf("on: %v ", vi.on))
+	buf.WriteString(fmt.Sprintf("using: %v ", vi.using))
+	buf.WriteString(fmt.Sprintf("ddoc: %v ", *vi.ddoc))
+	buf.WriteString(fmt.Sprintf("bucket: %v ", *vi.bucket))
+	return buf.String()
 }
 
 func newDesignDoc(idxname string, on catalog.IndexKey) (*designdoc, error) {
@@ -77,39 +89,55 @@ func loadViewIndexes(b *bucket) ([]*viewIndex, error) {
 		iname := strings.TrimPrefix(id, "_design/ddl_")
 		inames = append(inames, iname)
 	}
-	
+
 	indexes := make([]*viewIndex, 0, len(inames))
 	for _, iname := range inames {
 		ddname := "ddl_" + iname
 		jdoc, err := getDesignDoc(b, ddname)
 		if err != nil {
-			fmt.Println("Warning - cannot fetch index: ", iname)
+			return nil, err
 		}
 		jview, ok := jdoc.Views[iname]
 		if !ok {
-			fmt.Println("Warning - missing view for index: ", iname)
+			return nil, errors.New("Missing view for index " + iname)
 		}
-		ddoc := designdoc {
+
+		exprlist := make([]ast.Expression, 0, len(jdoc.IndexOn))
+		for _, ser := range jdoc.IndexOn {
+			expr, err := ast.UnmarshalExpression([]byte(ser))
+			if err != nil {
+				return nil, errors.New("Cannot unmarshal expression for index " + iname)
+			}
+			exprlist = append(exprlist, expr)
+		}
+		if len(exprlist) != len(jdoc.IndexOn) {
+			continue
+		}
+
+		ddoc := designdoc{
 			name:     ddname,
 			viewname: iname,
 			mapfn:    jview.Map,
 			reducefn: jview.Reduce,
 		}
 		if ddoc.checksum() != jdoc.IndexChecksum {
-			fmt.Println("Warning - checksum failed on index: ", iname)
+			return nil, errors.New("Warning - checksum failed on index " + iname)
 		}
-		vidx := viewIndex {
+
+		vidx := viewIndex{
 			name:   iname,
 			bucket: b,
 			using:  catalog.VIEW,
 			ddoc:   &ddoc,
+			on:     exprlist,
 		}
 		indexes = append(indexes, &vidx)
 	}
+
 	return indexes, nil
 }
 
-func newPrimaryIndex(b *bucket, ddname string, view string) (*primaryIndex) {
+func newPrimaryIndex(b *bucket, ddname string, view string) *primaryIndex {
 	meta := ast.NewFunctionCall("meta", ast.FunctionArgExpressionList{})
 	mdid := ast.NewDotMemberOperator(meta, ast.NewProperty("id"))
 	name := "#primary"
@@ -117,7 +145,7 @@ func newPrimaryIndex(b *bucket, ddname string, view string) (*primaryIndex) {
 	idx := primaryIndex{
 		viewIndex{
 			name:   name,
-			using:  catalog.UNSPECIFIED,
+			using:  catalog.VIEW,
 			on:     catalog.IndexKey{mdid},
 			ddoc:   &ddoc,
 			bucket: b,
@@ -182,12 +210,16 @@ func (idx *viewIndex) putDesignDoc() error {
 	put.Views = make(map[string]cb.ViewDefinition)
 	put.Views[idx.name] = view
 	put.IndexChecksum = idx.ddoc.checksum()
-	
+
 	put.IndexOn = make([]string, len(idx.on))
 	for idx, expr := range idx.on {
-		put.IndexOn[idx] = expr.String()
+		ser, err := json.Marshal(expr)
+		if err != nil {
+			return err
+		}
+		put.IndexOn[idx] = string(ser)
 	}
-	
+
 	if err := idx.bucket.cbbucket.PutDDoc(idx.DDocName(), &put); err != nil {
 		return err
 	}
