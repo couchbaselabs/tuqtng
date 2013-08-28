@@ -45,7 +45,7 @@ func newDesignDoc(idxname string, on catalog.IndexKey) (*designdoc, error) {
 	var doc designdoc
 
 	doc.name = "ddl_" + idxname
-	doc.viewname = "autogen"
+	doc.viewname = idxname
 
 	err := generateMap(on, &doc)
 	if err != nil {
@@ -82,7 +82,13 @@ func generateMap(on catalog.IndexKey, doc *designdoc) error {
 	buf := new(bytes.Buffer)
 
 	fmt.Fprintln(buf, templStart)
-	fmt.Fprintln(buf, templFunctions)
+	line := strings.Replace(templFunctions, "$null", strconv.Itoa(TYPE_NULL), -1)
+	line = strings.Replace(line, "$boolean", strconv.Itoa(TYPE_BOOLEAN), -1)
+	line = strings.Replace(line, "$number", strconv.Itoa(TYPE_NUMBER), -1)
+	line = strings.Replace(line, "$string", strconv.Itoa(TYPE_STRING), -1)
+	line = strings.Replace(line, "$array", strconv.Itoa(TYPE_ARRAY), -1)
+	line = strings.Replace(line, "$object", strconv.Itoa(TYPE_OBJECT), -1)
+	fmt.Fprintln(buf, line)
 
 	keylist := new(bytes.Buffer)
 	for idx, expr := range on {
@@ -104,13 +110,7 @@ func generateMap(on catalog.IndexKey, doc *designdoc) error {
 		fmt.Fprint(keylist, jvar)
 	}
 
-	line := strings.Replace(templKey, "$keylist", keylist.String(), -1)
-	line = strings.Replace(line, "$null", strconv.Itoa(TYPE_NULL), -1)
-	line = strings.Replace(line, "boolean", strconv.Itoa(TYPE_BOOLEAN), -1)
-	line = strings.Replace(line, "$number", strconv.Itoa(TYPE_NUMBER), -1)
-	line = strings.Replace(line, "$string", strconv.Itoa(TYPE_STRING), -1)
-	line = strings.Replace(line, "$array", strconv.Itoa(TYPE_ARRAY), -1)
-	line = strings.Replace(line, "$object", strconv.Itoa(TYPE_OBJECT), -1)
+	line = strings.Replace(templKey, "$keylist", keylist.String(), -1)
 
 	fmt.Fprint(buf, line)
 	fmt.Fprint(buf, templEmit)
