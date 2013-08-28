@@ -114,7 +114,7 @@ func encodeValueAsMapKey(keys catalog.LookupValue) interface{} {
 		case float64:
 			rv[i] = []interface{}{TYPE_NUMBER, val}
 		case string:
-			rv[i] = []interface{}{TYPE_STRING, val}
+			rv[i] = []interface{}{TYPE_STRING, encodeStringAsNumericArray(val)}
 		case []interface{}:
 			rv[i] = []interface{}{TYPE_ARRAY, val}
 		case map[string]interface{}:
@@ -122,6 +122,14 @@ func encodeValueAsMapKey(keys catalog.LookupValue) interface{} {
 		default:
 			panic(fmt.Sprintf("Unable to encode type %T to map key", val))
 		}
+	}
+	return rv
+}
+
+func encodeStringAsNumericArray(str string) []float64 {
+	rv := make([]float64, len(str))
+	for i, rune := range str {
+		rv[i] = float64(rune)
 	}
 	return rv
 }

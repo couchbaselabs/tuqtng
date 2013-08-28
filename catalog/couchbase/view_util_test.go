@@ -169,7 +169,7 @@ func TestViewOptions(t *testing.T) {
 		// start/end different types
 		{
 			catalog.LookupValue{dparval.NewValue(5.0)},
-			catalog.LookupValue{dparval.NewValue("marty")},
+			catalog.LookupValue{dparval.NewValue("m")},
 			catalog.Both,
 			map[string]interface{}{
 				"startkey": []interface{}{
@@ -179,7 +179,7 @@ func TestViewOptions(t *testing.T) {
 				},
 				"endkey": []interface{}{
 					[]interface{}{
-						TYPE_STRING, "marty",
+						TYPE_STRING, []float64{109.0},
 					},
 				},
 			},
