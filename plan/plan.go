@@ -14,6 +14,7 @@ package plan
 
 import (
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/catalog"
 )
 
 type Plan struct {
@@ -42,19 +43,29 @@ func (this *Explain) Sources() []PlanElement {
 	return []PlanElement{}
 }
 
-type Scan struct {
-	Type      string `json:"type"`
-	ScanIndex string `json:"index"`
-	Bucket    string `json:"bucket"`
-	Pool      string `json:"pool"`
+type ScanRange struct {
+	Low       catalog.LookupValue    `json:"low"`
+	High      catalog.LookupValue    `json:"high"`
+	Inclusion catalog.RangeInclusion `json:"inclusion"`
 }
 
-func NewScan(pool string, bucket string, index string) *Scan {
+type ScanRanges []*ScanRange
+
+type Scan struct {
+	Type      string     `json:"type"`
+	ScanIndex string     `json:"index"`
+	Bucket    string     `json:"bucket"`
+	Pool      string     `json:"pool"`
+	Ranges    ScanRanges `json:"ranges"`
+}
+
+func NewScan(pool string, bucket string, index string, ranges ScanRanges) *Scan {
 	return &Scan{
 		Type:      "scan",
 		Pool:      pool,
 		Bucket:    bucket,
 		ScanIndex: index,
+		Ranges:    ranges,
 	}
 }
 

@@ -82,14 +82,28 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 
 	for _, index := range indexes {
 		var lastStep plan.PlanElement
-		switch index.(type) {
+		switch index := index.(type) {
 		case catalog.PrimaryIndex:
 			clog.To(planner.CHANNEL, "See primary index %v", index.Name())
-			lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name())
+			lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name(), nil)
 		case catalog.RangeIndex:
 			// see if this index can be used
 			clog.To(planner.CHANNEL, "See index %v", index.Name())
-			continue
+			if stmt.Where != nil {
+				possible, ranges, _, err := CanIUseThisIndexForThisWhereClause(index, stmt.Where, stmt.From.Bucket)
+				if err != nil {
+					clog.Error(err)
+					continue
+				}
+				clog.To(planner.CHANNEL, "Can I use it: %v", possible)
+				if possible {
+					lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name(), ranges)
+				} else {
+					continue
+				}
+			} else {
+				continue
+			}
 		default:
 			clog.To(planner.CHANNEL, "Unsupported type of index %T", index)
 			continue

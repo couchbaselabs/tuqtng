@@ -19,3 +19,5 @@ import (
 type Optimizer interface {
 	Optimize(plan.PlanChannel, query.ErrorChannel) (*plan.Plan, query.Error)
 }
+
+const CHANNEL = "OPTIMIZER"

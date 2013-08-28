@@ -10,6 +10,8 @@
 package simple
 
 import (
+	"github.com/couchbaselabs/clog"
+	"github.com/couchbaselabs/tuqtng/optimizer"
 	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -23,7 +25,7 @@ func NewSimpleOptimizer() *SimpleOptimizer {
 
 // simplest possible implementation
 // 1.  read all plans off plan channel
-// 2.  return first channel
+// 2.  return last plan
 func (this *SimpleOptimizer) Optimize(planChannel plan.PlanChannel, errChannel query.ErrorChannel) (*plan.Plan, query.Error) {
 
 	plans := make([]plan.Plan, 0)
@@ -34,7 +36,10 @@ func (this *SimpleOptimizer) Optimize(planChannel plan.PlanChannel, errChannel q
 	for ok {
 		select {
 		case p, ok = <-planChannel:
-			plans = append(plans, p)
+			if ok {
+				clog.To(optimizer.CHANNEL, "See plan %v", p)
+				plans = append(plans, p)
+			}
 		case err, ok = <-errChannel:
 			if err != nil {
 				return nil, err
@@ -43,7 +48,9 @@ func (this *SimpleOptimizer) Optimize(planChannel plan.PlanChannel, errChannel q
 	}
 
 	if len(plans) > 0 {
-		return &plans[0], nil
+		chosenPlan := plans[len(plans)-1]
+		clog.To(optimizer.CHANNEL, "Choosing plan %v", chosenPlan)
+		return &chosenPlan, nil
 	}
 
 	return nil, query.NewError(nil, "No plans produced for optimizer to choose from")

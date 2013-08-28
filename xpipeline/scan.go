@@ -17,6 +17,7 @@ import (
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -26,14 +27,16 @@ type Scan struct {
 	bucket                catalog.Bucket
 	index                 catalog.ScanIndex
 	downstreamStopChannel misc.StopChannel
+	ranges                plan.ScanRanges
 }
 
-func NewScan(bucket catalog.Bucket, index catalog.ScanIndex) *Scan {
+func NewScan(bucket catalog.Bucket, index catalog.ScanIndex, ranges plan.ScanRanges) *Scan {
 	return &Scan{
 		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 		bucket:         bucket,
 		index:          index,
+		ranges:         ranges,
 	}
 }
 
@@ -49,17 +52,44 @@ func (this *Scan) Run(stopChannel misc.StopChannel) {
 	// this MUST be here so that it runs before the channels are closed
 	defer this.RecoverPanic()
 
-	this.downstreamStopChannel = stopChannel
 	clog.To(CHANNEL, "scan operator starting")
+
+	if this.ranges == nil {
+		this.scanRange(nil)
+	} else {
+		for _, scanRange := range this.ranges {
+			ok := this.scanRange(scanRange)
+			if !ok {
+				break
+			}
+		}
+	}
+
+	clog.To(CHANNEL, "scan operator finished")
+}
+
+func (this *Scan) scanRange(scanRange *plan.ScanRange) bool {
 
 	indexItemChannel := make(dparval.ValueChannel)
 	indexWarnChannel := make(query.ErrorChannel)
 	indexErrorChannel := make(query.ErrorChannel)
+
+	clog.To(CHANNEL, "scanning range %v", scanRange)
+	if scanRange == nil {
+		go this.index.ScanEntries(indexItemChannel, indexWarnChannel, indexErrorChannel)
+	} else {
+		rangeScan, ok := this.index.(catalog.RangeIndex)
+		if ok {
+			go rangeScan.ScanRange(scanRange.Low, scanRange.High, scanRange.Inclusion, indexItemChannel, indexWarnChannel, indexErrorChannel)
+		} else {
+			this.SendError(query.NewError(nil, "Cannot range scan this"))
+			return false
+		}
+	}
+
 	var item *dparval.Value
 	var warn query.Error
 	var err query.Error
-
-	go this.index.ScanEntries(indexItemChannel, indexWarnChannel, indexErrorChannel)
 
 	ok := true
 	for ok {
@@ -75,12 +105,15 @@ func (this *Scan) Run(stopChannel misc.StopChannel) {
 		case err, ok = <-indexErrorChannel:
 			if err != nil {
 				this.SendError(err)
+				return false
 			}
-		case _, ok = <-stopChannel:
+		case _, ok = <-this.downstreamStopChannel:
 			// downstream has asked us to stop
+			return false
 		}
 	}
-	clog.To(CHANNEL, "scan operator finished")
+
+	return true
 }
 
 func (this *Scan) processItem(item *dparval.Value) bool {
