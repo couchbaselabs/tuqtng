@@ -13,20 +13,21 @@
 package simple
 
 import (
-	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/plan"
-	"github.com/couchbaselabs/tuqtng/planner"
 )
 
 func CanIUseThisIndexForThisWhereClause(index catalog.RangeIndex, where ast.Expression, bucket string) (bool, plan.ScanRanges, ast.Expression, error) {
 
 	// convert the index key to formal notation
-	indexKeyFormal := IndexKeyInFormalNotation(index.Key(), bucket)
+	indexKeyFormal, err := IndexKeyInFormalNotation(index.Key(), bucket)
+	if err != nil {
+		return false, nil, nil, err
+	}
 
 	// see if the where clause expression is sargable with respect to the index key
-	es := NewExpressionSargable(fkey[0])
+	es := NewExpressionSargable(indexKeyFormal[0])
 	where.Accept(es)
 	if es.IsSargable() {
 		return true, es.ScanRanges(), nil, nil
@@ -36,8 +37,7 @@ func CanIUseThisIndexForThisWhereClause(index catalog.RangeIndex, where ast.Expr
 	return false, nil, nil, nil
 }
 
-func IndexKeyInFormalNotation(catalog.IndexKey, bucket string) (catalog.IndexKey, err) {
-	key := index.Key()
+func IndexKeyInFormalNotation(key catalog.IndexKey, bucket string) (catalog.IndexKey, error) {
 	fkey := make(catalog.IndexKey, len(key))
 	fnot := ast.NewExpressionFormalNotationConverter([]string{}, []string{bucket}, bucket)
 	for i, kp := range key {
