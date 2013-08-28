@@ -40,6 +40,11 @@ func newViewIndex(name string, on catalog.IndexKey, bkt *bucket) (*viewIndex, er
 		return nil, err
 	}
 
+	err = inst.WaitForIndex()
+	if err != nil {
+		return nil, err
+	}
+
 	return &inst, nil
 }
 
@@ -248,7 +253,23 @@ func getDesignDoc(b *bucket, ddocname string) (*ddocJSON, error) {
 }
 
 func (idx *viewIndex) DropViewIndex() error {
-	if err := idx.bucket.cbbucket.DeleteDDoc(idx.DDocName()); err != nil {
+	if err := idx.bucket.cbbucket.DeleteDDoc(idx.ddoc.name); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (idx *viewIndex) WaitForIndex() error {
+	_, err :=
+		idx.bucket.cbbucket.View(
+			idx.ddoc.name,
+			idx.ddoc.viewname,
+			map[string]interface{}{
+				"start_key": []interface{}{"thing"},
+				"end_key":   []interface{}{"thing", map[string]string{}},
+				"stale":     false,
+			})
+	if err != nil {
 		return err
 	}
 	return nil
