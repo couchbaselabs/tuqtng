@@ -26,11 +26,37 @@ func CanIUseThisIndexForThisWhereClause(index catalog.RangeIndex, where ast.Expr
 		return false, nil, nil, err
 	}
 
-	// see if the where clause expression is sargable with respect to the index key
-	es := NewExpressionSargable(indexKeyFormal[0])
-	where.Accept(es)
-	if es.IsSargable() {
-		return true, es.ScanRanges(), nil, nil
+	// put the where clause into conjunctive normal form
+	ennf := ast.NewExpressionNNF()
+	whereNNF, err := where.Accept(ennf)
+	if err != nil {
+		return false, nil, nil, err
+	}
+	ecnf := ast.NewExpressionCNF()
+	whereCNF, err := whereNNF.Accept(ecnf)
+	if err != nil {
+		return false, nil, nil, err
+	}
+
+	switch whereCNF := whereCNF.(type) {
+	case *ast.AndOperator:
+		// this is an and, we can try to satisfy individual operands
+		for _, oper := range whereCNF.Operands {
+			// see if the where clause expression is sargable with respect to the index key
+			es := NewExpressionSargable(indexKeyFormal[0])
+			oper.Accept(es)
+			if es.IsSargable() {
+				return true, es.ScanRanges(), nil, nil
+			}
+		}
+	default:
+		// not an and, we must satisfy the whole expression
+		// see if the where clause expression is sargable with respect to the index key
+		es := NewExpressionSargable(indexKeyFormal[0])
+		whereCNF.Accept(es)
+		if es.IsSargable() {
+			return true, es.ScanRanges(), nil, nil
+		}
 	}
 
 	// cannot use this index
