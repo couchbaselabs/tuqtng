@@ -32,14 +32,20 @@ var logKeys = flag.String("log", "", "Log keywords, comma separated")
 var devMode = flag.Bool("dev", false, "Developer Mode")
 var profileMode = flag.Bool("profile", false, "Profile Mode")
 
+var devModeDefaultLogKeys = []string{"HTTP", "NETWORK", "PIPELINE", "CATALOG", "PLANNER", "SCAN", "OPTIMIZER"}
+
 func main() {
 	flag.Parse()
 
-	clog.ParseLogFlag(*logKeys)
-
 	if *devMode {
 		ast.EnableDeveloperFunctions()
-		clog.Log("Developer Mode Enabled")
+		if *logKeys == "" {
+			clog.ParseLogFlags(devModeDefaultLogKeys)
+			clog.Log("Developer Mode Enabled (default developer logging)")
+		} else {
+			clog.ParseLogFlag(*logKeys)
+			clog.Log("Developer Mode Enabled (custom command-line logging)")
+		}
 	}
 
 	go dumpOnSignal(syscall.SIGUSR2)
