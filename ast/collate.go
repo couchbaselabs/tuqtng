@@ -15,15 +15,10 @@ package ast
 import (
 	"fmt"
 	"sort"
-
-	"code.google.com/p/go.exp/locale/collate"
-	"code.google.com/p/go.text/locale"
 )
 
-var icuCollator = collate.New(locale.Make("icu"))
-
-// CouchDB-compatible collation/comparison of JSON values.
-// See: http://wiki.apache.org/couchdb/View_collation#Collation_Specification
+// this is N1QL collation
+// like Couch, but strings are compared like memcmp
 func CollateJSON(key1, key2 interface{}) int {
 	type1 := collationType(key1)
 	type2 := collationType(key2)
@@ -45,7 +40,12 @@ func CollateJSON(key1, key2 interface{}) int {
 	case 4:
 		s1 := key1.(string)
 		s2 := key2.(string)
-		return icuCollator.CompareString(s1, s2)
+		if s1 < s2 {
+			return -1
+		} else if s1 > s2 {
+			return 1
+		}
+		return 0
 	case 5:
 		array1 := key1.([]interface{})
 		array2 := key2.([]interface{})

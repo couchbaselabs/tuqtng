@@ -33,10 +33,10 @@ func TestCollateJSON(t *testing.T) {
 		{"1234", "1235", -1},
 		{"1234", "1234", 0},
 
-		// verify unicode collation
-		{"a", "A", -1},
-		{"A", "aa", -1},
-		{"B", "aa", 1},
+		// verify n1ql collation
+		{"A", "a", -1},
+		{"a", "aa", -1},
+		{"b", "aa", 1},
 
 		// arrays
 		{[]interface{}{}, "foo", 1},
