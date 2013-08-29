@@ -13,6 +13,8 @@
 package plan
 
 import (
+	"encoding/json"
+
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 )
@@ -44,9 +46,42 @@ func (this *Explain) Sources() []PlanElement {
 }
 
 type ScanRange struct {
-	Low       catalog.LookupValue    `json:"low"`
-	High      catalog.LookupValue    `json:"high"`
-	Inclusion catalog.RangeInclusion `json:"inclusion"`
+	Low       catalog.LookupValue
+	High      catalog.LookupValue
+	Inclusion catalog.RangeInclusion
+}
+
+func (sr ScanRange) MarshalJSON() ([]byte, error) {
+	r := map[string]interface{}{}
+
+	low := make([]interface{}, len(sr.Low))
+	for i, l := range sr.Low {
+		low[i] = l.Value()
+	}
+	if len(low) > 0 {
+		r["low"] = low
+	}
+
+	high := make([]interface{}, len(sr.High))
+	for i, l := range sr.High {
+		high[i] = l.Value()
+	}
+	if len(high) > 0 {
+		r["high"] = high
+	}
+
+	switch sr.Inclusion {
+	case catalog.Neither:
+		r["inclusion"] = "neither"
+	case catalog.Low:
+		r["inclusion"] = "low"
+	case catalog.High:
+		r["inclusion"] = "high"
+	case catalog.Both:
+		r["inclusion"] = "both"
+	}
+
+	return json.Marshal(r)
 }
 
 type ScanRanges []*ScanRange
