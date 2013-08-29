@@ -263,8 +263,12 @@ func (b *bucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
 
 func (b *bucket) CreateIndex(name string, key catalog.IndexKey, using catalog.IndexType) (catalog.Index, query.Error) {
 
-	switch using {
+	if using == "" {
+		// current default is VIEW
+		using = catalog.VIEW
+	}
 
+	switch using {
 	case catalog.VIEW:
 		if _, exists := b.indexes[name]; exists {
 			return nil, query.NewError(nil, fmt.Sprintf("Index already exists: %s", name))
