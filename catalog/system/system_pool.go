@@ -101,5 +101,11 @@ func (p *pool) loadBuckets() (e query.Error) {
 	}
 	p.buckets[db.Name()] = db
 
+	ib, e := newIndexesBucket(p)
+	if e != nil {
+		return e
+	}
+	p.buckets[ib.Name()] = ib
+
 	return nil
 }
