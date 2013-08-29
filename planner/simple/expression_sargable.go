@@ -200,6 +200,58 @@ func (this *ExpressionSargable) Visit(e ast.Expression) (ast.Expression, error) 
 				this.scanRanges = append(this.scanRanges, newScanRange)
 			}
 		}
+
+	case *ast.IsNullOperator:
+		if this.matchesIndex(e.Operand) {
+			this.sargable = true
+			newScanRange := &plan.ScanRange{
+				Low:       catalog.LookupValue{dparval.NewValue(nil)},
+				High:      catalog.LookupValue{dparval.NewValue(nil)},
+				Inclusion: catalog.Both,
+			}
+			this.scanRanges = append(this.scanRanges, newScanRange)
+		}
+
+	case *ast.IsNotNullOperator:
+		if this.matchesIndex(e.Operand) {
+			this.sargable = true
+			newScanRange := &plan.ScanRange{
+				Low:       catalog.LookupValue{dparval.NewValue(nil)},
+				Inclusion: catalog.High,
+			}
+			this.scanRanges = append(this.scanRanges, newScanRange)
+		}
+
+	case *ast.IsNotMissingOperator:
+		if this.matchesIndex(e.Operand) {
+			this.sargable = true
+			newScanRange := &plan.ScanRange{
+				Low:       catalog.LookupValue{dparval.NewValue(nil)},
+				Inclusion: catalog.Both,
+			}
+			this.scanRanges = append(this.scanRanges, newScanRange)
+		}
+
+	case *ast.IsValuedOperator:
+		if this.matchesIndex(e.Operand) {
+			this.sargable = true
+			newScanRange := &plan.ScanRange{
+				Low:       catalog.LookupValue{dparval.NewValue(nil)},
+				Inclusion: catalog.High,
+			}
+			this.scanRanges = append(this.scanRanges, newScanRange)
+		}
+
+	case *ast.IsNotValuedOperator:
+		if this.matchesIndex(e.Operand) {
+			this.sargable = true
+			newScanRange := &plan.ScanRange{
+				Low:       catalog.LookupValue{dparval.NewValue(nil)},
+				High:      catalog.LookupValue{dparval.NewValue(nil)},
+				Inclusion: catalog.Both,
+			}
+			this.scanRanges = append(this.scanRanges, newScanRange)
+		}
 	}
 
 	return e, nil
