@@ -29,6 +29,8 @@ const templFunctions = `
       } else {
         return [$object, val];
       }
+    } else {
+        return undefined;
     }
   };`
 
@@ -36,11 +38,19 @@ const templExpr = `
   var $var = indexFormattedValue($path);`
 
 const templKey = `
-  var key = [$keylist];`
+  var key = [$keylist];
+  var pos = key.indexOf(undefined);
+  if (pos == 0) {
+    return;
+  } else if (pos > 0) {
+    key.splice(pos)
+  }
+`
 
 const templEmit = `
   emit(key, null);`
 
 const templEnd = `
 }
+// salt: $rnd
 `

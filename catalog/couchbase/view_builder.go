@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"hash/crc32"
+	"math/rand"
 	"strconv"
 	"strings"
 	"time"
@@ -197,9 +198,11 @@ func generateMap(on catalog.IndexKey, doc *designdoc) error {
 
 	fmt.Fprint(buf, line)
 	fmt.Fprint(buf, templEmit)
-	fmt.Fprint(buf, templEnd)
-	doc.mapfn = buf.String()
 
+	line = strings.Replace(templEnd, "$rnd", strconv.Itoa(int(rand.Int31())), -1)
+	fmt.Fprint(buf, line)
+
+	doc.mapfn = buf.String()
 	return nil
 }
 
