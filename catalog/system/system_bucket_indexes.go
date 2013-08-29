@@ -95,7 +95,7 @@ func (b *indexbucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 					"bucket_id":  bucket.Id(),
 					"pool_id":    pool.Id(),
 					"site_id":    b.pool.site.actualSite.Id(),
-					"index_key":  catalogObjectToJSONSafe(index.Key()),
+					"index_key":  catalogObjectToJSONSafe(indexKeyToIndexKeyStringArray(index.Key())),
 					"index_type": catalogObjectToJSONSafe(index.Type()),
 				}
 				return dparval.NewValue(doc), nil
@@ -103,6 +103,14 @@ func (b *indexbucket) Fetch(id string) (item *dparval.Value, e query.Error) {
 		}
 	}
 	return nil, err
+}
+
+func indexKeyToIndexKeyStringArray(key catalog.IndexKey) []string {
+	rv := make([]string, len(key))
+	for i, kp := range key {
+		rv[i] = kp.String()
+	}
+	return rv
 }
 
 func catalogObjectToJSONSafe(catobj interface{}) interface{} {
