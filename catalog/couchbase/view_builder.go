@@ -8,6 +8,7 @@ import (
 	"hash/crc32"
 	"strconv"
 	"strings"
+	"time"
 
 	cb "github.com/couchbaselabs/go-couchbase"
 	"github.com/couchbaselabs/tuqtng/ast"
@@ -231,7 +232,7 @@ func (idx *viewIndex) putDesignDoc() error {
 
 	saved, err := getDesignDoc(idx.bucket, idx.DDocName())
 	if err != nil || saved.IndexChecksum != idx.ddoc.checksum() {
-		return errors.New("Index creation failed, checksum mismatch: " + idx.name)
+		return errors.New("Index creation failed: " + idx.name)
 	}
 
 	return nil
@@ -260,8 +261,14 @@ func (idx *viewIndex) DropViewIndex() error {
 }
 
 func (idx *viewIndex) WaitForIndex() error {
-	_, err :=
-		idx.bucket.cbbucket.View(
+	var err error
+	// if we have got this far, very likely any errors are
+	// due to index not yet being noticed by the system.
+	for i := 0; i < 3; i++ {
+		if i > 1 {
+			time.Sleep(time.Duration(i*3) * time.Second)
+		}
+		_, err = idx.bucket.cbbucket.View(
 			idx.ddoc.name,
 			idx.ddoc.viewname,
 			map[string]interface{}{
@@ -269,10 +276,11 @@ func (idx *viewIndex) WaitForIndex() error {
 				"end_key":   []interface{}{"thing", map[string]string{}},
 				"stale":     false,
 			})
-	if err != nil {
-		return err
+		if err == nil {
+			break
+		}
 	}
-	return nil
+	return err
 }
 
 // AST to JS conversion
