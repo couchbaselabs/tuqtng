@@ -60,16 +60,18 @@ func TestSimpleSelect(t *testing.T) {
 }
 
 func TestAllCaseFiles(t *testing.T) {
+	qc := start()
+	defer close(qc)
 	matches, err := filepath.Glob("json/cases/case_*.json")
 	if err != nil {
 		t.Errorf("glob failed: %v", err)
 	}
 	for _, m := range matches {
-		testCaseFile(t, m)
+		testCaseFile(t, m, qc)
 	}
 }
 
-func testCaseFile(t *testing.T, fname string) {
+func testCaseFile(t *testing.T, fname string, qc network.QueryChannel) {
 	t.Logf("testCaseFile: %v\n", fname)
 	b, err := ioutil.ReadFile(fname)
 	if err != nil {
@@ -91,8 +93,6 @@ func testCaseFile(t *testing.T, fname string) {
 		statements := v.(string)
 		t.Logf("  %d: %v\n", i, statements)
 
-		qc := start()
-		defer close(qc)
 		resultsActual, _, errActual := Run(qc, statements)
 
 		errExpected := ""
