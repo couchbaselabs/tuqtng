@@ -257,6 +257,30 @@
             "id": "ian"
         }
     ]
+    },
+
+    {
+        "statements": "SELECT BASE64_VALUE() AS b64 FROM contacts",
+        "results": [
+        {
+            "b64": "eyJ0eXBlIjoiY29udGFjdCIsCiAibmFtZSI6ImRhdmUiLAogImNoaWxkcmVuIjpbCiAgICAgICAgeyJuYW1lIjoiYWlkZW4iLCJhZ2UiOjE3LCJnZW5kZXIiOiJtIn0sCiAgICAgICAgeyJuYW1lIjoiYmlsbCIsImFnZSI6MiwiZ2VuZGVyIjoiZiJ9CiBdLAogImhvYmJpZXMiOlsiZ29sZiIsICJzdXJmaW5nIl0KfQo="
+        },
+        {
+            "b64": "eyJ0eXBlIjoiY29udGFjdCIsCiAibmFtZSI6ImVhcmwiLAogImNoaWxkcmVuIjpbCiAgICAgICAgeyJuYW1lIjoieGVuYSIsImFnZSI6MTcsImdlbmRlciI6ImYifSwKICAgICAgICB7Im5hbWUiOiJ5dXJpIiwiYWdlIjoyLCJnZW5kZXIiOiJtIn0KIF0sCiAiaG9iYmllcyI6WyJzdXJmaW5nIl0KfQo="
+        },
+        {
+            "b64": "eyJ0eXBlIjoiY29udGFjdCIsCiAibmFtZSI6ImZyZWQiLAogImhvYmJpZXMiOlsiZ29sZiIsInN1cmZpbmciXQp9Cg=="
+        },
+        {
+            "b64": "eyJ0eXBlIjoiY29udGFjdCIsCiAibmFtZSI6ImhhcnJ5Igp9Cg=="
+        },
+        {
+            "b64": "eyJ0eXBlIjoiY29udGFjdCIsCiAibmFtZSI6ImlhbiIsCiAiY2hpbGRyZW4iOlsKICAgIHsibmFtZSI6ImFiYW1hIiwiYWdlIjoxNywiZ2VuZGVyIjoibSJ9LAogICAgeyJuYW1lIjoiYmViYW1hIiwiYWdlIjoyMSwiZ2VuZGVyIjoibSJ9CiBdLAogImhvYmJpZXMiOlsiZ29sZiIsICJzdXJmaW5nIl0KfQo="
+        },
+        {
+            "b64": "eyJ0eXBlIjoiY29udGFjdCIsCiAibmFtZSI6ImphbmUiLAogImNvbnRhY3RzIjogWwogICB7CiAgICAibmFtZSI6ICJmcmVkIgogICB9LAogICB7CiAgICAibmFtZSI6ICJzaGVlbGEiCiAgIH0KIF0KfQo="
+        }
+    ]
     }
 
 ]

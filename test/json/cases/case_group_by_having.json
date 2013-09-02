@@ -71,7 +71,22 @@
             "type": "Movies&TV"
         }
     ]
+    },
+
+    {
+        "description": "use array aggregate function",
+        "statements": "SELECT ARRAY_AGG(asin) AS agg FROM catalog",
+        "results": [
+        {
+            "agg": [
+                "B0094QY7HE",
+                "B0094QY3AB",
+                "B0094QY3LI"
+            ]
+        }
+    ]
     }
+
 
 
 

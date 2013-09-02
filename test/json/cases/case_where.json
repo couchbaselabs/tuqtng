@@ -175,6 +175,66 @@
             "title": "Sherlock: Series 1"
         }
     ]
+    },
+
+    {
+        "statements": "SELECT id FROM orders WHERE shipped-on IS NOT VALUED",
+        "results": [
+        {
+            "id": "1236"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT id FROM orders WHERE shipped-on IS VALUED",
+        "results": [
+        {
+            "id": "1200"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT id FROM orders WHERE shipped-on IS NOT NULL",
+        "results": [
+        {
+            "id": "1200"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT id FROM orders WHERE shipped-on IS NULL",
+        "results": [
+        {
+            "id": "1236"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT id FROM orders WHERE shipped-on IS NOT MISSING",
+        "results": [
+        {
+            "id": "1200"
+        },
+        {
+            "id": "1236"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT id FROM orders WHERE shipped-on IS MISSING",
+        "results": [
+        {
+            "id": "1234"
+        },
+        {
+            "id": "1235"
+        }
+    ]
     }
 
 ]
