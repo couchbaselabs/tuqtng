@@ -97,6 +97,32 @@
             }
         }
     ]
+    },
+
+    {
+        "statements": "SELECT dimensions FROM catalog ORDER BY dimensions.length, dimensions.width ASC LIMIT 1",
+        "results": [
+        {
+            "dimensions": {
+                "height": 1.2,
+                "length": 2,
+                "width": 1.5
+            }
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT dimensions FROM catalog ORDER BY dimensions.length, dimensions.width ASC LIMIT 1 OFFSET 1",
+        "results": [
+        {
+            "dimensions": {
+                "height": 1,
+                "length": 2,
+                "width": 2.5
+            }
+        }
+    ]
     }
 
 ]
