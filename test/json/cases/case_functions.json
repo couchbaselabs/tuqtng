@@ -281,6 +281,270 @@
             "b64": "eyJ0eXBlIjoiY29udGFjdCIsCiAibmFtZSI6ImphbmUiLAogImNvbnRhY3RzIjogWwogICB7CiAgICAibmFtZSI6ICJmcmVkIgogICB9LAogICB7CiAgICAibmFtZSI6ICJzaGVlbGEiCiAgIH0KIF0KfQo="
         }
     ]
+    },
+
+    {
+        "statements": "SELECT CEIL(score+0.5) FROM game",
+        "results": [
+        {
+            "$1": 11
+        },
+        {
+            "$1": 11
+        },
+        {
+            "$1": 101
+        },
+        {
+            "$1": 9
+        },
+        {
+            "$1": 2
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT FLOOR(score+0.5) FROM game",
+        "results": [
+        {
+            "$1": 10
+        },
+        {
+            "$1": 10
+        },
+        {
+            "$1": 100
+        },
+        {
+            "$1": 8
+        },
+        {
+            "$1": 1
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT GREATEST(score, 75) FROM game",
+        "results": [
+        {
+            "$1": 75
+        },
+        {
+            "$1": 75
+        },
+        {
+            "$1": 100
+        },
+        {
+            "$1": 75
+        },
+        {
+            "$1": 75
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT LEAST(score, 5) FROM game",
+        "results": [
+        {
+            "$1": 5
+        },
+        {
+            "$1": 5
+        },
+        {
+            "$1": 5
+        },
+        {
+            "$1": 5
+        },
+        {
+            "$1": 1
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT IFMISSING(shipped-on,\"MISSING\") FROM orders",
+        "results": [
+        {
+            "$1": "2012/01/02"
+        },
+        {
+            "$1": "MISSING"
+        },
+        {
+            "$1": "MISSING"
+        },
+        {
+            "$1": null
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT IFNULL(shipped-on,\"NULL\") FROM orders",
+        "results": [
+        {
+            "$1": "2012/01/02"
+        },
+        {},
+        {},
+        {
+            "$1": "NULL"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT IFMISSINGORNULL(shipped-on,\"NOT THERE\") FROM orders",
+        "results": [
+        {
+            "$1": "2012/01/02"
+        },
+        {
+            "$1": "NOT THERE"
+        },
+        {
+            "$1": "NOT THERE"
+        },
+        {
+            "$1": "NOT THERE"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT NULLIF(score, 100) FROM game WHERE score > 50",
+        "results": [
+        {
+            "$1": null
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT MISSINGIF(score, 100) FROM game WHERE score > 50",
+        "results": [
+        {}
+    ]
+    },
+
+    {
+        "statements": "SELECT TRIM(name,\"d\") FROM contacts",
+        "results": [
+        {
+            "$1": "ave"
+        },
+        {
+            "$1": "earl"
+        },
+        {
+            "$1": "fre"
+        },
+        {
+            "$1": "harry"
+        },
+        {
+            "$1": "ian"
+        },
+        {
+            "$1": "jane"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT LTRIM(name,\"d\") FROM contacts",
+        "results": [
+        {
+            "$1": "ave"
+        },
+        {
+            "$1": "earl"
+        },
+        {
+            "$1": "fred"
+        },
+        {
+            "$1": "harry"
+        },
+        {
+            "$1": "ian"
+        },
+        {
+            "$1": "jane"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT RTRIM(name,\"d\") FROM contacts",
+        "results": [
+        {
+            "$1": "dave"
+        },
+        {
+            "$1": "earl"
+        },
+        {
+            "$1": "fre"
+        },
+        {
+            "$1": "harry"
+        },
+        {
+            "$1": "ian"
+        },
+        {
+            "$1": "jane"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT TRUNC(score+0.5) FROM game",
+        "results": [
+        {
+            "$1": 10
+        },
+        {
+            "$1": 10
+        },
+        {
+            "$1": 100
+        },
+        {
+            "$1": 8
+        },
+        {
+            "$1": 1
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT ROUND(score+0.5) FROM game",
+        "results": [
+        {
+            "$1": 11
+        },
+        {
+            "$1": 11
+        },
+        {
+            "$1": 101
+        },
+        {
+            "$1": 9
+        },
+        {
+            "$1": 2
+        }
+    ]
     }
 
 ]

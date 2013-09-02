@@ -235,6 +235,66 @@
             "id": "1235"
         }
     ]
+    },
+
+    {
+        "statements": "SELECT name FROM contacts WHERE name <> \"dave\"",
+        "results": [
+        {
+            "name": "earl"
+        },
+        {
+            "name": "fred"
+        },
+        {
+            "name": "harry"
+        },
+        {
+            "name": "ian"
+        },
+        {
+            "name": "jane"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT score FROM game WHERE score <= 8",
+        "results": [
+        {
+            "score": 8
+        },
+        {
+            "score": 1
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT score FROM game WHERE score >= 10",
+        "results": [
+        {
+            "score": 10
+        },
+        {
+            "score": 10
+        },
+        {
+            "score": 100
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT name FROM contacts WHERE name = \"dave\" OR name = \"earl\"",
+        "results": [
+        {
+            "name": "dave"
+        },
+        {
+            "name": "earl"
+        }
+    ]
     }
 
 ]

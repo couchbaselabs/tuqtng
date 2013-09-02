@@ -421,6 +421,37 @@
             "title": "Inferno"
         }
     ]
+    },
+
+    {
+        "statements": "SELECT {\"name\": id} AS custom_obj FROM game",
+        "results": [
+        {
+            "custom_obj": {
+                "name": "damien"
+            }
+        },
+        {
+            "custom_obj": {
+                "name": "dustin"
+            }
+        },
+        {
+            "custom_obj": {
+                "name": "junyi"
+            }
+        },
+        {
+            "custom_obj": {
+                "name": "marty"
+            }
+        },
+        {
+            "custom_obj": {
+                "name": "steve"
+            }
+        }
+    ]
     }
 
 ]
