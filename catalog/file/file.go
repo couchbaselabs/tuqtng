@@ -190,6 +190,7 @@ func (p *pool) loadBuckets() (e query.Error) {
 			}
 
 			p.buckets[diru] = b
+			p.bucketNames = append(p.bucketNames, b.Name())
 		}
 	}
 
