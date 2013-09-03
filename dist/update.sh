@@ -96,6 +96,9 @@ coverage() {
     do
         gocov test $project/$sub | gocov-html > $DIST/cov-$sub.html
     done
+    cd $top/test
+    gocov test -deps -exclude-goroot | jq '{"Packages": [.Packages[] | if .Name > "github.com/couchbaselabs/tuqtng" and .Name < "github.com/couchbaselabs/tuqtnh" then . else empty end]}' | gocov-html > $DIST/integ-cov.html
+    cd $top
 }
 
 upload() {
