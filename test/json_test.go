@@ -117,13 +117,14 @@ func testCaseFile(t *testing.T, fname string, qc network.QueryChannel) {
 		if ok {
 			matchStatements := v.(string)
 			resultsMatch, _, errMatch := Run(qc, matchStatements)
-			if errActual != errMatch {
+			if !reflect.DeepEqual(errActual, errActual) {
 				t.Errorf("errors don't match, actual: %#v, expected: %#v"+
 					", for case file: %v, index: %v",
 					errActual, errMatch, fname, i)
 			}
 			doResultsMatch(t, resultsActual, resultsMatch, fname, i)
-			return
+			// this style of matching replaces exact error/result matching
+			continue
 		}
 
 		errExpected := ""
