@@ -148,7 +148,7 @@
                   { logDebugTokens("FALSE"); return FALSE}
 /[nN][uU][lL][lL]/
                   { logDebugTokens("NULL"); return NULL}
-/-?([0-9]|[1-9][0-9]*)(\.[0-9][0-9]*)([eE][+\-]?[0-9][0-9]*)?/
+/([0-9]|[1-9][0-9]*)(\.[0-9][0-9]*)([eE][+\-]?[0-9][0-9]*)?/
                   {
                   // there are 2 separate rules for NUMBER
                   // instead of 1 with two optional components
@@ -157,13 +157,13 @@
                     logDebugTokens("NUMBER - %f", lval.f);
                     return NUMBER
                   }
-/-?([0-9]|[1-9][0-9]*)(\.[0-9][0-9]*)?([eE][+\-]?[0-9][0-9]*)/
+/([0-9]|[1-9][0-9]*)(\.[0-9][0-9]*)?([eE][+\-]?[0-9][0-9]*)/
                   {
                     lval.f,_ = strconv.ParseFloat(yylex.Text(), 64);
                     logDebugTokens("NUMBER - %f", lval.f);
                     return NUMBER
                   }
-/-?[0-9]|[1-9][0-9]*/
+/[0-9]|[1-9][0-9]*/
                   {
                     lval.n,_ = strconv.Atoi(yylex.Text());
                     logDebugTokens("INT - %d", lval.n);
