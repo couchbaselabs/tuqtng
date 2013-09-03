@@ -1,0 +1,9 @@
+[
+    {
+        "description": "verify that we get the same results with/without an index",
+        "preStatements": "CREATE INDEX nameidx ON contacts(name)",
+        "statements": "SELECT name FROM contacts WHERE name > \"harry\" ORDER BY name",
+        "postStatements": "DROP INDEX contacts.nameidx",
+        "matchStatements": "SELECT name FROM contacts WHERE name > \"harry\" ORDER BY name"
+    }
+]

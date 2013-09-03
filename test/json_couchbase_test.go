@@ -34,3 +34,16 @@ func TestAllCaseFilesCouchbase(t *testing.T) {
 	}
 
 }
+
+func TestAllCouchbaseCaseFilesCouchbase(t *testing.T) {
+	qc := startCouchbase()
+	defer close(qc)
+	matches, err := filepath.Glob("json/couchbase_cases/case_*.json")
+	if err != nil {
+		t.Errorf("glob failed: %v", err)
+	}
+	for _, m := range matches {
+		testCaseFile(t, m, qc)
+	}
+
+}

@@ -85,13 +85,31 @@ func testCaseFile(t *testing.T, fname string, qc network.QueryChannel) {
 		return
 	}
 	for i, c := range cases {
-		v, ok := c["statements"]
+		v, ok := c["preStatements"]
+		if ok {
+			preStatements := v.(string)
+			_, _, err := Run(qc, preStatements)
+			if err != nil {
+				t.Errorf("preStatements resulted in error: %v, for case file: %v, index: %v", err, fname, i)
+			}
+		}
+
+		v, ok = c["statements"]
 		if !ok || v == nil {
 			t.Errorf("missing statements for case file: %v, index: %v", fname, i)
 			return
 		}
 		statements := v.(string)
 		t.Logf("  %d: %v\n", i, statements)
+
+		v, ok = c["postStatements"]
+		if ok {
+			postStatements := v.(string)
+			_, _, err := Run(qc, postStatements)
+			if err != nil {
+				t.Errorf("postStatements resulted in error: %v, for case file: %v, index: %v", err, fname, i)
+			}
+		}
 
 		resultsActual, _, errActual := Run(qc, statements)
 
