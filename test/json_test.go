@@ -95,6 +95,19 @@ func testCaseFile(t *testing.T, fname string, qc network.QueryChannel) {
 
 		resultsActual, _, errActual := Run(qc, statements)
 
+		v, ok = c["matchStatements"]
+		if ok {
+			matchStatements := v.(string)
+			resultsMatch, _, errMatch := Run(qc, matchStatements)
+			if errActual != errMatch {
+				t.Errorf("errors don't match, actual: %#v, expected: %#v"+
+					", for case file: %v, index: %v",
+					errActual, errMatch, fname, i)
+			}
+			doResultsMatch(t, resultsActual, resultsMatch, fname, i)
+			return
+		}
+
 		errExpected := ""
 		v, ok = c["error"]
 		if ok {
@@ -121,17 +134,22 @@ func testCaseFile(t *testing.T, fname string, qc network.QueryChannel) {
 			return
 		}
 		resultsExpected := v.([]interface{})
-		if len(resultsActual) != len(resultsExpected) {
-			t.Errorf("results len don't match, %v vs %v, %v vs %v"+
-				", for case file: %v, index: %v",
-				len(resultsActual), len(resultsExpected),
-				resultsActual, resultsExpected, fname, i)
-			return
-		}
-		if !reflect.DeepEqual(resultsActual, resultsExpected) {
-			t.Errorf("results don't match, actual: %#v, expected: %#v"+
-				", for case file: %v, index: %v",
-				resultsActual, resultsExpected, fname, i)
-		}
+		doResultsMatch(t, resultsActual, resultsExpected, fname, i)
+	}
+}
+
+func doResultsMatch(t *testing.T, resultsActual, resultsExpected []interface{}, fname string, i int) {
+	if len(resultsActual) != len(resultsExpected) {
+		t.Errorf("results len don't match, %v vs %v, %v vs %v"+
+			", for case file: %v, index: %v",
+			len(resultsActual), len(resultsExpected),
+			resultsActual, resultsExpected, fname, i)
+		return
+	}
+	if !reflect.DeepEqual(resultsActual, resultsExpected) {
+		t.Errorf("results don't match, actual: %#v, expected: %#v"+
+			", for case file: %v, index: %v",
+			resultsActual, resultsExpected, fname, i)
+		return
 	}
 }

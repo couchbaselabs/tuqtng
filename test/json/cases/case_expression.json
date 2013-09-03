@@ -9,6 +9,10 @@
     ]
     },
     {
+        "statements": "SELECT 1+1 AS result",
+        "matchStatements": "SELECT 2 AS result"
+    },
+    {
         "statements": "SELECT (1)-(1) AS result",
         "description": "this odd syntax is to let us test the operator, but ignore a syntax bug",
         "results": [
