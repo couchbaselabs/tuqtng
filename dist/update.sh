@@ -97,8 +97,8 @@ coverage() {
         gocov test $project/$sub | gocov-html > $DIST/cov-$sub.html
     done
     cd $top/test
-    echo `pwd`
-    jq --version
+    echo `pwd` 1>&2
+    jq --version 1>&2
     gocov test -deps -exclude-goroot > $DIST/integ.json
     cat $DIST/integ.json | jq '{"Packages": [.Packages[] | if .Name > "github.com/couchbaselabs/tuqtng" and .Name < "github.com/couchbaselabs/tuqtnh" then . else empty end]}' > $DIST/integ2.json
     cat $DIST/integ2.json |gocov-html > $DIST/integ-cov.html
