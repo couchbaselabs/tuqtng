@@ -9,8 +9,8 @@ func logDebugGrammar(format string, v ...interface{}) {
 }
 %}
 
-%union { 
-s string 
+%union {
+s string
 n int
 f float64}
 
@@ -35,7 +35,7 @@ f float64}
 %token CASE WHEN THEN ELSE END
 %token ANY ALL OVER FIRST ARRAY IN
 %left OR
-%left AND 
+%left AND
 %left DOT LBRACKET
 %left EQ LT LTE GT GTE NE LIKE
 %left PLUS MINUS
@@ -45,7 +45,7 @@ f float64}
 
 %%
 
-input: 
+input:
 stmt {
 	logDebugGrammar("INPUT")
 }
@@ -56,7 +56,7 @@ EXPLAIN stmt {
 }
 
 stmt:
-select_stmt { 
+select_stmt {
 	logDebugGrammar("STMT - SELECT")
 }
 |
@@ -163,14 +163,14 @@ select_compound  {
 }
 ;
 
-select_compound:    
+select_compound:
 select_core select_order select_limit_offset {
 	// future extensibility for comining queries with UNION, etc
-	logDebugGrammar("SELECT_COMPOUND") 
+	logDebugGrammar("SELECT_COMPOUND")
 }
 ;
 
-select_core:    
+select_core:
 select_select select_from select_where select_group_having {
 	logDebugGrammar("SELECT_CORE")
 }
@@ -211,14 +211,14 @@ HAVING expression {
 }
 ;
 
-select_select:  
+select_select:
 select_select_head select_select_qualifier select_select_tail {
 	logDebugGrammar("SELECT_SELECT")
 }
 ;
 
-select_select_head:  
-SELECT { 
+select_select_head:
+SELECT {
 	logDebugGrammar("SELECT_SELECT_HEAD")
 }
 ;
@@ -248,8 +248,8 @@ UNIQUE {
 }
 ;
 
-select_select_tail:		
-result_list { 
+select_select_tail:
+result_list {
 	logDebugGrammar("SELECT SELECT TAIL - EXPR")
 	result_expr_list := parsingStack.Pop().(ast.ResultExpressionList)
 	switch parsingStatement := parsingStatement.(type) {
@@ -285,14 +285,14 @@ dotted_path_star {
 	logDebugGrammar("RESULT STAR")
 }
 |
-expression { 
+expression {
 	logDebugGrammar("RESULT EXPR")
 	expr_part := parsingStack.Pop().(ast.Expression)
 	result_expr := ast.NewResultExpression(expr_part)
 	parsingStack.Push(result_expr)
 }
 |
-expression AS IDENTIFIER { 
+expression AS IDENTIFIER {
 	logDebugGrammar("SORT EXPR ASC")
 	expr_part := parsingStack.Pop().(ast.Expression)
 	result_expr := ast.NewResultExpressionWithAlias(expr_part, $3.s)
@@ -412,8 +412,8 @@ path AS IDENTIFIER {
 	parsingStack.Push(&ast.From{Projection: proj, As: $3.s})
 }
 
-select_where:   
-/* empty */ { 
+select_where:
+/* empty */ {
 	logDebugGrammar("SELECT WHERE - EMPTY")
 }
 |
@@ -428,25 +428,25 @@ WHERE expression {
 	}
 };
 
-select_order:   
+select_order:
 /* empty */
 |
 ORDER BY sorting_list {
-	
+
 }
 ;
 
 sorting_list:
 sorting_single {
-	
+
 }
 |
 sorting_single COMMA sorting_list {
-	
+
 };
 
 sorting_single:
-expression { 
+expression {
 	logDebugGrammar("SORT EXPR")
 	expr := parsingStack.Pop()
 	switch parsingStatement := parsingStatement.(type) {
@@ -457,7 +457,7 @@ expression {
 	}
 }
 |
-expression ASC { 
+expression ASC {
 	logDebugGrammar("SORT EXPR ASC")
 	expr := parsingStack.Pop()
 	switch parsingStatement := parsingStatement.(type) {
@@ -468,7 +468,7 @@ expression ASC {
 	}
 }
 |
-expression DESC { 
+expression DESC {
 	logDebugGrammar("SORT EXPR DESC")
 	expr := parsingStack.Pop()
 	switch parsingStatement := parsingStatement.(type) {
@@ -481,15 +481,15 @@ expression DESC {
 
 select_limit_offset:
 /* empty */ {
-	
+
 }
 |
 select_limit {
-	
+
 }
 |
 select_limit select_offset {
-	
+
 }
 ;
 
@@ -508,7 +508,7 @@ LIMIT INT {
 };
 
 select_offset:
-OFFSET INT { 
+OFFSET INT {
 	logDebugGrammar("OFFSET %d", $2.n)
 	if $2.n < 0 {
 		panic("OFFSET cannot be negative")
@@ -533,7 +533,7 @@ expr PLUS expr {
 	logDebugGrammar("EXPR - PLUS")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewPlusOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewPlusOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -541,7 +541,7 @@ expr MINUS expr {
 	logDebugGrammar("EXPR - MINUS")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewSubtractOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewSubtractOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -549,7 +549,7 @@ expr MULT expr {
 	logDebugGrammar("EXPR - MULT")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewMultiplyOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewMultiplyOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -557,7 +557,7 @@ expr DIV expr {
 	logDebugGrammar("EXPR - DIV")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewDivideOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewDivideOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -565,7 +565,7 @@ expr MOD expr {
 	logDebugGrammar("EXPR - MOD")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewModuloOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewModuloOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -573,7 +573,7 @@ expr CONCAT expr {
 	logDebugGrammar("EXPR - CONCAT")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewStringConcatenateOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewStringConcatenateOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -597,7 +597,7 @@ expr EQ expr {
 	logDebugGrammar("EXPR - EQ")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewEqualToOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewEqualToOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -605,7 +605,7 @@ expr LT expr {
 	logDebugGrammar("EXPR - LT")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewLessThanOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewLessThanOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -613,7 +613,7 @@ expr LTE expr {
 	logDebugGrammar("EXPR - LTE")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewLessThanOrEqualOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewLessThanOrEqualOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -621,7 +621,7 @@ expr GT expr {
 	logDebugGrammar("EXPR - GT")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewGreaterThanOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewGreaterThanOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -629,7 +629,7 @@ expr GTE expr {
 	logDebugGrammar("EXPR - GTE")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewGreaterThanOrEqualOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewGreaterThanOrEqualOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -637,7 +637,7 @@ expr NE expr {
 	logDebugGrammar("EXPR - NE")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewNotEqualToOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewNotEqualToOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -645,7 +645,7 @@ expr LIKE expr {
 	logDebugGrammar("EXPR - LIKE")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewLikeOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewLikeOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
@@ -653,15 +653,15 @@ expr NOT LIKE expr {
 	logDebugGrammar("EXPR - NOT LIKE")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewNotLikeOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewNotLikeOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
 expr DOT IDENTIFIER {
 	logDebugGrammar("EXPR DOT MEMBER")
-	right := ast.NewProperty($3.s) 
+	right := ast.NewProperty($3.s)
 	left := parsingStack.Pop()
-	thisExpression := ast.NewDotMemberOperator(left.(ast.Expression), right) 
+	thisExpression := ast.NewDotMemberOperator(left.(ast.Expression), right)
 	parsingStack.Push(thisExpression)
 }
 |
@@ -669,77 +669,77 @@ expr LBRACKET expr RBRACKET {
 	logDebugGrammar("EXPR BRACKET MEMBER")
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
-	thisExpression := ast.NewBracketMemberOperator(left.(ast.Expression), right.(ast.Expression)) 
+	thisExpression := ast.NewBracketMemberOperator(left.(ast.Expression), right.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
 expr IS NULL {
 	logDebugGrammar("SUFFIX_EXPR IS NULL")
 	operand := parsingStack.Pop()
-	thisExpression := ast.NewIsNullOperator(operand.(ast.Expression)) 
+	thisExpression := ast.NewIsNullOperator(operand.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
 expr IS NOT NULL {
 	logDebugGrammar("SUFFIX_EXPR IS NOT NULL")
 	operand := parsingStack.Pop()
-	thisExpression := ast.NewIsNotNullOperator(operand.(ast.Expression)) 
+	thisExpression := ast.NewIsNotNullOperator(operand.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
 expr IS MISSING {
 	logDebugGrammar("SUFFIX_EXPR IS MISSING")
 	operand := parsingStack.Pop()
-	thisExpression := ast.NewIsMissingOperator(operand.(ast.Expression)) 
+	thisExpression := ast.NewIsMissingOperator(operand.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
 expr IS NOT MISSING {
 	logDebugGrammar("SUFFIX_EXPR IS NOT MISSING")
 	operand := parsingStack.Pop()
-	thisExpression := ast.NewIsNotMissingOperator(operand.(ast.Expression)) 
+	thisExpression := ast.NewIsNotMissingOperator(operand.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
 expr IS VALUED {
 	logDebugGrammar("SUFFIX_EXPR IS VALUED")
 	operand := parsingStack.Pop()
-	thisExpression := ast.NewIsValuedOperator(operand.(ast.Expression)) 
+	thisExpression := ast.NewIsValuedOperator(operand.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
 expr IS NOT VALUED {
 	logDebugGrammar("SUFFIX_EXPR IS NOT VALUED")
 	operand := parsingStack.Pop()
-	thisExpression := ast.NewIsNotValuedOperator(operand.(ast.Expression)) 
+	thisExpression := ast.NewIsNotValuedOperator(operand.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
 prefix_expr {
-	
+
 }
 ;
 
-prefix_expr: 
+prefix_expr:
 NOT prefix_expr {
 	logDebugGrammar("EXPR - NOT")
 	operand := parsingStack.Pop()
-	thisExpression := ast.NewNotOperator(operand.(ast.Expression)) 
+	thisExpression := ast.NewNotOperator(operand.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
 MINUS prefix_expr {
 	logDebugGrammar("EXPR - CHANGE SIGN")
 	operand := parsingStack.Pop()
-	thisExpression := ast.NewChangeSignOperator(operand.(ast.Expression)) 
+	thisExpression := ast.NewChangeSignOperator(operand.(ast.Expression))
 	parsingStack.Push(thisExpression)
 }
 |
 suffix_expr {
-	
+
 };
 
-suffix_expr: 
+suffix_expr:
 atom {
 	logDebugGrammar("SUFFIX_EXPR")
 }
@@ -748,8 +748,8 @@ atom {
 atom:
 IDENTIFIER {
 	logDebugGrammar("IDENTIFIER - %s", $1.s)
-	thisExpression := ast.NewProperty($1.s) 
-	parsingStack.Push(thisExpression) 
+	thisExpression := ast.NewProperty($1.s)
+	parsingStack.Push(thisExpression)
 }
 |
 literal_value {
@@ -891,22 +891,22 @@ ELSE expr {
 path:
 IDENTIFIER {
 	logDebugGrammar("PATH - %v", $1.s)
-	thisExpression := ast.NewProperty($1.s) 
-	parsingStack.Push(thisExpression) 
+	thisExpression := ast.NewProperty($1.s)
+	parsingStack.Push(thisExpression)
 }
 |
 path LBRACKET INT RBRACKET {
 	logDebugGrammar("PATH BRACKET - %v[%v]", $1.s, $3.n)
 	left := parsingStack.Pop()
-	thisExpression := ast.NewBracketMemberOperator(left.(ast.Expression), ast.NewLiteralNumber(float64($3.n))) 
+	thisExpression := ast.NewBracketMemberOperator(left.(ast.Expression), ast.NewLiteralNumber(float64($3.n)))
 	parsingStack.Push(thisExpression)
 }
 |
 path DOT IDENTIFIER {
 	logDebugGrammar("PATH DOT PATH - $1.s")
-	right := ast.NewProperty($3.s) 
+	right := ast.NewProperty($3.s)
 	left := parsingStack.Pop()
-	thisExpression := ast.NewDotMemberOperator(left.(ast.Expression), right) 
+	thisExpression := ast.NewDotMemberOperator(left.(ast.Expression), right)
 	parsingStack.Push(thisExpression)
 }
 ;
@@ -963,7 +963,7 @@ expr DOT MULT {
 literal_value:
 STRING {
 	logDebugGrammar("STRING %s", $1.s)
-	thisExpression := ast.NewLiteralString($1.s) 
+	thisExpression := ast.NewLiteralString($1.s)
 	parsingStack.Push(thisExpression)
 }
 |
@@ -981,13 +981,13 @@ array {
 |
 TRUE {
 	logDebugGrammar("TRUE")
-	thisExpression := ast.NewLiteralBool(true) 
+	thisExpression := ast.NewLiteralBool(true)
 	parsingStack.Push(thisExpression)
 }
 |
 FALSE {
 	logDebugGrammar("FALSE")
-	thisExpression := ast.NewLiteralBool(false) 
+	thisExpression := ast.NewLiteralBool(false)
 	parsingStack.Push(thisExpression)
 }
 |
@@ -1040,13 +1040,13 @@ named_expression_single COMMA named_expression_list {
 }
 ;
 
-named_expression_single:   
-STRING COLON expression {  
+named_expression_single:
+STRING COLON expression {
 	logDebugGrammar("NAMED EXPR SINGLE")
 	thisKey := $1.s
 	thisValue := parsingStack.Pop().(ast.Expression)
 	thisExpression := ast.NewLiteralObject(map[string]ast.Expression{thisKey: thisValue})
-	parsingStack.Push(thisExpression) 
+	parsingStack.Push(thisExpression)
 }
 ;
 
@@ -1073,7 +1073,7 @@ expression {
 	parsingStack.Push(exp_list)
 }
 |
-expression COMMA expression_list { 
+expression COMMA expression_list {
 	logDebugGrammar("EXPRESSION LIST COMPOUND")
 	rest := parsingStack.Pop().(ast.ExpressionList)
 	last := parsingStack.Pop()
