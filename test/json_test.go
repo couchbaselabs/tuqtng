@@ -101,6 +101,7 @@ func testCaseFile(t *testing.T, fname string, qc network.QueryChannel) {
 		}
 		statements := v.(string)
 		t.Logf("  %d: %v\n", i, statements)
+		resultsActual, _, errActual := Run(qc, statements)
 
 		v, ok = c["postStatements"]
 		if ok {
@@ -110,8 +111,6 @@ func testCaseFile(t *testing.T, fname string, qc network.QueryChannel) {
 				t.Errorf("postStatements resulted in error: %v, for case file: %v, index: %v", err, fname, i)
 			}
 		}
-
-		resultsActual, _, errActual := Run(qc, statements)
 
 		v, ok = c["matchStatements"]
 		if ok {
