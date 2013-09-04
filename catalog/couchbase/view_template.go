@@ -27,7 +27,16 @@ const templFunctions = `
       if (val instanceof Array) {
         return [$array, val];
       } else {
-        return [$object, val];
+        innerKeys = [];
+        for (var k in val) {
+          innerKeys.push(k);
+        }
+        innerKeys.sort()
+        innerVals = [];
+        for (var i in innerKeys) {
+          innerVals.push(indexFormattedValue(val[innerKeys[i]]));
+        }
+        return [$object, [innerKeys, innerVals]];
       }
     } else {
         return undefined;

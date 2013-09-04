@@ -12,6 +12,7 @@ package couchbase
 import (
 	"fmt"
 	"runtime/debug"
+	"sort"
 	"strings"
 
 	"github.com/couchbaselabs/clog"
@@ -106,24 +107,28 @@ func encodeValueAsMapKey(keys catalog.LookupValue) interface{} {
 	rv := make([]interface{}, len(keys))
 	for i, lv := range keys {
 		val := lv.Value()
-		switch val := val.(type) {
-		case nil:
-			rv[i] = []interface{}{TYPE_NULL}
-		case bool:
-			rv[i] = []interface{}{TYPE_BOOLEAN, val}
-		case float64:
-			rv[i] = []interface{}{TYPE_NUMBER, val}
-		case string:
-			rv[i] = []interface{}{TYPE_STRING, encodeStringAsNumericArray(val)}
-		case []interface{}:
-			rv[i] = []interface{}{TYPE_ARRAY, val}
-		case map[string]interface{}:
-			rv[i] = []interface{}{TYPE_OBJECT, val}
-		default:
-			panic(fmt.Sprintf("Unable to encode type %T to map key", val))
-		}
+		rv[i] = encodeValue(val)
 	}
 	return rv
+}
+
+func encodeValue(val interface{}) interface{} {
+	switch val := val.(type) {
+	case nil:
+		return []interface{}{TYPE_NULL}
+	case bool:
+		return []interface{}{TYPE_BOOLEAN, val}
+	case float64:
+		return []interface{}{TYPE_NUMBER, val}
+	case string:
+		return []interface{}{TYPE_STRING, encodeStringAsNumericArray(val)}
+	case []interface{}:
+		return []interface{}{TYPE_ARRAY, val}
+	case map[string]interface{}:
+		return []interface{}{TYPE_OBJECT, encodeObjectAsCompoundArray(val)}
+	default:
+		panic(fmt.Sprintf("Unable to encode type %T to map key", val))
+	}
 }
 
 func encodeStringAsNumericArray(str string) []float64 {
@@ -132,4 +137,19 @@ func encodeStringAsNumericArray(str string) []float64 {
 		rv[i] = float64(rune)
 	}
 	return rv
+}
+
+func encodeObjectAsCompoundArray(obj map[string]interface{}) []interface{} {
+	keys := make([]string, len(obj))
+	counter := 0
+	for k, _ := range obj {
+		keys[counter] = k
+		counter++
+	}
+	sort.Strings(keys)
+	vals := make([]interface{}, len(obj))
+	for i, key := range keys {
+		vals[i] = encodeValue(obj[key])
+	}
+	return []interface{}{keys, vals}
 }
