@@ -16,7 +16,7 @@ import (
 )
 
 func setup(cacheDir string, src string, srcF os.FileInfo, err error) error {
-	if strings.HasPrefix(srcF.Name(), ".") {
+	if strings.HasPrefix(srcF.Name(), ".") || strings.Contains(src, "/.") {
 		return nil
 	}
 

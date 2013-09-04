@@ -4,7 +4,7 @@ var max = 0;
 
 function init() {
     var ie = ace.edit('iedit');
-    ie.renderer.setShowGutter(false); 
+    ie.renderer.setShowGutter(false);
     ie.setTheme('ace/theme/eclipse');
     ie.setHighlightActiveLine(false);
     ie.setShowPrintMargin(false);
@@ -13,7 +13,7 @@ function init() {
     ie.setDisplayIndentGuides(false);
 
     var re = ace.edit('redit');
-    re.renderer.setShowGutter(false); 
+    re.renderer.setShowGutter(false);
     re.setTheme('ace/theme/eclipse');
     re.setHighlightActiveLine(false);
     re.setShowPrintMargin(false);
@@ -41,7 +41,7 @@ function load(n) {
     updateNav(n);
 
     var slide = slideUrl(n);
-	
+
     $.get(slide, function(data, status) {
         if (status != 'success') return;
         $('#content').html(data);
@@ -60,7 +60,11 @@ function load(n) {
 }
 
 function run() {
-	var url = '/query';
+    var re = ace.edit('redit');
+    re.setValue("Running..");
+    re.navigateFileEnd();
+
+    var url = '/query';
     var ie = ace.edit('iedit');
     var query = 'q=' + encodeURIComponent(ie.getValue());
     $.post(url, query, ran).fail(failed);
