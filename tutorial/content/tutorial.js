@@ -40,7 +40,7 @@ function load(n) {
     setLocation(n);
     updateNav(n);
 
-    var slide = slideUrl(n)
+    var slide = slideUrl(n);
 	
     $.get(slide, function(data, status) {
         if (status != 'success') return;
