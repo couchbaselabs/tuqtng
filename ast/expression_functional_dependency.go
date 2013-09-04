@@ -38,7 +38,7 @@ func NewExpressionFunctionalDependencyCheckerFull(deps ExpressionList) *Expressi
 
 func (this *ExpressionFunctionalDependencyChecker) Visit(expr Expression) (Expression, error) {
 	// first let scalar literals pass, they do not depend on anything
-	switch expr.(type) {
+	switch expr := expr.(type) {
 	case *LiteralNull:
 		return nil, nil
 	case *LiteralBool:
@@ -47,6 +47,16 @@ func (this *ExpressionFunctionalDependencyChecker) Visit(expr Expression) (Expre
 		return nil, nil
 	case *LiteralString:
 		return nil, nil
+	case *LiteralArray:
+		//empty array is satisfied (non-empty handled later)
+		if len(expr.Val) == 0 {
+			return nil, nil
+		}
+	case *LiteralObject:
+		// empty object is satisfied (non-empty handled later)
+		if len(expr.Val) == 0 {
+			return nil, nil
+		}
 	case AggregateFunctionCallExpression:
 		if this.AggregatesSatisfied {
 			return nil, nil
