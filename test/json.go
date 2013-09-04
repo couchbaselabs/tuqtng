@@ -49,7 +49,9 @@ func (this *MockResponse) SendError(err query.Error) {
 }
 
 func (this *MockResponse) SendResult(val interface{}) {
-	this.results = append(this.results, val)
+	// sanitize the value the same way the HTTP endpoint does
+	sanitizedValue := misc.SanitizeUnrepresentableJSON(val)
+	this.results = append(this.results, sanitizedValue)
 }
 
 func (this *MockResponse) NoMoreResults() {

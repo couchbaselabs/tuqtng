@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -96,7 +97,8 @@ func (this *HttpResponse) ProcessResults() (int, error) {
 				return 0, err
 			}
 		}
-		_, err := this.printObj(val)
+		valSanitized := misc.SanitizeUnrepresentableJSON(val)
+		_, err := this.printObj(valSanitized)
 		if err != nil {
 			return 0, err
 		}

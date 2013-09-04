@@ -60,6 +60,38 @@
             "result": -3
         }
     ]
+    },
+
+
+
+    {
+        "statements": "SELECT 1/0 AS result",
+        "description": "again this sytnax forces the change sign operator",
+        "results": [
+        {
+            "result": "+Infinity"
+        }
+    ]
+    }
+    ,
+    {
+        "statements": "SELECT -1/0 AS result",
+        "description": "again this sytnax forces the change sign operator",
+        "results": [
+        {
+            "result": "-Infinity"
+        }
+    ]
+    }
+    ,
+    {
+        "statements": "SELECT 0/0 AS result",
+        "description": "again this sytnax forces the change sign operator",
+        "results": [
+        {
+            "result": "NaN"
+        }
+    ]
     }
 ]
 
