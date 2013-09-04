@@ -89,8 +89,6 @@ func (this *InterpretedExecutor) processItem(q network.Query, item *dparval.Valu
 	case *dparval.Value:
 		result := projection.Value()
 		q.Response().SendResult(result)
-	default:
-		q.Response().SendResult(projection)
 	}
 	return true
 }

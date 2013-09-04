@@ -10,6 +10,7 @@
 package xpipeline
 
 import (
+	"encoding/json"
 	"fmt"
 	"runtime/debug"
 
@@ -50,8 +51,15 @@ func (this *Explain) Run(stopChannel misc.StopChannel) {
 	this.downstreamStopChannel = stopChannel
 	clog.To(CHANNEL, "explain operator starting")
 	item := dparval.NewValue(map[string]interface{}{})
-	item.SetAttachment("projection", this.Plan)
-	this.SendItem(item)
+
+	planBytes, err := json.Marshal(this.Plan)
+	if err != nil {
+		this.SendError(query.NewError(err, "error serializing plan to JSON"))
+	} else {
+		projection := dparval.NewValueFromBytes(planBytes)
+		item.SetAttachment("projection", projection)
+		this.SendItem(item)
+	}
 
 	clog.To(CHANNEL, "explain operator finished")
 }

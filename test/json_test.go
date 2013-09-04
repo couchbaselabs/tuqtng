@@ -18,6 +18,7 @@ import (
 	"testing"
 
 	"github.com/couchbaselabs/tuqtng/network"
+	"github.com/dustin/go-jsonpointer"
 )
 
 func start() network.QueryChannel {
@@ -122,8 +123,6 @@ func testCaseFile(t *testing.T, fname string, qc network.QueryChannel) {
 					errActual, errMatch, fname, i)
 			}
 			doResultsMatch(t, resultsActual, resultsMatch, fname, i)
-			// this style of matching replaces exact error/result matching
-			continue
 		}
 
 		errExpected := ""
@@ -147,12 +146,41 @@ func testCaseFile(t *testing.T, fname string, qc network.QueryChannel) {
 		}
 
 		v, ok = c["results"]
-		if !ok || v == nil {
-			t.Errorf("missing results for case file: %v, index: %v", fname, i)
-			return
+		if ok {
+			resultsExpected := v.([]interface{})
+			doResultsMatch(t, resultsActual, resultsExpected, fname, i)
 		}
-		resultsExpected := v.([]interface{})
-		doResultsMatch(t, resultsActual, resultsExpected, fname, i)
+
+		v, ok = c["resultAssertions"]
+		if ok {
+			resultAssertions := v.([]interface{})
+			for _, rule := range resultAssertions {
+				rule, ok := rule.(map[string]interface{})
+				if ok {
+					pointer, ok := rule["pointer"].(string)
+					if ok {
+						expectedVal, ok := rule["expect"]
+						if ok {
+							// FIXME the wrapper object here is temporary
+							// while go-jsonpointer API changes slightly
+							actualVal := jsonpointer.Get(map[string]interface{}{"wrap": resultsActual}, "/wrap"+pointer)
+
+							if !reflect.DeepEqual(actualVal, expectedVal) {
+								t.Errorf("did not see the expected value %v, got %v for pointer: %s", errExpected, actualVal, pointer)
+							}
+						} else {
+							t.Errorf("expected an expection")
+						}
+					} else {
+						t.Errorf("expected pointer string")
+					}
+				} else {
+					t.Errorf("expected resultAssertions to be objects")
+				}
+			}
+
+		}
+
 	}
 }
 
