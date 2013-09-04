@@ -166,7 +166,7 @@ func testCaseFile(t *testing.T, fname string, qc network.QueryChannel) {
 							actualVal := jsonpointer.Get(map[string]interface{}{"wrap": resultsActual}, "/wrap"+pointer)
 
 							if !reflect.DeepEqual(actualVal, expectedVal) {
-								t.Errorf("did not see the expected value %v, got %v for pointer: %s", errExpected, actualVal, pointer)
+								t.Errorf("did not see the expected value %v, got %v for pointer: %s", expectedVal, actualVal, pointer)
 							}
 						} else {
 							t.Errorf("expected an expection")

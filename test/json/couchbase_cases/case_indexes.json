@@ -16,6 +16,14 @@
             {
                 "pointer": "/0/input/input/input/input/index",
                 "expect": "nameidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/low/0",
+                "expect": "harry"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "high"
             }
         ]
     },
@@ -37,6 +45,14 @@
             {
                 "pointer": "/0/input/input/input/input/index",
                 "expect": "nameidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/high/0",
+                "expect": "harry"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "low"
             }
         ]
     },
@@ -58,6 +74,14 @@
             {
                 "pointer": "/0/input/input/input/input/index",
                 "expect": "nameidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/low/0",
+                "expect": "harry"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "both"
             }
         ]
     },
@@ -79,6 +103,14 @@
             {
                 "pointer": "/0/input/input/input/input/index",
                 "expect": "nameidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/high/0",
+                "expect": "harry"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "both"
             }
         ]
     },
@@ -100,6 +132,18 @@
             {
                 "pointer": "/0/input/input/input/input/index",
                 "expect": "nameidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/low/0",
+                "expect": "harry"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/high/0",
+                "expect": "harry"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "both"
             }
         ]
     },
@@ -121,6 +165,90 @@
             {
                 "pointer": "/0/input/input/input/input/index",
                 "expect": "nameidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/high/0",
+                "expect": "harry"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "low"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/1/low/0",
+                "expect": "harry"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/1/inclusion",
+                "expect": "high"
+            }
+        ]
+    },
+
+    {
+        "description": "verify that we get the same results with/without an index",
+        "preStatements": "CREATE INDEX nameidx ON contacts(name)",
+        "statements": "SELECT name FROM contacts WHERE name LIKE \"har%\" ORDER BY name",
+        "postStatements": "DROP INDEX contacts.nameidx",
+        "matchStatements": "SELECT name FROM contacts WHERE name LIKE \"har%\" ORDER BY name"
+    },
+    {
+        "description": "verify that we get the same results with/without an index",
+        "preStatements": "CREATE INDEX nameidx ON contacts(name)",
+        "statements": "EXPLAIN SELECT name FROM contacts WHERE name LIKE \"har%\" ORDER BY name",
+        "postStatements": "DROP INDEX contacts.nameidx",
+        "resultAssertions": [
+            {
+                "pointer": "/0/input/input/input/input/index",
+                "expect": "nameidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/low/0",
+                "expect": "har"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/high/0",
+                "expect": "has"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "low"
+            }
+        ]
+    },
+
+    {
+        "description": "verify that we get the same results with/without an index",
+        "preStatements": "CREATE INDEX nameidx ON contacts(name)",
+        "statements": "SELECT name FROM contacts WHERE name NOT LIKE \"har%\" ORDER BY name",
+        "postStatements": "DROP INDEX contacts.nameidx",
+        "matchStatements": "SELECT name FROM contacts WHERE name NOT LIKE \"har%\" ORDER BY name"
+    },
+    {
+        "description": "verify that we get the same results with/without an index",
+        "preStatements": "CREATE INDEX nameidx ON contacts(name)",
+        "statements": "EXPLAIN SELECT name FROM contacts WHERE name NOT LIKE \"har%\" ORDER BY name",
+        "postStatements": "DROP INDEX contacts.nameidx",
+        "resultAssertions": [
+            {
+                "pointer": "/0/input/input/input/input/index",
+                "expect": "nameidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/high/0",
+                "expect": "har"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "low"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/1/low/0",
+                "expect": "has"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/1/inclusion",
+                "expect": "high"
             }
         ]
     },
@@ -143,6 +271,14 @@
             {
                 "pointer": "/0/input/input/input/input/index",
                 "expect": "scoreidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/low/0",
+                "expect": 8
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "high"
             }
         ]
     },
@@ -164,6 +300,14 @@
             {
                 "pointer": "/0/input/input/input/input/index",
                 "expect": "scoreidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/high/0",
+                "expect": 8
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "low"
             }
         ]
     },
@@ -185,6 +329,14 @@
             {
                 "pointer": "/0/input/input/input/input/index",
                 "expect": "scoreidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/low/0",
+                "expect": 8
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "both"
             }
         ]
     },
@@ -206,6 +358,14 @@
             {
                 "pointer": "/0/input/input/input/input/index",
                 "expect": "scoreidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/high/0",
+                "expect": 8
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "both"
             }
         ]
     },
@@ -227,6 +387,18 @@
             {
                 "pointer": "/0/input/input/input/input/index",
                 "expect": "scoreidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/low/0",
+                "expect": 8
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/high/0",
+                "expect": 8
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "both"
             }
         ]
     },
@@ -248,6 +420,22 @@
             {
                 "pointer": "/0/input/input/input/input/index",
                 "expect": "scoreidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/high/0",
+                "expect": 8
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "low"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/1/low/0",
+                "expect": 8
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/1/inclusion",
+                "expect": "high"
             }
         ]
     },
