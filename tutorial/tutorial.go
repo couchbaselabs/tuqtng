@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
@@ -8,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 
@@ -15,7 +17,11 @@ import (
 	"github.com/russross/blackfriday"
 )
 
-func setup(cacheDir string, src string, srcF os.FileInfo, err error) error {
+type Index struct {
+	Entries []string `json:"entries`
+}
+
+func setup(cacheDir string, src string, srcF os.FileInfo, idx *Index, err error) error {
 	if strings.HasPrefix(srcF.Name(), ".") || strings.Contains(src, "/.") {
 		return nil
 	}
@@ -58,6 +64,13 @@ func setup(cacheDir string, src string, srcF os.FileInfo, err error) error {
 		return err
 	}
 
+	headrx := regexp.MustCompile("##[^\n]+\n")
+	found := headrx.FindString(string(sbuf))
+	if len(found) > 0 {
+		found = strings.TrimSpace(strings.TrimPrefix(found, "##"))
+		idx.Entries = append(idx.Entries, found)
+	}
+
 	return nil
 }
 
@@ -75,22 +88,15 @@ func main() {
 		clog.Fatal("Stopped")
 	}()
 
+	var idx Index
 	walker := func(src string, f os.FileInfo, err error) error {
-		return setup(tempDir, src, f, err)
+		return setup(tempDir, src, f, &idx, err)
 	}
 
+	idx.Entries = []string{}
 	if err := filepath.Walk("./content/", walker); err != nil {
 		clog.Fatalf("Filewalk %v", err)
 	}
-
-	clog.Log("Running at http:///localhost:8000/")
-
-	go func() {
-		for {
-			filepath.Walk("./content/", walker)
-			time.Sleep(2 * time.Second)
-		}
-	}()
 
 	http.Handle("/", http.RedirectHandler("/tutorial/tutorial.html#1", 302))
 
@@ -101,7 +107,27 @@ func main() {
 	fs := http.FileServer(http.Dir(tempDir + "/content/"))
 	http.Handle("/tutorial/", http.StripPrefix("/tutorial/", fs))
 
+	getindex := func(w http.ResponseWriter, r *http.Request) {
+		json, err := json.Marshal(idx)
+		if err != nil {
+			clog.Fatalf("During Index JSON Marshal %v", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(json)
+	}
+	http.HandleFunc("/tutorial/index.json", getindex)
+
 	if err := http.ListenAndServe(":8000", nil); err != nil {
 		clog.Fatalf("ListenAndServe %v", err)
 	}
+
+	clog.Log("Running at http:///localhost:8000/")
+	go func() {
+		for {
+			idx.Entries = []string{}
+			filepath.Walk("./content/", walker)
+			time.Sleep(2 * time.Second)
+		}
+	}()
+
 }
