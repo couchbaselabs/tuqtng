@@ -58,7 +58,8 @@ type Bucket interface {
 	IndexNames() ([]string, query.Error)
 	IndexById(id string) (Index, query.Error)
 	IndexByName(name string) (Index, query.Error)
-	IndexByPrimary() (PrimaryIndex, query.Error)
+	IndexByPrimary() (PrimaryIndex, query.Error)     // Returns the server-recommended primary index
+	IndexesByPrimary() ([]PrimaryIndex, query.Error) // Returns all available primary indexes
 	Indexes() ([]Index, query.Error)
 	Fetch(id string) (*dparval.Value, query.Error)
 	BulkFetch([]string) (map[string]*dparval.Value, query.Error)

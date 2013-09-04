@@ -60,6 +60,10 @@ func (b *dualbucket) IndexByPrimary() (catalog.PrimaryIndex, query.Error) {
 	return b.primary, nil
 }
 
+func (b *dualbucket) IndexesByPrimary() ([]catalog.PrimaryIndex, query.Error) {
+	return []catalog.PrimaryIndex{b.primary}, nil
+}
+
 func (b *dualbucket) Indexes() ([]catalog.Index, query.Error) {
 	return []catalog.Index{b.primary}, nil
 }

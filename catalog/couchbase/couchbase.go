@@ -215,6 +215,10 @@ func (b *bucket) IndexByPrimary() (catalog.PrimaryIndex, query.Error) {
 	return b.primary, nil
 }
 
+func (b *bucket) IndexesByPrimary() ([]catalog.PrimaryIndex, query.Error) {
+	return []catalog.PrimaryIndex{b.primary}, nil
+}
+
 func (b *bucket) Indexes() ([]catalog.Index, query.Error) {
 	rv := make([]catalog.Index, 0, len(b.indexes))
 	for _, index := range b.indexes {

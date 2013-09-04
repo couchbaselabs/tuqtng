@@ -60,6 +60,10 @@ func (b *poolbucket) IndexByPrimary() (catalog.PrimaryIndex, query.Error) {
 	return b.primary, nil
 }
 
+func (b *poolbucket) IndexesByPrimary() ([]catalog.PrimaryIndex, query.Error) {
+	return []catalog.PrimaryIndex{b.primary}, nil
+}
+
 func (b *poolbucket) Indexes() ([]catalog.Index, query.Error) {
 	return []catalog.Index{b.primary}, nil
 }

@@ -96,20 +96,19 @@ func (b *bucket) loadIndexes() query.Error {
 	pi := newPrimaryIndex(b, "", "_all_docs")
 	b.indexes[pi.name] = pi
 	b.primary = pi
-	
+
 	// and recreate remaining from ddocs
 	indexes, err := loadViewIndexes(b)
 	if err != nil {
 		return query.NewError(err, "Error loading indexes")
 	}
-	
+
 	for _, index := range indexes {
 		b.indexes[index.name] = index
 	}
-	
+
 	return nil
 }
-
 
 func (vi *viewIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	vi.ScanRange(nil, nil, catalog.Both, ch, warnch, errch)

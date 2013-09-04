@@ -63,6 +63,10 @@ func (b *bucketbucket) IndexByPrimary() (catalog.PrimaryIndex, query.Error) {
 	return b.primary, nil
 }
 
+func (b *bucketbucket) IndexesByPrimary() ([]catalog.PrimaryIndex, query.Error) {
+	return []catalog.PrimaryIndex{b.primary}, nil
+}
+
 func (b *bucketbucket) Indexes() ([]catalog.Index, query.Error) {
 	return []catalog.Index{b.primary}, nil
 }
