@@ -10,10 +10,6 @@ On the right hand side you see a query editor. All of the queries in this tutori
 * products
 * orders
 * tags
-* articles1
-* articles2
-* categories1
-* categories2
 * non-json
 
 Go ahead, run your first query now!

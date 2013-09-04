@@ -8,7 +8,7 @@ function init() {
     ie.setTheme('ace/theme/eclipse');
     ie.setHighlightActiveLine(false);
     ie.setShowPrintMargin(false);
-    ie.getSession().setMode('ace/mode/unql');
+    ie.getSession().setMode('ace/mode/n1ql');
     ie.getSession().setUseWrapMode(true);
     ie.setDisplayIndentGuides(false);
 
