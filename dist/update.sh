@@ -68,6 +68,9 @@ buildtutorial() {
 builddistpackages() {
 
     mkdir -p $DIST/tutorial_tmp
+    cd tutorial
+    go build
+    cd $top
     tutorial/tutorial -src tutorial/content/ -dst $DIST/tutorial_tmp/
 
     # mac build
