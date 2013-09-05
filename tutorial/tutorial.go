@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
@@ -13,7 +14,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"flag"
 
 	"github.com/couchbaselabs/clog"
 	"github.com/russross/blackfriday"
@@ -84,28 +84,28 @@ func main() {
 	xsrc := flag.String("src", "./content", "Source directory to read markdown from")
 	xdst := flag.String("dst", "", "Destination to write translated content")
 	flag.Parse()
-	
+
 	srcD, srcE := os.Stat(*xsrc)
 	if os.IsNotExist(srcE) || !srcD.IsDir() {
-    	clog.Fatalf("Source directory does not exist: %s", *xsrc)
- 	}
- 	
- 	if len(*xdst) > 0 {
+		clog.Fatalf("Source directory does not exist: %s", *xsrc)
+	}
+
+	if len(*xdst) > 0 {
 		dstD, dstE := os.Stat(*xdst)
 		if os.IsNotExist(dstE) || !dstD.IsDir() {
-	    	clog.Fatalf("Target directory does not exist: %s", *xdst)
- 		}
- 	}
- 	
- 	tld := strings.Trim(*xsrc, "/")
- 	dirpos := strings.LastIndex(tld, "/")
- 	if dirpos < 0 {
-	 	tld = tld[dirpos + 1:]
- 	}
- 	if (len(tld) < 1) {
-	 	clog.Fatalf("Source directory path must be at least one level deep, example: ./content")
+			clog.Fatalf("Target directory does not exist: %s", *xdst)
+		}
 	}
-	
+
+	tld := strings.Trim(*xsrc, "/")
+	dirpos := strings.LastIndex(tld, "/")
+	if dirpos < 0 {
+		tld = tld[dirpos+1:]
+	}
+	if len(tld) < 1 {
+		clog.Fatalf("Source directory path must be at least one level deep, example: ./content")
+	}
+
 	if len(*xdst) > 0 {
 		translate(*xsrc, *xdst, tld)
 	} else {
@@ -113,24 +113,44 @@ func main() {
 	}
 }
 
+func isEmpty(dir string) bool {
+	empty := true
+	walker := func(dir string, f os.FileInfo, err error) error {
+		if f.IsDir() {
+			return nil
+		}
+		empty = false
+		return nil
+	}
+	if err := filepath.Walk(dir, walker); err != nil {
+		clog.Fatalf("Filewalk %v", err)
+	}
+	return empty
+}
+
 func translate(src, dst, tld string) {
-	var idx Index = make(map[string]int)	
+
+	if !isEmpty(dst) {
+		clog.Fatalf("Target directory %s is not empty", dst)
+	}
+
+	var idx Index = make(map[string]int)
 	walker := func(fsrc string, f os.FileInfo, err error) error {
 		return setup(dst, fsrc, f, idx, err)
 	}
 	if err := filepath.Walk(src, walker); err != nil {
 		clog.Fatalf("Filewalk %v", err)
 	}
-	
+
 	json, err := json.Marshal(idx)
 	if err != nil {
 		clog.Fatalf("During Index JSON Marshal %v", err)
 	}
-	
+
 	jfile := strings.TrimRight(dst, "/")
 	jfile += "/" + tld + "/index.json"
 	clog.Print("Writing index file", jfile, " data ", idx)
-    err = ioutil.WriteFile(jfile, json, 0666)
+	err = ioutil.WriteFile(jfile, json, 0666)
 	if err != nil {
 		clog.Fatalf("Error writing json file: %s", jfile)
 	}
