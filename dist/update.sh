@@ -112,33 +112,35 @@ builddistpackages() {
     cd $top
     rm -rf $DIST/stage
 
-    #win 32
-    mkdir -p $DIST/stage
-    cp $DIST/tuqtng.win32.exe $DIST/stage/tuqtng.exe
-    cp $DIST/tuq_client.win32.exe $DIST/stage/tuq_client.exe
-    cp -r static/ $DIST/stage/static
-    mkdir -p $DIST/stage/static/tutorial
-    cp -r $DIST/tutorial_tmp/ $DIST/stage/static/tutorial
-    mkdir -p $DIST/stage/tutorial/default/tutorial
-    cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
-    cd $DIST/stage
-    zip $DIST/cb-query_preview_x86_win.zip -r .
-    cd $top
-    rm -rf $DIST/stage
+    # windows packages commented out as build seems to be failing
 
-    #linux 64
-    mkdir -p $DIST/stage
-    cp $DIST/tuqtng.lin64 $DIST/stage/tuqtng
-    cp $DIST/tuq_client.lin64 $DIST/stage/tuq_client
-    cp -r static/ $DIST/stage/static
-    mkdir -p $DIST/stage/static/tutorial
-    cp -r $DIST/tutorial_tmp/ $DIST/stage/static/tutorial
-    mkdir -p $DIST/stage/tutorial/default/tutorial
-    cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
-    cd $DIST/stage
-    zip $DIST/cb-query_preview_x86_64_win.zip -r .
-    cd $top
-    rm -rf $DIST/stage
+    #win 32
+    # mkdir -p $DIST/stage
+    # cp $DIST/tuqtng.win32.exe $DIST/stage/tuqtng.exe
+    # cp $DIST/tuq_client.win32.exe $DIST/stage/tuq_client.exe
+    # cp -r static/ $DIST/stage/static
+    # mkdir -p $DIST/stage/static/tutorial
+    # cp -r $DIST/tutorial_tmp/ $DIST/stage/static/tutorial
+    # mkdir -p $DIST/stage/tutorial/default/tutorial
+    # cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
+    # cd $DIST/stage
+    # zip $DIST/cb-query_preview_x86_win.zip -r .
+    # cd $top
+    # rm -rf $DIST/stage
+
+    #win 64
+    # mkdir -p $DIST/stage
+    # cp $DIST/tuqtng.win64.exe $DIST/stage/tuqtng.exe
+    # cp $DIST/tuq_client.win64 $DIST/stage/tuq_client.exe
+    # cp -r static/ $DIST/stage/static
+    # mkdir -p $DIST/stage/static/tutorial
+    # cp -r $DIST/tutorial_tmp/ $DIST/stage/static/tutorial
+    # mkdir -p $DIST/stage/tutorial/default/tutorial
+    # cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
+    # cd $DIST/stage
+    # zip $DIST/cb-query_preview_x86_64_win.zip -r .
+    # cd $top
+    # rm -rf $DIST/stage
 
     rm -rf $DIST/tutorial_tmp
     
