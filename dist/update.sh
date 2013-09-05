@@ -65,6 +65,25 @@ buildtutorial() {
     wait
 }
 
+builddistpackages() {
+
+    mkdir -p $DIST/tutorial_tmp
+    # generate tutorial html
+
+    mkdir -p $DIST/stage
+    cp $DIST/tuqtng.mac $DIST/stage/tuqtng
+    cp $DIST/tuq_client.mac $DIST/stage/tuq_client
+    cp -r static/ $DIST/stage/static
+    mkdir -p $DIST/stage/static/tutorial
+    cp -r $DIST/tutorial_tmp/ $DIST/stage/static/tutorial
+    mkdir -p $DIST/stage/tutorial/default/tutorial
+    cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
+    zip $DIST/cb-query_preview_x86_64_mac.zip $DIST/stage
+
+    rm -rf $DIST/tutorial_tmp
+    rm -rf $DIST/stage
+}
+
 compress() {
     rm -f $DIST/tuqtng.*.gz $DIST/tuq_client.*.gz $DIST/tuq_tutorial.*.gz || true
 
@@ -118,6 +137,7 @@ mkversion
 build
 buildclient
 buildtutorial
+builddistpackages
 compress
 benchmark
 coverage
