@@ -26,12 +26,12 @@ type HttpEndpoint struct {
 	queryChannel network.QueryChannel
 }
 
-func NewHttpEndpoint(address string, includeProfileHandlers bool) *HttpEndpoint {
+func NewHttpEndpoint(address string, includeProfileHandlers bool, staticPath string) *HttpEndpoint {
 	rv := &HttpEndpoint{}
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/", welcome).Methods("GET")
+	r.Handle("/", http.FileServer(http.Dir(staticPath)))
 	r.Handle("/query", rv).Methods("GET", "POST")
 
 	if includeProfileHandlers {
@@ -55,18 +55,13 @@ func (this *HttpEndpoint) SendQueriesTo(queryChannel network.QueryChannel) {
 	this.queryChannel = queryChannel
 }
 
-func welcome(w http.ResponseWriter, r *http.Request) {
-	mustEncode(w, map[string]interface{}{
-		"tuqtng":  "where no query has relaxed before",
-		"version": "tuqtng 0.0",
-	})
-}
-
 func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	clog.To(CHANNEL, "request received")
 	q := NewHttpQuery(w, r)
-	this.queryChannel <- q
-	q.Process()
+	if q != nil {
+		this.queryChannel <- q
+		q.Process()
+	}
 }
 
 func mustEncode(w io.Writer, i interface{}) {

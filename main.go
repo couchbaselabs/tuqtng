@@ -31,6 +31,7 @@ var defaultPoolName = flag.String("pool", "default", "Default Pool")
 var logKeys = flag.String("log", "", "Log keywords, comma separated")
 var devMode = flag.Bool("dev", false, "Developer Mode")
 var profileMode = flag.Bool("profile", false, "Profile Mode")
+var staticPath = flag.String("staticPath", "static", "Path to static content")
 
 var devModeDefaultLogKeys = []string{"HTTP", "NETWORK", "PIPELINE", "CATALOG", "PLANNER", "SCAN", "OPTIMIZER"}
 
@@ -54,7 +55,7 @@ func main() {
 	queryChannel := make(network.QueryChannel)
 
 	// create one or more network endpoints
-	httpEndpoint := http.NewHttpEndpoint(*addr, *profileMode)
+	httpEndpoint := http.NewHttpEndpoint(*addr, *profileMode, *staticPath)
 	httpEndpoint.SendQueriesTo(queryChannel)
 
 	err := server.Server(VERSION, *couchbaseSite, *defaultPoolName, queryChannel)
