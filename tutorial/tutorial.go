@@ -10,6 +10,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -17,11 +18,9 @@ import (
 	"github.com/russross/blackfriday"
 )
 
-type Index struct {
-	Entries []string `json:"entries`
-}
+type Index map[string]int
 
-func setup(cacheDir string, src string, srcF os.FileInfo, idx *Index, err error) error {
+func setup(cacheDir string, src string, srcF os.FileInfo, idx Index, err error) error {
 	if strings.HasPrefix(srcF.Name(), ".") || strings.Contains(src, "/.") {
 		return nil
 	}
@@ -64,11 +63,17 @@ func setup(cacheDir string, src string, srcF os.FileInfo, idx *Index, err error)
 		return err
 	}
 
-	headrx := regexp.MustCompile("##[^\n]+\n")
-	found := headrx.FindString(string(sbuf))
-	if len(found) > 0 {
-		found = strings.TrimSpace(strings.TrimPrefix(found, "##"))
-		idx.Entries = append(idx.Entries, found)
+	if strings.HasSuffix(src, ".md") {
+		search := regexp.MustCompile("##[^\n]+\n")
+		found := search.FindString(string(sbuf))
+		if len(found) > 0 {
+			found = strings.TrimSpace(strings.TrimPrefix(found, "##"))
+			nsearch := regexp.MustCompile("/slide-(\\d+).md")
+			num := nsearch.FindStringSubmatch(src)
+			if len(num) > 0 {
+				idx[found], _ = strconv.Atoi(num[1])
+			}
+		}
 	}
 
 	return nil
@@ -89,23 +94,15 @@ func main() {
 	}()
 
 	var idx Index
+	idx = make(map[string]int)
+
 	walker := func(src string, f os.FileInfo, err error) error {
-		return setup(tempDir, src, f, &idx, err)
+		return setup(tempDir, src, f, idx, err)
 	}
 
-	idx.Entries = []string{}
 	if err := filepath.Walk("./content/", walker); err != nil {
 		clog.Fatalf("Filewalk %v", err)
 	}
-
-	http.Handle("/", http.RedirectHandler("/tutorial/tutorial.html#1", 302))
-
-	url, _ := url.Parse("http://localhost:8093")
-	rp := httputil.NewSingleHostReverseProxy(url)
-	http.Handle("/query", rp)
-
-	fs := http.FileServer(http.Dir(tempDir + "/content/"))
-	http.Handle("/tutorial/", http.StripPrefix("/tutorial/", fs))
 
 	getindex := func(w http.ResponseWriter, r *http.Request) {
 		json, err := json.Marshal(idx)
@@ -117,17 +114,25 @@ func main() {
 	}
 	http.HandleFunc("/tutorial/index.json", getindex)
 
-	if err := http.ListenAndServe(":8000", nil); err != nil {
-		clog.Fatalf("ListenAndServe %v", err)
-	}
+	url, _ := url.Parse("http://localhost:8093")
+	rp := httputil.NewSingleHostReverseProxy(url)
+	http.Handle("/query", rp)
+
+	fs := http.FileServer(http.Dir(tempDir + "/content/"))
+	http.Handle("/tutorial/", http.StripPrefix("/tutorial/", fs))
+
+	http.Handle("/", http.RedirectHandler("/tutorial/tutorial.html#1", 302))
 
 	clog.Log("Running at http:///localhost:8000/")
 	go func() {
 		for {
-			idx.Entries = []string{}
 			filepath.Walk("./content/", walker)
 			time.Sleep(2 * time.Second)
 		}
 	}()
 
+	// last step
+	if err := http.ListenAndServe(":8000", nil); err != nil {
+		clog.Fatalf("ListenAndServe %v", err)
+	}
 }

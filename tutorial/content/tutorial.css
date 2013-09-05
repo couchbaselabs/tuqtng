@@ -144,9 +144,19 @@ h1, h2, h3, h4 {
 	margin-left: 2%;
 }
 
-#toc {
+#index {
 	display: inline-block;
 	margin-right: 2%;
+}
+
+#toc {
+	padding-top: 30px;
+}
+
+#toc a, a:visited, a:active {
+    font-size: 14px;
+	color: #a30a0a;
+	cursor: pointer;
 }
 
 #next {

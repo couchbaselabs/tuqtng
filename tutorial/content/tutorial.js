@@ -27,8 +27,10 @@ function init() {
     if (max < 1) max = guessmax();
 
     $('#run').click(run);
+    $('#index').click(index);
     $('#prev').click(prev).addClass('enabled');
     $('#next').click(next).addClass('enabled');
+
     if ('onhashchange' in window) $(window).bind('hashchange', change);
 
     load(getLocation());
@@ -56,6 +58,28 @@ function load(n) {
         re.navigateFileEnd();
 
         ie.focus();
+    });
+}
+
+function index() {
+    $.get('index.json', function(data, status) {
+        if (status != 'success') return;
+
+        var sorted = {};
+        $.each(data, function(title, nloc) {
+            sorted[nloc] = title;
+        });
+
+        var div = $(document.createElement('ul'));
+        div.attr('id', 'toc');
+        for (var i=1; sorted[i] != undefined; i++) {
+            $('<li><a onclick="javascript:load(' + i + ');">' + sorted[i] + '</a></li>').appendTo(div);
+        }
+
+        setLocation('index');
+        $('#content').empty();
+        div.appendTo('#content');
+        $('#content').focus();
     });
 }
 
@@ -106,10 +130,16 @@ function slideUrl(n) {
 }
 
 function updateNav(n) {
-    if (n == 1) $('#prev').removeClass('enabled').addClass('disabled');
-    if (n == 2) $('#prev').removeClass('disabled').addClass('enabled');
-    if (n == max-1) $('#next').removeClass('disabled').addClass('enabled');
-    if (n == max) $('#next').removeClass('enabled').addClass('disabled');
+    if (n == 1) {
+        $('#prev').removeClass('enabled').addClass('disabled');
+    } else {
+        $('#prev').removeClass('disabled').addClass('enabled');
+    }
+    if (n == max) {
+        $('#next').removeClass('enabled').addClass('disabled');
+    } else {
+        $('#next').removeClass('disabled').addClass('enabled');
+    }
 }
 
 function setLocation(n) {
@@ -124,6 +154,12 @@ function getLocation(n) {
     return 1;
 }
 
+function isIndex() {
+    var h = window.location.hash;
+    return (h == "#index");
+}
+
+
 function next() {
     var n = getLocation();
     if (n < max) load(n + 1);
@@ -135,8 +171,9 @@ function prev() {
 }
 
 function change() {
+    if (isIndex()) return;
     var n = getLocation();
-    load (n);
+    load(n);
 }
 
 function guessmax() {
