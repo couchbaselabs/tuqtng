@@ -78,7 +78,9 @@ builddistpackages() {
     cp -r $DIST/tutorial_tmp/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/tutorial/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
-    zip $DIST/cb-query_preview_x86_64_mac.zip $DIST/stage
+    cd $DIST/stage
+    zip $DIST/cb-query_preview_x86_64_mac.zip -r .
+    cd $top
 
     rm -rf $DIST/tutorial_tmp
     rm -rf $DIST/stage
