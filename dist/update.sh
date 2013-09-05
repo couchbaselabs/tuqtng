@@ -68,7 +68,7 @@ buildtutorial() {
 builddistpackages() {
 
     mkdir -p $DIST/tutorial_tmp
-    # generate tutorial html
+    tutorial/tutorial -src tutorial/content/ -dst $DIST/tutorial_tmp/
 
     # mac build
     mkdir -p $DIST/stage
@@ -76,7 +76,7 @@ builddistpackages() {
     cp $DIST/tuq_client.mac $DIST/stage/tuq_client
     cp -r static/ $DIST/stage/static
     mkdir -p $DIST/stage/static/tutorial
-    cp -r $DIST/tutorial_tmp/ $DIST/stage/static/tutorial
+    cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/tutorial/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
     cd $DIST/stage
@@ -90,7 +90,7 @@ builddistpackages() {
     cp $DIST/tuq_client.lin32 $DIST/stage/tuq_client
     cp -r static/ $DIST/stage/static
     mkdir -p $DIST/stage/static/tutorial
-    cp -r $DIST/tutorial_tmp/ $DIST/stage/static/tutorial
+    cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/tutorial/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
     cd $DIST/stage
@@ -104,7 +104,7 @@ builddistpackages() {
     cp $DIST/tuq_client.lin64 $DIST/stage/tuq_client
     cp -r static/ $DIST/stage/static
     mkdir -p $DIST/stage/static/tutorial
-    cp -r $DIST/tutorial_tmp/ $DIST/stage/static/tutorial
+    cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/tutorial/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
     cd $DIST/stage
@@ -120,7 +120,7 @@ builddistpackages() {
     # cp $DIST/tuq_client.win32.exe $DIST/stage/tuq_client.exe
     # cp -r static/ $DIST/stage/static
     # mkdir -p $DIST/stage/static/tutorial
-    # cp -r $DIST/tutorial_tmp/ $DIST/stage/static/tutorial
+    # cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     # mkdir -p $DIST/stage/tutorial/default/tutorial
     # cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
     # cd $DIST/stage
@@ -134,7 +134,7 @@ builddistpackages() {
     # cp $DIST/tuq_client.win64 $DIST/stage/tuq_client.exe
     # cp -r static/ $DIST/stage/static
     # mkdir -p $DIST/stage/static/tutorial
-    # cp -r $DIST/tutorial_tmp/ $DIST/stage/static/tutorial
+    # cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     # mkdir -p $DIST/stage/tutorial/default/tutorial
     # cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
     # cd $DIST/stage

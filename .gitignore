@@ -7,6 +7,7 @@
 .DS_Store
 /dist/*.gz
 /dist/version.json
+/dist/tutorial_tmp
 /tuqtng
 /tuq_client/tuq_client
 /tuq_client/tmp
