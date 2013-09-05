@@ -13,6 +13,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"flag"
 
 	"github.com/couchbaselabs/clog"
 	"github.com/russross/blackfriday"
@@ -80,6 +81,62 @@ func setup(cacheDir string, src string, srcF os.FileInfo, idx Index, err error) 
 }
 
 func main() {
+	xsrc := flag.String("src", "./content", "Source directory to read markdown from")
+	xdst := flag.String("dst", "", "Destination to write translated content")
+	flag.Parse()
+	
+	srcD, srcE := os.Stat(*xsrc)
+	if os.IsNotExist(srcE) || !srcD.IsDir() {
+    	clog.Fatalf("Source directory does not exist: %s", *xsrc)
+ 	}
+ 	
+ 	if len(*xdst) > 0 {
+		dstD, dstE := os.Stat(*xdst)
+		if os.IsNotExist(dstE) || !dstD.IsDir() {
+	    	clog.Fatalf("Target directory does not exist: %s", *xdst)
+ 		}
+ 	}
+ 	
+ 	tld := strings.Trim(*xsrc, "/")
+ 	dirpos := strings.LastIndex(tld, "/")
+ 	if dirpos < 0 {
+	 	tld = tld[dirpos + 1:]
+ 	}
+ 	if (len(tld) < 1) {
+	 	clog.Fatalf("Source directory path must be at least one level deep, example: ./content")
+	}
+	
+	if len(*xdst) > 0 {
+		translate(*xsrc, *xdst, tld)
+	} else {
+		serve(*xsrc, tld)
+	}
+}
+
+func translate(src, dst, tld string) {
+	var idx Index = make(map[string]int)	
+	walker := func(fsrc string, f os.FileInfo, err error) error {
+		return setup(dst, fsrc, f, idx, err)
+	}
+	if err := filepath.Walk(src, walker); err != nil {
+		clog.Fatalf("Filewalk %v", err)
+	}
+	
+	json, err := json.Marshal(idx)
+	if err != nil {
+		clog.Fatalf("During Index JSON Marshal %v", err)
+	}
+	
+	jfile := strings.TrimRight(dst, "/")
+	jfile += "/" + tld + "/index.json"
+	clog.Print("Writing index file", jfile, " data ", idx)
+    err = ioutil.WriteFile(jfile, json, 0666)
+	if err != nil {
+		clog.Fatalf("Error writing json file: %s", jfile)
+	}
+}
+
+func serve(cdir string, tld string) {
 	tempDir, _ := ioutil.TempDir("", "tut")
 	tempDir += string(os.PathSeparator)
 	defer os.RemoveAll(tempDir)
@@ -100,7 +157,7 @@ func main() {
 		return setup(tempDir, src, f, idx, err)
 	}
 
-	if err := filepath.Walk("./content/", walker); err != nil {
+	if err := filepath.Walk(cdir, walker); err != nil {
 		clog.Fatalf("Filewalk %v", err)
 	}
 
@@ -118,15 +175,15 @@ func main() {
 	rp := httputil.NewSingleHostReverseProxy(url)
 	http.Handle("/query", rp)
 
-	fs := http.FileServer(http.Dir(tempDir + "/content/"))
+	fs := http.FileServer(http.Dir(tempDir + "/" + tld + "/"))
 	http.Handle("/tutorial/", http.StripPrefix("/tutorial/", fs))
 
 	http.Handle("/", http.RedirectHandler("/tutorial/tutorial.html#1", 302))
 
-	clog.Log("Running at http:///localhost:8000/")
+	clog.Log("Running at http://localhost:8000/")
 	go func() {
 		for {
-			filepath.Walk("./content/", walker)
+			filepath.Walk(cdir, walker)
 			time.Sleep(2 * time.Second)
 		}
 	}()
