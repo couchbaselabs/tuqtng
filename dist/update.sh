@@ -72,16 +72,19 @@ builddistpackages() {
     go build
     cd $top
     tutorial/tutorial -src tutorial/content/ -dst $DIST/tutorial_tmp/
+    # FIXME see if we can eliminate this step
+    cp $DIST/tutorial_tmp/tutorial/content/tutorial.html $DIST/tutorial_tmp/tutorial/content/index.html
 
     # mac build
     mkdir -p $DIST/stage
+    cp $DIST/start_tutorial.sh $DIST/stage
     cp $DIST/tuqtng.mac $DIST/stage/tuqtng
     cp $DIST/tuq_client.mac $DIST/stage/tuq_client
     cp -r static/ $DIST/stage/static
     mkdir -p $DIST/stage/static/tutorial
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
-    mkdir -p $DIST/stage/tutorial/default/tutorial
-    cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
+    mkdir -p $DIST/stage/data/default/tutorial
+    cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
     cd $DIST/stage
     zip $DIST/cb-query_preview_x86_64_mac.zip -r .
     cd $top
@@ -89,13 +92,14 @@ builddistpackages() {
 
     #linux 32
     mkdir -p $DIST/stage
+    cp $DIST/start_tutorial.sh $DIST/stage
     cp $DIST/tuqtng.lin32 $DIST/stage/tuqtng
     cp $DIST/tuq_client.lin32 $DIST/stage/tuq_client
     cp -r static/ $DIST/stage/static
     mkdir -p $DIST/stage/static/tutorial
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
-    mkdir -p $DIST/stage/tutorial/default/tutorial
-    cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
+    mkdir -p $DIST/stage/data/default/tutorial
+    cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
     cd $DIST/stage
     tar zcvf $DIST/cb-query_preview_x86_linux.tar.gz .
     cd $top
@@ -103,13 +107,14 @@ builddistpackages() {
 
     #linux 64
     mkdir -p $DIST/stage
+    cp $DIST/start_tutorial.sh $DIST/stage
     cp $DIST/tuqtng.lin64 $DIST/stage/tuqtng
     cp $DIST/tuq_client.lin64 $DIST/stage/tuq_client
     cp -r static/ $DIST/stage/static
     mkdir -p $DIST/stage/static/tutorial
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
-    mkdir -p $DIST/stage/tutorial/default/tutorial
-    cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
+    mkdir -p $DIST/stage/data/default/tutorial
+    cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
     cd $DIST/stage
     tar zcvf $DIST/cb-query_preview_x86_64_linux.tar.gz .
     cd $top
@@ -124,8 +129,8 @@ builddistpackages() {
     # cp -r static/ $DIST/stage/static
     # mkdir -p $DIST/stage/static/tutorial
     # cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
-    # mkdir -p $DIST/stage/tutorial/default/tutorial
-    # cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
+    # mkdir -p $DIST/stage/data/default/tutorial
+    # cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
     # cd $DIST/stage
     # zip $DIST/cb-query_preview_x86_win.zip -r .
     # cd $top
@@ -138,8 +143,8 @@ builddistpackages() {
     # cp -r static/ $DIST/stage/static
     # mkdir -p $DIST/stage/static/tutorial
     # cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
-    # mkdir -p $DIST/stage/tutorial/default/tutorial
-    # cp -r test/json/tutorial/ $DIST/stage/tutorial/default/tutorial
+    # mkdir -p $DIST/stage/data/default/tutorial
+    # cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
     # cd $DIST/stage
     # zip $DIST/cb-query_preview_x86_64_win.zip -r .
     # cd $top
