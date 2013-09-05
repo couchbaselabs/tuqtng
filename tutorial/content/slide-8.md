@@ -1,13 +1,15 @@
-## Use Functions on the Data
+## Filtering Documents with WHERE
 
-Built-in functions allow greater flexibility when working with the data.
+In previous slides you used a WHERE clause like WHERE name = 'dave' to match a single document.  Other comparison operators can be used to match multiple documents.
 
-One useful built-in function is LENGTH().  If the argument passed to this function is an array or object, it returns the number of items inside.  If the argument is a string it returns the number of characters in the string.
+In the query example on the right we match documents where the person's age is greater than 30.
 
-In the example on the right we look for people having at least one child.
+All of the standard comparison operators are supported (>, >=, <, <=, =, and !=).  All of these comparison operators also consider the value's type, so `score > 8` will return documents containing a numeric score that is greater than 8.  Similarly, `name > 'marty'` will return documents containing a string name that is after 'marty'.
+
+Try changing the comparison from > to <.
 
 <pre id="example">
-SELECT name, LENGTH(children) AS num_children 
-    FROM tutorial 
-        WHERE LENGTH(children) > 0
+SELECT fname, age 
+    FROM tutorial
+        WHERE age > 30
 </pre>

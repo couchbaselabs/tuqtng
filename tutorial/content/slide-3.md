@@ -10,7 +10,7 @@ always refers to an attribute in the parent document or an alias. Attributes fro
 Try removing the 'AS cname' clause and see what happens.
 
 <pre id="example">
-SELECT children[0].name AS cname
+SELECT children[0].fname AS cname
 	FROM tutorial
-       WHERE name='dave'
+       WHERE fname='Dave'
 </pre>

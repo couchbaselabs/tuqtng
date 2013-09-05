@@ -9,7 +9,7 @@ The common arithmetic operations +, -, *, / and % are supported.
 Try using a different arithmetic operation.
 
 <pre id="example">
-SELECT name, age, age/7 AS age_dog_years 
+SELECT fname, age, age/7 AS age_dog_years 
     FROM tutorial 
-        WHERE name = 'dave'
+        WHERE fname = 'Dave'
 </pre>

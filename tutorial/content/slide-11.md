@@ -1,13 +1,15 @@
-## Ordering results with ORDER BY
+## Matching Elements in Nested Arrays with ANY
 
-Queries can optionally include an ORDER BY clause describing how the results should be sorted.
+Sometimes the conditions you want to filter need to be applied to arrays nested inside the document.  In the tutorial sample dataset people contain an array of children, and each child has a name and an age.
 
-In the example on the right we ask that the people be listed in alphabetical order.
+In the example on the right we want to find any person that has a child over the age of 10.
 
-Try adding DESC after name.
+The expression after the OVER clause describes which array we want to work with.  The AS label allows us to assign a name to the element in the array we are considering.  The expression after the ANY keyword is the condition that must be satisified by at least one element in the array.
+
+Try changing ANY to ALL.
 
 <pre id="example">
-SELECT name 
+SELECT fname 
     FROM tutorial 
-        ORDER BY name
+        WHERE ANY child.age > 10 OVER child IN tutorial.children END
 </pre>

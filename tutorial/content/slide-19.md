@@ -1,11 +1,12 @@
-## Combining Document Joins with Group By
+## Array Comprehensions
 
-Twitter tweet topics
+Array comprehensions allow you to build new arrays from existing ones.
+
+In the example on the right we build a new array containing just the childrens names for all people that have children.
 
 <pre id="example">
-SELECT topic, COUNT(*) 
-	FROM tweets 
-		OVER tweets.topics AS topic 
-			GROUP BY topic
-				HAVING COUNT(*) >= 2
+	SELECT 
+		ARRAY child.fname OVER child IN tutorial.children END AS children_names
+			FROM tutorial 
+				WHERE children IS NOT NULL
 </pre>

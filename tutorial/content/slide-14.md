@@ -1,19 +1,13 @@
-## Putting it All Together
+## Ordering results with ORDER BY
 
-The real power of the language comes when we combine all these features together.
+Queries can optionally include an ORDER BY clause describing how the results should be sorted.
 
-The example query on the right combines many of the features of the language into a single query.
+In the example on the right we ask that the people be listed by age in ascending order.
 
-Here we match people having a yahoo email address or having all of their children over the age of 10.  For each person satisfying these requirements, we display their name, email address, and the full list of children.
-
-This would match 2 people ('harry' and 'ian').  We then asked that they be ordered by name in ascending order.  Then we ask to receive only 1 result, skipping over the first result.  This leaves us with the information about 'ian'.
+Try adding DESC after age.
 
 <pre id="example">
-SELECT name, email, children 
+SELECT fname, age 
     FROM tutorial 
-        WHERE email LIKE '%@yahoo.com' 
-        OR ALL child.age > 10 OVER tutorial.children AS child
-            ORDER BY name
-                LIMIT 1
-                    OFFSET 1
+        ORDER BY age
 </pre>

@@ -19,5 +19,5 @@ Try the next sample query where we find all documents where the name is 'ian.'
 <pre id="example">
 SELECT *
   FROM tutorial
-    WHERE name = 'ian'
+    WHERE fname = 'Ian'
 </pre>

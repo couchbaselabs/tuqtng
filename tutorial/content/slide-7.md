@@ -1,17 +1,12 @@
-## Pattern Matching Text with LIKE
+## String Concatenation
 
-Inexact string matching can be accomplished using the LIKE operator in the WHERE clause.
+The string concatenation operator allows you to combine multiple string values into one.
 
-The argument on the right hand side of the keyword LIKE is the pattern that the expression must match.
-In these patterns `%` is a wildcard which will match 0 or more characters.  Also `_` can be used to match
-exactly 1 character.
+In the example on the right we combine peoples first and last names into a full name.
 
-In the example on the right we look for people who have a yahoo.com email address.
-
-Try changing LIKE to NOT LIKE.
+Try adding the field "title" to the output as well.
 
 <pre id="example">
-SELECT name, email
+SELECT fname || " " || lname AS full_name
     FROM tutorial 
-        WHERE email LIKE '%@yahoo.com'
 </pre>

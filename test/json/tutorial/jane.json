@@ -1,13 +1,15 @@
 {"type":"contact",
- "name":"jane",
+ "title": "Mrs.",
+ "fname":"Jane",
+ "lname":"Edwards",
  "age": 40,
  "email": "jane@gmail.com",
  "contacts": [
    {
-    "name": "fred"
+    "fname": "Fred"
    },
    {
-    "name": "sheela"
+    "fname": "Sheela"
    }
  ],
  "relation": "cousin"

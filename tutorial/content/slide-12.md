@@ -1,12 +1,13 @@
-## Limiting the Number of Results with LIMIT
+## Combining Multiple Conditions with AND
 
-Sometimes queries return a large number of results and it can be helpful to process them in smaller batches.
+The AND operator allows us to match documents satisfying two or more conditions.
 
-In the example on the right we ask that it return no more than 2 results.
+In the example on the right we only return people having at least one child and having a gmail address.
+
+Try changing AND to OR.
 
 <pre id="example">
-SELECT name 
+SELECT fname 
     FROM tutorial 
-        ORDER BY name 
-            LIMIT 2
+        WHERE LENGTH(children) > 0 AND email LIKE '%@gmail.com'
 </pre>

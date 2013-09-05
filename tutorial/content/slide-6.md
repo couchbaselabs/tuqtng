@@ -1,15 +1,15 @@
-## Filtering Documents with WHERE
+## Use Functions on the Data
 
-In previous slides you used a WHERE clause like WHERE name = 'dave' to match a single document.  Other comparison operators can be used to match multiple documents.
+Built-in functions allow greater flexibility when working with the data.
 
-In the query example on the right we match documents where the person's age is greater than 30.
+The ROUND() and TRUNC() functions allow us to round and truncate numeric values.
 
-All of the standard comparison operators are supported (>, >=, <, <=, =, and !=).  All of these comparison operators also consider the value's type, so `score > 8` will return documents containing a numeric score that is greater than 8.  Similarly, `name > 'marty'` will return documents containing a string name that is after 'marty'.
+In the example on the right, we've updated the previous example to round the dog_years calculation to an integer.
 
-Try changing the comparison from > to <.
+Try changing ROUND() to TRUNC()
 
 <pre id="example">
-SELECT name, age 
-    FROM tutorial
-        WHERE age > 30
+SELECT fname, age, ROUND(age/7) AS age_dog_years 
+    FROM tutorial 
+        WHERE fname = 'Dave'
 </pre>

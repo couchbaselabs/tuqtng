@@ -1,36 +1,14 @@
-## Document Joins
+## Pagination with LIMIT/OFFSET
 
-Document joins allow us to take the contents of nested arrays and join them with the parent object.
+Sometimes queries return a large number of results and it can be helpful to process them in smaller batches.  After processing a smaller batch, you also want to skip over a batch to process the next one.
 
-Our source bucket has documents with the structure:
+In the example on the right we ask that it return no more than 2 results.
 
-	{
-	    "email": "dave@gmail.com",
-	    "name": "dave",
-	    "type": "contact"
-	    "children": [ ... nested child objects ... ],
-	}
-
-After the join we will have new objects representing parent/child pairs.
-
-	{
-	  "child": {
-	    "age": 17,
-	    "gender": "m",
-	    "name": "aiden"
-	  },
-	  "contact": {
-	    "age": 45,
-	    "children": [ ... full original array of children ... ],
-	    "email": "dave@gmail.com",
-	    "name": "dave",
-	    "type": "contact"
-	  }
-	}
+Try adding OFFSET 2 to get the next 2 results.
 
 <pre id="example">
-SELECT * 
-    FROM tutorial AS contact
-    	OVER contact.children AS child
-        	WHERE contact.name = 'dave' 
+SELECT fname, age
+    FROM tutorial 
+        ORDER BY age 
+            LIMIT 2
 </pre>
