@@ -11,6 +11,7 @@ package ast
 
 import (
 	"fmt"
+	"math"
 	"testing"
 
 	"github.com/couchbaselabs/dparval"
@@ -475,6 +476,212 @@ func TestFunction(t *testing.T) {
 			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("bob")), NewFunctionArgExpression(NewLiteralNumber(4))}),
 			nil,
 			nil,
+		},
+
+		// numeric infinite functions
+		{
+			NewFunctionCall("IFNAN", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.NaN())), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("IFNAN", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.NaN()))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("IFNAN", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			&dparval.Undefined{"dne"},
+		},
+		{
+			NewFunctionCall("IFPOSINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(1))), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("IFPOSINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(1)))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("IFPOSINF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			&dparval.Undefined{"dne"},
+		},
+		{
+			NewFunctionCall("IFNEGINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(-1))), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("IFNEGINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(-1)))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("IFNEGINF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			&dparval.Undefined{"dne"},
+		},
+		{
+			NewFunctionCall("IFINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(1))), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("IFINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(-1))), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("IFINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(1)))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("IFINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(-1)))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("IFINF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			&dparval.Undefined{"dne"},
+		},
+		{
+			NewFunctionCall("IFNANORINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.NaN())), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("IFNANORINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(1))), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("IFNANORINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(-1))), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("IFNANORINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.NaN()))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("IFNANORINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(1)))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("IFNANORINF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(-1)))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("IFNANORINF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			&dparval.Undefined{"dne"},
+		},
+		{
+			NewFunctionCall("FIRSTNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.NaN())), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("FIRSTNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(1))), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("FIRSTNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(-1))), NewFunctionArgExpression(NewLiteralNumber(5.0)), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			5.0,
+			nil,
+		},
+		{
+			NewFunctionCall("FIRSTNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.NaN()))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("FIRSTNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(1)))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("FIRSTNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(math.Inf(-1)))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("FIRSTNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
+			nil,
+			nil,
+		},
+
+		{
+			NewFunctionCall("NANIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello2"))}),
+			"hello",
+			nil,
+		},
+		// these are commented out because NaN != NaN
+		// and I haven't decided how to cope with that yet
+		// {
+		// 	NewFunctionCall("NANIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello"))}),
+		// 	math.NaN(),
+		// 	nil,
+		// },
+		// {
+		// 	NewFunctionCall("NANIF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewProperty("dne"))}),
+		// 	math.NaN(),
+		// 	nil,
+		// },
+		{
+			NewFunctionCall("NANIF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
+			&dparval.Undefined{"dne"},
+		},
+
+		{
+			NewFunctionCall("POSINFIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello2"))}),
+			"hello",
+			nil,
+		},
+		{
+			NewFunctionCall("POSINFIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			math.Inf(1),
+			nil,
+		},
+		{
+			NewFunctionCall("POSINFIF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewProperty("dne"))}),
+			math.Inf(1),
+			nil,
+		},
+		{
+			NewFunctionCall("POSINFIF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
+			&dparval.Undefined{"dne"},
+		},
+		{
+			NewFunctionCall("NEGINFIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello2"))}),
+			"hello",
+			nil,
+		},
+		{
+			NewFunctionCall("NEGINFIF", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello")), NewFunctionArgExpression(NewLiteralString("hello"))}),
+			math.Inf(-1),
+			nil,
+		},
+		{
+			NewFunctionCall("NEGINFIF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewProperty("dne"))}),
+			math.Inf(-1),
+			nil,
+		},
+		{
+			NewFunctionCall("NEGINFIF", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne")), NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
+			&dparval.Undefined{"dne"},
 		},
 	}
 

@@ -45,6 +45,17 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	"ROUND": NewFunctionCallRound,
 	"TRUNC": NewFunctionCallTrunc,
 
+	// numeric infinite functions
+	"IFNAN":      NewFunctionCallIfNaN,
+	"IFPOSINF":   NewFunctionCallIfPosInf,
+	"IFNEGINF":   NewFunctionCallIfNegInf,
+	"IFINF":      NewFunctionCallIfInf,
+	"IFNANORINF": NewFunctionCallIfNaNOrInf,
+	"FIRSTNUM":   NewFunctionCallFirstNum,
+	"NANIF":      NewFunctionCallNaNIf,
+	"POSINFIF":   NewFunctionCallPosInfIf,
+	"NEGINFIF":   NewFunctionCallNegInfIf,
+
 	// string functions
 	"LOWER":  NewFunctionCallLower,
 	"UPPER":  NewFunctionCallUpper,
