@@ -31,8 +31,8 @@ func NewHttpEndpoint(address string, includeProfileHandlers bool, staticPath str
 
 	r := mux.NewRouter()
 
-	r.Handle("/", http.FileServer(http.Dir(staticPath)))
 	r.Handle("/query", rv).Methods("GET", "POST")
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir(staticPath)))
 
 	if includeProfileHandlers {
 		r.Handle("/debug/pprof/", http.HandlerFunc(pprof.Index))
