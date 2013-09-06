@@ -71,8 +71,10 @@ func setup(cacheDir string, src string, srcF os.FileInfo, idx Index, err error) 
 			found = strings.TrimSpace(strings.TrimPrefix(found, "##"))
 			nsearch := regexp.MustCompile("/slide-(\\d+).md")
 			num := nsearch.FindStringSubmatch(src)
-			if len(num) > 0 {
-				idx[found], _ = strconv.Atoi(num[1])
+			if num != nil {
+				n, _ := strconv.Atoi(num[1])
+				li := strconv.Itoa(n) + ". " + found
+				idx[li] = n
 			}
 		}
 	}
@@ -149,7 +151,6 @@ func translate(src, dst, tld string) {
 
 	jfile := strings.TrimRight(dst, "/")
 	jfile += "/" + tld + "/index.json"
-	clog.Print("Writing index file", jfile, " data ", idx)
 	err = ioutil.WriteFile(jfile, json, 0666)
 	if err != nil {
 		clog.Fatalf("Error writing json file: %s", jfile)

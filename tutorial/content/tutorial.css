@@ -151,6 +151,8 @@ h1, h2, h3, h4 {
 
 #toc {
 	padding-top: 30px;
+	padding-left: 0px;
+	list-style-type: none;
 }
 
 #toc a, a:visited, a:active {
