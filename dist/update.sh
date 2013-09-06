@@ -121,18 +121,18 @@ builddistpackages() {
     # windows packages commented out as build seems to be failing
 
     #win 32
-    # mkdir -p $DIST/stage
-    # cp $DIST/tuqtng.win32.exe $DIST/stage/tuqtng.exe
-    # cp $DIST/tuq_client.win32.exe $DIST/stage/tuq_client.exe
-    # cp -r static/ $DIST/stage/static
-    # mkdir -p $DIST/stage/static/tutorial
-    # cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
-    # mkdir -p $DIST/stage/data/default/tutorial
-    # cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
-    # cd $DIST/stage
-    # zip $DIST/cb-query_preview_x86_win.zip -r .
-    # cd $top
-    # rm -rf $DIST/stage
+    mkdir -p $DIST/stage
+    cp $DIST/tuqtng.win32.exe $DIST/stage/tuqtng.exe
+    cp $DIST/tuq_client.win32.exe $DIST/stage/tuq_client.exe
+    cp -r static/ $DIST/stage/static
+    mkdir -p $DIST/stage/static/tutorial
+    cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
+    mkdir -p $DIST/stage/data/default/tutorial
+    cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
+    cd $DIST/stage
+    zip $DIST/cb-query_preview_x86_win.zip -r .
+    cd $top
+    rm -rf $DIST/stage
 
     #win 64
     mkdir -p $DIST/stage
