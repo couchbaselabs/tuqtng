@@ -1,28 +1,26 @@
-# Unstructured Query Language 2013 (UNQL 2013)
+# Non-first normal form Query Language v1 (N1QL v1)
 
 * Status: DRAFT/PROPOSAL
-* Latest: [unql-2013](https://github.com/couchbaselabs/tuqqedin/blob/master/docs/unql-2013.md)
-* Modified: 2013-06-03
+* Latest: [nq1l-v1](https://github.com/couchbaselabs/tuqtng/blob/master/docs/n1ql-v1.md)
+* Modified: 2013-10-06
 
 ## Summary
 
-Unstructured Query Language 2013 (UNQL 2013) is a query language for Couchbase.
-
-This language attempts to satisfy these [requirements](https://github.com/couchbaselabs/tuqqedin/blob/master/docs/requirements.md).
+Non-first normal form Query Language v1 (N1QL v1) is a query language for document databases.
 
 This document describes the syntax and semantics of the language.
 
 ## Statement
 
-An UNQL statement is an instance of:
+An N1QL statement is an instance of:
 
-unql-stmt:
+n1ql-stmt:
 
-![](diagram/unql-stmt.png)
+![](diagram/n1ql-stmt.png)
 
 ### EXPLAIN
 
-An UNQL statement can be preceded with the keyword "EXPLAIN".  This causes the statement to return information about how the UNQL statement would have operated if the EXPLAIN keyword had been omitted.
+A N1QL statement can be preceded with the keyword "EXPLAIN".  This causes the statement to return information about how the N1QL statement would have operated if the EXPLAIN keyword had been omitted.
 
 The output from EXPLAIN is intended for analysis and troublehsooting only.  The details of the output format are subject to change.
 
@@ -63,7 +61,7 @@ The behavior of a SELECT query is best understood as a sequence of steps.  Outpu
 
 ##### Data Source
 
-The FROM clause is optional.  When it is omitted, the input for the execution of the query is a single empty object.  This allows for the evaluation of UNQL expressions that do not depend on any data.
+The FROM clause is optional.  When it is omitted, the input for the execution of the query is a single empty object.  This allows for the evaluation of N1QL expressions that do not depend on any data.
 
 The most common form of the FROM clause is specifying a single identifier which identifies a database or bucket name.  In this form, an alias can optionally be specified with the AS clause.  When spcified this alias is the identifier used to explicitly refer to this data source in the query.  If omitted, the data source is referred to using the database name itself.
 
@@ -205,10 +203,10 @@ An identifier is a symbolic reference to a particular value in the current conte
 If the current context is the document:
 
     {
-    	"name": "unql"
+    	"name": "n1ql"
     }
 
-Then the indentifier *name* would evaluate to the value unql.
+Then the indentifier *name* would evaluate to the value n1ql.
 
 nested-expr:
 
@@ -261,7 +259,7 @@ Logical terms allow for combining other expressions using boolean logic.  Standa
 
 ### Four-valued logic
 
-In UNQL boolean propositions could evaluate to NULL or MISSING.  The following table describes how these values relate to the logical operators:
+In N1QL boolean propositions could evaluate to NULL or MISSING.  The following table describes how these values relate to the logical operators:
 
 <table>
   <tr>
@@ -404,7 +402,7 @@ For equal (= and ==) and not equal (!= and <>) two forms are supported to aid in
 
 If either operand in a comparison is MISSING, the result is MISSING.  Next, if either operand in a comparison is NULL, the result is NULL.  Otherwise the remaining rules for comparing values are followed.
 
-In UNQL a comparison operator implicitly requires that both operands be of the same type.  If the operands are of different types it always evaluates to FALSE.
+In N1QL a comparison operator implicitly requires that both operands be of the same type.  If the operands are of different types it always evaluates to FALSE.
 
 By default, string comparison is done using a raw collation (sometimes referred to as binary, C, or memcmp).  This collation is **case sensitive**.  Case insensitive comparisons can be performed using UPPER() or LOWER() functions.
 
@@ -512,7 +510,7 @@ See [ECMAScript Language Specification Chapter 11 Section 9](http://ecma-interna
 
 ## Appendix 1 - Identifier Scoping/Ambiguity
 
-Identifiers appear in many places in an UNQL query.  Frequently identifiers are used to described paths within a document, but they are also used in `AS` clauses to introduce new identifiers.
+Identifiers appear in many places in an N1QL query.  Frequently identifiers are used to described paths within a document, but they are also used in `AS` clauses to introduce new identifiers.
 
 * SELECT - `AS` identifiers in the projection create new names that may be referred to in the ORDER BY claus
 * FROM - `AS` identifiers in the FROM clause create new names that may be referred to anywhere in the query
@@ -608,7 +606,7 @@ For, AVG, and SUM, any row where the result of the expression is non-numieric is
 
 ## Appendix 3 - Operator Precedence
 
-The following operators are supported by UNQL.  The list is ordered from highest to lowest precedence.
+The following operators are supported by N1QL.  The list is ordered from highest to lowest precedence.
 
 * CASE/WHEN/THEN/ELSE/END
 * . 
@@ -631,8 +629,8 @@ Parentheses, while not strictly speaking an operator, allow for grouping express
 
 The following rules are the same as defined by [json.org](http://json.org/) with two changes:
 
-1.  In standard JSON arrays and objects only contain nested values.  In UNQL, literal arrays and objects can contain nested expressions.
-2.  In standard JSON "true", "false" and "null" are case-sensitive.  In UNQL, to be consistent with other keywords, they are defined to be case-insensitive.
+1.  In standard JSON arrays and objects only contain nested values.  In N1QL, literal arrays and objects can contain nested expressions.
+2.  In standard JSON "true", "false" and "null" are case-sensitive.  In N1QL, to be consistent with other keywords, they are defined to be case-insensitive.
 
 literal-value:
 
@@ -769,10 +767,10 @@ The following keywords are reserved and cannot be used in document property path
 
 ## Appendix 6 - Sample Projections
 
-For the following examples consider a bucket containing the following document with ID "unql-2013"
+For the following examples consider a bucket containing the following document with ID "n1ql-v1"
 
     {
-      "name": "UNQL",
+      "name": "N1QL",
       "address": {
       	"city": "Mountain View"
       },
@@ -784,7 +782,7 @@ For the following examples consider a bucket containing the following document w
 `SELECT *`
 
     {
-      "name": "UNQL",
+      "name": "N1QL",
       "address": {
       	"city": "Mountain View"
       },
@@ -796,7 +794,7 @@ For the following examples consider a bucket containing the following document w
 `SELECT name`
 
     {
-    	"name": "UNQL"
+    	"name": "N1QL"
     }
 
 #### Selecting a more complex expression
@@ -820,13 +818,13 @@ For the following examples consider a bucket containing the following document w
 `SELECT *, META()`
 
     {
-      "name": "UNQL",
+      "name": "N1QL",
       "address": {
       	"city": "Mountain View"
       },
       "revisions": [2013],
       "meta": {
-      	"id": "unql-2013",
+      	"id": "n1ql-v1",
       	"cas": "8BADF00DDEADBEEF",
       	"flags": 0,
       	"expiration": 0
@@ -838,13 +836,13 @@ For the following examples consider a bucket containing the following document w
 `SELECT *, META() AS custom_meta_field`
 
     {
-      "name": "UNQL",
+      "name": "N1QL",
       "address": {
       	"city": "Mountain View"
       },
       "revisions": [2013],
       "custom_meta_field": {
-      	"id": "unql-2013",
+      	"id": "n1ql-v1",
       	"cas": "8BADF00DDEADBEEF",
       	"flags": 0,
       	"expiration": 0
@@ -857,7 +855,7 @@ SELECT {"thename": name} AS custom_obj
 
     {
       "custom_obj": {
-        "thename": "UNQL"
+        "thename": "N1QL"
       }
     }
 
@@ -952,7 +950,7 @@ Agreement that it should be semantnic error.  For now it is safest to simply inf
 
 ## About this Document
 
-The [grammar](https://github.com/couchbaselabs/tuqqedin/blob/master/docs/unql-2013.ebnf) forming the basis of this document is written in a [W3C dialect of EBNF](http://www.w3.org/TR/REC-xml/#sec-notation).
+The [grammar](https://github.com/couchbaselabs/tuqtng/blob/master/docs/n1ql-v1.ebnf) forming the basis of this document is written in a [W3C dialect of EBNF](http://www.w3.org/TR/REC-xml/#sec-notation).
 
 This grammar has not yet been converted to an actual implementation, ambiguities and conflicts may still be present.
 

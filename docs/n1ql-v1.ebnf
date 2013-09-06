@@ -1,7 +1,7 @@
 /***************
- *  unql 2013  *
+ *  n1ql v1  *
  ***************/
-unql-stmt ::=  'EXPLAIN'? select-stmt
+n1ql-stmt ::=  'EXPLAIN'? select-stmt
 
 /*
  *  select
