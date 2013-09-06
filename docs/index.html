@@ -129,12 +129,49 @@
     }
   </style></head>
    <body>
-      <p style="font-size: 14px; font-weight:bold"><a name="n1ql-stmt">n1ql-stmt:</a></p><img border="0" height="52" src="diagram/n1ql-stmt.png" usemap="#n1ql-stmt.map" width="286"><map name="n1ql-stmt.map">
-         <area coords="167,1,257,33" href="#select-stmt" shape="rect" title="select-stmt"></map><p>
+      <p style="font-size: 14px; font-weight:bold"><a name="n1ql-stmt">n1ql-stmt:</a></p><img border="0" height="168" src="diagram/n1ql-stmt.png" usemap="#n1ql-stmt.map" width="420"><map name="n1ql-stmt.map">
+         <area coords="187,1,277,33" href="#select-stmt" shape="rect" title="select-stmt">
+         <area coords="187,45,371,77" href="#create-primary-index-stmt" shape="rect" title="create-primary-index-stmt">
+         <area coords="187,89,319,121" href="#create-index-stmt" shape="rect" title="create-index-stmt">
+         <area coords="187,133,307,165" href="#drop-index-stmt" shape="rect" title="drop-index-stmt"></map><p>
          <div class="ebnf"><pre><a href="#n1ql-stmt" title="n1ql-stmt">n1ql-stmt</a>
-         ::= 'EXPLAIN'? <a href="#select-stmt" title="select-stmt">select-stmt</a></pre></div>
+         ::= 'EXPLAIN'? ( <a href="#select-stmt" title="select-stmt">select-stmt</a> | <a href="#create-primary-index-stmt" title="create-primary-index-stmt">create-primary-index-stmt</a> | <a href="#create-index-stmt" title="create-index-stmt">create-index-stmt</a> | <a href="#drop-index-stmt" title="drop-index-stmt">drop-index-stmt</a> )</pre></div>
       </p>
-      <p>no references</p><br><p style="font-size: 14px; font-weight:bold"><a name="select-stmt">select-stmt:</a></p><img border="0" height="112" src="diagram/select-stmt.png" usemap="#select-stmt.map" width="858"><map name="select-stmt.map">
+      <p>no references</p><br><p style="font-size: 14px; font-weight:bold"><a name="create-primary-index-stmt">create-primary-index-stmt:</a></p><img border="0" height="52" src="diagram/create-primary-index-stmt.png" usemap="#create-primary-index-stmt.map" width="728"><map name="create-primary-index-stmt.map">
+         <area coords="427,1,513,33" href="#pool-name" shape="rect" title="pool-name">
+         <area coords="597,1,699,33" href="#bucket-name" shape="rect" title="bucket-name"></map><p>
+         <div class="ebnf"><pre><a href="#create-primary-index-stmt" title="create-primary-index-stmt">create-primary-index-stmt</a>
+         ::= 'CREATE' 'PRIMARY' 'INDEX' 'ON' ( ':' <a href="#pool-name" title="pool-name">pool-name</a> '.' )? <a href="#bucket-name" title="bucket-name">bucket-name</a></pre></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#n1ql-stmt" title="n1ql-stmt">n1ql-stmt</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="create-index-stmt">create-index-stmt:</a></p><img border="0" height="178" src="diagram/create-index-stmt.png" usemap="#create-index-stmt.map" width="916"><map name="create-index-stmt.map">
+         <area coords="201,1,295,33" href="#index-name" shape="rect" title="index-name">
+         <area coords="439,1,525,33" href="#pool-name" shape="rect" title="pool-name">
+         <area coords="609,1,711,33" href="#bucket-name" shape="rect" title="bucket-name">
+         <area coords="777,1,847,33" href="#expr-list" shape="rect" title="expr-list">
+         <area coords="773,127,847,159" href="#identifier" shape="rect" title="identifier"></map><p>
+         <div class="ebnf"><pre><a href="#create-index-stmt" title="create-index-stmt">create-index-stmt</a>
+         ::= 'CREATE' 'INDEX' <a href="#index-name" title="index-name">index-name</a> 'ON' ( ':' <a href="#pool-name" title="pool-name">pool-name</a> '.' )? <a href="#bucket-name" title="bucket-name">bucket-name</a> '(' <a href="#expr-list" title="expr-list">expr-list</a> ')' ( 'USING' ( 'VIEW' | <a href="#identifier" title="identifier">identifier</a> ) )?</pre></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#n1ql-stmt" title="n1ql-stmt">n1ql-stmt</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="drop-index-stmt">drop-index-stmt:</a></p><img border="0" height="52" src="diagram/drop-index-stmt.png" usemap="#drop-index-stmt.map" width="712"><map name="drop-index-stmt.map">
+         <area coords="253,1,339,33" href="#pool-name" shape="rect" title="pool-name">
+         <area coords="423,1,525,33" href="#bucket-name" shape="rect" title="bucket-name">
+         <area coords="589,1,683,33" href="#index-name" shape="rect" title="index-name"></map><p>
+         <div class="ebnf"><pre><a href="#drop-index-stmt" title="drop-index-stmt">drop-index-stmt</a>
+         ::= 'DROP' 'INDEX' ( ':' <a href="#pool-name" title="pool-name">pool-name</a> '.' )? <a href="#bucket-name" title="bucket-name">bucket-name</a> '.' <a href="#index-name" title="index-name">index-name</a></pre></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#n1ql-stmt" title="n1ql-stmt">n1ql-stmt</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="select-stmt">select-stmt:</a></p><img border="0" height="112" src="diagram/select-stmt.png" usemap="#select-stmt.map" width="858"><map name="select-stmt.map">
          <area coords="29,45,117,77" href="#select-core" shape="rect" title="select-core">
          <area coords="321,45,427,77" href="#ordering-term" shape="rect" title="ordering-term">
          <area coords="585,45,621,77" href="#int" shape="rect" title="int">
@@ -159,13 +196,12 @@
          <ul>
             <li><a href="#select-stmt" title="select-stmt">select-stmt</a></li>
          </ul>
-      </p><br><p style="font-size: 14px; font-weight:bold"><a name="data-source">data-source:</a></p><img border="0" height="52" src="diagram/data-source.png" usemap="#data-source.map" width="528"><map name="data-source.map">
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="data-source">data-source:</a></p><img border="0" height="52" src="diagram/data-source.png" usemap="#data-source.map" width="530"><map name="data-source.map">
          <area coords="29,1,77,33" href="#path" shape="rect" title="path">
-         <area coords="117,1,153,33" href="#AS" shape="rect" title="AS">
-         <area coords="173,1,247,33" href="#identifier" shape="rect" title="identifier">
-         <area coords="383,1,479,33" href="#data-source" shape="rect" title="data-source"></map><p>
+         <area coords="175,1,249,33" href="#identifier" shape="rect" title="identifier">
+         <area coords="385,1,481,33" href="#data-source" shape="rect" title="data-source"></map><p>
          <div class="ebnf"><pre><a href="#data-source" title="data-source">data-source</a>
-         ::= <a href="#path" title="path">path</a> ( <a href="#AS" title="AS">AS</a> <a href="#identifier" title="identifier">identifier</a> )? ( 'OVER' <a href="#data-source" title="data-source">data-source</a> )?</pre></div>
+         ::= <a href="#path" title="path">path</a> ( 'AS' <a href="#identifier" title="identifier">identifier</a> )? ( 'OVER' <a href="#data-source" title="data-source">data-source</a> )?</pre></div>
       </p>
       <p>referenced by:
          <ul>
@@ -421,6 +457,7 @@
       <p>referenced by:
          <ul>
             <li><a href="#collection-expr" title="collection-expr">collection-expr</a></li>
+            <li><a href="#create-index-stmt" title="create-index-stmt">create-index-stmt</a></li>
             <li><a href="#data-source" title="data-source">data-source</a></li>
             <li><a href="#expr" title="expr">expr</a></li>
             <li><a href="#function-name" title="function-name">function-name</a></li>

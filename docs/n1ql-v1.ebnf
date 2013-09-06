@@ -1,7 +1,22 @@
 /***************
  *  n1ql v1  *
  ***************/
-n1ql-stmt ::=  'EXPLAIN'? select-stmt
+n1ql-stmt ::=  'EXPLAIN'? (select-stmt | create-primary-index-stmt | create-index-stmt | drop-index-stmt)
+
+/*
+ * create primary index
+ */
+ create-primary-index-stmt ::= 'CREATE' 'PRIMARY' 'INDEX' 'ON' (':' pool-name '.')? bucket-name
+
+/*
+ *  create index
+ */
+ create-index-stmt ::= 'CREATE' 'INDEX' index-name 'ON' (':' pool-name '.')? bucket-name '(' expr-list ')' ('USING' ('VIEW' | identifier))?
+
+ /*
+  * drop index
+  */
+ drop-index-stmt ::= 'DROP' 'INDEX' (':' pool-name '.')? bucket-name '.' index-name
 
 /*
  *  select
@@ -9,7 +24,7 @@ n1ql-stmt ::=  'EXPLAIN'? select-stmt
 
 select-stmt ::= select-core ('ORDER' 'BY' ordering-term (',' ordering-term)*)? ('LIMIT' int ('OFFSET' int)?)?
 select-core ::= 'SELECT' ('DISTINCT' | 'UNIQUE')? result-expr-list ('FROM' data-source)? ('WHERE' expr)? ('GROUP' 'BY' expr (',' expr )* ('HAVING' expr)?)?
-data-source ::= path (AS identifier)? ('OVER' data-source)?
+data-source ::= path ('AS' identifier)? ('OVER' data-source)?
 path ::= identifier ('[' int ']')? ('.' path)?
 ordering-term ::= expr ('ASC' | 'DESC')?
 result-expr ::= (path '.')? '*' | expr ('AS' identifier)?
