@@ -199,7 +199,7 @@ func serve(cdir string, tld string) {
 	fs := http.FileServer(http.Dir(tempDir + "/" + tld + "/"))
 	http.Handle("/tutorial/", http.StripPrefix("/tutorial/", fs))
 
-	http.Handle("/", http.RedirectHandler("/tutorial/tutorial.html#1", 302))
+	http.Handle("/", http.RedirectHandler("/tutorial/index.html#1", 302))
 
 	clog.Log("Running at http://localhost:8000/")
 	go func() {

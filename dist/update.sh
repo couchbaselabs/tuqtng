@@ -72,8 +72,6 @@ builddistpackages() {
     go build
     cd $top
     tutorial/tutorial -src tutorial/content/ -dst $DIST/tutorial_tmp/
-    # FIXME see if we can eliminate this step
-    cp $DIST/tutorial_tmp/tutorial/content/tutorial.html $DIST/tutorial_tmp/tutorial/content/index.html
 
     # mac build
     mkdir -p $DIST/stage

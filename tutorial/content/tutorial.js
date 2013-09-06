@@ -61,7 +61,14 @@ function load(n) {
     });
 }
 
+var iret = 1;
 function index() {
+	if (isIndex()) {
+		load(iret);
+		return;
+	}
+	
+	iret = getLocation();
     $.get('index.json', function(data, status) {
         if (status != 'success') return;
 
@@ -73,7 +80,10 @@ function index() {
         var div = $(document.createElement('ul'));
         div.attr('id', 'toc');
         for (var i=1; sorted[i] != undefined; i++) {
-            $('<li><a onclick="javascript:load(' + i + ');">' + sorted[i] + '</a></li>').appendTo(div);
+        	html = '<li'
+        	if (iret == i) html += ' class="cloc"'
+        	html += '><a onclick="javascript:load(' + i + ');">' + sorted[i] + '</a></li>'
+            $(html).appendTo(div);
         }
 
         setLocation('index');
@@ -146,7 +156,7 @@ function setLocation(n) {
     window.location.hash = '#' + n;
 }
 
-function getLocation(n) {
+function getLocation() {
     var h = window.location.hash;
     if (!h || h.length < 2) return 1;
     var n = parseInt(h.substr(1));

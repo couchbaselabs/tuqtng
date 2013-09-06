@@ -151,7 +151,7 @@ h1, h2, h3, h4 {
 
 #toc {
 	padding-top: 30px;
-	padding-left: 0px;
+	padding-left: 10px;
 	list-style-type: none;
 }
 
@@ -159,6 +159,10 @@ h1, h2, h3, h4 {
     font-size: 14px;
 	color: #a30a0a;
 	cursor: pointer;
+}
+.cloc {
+	list-style-type: disc;
+	color: #a30a0a;
 }
 
 #next {
