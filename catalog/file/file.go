@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
 
@@ -408,7 +407,7 @@ func fetch(path string) (item *dparval.Value, e query.Error) {
 }
 
 func documentPathToId(p string) string {
-	_, file := path.Split(p)
-	ext := path.Ext(file)
+	_, file := filepath.Split(p)
+	ext := filepath.Ext(file)
 	return file[0 : len(file)-len(ext)]
 }
