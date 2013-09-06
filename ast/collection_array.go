@@ -85,8 +85,9 @@ func (this *CollectionArrayOperator) Evaluate(item *dparval.Value) (*dparval.Val
 								// any other error should be returned to caller
 								return nil, err
 							}
+						} else {
+							rv = append(rv, outputResult)
 						}
-						rv = append(rv, outputResult)
 					}
 				} else {
 					// now we have to evaluate the output expression
@@ -99,8 +100,9 @@ func (this *CollectionArrayOperator) Evaluate(item *dparval.Value) (*dparval.Val
 							// any other error should be returned to caller
 							return nil, err
 						}
+					} else {
+						rv = append(rv, outputResult)
 					}
-					rv = append(rv, outputResult)
 				}
 			}
 		}
