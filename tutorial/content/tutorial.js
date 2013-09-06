@@ -108,7 +108,7 @@ function ran(data) {
     {
         var json = $.parseJSON(data);
         for (var key in json) {
-            if (json.hasOwnProperty(key) && key != 'resultset') {
+            if (json.hasOwnProperty(key) && key != 'resultset' && key != 'error') {
                 delete json[key];
             }
         }
