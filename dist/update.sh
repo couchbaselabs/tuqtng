@@ -102,10 +102,9 @@ builddistpackages() {
     cd $top
     rm -rf $DIST/stage
 
-    # windows packages commented out as build seems to be failing
-
     #win 32
     mkdir -p $DIST/stage
+    cp $DIST/start_tutorial.bat $DIST/stage
     cp $DIST/tuqtng.win32.exe $DIST/stage/tuqtng.exe
     cp $DIST/tuq_client.win32.exe $DIST/stage/tuq_client.exe
     cp -r static/ $DIST/stage/static
@@ -120,6 +119,7 @@ builddistpackages() {
 
     #win 64
     mkdir -p $DIST/stage
+    cp $DIST/start_tutorial.bat $DIST/stage
     cp $DIST/tuqtng.win64.exe $DIST/stage/tuqtng.exe
     cp $DIST/tuq_client.win64.exe $DIST/stage/tuq_client.exe
     cp -r static/ $DIST/stage/static
