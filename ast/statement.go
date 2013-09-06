@@ -11,7 +11,7 @@ package ast
 
 import ()
 
-// Statement is the abstract representation of an UNQL statement
+// Statement is the abstract representation of an N1QL statement
 type Statement interface {
 	SetExplainOnly(bool)
 	IsExplainOnly() bool

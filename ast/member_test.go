@@ -23,10 +23,10 @@ func TestDotMember(t *testing.T) {
 		},
 		"contact": map[string]interface{}{
 			"name": map[string]interface{}{
-				"first": "unql",
+				"first": "n1ql",
 				"last":  "couchbase",
 				"all": []interface{}{
-					"unql",
+					"n1ql",
 					"couchbase",
 				},
 			},
@@ -44,7 +44,7 @@ func TestDotMember(t *testing.T) {
 
 	tests := ExpressionTestSet{
 		{NewDotMemberOperator(NewProperty("address"), NewProperty("street")), "1 recursive function", nil},
-		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("first")), "unql", nil},
+		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("first")), "n1ql", nil},
 		{NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("last")), "couchbase", nil},
 
 		{NewDotMemberOperator(NewProperty("address"), NewProperty("city")), nil, &dparval.Undefined{"city"}},
@@ -63,7 +63,7 @@ func TestDotMember(t *testing.T) {
 		{NewBracketMemberOperator(NewProperty("friends"), NewProperty("bar")), nil, &dparval.Undefined{"bar"}},
 
 		//compound test
-		{NewBracketMemberOperator(NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("all")), NewLiteralNumber(0.0)), "unql", nil},
+		{NewBracketMemberOperator(NewDotMemberOperator(NewDotMemberOperator(NewProperty("contact"), NewProperty("name")), NewProperty("all")), NewLiteralNumber(0.0)), "n1ql", nil},
 
 		// test using bracket member on object instead of array
 		{NewBracketMemberOperator(NewProperty("address"), NewLiteralString("street")), "1 recursive function", nil},
