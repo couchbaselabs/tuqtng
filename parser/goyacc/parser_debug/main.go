@@ -28,7 +28,7 @@ func main() {
 	clog.EnableKey("PARSER")
 	clog.EnableKey("SCANNER")
 
-	parser := goyacc.NewUnqlParserWithDebug(*debugLevel)
+	parser := goyacc.NewN1qlParserWithDebug(*debugLevel)
 
 	reader := bufio.NewReader(os.Stdin)
 

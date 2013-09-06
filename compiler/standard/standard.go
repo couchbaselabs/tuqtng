@@ -37,7 +37,7 @@ func NewCompiler(site catalog.Site, defaultPoolName string) *StandardCompiler {
 	return &StandardCompiler{
 		site:            site,
 		defaultPoolName: defaultPoolName,
-		parser:          yaccParser.NewUnqlParser(),
+		parser:          yaccParser.NewN1qlParser(),
 		planner:         simplePlanner.NewSimplePlanner(site, defaultPoolName),
 		optimizer:       simpleOptimizer.NewSimpleOptimizer(),
 	}

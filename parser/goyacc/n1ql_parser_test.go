@@ -215,17 +215,17 @@ var invalidQueries = []string{
 }
 
 func TestParser(t *testing.T) {
-	unqlParser := NewUnqlParser()
+	n1qlParser := NewN1qlParser()
 
 	for _, v := range validQueries {
-		_, err := unqlParser.Parse(v)
+		_, err := n1qlParser.Parse(v)
 		if err != nil {
 			t.Errorf("Valid Query Parse Failed: %v - %v", v, err)
 		}
 	}
 
 	for _, v := range invalidQueries {
-		_, err := unqlParser.Parse(v)
+		_, err := n1qlParser.Parse(v)
 		if err == nil {
 			t.Errorf("Invalid Query Parsed Successfully: %v - %v", v, err)
 		}
@@ -386,10 +386,10 @@ func TestParserASTOutput(t *testing.T) {
 		},
 	}
 
-	unqlParser := NewUnqlParser()
+	n1qlParser := NewN1qlParser()
 
 	for _, v := range tests {
-		query, err := unqlParser.Parse(v.input)
+		query, err := n1qlParser.Parse(v.input)
 		if err != nil {
 			t.Errorf("Valid Query Parse Failed: %v - %v", v, err)
 		}

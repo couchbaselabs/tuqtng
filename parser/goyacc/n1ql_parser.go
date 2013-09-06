@@ -21,20 +21,20 @@ var parsingStack *Stack
 var parsingStatement ast.Statement
 var crashHard = false
 
-type UnqlParser struct {
+type N1qlParser struct {
 	mutex sync.Mutex
 }
 
-func NewUnqlParser() *UnqlParser {
-	return &UnqlParser{}
+func NewN1qlParser() *N1qlParser {
+	return &N1qlParser{}
 }
 
-func NewUnqlParserWithDebug(debug int) *UnqlParser {
+func NewN1qlParserWithDebug(debug int) *N1qlParser {
 	yyDebug = debug
-	return &UnqlParser{}
+	return &N1qlParser{}
 }
 
-func (u *UnqlParser) Parse(input string) (returnStatement ast.Statement, err error) {
+func (u *N1qlParser) Parse(input string) (returnStatement ast.Statement, err error) {
 	u.mutex.Lock()
 	defer u.mutex.Unlock()
 
