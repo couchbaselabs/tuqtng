@@ -24,7 +24,7 @@ func HandleInteractiveMode(tiServer string) {
 
 	currentUser, err := user.Current()
 	if err != nil {
-		fmt.Println("Unable to determine current user, history file disabled: %v", err)
+		fmt.Printf("Unable to determine current user, history file disabled: %v\n", err)
 	}
 
 	var liner = liner.NewLiner()
