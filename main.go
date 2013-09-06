@@ -14,7 +14,6 @@ import (
 	"os"
 	"os/signal"
 	"runtime/pprof"
-	"syscall"
 
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/tuqtng/ast"
@@ -49,7 +48,7 @@ func main() {
 		}
 	}
 
-	go dumpOnSignal(syscall.SIGUSR2)
+	go dumpOnSignalForPlatform()
 
 	// create a QueryChannel
 	queryChannel := make(network.QueryChannel)
