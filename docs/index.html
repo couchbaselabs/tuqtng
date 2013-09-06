@@ -196,16 +196,17 @@
          <ul>
             <li><a href="#select-stmt" title="select-stmt">select-stmt</a></li>
          </ul>
-      </p><br><p style="font-size: 14px; font-weight:bold"><a name="data-source">data-source:</a></p><img border="0" height="52" src="diagram/data-source.png" usemap="#data-source.map" width="530"><map name="data-source.map">
-         <area coords="29,1,77,33" href="#path" shape="rect" title="path">
-         <area coords="175,1,249,33" href="#identifier" shape="rect" title="identifier">
-         <area coords="385,1,481,33" href="#data-source" shape="rect" title="data-source"></map><p>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="data-source">data-source:</a></p><img border="0" height="68" src="diagram/data-source.png" usemap="#data-source.map" width="906"><map name="data-source.map">
+         <area coords="93,17,179,49" href="#pool-name" shape="rect" title="pool-name">
+         <area coords="263,17,311,49" href="#path" shape="rect" title="path">
+         <area coords="409,17,483,49" href="#identifier" shape="rect" title="identifier">
+         <area coords="639,17,713,49" href="#identifier" shape="rect" title="identifier">
+         <area coords="789,17,837,49" href="#path" shape="rect" title="path"></map><p>
          <div class="ebnf"><pre><a href="#data-source" title="data-source">data-source</a>
-         ::= <a href="#path" title="path">path</a> ( 'AS' <a href="#identifier" title="identifier">identifier</a> )? ( 'OVER' <a href="#data-source" title="data-source">data-source</a> )?</pre></div>
+         ::= ( ':' <a href="#pool-name" title="pool-name">pool-name</a> '.' )? <a href="#path" title="path">path</a> ( 'AS' <a href="#identifier" title="identifier">identifier</a> )? ( 'OVER' <a href="#identifier" title="identifier">identifier</a> 'IN' <a href="#path" title="path">path</a> )*</pre></div>
       </p>
       <p>referenced by:
          <ul>
-            <li><a href="#data-source" title="data-source">data-source</a></li>
             <li><a href="#select-core" title="select-core">select-core</a></li>
          </ul>
       </p><br><p style="font-size: 14px; font-weight:bold"><a name="path">path:</a></p><img border="0" height="52" src="diagram/path.png" usemap="#path.map" width="472"><map name="path.map">
