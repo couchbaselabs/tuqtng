@@ -24,7 +24,7 @@ func HandleInteractiveMode(tiServer string) {
 
 	currentUser, err := user.Current()
 	if err != nil {
-		fmt.Println("Unable to determine home directory, history file disabled")
+		fmt.Println("Unable to determine current user, history file disabled: %v", err)
 	}
 
 	var liner = liner.NewLiner()
