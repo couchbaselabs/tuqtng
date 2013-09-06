@@ -41,7 +41,7 @@ buildclient() {
     eval env GOARCH=arm   GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuq_client.arm $pkg &
     eval env GOARCH=arm   GOARM=5 GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuq_client.arm5 $pkg &
     eval env GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuq_client.lin64 $pkg &
-    eval env GOARCH=amd64 GOOS=freebsd CGO_ENABLED=0 go build $goflags -o $DIST/tuq_client.fbsd $pkg &&
+    eval env GOARCH=amd64 GOOS=freebsd CGO_ENABLED=0 go build $goflags -o $DIST/tuq_client.fbsd $pkg &
     eval env GOARCH=386   GOOS=windows go build $goflags -o $DIST/tuq_client.win32.exe $pkg &
     eval env GOARCH=amd64 GOOS=windows go build $goflags -o $DIST/tuq_client.win64.exe $pkg &
     eval env GOARCH=amd64 GOOS=darwin go build $goflags -o $DIST/tuq_client.mac $pkg &
