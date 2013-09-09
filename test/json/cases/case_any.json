@@ -34,5 +34,40 @@
             "name": "ian"
           }
         ]
+    },
+
+    {
+        "statements": "SELECT title FROM catalog WHERE ANY director OVER director IN details.director END",
+        "results": [
+        {
+            "title": "Sherlock: Series 1"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT details.director FROM catalog  GROUP BY details.director HAVING ANY director OVER director IN details.director END",
+        "results": [
+        {
+            "director": [
+                "Euros Lyn",
+                "Paul Mcguigan"
+            ]
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT asin FROM catalog WHERE dimensions.height > 1 and ANY gen = \"Thriller\" OVER gen IN details.genre END",
+        "results": [
+        {
+            "asin": "B0094QY7HE"
+        },
+        {
+            "asin": "B0094QY3LI"
+        }
+    ]
     }
+
+
 ]

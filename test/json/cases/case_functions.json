@@ -545,6 +545,63 @@
             "$1": 2
         }
     ]
+    },
+
+    {
+        "statements": "SELECT UPPER(type) || \" \" || LOWER(title) || \" \" || RTRIM(details.title, ' ') || \" \" || LTRIM(details.format, ' ' ) AS STR FROM catalog",
+        "results": [
+        {
+            "STR": null
+        },
+        {
+            "STR": "MOVIES&TV zero dark thirty ZERO DARK THIRTY DVD"
+        },
+        {
+            "STR": "MOVIES&TV sherlock: series 1 SHERLOCK: SERIES 1 Box Set"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT LENGTH(details) FROM catalog",
+        "results": [
+        {
+            "$1": 5
+        },
+        {
+            "$1": 6
+        },
+        {
+            "$1": 6
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT LENGTH(details.director) FROM catalog",
+        "results": [
+        {
+            "$1": null
+        },
+        {
+            "$1": 15
+        },
+        {
+            "$1": 2
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT  LENGTH(ARRAY director OVER director IN details.director  END) AS D FROM catalog WHERE LENGTH(details.director) > 1",
+        "results": [
+        {
+            "D": null
+        },
+        {
+            "D": 2
+        }
+    ]
     }
 
 ]

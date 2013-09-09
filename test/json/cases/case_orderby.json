@@ -123,6 +123,21 @@
             }
         }
     ]
+    },
+
+    {
+        "statements": "SELECT  C.list AS L FROM catalog.pricing AS C ORDER BY C.savings  DESC",
+        "results": [
+        {
+            "L": 799
+        },
+        {
+            "L": 599
+        },
+        {
+            "L": 300
+        }
+    ]
     }
 
 ]

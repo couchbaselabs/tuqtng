@@ -85,10 +85,106 @@
             ]
         }
     ]
+    },
+
+    {
+        "statements": "SELECT orderlines[1], count(*) AS count FROM orders GROUP BY orderlines[1]",
+        "results": [
+        {
+            "$1": {
+                "productId": "sugar22",
+                "qty": 1
+            },
+            "count": 3
+        },
+        {
+            "$1": {
+                "productId": "tea111",
+                "qty": 1
+            },
+            "count": 1
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT orderlines,  count(*) AS count FROM orders GROUP BY orderlines",
+        "results" : [
+        {
+            "count": 2,
+            "orderlines": [
+                {
+                    "productId": "coffee01",
+                    "qty": 1
+                },
+                {
+                    "productId": "sugar22",
+                    "qty": 1
+                }
+            ]
+        },
+        {
+            "count": 1,
+            "orderlines": [
+                {
+                    "productId": "coffee01",
+                    "qty": 2
+                },
+                {
+                    "productId": "tea111",
+                    "qty": 1
+                }
+            ]
+        },
+        {
+            "count": 1,
+            "orderlines": [
+                {
+                    "productId": "tea111",
+                    "qty": 1
+                },
+                {
+                    "productId": "sugar22",
+                    "qty": 1
+                }
+            ]
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT details.director AS D, count(*) AS count FROM catalog WHERE ANY director OVER director IN details.director  END GROUP BY details.director HAVING LENGTH(details.director) > 1",
+        "results": [
+        {
+            "D": [
+                "Euros Lyn",
+                "Paul Mcguigan"
+            ],
+            "count": 1
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT title, SUM(dimensions.length), SUM(dimensions.width) FROM catalog WHERE dimensions.height > 0.5 AND ANY gen = \"Thriller\" OVER gen IN details.genre END GROUP BY title HAVING SUM(dimensions.width) > 1 and SUM(dimensions.length) > 1",
+        "results": [
+        {
+            "$1": 7,
+            "$2": 12,
+            "title": "Inferno"
+        },
+        {
+            "$1": 2,
+            "$2": 2.5,
+            "title": "Zero Dark Thirty"
+        },
+        {
+            "$1": 2,
+            "$2": 1.5,
+            "title": "Sherlock: Series 1"
+        }
+    ]
     }
-
-
-
 
 
 

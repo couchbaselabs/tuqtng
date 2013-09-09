@@ -50,5 +50,46 @@
         },
         {}
         ]
+    },
+
+    {
+        "statements": "SELECT ANY gen = \"Thriller\" OVER gen IN details.genre END AS D, length(tags), FIRST gen OVER gen IN details.genre END AS G FROM catalog",
+        "results": [
+        {
+            "$1": 3,
+            "D": true,
+            "G": "Fiction"
+        },
+        {
+            "$1": 3,
+            "D": true,
+            "G": "Action"
+        },
+        {
+            "$1": 3,
+            "D": true,
+            "G": "Crime"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT title FROM catalog WHERE FIRST director OVER director IN details.director  WHEN length(director) > 1 END",
+        "results": [
+        {
+            "title": "Sherlock: Series 1"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT  FIRST director OVER director IN details.director  END FROM catalog WHERE length(details.director) > 1",
+        "results": [
+        {},
+        {
+            "$1": "Euros Lyn"
+        }
+    ]
     }
+
 ]

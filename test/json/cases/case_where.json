@@ -295,6 +295,15 @@
             "name": "earl"
         }
     ]
+    },
+
+    {
+        "statements": "SELECT catalog.asin FROM catalog WHERE dimensions = { \"height\": 1.2, \"length\": 2, \"width\": 1.5 } AND details.genre = [ \"Crime\", \"Thriller\" ]",
+        "results": [
+        {
+            "asin": "B0094QY3LI"
+        }
+    ]
     }
 
 ]
