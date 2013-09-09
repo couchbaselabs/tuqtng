@@ -51,11 +51,11 @@ function load(n) {
 		var sample = $('#example').text();
 		var ie = ace.edit('iedit');
 		ie.setValue(sample);
-		ie.navigateFileEnd();
+		ie.navigateFileStart();
 
 		var re = ace.edit('redit');
 		re.setValue("  ");
-		re.navigateFileEnd();
+		re.navigateFileStart();
 
 		ie.focus();
 	});
