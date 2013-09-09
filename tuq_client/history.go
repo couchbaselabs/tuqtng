@@ -18,9 +18,9 @@ import (
 	"github.com/sbinet/liner"
 )
 
-func LoadHistory(liner *liner.State, currentUser *user.User) {
-	if currentUser != nil && currentUser.HomeDir != "" {
-		ReadHistoryFromFile(liner, currentUser.HomeDir+"/.tuq_history")
+func LoadHistory(liner *liner.State, dir string) {
+	if dir != "" {
+		ReadHistoryFromFile(liner, dir+"/.tuq_history")
 	}
 }
 
