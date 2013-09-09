@@ -28,7 +28,11 @@ func HandleInteractiveMode(tiServer string) {
 		// try to find a HOME environment variable
 		homeDir = os.Getenv("HOME")
 		if homeDir == "" {
-			fmt.Printf("Unable to determine home directory, history file disabled: %v\n", err)
+			// then try USERPROFILE for Windows
+			homeDir = os.Getenv("USERPROFILE")
+			if homeDir == "" {
+				fmt.Printf("Unable to determine home directory, history file disabled: %v\n", err)
+			}
 		}
 	} else {
 		homeDir = currentUser.HomeDir
