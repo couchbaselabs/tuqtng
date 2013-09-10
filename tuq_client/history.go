@@ -13,7 +13,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"os/user"
 
 	"github.com/sbinet/liner"
 )
@@ -24,10 +23,10 @@ func LoadHistory(liner *liner.State, dir string) {
 	}
 }
 
-func UpdateHistory(liner *liner.State, currentUser *user.User, line string) {
+func UpdateHistory(liner *liner.State, dir, line string) {
 	liner.AppendHistory(line)
-	if currentUser != nil && currentUser.HomeDir != "" {
-		WriteHistoryToFile(liner, currentUser.HomeDir+"/.tuq_history")
+	if dir != "" {
+		WriteHistoryToFile(liner, dir+"/.tuq_history")
 	}
 }
 

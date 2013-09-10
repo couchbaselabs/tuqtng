@@ -13,7 +13,6 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"os/user"
 	"syscall"
 
 	"github.com/couchbaselabs/clog"
@@ -22,20 +21,14 @@ import (
 
 func HandleInteractiveMode(tiServer, prompt string) {
 
-	homeDir := ""
-	currentUser, err := user.Current()
-	if err != nil {
-		// try to find a HOME environment variable
-		homeDir = os.Getenv("HOME")
+	// try to find a HOME environment variable
+	homeDir := os.Getenv("HOME")
+	if homeDir == "" {
+		// then try USERPROFILE for Windows
+		homeDir = os.Getenv("USERPROFILE")
 		if homeDir == "" {
-			// then try USERPROFILE for Windows
-			homeDir = os.Getenv("USERPROFILE")
-			if homeDir == "" {
-				fmt.Printf("Unable to determine home directory, history file disabled: %v\n", err)
-			}
+			fmt.Printf("Unable to determine home directory, history file disabled\n")
 		}
-	} else {
-		homeDir = currentUser.HomeDir
 	}
 
 	var liner = liner.NewLiner()
@@ -55,7 +48,7 @@ func HandleInteractiveMode(tiServer, prompt string) {
 			continue
 		}
 
-		UpdateHistory(liner, currentUser, line)
+		UpdateHistory(liner, homeDir, line)
 		err = execute_internal(tiServer, line, os.Stdout)
 		if err != nil {
 			clog.Error(err)
