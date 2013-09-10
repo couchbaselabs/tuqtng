@@ -66,7 +66,16 @@ const templEnd = `
 
 const templPrimary = `
 function (doc, meta) {
-  emit(meta.id, null);
+  var stringToUtf8Bytes = function (str) {
+    var utf8 = unescape(encodeURIComponent(str));
+    var bytes = [];
+    for (var i = 0; i < str.length; ++i) {
+        bytes.push(str.charCodeAt(i));
+    }
+    return bytes;
+  };
+
+  emit([$string, stringToUtf8Bytes(meta.id)], null);
 }
 // salt: $rnd
 `

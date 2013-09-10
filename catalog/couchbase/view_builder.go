@@ -213,6 +213,7 @@ func newAllDocsIndex(b *bucket) *primaryIndex {
 func newPrimaryDDoc() *designdoc {
 	var doc designdoc
 	line := strings.Replace(templPrimary, "$rnd", strconv.Itoa(int(rand.Int31())), -1)
+	line = strings.Replace(line, "$string", strconv.Itoa(TYPE_STRING), -1)
 	doc.mapfn = line
 	doc.reducefn = ""
 	doc.name = "ddl_" + PRIMARY_INDEX
