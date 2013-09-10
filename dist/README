@@ -1,0 +1,24 @@
+Couchbase Query Dev Preview 1 - http://www.couchbase.com/communities/n1ql
+
+
+Running the Tutorial
+--------------------
+
+1.  Expand the package archive
+2.  Run ./start_tutorial.sh (windows start_tutorial.bat)
+3.  Open http://localhost:8093/tutorial in your browser
+
+
+
+Using Couchbase Query with your own Couchbase Server
+----------------------------------------------------
+
+./cbq-engine -couchbase http://<coucbhase-server-name>:8091/
+
+
+
+
+Using the command-line interactive query tool
+---------------------------------------------
+
+./cbq -engine=http://<couchbase-query-engine-server-name>:8093/

@@ -20,7 +20,7 @@ import (
 	"github.com/sbinet/liner"
 )
 
-func HandleInteractiveMode(tiServer string) {
+func HandleInteractiveMode(tiServer, prompt string) {
 
 	homeDir := ""
 	currentUser, err := user.Current()
@@ -46,7 +46,7 @@ func HandleInteractiveMode(tiServer string) {
 	go signalCatcher(liner)
 
 	for {
-		line, err := liner.Prompt("tuq> ")
+		line, err := liner.Prompt(prompt + "> ")
 		if err != nil {
 			break
 		}

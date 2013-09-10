@@ -21,14 +21,14 @@ build() {
     pkg=$project
     goflags="-v -ldflags '-X main.VERSION $version'"
 
-    eval env GOARCH=386   GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuqtng.lin32 $pkg &
-    eval env GOARCH=arm   GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuqtng.arm $pkg &
-    eval env GOARCH=arm   GOARM=5 GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuqtng.arm5 $pkg &
-    eval env GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuqtng.lin64 $pkg &
-    eval env GOARCH=amd64 GOOS=freebsd CGO_ENABLED=0 go build $goflags -o $DIST/tuqtng.fbsd $pkg &&
-    eval env GOARCH=386   GOOS=windows go build $goflags -o $DIST/tuqtng.win32.exe $pkg &
-    eval env GOARCH=amd64 GOOS=windows go build $goflags -o $DIST/tuqtng.win64.exe $pkg &
-    eval env GOARCH=amd64 GOOS=darwin go build $goflags -o $DIST/tuqtng.mac $pkg &
+    eval env GOARCH=386   GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/cbq-engine.lin32 $pkg &
+    eval env GOARCH=arm   GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/cbq-engine.arm $pkg &
+    eval env GOARCH=arm   GOARM=5 GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/cbq-engine.arm5 $pkg &
+    eval env GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/cbq-engine.lin64 $pkg &
+    eval env GOARCH=amd64 GOOS=freebsd CGO_ENABLED=0 go build $goflags -o $DIST/cbq-engine.fbsd $pkg &&
+    eval env GOARCH=386   GOOS=windows go build $goflags -o $DIST/cbq-engine.win32.exe $pkg &
+    eval env GOARCH=amd64 GOOS=windows go build $goflags -o $DIST/cbq-engine.win64.exe $pkg &
+    eval env GOARCH=amd64 GOOS=darwin go build $goflags -o $DIST/cbq-engine.mac $pkg &
 
     wait
 }
@@ -37,14 +37,14 @@ buildclient() {
     pkg=$project/tuq_client
     goflags="-v -ldflags '-X main.VERSION $version'"
 
-    eval env GOARCH=386   GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuq_client.lin32 $pkg &
-    eval env GOARCH=arm   GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuq_client.arm $pkg &
-    eval env GOARCH=arm   GOARM=5 GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuq_client.arm5 $pkg &
-    eval env GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/tuq_client.lin64 $pkg &
-    eval env GOARCH=amd64 GOOS=freebsd CGO_ENABLED=0 go build $goflags -o $DIST/tuq_client.fbsd $pkg &
-    eval env GOARCH=386   GOOS=windows go build $goflags -o $DIST/tuq_client.win32.exe $pkg &
-    eval env GOARCH=amd64 GOOS=windows go build $goflags -o $DIST/tuq_client.win64.exe $pkg &
-    eval env GOARCH=amd64 GOOS=darwin go build $goflags -o $DIST/tuq_client.mac $pkg &
+    eval env GOARCH=386   GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/cbq.lin32 $pkg &
+    eval env GOARCH=arm   GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/cbq.arm $pkg &
+    eval env GOARCH=arm   GOARM=5 GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/cbq.arm5 $pkg &
+    eval env GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/cbq.lin64 $pkg &
+    eval env GOARCH=amd64 GOOS=freebsd CGO_ENABLED=0 go build $goflags -o $DIST/cbq.fbsd $pkg &
+    eval env GOARCH=386   GOOS=windows go build $goflags -o $DIST/cbq.win32.exe $pkg &
+    eval env GOARCH=amd64 GOOS=windows go build $goflags -o $DIST/cbq.win64.exe $pkg &
+    eval env GOARCH=amd64 GOOS=darwin go build $goflags -o $DIST/cbq.mac $pkg &
 
     wait
 }
@@ -60,75 +60,75 @@ builddistpackages() {
     # mac build
     mkdir -p $DIST/stage
     cp $DIST/start_tutorial.sh $DIST/stage
-    cp $DIST/tuqtng.mac $DIST/stage/tuqtng
-    cp $DIST/tuq_client.mac $DIST/stage/tuq_client
+    cp $DIST/cbq-engine.mac $DIST/stage/cbq-engine
+    cp $DIST/cbq.mac $DIST/stage/cbq
     cp -r static/ $DIST/stage/static
     mkdir -p $DIST/stage/static/tutorial
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/data/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
     cd $DIST/stage
-    zip $DIST/cb-query_preview_x86_64_mac.zip -r .
+    zip $DIST/couchbase-query_dev_preview1_x86_64_mac.zip -r .
     cd $top
     rm -rf $DIST/stage
 
     #linux 32
     mkdir -p $DIST/stage
     cp $DIST/start_tutorial.sh $DIST/stage
-    cp $DIST/tuqtng.lin32 $DIST/stage/tuqtng
-    cp $DIST/tuq_client.lin32 $DIST/stage/tuq_client
+    cp $DIST/cbq-engine.lin32 $DIST/stage/cbq-engine
+    cp $DIST/cbq.lin32 $DIST/stage/cbq
     cp -r static/ $DIST/stage/static
     mkdir -p $DIST/stage/static/tutorial
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/data/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
     cd $DIST/stage
-    tar zcvf $DIST/cb-query_preview_x86_linux.tar.gz .
+    tar zcvf $DIST/couchbase-query_dev_preview1_x86_linux.tar.gz .
     cd $top
     rm -rf $DIST/stage
 
     #linux 64
     mkdir -p $DIST/stage
     cp $DIST/start_tutorial.sh $DIST/stage
-    cp $DIST/tuqtng.lin64 $DIST/stage/tuqtng
-    cp $DIST/tuq_client.lin64 $DIST/stage/tuq_client
+    cp $DIST/cbq-engine.lin64 $DIST/stage/cbq-engine
+    cp $DIST/cbq.lin64 $DIST/stage/cbq
     cp -r static/ $DIST/stage/static
     mkdir -p $DIST/stage/static/tutorial
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/data/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
     cd $DIST/stage
-    tar zcvf $DIST/cb-query_preview_x86_64_linux.tar.gz .
+    tar zcvf $DIST/couchbase-query_dev_preview1_x86_64_linux.tar.gz .
     cd $top
     rm -rf $DIST/stage
 
     #win 32
     mkdir -p $DIST/stage
     cp $DIST/start_tutorial.bat $DIST/stage
-    cp $DIST/tuqtng.win32.exe $DIST/stage/tuqtng.exe
-    cp $DIST/tuq_client.win32.exe $DIST/stage/tuq_client.exe
+    cp $DIST/cbq-engine.win32.exe $DIST/stage/cbq-engine.exe
+    cp $DIST/cbq.win32.exe $DIST/stage/cbq.exe
     cp -r static/ $DIST/stage/static
     mkdir -p $DIST/stage/static/tutorial
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/data/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
     cd $DIST/stage
-    zip $DIST/cb-query_preview_x86_win.zip -r .
+    zip $DIST/couchbase-query_dev_preview1_x86_win.zip -r .
     cd $top
     rm -rf $DIST/stage
 
     #win 64
     mkdir -p $DIST/stage
     cp $DIST/start_tutorial.bat $DIST/stage
-    cp $DIST/tuqtng.win64.exe $DIST/stage/tuqtng.exe
-    cp $DIST/tuq_client.win64.exe $DIST/stage/tuq_client.exe
+    cp $DIST/cbq-engine.win64.exe $DIST/stage/cbq-engine.exe
+    cp $DIST/cbq.win64.exe $DIST/stage/cbq.exe
     cp -r static/ $DIST/stage/static
     mkdir -p $DIST/stage/static/tutorial
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/data/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
     cd $DIST/stage
-    zip $DIST/cb-query_preview_x86_64_win.zip -r .
+    zip $DIST/couchbase-query_dev_preview1_x86_64_win.zip -r .
     cd $top
     rm -rf $DIST/stage
 

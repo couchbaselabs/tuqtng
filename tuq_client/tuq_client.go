@@ -13,14 +13,16 @@ import (
 	"flag"
 	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
-var tiServer = flag.String("tuqtng", "http://localhost:8093/", "URL to tuqtng")
+var tiServer = flag.String("engine", "http://localhost:8093/", "URL to tuqtng")
 
 func main() {
 	flag.Parse()
-	HandleInteractiveMode(*tiServer)
+	HandleInteractiveMode(*tiServer, filepath.Base(os.Args[0]))
 }
 
 func execute_internal(tiServer, line string, w io.Writer) error {

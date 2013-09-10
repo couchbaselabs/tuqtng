@@ -5,8 +5,8 @@ echo.
 echo In your web browser open http://localhost:8093/tutorial/
 echo.
 
-start "TuqTng" "http://localhost:8093/tutorial/"
+start "cbq" "http://localhost:8093/tutorial/"
 
-tuqtng -couchbase dir:data
+cbq-engine -couchbase dir:data
 
 popd
