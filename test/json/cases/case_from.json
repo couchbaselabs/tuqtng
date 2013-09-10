@@ -41,7 +41,7 @@
     },
 
     {
-        "statements": "SELECT type FROM catalog.non.existing[3].path",
+        "statements": "SELECT type FROM catalog.non.existing[3].apath",
         "results": [
     ]
     },

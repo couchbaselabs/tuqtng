@@ -137,6 +137,79 @@
                   {
                     logDebugTokens("ARRAY"); return ARRAY
                   }
+/[aA][lL][tT][eE][rR]/
+                  {
+                    logDebugTokens("ALTER"); return ALTER
+                  }
+/[bB][eE][tT][wW][eE][eE][nN]/
+                  {
+                    logDebugTokens("BETWEEN"); return BETWEEN
+                  }
+/[bB][uU][cC][kK][eE][tT]/
+                  {
+                    logDebugTokens("BUCKET"); return BUCKET
+                  }
+/[cC][aA][sS][tT]/
+                  {
+                    logDebugTokens("CAST"); return CAST
+                  }
+/[cC][oO][lL][lL][aA][tT][eE]/
+                  {
+                    logDebugTokens("COLLATE"); return COLLATE
+                  }
+/[dD][aA][tT][aA][bB][aA][sS][eE]/
+                  {
+                    logDebugTokens("DATABASE"); return DATABASE
+                  }
+/[dD][eE][lL][eE][tT][eE]/
+                  {
+                    logDebugTokens("DELETE"); return DELETE
+                  }
+/[eE][aA][cC][hH]/
+                  {
+                    logDebugTokens("EACH"); return EACH
+                  }
+/[eE][xX][cC][eE][pP][tT]/
+                  {
+                    logDebugTokens("EXCEPT"); return EXCEPT
+                  }
+/[eE][xX][iI][sS][tT][sS]/
+                  {
+                    logDebugTokens("EXISTS"); return EXISTS
+                  }
+/[iI][fF]/        { logDebugTokens("IF"); return IF }
+/[iI][nN][lL][iI][nN][eE]/
+                  {
+                    logDebugTokens("INLINE"); return INLINE
+                  }
+/[iI][nN][sS][eE][rR][tT]/
+                  {
+                    logDebugTokens("INSERT"); return INSERT
+                  }
+/[iI][nN][tT][eE][rR][sS][eE][cC][tT]/
+                  {
+                    logDebugTokens("INTERSECT"); return INTERSECT
+                  }
+/[iI][nN][tT][oO]/
+                  {
+                    logDebugTokens("INTO"); return INTO
+                  }
+/[jJ][oO][iI][nN]/
+                  {
+                    logDebugTokens("JOIN"); return JOIN
+                  }
+/[pP][aA][tT][hH]/
+                  {
+                    logDebugTokens("PATH"); return PATH
+                  }
+/[uU][nN][iI][oO][nN]/
+                  {
+                    logDebugTokens("UNION"); return UNION
+                  }
+/[uU][pP][dD][aA][tT][eE]/
+                  {
+                    logDebugTokens("UPDATE"); return UPDATE
+                  }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }
