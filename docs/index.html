@@ -443,11 +443,11 @@
          <ul>
             <li><a href="#expr" title="expr">expr</a></li>
          </ul>
-      </p><br><p style="font-size: 14px; font-weight:bold"><a name="function">function:</a></p><img border="0" height="222" src="diagram/function.png" usemap="#function.map" width="554"><map name="function.map">
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="function">function:</a></p><img border="0" height="162" src="diagram/function.png" usemap="#function.map" width="646"><map name="function.map">
          <area coords="29,1,139,33" href="#function-name" shape="rect" title="function-name">
-         <area coords="245,1,293,33" href="#path" shape="rect" title="path">
+         <area coords="391,1,439,33" href="#path" shape="rect" title="path">
          <area coords="391,111,439,143" href="#expr" shape="rect" title="expr"></map><p>
-         <div class="ebnf"><pre><a href="#function" title="function">function</a> ::= <a href="#function-name" title="function-name">function-name</a> '(' ( ( <a href="#path" title="path">path</a> '.' )? '*' | ( 'DISTINCT' | 'UNIQUE' )? <a href="#expr" title="expr">expr</a> ( ',' <a href="#expr" title="expr">expr</a> )* )? ')'</pre></div>
+         <div class="ebnf"><pre><a href="#function" title="function">function</a> ::= <a href="#function-name" title="function-name">function-name</a> '(' ( 'DISTINCT' | 'UNIQUE' )? ( ( <a href="#path" title="path">path</a> '.' )? '*' | <a href="#expr" title="expr">expr</a> ( ',' <a href="#expr" title="expr">expr</a> )* )? ')'</pre></div>
       </p>
       <p>referenced by:
          <ul>

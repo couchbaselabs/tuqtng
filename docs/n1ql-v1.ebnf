@@ -46,7 +46,7 @@ nested-expr ::= expr '.' expr | expr '[' expr ']'
 /*
  *  functions
  */
-function ::= function-name '(' ((path '.')? '*' | ('DISTINCT' | 'UNIQUE')? expr (',' expr)*)? ')'
+function ::= function-name '(' ('DISTINCT' | 'UNIQUE')? ((path '.')? '*' | expr (',' expr)*)? ')'
 function-name ::= identifier
 
 /*

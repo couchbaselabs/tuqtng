@@ -129,9 +129,23 @@ Final projection of evaluated result expressions is as follows:
 2.  If the result expression list includes `<path>.*`, the path is evaluated.  If the result of this evaluation is an object, all the key/value pairs within this object are added to the result object.  If the result is not an object, nothing is added to the result object.
 3.  For each remaining expression in the result expression list.  If an AS clause was specified, that identifier is used as the key in the result object and the value is the evaluated expression.  If no AS clause was specified, a default name is generated for the key.
 
-Specifying the same identifier more than once in the result expression list, or using an identifer that conflicts with a field in the document returned by '*' is allowed, but it is only guaranteed that one value with that key is returned.  If duplicate key names are detected in the projection, a warning is returned along with the query results.
+All projection identifiers must be unique (both explicitly named identifiers with the AS clause and automatically generated names).  If an identifier conflicts with a field produced by a '*' expression a warning will be generated.  Below are some examples:
 
-Returning complex object and arrays is possible by specifying literal JSON in the projection expression.
+    SELECT field1 AS name, field2 AS name
+
+This query results in an error because "name" is used twice in the projection.
+
+    SELECT field1 AS name, name
+
+This query results in an error because the explicitly named alias "name" and the automatically generated name for the field "name" are the same.
+
+    SELECT parent.name, child.name
+
+This query results in an error because both automatically generated names are the same.  To avoid this, use an explicit alias to differentiate them.
+
+    SELECT parent.name AS parent_name, child.name
+
+Returning complex objects and arrays is possible by specifying literal JSON in the projection expression.
 
 See Appendix 6 for some example projections.
 
@@ -591,17 +605,31 @@ If the identifier is the name of a datasource, it refers to the whole object in 
 
 Function names are case in-sensitive.  The following functions are defined:
 
+BASE64_VALUE(value) - return the value encoded in base64.  can be used on work with non-JSON values stored in the bucket.
+
 CEIL(value) - if value is numeric, returns the smallest integer not less than the value.  otherwise, NULL.
+
+FIRSTNUM(expr1, expr2, ...) - returns the first non-NULL, non-MISSING, non-NaN, non-infinite numeric value
 
 FLOOR(value) - if value is numeric, returns the largest integer not greater than the value.  otherwise, NULL.
 
 GREATEST(expr, expr, ...) - returns the largest value of all the expressions.  if all values are NULL or MISSING returns NULL.
 
+IFINF(expr1, expr2, ...) - returns the first non-inifite value (+ or -)
+
 IFMISSING(expr1, expr2, ...) - returns the first non-MISSING value
 
 IFMISSINGORNULL(expr1, expr2, ...) - returns the first non-NULL, non-MISSING value
 
+IFNAN(expr1, expr2, ...) - returns the first non-NaN value
+
+IFNANORINF(expr1, expr2, ...) - returns the first non-Nan, non-inifinite value
+
+IFNEGINF(expr1, expr2, ...) - returns the first non -Infinity values
+
 IFNULL(epxr1, expr2, ...) - returns the first non-NULL value
+
+IFPOSINF(expr1, expr2, ...) - returns the first non +Infinity value
 
 META() - returns the meta data for the document in the current context
 
@@ -620,7 +648,13 @@ LOWER(expr) - if expr is a string, the string is returned in all lower case.  ot
 
 LTRIM(expr, character set) - remove the longest string containing only the characters in the specified character set starting at the beginning
 
-NULLIF(value1, value2) - if value1 = value 2, return NULL, otherwise value1
+NANIF(value1, value2) - if value1 = value2, return NaN, otherwise value1
+
+NEGINFIF(value1, value2) - if value1 = value2, return -Infinity, otherwise value1
+
+NULLIF(value1, value2) - if value1 = value2, return NULL, otherwise value1
+
+POSINFIF(value1, value2) - if value1 = value2, return +Infinity, otherwise value1
 
 ROUND(value) - if value is numeric, rounds to the nearest integer.  otherwise NULL.  same as ROUND(value, 0)
 
@@ -644,7 +678,7 @@ VALUE() - returns the full value for the item in the current context
 
 ### Aggregate Functions
 
-There are 5 aggregate functions, SUM, AVG, COUNT, MIN, and MAX.  Aggregate functions can only be used in SELECT, HAVING, and ORDER BY clauses.  When aggregate functions are used in expressions in these clauses, the query will operate as an aggregate query.  Aggregate functions take one argument, the value over which to compute the aggregate function.  The COUNT function can also take '*' as its argument.
+There are 6 aggregate functions, SUM, AVG, COUNT, MIN, MAX and ARRAY_AGG.  Aggregate functions can only be used in SELECT, HAVING, and ORDER BY clauses.  When aggregate functions are used in expressions in these clauses, the query will operate as an aggregate query.  Aggregate functions take one argument, the value over which to compute the aggregate function.  The COUNT function can also take '*' or 'path.*' as its argument.
 
 ##### Null/Missing/Non-numeric Elimination
 
@@ -658,6 +692,8 @@ MIN(expr) - min returns the minimum value of all values in the group.  The minim
 MAX(expr) - max returns the maximum values of all values in the group.  The maximum value is the last value that would be returned from an ORDER BY  on the same expression.  max returns NULL if there are no non-NULL, non-MISSING values
 
 For, AVG, and SUM, any row where the result of the expression is non-numieric is also eliminated.
+
+ARRAY_AGG(expr) - evaluate the expression for each member of the group and return an array containing these values
 
 ## Appendix 3 - Operator Precedence
 
@@ -1083,6 +1119,9 @@ Diagrams were generated by [Railroad Diagram Generator](http://railroad.my28msec
     * Update syntax of ANY/ALL
     * Added syntax/semantics for FIRST/ARRAY comprehensions
     * Removed open items for array comprehensions and ELEMENTSMATCHING funcion
+* 2013-09-10 - Major Updates 2
+    * Clarified projection of the same identifier
+    * Added missing functions
 
 ### Open Issues
 
