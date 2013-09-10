@@ -18,6 +18,7 @@ type CreateIndexStatement struct {
 	Bucket      string         `json:"bucket"`
 	Pool        string         `json:"pool"`
 	On          ExpressionList `json:"on"`
+	Primary     bool           `json:"primary"`
 }
 
 func NewCreateIndexStatement() *CreateIndexStatement {

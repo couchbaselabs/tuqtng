@@ -28,17 +28,19 @@ type CreateIndex struct {
 	bucket                catalog.Bucket
 	name                  string
 	index_type            string
+	primary               bool
 	on                    ast.ExpressionList
 	downstreamStopChannel misc.StopChannel
 }
 
-func NewCreateIndex(bucket catalog.Bucket, name string, index_type string, on ast.ExpressionList) *CreateIndex {
+func NewCreateIndex(bucket catalog.Bucket, name string, index_type string, primary bool, on ast.ExpressionList) *CreateIndex {
 	return &CreateIndex{
 		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 		bucket:         bucket,
 		name:           name,
 		index_type:     index_type,
+		primary:        primary,
 		on:             on,
 	}
 }
@@ -62,8 +64,18 @@ func (this *CreateIndex) Run(stopChannel misc.StopChannel) {
 	}
 
 	this.downstreamStopChannel = stopChannel
-	clog.To(CHANNEL, "create_index operator starting")
-	index, err := this.bucket.CreateIndex(this.name, indexOn, indexType)
+
+	var index catalog.Index
+	var err query.Error
+
+	if this.primary {
+		clog.To(CHANNEL, "create_index (primary) operator starting")
+		index, err = this.bucket.CreatePrimaryIndex()
+	} else {
+		clog.To(CHANNEL, "create_index (secondary) operator starting")
+		index, err = this.bucket.CreateIndex(this.name, indexOn, indexType)
+	}
+
 	if err != nil {
 		this.SendError(err)
 	} else {

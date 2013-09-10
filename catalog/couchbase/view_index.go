@@ -19,6 +19,11 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
+const (
+	PRIMARY_INDEX = "#primary"
+	ALLDOCS_INDEX = "#alldocs"
+)
+
 type viewIndex struct {
 	name   string
 	using  catalog.IndexType
@@ -70,14 +75,6 @@ func (idx *viewIndex) ViewName() string {
 	return idx.ddoc.viewname
 }
 
-func (b *bucket) createViewIndex(name string, key catalog.IndexKey) (catalog.Index, query.Error) {
-	idx, err := newViewIndex(name, key, b)
-	if err != nil {
-		return nil, query.NewError(err, fmt.Sprintf("Cannot create index %s", name))
-	}
-	return idx, nil
-}
-
 func (vi *viewIndex) Drop() query.Error {
 	bucket := vi.bucket
 	if vi.IsPrimary() {
@@ -92,10 +89,9 @@ func (vi *viewIndex) Drop() query.Error {
 }
 
 func (b *bucket) loadIndexes() query.Error {
-	// put in indicative entry for primary index
-	pi := newPrimaryIndex(b, "", "_all_docs")
+	// #alldocs implicitly exists
+	pi := newAllDocsIndex(b)
 	b.indexes[pi.name] = pi
-	b.primary = pi
 
 	// and recreate remaining from ddocs
 	indexes, err := loadViewIndexes(b)
@@ -104,7 +100,8 @@ func (b *bucket) loadIndexes() query.Error {
 	}
 
 	for _, index := range indexes {
-		b.indexes[index.name] = index
+		name := (*index).Name()
+		b.indexes[name] = *index
 	}
 
 	return nil
@@ -163,6 +160,10 @@ func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue
 			}
 		}
 	}
+}
+
+func (pi *primaryIndex) BucketId() string {
+	return pi.viewIndex.bucket.Id()
 }
 
 func (pi *primaryIndex) IsPrimary() bool {

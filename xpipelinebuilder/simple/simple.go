@@ -89,7 +89,7 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 			if err != nil {
 				return nil, err
 			}
-			currentOperator = xpipeline.NewCreateIndex(bucket, currentElement.Name, currentElement.IndexType, currentElement.On)
+			currentOperator = xpipeline.NewCreateIndex(bucket, currentElement.Name, currentElement.IndexType, currentElement.Primary, currentElement.On)
 		case *plan.DropIndex:
 			pool, err := this.site.PoolByName(currentElement.Pool)
 			if err != nil {

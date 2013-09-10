@@ -306,16 +306,18 @@ type CreateIndex struct {
 	Bucket    string             `json:"bucket"`
 	Name      string             `json:"name"`
 	IndexType string             `json:"index_type"`
+	Primary   bool               `json:"primary"`
 	On        ast.ExpressionList `json:"on"`
 }
 
-func NewCreateIndex(pool string, bucket string, name string, index_type string, on ast.ExpressionList) *CreateIndex {
+func NewCreateIndex(pool string, bucket string, name string, index_type string, primary bool, on ast.ExpressionList) *CreateIndex {
 	return &CreateIndex{
 		Type:      "create_index",
 		Pool:      pool,
 		Bucket:    bucket,
 		Name:      name,
 		IndexType: index_type,
+		Primary:   primary,
 		On:        on,
 	}
 }

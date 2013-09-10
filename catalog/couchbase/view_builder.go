@@ -79,7 +79,7 @@ func newDesignDoc(idxname string, on catalog.IndexKey) (*designdoc, error) {
 	return &doc, nil
 }
 
-func loadViewIndexes(b *bucket) ([]*viewIndex, error) {
+func loadViewIndexes(b *bucket) ([]*catalog.Index, error) {
 
 	rows, err := b.cbbucket.GetDDocs()
 	if err != nil {
@@ -97,7 +97,7 @@ func loadViewIndexes(b *bucket) ([]*viewIndex, error) {
 		inames = append(inames, iname)
 	}
 
-	indexes := make([]*viewIndex, 0, len(inames))
+	indexes := make([]*catalog.Index, 0, len(inames))
 	for _, iname := range inames {
 		ddname := "ddl_" + iname
 		jdoc, err := getDesignDoc(b, ddname)
@@ -110,12 +110,20 @@ func loadViewIndexes(b *bucket) ([]*viewIndex, error) {
 		}
 
 		exprlist := make([]ast.Expression, 0, len(jdoc.IndexOn))
+
 		for _, ser := range jdoc.IndexOn {
-			expr, err := ast.UnmarshalExpression([]byte(ser))
-			if err != nil {
-				return nil, errors.New("Cannot unmarshal expression for index " + iname)
+			// HACK - remove this when Unmarshall supports META()
+			if iname == PRIMARY_INDEX {
+				meta := ast.NewFunctionCall("meta", ast.FunctionArgExpressionList{})
+				mdid := ast.NewDotMemberOperator(meta, ast.NewProperty("id"))
+				exprlist = append(exprlist, mdid)
+			} else {
+				expr, err := ast.UnmarshalExpression([]byte(ser))
+				if err != nil {
+					return nil, errors.New("Cannot unmarshal expression for index " + iname)
+				}
+				exprlist = append(exprlist, expr)
 			}
-			exprlist = append(exprlist, expr)
 		}
 		if len(exprlist) != len(jdoc.IndexOn) {
 			continue
@@ -131,27 +139,68 @@ func loadViewIndexes(b *bucket) ([]*viewIndex, error) {
 			return nil, errors.New("Warning - checksum failed on index " + iname)
 		}
 
-		vidx := viewIndex{
-			name:   iname,
-			bucket: b,
-			using:  catalog.VIEW,
-			ddoc:   &ddoc,
-			on:     exprlist,
+		var index catalog.Index
+
+		if iname == PRIMARY_INDEX {
+			index = &primaryIndex{
+				viewIndex{
+					name:   iname,
+					bucket: b,
+					using:  catalog.VIEW,
+					ddoc:   &ddoc,
+					on:     exprlist,
+				},
+			}
+			indexes = append(indexes, &index)
+		} else {
+			index = &viewIndex{
+				name:   iname,
+				bucket: b,
+				using:  catalog.VIEW,
+				ddoc:   &ddoc,
+				on:     exprlist,
+			}
+			indexes = append(indexes, &index)
 		}
-		indexes = append(indexes, &vidx)
 	}
 
 	return indexes, nil
 }
 
-func newPrimaryIndex(b *bucket, ddname string, view string) *primaryIndex {
+func newPrimaryIndex(b *bucket) (*primaryIndex, error) {
+	ddoc := newPrimaryDDoc()
 	meta := ast.NewFunctionCall("meta", ast.FunctionArgExpressionList{})
 	mdid := ast.NewDotMemberOperator(meta, ast.NewProperty("id"))
-	name := "#primary"
-	ddoc := designdoc{name: ddname, viewname: view}
+	inst := primaryIndex{
+		viewIndex{
+			name:   PRIMARY_INDEX,
+			using:  catalog.VIEW,
+			on:     catalog.IndexKey{mdid},
+			ddoc:   ddoc,
+			bucket: b,
+		},
+	}
+
+	err := inst.putDesignDoc()
+	if err != nil {
+		return nil, err
+	}
+
+	err = inst.WaitForIndex()
+	if err != nil {
+		return nil, err
+	}
+
+	return &inst, nil
+}
+
+func newAllDocsIndex(b *bucket) *primaryIndex {
+	meta := ast.NewFunctionCall("meta", ast.FunctionArgExpressionList{})
+	mdid := ast.NewDotMemberOperator(meta, ast.NewProperty("id"))
+	ddoc := designdoc{name: "", viewname: "_all_docs"}
 	idx := primaryIndex{
 		viewIndex{
-			name:   name,
+			name:   ALLDOCS_INDEX,
 			using:  catalog.VIEW,
 			on:     catalog.IndexKey{mdid},
 			ddoc:   &ddoc,
@@ -159,6 +208,16 @@ func newPrimaryIndex(b *bucket, ddname string, view string) *primaryIndex {
 		},
 	}
 	return &idx
+}
+
+func newPrimaryDDoc() *designdoc {
+	var doc designdoc
+	line := strings.Replace(templPrimary, "$rnd", strconv.Itoa(int(rand.Int31())), -1)
+	doc.mapfn = line
+	doc.reducefn = ""
+	doc.name = "ddl_" + PRIMARY_INDEX
+	doc.viewname = PRIMARY_INDEX
+	return &doc
 }
 
 func generateMap(on catalog.IndexKey, doc *designdoc) error {

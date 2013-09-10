@@ -163,7 +163,6 @@ type bucket struct {
 	pool     *pool
 	name     string
 	indexes  map[string]catalog.Index
-	primary  catalog.PrimaryIndex
 	cbbucket *cb.Bucket
 }
 
@@ -212,11 +211,28 @@ func (b *bucket) IndexByName(name string) (catalog.Index, query.Error) {
 }
 
 func (b *bucket) IndexByPrimary() (catalog.PrimaryIndex, query.Error) {
-	return b.primary, nil
+	idx, ok := b.indexes[PRIMARY_INDEX]
+	if ok {
+		primary := idx.(catalog.PrimaryIndex)
+		return primary, nil
+	}
+	all, ok := b.indexes[ALLDOCS_INDEX]
+	if ok {
+		primary := all.(catalog.PrimaryIndex)
+		return primary, nil
+	}
+	return nil, query.NewError(nil, "no primary index found!")
 }
 
 func (b *bucket) IndexesByPrimary() ([]catalog.PrimaryIndex, query.Error) {
-	return []catalog.PrimaryIndex{b.primary}, nil
+	rv := make([]catalog.PrimaryIndex, 0, 2)
+	for _, index := range b.indexes {
+		switch pi := index.(type) {
+		case catalog.PrimaryIndex:
+			rv = append(rv, pi)
+		}
+	}
+	return rv, nil
 }
 
 func (b *bucket) Indexes() ([]catalog.Index, query.Error) {
@@ -262,7 +278,18 @@ func (b *bucket) Fetch(id string) (*dparval.Value, query.Error) {
 }
 
 func (b *bucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
-	return nil, query.NewError(nil, "Primary index cannot created as it uses _all_docs.")
+
+	// TODO - add USING as a parameter to this call (needs catalog change)
+
+	if _, exists := b.indexes[PRIMARY_INDEX]; exists {
+		return nil, query.NewError(nil, "Primary index already exists")
+	}
+	idx, err := newPrimaryIndex(b)
+	if err != nil {
+		return nil, query.NewError(err, "Error creating primary index")
+	}
+	b.indexes[idx.Name()] = idx
+	return idx, nil
 }
 
 func (b *bucket) CreateIndex(name string, key catalog.IndexKey, using catalog.IndexType) (catalog.Index, query.Error) {
@@ -277,9 +304,9 @@ func (b *bucket) CreateIndex(name string, key catalog.IndexKey, using catalog.In
 		if _, exists := b.indexes[name]; exists {
 			return nil, query.NewError(nil, fmt.Sprintf("Index already exists: %s", name))
 		}
-		idx, err := b.createViewIndex(name, key)
+		idx, err := newViewIndex(name, key, b)
 		if err != nil {
-			return nil, err
+			return nil, query.NewError(err, fmt.Sprintf("Error creating index: %s", name))
 		}
 		b.indexes[idx.Name()] = idx
 		return idx, nil

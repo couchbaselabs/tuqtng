@@ -129,6 +129,10 @@
                   {
                     logDebugTokens("ON"); return ON
                   }
+/[pP][rR][iI][mM][aA][rR][yY]/
+                  {
+                    logDebugTokens("PRIMARY"); return PRIMARY
+                  }
 /[aA][rR][rR][aA][yY]/
                   {
                     logDebugTokens("ARRAY"); return ARRAY

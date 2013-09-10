@@ -63,3 +63,10 @@ const templEnd = `
 }
 // salt: $rnd
 `
+
+const templPrimary = `
+function (doc, meta) {
+  emit(meta.id, null);
+}
+// salt: $rnd
+`

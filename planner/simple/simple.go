@@ -188,7 +188,7 @@ func (this *SimplePlanner) buildCreateIndexStatementPlans(stmt *ast.CreateIndexS
 
 	var lastStep plan.PlanElement
 
-	lastStep = plan.NewCreateIndex(pool.Name(), bucket.Name(), stmt.Name, stmt.Method, stmt.On)
+	lastStep = plan.NewCreateIndex(pool.Name(), bucket.Name(), stmt.Name, stmt.Method, stmt.Primary, stmt.On)
 	if stmt.ExplainOnly {
 		lastStep = plan.NewExplain(lastStep)
 	}

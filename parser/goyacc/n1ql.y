@@ -15,7 +15,7 @@ n int
 f float64}
 
 %token EXPLAIN
-%token CREATE DROP VIEW INDEX ON USING
+%token CREATE DROP PRIMARY VIEW INDEX ON USING
 %token DISTINCT UNIQUE
 %token SELECT AS FROM WHERE
 %token ORDER BY ASC DESC
@@ -61,7 +61,6 @@ select_stmt {
 }
 |
 create_index_stmt {
-	logDebugGrammar("STMT - CREATE INDEX")
 }
 |
 drop_index_stmt {
@@ -71,6 +70,58 @@ drop_index_stmt {
 
 // CREATE INDEX STATEMENT
 create_index_stmt:
+create_primary_index_stmt {
+	logDebugGrammar("STMT - CREATE PRIMARY INDEX")
+}
+|
+create_secondary_index_stmt {
+	logDebugGrammar("STMT - CREATE SECONDARY INDEX")
+}
+;
+
+create_primary_index_stmt:
+CREATE PRIMARY INDEX ON IDENTIFIER {
+	bucket := $5.s
+	createIndexStmt := ast.NewCreateIndexStatement()
+	createIndexStmt.Bucket = bucket
+	createIndexStmt.Primary = true
+	parsingStatement = createIndexStmt
+}
+|
+CREATE PRIMARY INDEX ON COLON IDENTIFIER DOT IDENTIFIER {
+	pool := $6.s
+	bucket := $8.s
+	createIndexStmt := ast.NewCreateIndexStatement()
+	createIndexStmt.Pool = pool
+	createIndexStmt.Bucket = bucket
+	createIndexStmt.Primary = true
+	parsingStatement = createIndexStmt
+}
+|
+CREATE PRIMARY INDEX ON IDENTIFIER USING view_using {
+	method := parsingStack.Pop().(string)
+	bucket := $5.s
+	createIndexStmt := ast.NewCreateIndexStatement()
+	createIndexStmt.Bucket = bucket
+	createIndexStmt.Method = method
+	createIndexStmt.Primary = true
+	parsingStatement = createIndexStmt
+}
+|
+CREATE PRIMARY INDEX ON COLON IDENTIFIER DOT IDENTIFIER USING view_using {
+	method := parsingStack.Pop().(string)
+	bucket := $8.s
+	pool := $6.s
+	createIndexStmt := ast.NewCreateIndexStatement()
+	createIndexStmt.Pool = pool
+	createIndexStmt.Bucket = bucket
+	createIndexStmt.Method = method
+	createIndexStmt.Primary = true
+	parsingStatement = createIndexStmt
+}
+;
+
+create_secondary_index_stmt:
 CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN {
 	on := parsingStack.Pop().(ast.ExpressionList)
 	bucket := $5.s
@@ -79,6 +130,7 @@ CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN {
 	createIndexStmt.On = on
 	createIndexStmt.Bucket = bucket
 	createIndexStmt.Name = name
+	createIndexStmt.Primary = false
 	parsingStatement = createIndexStmt
 }
 |
@@ -92,6 +144,7 @@ CREATE INDEX IDENTIFIER ON COLON IDENTIFIER DOT IDENTIFIER LPAREN expression_lis
 	createIndexStmt.Pool = pool
 	createIndexStmt.Bucket = bucket
 	createIndexStmt.Name = name
+	createIndexStmt.Primary = false
 	parsingStatement = createIndexStmt
 }
 |
@@ -105,6 +158,7 @@ CREATE INDEX IDENTIFIER ON IDENTIFIER LPAREN expression_list RPAREN USING view_u
 	createIndexStmt.Bucket = bucket
 	createIndexStmt.Name = name
 	createIndexStmt.Method = method
+	createIndexStmt.Primary = false
 	parsingStatement = createIndexStmt
 }
 |
@@ -120,6 +174,7 @@ CREATE INDEX IDENTIFIER ON COLON IDENTIFIER DOT IDENTIFIER LPAREN expression_lis
 	createIndexStmt.Bucket = bucket
 	createIndexStmt.Name = name
 	createIndexStmt.Method = method
+	createIndexStmt.Primary = false
 	parsingStatement = createIndexStmt
 }
 ;
