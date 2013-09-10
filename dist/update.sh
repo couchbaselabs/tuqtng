@@ -59,6 +59,7 @@ builddistpackages() {
 
     # mac build
     mkdir -p $DIST/stage
+    cp $DIST/README $DIST/stage
     cp $DIST/start_tutorial.sh $DIST/stage
     cp $DIST/cbq-engine.mac $DIST/stage/cbq-engine
     cp $DIST/cbq.mac $DIST/stage/cbq
@@ -74,6 +75,7 @@ builddistpackages() {
 
     #linux 32
     mkdir -p $DIST/stage
+    cp $DIST/README $DIST/stage
     cp $DIST/start_tutorial.sh $DIST/stage
     cp $DIST/cbq-engine.lin32 $DIST/stage/cbq-engine
     cp $DIST/cbq.lin32 $DIST/stage/cbq
@@ -89,6 +91,7 @@ builddistpackages() {
 
     #linux 64
     mkdir -p $DIST/stage
+    cp $DIST/README $DIST/stage
     cp $DIST/start_tutorial.sh $DIST/stage
     cp $DIST/cbq-engine.lin64 $DIST/stage/cbq-engine
     cp $DIST/cbq.lin64 $DIST/stage/cbq
@@ -104,6 +107,7 @@ builddistpackages() {
 
     #win 32
     mkdir -p $DIST/stage
+    cp $DIST/README $DIST/stage
     cp $DIST/start_tutorial.bat $DIST/stage
     cp $DIST/cbq-engine.win32.exe $DIST/stage/cbq-engine.exe
     cp $DIST/cbq.win32.exe $DIST/stage/cbq.exe
@@ -119,6 +123,7 @@ builddistpackages() {
 
     #win 64
     mkdir -p $DIST/stage
+    cp $DIST/README $DIST/stage
     cp $DIST/start_tutorial.bat $DIST/stage
     cp $DIST/cbq-engine.win64.exe $DIST/stage/cbq-engine.exe
     cp $DIST/cbq.win64.exe $DIST/stage/cbq.exe
