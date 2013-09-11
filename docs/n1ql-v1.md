@@ -63,15 +63,15 @@ The behavior of a SELECT query is best understood as a sequence of steps.  Outpu
 
 The FROM clause is optional.  When it is omitted, the input for the execution of the query is a single empty object.  This allows for the evaluation of N1QL expressions that do not depend on any data.
 
-The most common form of the FROM clause is specifying a single identifier which identifies a bucket name.  The bucket name can optionally be prefixed by an explicit pool name.  When not specified the current default pool is used.  In this form, an alias can optionally be specified with the AS clause.  When spcified this alias is the identifier used to explicitly refer to this data source in the query.  If omitted, the data source is referred to using the bucket name itself.
+The most common form of the FROM clause is specifying a single identifier which identifies a bucket name.  The bucket name can optionally be prefixed by an explicit pool name.  When the pool name is not specified, the current default pool is used. An alias for the bucket name can optionally be specified with the AS clause.  When specified, this alias is the identifier used to explicitly refer to this data source in the query.  If omitted, the data source is referred to using the bucket name itself.
 
-Another usage of the FROM clause specifies a path within a bucket.  In this form, for each document in the specified bucket, the sub-path is evaluated and that value becomes the input to the query.  If a literal integer array index is used it must be non-negative.  If any of the elements of the path are NULL or MISSING for a document in the bucket, that document will not contribute any canidate objects to the rest of the query.  For example:
+Another usage of the FROM clause specifies a path within a bucket.  In this form, for each document in the specified bucket, the sub-path is evaluated and that value becomes the input to the query.  If a literal integer array index is used it must be non-negative.  If any of the elements of the path are NULL or MISSING for a document in the bucket, that document will not contribute any candidate objects to the rest of the query.  For example:
 
     FROM organizations.address
 
 In this example, a bucket named `organizations` contains documents describing each organization.  Each organization document has a field namd `address` which is an object.  Using this syntax each address object becomes the input to the query.
 
-Finally, the most complex usage of the FROM clause allows for path joins within a document.  Conceptually, a document containing a nested array can have each of the members of this array joined with the document.  Each of these joined objectes become the input to the query.  If the element referenced by the OVER path is not an array (any scalar value, NULL or MISSING) then this document will not contribute any canidate objects to the rest of the query.  For example:
+Finally, the most complex usage of the FROM clause allows for path joins within a document.  Conceptually, a document containing a nested array can have each of the members of this array joined with the document.  Each of these joined objects become the input to the query.  If the element referenced by the OVER path is not an array (any scalar value, NULL or MISSING) then this document will not contribute any candidate objects to the rest of the query.  For example:
 
     FROM organizations AS organization OVER employee IN organization.employees
 
@@ -82,7 +82,7 @@ Using this sytnax, a single organization with two employees:
       "employees": [ e1, e2]
     }
 
-Would result in two objectes forming the input for the execution of the query:
+Would result in two objects forming the input for the execution of the query:
 
     {
       "organization": {
@@ -125,7 +125,7 @@ Result object generation depends on whether or not this is an aggregate query.  
 
 Final projection of evaluated result expressions is as follows:
 
-1.  If the result expression list included '*', the result object is the original item returned from the FROM clause.  Otherwise the result object starts empty.
+1.  If the result expression list included '*' and the original item returned from the FROM clause is an object, then all the key/value pairs within this object are added to the result object. If it is not an object, nothing is added to the result object.
 2.  If the result expression list includes `<path>.*`, the path is evaluated.  If the result of this evaluation is an object, all the key/value pairs within this object are added to the result object.  If the result is not an object, nothing is added to the result object.
 3.  For each remaining expression in the result expression list.  If an AS clause was specified, that identifier is used as the key in the result object and the value is the evaluated expression.  If no AS clause was specified, a default name is generated for the key.
 
