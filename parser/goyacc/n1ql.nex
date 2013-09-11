@@ -210,6 +210,10 @@
                   {
                     logDebugTokens("UPDATE"); return UPDATE
                   }
+/[pP][oO][oO][lL]/
+                  {
+                    logDebugTokens("POOL"); return POOL
+                  }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }

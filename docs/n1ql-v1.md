@@ -50,7 +50,7 @@ path:
 
 The SELECT statement is used to query a data source.  The result of a SELECT is an array containing zero or more result objects.
 
-#### Select Procesing
+#### Select Core Processing
 
 The behavior of a SELECT query is best understood as a sequence of steps.  Output objects from a step become input objects to the next step.
 
@@ -63,7 +63,7 @@ The behavior of a SELECT query is best understood as a sequence of steps.  Outpu
 
 The FROM clause is optional.  When it is omitted, the input for the execution of the query is a single empty object.  This allows for the evaluation of N1QL expressions that do not depend on any data.
 
-The most common form of the FROM clause is specifying a single identifier which identifies a database or bucket name.  The bucket name can optionally be prefixed by an explicit pool name.  When not specified the current default pool is used.  In this form, an alias can optionally be specified with the AS clause.  When spcified this alias is the identifier used to explicitly refer to this data source in the query.  If omitted, the data source is referred to using the database name itself.
+The most common form of the FROM clause is specifying a single identifier which identifies a bucket name.  The bucket name can optionally be prefixed by an explicit pool name.  When not specified the current default pool is used.  In this form, an alias can optionally be specified with the AS clause.  When spcified this alias is the identifier used to explicitly refer to this data source in the query.  If omitted, the data source is referred to using the bucket name itself.
 
 Another usage of the FROM clause specifies a path within a bucket.  In this form, for each document in the specified bucket, the sub-path is evaluated and that value becomes the input to the query.  If a literal integer array index is used it must be non-negative.  If any of the elements of the path are NULL or MISSING for a document in the bucket, that document will not contribute any canidate objects to the rest of the query.  For example:
 
@@ -113,7 +113,7 @@ The first clause would make the input to the query be the array of employees.  T
 
 ##### Filtering
 
-If a WHERE clause is specified, the expression is evaluated for each object.  All objects evluating to TRUE are included in the result array.
+If a WHERE clause is specified, the expression is evaluated for each object.  All objects evluating to TRUE are included in the result of the filtering stage.
 
 ##### Result Object Generation
 
@@ -153,11 +153,9 @@ See Appendix 6 for some example projections.
 
 If the DISTINCT or UNIQUE keywords were specified duplicate result objects are removed from the result array.  If neither DISTINCT/UNIQUE keyword was specified, the statement returns all qualifying objects.
 
-Two results are considered duplicate if the projected objects are the same (using the normal procedure for comparing objects).  See the ORDER BY section for more details about this process.
+Two results are considered duplicate if the projected objects are equal (using the normal procedure for comparing objects).  See the ORDER BY section for more details about this process.
 
 ### SELECT Statement
-
-Now, we can expand to consider the full SELECT statement:
 
 select-stmt:
 
@@ -166,6 +164,16 @@ select-stmt:
 ordering-term:
 
 ![](diagram/ordering-term.png)
+
+Now, we can expand to consider the full SELECT statement.
+
+#### Full Select Processing
+
+The output from the Select Core Processing steps is then further processed by the ORDER BY, LIMIT and OFFSET clauses as follows.
+
+1.  Items are placed in the order specified by the ORDER BY expression list
+2.  The first N items are skipped as specified by the OFFSET clause
+3.  No more than M items are returned as specified by the LIMIT clause
 
 #### ORDER BY and LIMIT/OFFSET
 
@@ -273,7 +281,7 @@ Collection expressions allow you to extract information from nested collections 
 The input array is deteremined by the **IN** clause of this expression.  Elements of the array are iterated through, and assigned the `identifier` before the **IN** clause.
 
 * FIRST - evaluate the expr for the first element of the array that satisfies the **WHEN** clause.  If no **WHEN** clause was specfified, evaluate the expr for the first element of the array.
-* ARRAY - array comprehension.  a new array is created containing the result of evaluating the expr for each element in the array satisfying the **WHEN** clause.  If no **WHEN** clause was specified, each element of the array is evaluated and that result is placed in the new array.
+* ARRAY - array comprehension.  a new array is created containing the result of evaluating the expr for each element in the array satisfying the **WHEN** clause.  If no **WHEN** clause was specified, the expr is evaluated for each element of the of the array and that result is placed in the new array.
 
 For example, consider a document containing a nested array of people objects representing children.
 
@@ -548,6 +556,8 @@ The CREATE PRIMARY INDEX is used to request the system create a primary index on
 
 You can optionally specifiy an explicit pool name.  If not specified, the current default pool is used.
 
+If the primary index already exists, this statement succeeds with a warning.
+
 ### CREATE INDEX Statement
 
 create-index-stmt:
@@ -565,7 +575,7 @@ In N1QL v1 only basic path expressions are allowed in the expression list.  Path
 
 * path
 * path.subpath
-* path[literal positive integer index]
+* path[literal non-negative integer index]
 
 ### DROP INDEX Statement
 
@@ -581,7 +591,7 @@ You can optionally specify an explicit pool name.  If it is not specified, the c
 
 Identifiers appear in many places in an N1QL query.  Frequently identifiers are used to described paths within a document, but they are also used in `AS` clauses to introduce new identifiers.
 
-* SELECT - `AS` identifiers in the projection create new names that may be referred to in the ORDER BY claus
+* SELECT - `AS` identifiers in the projection create new names that may be referred to in the ORDER BY clause
 * FROM - `AS` identifiers in the FROM clause create new names that may be referred to anywhere in the query
 * ANY/ALL collection expressions - `AS` identifiers in collection expressions create names that can **ONLY** be used within this collection expression
 
@@ -589,17 +599,19 @@ Introducing the same identifier using `AS` multiple times in a query results in 
 
 When an `AS` identifier collides with a document property in the same scope, the identifier always refers to the `AS` alias and **NOT** the document property.  This allows for consistent behavior in scenarios where an identifier only collides with some of the documents.
 
-The left-most portion of a dotted identifier may refer to the name of the datasource.  For example:
+The left-most portion of a dotted identifier may refer to the name of the bucket.  For example:
 
     SELECT beer.name FROM beer
 
 In this query `beer.name` is simply a more formal way of expressing `name`.
 
-If the identifier is the name of a datasource, it refers to the whole object in the current context.  For example
+If the identifier is the name of a bucket, it refers to the whole object in the current context.  For example
 
     SELECT * FROM beer WHERE beer = {"name": "bud"}
 
-  This query would perform an exact match of candidate documents from the beer datasource against the specified object literal.
+  This query would perform an exact match of candidate documents from the beer bucket against the specified object literal.
+
+Identifiers referring to bucket names, aliases, or document properties are case-sensitive.  Identifiers referring to function names are case-insensitive.
 
 ## Appendix 2 - Functions
 
@@ -685,7 +697,7 @@ There are 6 aggregate functions, SUM, AVG, COUNT, MIN, MAX and ARRAY_AGG.  Aggre
 If the argument the aggregate function is '*' all rows are considered.
 If the argument to the aggregate function is anything else, then if the result of evaluating the expression is Null or Missing, that row is eliminated.
 
-COUNT(expr) - always returns 0 or a positive integer
+COUNT(expr) - the number of items in the group where the result of evaluating expr is not eliminiated.  Always returns 0 or a positive integer.  If DISTINCT keyword is included the results of evaluating expr are compared and duplicate values are eliminiated.
 
 MIN(expr) - min returns the minimum value of all values in the group.  The minimum value is the first non-NULL, non-MISSING value that would result from an ORDER BY on the same expression.  min returns NULL if there are no non-NULL, non-MISSING values.
 
@@ -797,7 +809,9 @@ hex-digit:
 
 ## Appendix 5 - Key/Reserved Words
 
-The following keywords are reserved and cannot be used in document property paths.  All keywords are case-insensitive.
+The following keywords are reserved and cannot be used as identifiers.  All keywords are case-insensitive.
+
+There will be more reserved words in the future to support DDL, DML, compound statements, and the like. To ensure that an identifier does not conflict with a future reserved word, you can escape the identifier with back ticks.
 
 * ALL
 * ALTER
@@ -849,6 +863,7 @@ The following keywords are reserved and cannot be used in document property path
 * ORDER
 * OVER
 * PATH
+* POOL
 * PRIMARY
 * SELECT
 * THEN
@@ -960,7 +975,7 @@ SELECT {"thename": name} AS custom_obj
 
 When doing a document join such as
 
-    SELECT ... FROM contacts AS contact OVER contact.children AS child
+    SELECT ... FROM contacts AS contact OVER child IN contact.children
 
 We agree that there is an internal structure like:
 
@@ -1000,7 +1015,7 @@ There was agreement that this should produce a semantic error.
 
 At this point we can summarize that queries involving a JOIN must prefix all property access with bucket/alias names.  Omitting the prefix in those queries is a semantic error.  Further, for non-JOIN queries, the implementation can convert informal names (omitting bucket/alias) into formal names (containing the bucket/alias).  This will mean no conversions or special rules at data lookup time.
 
-What should `SELECT VALUE() FROM contacts AS contact OVER children AS child` produce?
+What should `SELECT VALUE() FROM contacts AS contact OVER child IN children` produce?
 
 Agreement that it should produce:
 
@@ -1009,7 +1024,7 @@ Agreement that it should produce:
     }
 
 
-What should `SELECT VALUE(contact) FROM contacts AS contact OVER contact.children AS child` produce?
+What should `SELECT VALUE(contact) FROM contacts AS contact OVER child IN contact.children` produce?
 
 Agreement that it should produce:
 
@@ -1027,7 +1042,7 @@ Agreement that it should produce:  (this is because VALUE() is defined to work o
     }
 
 
-What should `SELECT META() FROM contacts AS contact OVER contact.children AS child` produce?
+What should `SELECT META() FROM contacts AS contact OVER child IN contact.children` produce?
 
 Agreement that it should produce semantic error.  Part of the reasoning, is that if we look ahead to future joins of the form:
 
@@ -1041,7 +1056,7 @@ Here it seems clear that META() should just be an error.
 
 In summary, the 0 argument version of META() is only valid for non-join queries.  JOIN queries must provide 1 argument, where that argument is the bucket/alias name.  Otherwise semantic error is returned.
 
-What should `SELECT * FROM contacts.children[0] OVER friends` return?
+What should `SELECT * FROM contacts.children[0] OVER friend IN friends` return?
 
 Agreement that it should be semantnic error.  For now it is safest to simply inform the user they must provide an explicit alias.  We can always improve this later.
 
@@ -1145,6 +1160,13 @@ Users can use the IFNAN, IFPOSINF, and IFNEGINF family of functions to change th
     * Clarified projection of the same identifier
     * Added missing functions
     * Added new appendix describing NaN/+Infinity/-Infinity serialization
+* 2013-09-11 - Additional clarifications
+    * Clarified SELECT core/full processing
+    * Updated wording DISTINCT/FILTER phases
+    * Reworded array comprehension description
+    * Changed positive integer to non-negative integer in index path specification
+    * Changed datasource/database to bucket in many places
+    * Fixed a few remaining refernces to old OVER syntax
 
 ### Open Issues
 
