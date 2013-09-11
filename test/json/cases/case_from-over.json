@@ -263,5 +263,77 @@
                 "type": "contact"
         }
     ]
+    },
+
+
+    {
+        "statements": "SELECT search.category AS most_searched_category, count(*) AS count FROM user_profile AS search_hist OVER search IN search_hist.search_history GROUP BY search.category",
+        "results": [
+        {
+            "count": 11,
+            "most_searched_category": "Films"
+        },
+        {
+            "count": 7,
+            "most_searched_category": "Books"
+        },
+        {
+            "count": 2,
+            "most_searched_category": "Music"
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT search.category, subcat, count(*) AS C FROM user_profile AS search_hist OVER search IN search_hist.search_history OVER subcat IN search.sub-category GROUP BY search.category, subcat HAVING search.category = \"Films\" ORDER BY subcat",
+        "results": [
+        {
+            "C": 4,
+            "category": "Films",
+            "subcat": "Action"
+        },
+        {
+            "C": 2,
+            "category": "Films",
+            "subcat": "Animation"
+        },
+        {
+            "C": 4,
+            "category": "Films",
+            "subcat": "Classic Films"
+        },
+        {
+            "C": 1,
+            "category": "Films",
+            "subcat": "Comedy"
+        },
+        {
+            "C": 2,
+            "category": "Films",
+            "subcat": "Documentary"
+        },
+        {
+            "C": 1,
+            "category": "Films",
+            "subcat": "Drama"
+        },
+        {
+            "C": 2,
+            "category": "Films",
+            "subcat": "Foreign Films"
+        },
+        {
+            "C": 3,
+            "category": "Films",
+            "subcat": "Music & Musicals"
+        },
+        {
+            "C": 5,
+            "category": "Films",
+            "subcat": "Sci-Fi, Fantasy & Horror"
+        }
+    ]
+    
     }
+
 ]

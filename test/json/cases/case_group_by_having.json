@@ -184,6 +184,63 @@
             "title": "Sherlock: Series 1"
         }
     ]
+    },
+
+    {
+        "statements": "SELECT personal_details.state, profile_details.loyalty.membership_type, count(*) AS gold_members FROM user_profile GROUP BY personal_details.state, profile_details.loyalty.membership_type HAVING profile_details.loyalty.membership_type = \"Gold\" ORDER BY personal_details.state",
+        "results": [
+        {
+            "gold_members": 1,
+            "membership_type": "Gold",
+            "state": "Alabama"
+        },
+        {
+            "gold_members": 1,
+            "membership_type": "Gold",
+            "state": "Nebraska"
+        },
+        {
+            "gold_members": 1,
+            "membership_type": "Gold",
+            "state": "Utah"
+        },
+        {
+            "gold_members": 1,
+            "membership_type": "Gold",
+            "state": "Virginia"
+        }
+    ]
+    
+    },
+
+    {
+        "statements": "SELECT profile_details.prefs.ui_theme, count(*) AS theme_usage FROM user_profile GROUP BY profile_details.prefs.ui_theme ORDER BY count(*)",
+        "results": [
+        {
+            "theme_usage": 1,
+            "ui_theme": "Pebbles"
+        },
+        {
+            "theme_usage": 2,
+            "ui_theme": "Grafitti"
+        },
+        {
+            "theme_usage": 2,
+            "ui_theme": "Mountains"
+        },
+        {
+            "theme_usage": 2,
+            "ui_theme": "Planets"
+        },
+        {
+            "theme_usage": 3,
+            "ui_theme": "Wood"
+        },
+        {
+            "theme_usage": 5,
+            "ui_theme": "Tree Tops"
+        }
+    ]
     }
 
 

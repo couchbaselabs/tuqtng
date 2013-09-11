@@ -138,7 +138,29 @@
             "L": 300
         }
     ]
+    },
+
+    {
+        "statements": "SELECT first_name, state, age FROM user_profile.personal_details ORDER BY age, first_name LIMIT 3",
+        "results": [
+        {
+            "age": 17,
+            "first_name": "Valene",
+            "state": "Montana"
+        },
+        {
+            "age": 23,
+            "first_name": "Lavona",
+            "state": "Virginia"
+        },
+        {
+            "age": 25,
+            "first_name": "Jovan",
+            "state": "New York"
+        }
+    ]
     }
+
 
 ]
 

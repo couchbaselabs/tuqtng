@@ -304,6 +304,26 @@
             "asin": "B0094QY3LI"
         }
     ]
+    },
+
+    {
+        "statements": "SELECT profile_details.user_id, profile_details.loyalty, personal_details.age FROM user_profile WHERE (profile_details.loyalty.loyalty_score > 6 AND profile_details.loyalty.loyalty_score < 9) AND (LENGTH(profile_details.loyalty.friends_referred) > 1 OR (profile_details.loyalty.reward_points + profile_details.loyalty.reward_points) > 900) OR  ( (personal_details.age > 55 OR personal_details.age < 20) AND profile_details.prefs.promotion_email = True) OR profile_details.loyalty.board_member = True ORDER BY profile_details.user_id",
+        "results": [
+        {
+            "age": 33,
+            "loyalty": {
+                "friends_referred": [
+                    "Nicholas_66386033",
+                    "Reda_56369093"
+                ],
+                "loyalty_score": 7.665663810642913,
+                "membership_type": "Gold",
+                "redeemed_points": 357,
+                "reward_points": 630
+            },
+            "user_id": "Armanda_57083532"
+        }
+    ]
     }
 
 ]

@@ -67,6 +67,40 @@
             "asin": "B0094QY3LI"
         }
     ]
+    },
+
+    {
+        "statements": "SELECT search_history FROM user_profile WHERE (ANY (search.category = \"Films\" AND ANY subcat = \"Comedy\" OVER subcat IN search.sub-category END) OVER search IN search_history END) AND (ANY (search.category = \"Books\" AND ANY subcat LIKE \"History%\" OVER subcat IN search.sub-category END) OVER search IN search_history END) AND (ANY (search.category = \"Music\" AND ANY subcat LIKE \"%Folk\" OVER subcat IN search.sub-category END) OVER search IN search_history END)",
+        "results": [
+        {
+            "search_history": [
+                {
+                    "category": "Films",
+                    "sub-category": [
+                        "Sci-Fi, Fantasy & Horror",
+                        "Foreign Films",
+                        "Comedy"
+                    ]
+                },
+                {
+                    "category": "Books",
+                    "sub-category": [
+                        "Cookbooks, Food & Wine",
+                        "History",
+                        "NonFiction"
+                    ]
+                },
+                {
+                    "category": "Music",
+                    "sub-category": [
+                        "Alternative",
+                        "Blues and Folk",
+                        "Kid's Music"
+                    ]
+                }
+            ]
+        }
+    ]
     }
 
 
