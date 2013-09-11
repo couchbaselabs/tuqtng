@@ -135,6 +135,17 @@ func (this *SelectStatement) VerifySemantics() error {
 
 	// if this is an aggregate query we need to perform some additional checks
 	if this.IsAggregate() {
+		// valid order by expressions
+		validOrderByExpressions := ExpressionList{}
+		if this.GroupBy != nil {
+			for _, gb := range this.GroupBy {
+				validOrderByExpressions = append(validOrderByExpressions, gb)
+			}
+		}
+		for _, alias := range this.explicitProjectionAliases {
+			validOrderByExpressions = append(validOrderByExpressions, NewProperty(alias))
+		}
+
 		// separate two cases, with group by and without
 		if this.GroupBy == nil {
 			// this means an aggregate function was used, but there was no group by
@@ -151,7 +162,7 @@ func (this *SelectStatement) VerifySemantics() error {
 				}
 			}
 			if this.OrderBy != nil {
-				err := this.OrderBy.VerifyAllAggregateFunctionsOrInThisList(ExpressionList{})
+				err := this.OrderBy.VerifyAllAggregateFunctionsOrInThisList(validOrderByExpressions)
 				if err != nil {
 					return err
 				}
@@ -174,7 +185,7 @@ func (this *SelectStatement) VerifySemantics() error {
 				}
 			}
 			if this.OrderBy != nil {
-				err := this.OrderBy.VerifyAllAggregateFunctionsOrInThisList(this.GroupBy)
+				err := this.OrderBy.VerifyAllAggregateFunctionsOrInThisList(validOrderByExpressions)
 				if err != nil {
 					return err
 				}
