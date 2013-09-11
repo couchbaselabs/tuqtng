@@ -5,7 +5,7 @@ Running the Tutorial
 --------------------
 
 1.  Expand the package archive
-2.  Run ./start_tutorial.sh (windows start_tutorial.bat)
+2.  Run ./start_tutorial.sh (on Windows start_tutorial.bat)
 3.  Open http://localhost:8093/tutorial in your browser
 
 
@@ -21,4 +21,4 @@ Using Couchbase Query with your own Couchbase Server
 Using the command-line interactive query tool
 ---------------------------------------------
 
-./cbq -engine=http://<couchbase-query-engine-server-name>:8093/
+./cbq -engine=http://<cbq-engine-server-name>:8093/
