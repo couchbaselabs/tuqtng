@@ -7,7 +7,7 @@ The query on the right looks for people where the children field is explicitly s
 Try changing the query to IS MISSING.
 
 <pre id="example">
-	SELECT fname 
+	SELECT fname, children
 		FROM tutorial 
 			WHERE children IS NULL
 </pre>

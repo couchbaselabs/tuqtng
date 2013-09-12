@@ -19,6 +19,5 @@ SELECT relation, COUNT(*) AS count, AVG(age) AS avg_age
           GROUP BY relation
             HAVING COUNT(*) > 1
                 ORDER BY AVG(age) DESC
-                    LIMIT 1
-                        OFFSET 1
+                    LIMIT 1 OFFSET 1
 </pre>

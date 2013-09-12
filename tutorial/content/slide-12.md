@@ -7,7 +7,7 @@ In the example on the right we only return people having at least one child and 
 Try changing AND to OR.
 
 <pre id="example">
-SELECT fname 
+SELECT fname, email, children
     FROM tutorial 
         WHERE LENGTH(children) > 0 AND email LIKE '%@gmail.com'
 </pre>

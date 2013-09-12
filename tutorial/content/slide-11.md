@@ -9,7 +9,7 @@ The expression after the OVER clause describes which array we want to work with.
 Try changing ANY to ALL.
 
 <pre id="example">
-SELECT fname 
+SELECT fname, children
     FROM tutorial 
         WHERE ANY child.age > 10 OVER child IN tutorial.children END
 </pre>
