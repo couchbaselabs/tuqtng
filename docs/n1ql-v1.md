@@ -1,4 +1,4 @@
-# Non-first normal form Query Language v1 (N1QL v1)
+# N1QL&mdash;Query Language for N1NF (Non-1st Normal Form): v1
 
 * Status: DRAFT/PROPOSAL
 * Latest: [nq1l-v1](https://github.com/couchbaselabs/tuqtng/blob/master/docs/n1ql-v1.md)
