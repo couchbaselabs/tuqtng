@@ -385,6 +385,11 @@
             "user_id": "Reda_56369093"
         }
     ]
+    },
+
+    {
+        "statements": "SELECT name FROM tweets WHERE user.id_str = \"6253287\"",
+        "matchStatements": "SELECT name FROM tweets WHERE \"6253287\" = user.id_str"
     }
 
 ]
