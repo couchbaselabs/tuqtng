@@ -2,7 +2,7 @@
 
 * Status: DRAFT/PROPOSAL
 * Latest: [nq1l-v1](https://github.com/couchbaselabs/tuqtng/blob/master/docs/n1ql-v1.md)
-* Modified: 2013-10-06
+* Modified: 2013-09-12
 
 ## Summary
 
@@ -1167,6 +1167,8 @@ Users can use the IFNAN, IFPOSINF, and IFNEGINF family of functions to change th
     * Changed positive integer to non-negative integer in index path specification
     * Changed datasource/database to bucket in many places
     * Fixed a few remaining refernces to old OVER syntax
+* 2013-09-12 - Minor cleanup
+    * Tweak grammar of DISTINCT in functionc all
 
 ### Open Issues
 
