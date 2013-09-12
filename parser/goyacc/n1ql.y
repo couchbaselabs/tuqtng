@@ -40,12 +40,12 @@ f float64}
 %token ANY ALL OVER FIRST ARRAY IN
 %left OR
 %left AND
-%left DOT LBRACKET
 %left EQ LT LTE GT GTE NE LIKE
 %left PLUS MINUS
 %left MULT DIV MOD CONCAT
 %left IS
 %right NOT
+%left DOT LBRACKET
 
 %%
 

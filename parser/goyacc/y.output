@@ -2280,11 +2280,13 @@ state 157
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	MULT  shift 104
 	DIV  shift 105
 	CONCAT  shift 107
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	MOD  shift 106
 	.  reduce 67 (src line 590)
 
@@ -2316,11 +2318,13 @@ state 158
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	MULT  shift 104
 	DIV  shift 105
 	CONCAT  shift 107
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	MOD  shift 106
 	.  reduce 68 (src line 598)
 
@@ -2352,8 +2356,10 @@ state 159
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	.  reduce 69 (src line 606)
 
 
@@ -2384,8 +2390,10 @@ state 160
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	.  reduce 70 (src line 614)
 
 
@@ -2416,8 +2424,10 @@ state 161
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	.  reduce 71 (src line 622)
 
 
@@ -2448,8 +2458,10 @@ state 162
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	.  reduce 72 (src line 630)
 
 
@@ -2575,6 +2587,7 @@ state 165
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	PLUS  shift 102
 	MINUS  shift 103
 	MULT  shift 104
@@ -2582,6 +2595,7 @@ state 165
 	CONCAT  shift 107
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	MOD  shift 106
 	.  reduce 75 (src line 654)
 
@@ -2613,6 +2627,7 @@ state 166
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	PLUS  shift 102
 	MINUS  shift 103
 	MULT  shift 104
@@ -2620,6 +2635,7 @@ state 166
 	CONCAT  shift 107
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	MOD  shift 106
 	.  reduce 76 (src line 662)
 
@@ -2651,6 +2667,7 @@ state 167
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	PLUS  shift 102
 	MINUS  shift 103
 	MULT  shift 104
@@ -2658,6 +2675,7 @@ state 167
 	CONCAT  shift 107
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	MOD  shift 106
 	.  reduce 77 (src line 670)
 
@@ -2689,6 +2707,7 @@ state 168
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	PLUS  shift 102
 	MINUS  shift 103
 	MULT  shift 104
@@ -2696,6 +2715,7 @@ state 168
 	CONCAT  shift 107
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	MOD  shift 106
 	.  reduce 78 (src line 678)
 
@@ -2727,6 +2747,7 @@ state 169
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	PLUS  shift 102
 	MINUS  shift 103
 	MULT  shift 104
@@ -2734,6 +2755,7 @@ state 169
 	CONCAT  shift 107
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	MOD  shift 106
 	.  reduce 79 (src line 686)
 
@@ -2765,6 +2787,7 @@ state 170
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	PLUS  shift 102
 	MINUS  shift 103
 	MULT  shift 104
@@ -2772,6 +2795,7 @@ state 170
 	CONCAT  shift 107
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	MOD  shift 106
 	.  reduce 80 (src line 694)
 
@@ -2803,6 +2827,7 @@ state 171
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	PLUS  shift 102
 	MINUS  shift 103
 	MULT  shift 104
@@ -2810,6 +2835,7 @@ state 171
 	CONCAT  shift 107
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	MOD  shift 106
 	.  reduce 81 (src line 702)
 
@@ -3455,6 +3481,7 @@ state 215
 	expr:  expr.IS VALUED 
 	expr:  expr.IS NOT VALUED 
 
+	LBRACKET  shift 119
 	PLUS  shift 102
 	MINUS  shift 103
 	MULT  shift 104
@@ -3462,6 +3489,7 @@ state 215
 	CONCAT  shift 107
 	NOT  shift 117
 	IS  shift 120
+	DOT  shift 118
 	MOD  shift 106
 	.  reduce 82 (src line 710)
 
@@ -4574,9 +4602,9 @@ state 284
 99 working sets used
 memory: parser 679/30000
 128 extra closures
-1452 shift entries, 1 exceptions
+1480 shift entries, 1 exceptions
 123 goto entries
 382 entries saved by goto default
 Optimizer space used: output 1001/30000
-1001 table entries, 291 zero
+1001 table entries, 285 zero
 maximum spread: 91, maximum offset: 283

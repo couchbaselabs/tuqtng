@@ -310,6 +310,17 @@
         "statements": "SELECT profile_details.user_id, profile_details.loyalty, personal_details.age FROM user_profile WHERE (profile_details.loyalty.loyalty_score > 6 AND profile_details.loyalty.loyalty_score < 9) AND (LENGTH(profile_details.loyalty.friends_referred) > 1 OR (profile_details.loyalty.reward_points + profile_details.loyalty.reward_points) > 900) OR  ( (personal_details.age > 55 OR personal_details.age < 20) AND profile_details.prefs.promotion_email = True) OR profile_details.loyalty.board_member = True ORDER BY profile_details.user_id",
         "results": [
         {
+            "age": 54,
+            "loyalty": {
+                "friends_referred": [],
+                "loyalty_score": 7.983110639312416,
+                "membership_type": "Gold",
+                "redeemed_points": 2016,
+                "reward_points": 2058
+            },
+            "user_id": "Ardelia_91499701"
+        },
+        {
             "age": 33,
             "loyalty": {
                 "friends_referred": [
@@ -322,6 +333,56 @@
                 "reward_points": 630
             },
             "user_id": "Armanda_57083532"
+        },
+        {
+            "age": 49,
+            "loyalty": {
+                "friends_referred": [
+                    "Ardelia_91499701"
+                ],
+                "loyalty_score": 6.991706946717727,
+                "membership_type": "Silver",
+                "redeemed_points": 1152,
+                "reward_points": 1404
+            },
+            "user_id": "Casey_50744697"
+        },
+        {
+            "age": 46,
+            "loyalty": {
+                "friends_referred": [],
+                "loyalty_score": 7.065630034442833,
+                "membership_type": "Gold",
+                "redeemed_points": 777,
+                "reward_points": 546
+            },
+            "user_id": "Darrell_24316368"
+        },
+        {
+            "age": 23,
+            "loyalty": {
+                "friends_referred": [
+                    "Jovan_57838602"
+                ],
+                "loyalty_score": 6.649162416253482,
+                "membership_type": "Silver",
+                "redeemed_points": 1440,
+                "reward_points": 504
+            },
+            "user_id": "Lavona_56124224"
+        },
+        {
+            "age": 44,
+            "loyalty": {
+                "friends_referred": [
+                    "Darrell_24316368"
+                ],
+                "loyalty_score": 6.7559905696985805,
+                "membership_type": "Silver",
+                "redeemed_points": 1386,
+                "reward_points": 1476
+            },
+            "user_id": "Reda_56369093"
         }
     ]
     }
