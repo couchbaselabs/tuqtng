@@ -390,6 +390,53 @@
     {
         "statements": "SELECT name FROM tweets WHERE user.id_str = \"6253287\"",
         "matchStatements": "SELECT name FROM tweets WHERE \"6253287\" = user.id_str"
-    }
+    },
 
+    {
+        "statements" : "SELECT id FROM orders WHERE ANY product == \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "results" : [
+        {
+            "id": "1234"
+        },
+        {
+            "id": "1235"
+        }
+    ]
+    },
+
+    {
+        "statements" : "SELECT id FROM orders WHERE ALL product <> \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "results" : [
+        {
+            "id": "1200"
+        },
+        {
+            "id": "1236"
+        }
+    ]
+    },
+
+    {
+        "statements" : "SELECT id FROM orders WHERE NOT ALL product != \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "results" : [
+        {
+            "id": "1234"
+        },
+        {
+            "id": "1235"
+        }
+    ]
+    },
+
+    {
+        "statements" : "SELECT id FROM orders WHERE ALL product != \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "results" : [
+        {
+            "id": "1200"
+        },
+        {
+            "id": "1236"
+        }
+    ]
+    }
 ]

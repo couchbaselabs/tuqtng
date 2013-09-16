@@ -82,5 +82,84 @@
         },
         {}
         ]
+    },
+
+    {
+        "statements" : "select DISTINCT (ARRAY ol.productId OVER ol IN orderlines END) AS A FROM orders",
+        "results" : [
+        {
+            "A": [
+                "coffee01",
+                "sugar22"
+            ]
+        },
+        {
+            "A": [
+                "coffee01",
+                "tea111"
+            ]
+        },
+        {
+            "A": [
+                "tea111",
+                "sugar22"
+            ]
+        }
+    ]
+
+    },
+
+    {
+        "statements" : "select id FROM orders WHERE ANY product = \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "results" : [
+        {
+            "id": "1234"
+        },
+        {
+            "id": "1235"
+        }
+    ]
+    },
+
+    {
+        "statements" : "select id from orders WHERE ARRAY ol.productId OVER ol IN orderlines END = [ \"coffee01\", \"sugar22\" ]",
+        "results" : [
+        {
+            "id": "1200"
+        },
+        {
+            "id": "1236"
+        }
+    ]
+    },
+
+    {
+        "statements" : "SELECT profile_details.user_id, profile_details.loyalty, personal_details.age FROM user_profile WHERE (profile_details.loyalty.loyalty_score > 6.7 AND profile_details.loyalty.loyalty_score < 9) AND ( ANY friend OVER friend IN profile_details.loyalty.friends_referred END AND (profile_details.loyalty.reward_points + profile_details.loyalty.redeemed_points) > 1100) AND  ( (personal_details.age > 45 OR personal_details.age < 35) ) OR profile_details.loyalty.board_member <> True ORDER BY profile_details.user_id",
+        "results" : [
+        {
+            "age": 49,
+            "loyalty": {
+                "friends_referred": [
+                    "Ardelia_91499701"
+                ],
+                "loyalty_score": 6.991706946717727,
+                "membership_type": "Silver",
+                "redeemed_points": 1152,
+                "reward_points": 1404
+            },
+            "user_id": "Casey_50744697"
+        }
+    ]
+    },
+
+    {
+        "statements" : "SELECT id FROM orders WHERE ANY product == \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END AND ANY qty > 1 OVER qty IN ARRAY ol.qty OVER ol IN orderlines END END",
+        "results" : [
+        {
+            "id": "1234"
+        }
+    ]
     }
+
+
 ]

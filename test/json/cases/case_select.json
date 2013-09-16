@@ -452,6 +452,104 @@
             }
         }
     ]
+    },
+
+    {
+        "statements" : "SELECT a FROM complex_json WHERE a IS VALUED",
+        "results" : [
+        {
+            "a": 1
+        },
+        {
+            "a": "str"
+        },
+        {
+            "a": true
+        },
+        {
+            "a": [
+                0,
+                1
+            ]
+        },
+        {
+            "a": {
+                "f1": 1,
+                "f2": 2
+            }
+        }
+    ]
+    },
+
+    {
+        "statements" : "SELECT a FROM complex_json WHERE a IS NULL",
+        "results" : [
+        {
+            "a": null
+        }
+    ]
+    },
+
+    {
+        "statements" : "SELECT a FROM complex_json WHERE a = \"str\"",
+        "results" : [
+        {
+            "a": "str"
+        }
+    ]
+    },
+
+    {
+        "statements" : "SELECT `a.b_c.d` FROM complex_json",
+        "results" : [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {
+            "a.b_c.d": 99
+        }
+    ]
+    },
+
+    {
+        "statements" : "SELECT `b.c` FROM complex_json",
+        "results" : [
+        {
+            "b.c": 4
+        },
+        {
+            "b.c": 5
+        },
+        {},
+        {},
+        {},
+        {}
+    ]
+    },
+
+    {
+        "statements" : "SELECT b.c FROM complex_json",
+        "results" : [
+        {
+            "c": {
+                "e": [
+                    5,
+                    6
+                ],
+                "f": [
+                    7,
+                    8
+                ]
+            }
+        },
+        {},
+        {},
+        {},
+        {},
+        {}
+    ]
     }
 
 ]

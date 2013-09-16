@@ -101,7 +101,54 @@
             ]
         }
     ]
-    }
+    },
 
+    {
+        "statements" : "SELECT id FROM orders WHERE ALL product LIKE \"tea_11\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "results" : [
+    ]
+    },
+
+    {
+        "statements" : "SELECT id FROM orders WHERE ANY product LIKE \"______\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "results" : [
+        {
+            "id": "1234"
+        },
+        {
+            "id": "1235"
+        }
+    ]
+    },
+
+    {
+        "statements" : "SELECT id FROM orders WHERE ALL product NOT LIKE \"tea11%\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "results" : [
+        {
+            "id": "1200"
+        },
+        {
+            "id": "1236"
+        }
+    ]
+    },
+
+    {
+        "statements" : "SELECT id FROM orders WHERE ANY product NOT LIKE \"tea11%\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "results" : [
+        {
+            "id": "1200"
+        },
+        {
+            "id": "1234"
+        },
+        {
+            "id": "1235"
+        },
+        {
+            "id": "1236"
+        }
+    ]
+    }
 
 ]
