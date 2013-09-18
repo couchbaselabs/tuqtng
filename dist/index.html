@@ -111,9 +111,9 @@ tuqtng is a <a href="http://labs.couchbase.com/">couchbase labs</a> project
 <script type="text/javascript">
     $(function() {
         $.ajax("version.json").success(function(d) {
-            $("#server-version").text("v" + d.version);
-            $("#client-version").text("v" + d.version);
-            $("#tutorial-version").text("v" + d.version);
+            $("#server-version").text(d.version);
+            $("#client-version").text(d.version);
+            $("#tutorial-version").text(d.version);
         });
         $.ajax("benchmark.txt").success(function(d) {
             $("#benchmark").text(d);
