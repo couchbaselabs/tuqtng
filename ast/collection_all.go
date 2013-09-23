@@ -19,6 +19,15 @@ type CollectionAllOperator struct {
 }
 
 func NewCollectionAllOperator(condition Expression, over Expression, as string) *CollectionAllOperator {
+	if as == "" {
+		prop := expressionEndsInProperty(over)
+		if prop != nil {
+			candidateName, uniq := propertyName(prop, []string{})
+			if uniq {
+				as = candidateName
+			}
+		}
+	}
 	return &CollectionAllOperator{
 		"all",
 		CollectionOperator{

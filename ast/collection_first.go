@@ -19,6 +19,15 @@ type CollectionFirstOperator struct {
 }
 
 func NewCollectionFirstOperator(condition Expression, over Expression, as string, output Expression) *CollectionFirstOperator {
+	if as == "" {
+		prop := expressionEndsInProperty(over)
+		if prop != nil {
+			candidateName, uniq := propertyName(prop, []string{})
+			if uniq {
+				as = candidateName
+			}
+		}
+	}
 	return &CollectionFirstOperator{
 		"first",
 		CollectionOperator{

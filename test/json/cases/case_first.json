@@ -90,6 +90,35 @@
             "$1": "Euros Lyn"
         }
     ]
+    },
+    {
+        "statements": "SELECT FIRST children OVER children END AS first_child FROM contacts",
+        "results": [
+        {
+            "first_child": {
+                "age": 17,
+                "gender": "m",
+                "name": "aiden"
+            }
+        },
+        {
+            "first_child": {
+                "age": 17,
+                "gender": "f",
+                "name": "xena"
+            }
+        },
+        {},
+        {},
+        {
+            "first_child": {
+                "age": 17,
+                "gender": "m",
+                "name": "abama"
+            }
+        },
+        {}
+        ]
     }
 
 ]

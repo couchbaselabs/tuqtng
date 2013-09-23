@@ -844,11 +844,27 @@ ANY expr OVER IDENTIFIER IN expr END {
 	parsingStack.Push(collectionAny)
 }
 |
+ANY expr OVER expr END {
+	logDebugGrammar("ANY OVER")
+	sub := parsingStack.Pop().(ast.Expression)
+	condition := parsingStack.Pop().(ast.Expression)
+	collectionAny := ast.NewCollectionAnyOperator(condition, sub, "")
+	parsingStack.Push(collectionAny)
+}
+|
 ALL expr OVER IDENTIFIER IN expr END {
 	logDebugGrammar("ALL OVER")
 	sub := parsingStack.Pop().(ast.Expression)
 	condition := parsingStack.Pop().(ast.Expression)
 	collectionAny := ast.NewCollectionAllOperator(condition, sub, $4.s)
+	parsingStack.Push(collectionAny)
+}
+|
+ALL expr OVER expr END {
+	logDebugGrammar("ALL OVER")
+	sub := parsingStack.Pop().(ast.Expression)
+	condition := parsingStack.Pop().(ast.Expression)
+	collectionAny := ast.NewCollectionAllOperator(condition, sub, "")
 	parsingStack.Push(collectionAny)
 }
 |
@@ -861,11 +877,28 @@ FIRST expr OVER IDENTIFIER IN expr WHEN expr END {
 	parsingStack.Push(collectionFirst)
 }
 |
+FIRST expr OVER expr WHEN expr END {
+	logDebugGrammar("FIRST OVER")
+	condition := parsingStack.Pop().(ast.Expression)
+	sub := parsingStack.Pop().(ast.Expression)
+	output := parsingStack.Pop().(ast.Expression)
+	collectionFirst := ast.NewCollectionFirstOperator(condition, sub, "", output)
+	parsingStack.Push(collectionFirst)
+}
+|
 FIRST expr OVER IDENTIFIER IN expr END {
 	logDebugGrammar("FIRST OVER")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
 	collectionFirst := ast.NewCollectionFirstOperator(nil, sub, $4.s, output)
+	parsingStack.Push(collectionFirst)
+}
+|
+FIRST expr OVER expr END {
+	logDebugGrammar("FIRST OVER")
+	sub := parsingStack.Pop().(ast.Expression)
+	output := parsingStack.Pop().(ast.Expression)
+	collectionFirst := ast.NewCollectionFirstOperator(nil, sub, "", output)
 	parsingStack.Push(collectionFirst)
 }
 |
@@ -878,11 +911,28 @@ ARRAY expr OVER IDENTIFIER IN expr WHEN expr END {
 	parsingStack.Push(collectionArray)
 }
 |
+ARRAY expr OVER expr WHEN expr END {
+	logDebugGrammar("ARRAY OVER WHEN")
+	condition := parsingStack.Pop().(ast.Expression)
+	sub := parsingStack.Pop().(ast.Expression)
+	output := parsingStack.Pop().(ast.Expression)
+	collectionArray := ast.NewCollectionArrayOperator(condition, sub, "", output)
+	parsingStack.Push(collectionArray)
+}
+|
 ARRAY expr OVER IDENTIFIER IN expr END {
 	logDebugGrammar("ARRAY OVER")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
 	collectionArray := ast.NewCollectionArrayOperator(nil, sub, $4.s, output)
+	parsingStack.Push(collectionArray)
+}
+|
+ARRAY expr OVER expr END {
+	logDebugGrammar("ARRAY OVER")
+	sub := parsingStack.Pop().(ast.Expression)
+	output := parsingStack.Pop().(ast.Expression)
+	collectionArray := ast.NewCollectionArrayOperator(nil, sub, "", output)
 	parsingStack.Push(collectionArray)
 }
 |

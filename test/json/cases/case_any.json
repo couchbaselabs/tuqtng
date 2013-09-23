@@ -102,7 +102,20 @@
         }
     ]
     },
-
+    {
+        "statements": "SELECT name FROM contacts WHERE ANY children.age > 14 OVER children END",
+        "results": [
+          {
+            "name": "dave"
+          },
+          {
+            "name": "earl"
+          },
+          {
+            "name": "ian"
+          }
+        ]
+    },
     {
         "statements" : "SELECT id FROM orders WHERE ALL product LIKE \"tea_11\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
         "results" : [

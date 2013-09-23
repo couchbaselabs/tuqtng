@@ -391,7 +391,17 @@
         "statements": "SELECT name FROM tweets WHERE user.id_str = \"6253287\"",
         "matchStatements": "SELECT name FROM tweets WHERE \"6253287\" = user.id_str"
     },
-
+    {
+        "statements": "SELECT title FROM catalog WHERE (ALL length(genre) > 5 OVER details.genre END)",
+        "results": [
+        {
+            "title": "Inferno"
+        },
+        {
+            "title": "Zero Dark Thirty"
+        }
+    ]
+    },
     {
         "statements" : "SELECT id FROM orders WHERE ANY product == \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
         "results" : [
