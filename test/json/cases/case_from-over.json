@@ -334,6 +334,171 @@
         }
     ]
     
+    },
+    {
+        "statements": "SELECT * FROM contacts AS contact OVER contact.children",
+        "results": [
+        {
+            "children": {
+                "age": 17,
+                "gender": "m",
+                "name": "aiden"
+            },
+            "contact": {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "aiden"
+                    },
+                    {
+                        "age": 2,
+                        "gender": "f",
+                        "name": "bill"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "dave",
+                "type": "contact"
+            }
+        },
+        {
+            "children": {
+                "age": 2,
+                "gender": "f",
+                "name": "bill"
+            },
+            "contact": {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "aiden"
+                    },
+                    {
+                        "age": 2,
+                        "gender": "f",
+                        "name": "bill"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "dave",
+                "type": "contact"
+            }
+        },
+        {
+            "children": {
+                "age": 17,
+                "gender": "f",
+                "name": "xena"
+            },
+            "contact": {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "f",
+                        "name": "xena"
+                    },
+                    {
+                        "age": 2,
+                        "gender": "m",
+                        "name": "yuri"
+                    }
+                ],
+                "hobbies": [
+                    "surfing"
+                ],
+                "name": "earl",
+                "type": "contact"
+            }
+        },
+        {
+            "children": {
+                "age": 2,
+                "gender": "m",
+                "name": "yuri"
+            },
+            "contact": {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "f",
+                        "name": "xena"
+                    },
+                    {
+                        "age": 2,
+                        "gender": "m",
+                        "name": "yuri"
+                    }
+                ],
+                "hobbies": [
+                    "surfing"
+                ],
+                "name": "earl",
+                "type": "contact"
+            }
+        },
+        {
+            "children": {
+                "age": 17,
+                "gender": "m",
+                "name": "abama"
+            },
+            "contact": {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "abama"
+                    },
+                    {
+                        "age": 21,
+                        "gender": "m",
+                        "name": "bebama"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "ian",
+                "type": "contact"
+            }
+        },
+        {
+            "children": {
+                "age": 21,
+                "gender": "m",
+                "name": "bebama"
+            },
+            "contact": {
+                "children": [
+                    {
+                        "age": 17,
+                        "gender": "m",
+                        "name": "abama"
+                    },
+                    {
+                        "age": 21,
+                        "gender": "m",
+                        "name": "bebama"
+                    }
+                ],
+                "hobbies": [
+                    "golf",
+                    "surfing"
+                ],
+                "name": "ian",
+                "type": "contact"
+            }
+        }
+    ]
     }
 
 ]

@@ -443,6 +443,12 @@ data_source over_source {
 ;
 
 over_source:
+OVER path {
+	logDebugGrammar("OVER IN")
+	proj := parsingStack.Pop().(ast.Expression)
+	parsingStack.Push(&ast.From{Projection: proj, As: ""})
+}
+|
 OVER IDENTIFIER IN path {
 	logDebugGrammar("OVER IN")
 	proj := parsingStack.Pop().(ast.Expression)

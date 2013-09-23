@@ -112,6 +112,7 @@ var validQueries = []string{
 	`SELECT * FROM abucket AS buck`,
 	`SELECT * FROM abucket AS buck OVER address IN buck.addresses`,
 	`SELECT * FROM abucket AS buck OVER address IN buck.addresses OVER line IN address.lines`,
+	`SELECT * FROM abucket AS buck OVER buck.addresses`,
 
 	`SELECT DISTINCT name from abucket`,
 	`SELECT UNIQUE name from abucket`,
