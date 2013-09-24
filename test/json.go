@@ -10,6 +10,8 @@
 package test
 
 import (
+	"time"
+
 	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
@@ -73,7 +75,8 @@ func Run(qc network.QueryChannel, q string) ([]interface{}, []query.Error, query
 }
 
 func Start(site, pool string) network.QueryChannel {
+	timeout := -1 * time.Second
 	qc := make(network.QueryChannel)
-	go server.Server("TEST", site, pool, qc)
+	go server.Server("TEST", site, pool, qc, &timeout)
 	return qc
 }
