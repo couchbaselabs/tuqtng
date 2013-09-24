@@ -10,6 +10,8 @@
 package interpreted
 
 import (
+	"time"
+
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
@@ -34,7 +36,30 @@ func NewExecutor(site catalog.Site, defaultPool string) *InterpretedExecutor {
 	}
 }
 
-func (this *InterpretedExecutor) Execute(optimalPlan *plan.Plan, q network.Query) {
+func (this *InterpretedExecutor) Execute(optimalPlan *plan.Plan, q network.Query, timeout *time.Duration) {
+	stopChannel := make(misc.StopChannel)
+	if timeout.Nanoseconds() < 0 {
+		this.executeInternal(optimalPlan, q, stopChannel)
+	} else {
+		c := make(chan error, 1)
+		go func() {
+			this.executeInternal(optimalPlan, q, stopChannel)
+			c <- nil
+		}()
+		select {
+		case <-c:
+			return
+		case <-time.After(*timeout):
+			clog.To(executor.CHANNEL, "simple executor timeout trigger")
+			close(stopChannel)
+			clog.To(executor.CHANNEL, "stop channel closed")
+		}
+		<-c
+		q.Response().SendError(query.NewTimeoutError(timeout))
+	}
+}
+
+func (this *InterpretedExecutor) executeInternal(optimalPlan *plan.Plan, q network.Query, timeoutStopChannel misc.StopChannel) {
 
 	clog.To(executor.CHANNEL, "simple executor started")
 
@@ -48,6 +73,7 @@ func (this *InterpretedExecutor) Execute(optimalPlan *plan.Plan, q network.Query
 
 	// create a stop channel
 	stopChannel := make(misc.StopChannel)
+	defer close(stopChannel)
 	// set it on the query object, so HTTP layer can
 	// stop us if the client goes away
 	q.SetStopChannel(stopChannel)
@@ -76,6 +102,9 @@ func (this *InterpretedExecutor) Execute(optimalPlan *plan.Plan, q network.Query
 					}
 				}
 			}
+		case _, ok = <-timeoutStopChannel:
+			clog.To(executor.CHANNEL, "simple execution aborted, timeout")
+			return
 		}
 	}
 

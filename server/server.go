@@ -12,6 +12,7 @@ package server
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/couchbaselabs/clog"
 
@@ -42,7 +43,7 @@ func Site(s string) (catalog.Site, error) {
 }
 
 func Server(version, siteName, defaultPoolName string,
-	queryChannel network.QueryChannel) error {
+	queryChannel network.QueryChannel, timeout *time.Duration) error {
 	site, err := Site(siteName)
 	if err != nil {
 		return fmt.Errorf("Unable to access site %s, err: %v", siteName, err)
@@ -63,13 +64,14 @@ func Server(version, siteName, defaultPoolName string,
 
 	// dispatch each query that comes in
 	for query := range queryChannel {
-		go Dispatch(query, comp, exec)
+		go Dispatch(query, comp, exec, timeout)
 	}
 
 	return nil
 }
 
-func Dispatch(q network.Query, comp compiler.Compiler, exec executor.Executor) {
+func Dispatch(q network.Query, comp compiler.Compiler, exec executor.Executor,
+	timeout *time.Duration) {
 	request := q.Request()
 	response := q.Response()
 
@@ -80,6 +82,6 @@ func Dispatch(q network.Query, comp compiler.Compiler, exec executor.Executor) {
 			response.SendError(err)
 			return
 		}
-		exec.Execute(plan, q)
+		exec.Execute(plan, q, timeout)
 	}
 }

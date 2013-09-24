@@ -19,6 +19,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/couchbaselabs/tuqtng/misc"
 )
@@ -144,6 +145,10 @@ func NewBucketDoesNotExist(bucket string) Error {
 
 func NewPoolDoesNotExist(pool string) Error {
 	return &err{level: EXCEPTION, ICode: 4041, IKey: "pool_not_found", InternalMsg: fmt.Sprintf("Pool %s does not exist", pool), InternalCaller: misc.CallerN(1)}
+}
+
+func NewTimeoutError(timeout *time.Duration) Error {
+	return &err{level: EXCEPTION, ICode: 4080, IKey: "timeout", InternalMsg: fmt.Sprintf("Timeout %v exceeded", timeout), InternalCaller: misc.CallerN(1)}
 }
 
 func NewTotalRowsInfo(rows int) Error {

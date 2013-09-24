@@ -14,6 +14,7 @@ import (
 	"os"
 	"os/signal"
 	"runtime/pprof"
+	"time"
 
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/tuqtng/ast"
@@ -31,6 +32,7 @@ var logKeys = flag.String("log", "", "Log keywords, comma separated")
 var devMode = flag.Bool("dev", false, "Developer Mode")
 var profileMode = flag.Bool("profile", false, "Profile Mode")
 var staticPath = flag.String("staticPath", "static", "Path to static content")
+var queryTimeout = flag.Duration("queryTimeout", -1*time.Second, "Query execution timeout, negative values disable timeout")
 
 var devModeDefaultLogKeys = []string{"HTTP", "NETWORK", "PIPELINE", "CATALOG", "PLANNER", "SCAN", "OPTIMIZER"}
 
@@ -57,7 +59,7 @@ func main() {
 	httpEndpoint := http.NewHttpEndpoint(*addr, *profileMode, *staticPath)
 	httpEndpoint.SendQueriesTo(queryChannel)
 
-	err := server.Server(VERSION, *couchbaseSite, *defaultPoolName, queryChannel)
+	err := server.Server(VERSION, *couchbaseSite, *defaultPoolName, queryChannel, queryTimeout)
 	if err != nil {
 		clog.Fatalf("Unable to run server, err: %v", err)
 	}

@@ -10,12 +10,14 @@
 package executor
 
 import (
+	"time"
+
 	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
 )
 
 type Executor interface {
-	Execute(*plan.Plan, network.Query)
+	Execute(*plan.Plan, network.Query, *time.Duration)
 }
 
 const CHANNEL = "EXECUTOR"
