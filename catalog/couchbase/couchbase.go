@@ -246,7 +246,10 @@ func (b *bucket) Indexes() ([]catalog.Index, query.Error) {
 func (b *bucket) BulkFetch(ids []string) (map[string]*dparval.Value, query.Error) {
 	rv := make(map[string]*dparval.Value, 0)
 
-	bulkResponse := b.cbbucket.GetBulk(ids)
+	bulkResponse, err := b.cbbucket.GetBulk(ids)
+	if err != nil {
+		return nil, query.NewError(err, "Error doing bulk get")
+	}
 	for k, v := range bulkResponse {
 
 		doc := dparval.NewValueFromBytes(v.Body)
