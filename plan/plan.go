@@ -49,10 +49,11 @@ type ScanRange struct {
 	Low       catalog.LookupValue
 	High      catalog.LookupValue
 	Inclusion catalog.RangeInclusion
+	Limit     int64
 }
 
 func (sr ScanRange) MarshalJSON() ([]byte, error) {
-	r := map[string]interface{}{}
+	r := map[string]interface{}{"limit": sr.Limit}
 
 	low := make([]interface{}, len(sr.Low))
 	for i, l := range sr.Low {

@@ -90,14 +90,14 @@ type Index interface {
 
 // ScanIndex represents scanning indexes.
 type ScanIndex interface {
-	ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	ScanEntries(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
 
 // PrimaryIndex represents primary key indexes.
 type PrimaryIndex interface {
 	Index
 	ScanIndex
-	ScanBucket(ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	ScanBucket(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
 
 type LookupValue []*dparval.Value
@@ -139,7 +139,7 @@ type RangeIndex interface {
 	LookupIndex
 	Direction() Direction
 	Statistics() (RangeStatistics, query.Error)
-	ScanRange(low LookupValue, high LookupValue, inclusion RangeInclusion, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	ScanRange(low LookupValue, high LookupValue, inclusion RangeInclusion, limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
 
 // SearchIndex represents full text search indexes.

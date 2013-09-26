@@ -95,15 +95,42 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 					clog.Error(err)
 					continue
 				}
-				clog.To(planner.CHANNEL, "Can I use it: %v", possible)
+				clog.To(planner.CHANNEL, "Can I use it1: %v", possible)
 				if possible {
+
+					// great, but lets check for a min optimizatin too
+					if stmt.GroupBy != nil && len(stmt.GroupBy) == 0 {
+						possible, minranges, _, _ := CanIUseThisIndexForThisProjectionNoWhereNoGroupClause(index, stmt.Select, stmt.From.Bucket)
+						if possible {
+							for _, r := range ranges {
+								r.Limit = minranges[0].Limit
+							}
+						}
+					}
+
 					lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name(), ranges)
 				} else {
 					continue
 				}
 			} else {
-				continue
+				// this works for aggregates on the whole bucket
+				if stmt.GroupBy != nil && len(stmt.GroupBy) == 0 {
+					possible, ranges, _, err := CanIUseThisIndexForThisProjectionNoWhereNoGroupClause(index, stmt.Select, stmt.From.Bucket)
+					if err != nil {
+						clog.Error(err)
+						continue
+					}
+					clog.To(planner.CHANNEL, "Can I use it2: %v", possible)
+					if possible {
+						lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name(), ranges)
+					} else {
+						continue
+					}
+				} else {
+					continue
+				}
 			}
+
 		default:
 			clog.To(planner.CHANNEL, "Unsupported type of index %T", index)
 			continue

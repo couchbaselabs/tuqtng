@@ -89,7 +89,7 @@ func notTestCouchbase(t *testing.T) {
 		itemChannel := make(dparval.ValueChannel)
 		warnChannel := make(query.ErrorChannel)
 		errorChannel := make(query.ErrorChannel)
-		go si.ScanEntries(itemChannel, warnChannel, errorChannel)
+		go si.ScanEntries(0, itemChannel, warnChannel, errorChannel)
 
 		var err query.Error
 		ok := true

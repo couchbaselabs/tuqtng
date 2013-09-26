@@ -182,11 +182,11 @@ func (pi *indexIndex) Drop() query.Error {
 	return query.NewError(nil, "Primary index cannot be dropped.")
 }
 
-func (pi *indexIndex) ScanBucket(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
-	pi.ScanEntries(ch, warnch, errch)
+func (pi *indexIndex) ScanBucket(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+	pi.ScanEntries(limit, ch, warnch, errch)
 }
 
-func (pi *indexIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (pi *indexIndex) ScanEntries(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)
@@ -203,7 +203,10 @@ func (pi *indexIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.E
 						if err == nil {
 							indexIds, err := bucket.IndexIds()
 							if err == nil {
-								for _, indexId := range indexIds {
+								for i, indexId := range indexIds {
+									if limit > 0 && int64(i) > limit {
+										break
+									}
 									doc := dparval.NewValue(map[string]interface{}{})
 									doc.SetAttachment("meta", map[string]interface{}{"id": fmt.Sprintf("%s/%s/%s", poolId, bucketId, indexId)})
 									ch <- doc

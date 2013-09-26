@@ -34,7 +34,11 @@ var MIN_ID = cb.DocId("")
 var MAX_ID = cb.DocId(strings.Repeat(string([]byte{0xff}), 251))
 
 func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *cb.Bucket,
-	ddoc string, view string, options map[string]interface{}, batchSize int) {
+	ddoc string, view string, options map[string]interface{}, batchSize int64, limit int64) {
+
+	if limit != 0 && limit < batchSize {
+		batchSize = limit
+	}
 
 	defer close(result)
 	defer close(errs)
@@ -49,6 +53,7 @@ func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *
 
 	options["limit"] = batchSize + 1
 
+	numRead := int64(0)
 	ok := true
 	for ok {
 
@@ -63,14 +68,15 @@ func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *
 		}
 
 		for i, row := range vres.Rows {
-			if i < batchSize {
+			if int64(i) < batchSize {
 				// dont process the last row, its just used to see if we
 				// need to continue processing
 				result <- row
+				numRead += 1
 			}
 		}
 
-		if len(vres.Rows) > batchSize {
+		if (int64(len(vres.Rows)) > batchSize) && (limit == 0 || (limit != 0 && numRead < limit)) {
 			// prepare for next run
 			skey := vres.Rows[batchSize].Key
 			skeydocid := vres.Rows[batchSize].ID

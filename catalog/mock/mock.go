@@ -307,20 +307,24 @@ func (pi *primaryIndex) Drop() query.Error {
 	return query.NewError(nil, "Primary index cannot be dropped.")
 }
 
-func (pi *primaryIndex) ScanBucket(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
-	pi.ScanEntries(ch, warnch, errch)
+func (pi *primaryIndex) ScanBucket(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+	pi.ScanEntries(limit, ch, warnch, errch)
 }
 
-func (pi *primaryIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
-	go pi.scanEntries(ch, warnch, errch)
+func (pi *primaryIndex) ScanEntries(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+	go pi.scanEntries(limit, ch, warnch, errch)
 }
 
-func (pi *primaryIndex) scanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (pi *primaryIndex) scanEntries(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)
 
-	for i := 0; i < pi.bucket.nitems; i++ {
+	if limit == 0 {
+		limit = int64(pi.bucket.nitems)
+	}
+
+	for i := 0; i < pi.bucket.nitems && int64(i) < limit; i++ {
 		doc := dparval.NewValue(map[string]interface{}{})
 		doc.SetAttachment("meta", map[string]interface{}{"id": strconv.Itoa(i)})
 		ch <- doc

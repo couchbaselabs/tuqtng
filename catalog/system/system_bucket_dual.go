@@ -141,11 +141,11 @@ func (pi *dualIndex) Drop() query.Error {
 	return query.NewError(nil, "Primary index cannot be dropped.")
 }
 
-func (pi *dualIndex) ScanBucket(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
-	pi.ScanEntries(ch, warnch, errch)
+func (pi *dualIndex) ScanBucket(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+	pi.ScanEntries(limit, ch, warnch, errch)
 }
 
-func (pi *dualIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (pi *dualIndex) ScanEntries(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)

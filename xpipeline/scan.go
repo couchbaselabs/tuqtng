@@ -76,11 +76,11 @@ func (this *Scan) scanRange(scanRange *plan.ScanRange) bool {
 
 	clog.To(CHANNEL, "scanning range %v", scanRange)
 	if scanRange == nil {
-		go this.index.ScanEntries(indexItemChannel, indexWarnChannel, indexErrorChannel)
+		go this.index.ScanEntries(0, indexItemChannel, indexWarnChannel, indexErrorChannel)
 	} else {
 		rangeScan, ok := this.index.(catalog.RangeIndex)
 		if ok {
-			go rangeScan.ScanRange(scanRange.Low, scanRange.High, scanRange.Inclusion, indexItemChannel, indexWarnChannel, indexErrorChannel)
+			go rangeScan.ScanRange(scanRange.Low, scanRange.High, scanRange.Inclusion, scanRange.Limit, indexItemChannel, indexWarnChannel, indexErrorChannel)
 		} else {
 			this.SendError(query.NewError(nil, "Cannot range scan this"))
 			return false

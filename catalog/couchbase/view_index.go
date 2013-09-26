@@ -107,11 +107,11 @@ func (b *bucket) loadIndexes() query.Error {
 	return nil
 }
 
-func (vi *viewIndex) ScanEntries(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
-	vi.ScanRange(nil, nil, catalog.Both, ch, warnch, errch)
+func (vi *viewIndex) ScanEntries(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+	vi.ScanRange(nil, nil, catalog.Both, limit, ch, warnch, errch)
 }
 
-func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue, inclusion catalog.RangeInclusion, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue, inclusion catalog.RangeInclusion, limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 
 	viewOptions := generateViewOptions(low, high, inclusion)
 
@@ -121,7 +121,7 @@ func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue
 
 	viewRowChannel := make(chan cb.ViewRow)
 	viewErrChannel := make(query.ErrorChannel)
-	go WalkViewInBatches(viewRowChannel, viewErrChannel, vi.bucket.cbbucket, vi.DDocName(), vi.ViewName(), viewOptions, 1000)
+	go WalkViewInBatches(viewRowChannel, viewErrChannel, vi.bucket.cbbucket, vi.DDocName(), vi.ViewName(), viewOptions, 1000, limit)
 
 	var viewRow cb.ViewRow
 	var err query.Error
@@ -170,16 +170,16 @@ func (pi *primaryIndex) IsPrimary() bool {
 	return true
 }
 
-func (pi *primaryIndex) ScanBucket(ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
-	pi.ScanEntries(ch, warnch, errch)
+func (pi *primaryIndex) ScanBucket(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+	pi.ScanEntries(limit, ch, warnch, errch)
 }
 
 func (vi *viewIndex) Check(value catalog.LookupValue, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
-	vi.ScanRange(value, value, catalog.Both, ch, warnch, errch)
+	vi.ScanRange(value, value, catalog.Both, 0, ch, warnch, errch)
 }
 
 func (vi *viewIndex) Lookup(value catalog.LookupValue, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
-	vi.ScanRange(value, value, catalog.Both, ch, warnch, errch)
+	vi.ScanRange(value, value, catalog.Both, 0, ch, warnch, errch)
 }
 
 func (vi *viewIndex) Statistics() (catalog.RangeStatistics, query.Error) {

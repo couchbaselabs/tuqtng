@@ -13,10 +13,84 @@
 package simple
 
 import (
+	"fmt"
+
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/plan"
+	"github.com/couchbaselabs/tuqtng/planner"
 )
+
+func CanIUseThisIndexForThisProjectionNoWhereNoGroupClause(index catalog.RangeIndex, resultExprList ast.ResultExpressionList, bucket string) (bool, plan.ScanRanges, ast.Expression, error) {
+
+	// convert the index key to formal notation
+	indexKeyFormal, err := IndexKeyInFormalNotation(index.Key(), bucket)
+	if err != nil {
+		return false, nil, nil, err
+	}
+
+	// FIXME only looking at first element in key right now
+	deps := ast.ExpressionList{indexKeyFormal[0]}
+	clog.To(planner.CHANNEL, "index deps are: %v", deps)
+	depChecker := ast.NewExpressionFunctionalDependencyCheckerFull(deps)
+
+	// start looking at the projection
+	allAggregateFunctionsMin := true
+	for _, resultExpr := range resultExprList {
+
+		// presence of * means we cannot use index on field, must see all (for this particular optimization)
+		if resultExpr.Star {
+			return false, nil, nil, nil
+		}
+
+		switch expr := resultExpr.Expr.(type) {
+		case ast.AggregateFunctionCallExpression:
+			_, isMin := expr.(*ast.FunctionCallMin)
+			if !isMin {
+				clog.To(planner.CHANNEL, "projection not MIN")
+				allAggregateFunctionsMin = false
+			}
+			// aggregates all take 1 operand
+			operands := expr.GetOperands()
+			if len(operands) < 1 {
+				return false, nil, nil, nil
+			}
+			aggOperand := operands[0]
+			// preence of * means we cannot use this index, must see all (for this particular optimization)
+			if aggOperand.Star {
+				return false, nil, nil, nil
+			}
+			// look at dependencies inside this operand
+			_, err := depChecker.Visit(aggOperand.Expr)
+			if err != nil {
+				return false, nil, nil, nil
+			}
+		default:
+			// all expressions must be aggregates for this particular optimization
+			return false, nil, nil, nil
+		}
+	}
+
+	// if we made it this far, we can in fact use the index
+	// doing a scan of all non-eliminatable items (non-NULL, non-MISSING)
+	dummyOp := ast.NewIsNotNullOperator(indexKeyFormal[0])
+	es := NewExpressionSargable(indexKeyFormal[0])
+	dummyOp.Accept(es)
+	if es.IsSargable() {
+		ranges := es.ScanRanges()
+		if allAggregateFunctionsMin {
+			for _, r := range ranges {
+				r.Limit = 1
+			}
+		}
+		return true, ranges, nil, nil
+	}
+	clog.Error(fmt.Errorf("expected this to never happen"))
+
+	// cannot use this index
+	return false, nil, nil, nil
+}
 
 func CanIUseThisIndexForThisWhereClause(index catalog.RangeIndex, where ast.Expression, bucket string) (bool, plan.ScanRanges, ast.Expression, error) {
 
