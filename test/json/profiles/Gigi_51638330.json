@@ -1,0 +1,35 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 41,
+        "display_name": "Gigi Stuart",
+        "email": "Gigi.Stuart@snailmail.com",
+        "first_name": "Gigi",
+        "last_name": "Stuart",
+        "state": "Oklahoma"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Jul  7 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.3189889907427688,
+            "membership_type": "Basic",
+            "redeemed_points": 87,
+            "reward_points": 252
+        },
+        "password": "Gigi64",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Wed Jan 23 12:58:49 2013",
+        "user_id": "Gigi_51638330"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu May  2 12:58:49 2013",
+            "order_id": "T505129501612"
+        }
+    ]
+}

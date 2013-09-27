@@ -1,0 +1,33 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 40,
+        "display_name": "Ginger Tolbert",
+        "email": "Ginger.Tolbert@snailmail.com",
+        "first_name": "Ginger",
+        "last_name": "Tolbert",
+        "state": "Mississippi"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Jul  5 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.4228357970895744,
+            "membership_type": "Basic",
+            "redeemed_points": 51,
+            "reward_points": 273
+        },
+        "password": "Ginger24",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Wed Nov 16 12:58:49 2011",
+        "user_id": "Ginger_30742244"
+    },
+    "shipped_order_history": []
+}

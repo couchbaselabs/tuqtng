@@ -1,0 +1,71 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 28,
+        "display_name": "Madelyn Mauro",
+        "email": "Madelyn.Mauro@snailmail.com",
+        "first_name": "Madelyn",
+        "last_name": "Mauro",
+        "state": "Massachusetts"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Aug 30 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Allene_89199207"
+            ],
+            "loyalty_score": 6.379376847756627,
+            "membership_type": "Silver",
+            "redeemed_points": 648,
+            "reward_points": 630
+        },
+        "password": "Madelyn66",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Fri Jun 28 12:58:49 2013",
+        "user_id": "Madelyn_6582547"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Drama"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Aug  3 12:58:49 2013",
+            "order_id": "T111848795193"
+        },
+        {
+            "order_datetime": "Tue Jul 30 12:58:49 2013",
+            "order_id": "T364257637510"
+        },
+        {
+            "order_datetime": "Tue Jul 30 12:58:49 2013",
+            "order_id": "T309823732279"
+        },
+        {
+            "order_datetime": "Sat Aug 10 12:58:49 2013",
+            "order_id": "T998232607642"
+        },
+        {
+            "order_datetime": "Sat Jun 29 12:58:49 2013",
+            "order_id": "T126264846482"
+        },
+        {
+            "order_datetime": "Sun Aug 18 12:58:49 2013",
+            "order_id": "T676746822838"
+        }
+    ]
+}

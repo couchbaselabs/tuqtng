@@ -1,0 +1,51 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 54,
+        "display_name": "Mercedez Araujo",
+        "email": "Mercedez.Araujo@snailmail.com",
+        "first_name": "Mercedez",
+        "last_name": "Araujo",
+        "state": "Maine"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Aug 30 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.435835678797906,
+            "membership_type": "Silver",
+            "redeemed_points": 1224,
+            "reward_points": 1692
+        },
+        "password": "Mercedez70",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Fri Jun  7 12:58:49 2013",
+        "user_id": "Mercedez_15048252"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Aug 26 12:58:49 2013",
+            "order_id": "T412350584832"
+        },
+        {
+            "order_datetime": "Thu Aug  8 12:58:49 2013",
+            "order_id": "T619764845354"
+        },
+        {
+            "order_datetime": "Sat Jul 27 12:58:49 2013",
+            "order_id": "T326945469279"
+        },
+        {
+            "order_datetime": "Wed Aug 14 12:58:49 2013",
+            "order_id": "T458331611193"
+        }
+    ]
+}

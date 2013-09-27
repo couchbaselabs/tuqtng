@@ -1,0 +1,51 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 49,
+        "display_name": "Donya Poulin",
+        "email": "Donya.Poulin@snailmail.com",
+        "first_name": "Donya",
+        "last_name": "Poulin",
+        "state": "Indiana"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Feb  7 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.9733374240451926,
+            "membership_type": "Basic",
+            "redeemed_points": 108,
+            "reward_points": 153
+        },
+        "password": "Donya70",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Tue Apr 26 12:58:49 2011",
+        "user_id": "Donya_6536328"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Comedy"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Sep  4 12:58:49 2012",
+            "order_id": "T267836046917"
+        },
+        {
+            "order_datetime": "Fri Nov 30 12:58:49 2012",
+            "order_id": "T749357318561"
+        }
+    ]
+}

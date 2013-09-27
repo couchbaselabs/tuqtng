@@ -1,0 +1,30 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 18,
+        "display_name": "Domonique Brigham",
+        "email": "Domonique.Brigham@snailmail.com",
+        "first_name": "Domonique",
+        "last_name": "Brigham",
+        "state": "South Carolina"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Jan 18 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.5387851137979969,
+            "membership_type": "Basic",
+            "redeemed_points": 297,
+            "reward_points": 225
+        },
+        "password": "Domonique12",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Wed Sep 28 12:58:49 2011",
+        "user_id": "Domonique_67418145"
+    },
+    "shipped_order_history": []
+}

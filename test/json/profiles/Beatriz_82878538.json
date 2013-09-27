@@ -1,0 +1,30 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 17,
+        "display_name": "Beatriz Strickland",
+        "email": "Beatriz.Strickland@snailmail.com",
+        "first_name": "Beatriz",
+        "last_name": "Strickland",
+        "state": "Maine"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Jul 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.6432986936543275,
+            "membership_type": "Silver",
+            "redeemed_points": 900,
+            "reward_points": 132
+        },
+        "password": "Beatriz23",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Tue Jan 15 12:58:49 2013",
+        "user_id": "Beatriz_82878538"
+    },
+    "shipped_order_history": []
+}

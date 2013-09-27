@@ -1,0 +1,42 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 37,
+        "display_name": "Jani Beaudoin",
+        "email": "Jani.Beaudoin@snailmail.com",
+        "first_name": "Jani",
+        "last_name": "Beaudoin",
+        "state": "New Mexico"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Sep 11 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.665997967623204,
+            "membership_type": "Silver",
+            "redeemed_points": 1455,
+            "reward_points": 1170
+        },
+        "password": "Jani70",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Sat Jun 22 12:58:49 2013",
+        "user_id": "Jani_87024537"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

@@ -1,0 +1,47 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 25,
+        "display_name": "Harry Arriola",
+        "email": "Harry.Arriola@snailmail.com",
+        "first_name": "Harry",
+        "last_name": "Arriola",
+        "state": "Tennessee"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Sep 13 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.510132443785059,
+            "membership_type": "Basic",
+            "redeemed_points": 252,
+            "reward_points": 516
+        },
+        "password": "Harry94",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Sun Apr  7 12:58:49 2013",
+        "user_id": "Harry_97288849"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Jun 15 12:58:49 2013",
+            "order_id": "T729361926092"
+        }
+    ]
+}

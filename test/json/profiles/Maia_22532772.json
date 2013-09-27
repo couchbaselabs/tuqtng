@@ -1,0 +1,69 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 38,
+        "display_name": "Maia Mcguire",
+        "email": "Maia.Mcguire@snailmail.com",
+        "first_name": "Maia",
+        "last_name": "Mcguire",
+        "state": "Nevada"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Sep 23 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Joya_19793816",
+                "Lyndon_27911662"
+            ],
+            "loyalty_score": 9.861315180743267,
+            "membership_type": "Platinum",
+            "redeemed_points": 864,
+            "reward_points": 1296
+        },
+        "password": "Maia55",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Tue Aug 13 12:58:49 2013",
+        "user_id": "Maia_22532772"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Sep 13 12:58:49 2013",
+            "order_id": "T717758649867"
+        },
+        {
+            "order_datetime": "Wed Sep 11 12:58:49 2013",
+            "order_id": "T774023356364"
+        },
+        {
+            "order_datetime": "Thu Aug 22 12:58:49 2013",
+            "order_id": "T575662898860"
+        },
+        {
+            "order_datetime": "Sun Sep  1 12:58:49 2013",
+            "order_id": "T262364276360"
+        },
+        {
+            "order_datetime": "Tue Aug 20 12:58:49 2013",
+            "order_id": "T917255727459"
+        },
+        {
+            "order_datetime": "Sun Sep  8 12:58:49 2013",
+            "order_id": "T591740152534"
+        },
+        {
+            "order_datetime": "Sat Sep 21 12:58:49 2013",
+            "order_id": "T556432286118"
+        },
+        {
+            "order_datetime": "Mon Sep 23 12:58:49 2013",
+            "order_id": "T176825539354"
+        }
+    ]
+}

@@ -1,0 +1,39 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 25,
+        "display_name": "Edmond Fraley",
+        "email": "Edmond.Fraley@snailmail.com",
+        "first_name": "Edmond",
+        "last_name": "Fraley",
+        "state": "Washington"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Dec 19 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.3036866239360188,
+            "membership_type": "Basic",
+            "redeemed_points": 282,
+            "reward_points": 84
+        },
+        "password": "Edmond39",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Thu Apr 28 12:58:49 2011",
+        "user_id": "Edmond_1319434"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Nov 15 12:58:49 2011",
+            "order_id": "T834446184109"
+        }
+    ]
+}

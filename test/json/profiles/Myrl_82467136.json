@@ -1,0 +1,66 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 32,
+        "display_name": "Myrl Presley",
+        "email": "Myrl.Presley@snailmail.com",
+        "first_name": "Myrl",
+        "last_name": "Presley",
+        "state": "South Dakota"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Aug 11 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.729899038286139,
+            "membership_type": "Silver",
+            "redeemed_points": 45,
+            "reward_points": 555
+        },
+        "password": "Myrl40",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Fri Jun  8 12:58:49 2012",
+        "user_id": "Myrl_82467136"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "NonFiction"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Nov  7 12:58:49 2012",
+            "order_id": "T911025212547"
+        },
+        {
+            "order_datetime": "Mon Mar 18 12:58:49 2013",
+            "order_id": "T266630235509"
+        },
+        {
+            "order_datetime": "Mon Nov 19 12:58:49 2012",
+            "order_id": "T203668899881"
+        },
+        {
+            "order_datetime": "Thu Sep  6 12:58:49 2012",
+            "order_id": "T725520231852"
+        },
+        {
+            "order_datetime": "Fri Nov 23 12:58:49 2012",
+            "order_id": "T351351996097"
+        }
+    ]
+}

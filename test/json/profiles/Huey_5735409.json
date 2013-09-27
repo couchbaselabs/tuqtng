@@ -1,0 +1,87 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 38,
+        "display_name": "Huey Allard",
+        "email": "Huey.Allard@snailmail.com",
+        "first_name": "Huey",
+        "last_name": "Allard",
+        "state": "Kansas"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Jul 17 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Cherise_76743910",
+                "Myles_15172808"
+            ],
+            "loyalty_score": 7.9774706358853456,
+            "membership_type": "Gold",
+            "redeemed_points": 147,
+            "reward_points": 2100
+        },
+        "password": "Huey52",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Sun May  1 12:58:49 2011",
+        "user_id": "Huey_5735409"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Documentary",
+                "Fitness / Instructional"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Travel"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk",
+                "Jazz",
+                "Pop Music"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Apr  8 12:58:49 2012",
+            "order_id": "T348946532322"
+        },
+        {
+            "order_datetime": "Sat Feb 18 12:58:49 2012",
+            "order_id": "T898127093621"
+        },
+        {
+            "order_datetime": "Sat Jan 28 12:58:49 2012",
+            "order_id": "T267540336692"
+        },
+        {
+            "order_datetime": "Sat Jun 16 12:58:49 2012",
+            "order_id": "T574127308475"
+        },
+        {
+            "order_datetime": "Fri May 27 12:58:49 2011",
+            "order_id": "T190751211185"
+        },
+        {
+            "order_datetime": "Sat Nov  5 12:58:49 2011",
+            "order_id": "T231136921018"
+        }
+    ]
+}

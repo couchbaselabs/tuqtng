@@ -1,0 +1,71 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 44,
+        "display_name": "Jacquelyne Marble",
+        "email": "Jacquelyne.Marble@snailmail.com",
+        "first_name": "Jacquelyne",
+        "last_name": "Marble",
+        "state": "Florida"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Aug 19 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.855793499899745,
+            "membership_type": "Silver",
+            "redeemed_points": 1566,
+            "reward_points": 846
+        },
+        "password": "Jacquelyne32",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Fri Jan 11 12:58:49 2013",
+        "user_id": "Jacquelyne_14547114"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Comedy"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Jul 24 12:58:49 2013",
+            "order_id": "T594030805033"
+        },
+        {
+            "order_datetime": "Thu May 23 12:58:49 2013",
+            "order_id": "T797545119592"
+        },
+        {
+            "order_datetime": "Tue Aug 13 12:58:49 2013",
+            "order_id": "T672744361652"
+        },
+        {
+            "order_datetime": "Thu Feb  7 12:58:49 2013",
+            "order_id": "T112657681357"
+        },
+        {
+            "order_datetime": "Thu Jun 13 12:58:49 2013",
+            "order_id": "T317756573335"
+        }
+    ]
+}

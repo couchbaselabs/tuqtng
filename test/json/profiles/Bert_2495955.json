@@ -1,0 +1,63 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 16,
+        "display_name": "Bert Lombardi",
+        "email": "Bert.Lombardi@snailmail.com",
+        "first_name": "Bert",
+        "last_name": "Lombardi",
+        "state": "New Mexico"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Aug  4 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.902631042418426,
+            "membership_type": "Silver",
+            "redeemed_points": 594,
+            "reward_points": 414
+        },
+        "password": "Bert12",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Sat Jul  7 12:58:49 2012",
+        "user_id": "Bert_2495955"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Drama"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Oct 15 12:58:49 2012",
+            "order_id": "T161631978667"
+        },
+        {
+            "order_datetime": "Mon Jun 17 12:58:49 2013",
+            "order_id": "T763851952599"
+        },
+        {
+            "order_datetime": "Mon Dec 10 12:58:49 2012",
+            "order_id": "T451631997566"
+        },
+        {
+            "order_datetime": "Tue Apr  2 12:58:49 2013",
+            "order_id": "T915663569383"
+        },
+        {
+            "order_datetime": "Mon Jun 24 12:58:49 2013",
+            "order_id": "T276144442134"
+        }
+    ]
+}

@@ -1,0 +1,60 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 32,
+        "display_name": "Shella Trimble",
+        "email": "Shella.Trimble@snailmail.com",
+        "first_name": "Shella",
+        "last_name": "Trimble",
+        "state": "New Jersey"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Mar 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.7534433672622507,
+            "membership_type": "Basic",
+            "redeemed_points": 60,
+            "reward_points": 36
+        },
+        "password": "Shella76",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Fri Aug 12 12:58:49 2011",
+        "user_id": "Shella_1785767"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Drama",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Travel",
+                "Diet & Health"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal",
+                "Kid's Music",
+                "Opera and Vocal"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

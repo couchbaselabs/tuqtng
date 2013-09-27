@@ -1,0 +1,85 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 27,
+        "display_name": "Shad Boothe",
+        "email": "Shad.Boothe@snailmail.com",
+        "first_name": "Shad",
+        "last_name": "Boothe",
+        "state": "Michigan"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Nov  8 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [
+                "Evon_82609958"
+            ],
+            "loyalty_score": 8.373080413919627,
+            "membership_type": "Gold",
+            "redeemed_points": 288,
+            "reward_points": 816
+        },
+        "password": "Shad86",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Tue Jul  5 12:58:49 2011",
+        "user_id": "Shad_57914522"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "NonFiction"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Jan  3 12:58:49 2012",
+            "order_id": "T168840486169"
+        },
+        {
+            "order_datetime": "Mon May 14 12:58:49 2012",
+            "order_id": "T175830973903"
+        },
+        {
+            "order_datetime": "Tue Jan 17 12:58:49 2012",
+            "order_id": "T486340173299"
+        },
+        {
+            "order_datetime": "Fri Feb 24 12:58:49 2012",
+            "order_id": "T904956489865"
+        },
+        {
+            "order_datetime": "Wed Jan 11 12:58:49 2012",
+            "order_id": "T305251198020"
+        },
+        {
+            "order_datetime": "Tue Jan 17 12:58:49 2012",
+            "order_id": "T722524546019"
+        },
+        {
+            "order_datetime": "Tue Nov 29 12:58:49 2011",
+            "order_id": "T414630337399"
+        },
+        {
+            "order_datetime": "Sat Aug 20 12:58:49 2011",
+            "order_id": "T327342409230"
+        }
+    ]
+}

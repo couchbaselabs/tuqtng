@@ -1,0 +1,53 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 44,
+        "display_name": "Delbert Qualls",
+        "email": "Delbert.Qualls@snailmail.com",
+        "first_name": "Delbert",
+        "last_name": "Qualls",
+        "state": "South Carolina"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Apr  8 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.0508091439788867,
+            "membership_type": "Basic",
+            "redeemed_points": 801,
+            "reward_points": 873
+        },
+        "password": "Delbert18",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Sun Aug 28 12:58:49 2011",
+        "user_id": "Delbert_15147496"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "NonFiction"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal",
+                "Jazz",
+                "New Age"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

@@ -1,0 +1,44 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 21,
+        "display_name": "Kelly Mclain",
+        "email": "Kelly.Mclain@snailmail.com",
+        "first_name": "Kelly",
+        "last_name": "Mclain",
+        "state": "Vermont"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.63076949999113,
+            "membership_type": "Silver",
+            "redeemed_points": 468,
+            "reward_points": 468
+        },
+        "password": "Kelly18",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Fri Mar 15 12:58:49 2013",
+        "user_id": "Kelly_60567196"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun May 26 12:58:49 2013",
+            "order_id": "T465851916239"
+        }
+    ]
+}

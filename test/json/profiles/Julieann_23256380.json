@@ -1,0 +1,53 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Julieann Sweeney",
+        "email": "Julieann.Sweeney@snailmail.com",
+        "first_name": "Julieann",
+        "last_name": "Sweeney",
+        "state": "Wisconsin\n"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Aug  7 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.9015122535745475,
+            "membership_type": "Basic",
+            "redeemed_points": 342,
+            "reward_points": 294
+        },
+        "password": "Julieann62",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Mon Jul 25 12:58:49 2011",
+        "user_id": "Julieann_23256380"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "Travel",
+                "Sports & Adventure"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal",
+                "Jazz"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

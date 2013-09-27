@@ -1,0 +1,60 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 31,
+        "display_name": "Anastasia Marr",
+        "email": "Anastasia.Marr@snailmail.com",
+        "first_name": "Anastasia",
+        "last_name": "Marr",
+        "state": "Oregon"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Apr 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.9139818879128585,
+            "membership_type": "Basic",
+            "redeemed_points": 450,
+            "reward_points": 594
+        },
+        "password": "Anastasia50",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Mon May 16 12:58:49 2011",
+        "user_id": "Anastasia_13124322"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music",
+                "Jazz"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Feb 20 12:58:49 2012",
+            "order_id": "T875868415662"
+        },
+        {
+            "order_datetime": "Fri Feb 24 12:58:49 2012",
+            "order_id": "T879024393011"
+        }
+    ]
+}

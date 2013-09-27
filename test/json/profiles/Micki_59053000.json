@@ -1,0 +1,62 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 23,
+        "display_name": "Micki Suggs",
+        "email": "Micki.Suggs@snailmail.com",
+        "first_name": "Micki",
+        "last_name": "Suggs",
+        "state": "Arkansas"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Aug 30 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Leontine_48093024",
+                "Ebony_41465045"
+            ],
+            "loyalty_score": 9.947391576864531,
+            "membership_type": "Platinum",
+            "redeemed_points": 2457,
+            "reward_points": 1323
+        },
+        "password": "Micki50",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Wed Mar 27 12:58:49 2013",
+        "user_id": "Micki_59053000"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Comedy"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "NonFiction",
+                "Home & Garden"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun May  5 12:58:49 2013",
+            "order_id": "T245456211370"
+        },
+        {
+            "order_datetime": "Sun Jul  7 12:58:49 2013",
+            "order_id": "T247625562486"
+        }
+    ]
+}

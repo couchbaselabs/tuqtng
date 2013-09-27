@@ -1,0 +1,55 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 58,
+        "display_name": "Randall Butcher",
+        "email": "Randall.Butcher@snailmail.com",
+        "first_name": "Randall",
+        "last_name": "Butcher",
+        "state": "South Dakota"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Sep  6 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.2009228023318013,
+            "membership_type": "Basic",
+            "redeemed_points": 153,
+            "reward_points": 783
+        },
+        "password": "Randall41",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Mon Dec 17 12:58:49 2012",
+        "user_id": "Randall_61193196"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Feb 11 12:58:49 2013",
+            "order_id": "T625148842588"
+        },
+        {
+            "order_datetime": "Mon Jun 17 12:58:49 2013",
+            "order_id": "T352463798853"
+        },
+        {
+            "order_datetime": "Sun Jan  6 12:58:49 2013",
+            "order_id": "T438868673787"
+        }
+    ]
+}

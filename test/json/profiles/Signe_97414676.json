@@ -1,0 +1,30 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 43,
+        "display_name": "Signe Marra",
+        "email": "Signe.Marra@snailmail.com",
+        "first_name": "Signe",
+        "last_name": "Marra",
+        "state": "Massachusetts"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Sep 23 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.8396067397075788,
+            "membership_type": "Basic",
+            "redeemed_points": 30,
+            "reward_points": 168
+        },
+        "password": "Signe95",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Thu Sep 19 12:58:49 2013",
+        "user_id": "Signe_97414676"
+    },
+    "shipped_order_history": []
+}

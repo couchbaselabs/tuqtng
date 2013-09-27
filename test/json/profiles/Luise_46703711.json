@@ -1,0 +1,41 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 24,
+        "display_name": "Luise Ramsey",
+        "email": "Luise.Ramsey@snailmail.com",
+        "first_name": "Luise",
+        "last_name": "Ramsey",
+        "state": "Michigan"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Sep 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.7123714440200679,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Luise50",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Mon Feb 18 12:58:49 2013",
+        "user_id": "Luise_46703711"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

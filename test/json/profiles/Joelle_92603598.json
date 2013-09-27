@@ -1,0 +1,52 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 21,
+        "display_name": "Joelle Grant",
+        "email": "Joelle.Grant@snailmail.com",
+        "first_name": "Joelle",
+        "last_name": "Grant",
+        "state": "Kansas"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jul  1 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Felix_36988365",
+                "Mercy_32941446",
+                "Noma_43254285"
+            ],
+            "loyalty_score": 8.542821464432148,
+            "membership_type": "Gold",
+            "redeemed_points": 192,
+            "reward_points": 1464
+        },
+        "password": "Joelle25",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Tue Feb  5 12:58:49 2013",
+        "user_id": "Joelle_92603598"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon May  6 12:58:49 2013",
+            "order_id": "T283064674136"
+        }
+    ]
+}

@@ -1,0 +1,70 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 42,
+        "display_name": "Erlinda Welsh",
+        "email": "Erlinda.Welsh@snailmail.com",
+        "first_name": "Erlinda",
+        "last_name": "Welsh",
+        "state": "Arizona"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Sep 21 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.096490256744012,
+            "membership_type": "Silver",
+            "redeemed_points": 360,
+            "reward_points": 696
+        },
+        "password": "Erlinda95",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Sun Jul 21 12:58:49 2013",
+        "user_id": "Erlinda_54124350"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal",
+                "Country Music"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Aug 13 12:58:49 2013",
+            "order_id": "T573944565687"
+        },
+        {
+            "order_datetime": "Sat Jul 27 12:58:49 2013",
+            "order_id": "T877535204559"
+        },
+        {
+            "order_datetime": "Mon Aug  5 12:58:49 2013",
+            "order_id": "T679645084987"
+        },
+        {
+            "order_datetime": "Thu Sep 19 12:58:49 2013",
+            "order_id": "T839632542108"
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 16,
+        "display_name": "Millicent Ryder",
+        "email": "Millicent.Ryder@snailmail.com",
+        "first_name": "Millicent",
+        "last_name": "Ryder",
+        "state": "Georgia"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Apr 28 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.4259278278875145,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Millicent59",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Thu Feb 23 12:58:49 2012",
+        "user_id": "Millicent_72583965"
+    },
+    "shipped_order_history": []
+}

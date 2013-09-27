@@ -1,0 +1,44 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 44,
+        "display_name": "Donita Arriola",
+        "email": "Donita.Arriola@snailmail.com",
+        "first_name": "Donita",
+        "last_name": "Arriola",
+        "state": "Minnesota"
+    },
+    "profile_details": {
+        "last_login_time": "Thu May  9 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.7110380029858683,
+            "membership_type": "Basic",
+            "redeemed_points": 180,
+            "reward_points": 150
+        },
+        "password": "Donita40",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Sat Oct 20 12:58:49 2012",
+        "user_id": "Donita_44183414"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Dec 10 12:58:49 2012",
+            "order_id": "T939530406182"
+        },
+        {
+            "order_datetime": "Sun Nov 25 12:58:49 2012",
+            "order_id": "T369129945146"
+        }
+    ]
+}

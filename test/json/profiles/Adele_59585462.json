@@ -1,0 +1,33 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 58,
+        "display_name": "Adele Barnhart",
+        "email": "Adele.Barnhart@snailmail.com",
+        "first_name": "Adele",
+        "last_name": "Barnhart",
+        "state": "Arizona"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Jun 18 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.083357047270201,
+            "membership_type": "Basic",
+            "redeemed_points": 207,
+            "reward_points": 189
+        },
+        "password": "Adele62",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Sat Jul  2 12:58:49 2011",
+        "user_id": "Adele_59585462"
+    },
+    "shipped_order_history": []
+}

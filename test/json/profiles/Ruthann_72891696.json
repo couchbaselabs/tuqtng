@@ -1,0 +1,43 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 45,
+        "display_name": "Ruthann Bauman",
+        "email": "Ruthann.Bauman@snailmail.com",
+        "first_name": "Ruthann",
+        "last_name": "Bauman",
+        "state": "Alabama"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Sep 20 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 8.741828521999796,
+            "membership_type": "Gold",
+            "redeemed_points": 768,
+            "reward_points": 2352
+        },
+        "password": "Ruthann11",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Thu Jun  2 12:58:49 2011",
+        "user_id": "Ruthann_72891696"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Apr  4 12:58:49 2012",
+            "order_id": "T454720699893"
+        },
+        {
+            "order_datetime": "Fri Aug 10 12:58:49 2012",
+            "order_id": "T420437332548"
+        }
+    ]
+}

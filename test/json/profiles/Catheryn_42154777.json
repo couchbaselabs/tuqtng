@@ -1,0 +1,37 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 36,
+        "display_name": "Catheryn Hays",
+        "email": "Catheryn.Hays@snailmail.com",
+        "first_name": "Catheryn",
+        "last_name": "Hays",
+        "state": "New Hampshire"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Mar 19 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Elmira_2728933"
+            ],
+            "loyalty_score": 8.779079282568967,
+            "membership_type": "Gold",
+            "redeemed_points": 744,
+            "reward_points": 2160
+        },
+        "password": "Catheryn94",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Sun Oct  9 12:58:49 2011",
+        "user_id": "Catheryn_42154777"
+    },
+    "shipped_order_history": []
+}

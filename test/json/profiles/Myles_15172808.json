@@ -1,0 +1,55 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 44,
+        "display_name": "Myles Back",
+        "email": "Myles.Back@snailmail.com",
+        "first_name": "Myles",
+        "last_name": "Back",
+        "state": "Wisconsin\n"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Jan 26 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 7.319391240749745,
+            "membership_type": "Gold",
+            "redeemed_points": 1869,
+            "reward_points": 1281
+        },
+        "password": "Myles41",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Tue Jan 11 12:58:49 2011",
+        "user_id": "Myles_15172808"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Sep  7 12:58:49 2012",
+            "order_id": "T155756415591"
+        },
+        {
+            "order_datetime": "Fri Dec 21 12:58:49 2012",
+            "order_id": "T785841232511"
+        },
+        {
+            "order_datetime": "Tue Oct  4 12:58:49 2011",
+            "order_id": "T625369421587"
+        },
+        {
+            "order_datetime": "Tue Jul 24 12:58:49 2012",
+            "order_id": "T323250681792"
+        }
+    ]
+}

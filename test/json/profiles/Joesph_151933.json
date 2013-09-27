@@ -1,0 +1,56 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 41,
+        "display_name": "Joesph Barrows",
+        "email": "Joesph.Barrows@snailmail.com",
+        "first_name": "Joesph",
+        "last_name": "Barrows",
+        "state": "Oregon"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Sep 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.556639119068468,
+            "membership_type": "Silver",
+            "redeemed_points": 360,
+            "reward_points": 105
+        },
+        "password": "Joesph86",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Tue Sep 17 12:58:49 2013",
+        "user_id": "Joesph_151933"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Sep 24 12:58:49 2013",
+            "order_id": "T917963257941"
+        },
+        {
+            "order_datetime": "Tue Sep 24 12:58:49 2013",
+            "order_id": "T614067188467"
+        },
+        {
+            "order_datetime": "Sat Sep 21 12:58:49 2013",
+            "order_id": "T553030363322"
+        },
+        {
+            "order_datetime": "Sat Sep 21 12:58:49 2013",
+            "order_id": "T183929236328"
+        }
+    ]
+}

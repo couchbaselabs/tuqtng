@@ -1,0 +1,74 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 51,
+        "display_name": "Steffanie Kell",
+        "email": "Steffanie.Kell@snailmail.com",
+        "first_name": "Steffanie",
+        "last_name": "Kell",
+        "state": "Vermont"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Sep 22 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 8.759061330380472,
+            "membership_type": "Gold",
+            "redeemed_points": 144,
+            "reward_points": 600
+        },
+        "password": "Steffanie41",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Mon Feb  7 12:58:49 2011",
+        "user_id": "Steffanie_26926278"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Apr  5 12:58:49 2012",
+            "order_id": "T912723749763"
+        },
+        {
+            "order_datetime": "Fri Jun 24 12:58:49 2011",
+            "order_id": "T974842508380"
+        },
+        {
+            "order_datetime": "Tue Feb 22 12:58:49 2011",
+            "order_id": "T283926391167"
+        },
+        {
+            "order_datetime": "Wed Dec  7 12:58:49 2011",
+            "order_id": "T375553957501"
+        },
+        {
+            "order_datetime": "Tue Apr 19 12:58:49 2011",
+            "order_id": "T514133413878"
+        },
+        {
+            "order_datetime": "Wed Aug 10 12:58:49 2011",
+            "order_id": "T309140035995"
+        },
+        {
+            "order_datetime": "Thu Oct 13 12:58:49 2011",
+            "order_id": "T645641625032"
+        },
+        {
+            "order_datetime": "Mon Sep 12 12:58:49 2011",
+            "order_id": "T232120405790"
+        }
+    ]
+}

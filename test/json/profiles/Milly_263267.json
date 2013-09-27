@@ -1,0 +1,46 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 49,
+        "display_name": "Milly Elkins",
+        "email": "Milly.Elkins@snailmail.com",
+        "first_name": "Milly",
+        "last_name": "Elkins",
+        "state": "Alaska"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Jul 23 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.5204202385203416,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Milly64",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Sun Feb 17 12:58:49 2013",
+        "user_id": "Milly_263267"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Comedy",
+                "Fitness / Instructional"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

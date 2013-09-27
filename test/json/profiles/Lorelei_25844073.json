@@ -1,0 +1,75 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 35,
+        "display_name": "Lorelei Akin",
+        "email": "Lorelei.Akin@snailmail.com",
+        "first_name": "Lorelei",
+        "last_name": "Akin",
+        "state": "Arkansas"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Apr 17 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Lloyd_94742736",
+                "Asia_24030"
+            ],
+            "loyalty_score": 8.093940658605819,
+            "membership_type": "Gold",
+            "redeemed_points": 1272,
+            "reward_points": 504
+        },
+        "password": "Lorelei64",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Tue Oct  9 12:58:49 2012",
+        "user_id": "Lorelei_25844073"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Drama",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Apr  1 12:58:49 2013",
+            "order_id": "T538825756289"
+        },
+        {
+            "order_datetime": "Mon Oct 15 12:58:49 2012",
+            "order_id": "T484959023623"
+        },
+        {
+            "order_datetime": "Mon Oct 22 12:58:49 2012",
+            "order_id": "T219359328602"
+        },
+        {
+            "order_datetime": "Sun Nov 25 12:58:49 2012",
+            "order_id": "T232536554449"
+        },
+        {
+            "order_datetime": "Thu Feb  7 12:58:49 2013",
+            "order_id": "T390366954319"
+        },
+        {
+            "order_datetime": "Mon Dec 17 12:58:49 2012",
+            "order_id": "T537432108783"
+        }
+    ]
+}

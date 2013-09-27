@@ -1,0 +1,38 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 21,
+        "display_name": "Luanna Somerville",
+        "email": "Luanna.Somerville@snailmail.com",
+        "first_name": "Luanna",
+        "last_name": "Somerville",
+        "state": "Vermont"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Sep  2 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.8315227234841092,
+            "membership_type": "Basic",
+            "redeemed_points": 120,
+            "reward_points": 42
+        },
+        "password": "Luanna24",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Mon May 27 12:58:49 2013",
+        "user_id": "Luanna_21029758"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Jul 12 12:58:49 2013",
+            "order_id": "T972036328594"
+        }
+    ]
+}

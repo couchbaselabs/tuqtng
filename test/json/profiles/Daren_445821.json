@@ -1,0 +1,41 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 19,
+        "display_name": "Daren Hannah",
+        "email": "Daren.Hannah@snailmail.com",
+        "first_name": "Daren",
+        "last_name": "Hannah",
+        "state": "Delaware"
+    },
+    "profile_details": {
+        "last_login_time": "Thu May 30 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.4673715835657799,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Daren91",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Sat Sep  8 12:58:49 2012",
+        "user_id": "Daren_445821"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

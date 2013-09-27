@@ -1,0 +1,69 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 50,
+        "display_name": "Pablo Murillo",
+        "email": "Pablo.Murillo@snailmail.com",
+        "first_name": "Pablo",
+        "last_name": "Murillo",
+        "state": "Utah"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Oct 10 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [
+                "Marcela_11507756",
+                "Nohemi_60292675",
+                "Eveline_75562834"
+            ],
+            "loyalty_score": 9.739713072302479,
+            "membership_type": "Platinum",
+            "redeemed_points": 2079,
+            "reward_points": 999
+        },
+        "password": "Pablo13",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Fri Sep 16 12:58:49 2011",
+        "user_id": "Pablo_5432489"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Comedy"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "NonFiction"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Oct  4 12:58:49 2011",
+            "order_id": "T257260096273"
+        },
+        {
+            "order_datetime": "Tue Apr  3 12:58:49 2012",
+            "order_id": "T664657425826"
+        },
+        {
+            "order_datetime": "Mon Nov 21 12:58:49 2011",
+            "order_id": "T630834282323"
+        }
+    ]
+}

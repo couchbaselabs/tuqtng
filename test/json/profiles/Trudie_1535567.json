@@ -1,0 +1,74 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 26,
+        "display_name": "Trudie Coulter",
+        "email": "Trudie.Coulter@snailmail.com",
+        "first_name": "Trudie",
+        "last_name": "Coulter",
+        "state": "Rhode Island"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Aug  5 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.83576804534524,
+            "membership_type": "Silver",
+            "redeemed_points": 1260,
+            "reward_points": 288
+        },
+        "password": "Trudie69",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Fri Jun  7 12:58:49 2013",
+        "user_id": "Trudie_1535567"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy",
+                "Music & Musicals"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal",
+                "Country Music",
+                "New Age"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Jul  3 12:58:49 2013",
+            "order_id": "T887420389456"
+        },
+        {
+            "order_datetime": "Wed Jul 10 12:58:49 2013",
+            "order_id": "T864728994412"
+        },
+        {
+            "order_datetime": "Thu Jun 20 12:58:49 2013",
+            "order_id": "T222850613622"
+        },
+        {
+            "order_datetime": "Sun Jun 30 12:58:49 2013",
+            "order_id": "T698027219654"
+        }
+    ]
+}

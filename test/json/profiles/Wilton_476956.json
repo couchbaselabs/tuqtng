@@ -1,0 +1,47 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 50,
+        "display_name": "Wilton Church",
+        "email": "Wilton.Church@snailmail.com",
+        "first_name": "Wilton",
+        "last_name": "Church",
+        "state": "Michigan"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jan 28 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.1410015540964635,
+            "membership_type": "Basic",
+            "redeemed_points": 42,
+            "reward_points": 297
+        },
+        "password": "Wilton78",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Fri Nov 11 12:58:49 2011",
+        "user_id": "Wilton_476956"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

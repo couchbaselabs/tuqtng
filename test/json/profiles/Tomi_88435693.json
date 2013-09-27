@@ -1,0 +1,74 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 30,
+        "display_name": "Tomi Springer",
+        "email": "Tomi.Springer@snailmail.com",
+        "first_name": "Tomi",
+        "last_name": "Springer",
+        "state": "Georgia"
+    },
+    "profile_details": {
+        "last_login_time": "Sat May 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Gus_7428062",
+                "Britteny_17676517",
+                "Natisha_767365"
+            ],
+            "loyalty_score": 9.534807562951302,
+            "membership_type": "Platinum",
+            "redeemed_points": 513,
+            "reward_points": 864
+        },
+        "password": "Tomi80",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Fri Aug 24 12:58:49 2012",
+        "user_id": "Tomi_88435693"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal",
+                "Kid's Music",
+                "Opera and Vocal"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Mar 31 12:58:49 2013",
+            "order_id": "T845939758730"
+        },
+        {
+            "order_datetime": "Mon Feb 25 12:58:49 2013",
+            "order_id": "T209267649176"
+        },
+        {
+            "order_datetime": "Mon Dec 24 12:58:49 2012",
+            "order_id": "T241437927381"
+        }
+    ]
+}

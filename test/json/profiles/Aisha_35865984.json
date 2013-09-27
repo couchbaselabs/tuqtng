@@ -1,0 +1,45 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 22,
+        "display_name": "Aisha Fuentes",
+        "email": "Aisha.Fuentes@snailmail.com",
+        "first_name": "Aisha",
+        "last_name": "Fuentes",
+        "state": "Arkansas"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Jul 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.039212874965427,
+            "membership_type": "Silver",
+            "redeemed_points": 1350,
+            "reward_points": 540
+        },
+        "password": "Aisha19",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Thu Feb  2 12:58:49 2012",
+        "user_id": "Aisha_35865984"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Travel"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

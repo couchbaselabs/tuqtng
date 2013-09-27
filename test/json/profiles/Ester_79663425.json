@@ -1,0 +1,62 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 56,
+        "display_name": "Ester Hull",
+        "email": "Ester.Hull@snailmail.com",
+        "first_name": "Ester",
+        "last_name": "Hull",
+        "state": "Georgia"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Sep 13 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [
+                "Reginia_68062734",
+                "Graig_97982182"
+            ],
+            "loyalty_score": 9.881592814180681,
+            "membership_type": "Platinum",
+            "redeemed_points": 432,
+            "reward_points": 2052
+        },
+        "password": "Ester48",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Wed Apr 20 12:58:49 2011",
+        "user_id": "Ester_79663425"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon May 16 12:58:49 2011",
+            "order_id": "T854832605664"
+        },
+        {
+            "order_datetime": "Tue Apr 26 12:58:49 2011",
+            "order_id": "T906525256876"
+        },
+        {
+            "order_datetime": "Sat Feb  4 12:58:49 2012",
+            "order_id": "T353557052810"
+        },
+        {
+            "order_datetime": "Wed Aug  1 12:58:49 2012",
+            "order_id": "T331046722674"
+        },
+        {
+            "order_datetime": "Sun Jan 29 12:58:49 2012",
+            "order_id": "T987725414682"
+        },
+        {
+            "order_datetime": "Thu Feb  9 12:58:49 2012",
+            "order_id": "T796431584161"
+        },
+        {
+            "order_datetime": "Thu Feb  2 12:58:49 2012",
+            "order_id": "T837452891313"
+        }
+    ]
+}

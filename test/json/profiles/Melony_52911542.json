@@ -1,0 +1,30 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 56,
+        "display_name": "Melony Willie",
+        "email": "Melony.Willie@snailmail.com",
+        "first_name": "Melony",
+        "last_name": "Willie",
+        "state": "Delaware"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Nov 27 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.7823373297370881,
+            "membership_type": "Basic",
+            "redeemed_points": 84,
+            "reward_points": 114
+        },
+        "password": "Melony35",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Sat Feb 12 12:58:49 2011",
+        "user_id": "Melony_52911542"
+    },
+    "shipped_order_history": []
+}

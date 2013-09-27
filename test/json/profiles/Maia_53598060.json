@@ -1,0 +1,42 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 20,
+        "display_name": "Maia Olmstead",
+        "email": "Maia.Olmstead@snailmail.com",
+        "first_name": "Maia",
+        "last_name": "Olmstead",
+        "state": "Vermont"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Jun  4 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Yan_5077263",
+                "Tori_32829720"
+            ],
+            "loyalty_score": 9.486434609499298,
+            "membership_type": "Platinum",
+            "redeemed_points": 2160,
+            "reward_points": 1242
+        },
+        "password": "Maia63",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Thu Mar 31 12:58:49 2011",
+        "user_id": "Maia_53598060"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Mar  5 12:58:49 2012",
+            "order_id": "T599238666401"
+        }
+    ]
+}

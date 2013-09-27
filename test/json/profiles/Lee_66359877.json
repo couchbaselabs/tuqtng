@@ -1,0 +1,40 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 40,
+        "display_name": "Lee March",
+        "email": "Lee.March@snailmail.com",
+        "first_name": "Lee",
+        "last_name": "March",
+        "state": "Florida"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Sep  8 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Micheal_91903948",
+                "Frances_37446227",
+                "Genny_64401110",
+                "Debroah_9651604"
+            ],
+            "loyalty_score": 9.6877473880328,
+            "membership_type": "Platinum",
+            "redeemed_points": 243,
+            "reward_points": 54
+        },
+        "password": "Lee24",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Mon Jun 24 12:58:49 2013",
+        "user_id": "Lee_66359877"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Aug  4 12:58:49 2013",
+            "order_id": "T162230681336"
+        }
+    ]
+}

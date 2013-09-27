@@ -1,0 +1,39 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Adell Bray",
+        "email": "Adell.Bray@snailmail.com",
+        "first_name": "Adell",
+        "last_name": "Bray",
+        "state": "Colorado"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Aug 13 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.5429470331165804,
+            "membership_type": "Basic",
+            "redeemed_points": 60,
+            "reward_points": 114
+        },
+        "password": "Adell42",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Wed May 15 12:58:49 2013",
+        "user_id": "Adell_98386644"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Jun 29 12:58:49 2013",
+            "order_id": "T967033379581"
+        },
+        {
+            "order_datetime": "Mon May 27 12:58:49 2013",
+            "order_id": "T759250088520"
+        }
+    ]
+}

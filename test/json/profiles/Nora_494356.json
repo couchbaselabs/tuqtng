@@ -1,0 +1,50 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 60,
+        "display_name": "Nora Cortes",
+        "email": "Nora.Cortes@snailmail.com",
+        "first_name": "Nora",
+        "last_name": "Cortes",
+        "state": "Virginia"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Jul 21 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.1950345815506225,
+            "membership_type": "Silver",
+            "redeemed_points": 1080,
+            "reward_points": 1230
+        },
+        "password": "Nora93",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Tue May  7 12:58:49 2013",
+        "user_id": "Nora_494356"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Jul  6 12:58:49 2013",
+            "order_id": "T435541463930"
+        },
+        {
+            "order_datetime": "Fri May 31 12:58:49 2013",
+            "order_id": "T977165882649"
+        },
+        {
+            "order_datetime": "Wed Jul  3 12:58:49 2013",
+            "order_id": "T483655226453"
+        },
+        {
+            "order_datetime": "Fri Jul  5 12:58:49 2013",
+            "order_id": "T896247534167"
+        }
+    ]
+}

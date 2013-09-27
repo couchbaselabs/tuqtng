@@ -1,0 +1,76 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 38,
+        "display_name": "Mohammad Mcbride",
+        "email": "Mohammad.Mcbride@snailmail.com",
+        "first_name": "Mohammad",
+        "last_name": "Mcbride",
+        "state": "Mississippi"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Aug 29 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Bruna_76916737",
+                "Julieann_23256380"
+            ],
+            "loyalty_score": 8.755617446338528,
+            "membership_type": "Gold",
+            "redeemed_points": 2208,
+            "reward_points": 1968
+        },
+        "password": "Mohammad80",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Wed Oct 24 12:58:49 2012",
+        "user_id": "Mohammad_58767107"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "NonFiction",
+                "Diet & Health"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Dec  3 12:58:49 2012",
+            "order_id": "T320438915333"
+        },
+        {
+            "order_datetime": "Fri Jun 21 12:58:49 2013",
+            "order_id": "T994464977563"
+        },
+        {
+            "order_datetime": "Sun Dec  2 12:58:49 2012",
+            "order_id": "T222234246034"
+        },
+        {
+            "order_datetime": "Sat Oct 27 12:58:49 2012",
+            "order_id": "T362252426024"
+        },
+        {
+            "order_datetime": "Sat Jan 12 12:58:49 2013",
+            "order_id": "T342861319716"
+        },
+        {
+            "order_datetime": "Mon Mar 11 12:58:49 2013",
+            "order_id": "T935453543040"
+        }
+    ]
+}

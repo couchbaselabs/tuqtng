@@ -1,0 +1,51 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 20,
+        "display_name": "Rico Kiefer",
+        "email": "Rico.Kiefer@snailmail.com",
+        "first_name": "Rico",
+        "last_name": "Kiefer",
+        "state": "New Jersey"
+    },
+    "profile_details": {
+        "last_login_time": "Thu May 23 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.2230256544286189,
+            "membership_type": "Basic",
+            "redeemed_points": 84,
+            "reward_points": 33
+        },
+        "password": "Rico41",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Mon Jan  7 12:58:49 2013",
+        "user_id": "Rico_55898284"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "Medicine",
+                "Sports & Adventure"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

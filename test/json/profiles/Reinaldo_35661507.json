@@ -1,0 +1,45 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 22,
+        "display_name": "Reinaldo Mckee",
+        "email": "Reinaldo.Mckee@snailmail.com",
+        "first_name": "Reinaldo",
+        "last_name": "Mckee",
+        "state": "New Jersey"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Sep 16 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.4551016708125042,
+            "membership_type": "Basic",
+            "redeemed_points": 129,
+            "reward_points": 75
+        },
+        "password": "Reinaldo73",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Thu Aug 22 12:58:49 2013",
+        "user_id": "Reinaldo_35661507"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

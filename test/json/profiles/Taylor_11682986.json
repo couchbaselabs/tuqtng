@@ -1,0 +1,48 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 15,
+        "display_name": "Taylor Biddle",
+        "email": "Taylor.Biddle@snailmail.com",
+        "first_name": "Taylor",
+        "last_name": "Biddle",
+        "state": "New Hampshire"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Sep 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.5015968729583236,
+            "membership_type": "Basic",
+            "redeemed_points": 351,
+            "reward_points": 891
+        },
+        "password": "Taylor89",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Fri Jul 13 12:58:49 2012",
+        "user_id": "Taylor_11682986"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Jul 27 12:58:49 2012",
+            "order_id": "T714424188198"
+        },
+        {
+            "order_datetime": "Sun Aug  5 12:58:49 2012",
+            "order_id": "T819527226201"
+        },
+        {
+            "order_datetime": "Mon Jul 16 12:58:49 2012",
+            "order_id": "T742120065522"
+        }
+    ]
+}

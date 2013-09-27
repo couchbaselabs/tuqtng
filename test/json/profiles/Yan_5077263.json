@@ -1,0 +1,35 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 32,
+        "display_name": "Yan Soileau",
+        "email": "Yan.Soileau@snailmail.com",
+        "first_name": "Yan",
+        "last_name": "Soileau",
+        "state": "Missouri"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Jan  3 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.2829720752681215,
+            "membership_type": "Silver",
+            "redeemed_points": 888,
+            "reward_points": 108
+        },
+        "password": "Yan56",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Mon Feb 21 12:58:49 2011",
+        "user_id": "Yan_5077263"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Dec 30 12:58:49 2012",
+            "order_id": "T984256811336"
+        }
+    ]
+}

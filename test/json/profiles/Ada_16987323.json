@@ -1,0 +1,44 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 59,
+        "display_name": "Ada Han",
+        "email": "Ada.Han@snailmail.com",
+        "first_name": "Ada",
+        "last_name": "Han",
+        "state": "New Mexico"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jul 22 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.5859452842450565,
+            "membership_type": "Basic",
+            "redeemed_points": 783,
+            "reward_points": 639
+        },
+        "password": "Ada35",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Tue Jul 31 12:58:49 2012",
+        "user_id": "Ada_16987323"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Jun  5 12:58:49 2013",
+            "order_id": "T160130954936"
+        },
+        {
+            "order_datetime": "Sat Apr  6 12:58:49 2013",
+            "order_id": "T713361361284"
+        }
+    ]
+}

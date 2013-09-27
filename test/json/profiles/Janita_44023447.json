@@ -1,0 +1,64 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 50,
+        "display_name": "Janita Rey",
+        "email": "Janita.Rey@snailmail.com",
+        "first_name": "Janita",
+        "last_name": "Rey",
+        "state": "Rhode Island"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.6643607462710084,
+            "membership_type": "Basic",
+            "redeemed_points": 36,
+            "reward_points": 468
+        },
+        "password": "Janita95",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Tue Jun 25 12:58:49 2013",
+        "user_id": "Janita_44023447"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal",
+                "Kid's Music",
+                "Opera and Vocal"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Jul 14 12:58:49 2013",
+            "order_id": "T497321016788"
+        },
+        {
+            "order_datetime": "Sun Jul 21 12:58:49 2013",
+            "order_id": "T139147217548"
+        }
+    ]
+}

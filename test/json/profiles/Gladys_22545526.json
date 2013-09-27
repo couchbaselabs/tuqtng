@@ -1,0 +1,50 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 57,
+        "display_name": "Gladys Castellano",
+        "email": "Gladys.Castellano@snailmail.com",
+        "first_name": "Gladys",
+        "last_name": "Castellano",
+        "state": "Delaware"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Jul 31 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.6612477201922018,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Gladys69",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Fri May 11 12:58:49 2012",
+        "user_id": "Gladys_22545526"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

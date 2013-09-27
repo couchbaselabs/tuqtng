@@ -1,0 +1,42 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 40,
+        "display_name": "Adina Boggs",
+        "email": "Adina.Boggs@snailmail.com",
+        "first_name": "Adina",
+        "last_name": "Boggs",
+        "state": "Oklahoma"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Mar 24 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.1846589122256892,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Adina65",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Wed Jul 13 12:58:49 2011",
+        "user_id": "Adina_60488731"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

@@ -1,0 +1,51 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 17,
+        "display_name": "Kenia Homer",
+        "email": "Kenia.Homer@snailmail.com",
+        "first_name": "Kenia",
+        "last_name": "Homer",
+        "state": "Vermont"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug 24 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.778536203803673,
+            "membership_type": "Basic",
+            "redeemed_points": 729,
+            "reward_points": 225
+        },
+        "password": "Kenia53",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Fri Apr  5 12:58:49 2013",
+        "user_id": "Kenia_28202090"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Comedy",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Jul  2 12:58:49 2013",
+            "order_id": "T708847408851"
+        }
+    ]
+}

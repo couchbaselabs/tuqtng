@@ -1,0 +1,70 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 43,
+        "display_name": "Song Askew",
+        "email": "Song.Askew@snailmail.com",
+        "first_name": "Song",
+        "last_name": "Askew",
+        "state": "Nevada"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Sep 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Ming_63923877"
+            ],
+            "loyalty_score": 7.512505070586053,
+            "membership_type": "Gold",
+            "redeemed_points": 21,
+            "reward_points": 63
+        },
+        "password": "Song76",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Wed Feb 13 12:58:49 2013",
+        "user_id": "Song_46512627"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Drama"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "NonFiction"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Sep  2 12:58:49 2013",
+            "order_id": "T610347743174"
+        },
+        {
+            "order_datetime": "Mon Jun 17 12:58:49 2013",
+            "order_id": "T196450527103"
+        },
+        {
+            "order_datetime": "Fri Feb 22 12:58:49 2013",
+            "order_id": "T683525755178"
+        }
+    ]
+}

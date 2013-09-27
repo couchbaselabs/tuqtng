@@ -1,0 +1,55 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 29,
+        "display_name": "Roseanna Ritchey",
+        "email": "Roseanna.Ritchey@snailmail.com",
+        "first_name": "Roseanna",
+        "last_name": "Ritchey",
+        "state": "Pennsylvania"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Aug 22 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.045226828791119,
+            "membership_type": "Silver",
+            "redeemed_points": 168,
+            "reward_points": 984
+        },
+        "password": "Roseanna73",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Wed Jan 19 12:58:49 2011",
+        "user_id": "Roseanna_53898855"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Feb  4 12:58:49 2013",
+            "order_id": "T223059506959"
+        },
+        {
+            "order_datetime": "Mon Oct 17 12:58:49 2011",
+            "order_id": "T214332395661"
+        },
+        {
+            "order_datetime": "Sun Aug 26 12:58:49 2012",
+            "order_id": "T278950306644"
+        },
+        {
+            "order_datetime": "Fri Jun  3 12:58:49 2011",
+            "order_id": "T731826872088"
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 38,
+        "display_name": "Gertude Coppola",
+        "email": "Gertude.Coppola@snailmail.com",
+        "first_name": "Gertude",
+        "last_name": "Coppola",
+        "state": "Florida"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Aug 20 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.18226157996341197,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Gertude16",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Thu Jan  3 12:58:49 2013",
+        "user_id": "Gertude_225188"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy",
+                "Music & Musicals"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

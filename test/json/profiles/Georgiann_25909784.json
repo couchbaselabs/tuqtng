@@ -1,0 +1,45 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 48,
+        "display_name": "Georgiann Deluca",
+        "email": "Georgiann.Deluca@snailmail.com",
+        "first_name": "Georgiann",
+        "last_name": "Deluca",
+        "state": "North Dakota"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Apr 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Belle_4112520",
+                "Nicolas_42526249"
+            ],
+            "loyalty_score": 7.32703340286991,
+            "membership_type": "Gold",
+            "redeemed_points": 1512,
+            "reward_points": 882
+        },
+        "password": "Georgiann13",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Thu Oct 25 12:58:49 2012",
+        "user_id": "Georgiann_25909784"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Dec  5 12:58:49 2012",
+            "order_id": "T774832025859"
+        },
+        {
+            "order_datetime": "Sun Nov  4 12:58:49 2012",
+            "order_id": "T116532459581"
+        }
+    ]
+}

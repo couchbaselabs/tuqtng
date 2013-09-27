@@ -1,0 +1,34 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 41,
+        "display_name": "Moises Hammer",
+        "email": "Moises.Hammer@snailmail.com",
+        "first_name": "Moises",
+        "last_name": "Hammer",
+        "state": "California"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug 11 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.3029437094646545,
+            "membership_type": "Basic",
+            "redeemed_points": 150,
+            "reward_points": 63
+        },
+        "password": "Moises83",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Mon Apr  4 12:58:49 2011",
+        "user_id": "Moises_9680640"
+    },
+    "shipped_order_history": []
+}

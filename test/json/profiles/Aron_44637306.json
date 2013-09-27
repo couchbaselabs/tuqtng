@@ -1,0 +1,55 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 51,
+        "display_name": "Aron Hansen",
+        "email": "Aron.Hansen@snailmail.com",
+        "first_name": "Aron",
+        "last_name": "Hansen",
+        "state": "Illinois"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Sep 24 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.3366966392162505,
+            "membership_type": "Silver",
+            "redeemed_points": 774,
+            "reward_points": 198
+        },
+        "password": "Aron44",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Sat Sep 21 12:58:49 2013",
+        "user_id": "Aron_44637306"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Sep 23 12:58:49 2013",
+            "order_id": "T723861362191"
+        },
+        {
+            "order_datetime": "Sun Sep 22 12:58:49 2013",
+            "order_id": "T959246716203"
+        },
+        {
+            "order_datetime": "Tue Sep 24 12:58:49 2013",
+            "order_id": "T776658229550"
+        },
+        {
+            "order_datetime": "Mon Sep 23 12:58:49 2013",
+            "order_id": "T167565099389"
+        }
+    ]
+}

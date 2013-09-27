@@ -1,0 +1,40 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 25,
+        "display_name": "Jamaal Slater",
+        "email": "Jamaal.Slater@snailmail.com",
+        "first_name": "Jamaal",
+        "last_name": "Slater",
+        "state": "New Mexico"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Jun 19 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.4888683163177618,
+            "membership_type": "Basic",
+            "redeemed_points": 120,
+            "reward_points": 105
+        },
+        "password": "Jamaal66",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Sun Feb 24 12:58:49 2013",
+        "user_id": "Jamaal_56464708"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu May 30 12:58:49 2013",
+            "order_id": "T842541297633"
+        }
+    ]
+}

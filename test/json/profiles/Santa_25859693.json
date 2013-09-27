@@ -1,0 +1,35 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 59,
+        "display_name": "Santa Clay",
+        "email": "Santa.Clay@snailmail.com",
+        "first_name": "Santa",
+        "last_name": "Clay",
+        "state": "Rhode Island"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Apr 20 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.279646930649838,
+            "membership_type": "Silver",
+            "redeemed_points": 375,
+            "reward_points": 630
+        },
+        "password": "Santa29",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Mon Sep 26 12:58:49 2011",
+        "user_id": "Santa_25859693"
+    },
+    "shipped_order_history": []
+}

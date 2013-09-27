@@ -1,0 +1,57 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Liliana Mccallum",
+        "email": "Liliana.Mccallum@snailmail.com",
+        "first_name": "Liliana",
+        "last_name": "Mccallum",
+        "state": "Oklahoma"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Sep 13 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.8630407039493706,
+            "membership_type": "Basic",
+            "redeemed_points": 594,
+            "reward_points": 693
+        },
+        "password": "Liliana47",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Wed Aug 14 12:58:49 2013",
+        "user_id": "Liliana_64723789"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "NonFiction",
+                "Home & Garden"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music",
+                "Jazz"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

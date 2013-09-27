@@ -1,0 +1,59 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 55,
+        "display_name": "Dede Yates",
+        "email": "Dede.Yates@snailmail.com",
+        "first_name": "Dede",
+        "last_name": "Yates",
+        "state": "Oregon"
+    },
+    "profile_details": {
+        "last_login_time": "Sat May 11 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.113048932036977,
+            "membership_type": "Silver",
+            "redeemed_points": 1062,
+            "reward_points": 1476
+        },
+        "password": "Dede67",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Thu Oct 25 12:58:49 2012",
+        "user_id": "Dede_9494077"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Jan 26 12:58:49 2013",
+            "order_id": "T527026045239"
+        }
+    ]
+}

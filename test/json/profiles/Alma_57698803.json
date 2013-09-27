@@ -1,0 +1,33 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 27,
+        "display_name": "Alma Almond",
+        "email": "Alma.Almond@snailmail.com",
+        "first_name": "Alma",
+        "last_name": "Almond",
+        "state": "Rhode Island"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Nov 23 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.765316002895404,
+            "membership_type": "Silver",
+            "redeemed_points": 180,
+            "reward_points": 984
+        },
+        "password": "Alma50",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Sat Sep  3 12:58:49 2011",
+        "user_id": "Alma_57698803"
+    },
+    "shipped_order_history": []
+}

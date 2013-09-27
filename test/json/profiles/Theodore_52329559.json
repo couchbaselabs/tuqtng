@@ -1,0 +1,43 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 57,
+        "display_name": "Theodore Trujillo",
+        "email": "Theodore.Trujillo@snailmail.com",
+        "first_name": "Theodore",
+        "last_name": "Trujillo",
+        "state": "New Jersey"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Nov 26 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.545280905281676,
+            "membership_type": "Basic",
+            "redeemed_points": 558,
+            "reward_points": 135
+        },
+        "password": "Theodore84",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Mon Oct  3 12:58:49 2011",
+        "user_id": "Theodore_52329559"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Feb 13 12:58:49 2012",
+            "order_id": "T763063333288"
+        },
+        {
+            "order_datetime": "Wed Jun 20 12:58:49 2012",
+            "order_id": "T642753634198"
+        },
+        {
+            "order_datetime": "Wed Jun 20 12:58:49 2012",
+            "order_id": "T772643713060"
+        }
+    ]
+}

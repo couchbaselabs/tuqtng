@@ -1,0 +1,48 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 46,
+        "display_name": "Denna Turman",
+        "email": "Denna.Turman@snailmail.com",
+        "first_name": "Denna",
+        "last_name": "Turman",
+        "state": "New Mexico"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Sep  5 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.20247283852669717,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Denna28",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Mon Jul  8 12:58:49 2013",
+        "user_id": "Denna_32731677"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Drama",
+                "Music & Musicals"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel",
+                "Diet & Health"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

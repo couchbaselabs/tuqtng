@@ -1,0 +1,47 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 34,
+        "display_name": "Stacie Fortner",
+        "email": "Stacie.Fortner@snailmail.com",
+        "first_name": "Stacie",
+        "last_name": "Fortner",
+        "state": "Colorado"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Sep 14 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.474656886343258,
+            "membership_type": "Silver",
+            "redeemed_points": 960,
+            "reward_points": 1425
+        },
+        "password": "Stacie99",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Fri Apr  5 12:58:49 2013",
+        "user_id": "Stacie_975533"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Jul  5 12:58:49 2013",
+            "order_id": "T976924811988"
+        },
+        {
+            "order_datetime": "Sun Jul 21 12:58:49 2013",
+            "order_id": "T808652941867"
+        },
+        {
+            "order_datetime": "Mon Jun  3 12:58:49 2013",
+            "order_id": "T430860564280"
+        },
+        {
+            "order_datetime": "Thu Jul 11 12:58:49 2013",
+            "order_id": "T937158494830"
+        }
+    ]
+}

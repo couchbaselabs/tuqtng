@@ -1,0 +1,65 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 30,
+        "display_name": "Roberto Rivers",
+        "email": "Roberto.Rivers@snailmail.com",
+        "first_name": "Roberto",
+        "last_name": "Rivers",
+        "state": "Texas"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Sep 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 8.618041273733311,
+            "membership_type": "Gold",
+            "redeemed_points": 720,
+            "reward_points": 1968
+        },
+        "password": "Roberto11",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Tue May  7 12:58:49 2013",
+        "user_id": "Roberto_77365638"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Comedy",
+                "Music & Musicals"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "NonFiction",
+                "Diet & Health"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Aug 10 12:58:49 2013",
+            "order_id": "T309364857009"
+        },
+        {
+            "order_datetime": "Fri Jun 14 12:58:49 2013",
+            "order_id": "T945538769914"
+        },
+        {
+            "order_datetime": "Sun Jun  9 12:58:49 2013",
+            "order_id": "T260821227823"
+        },
+        {
+            "order_datetime": "Sun Aug 25 12:58:49 2013",
+            "order_id": "T535632302762"
+        }
+    ]
+}

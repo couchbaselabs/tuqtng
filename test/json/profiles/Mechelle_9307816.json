@@ -1,0 +1,58 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 36,
+        "display_name": "Mechelle Montano",
+        "email": "Mechelle.Montano@snailmail.com",
+        "first_name": "Mechelle",
+        "last_name": "Montano",
+        "state": "Tennessee"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Jul  5 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.98080057564673,
+            "membership_type": "Silver",
+            "redeemed_points": 525,
+            "reward_points": 165
+        },
+        "password": "Mechelle37",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Tue Feb  5 12:58:49 2013",
+        "user_id": "Mechelle_9307816"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Documentary"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Medicine"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk",
+                "Jazz"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri May 31 12:58:49 2013",
+            "order_id": "T878426416412"
+        }
+    ]
+}

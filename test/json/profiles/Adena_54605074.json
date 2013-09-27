@@ -1,0 +1,30 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 32,
+        "display_name": "Adena Pardo",
+        "email": "Adena.Pardo@snailmail.com",
+        "first_name": "Adena",
+        "last_name": "Pardo",
+        "state": "Missouri"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Sep  1 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.4419427354677206,
+            "membership_type": "Basic",
+            "redeemed_points": 60,
+            "reward_points": 117
+        },
+        "password": "Adena87",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Thu Jan 13 12:58:49 2011",
+        "user_id": "Adena_54605074"
+    },
+    "shipped_order_history": []
+}

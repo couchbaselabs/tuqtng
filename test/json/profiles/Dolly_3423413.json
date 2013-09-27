@@ -1,0 +1,61 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Dolly Shull",
+        "email": "Dolly.Shull@snailmail.com",
+        "first_name": "Dolly",
+        "last_name": "Shull",
+        "state": "Nebraska"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jul 15 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Carmina_36923940",
+                "Randa_2376030"
+            ],
+            "loyalty_score": 7.2000194813189955,
+            "membership_type": "Gold",
+            "redeemed_points": 1428,
+            "reward_points": 1323
+        },
+        "password": "Dolly27",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Fri Jul  6 12:58:49 2012",
+        "user_id": "Dolly_3423413"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Jul 13 12:58:49 2013",
+            "order_id": "T422452086274"
+        },
+        {
+            "order_datetime": "Sun Sep  9 12:58:49 2012",
+            "order_id": "T926332666739"
+        },
+        {
+            "order_datetime": "Tue Oct  2 12:58:49 2012",
+            "order_id": "T450859619818"
+        }
+    ]
+}

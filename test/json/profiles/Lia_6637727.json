@@ -1,0 +1,44 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 44,
+        "display_name": "Lia Stowers",
+        "email": "Lia.Stowers@snailmail.com",
+        "first_name": "Lia",
+        "last_name": "Stowers",
+        "state": "Arizona"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jul  1 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.13507360451913142,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Lia46",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Tue May 22 12:58:49 2012",
+        "user_id": "Lia_6637727"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

@@ -1,0 +1,63 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 16,
+        "display_name": "Gustavo Mcmanus",
+        "email": "Gustavo.Mcmanus@snailmail.com",
+        "first_name": "Gustavo",
+        "last_name": "Mcmanus",
+        "state": "Florida"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.404750043227136,
+            "membership_type": "Silver",
+            "redeemed_points": 264,
+            "reward_points": 780
+        },
+        "password": "Gustavo42",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Wed Mar 14 12:58:49 2012",
+        "user_id": "Gustavo_87074534"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel",
+                "Home & Garden"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Apr  2 12:58:49 2012",
+            "order_id": "T442056848796"
+        },
+        {
+            "order_datetime": "Wed Mar  6 12:58:49 2013",
+            "order_id": "T721620312160"
+        },
+        {
+            "order_datetime": "Fri Apr 26 12:58:49 2013",
+            "order_id": "T564632345373"
+        },
+        {
+            "order_datetime": "Fri May 17 12:58:49 2013",
+            "order_id": "T473160925341"
+        }
+    ]
+}

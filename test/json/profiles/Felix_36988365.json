@@ -1,0 +1,72 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 24,
+        "display_name": "Felix Geary",
+        "email": "Felix.Geary@snailmail.com",
+        "first_name": "Felix",
+        "last_name": "Geary",
+        "state": "Kentucky"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Aug 26 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 9.804193735280357,
+            "membership_type": "Platinum",
+            "redeemed_points": 1053,
+            "reward_points": 270
+        },
+        "password": "Felix91",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Wed Aug  8 12:58:49 2012",
+        "user_id": "Felix_36988365"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Documentary",
+                "Fitness / Instructional"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "Travel"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Nov  8 12:58:49 2012",
+            "order_id": "T431959014968"
+        },
+        {
+            "order_datetime": "Mon Sep 24 12:58:49 2012",
+            "order_id": "T663941786884"
+        },
+        {
+            "order_datetime": "Tue Jan  8 12:58:49 2013",
+            "order_id": "T523542913502"
+        },
+        {
+            "order_datetime": "Wed Oct 10 12:58:49 2012",
+            "order_id": "T451550726586"
+        },
+        {
+            "order_datetime": "Sat Sep 29 12:58:49 2012",
+            "order_id": "T821539568328"
+        },
+        {
+            "order_datetime": "Tue Jun 11 12:58:49 2013",
+            "order_id": "T871149061464"
+        }
+    ]
+}

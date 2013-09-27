@@ -1,0 +1,44 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 50,
+        "display_name": "Edna Vieira",
+        "email": "Edna.Vieira@snailmail.com",
+        "first_name": "Edna",
+        "last_name": "Vieira",
+        "state": "New Mexico"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Sep 23 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.8674665357723932,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Edna54",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Thu Jul 11 12:58:49 2013",
+        "user_id": "Edna_5626031"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Documentary"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

@@ -1,0 +1,56 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Barbara Mcintire",
+        "email": "Barbara.Mcintire@snailmail.com",
+        "first_name": "Barbara",
+        "last_name": "Mcintire",
+        "state": "Nebraska"
+    },
+    "profile_details": {
+        "last_login_time": "Thu May 16 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.673915826345885,
+            "membership_type": "Basic",
+            "redeemed_points": 828,
+            "reward_points": 369
+        },
+        "password": "Barbara58",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Mon Nov 14 12:58:49 2011",
+        "user_id": "Barbara_64043034"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Documentary"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music",
+                "Country Music"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

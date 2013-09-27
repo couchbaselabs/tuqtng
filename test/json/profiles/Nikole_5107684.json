@@ -1,0 +1,61 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 55,
+        "display_name": "Nikole Pate",
+        "email": "Nikole.Pate@snailmail.com",
+        "first_name": "Nikole",
+        "last_name": "Pate",
+        "state": "Florida"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Jun 21 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.1998268831335586,
+            "membership_type": "Basic",
+            "redeemed_points": 135,
+            "reward_points": 729
+        },
+        "password": "Nikole52",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Tue Sep 11 12:58:49 2012",
+        "user_id": "Nikole_5107684"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Drama",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Travel",
+                "Sports & Adventure"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Oct  3 12:58:49 2012",
+            "order_id": "T664656792367"
+        },
+        {
+            "order_datetime": "Sun Apr 14 12:58:49 2013",
+            "order_id": "T212021822665"
+        }
+    ]
+}

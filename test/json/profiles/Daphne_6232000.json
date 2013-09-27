@@ -1,0 +1,57 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 42,
+        "display_name": "Daphne Dietrich",
+        "email": "Daphne.Dietrich@snailmail.com",
+        "first_name": "Daphne",
+        "last_name": "Dietrich",
+        "state": "Iowa"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Sep 16 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Anita_88293330"
+            ],
+            "loyalty_score": 8.149120626552477,
+            "membership_type": "Gold",
+            "redeemed_points": 1488,
+            "reward_points": 504
+        },
+        "password": "Daphne30",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Sat Sep  7 12:58:49 2013",
+        "user_id": "Daphne_6232000"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Sep  9 12:58:49 2013",
+            "order_id": "T680635874354"
+        },
+        {
+            "order_datetime": "Wed Sep 11 12:58:49 2013",
+            "order_id": "T219046861733"
+        },
+        {
+            "order_datetime": "Wed Sep 11 12:58:49 2013",
+            "order_id": "T995451027465"
+        },
+        {
+            "order_datetime": "Mon Sep  9 12:58:49 2013",
+            "order_id": "T987335692638"
+        }
+    ]
+}

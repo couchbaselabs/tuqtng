@@ -1,0 +1,68 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 55,
+        "display_name": "Lanie Hopper",
+        "email": "Lanie.Hopper@snailmail.com",
+        "first_name": "Lanie",
+        "last_name": "Hopper",
+        "state": "Massachusetts"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Aug  8 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Else_76329063",
+                "Latricia_58516729",
+                "Natisha_3914951"
+            ],
+            "loyalty_score": 9.531028548599119,
+            "membership_type": "Platinum",
+            "redeemed_points": 2592,
+            "reward_points": 1755
+        },
+        "password": "Lanie14",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Fri Jul 20 12:58:49 2012",
+        "user_id": "Lanie_445800"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Jun 20 12:58:49 2013",
+            "order_id": "T185866215469"
+        },
+        {
+            "order_datetime": "Mon Jul  8 12:58:49 2013",
+            "order_id": "T760735272046"
+        },
+        {
+            "order_datetime": "Thu Jan  3 12:58:49 2013",
+            "order_id": "T239421626729"
+        },
+        {
+            "order_datetime": "Thu Aug 16 12:58:49 2012",
+            "order_id": "T496867109147"
+        },
+        {
+            "order_datetime": "Tue Aug 28 12:58:49 2012",
+            "order_id": "T625228526372"
+        },
+        {
+            "order_datetime": "Tue Mar 12 12:58:49 2013",
+            "order_id": "T102547615416"
+        },
+        {
+            "order_datetime": "Mon Jul 30 12:58:49 2012",
+            "order_id": "T173363886349"
+        }
+    ]
+}

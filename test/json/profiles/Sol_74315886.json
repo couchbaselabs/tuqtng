@@ -1,0 +1,88 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 60,
+        "display_name": "Sol Ratcliff",
+        "email": "Sol.Ratcliff@snailmail.com",
+        "first_name": "Sol",
+        "last_name": "Ratcliff",
+        "state": "Michigan"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Sep  6 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [
+                "Loma_51132384"
+            ],
+            "loyalty_score": 7.5120310264268,
+            "membership_type": "Gold",
+            "redeemed_points": 294,
+            "reward_points": 798
+        },
+        "password": "Sol87",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Wed Mar  9 12:58:49 2011",
+        "user_id": "Sol_74315886"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "NonFiction"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music",
+                "Jazz",
+                "Opera and Vocal"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Aug 26 12:58:49 2012",
+            "order_id": "T199166169022"
+        },
+        {
+            "order_datetime": "Tue Feb  7 12:58:49 2012",
+            "order_id": "T455131047636"
+        },
+        {
+            "order_datetime": "Mon Nov 14 12:58:49 2011",
+            "order_id": "T478837353230"
+        },
+        {
+            "order_datetime": "Tue Nov 29 12:58:49 2011",
+            "order_id": "T174165972105"
+        },
+        {
+            "order_datetime": "Sun Feb 12 12:58:49 2012",
+            "order_id": "T879168209163"
+        },
+        {
+            "order_datetime": "Mon Jan 16 12:58:49 2012",
+            "order_id": "T572946635444"
+        },
+        {
+            "order_datetime": "Sat Dec 31 12:58:49 2011",
+            "order_id": "T382220719032"
+        }
+    ]
+}

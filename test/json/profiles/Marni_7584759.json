@@ -1,0 +1,45 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 33,
+        "display_name": "Marni Custer",
+        "email": "Marni.Custer@snailmail.com",
+        "first_name": "Marni",
+        "last_name": "Custer",
+        "state": "Colorado"
+    },
+    "profile_details": {
+        "last_login_time": "Wed May  8 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.575368581241043,
+            "membership_type": "Basic",
+            "redeemed_points": 180,
+            "reward_points": 432
+        },
+        "password": "Marni71",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Tue Mar 29 12:58:49 2011",
+        "user_id": "Marni_7584759"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama",
+                "Music & Musicals"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Nov 26 12:58:49 2011",
+            "order_id": "T697253565286"
+        }
+    ]
+}

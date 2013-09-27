@@ -1,0 +1,50 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 19,
+        "display_name": "Silas Gorman",
+        "email": "Silas.Gorman@snailmail.com",
+        "first_name": "Silas",
+        "last_name": "Gorman",
+        "state": "Virginia"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Jul  6 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 7.917554220721933,
+            "membership_type": "Gold",
+            "redeemed_points": 966,
+            "reward_points": 1827
+        },
+        "password": "Silas47",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Tue Jan 22 12:58:49 2013",
+        "user_id": "Silas_50274007"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Drama",
+                "Fitness / Instructional"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Travel"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

@@ -1,0 +1,51 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 48,
+        "display_name": "Chang Desimone",
+        "email": "Chang.Desimone@snailmail.com",
+        "first_name": "Chang",
+        "last_name": "Desimone",
+        "state": "Maryland"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Aug 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 7.134286050818307,
+            "membership_type": "Gold",
+            "redeemed_points": 1911,
+            "reward_points": 399
+        },
+        "password": "Chang31",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Sat Jul 13 12:58:49 2013",
+        "user_id": "Chang_33038693"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Jul 16 12:58:49 2013",
+            "order_id": "T789469489552"
+        },
+        {
+            "order_datetime": "Wed Aug  7 12:58:49 2013",
+            "order_id": "T690347657750"
+        },
+        {
+            "order_datetime": "Sat Jul 20 12:58:49 2013",
+            "order_id": "T256136217275"
+        },
+        {
+            "order_datetime": "Wed Jul 17 12:58:49 2013",
+            "order_id": "T136921025265"
+        },
+        {
+            "order_datetime": "Mon Jul 15 12:58:49 2013",
+            "order_id": "T999064739619"
+        }
+    ]
+}

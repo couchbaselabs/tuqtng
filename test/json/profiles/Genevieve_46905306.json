@@ -1,0 +1,66 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Genevieve Dabney",
+        "email": "Genevieve.Dabney@snailmail.com",
+        "first_name": "Genevieve",
+        "last_name": "Dabney",
+        "state": "Massachusetts"
+    },
+    "profile_details": {
+        "last_login_time": "Sat May 11 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 9.716900221348912,
+            "membership_type": "Platinum",
+            "redeemed_points": 81,
+            "reward_points": 1674
+        },
+        "password": "Genevieve91",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Fri Mar  2 12:58:49 2012",
+        "user_id": "Genevieve_46905306"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "NonFiction",
+                "Home & Garden"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Mar 23 12:58:49 2013",
+            "order_id": "T398652239279"
+        },
+        {
+            "order_datetime": "Sun Feb 24 12:58:49 2013",
+            "order_id": "T397428981897"
+        },
+        {
+            "order_datetime": "Wed Aug  1 12:58:49 2012",
+            "order_id": "T229243509641"
+        },
+        {
+            "order_datetime": "Mon Jun 18 12:58:49 2012",
+            "order_id": "T179148772402"
+        }
+    ]
+}

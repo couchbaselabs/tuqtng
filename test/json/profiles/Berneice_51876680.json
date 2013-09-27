@@ -1,0 +1,88 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 28,
+        "display_name": "Berneice Isom",
+        "email": "Berneice.Isom@snailmail.com",
+        "first_name": "Berneice",
+        "last_name": "Isom",
+        "state": "Delaware"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jun 17 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Malia_81994691"
+            ],
+            "loyalty_score": 7.8798239943960136,
+            "membership_type": "Gold",
+            "redeemed_points": 1281,
+            "reward_points": 42
+        },
+        "password": "Berneice66",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Fri Aug 24 12:58:49 2012",
+        "user_id": "Berneice_51876680"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel",
+                "Home & Garden"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Feb  3 12:58:49 2013",
+            "order_id": "T523423943177"
+        },
+        {
+            "order_datetime": "Mon Nov 19 12:58:49 2012",
+            "order_id": "T646856519142"
+        },
+        {
+            "order_datetime": "Thu Mar 21 12:58:49 2013",
+            "order_id": "T596666513372"
+        },
+        {
+            "order_datetime": "Sat Feb  9 12:58:49 2013",
+            "order_id": "T503060999768"
+        },
+        {
+            "order_datetime": "Thu Feb 21 12:58:49 2013",
+            "order_id": "T686737052054"
+        },
+        {
+            "order_datetime": "Tue Nov  6 12:58:49 2012",
+            "order_id": "T272122443565"
+        },
+        {
+            "order_datetime": "Tue Apr  9 12:58:49 2013",
+            "order_id": "T945661781878"
+        }
+    ]
+}

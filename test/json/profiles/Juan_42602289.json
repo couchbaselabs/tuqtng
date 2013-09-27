@@ -1,0 +1,69 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 32,
+        "display_name": "Juan Sneed",
+        "email": "Juan.Sneed@snailmail.com",
+        "first_name": "Juan",
+        "last_name": "Sneed",
+        "state": "Alaska"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Aug 20 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Edwin_17986654"
+            ],
+            "loyalty_score": 6.301025745329413,
+            "membership_type": "Silver",
+            "redeemed_points": 1296,
+            "reward_points": 720
+        },
+        "password": "Juan76",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Mon Apr 29 12:58:49 2013",
+        "user_id": "Juan_42602289"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Travel"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu May 23 12:58:49 2013",
+            "order_id": "T655554101116"
+        },
+        {
+            "order_datetime": "Tue Jul 16 12:58:49 2013",
+            "order_id": "T639530817823"
+        },
+        {
+            "order_datetime": "Mon May  6 12:58:49 2013",
+            "order_id": "T696361884035"
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 56,
+        "display_name": "Elvia Good",
+        "email": "Elvia.Good@snailmail.com",
+        "first_name": "Elvia",
+        "last_name": "Good",
+        "state": "Colorado"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Jul 18 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.293668410895043,
+            "membership_type": "Basic",
+            "redeemed_points": 63,
+            "reward_points": 900
+        },
+        "password": "Elvia57",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Mon Apr 15 12:58:49 2013",
+        "user_id": "Elvia_56751179"
+    },
+    "shipped_order_history": []
+}

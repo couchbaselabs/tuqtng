@@ -1,0 +1,38 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 51,
+        "display_name": "Son Voigt",
+        "email": "Son.Voigt@snailmail.com",
+        "first_name": "Son",
+        "last_name": "Voigt",
+        "state": "Vermont"
+    },
+    "profile_details": {
+        "last_login_time": "Wed May 15 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Laurine_54405959",
+                "Miguelina_66199054",
+                "Deann_84453039",
+                "Weston_3077363"
+            ],
+            "loyalty_score": 9.938988862985841,
+            "membership_type": "Platinum",
+            "redeemed_points": 1836,
+            "reward_points": 459
+        },
+        "password": "Son54",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Sat Dec 31 12:58:49 2011",
+        "user_id": "Son_86341263"
+    },
+    "shipped_order_history": []
+}

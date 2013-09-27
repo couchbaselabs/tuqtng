@@ -1,0 +1,46 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 56,
+        "display_name": "Mayola Mcmahon",
+        "email": "Mayola.Mcmahon@snailmail.com",
+        "first_name": "Mayola",
+        "last_name": "Mcmahon",
+        "state": "Virginia"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Feb 19 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.1848303323547364,
+            "membership_type": "Silver",
+            "redeemed_points": 492,
+            "reward_points": 1128
+        },
+        "password": "Mayola70",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Tue Aug 23 12:58:49 2011",
+        "user_id": "Mayola_8135736"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Comedy"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "NonFiction"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

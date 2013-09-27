@@ -1,0 +1,67 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 45,
+        "display_name": "Roselee Valle",
+        "email": "Roselee.Valle@snailmail.com",
+        "first_name": "Roselee",
+        "last_name": "Valle",
+        "state": "New York"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jul  8 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.015004827261029,
+            "membership_type": "Silver",
+            "redeemed_points": 36,
+            "reward_points": 720
+        },
+        "password": "Roselee73",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Tue Sep  4 12:58:49 2012",
+        "user_id": "Roselee_70089862"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "NonFiction"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music",
+                "Country Music",
+                "Opera and Vocal"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Oct 25 12:58:49 2012",
+            "order_id": "T256866614142"
+        },
+        {
+            "order_datetime": "Tue Jun 11 12:58:49 2013",
+            "order_id": "T583521526166"
+        }
+    ]
+}

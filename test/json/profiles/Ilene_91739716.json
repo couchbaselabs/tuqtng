@@ -1,0 +1,43 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 57,
+        "display_name": "Ilene Mcdowell",
+        "email": "Ilene.Mcdowell@snailmail.com",
+        "first_name": "Ilene",
+        "last_name": "Mcdowell",
+        "state": "Nebraska"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Jan 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.4960807090947474,
+            "membership_type": "Basic",
+            "redeemed_points": 414,
+            "reward_points": 54
+        },
+        "password": "Ilene40",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Fri Mar 25 12:58:49 2011",
+        "user_id": "Ilene_91739716"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Dec 16 12:58:49 2011",
+            "order_id": "T669025658536"
+        },
+        {
+            "order_datetime": "Fri Dec  9 12:58:49 2011",
+            "order_id": "T324646011982"
+        },
+        {
+            "order_datetime": "Thu Nov  1 12:58:49 2012",
+            "order_id": "T285545916811"
+        }
+    ]
+}

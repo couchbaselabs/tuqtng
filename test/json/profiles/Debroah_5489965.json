@@ -1,0 +1,71 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 25,
+        "display_name": "Debroah Le",
+        "email": "Debroah.Le@snailmail.com",
+        "first_name": "Debroah",
+        "last_name": "Le",
+        "state": "Colorado"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Jul 20 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 9.719384374220612,
+            "membership_type": "Platinum",
+            "redeemed_points": 2133,
+            "reward_points": 1458
+        },
+        "password": "Debroah24",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Wed Feb  1 12:58:49 2012",
+        "user_id": "Debroah_5489965"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Comedy"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "Medicine"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Apr  3 12:58:49 2012",
+            "order_id": "T192965763543"
+        },
+        {
+            "order_datetime": "Sun Dec  2 12:58:49 2012",
+            "order_id": "T444322433583"
+        },
+        {
+            "order_datetime": "Fri Mar 29 12:58:49 2013",
+            "order_id": "T252655667829"
+        },
+        {
+            "order_datetime": "Fri Oct 12 12:58:49 2012",
+            "order_id": "T129853061067"
+        },
+        {
+            "order_datetime": "Tue Jun 19 12:58:49 2012",
+            "order_id": "T524465382687"
+        }
+    ]
+}

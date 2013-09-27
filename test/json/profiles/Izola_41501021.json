@@ -1,0 +1,39 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 31,
+        "display_name": "Izola Willett",
+        "email": "Izola.Willett@snailmail.com",
+        "first_name": "Izola",
+        "last_name": "Willett",
+        "state": "Vermont"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Sep 14 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.109693833455107,
+            "membership_type": "Silver",
+            "redeemed_points": 720,
+            "reward_points": 1215
+        },
+        "password": "Izola86",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Thu Jun 13 12:58:49 2013",
+        "user_id": "Izola_41501021"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Jun 24 12:58:49 2013",
+            "order_id": "T305026638115"
+        },
+        {
+            "order_datetime": "Mon Jul  1 12:58:49 2013",
+            "order_id": "T974535108599"
+        }
+    ]
+}

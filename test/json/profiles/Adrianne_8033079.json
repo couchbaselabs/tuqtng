@@ -1,0 +1,62 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 37,
+        "display_name": "Adrianne Thorpe",
+        "email": "Adrianne.Thorpe@snailmail.com",
+        "first_name": "Adrianne",
+        "last_name": "Thorpe",
+        "state": "Arkansas"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Jul 20 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Gregg_7005869",
+                "Sylvia_73978453"
+            ],
+            "loyalty_score": 9.105396182206462,
+            "membership_type": "Platinum",
+            "redeemed_points": 486,
+            "reward_points": 891
+        },
+        "password": "Adrianne59",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Fri Mar 29 12:58:49 2013",
+        "user_id": "Adrianne_8033079"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Jul  6 12:58:49 2013",
+            "order_id": "T663641967913"
+        },
+        {
+            "order_datetime": "Mon Jul  8 12:58:49 2013",
+            "order_id": "T458939484183"
+        },
+        {
+            "order_datetime": "Sat Jul 20 12:58:49 2013",
+            "order_id": "T504733169090"
+        },
+        {
+            "order_datetime": "Mon Jun 24 12:58:49 2013",
+            "order_id": "T785439587355"
+        },
+        {
+            "order_datetime": "Mon Apr 29 12:58:49 2013",
+            "order_id": "T486324724945"
+        },
+        {
+            "order_datetime": "Thu Jul 11 12:58:49 2013",
+            "order_id": "T495532623507"
+        },
+        {
+            "order_datetime": "Wed Jun  5 12:58:49 2013",
+            "order_id": "T453345858571"
+        }
+    ]
+}

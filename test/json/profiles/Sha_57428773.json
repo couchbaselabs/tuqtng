@@ -1,0 +1,44 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 58,
+        "display_name": "Sha Linville",
+        "email": "Sha.Linville@snailmail.com",
+        "first_name": "Sha",
+        "last_name": "Linville",
+        "state": "Florida"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Aug 29 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.271675251534814,
+            "membership_type": "Basic",
+            "redeemed_points": 288,
+            "reward_points": 261
+        },
+        "password": "Sha82",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Thu Apr 25 12:58:49 2013",
+        "user_id": "Sha_57428773"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Documentary",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

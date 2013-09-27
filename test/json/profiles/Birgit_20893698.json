@@ -1,0 +1,33 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 18,
+        "display_name": "Birgit Abreu",
+        "email": "Birgit.Abreu@snailmail.com",
+        "first_name": "Birgit",
+        "last_name": "Abreu",
+        "state": "Utah"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Jul 26 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.824686410336731,
+            "membership_type": "Silver",
+            "redeemed_points": 48,
+            "reward_points": 804
+        },
+        "password": "Birgit81",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Sat Mar 26 12:58:49 2011",
+        "user_id": "Birgit_20893698"
+    },
+    "shipped_order_history": []
+}

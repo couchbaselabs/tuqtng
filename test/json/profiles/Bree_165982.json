@@ -1,0 +1,58 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 50,
+        "display_name": "Bree Hass",
+        "email": "Bree.Hass@snailmail.com",
+        "first_name": "Bree",
+        "last_name": "Hass",
+        "state": "New Hampshire"
+    },
+    "profile_details": {
+        "last_login_time": "Tue May 14 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.0412646841985485,
+            "membership_type": "Basic",
+            "redeemed_points": 228,
+            "reward_points": 288
+        },
+        "password": "Bree83",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Mon Nov 26 12:58:49 2012",
+        "user_id": "Bree_165982"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Drama",
+                "Fitness / Instructional"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "NonFiction"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal",
+                "Country Music",
+                "Opera and Vocal"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

@@ -1,0 +1,44 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 55,
+        "display_name": "Else Hawley",
+        "email": "Else.Hawley@snailmail.com",
+        "first_name": "Else",
+        "last_name": "Hawley",
+        "state": "New Jersey"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Mar 14 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.723211851940943,
+            "membership_type": "Silver",
+            "redeemed_points": 300,
+            "reward_points": 90
+        },
+        "password": "Else77",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Sat May 14 12:58:49 2011",
+        "user_id": "Else_76329063"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Jun  6 12:58:49 2011",
+            "order_id": "T708940532303"
+        }
+    ]
+}

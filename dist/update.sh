@@ -69,6 +69,7 @@ builddistpackages() {
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/data/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
+    cp -r test/json/profiles/ $DIST/stage/data/default/profiles
     cd $DIST/stage
     zip $DIST/couchbase-query_dev_preview1_x86_64_mac.zip -r .
     cd $top
@@ -86,6 +87,7 @@ builddistpackages() {
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/data/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
+    cp -r test/json/profiles/ $DIST/stage/data/default/profiles
     cd $DIST/stage
     tar zcvf $DIST/couchbase-query_dev_preview1_x86_linux.tar.gz .
     cd $top
@@ -103,6 +105,7 @@ builddistpackages() {
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/data/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
+    cp -r test/json/profiles/ $DIST/stage/data/default/profiles
     cd $DIST/stage
     tar zcvf $DIST/couchbase-query_dev_preview1_x86_64_linux.tar.gz .
     cd $top
@@ -120,6 +123,7 @@ builddistpackages() {
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/data/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
+    cp -r test/json/profiles/ $DIST/stage/data/default/profiles
     cd $DIST/stage
     zip $DIST/couchbase-query_dev_preview1_x86_win.zip -r .
     cd $top
@@ -137,6 +141,7 @@ builddistpackages() {
     cp -r $DIST/tutorial_tmp/tutorial/content/ $DIST/stage/static/tutorial
     mkdir -p $DIST/stage/data/default/tutorial
     cp -r test/json/tutorial/ $DIST/stage/data/default/tutorial
+    cp -r test/json/profiles/ $DIST/stage/data/default/profiles
     cd $DIST/stage
     zip $DIST/couchbase-query_dev_preview1_x86_64_win.zip -r .
     cd $top

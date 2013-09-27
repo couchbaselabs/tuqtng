@@ -1,0 +1,64 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 42,
+        "display_name": "Chara Pfeifer",
+        "email": "Chara.Pfeifer@snailmail.com",
+        "first_name": "Chara",
+        "last_name": "Pfeifer",
+        "state": "Hawaii"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Sep 22 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.3594477404287515,
+            "membership_type": "Basic",
+            "redeemed_points": 228,
+            "reward_points": 198
+        },
+        "password": "Chara81",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Thu Sep 19 12:58:49 2013",
+        "user_id": "Chara_63736793"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Comedy"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "Travel",
+                "Diet & Health"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music",
+                "Kid's Music"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Sep 21 12:58:49 2013",
+            "order_id": "T707831921333"
+        }
+    ]
+}

@@ -1,0 +1,50 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 17,
+        "display_name": "Joya Headley",
+        "email": "Joya.Headley@snailmail.com",
+        "first_name": "Joya",
+        "last_name": "Headley",
+        "state": "Vermont"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jul 30 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.357601848498787,
+            "membership_type": "Basic",
+            "redeemed_points": 504,
+            "reward_points": 426
+        },
+        "password": "Joya72",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Thu Mar 10 12:58:49 2011",
+        "user_id": "Joya_19793816"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Apr 29 12:58:49 2011",
+            "order_id": "T177049421781"
+        }
+    ]
+}

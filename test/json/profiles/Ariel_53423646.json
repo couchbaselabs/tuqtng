@@ -1,0 +1,61 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 50,
+        "display_name": "Ariel Ahmad",
+        "email": "Ariel.Ahmad@snailmail.com",
+        "first_name": "Ariel",
+        "last_name": "Ahmad",
+        "state": "Oregon"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Nov 14 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.23627657247753,
+            "membership_type": "Basic",
+            "redeemed_points": 756,
+            "reward_points": 315
+        },
+        "password": "Ariel65",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Sat Jul 30 12:58:49 2011",
+        "user_id": "Ariel_53423646"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel",
+                "Diet & Health"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Oct 13 12:58:49 2011",
+            "order_id": "T436424765809"
+        },
+        {
+            "order_datetime": "Fri Nov 18 12:58:49 2011",
+            "order_id": "T721167623157"
+        }
+    ]
+}

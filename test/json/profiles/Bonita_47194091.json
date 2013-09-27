@@ -1,0 +1,75 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 19,
+        "display_name": "Bonita Spain",
+        "email": "Bonita.Spain@snailmail.com",
+        "first_name": "Bonita",
+        "last_name": "Spain",
+        "state": "Illinois"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Sep  4 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Morton_8891774",
+                "Lauryn_58435271",
+                "Lakia_56404766"
+            ],
+            "loyalty_score": 9.007621291795063,
+            "membership_type": "Platinum",
+            "redeemed_points": 2052,
+            "reward_points": 2025
+        },
+        "password": "Bonita97",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Thu Jul 11 12:58:49 2013",
+        "user_id": "Bonita_47194091"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Aug 11 12:58:49 2013",
+            "order_id": "T527943702162"
+        },
+        {
+            "order_datetime": "Mon Jul 22 12:58:49 2013",
+            "order_id": "T499527904176"
+        },
+        {
+            "order_datetime": "Sun Jul 21 12:58:49 2013",
+            "order_id": "T370527705573"
+        },
+        {
+            "order_datetime": "Wed Jul 24 12:58:49 2013",
+            "order_id": "T165623032391"
+        },
+        {
+            "order_datetime": "Thu Aug 15 12:58:49 2013",
+            "order_id": "T886263309983"
+        }
+    ]
+}

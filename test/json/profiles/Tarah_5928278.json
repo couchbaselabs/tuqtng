@@ -1,0 +1,42 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 21,
+        "display_name": "Tarah Pierre",
+        "email": "Tarah.Pierre@snailmail.com",
+        "first_name": "Tarah",
+        "last_name": "Pierre",
+        "state": "California"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Oct  5 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.557505013639394,
+            "membership_type": "Basic",
+            "redeemed_points": 474,
+            "reward_points": 570
+        },
+        "password": "Tarah28",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Thu May  5 12:58:49 2011",
+        "user_id": "Tarah_5928278"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Jan 22 12:58:49 2012",
+            "order_id": "T866623944408"
+        },
+        {
+            "order_datetime": "Sun Jul 29 12:58:49 2012",
+            "order_id": "T744730675413"
+        }
+    ]
+}

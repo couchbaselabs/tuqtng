@@ -1,0 +1,52 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 45,
+        "display_name": "Cari Tripp",
+        "email": "Cari.Tripp@snailmail.com",
+        "first_name": "Cari",
+        "last_name": "Tripp",
+        "state": "Massachusetts"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Issac_45076438",
+                "Marceline_1755781",
+                "Shan_5086108"
+            ],
+            "loyalty_score": 8.81947081336387,
+            "membership_type": "Gold",
+            "redeemed_points": 840,
+            "reward_points": 768
+        },
+        "password": "Cari86",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Sat Feb  2 12:58:49 2013",
+        "user_id": "Cari_991412"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Documentary",
+                "Fitness / Instructional"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Travel",
+                "Sports & Adventure"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

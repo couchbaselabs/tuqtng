@@ -1,0 +1,58 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 38,
+        "display_name": "Stacia Stepp",
+        "email": "Stacia.Stepp@snailmail.com",
+        "first_name": "Stacia",
+        "last_name": "Stepp",
+        "state": "Colorado"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Jul 11 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Delmer_61092466",
+                "Sanjuanita_40738564",
+                "Stephane_8509602"
+            ],
+            "loyalty_score": 8.504017596056103,
+            "membership_type": "Gold",
+            "redeemed_points": 408,
+            "reward_points": 1032
+        },
+        "password": "Stacia77",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Sat May 26 12:58:49 2012",
+        "user_id": "Stacia_2362574"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Drama"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "Medicine"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Aug 14 12:58:49 2012",
+            "order_id": "T497467584488"
+        }
+    ]
+}

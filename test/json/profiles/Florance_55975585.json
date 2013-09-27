@@ -1,0 +1,73 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 29,
+        "display_name": "Florance Robinette",
+        "email": "Florance.Robinette@snailmail.com",
+        "first_name": "Florance",
+        "last_name": "Robinette",
+        "state": "Alaska"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Jun 29 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 7.875794647382701,
+            "membership_type": "Gold",
+            "redeemed_points": 1806,
+            "reward_points": 357
+        },
+        "password": "Florance24",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Mon Jan  9 12:58:49 2012",
+        "user_id": "Florance_55975585"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Drama"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "NonFiction",
+                "Diet & Health"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Feb 14 12:58:49 2012",
+            "order_id": "T333933519249"
+        },
+        {
+            "order_datetime": "Wed May 23 12:58:49 2012",
+            "order_id": "T314368767862"
+        },
+        {
+            "order_datetime": "Mon Apr 15 12:58:49 2013",
+            "order_id": "T792866733274"
+        },
+        {
+            "order_datetime": "Tue Jul 17 12:58:49 2012",
+            "order_id": "T376959351806"
+        },
+        {
+            "order_datetime": "Fri May 10 12:58:49 2013",
+            "order_id": "T811120173402"
+        }
+    ]
+}

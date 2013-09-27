@@ -1,0 +1,49 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Agustin Templeton",
+        "email": "Agustin.Templeton@snailmail.com",
+        "first_name": "Agustin",
+        "last_name": "Templeton",
+        "state": "Illinois"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Aug 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Soon_69159793",
+                "Stasia_44724558",
+                "Rebbeca_48039532"
+            ],
+            "loyalty_score": 8.805119233913748,
+            "membership_type": "Gold",
+            "redeemed_points": 912,
+            "reward_points": 2376
+        },
+        "password": "Agustin84",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Fri Jul  8 12:58:49 2011",
+        "user_id": "Agustin_37268885"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Documentary",
+                "Fitness / Instructional"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed May 15 12:58:49 2013",
+            "order_id": "T572758784229"
+        }
+    ]
+}

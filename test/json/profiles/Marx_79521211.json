@@ -1,0 +1,84 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 19,
+        "display_name": "Marx Saxton",
+        "email": "Marx.Saxton@snailmail.com",
+        "first_name": "Marx",
+        "last_name": "Saxton",
+        "state": "Connecticut"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Aug 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Donita_85626659",
+                "Darren_88937102"
+            ],
+            "loyalty_score": 7.128682255410741,
+            "membership_type": "Gold",
+            "redeemed_points": 1302,
+            "reward_points": 924
+        },
+        "password": "Marx58",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Sat Jun 15 12:58:49 2013",
+        "user_id": "Marx_79521211"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music",
+                "Jazz",
+                "New Age"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Jun 17 12:58:49 2013",
+            "order_id": "T866551453222"
+        },
+        {
+            "order_datetime": "Fri Jun 21 12:58:49 2013",
+            "order_id": "T642957109511"
+        },
+        {
+            "order_datetime": "Sat Jun 22 12:58:49 2013",
+            "order_id": "T297620705280"
+        },
+        {
+            "order_datetime": "Thu Jul 25 12:58:49 2013",
+            "order_id": "T483131791144"
+        },
+        {
+            "order_datetime": "Tue Jul  2 12:58:49 2013",
+            "order_id": "T861321477646"
+        },
+        {
+            "order_datetime": "Mon Jul  8 12:58:49 2013",
+            "order_id": "T647621455583"
+        }
+    ]
+}

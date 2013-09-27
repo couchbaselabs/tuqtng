@@ -1,0 +1,59 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 45,
+        "display_name": "Kristen Crutcher",
+        "email": "Kristen.Crutcher@snailmail.com",
+        "first_name": "Kristen",
+        "last_name": "Crutcher",
+        "state": "Ohio"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Apr 12 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.0753866894297515,
+            "membership_type": "Basic",
+            "redeemed_points": 528,
+            "reward_points": 234
+        },
+        "password": "Kristen62",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Tue Feb 21 12:58:49 2012",
+        "user_id": "Kristen_31127890"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Travel"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Aug 28 12:58:49 2012",
+            "order_id": "T384462544115"
+        }
+    ]
+}

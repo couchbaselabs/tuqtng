@@ -1,0 +1,67 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 59,
+        "display_name": "Kenna Rock",
+        "email": "Kenna.Rock@snailmail.com",
+        "first_name": "Kenna",
+        "last_name": "Rock",
+        "state": "Wisconsin\n"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Jul  6 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Drew_33238906",
+                "Sanford_53719762",
+                "Roxana_8039073",
+                "Reinaldo_35661507"
+            ],
+            "loyalty_score": 9.302439868168568,
+            "membership_type": "Platinum",
+            "redeemed_points": 81,
+            "reward_points": 2700
+        },
+        "password": "Kenna22",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Thu Feb 28 12:58:49 2013",
+        "user_id": "Kenna_40252169"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Apr 18 12:58:49 2013",
+            "order_id": "T193027131667"
+        },
+        {
+            "order_datetime": "Thu Jun 13 12:58:49 2013",
+            "order_id": "T728736523889"
+        },
+        {
+            "order_datetime": "Thu May  9 12:58:49 2013",
+            "order_id": "T275669479196"
+        },
+        {
+            "order_datetime": "Tue May 28 12:58:49 2013",
+            "order_id": "T421163923136"
+        },
+        {
+            "order_datetime": "Thu May 30 12:58:49 2013",
+            "order_id": "T372461281416"
+        },
+        {
+            "order_datetime": "Mon Mar  4 12:58:49 2013",
+            "order_id": "T860532761819"
+        },
+        {
+            "order_datetime": "Mon Jun 10 12:58:49 2013",
+            "order_id": "T656369689520"
+        }
+    ]
+}

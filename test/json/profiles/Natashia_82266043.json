@@ -1,0 +1,47 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 59,
+        "display_name": "Natashia Unger",
+        "email": "Natashia.Unger@snailmail.com",
+        "first_name": "Natashia",
+        "last_name": "Unger",
+        "state": "Maine"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Jul 17 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 8.43398472988746,
+            "membership_type": "Gold",
+            "redeemed_points": 1272,
+            "reward_points": 720
+        },
+        "password": "Natashia21",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Tue May 31 12:58:49 2011",
+        "user_id": "Natashia_82266043"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Jul 19 12:58:49 2012",
+            "order_id": "T496026912483"
+        },
+        {
+            "order_datetime": "Mon Oct 15 12:58:49 2012",
+            "order_id": "T739951727282"
+        },
+        {
+            "order_datetime": "Sat Mar 24 12:58:49 2012",
+            "order_id": "T203636776685"
+        },
+        {
+            "order_datetime": "Tue Jun 28 12:58:49 2011",
+            "order_id": "T556064165517"
+        }
+    ]
+}

@@ -1,0 +1,33 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 35,
+        "display_name": "Antoine Staggs",
+        "email": "Antoine.Staggs@snailmail.com",
+        "first_name": "Antoine",
+        "last_name": "Staggs",
+        "state": "Virginia"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Sep 19 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.3259460241350407,
+            "membership_type": "Basic",
+            "redeemed_points": 66,
+            "reward_points": 54
+        },
+        "password": "Antoine39",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Tue Aug  6 12:58:49 2013",
+        "user_id": "Antoine_25584505"
+    },
+    "shipped_order_history": []
+}

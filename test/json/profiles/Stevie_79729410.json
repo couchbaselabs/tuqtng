@@ -1,0 +1,51 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 48,
+        "display_name": "Stevie Holton",
+        "email": "Stevie.Holton@snailmail.com",
+        "first_name": "Stevie",
+        "last_name": "Holton",
+        "state": "Rhode Island"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Aug 27 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.4470888617433975,
+            "membership_type": "Silver",
+            "redeemed_points": 480,
+            "reward_points": 495
+        },
+        "password": "Stevie76",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Fri Apr 29 12:58:49 2011",
+        "user_id": "Stevie_79729410"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Apr  4 12:58:49 2012",
+            "order_id": "T826128622121"
+        },
+        {
+            "order_datetime": "Fri Aug  3 12:58:49 2012",
+            "order_id": "T224048087989"
+        },
+        {
+            "order_datetime": "Fri Jul  6 12:58:49 2012",
+            "order_id": "T169921375984"
+        },
+        {
+            "order_datetime": "Sun Jun 16 12:58:49 2013",
+            "order_id": "T351760537471"
+        },
+        {
+            "order_datetime": "Sun Jul 29 12:58:49 2012",
+            "order_id": "T475654889127"
+        }
+    ]
+}

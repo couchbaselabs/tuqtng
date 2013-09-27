@@ -1,0 +1,52 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 46,
+        "display_name": "Randy Wheaton",
+        "email": "Randy.Wheaton@snailmail.com",
+        "first_name": "Randy",
+        "last_name": "Wheaton",
+        "state": "Utah"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Oct  9 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.8339210960541199,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Randy15",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Wed Mar  9 12:58:49 2011",
+        "user_id": "Randy_34067459"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Documentary"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk",
+                "Kid's Music"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

@@ -1,0 +1,63 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 55,
+        "display_name": "Charlie Bagley",
+        "email": "Charlie.Bagley@snailmail.com",
+        "first_name": "Charlie",
+        "last_name": "Bagley",
+        "state": "Georgia"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Jul 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.684955801337498,
+            "membership_type": "Silver",
+            "redeemed_points": 1215,
+            "reward_points": 1365
+        },
+        "password": "Charlie21",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Sat Jun  9 12:58:49 2012",
+        "user_id": "Charlie_16766675"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Dec 21 12:58:49 2012",
+            "order_id": "T749745161688"
+        },
+        {
+            "order_datetime": "Tue Aug  7 12:58:49 2012",
+            "order_id": "T955446181106"
+        },
+        {
+            "order_datetime": "Mon Dec 17 12:58:49 2012",
+            "order_id": "T302256025784"
+        }
+    ]
+}

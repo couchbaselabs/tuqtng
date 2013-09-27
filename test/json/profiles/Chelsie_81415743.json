@@ -1,0 +1,30 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 32,
+        "display_name": "Chelsie Mccutcheon",
+        "email": "Chelsie.Mccutcheon@snailmail.com",
+        "first_name": "Chelsie",
+        "last_name": "Mccutcheon",
+        "state": "Massachusetts"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Jun  6 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 9.20959774954365,
+            "membership_type": "Platinum",
+            "redeemed_points": 405,
+            "reward_points": 1836
+        },
+        "password": "Chelsie13",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Sat Feb  5 12:58:49 2011",
+        "user_id": "Chelsie_81415743"
+    },
+    "shipped_order_history": []
+}

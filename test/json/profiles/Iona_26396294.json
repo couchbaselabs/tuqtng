@@ -1,0 +1,57 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 22,
+        "display_name": "Iona Moore",
+        "email": "Iona.Moore@snailmail.com",
+        "first_name": "Iona",
+        "last_name": "Moore",
+        "state": "Massachusetts"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Sep 13 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Edith_30326378",
+                "Cedrick_32744383",
+                "Cammie_82003302",
+                "Dolly_3423413"
+            ],
+            "loyalty_score": 9.770680556313314,
+            "membership_type": "Platinum",
+            "redeemed_points": 216,
+            "reward_points": 1215
+        },
+        "password": "Iona85",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Mon Apr  8 12:58:49 2013",
+        "user_id": "Iona_26396294"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Drama",
+                "Music & Musicals"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu May 16 12:58:49 2013",
+            "order_id": "T790720081537"
+        },
+        {
+            "order_datetime": "Sat Aug 31 12:58:49 2013",
+            "order_id": "T878349184013"
+        }
+    ]
+}

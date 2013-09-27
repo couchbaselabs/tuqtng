@@ -1,0 +1,47 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 34,
+        "display_name": "Arlette Alaniz",
+        "email": "Arlette.Alaniz@snailmail.com",
+        "first_name": "Arlette",
+        "last_name": "Alaniz",
+        "state": "New York"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Jul  4 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Izola_41501021"
+            ],
+            "loyalty_score": 8.272577419894612,
+            "membership_type": "Gold",
+            "redeemed_points": 1344,
+            "reward_points": 1320
+        },
+        "password": "Arlette35",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Sat Oct 27 12:58:49 2012",
+        "user_id": "Arlette_11853754"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Comedy",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

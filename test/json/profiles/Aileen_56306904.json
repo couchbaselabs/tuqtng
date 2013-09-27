@@ -1,0 +1,47 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 31,
+        "display_name": "Aileen Montano",
+        "email": "Aileen.Montano@snailmail.com",
+        "first_name": "Aileen",
+        "last_name": "Montano",
+        "state": "Connecticut"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Aug 29 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.085851753310242,
+            "membership_type": "Silver",
+            "redeemed_points": 180,
+            "reward_points": 756
+        },
+        "password": "Aileen94",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Mon May 21 12:58:49 2012",
+        "user_id": "Aileen_56306904"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Apr  3 12:58:49 2013",
+            "order_id": "T623659927691"
+        }
+    ]
+}

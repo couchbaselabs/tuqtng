@@ -1,0 +1,53 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 24,
+        "display_name": "Camelia Ingalls",
+        "email": "Camelia.Ingalls@snailmail.com",
+        "first_name": "Camelia",
+        "last_name": "Ingalls",
+        "state": "Nebraska"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Sep 15 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Steven_67805161"
+            ],
+            "loyalty_score": 7.3655126973574605,
+            "membership_type": "Gold",
+            "redeemed_points": 819,
+            "reward_points": 1869
+        },
+        "password": "Camelia96",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Sun Jul 21 12:58:49 2013",
+        "user_id": "Camelia_21258157"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Aug  4 12:58:49 2013",
+            "order_id": "T634260544130"
+        },
+        {
+            "order_datetime": "Sun Aug  4 12:58:49 2013",
+            "order_id": "T336442428397"
+        },
+        {
+            "order_datetime": "Mon Aug 12 12:58:49 2013",
+            "order_id": "T932654657232"
+        },
+        {
+            "order_datetime": "Mon Jul 29 12:58:49 2013",
+            "order_id": "T998630021343"
+        },
+        {
+            "order_datetime": "Mon Aug 26 12:58:49 2013",
+            "order_id": "T288521415335"
+        }
+    ]
+}

@@ -1,0 +1,49 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 48,
+        "display_name": "Valery Sykes",
+        "email": "Valery.Sykes@snailmail.com",
+        "first_name": "Valery",
+        "last_name": "Sykes",
+        "state": "New Mexico"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Aug 16 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.957501680627796,
+            "membership_type": "Silver",
+            "redeemed_points": 960,
+            "reward_points": 855
+        },
+        "password": "Valery96",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Wed Jun 29 12:58:49 2011",
+        "user_id": "Valery_17513128"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Documentary",
+                "Fitness / Instructional"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Apr 24 12:58:49 2012",
+            "order_id": "T295153816649"
+        }
+    ]
+}

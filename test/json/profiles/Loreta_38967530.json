@@ -1,0 +1,49 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 24,
+        "display_name": "Loreta Laporte",
+        "email": "Loreta.Laporte@snailmail.com",
+        "first_name": "Loreta",
+        "last_name": "Laporte",
+        "state": "Indiana"
+    },
+    "profile_details": {
+        "last_login_time": "Tue May 28 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.988890872684979,
+            "membership_type": "Silver",
+            "redeemed_points": 444,
+            "reward_points": 1104
+        },
+        "password": "Loreta60",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Fri Aug 17 12:58:49 2012",
+        "user_id": "Loreta_38967530"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Documentary",
+                "Music & Musicals"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Apr 22 12:58:49 2013",
+            "order_id": "T160963906731"
+        },
+        {
+            "order_datetime": "Sat Sep 22 12:58:49 2012",
+            "order_id": "T466644016465"
+        }
+    ]
+}

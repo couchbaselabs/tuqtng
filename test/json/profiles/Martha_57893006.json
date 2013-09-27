@@ -1,0 +1,47 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 15,
+        "display_name": "Martha Binkley",
+        "email": "Martha.Binkley@snailmail.com",
+        "first_name": "Martha",
+        "last_name": "Binkley",
+        "state": "Nevada"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Jul 20 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.37258804877822294,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Martha21",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Tue May 10 12:58:49 2011",
+        "user_id": "Martha_57893006"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Comedy",
+                "Fitness / Instructional"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "NonFiction"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

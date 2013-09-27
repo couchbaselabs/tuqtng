@@ -1,0 +1,43 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 27,
+        "display_name": "Kenny Yi",
+        "email": "Kenny.Yi@snailmail.com",
+        "first_name": "Kenny",
+        "last_name": "Yi",
+        "state": "Oregon"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Sep 18 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.27964834653103,
+            "membership_type": "Silver",
+            "redeemed_points": 1065,
+            "reward_points": 300
+        },
+        "password": "Kenny72",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Sat Oct 22 12:58:49 2011",
+        "user_id": "Kenny_25402872"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Jul  2 12:58:49 2012",
+            "order_id": "T264662945609"
+        },
+        {
+            "order_datetime": "Tue Jul  9 12:58:49 2013",
+            "order_id": "T722534907924"
+        }
+    ]
+}

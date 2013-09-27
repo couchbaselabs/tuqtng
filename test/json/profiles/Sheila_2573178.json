@@ -1,0 +1,35 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 40,
+        "display_name": "Sheila Hinds",
+        "email": "Sheila.Hinds@snailmail.com",
+        "first_name": "Sheila",
+        "last_name": "Hinds",
+        "state": "Wisconsin\n"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Dec 10 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.2331143777612532,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Sheila78",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Sat Mar 19 12:58:49 2011",
+        "user_id": "Sheila_2573178"
+    },
+    "shipped_order_history": []
+}

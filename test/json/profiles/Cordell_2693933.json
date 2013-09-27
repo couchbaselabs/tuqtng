@@ -1,0 +1,44 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Cordell Bechtel",
+        "email": "Cordell.Bechtel@snailmail.com",
+        "first_name": "Cordell",
+        "last_name": "Bechtel",
+        "state": "Massachusetts"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Jun 12 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.163184188195137,
+            "membership_type": "Silver",
+            "redeemed_points": 195,
+            "reward_points": 780
+        },
+        "password": "Cordell11",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Sun Jun  5 12:58:49 2011",
+        "user_id": "Cordell_2693933"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Oct 21 12:58:49 2011",
+            "order_id": "T880621215595"
+        },
+        {
+            "order_datetime": "Wed Jul 11 12:58:49 2012",
+            "order_id": "T841061391581"
+        }
+    ]
+}

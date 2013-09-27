@@ -1,0 +1,35 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 19,
+        "display_name": "Jannette Feeney",
+        "email": "Jannette.Feeney@snailmail.com",
+        "first_name": "Jannette",
+        "last_name": "Feeney",
+        "state": "Connecticut"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Sep  4 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.0131518886511257,
+            "membership_type": "Basic",
+            "redeemed_points": 738,
+            "reward_points": 369
+        },
+        "password": "Jannette24",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Sat May 25 12:58:49 2013",
+        "user_id": "Jannette_64024497"
+    },
+    "shipped_order_history": []
+}

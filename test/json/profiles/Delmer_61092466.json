@@ -1,0 +1,58 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Delmer Geiger",
+        "email": "Delmer.Geiger@snailmail.com",
+        "first_name": "Delmer",
+        "last_name": "Geiger",
+        "state": "California"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Sep 19 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.985668011505551,
+            "membership_type": "Silver",
+            "redeemed_points": 1800,
+            "reward_points": 1458
+        },
+        "password": "Delmer21",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Thu Sep  5 12:58:49 2013",
+        "user_id": "Delmer_61092466"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Sep  9 12:58:49 2013",
+            "order_id": "T180833414118"
+        },
+        {
+            "order_datetime": "Thu Sep 12 12:58:49 2013",
+            "order_id": "T423529265285"
+        },
+        {
+            "order_datetime": "Tue Sep 10 12:58:49 2013",
+            "order_id": "T601925653397"
+        },
+        {
+            "order_datetime": "Mon Sep 16 12:58:49 2013",
+            "order_id": "T169266907955"
+        }
+    ]
+}

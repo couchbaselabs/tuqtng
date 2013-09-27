@@ -1,0 +1,41 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 44,
+        "display_name": "Warner Miles",
+        "email": "Warner.Miles@snailmail.com",
+        "first_name": "Warner",
+        "last_name": "Miles",
+        "state": "Delaware"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug  3 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Antwan_20677954"
+            ],
+            "loyalty_score": 6.230664160195064,
+            "membership_type": "Silver",
+            "redeemed_points": 882,
+            "reward_points": 378
+        },
+        "password": "Warner91",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Tue Feb 15 12:58:49 2011",
+        "user_id": "Warner_19164716"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Sep 10 12:58:49 2012",
+            "order_id": "T849368193665"
+        }
+    ]
+}

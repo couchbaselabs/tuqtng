@@ -1,0 +1,57 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 36,
+        "display_name": "Kate Labonte",
+        "email": "Kate.Labonte@snailmail.com",
+        "first_name": "Kate",
+        "last_name": "Labonte",
+        "state": "Hawaii"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Aug 30 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Marchelle_41958979"
+            ],
+            "loyalty_score": 6.073265506365351,
+            "membership_type": "Silver",
+            "redeemed_points": 720,
+            "reward_points": 1386
+        },
+        "password": "Kate40",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Fri May 24 12:58:49 2013",
+        "user_id": "Kate_68629843"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

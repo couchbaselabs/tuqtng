@@ -1,0 +1,43 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 17,
+        "display_name": "Barry Herrin",
+        "email": "Barry.Herrin@snailmail.com",
+        "first_name": "Barry",
+        "last_name": "Herrin",
+        "state": "Virginia"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Sep 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 9.888237438456418,
+            "membership_type": "Platinum",
+            "redeemed_points": 1026,
+            "reward_points": 675
+        },
+        "password": "Barry34",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Wed Jul 17 12:58:49 2013",
+        "user_id": "Barry_20735078"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Aug  2 12:58:49 2013",
+            "order_id": "T622727159589"
+        },
+        {
+            "order_datetime": "Mon Aug 19 12:58:49 2013",
+            "order_id": "T738561403232"
+        }
+    ]
+}

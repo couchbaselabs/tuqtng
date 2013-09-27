@@ -1,0 +1,42 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 45,
+        "display_name": "Christia Mathias",
+        "email": "Christia.Mathias@snailmail.com",
+        "first_name": "Christia",
+        "last_name": "Mathias",
+        "state": "New Mexico"
+    },
+    "profile_details": {
+        "last_login_time": "Wed May 22 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.322734497074422,
+            "membership_type": "Basic",
+            "redeemed_points": 6,
+            "reward_points": 246
+        },
+        "password": "Christia61",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Thu Jun 16 12:58:49 2011",
+        "user_id": "Christia_65836735"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Drama"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

@@ -1,0 +1,35 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 28,
+        "display_name": "Eveline Her",
+        "email": "Eveline.Her@snailmail.com",
+        "first_name": "Eveline",
+        "last_name": "Her",
+        "state": "North Dakota"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Apr  6 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.8231400018694999,
+            "membership_type": "Basic",
+            "redeemed_points": 285,
+            "reward_points": 60
+        },
+        "password": "Eveline58",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Tue Apr  5 12:58:49 2011",
+        "user_id": "Eveline_44749285"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Nov 17 12:58:49 2011",
+            "order_id": "T399062026693"
+        }
+    ]
+}

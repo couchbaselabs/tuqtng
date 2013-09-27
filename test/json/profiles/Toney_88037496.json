@@ -1,0 +1,72 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 40,
+        "display_name": "Toney Cathey",
+        "email": "Toney.Cathey@snailmail.com",
+        "first_name": "Toney",
+        "last_name": "Cathey",
+        "state": "Pennsylvania"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Jul  7 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.437785215417527,
+            "membership_type": "Silver",
+            "redeemed_points": 756,
+            "reward_points": 60
+        },
+        "password": "Toney15",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Wed Apr 10 12:58:49 2013",
+        "user_id": "Toney_88037496"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Medicine"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal",
+                "Kid's Music"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon May 20 12:58:49 2013",
+            "order_id": "T433322294226"
+        },
+        {
+            "order_datetime": "Wed May 29 12:58:49 2013",
+            "order_id": "T448938014208"
+        },
+        {
+            "order_datetime": "Wed Jun 12 12:58:49 2013",
+            "order_id": "T646569772726"
+        },
+        {
+            "order_datetime": "Sun Apr 28 12:58:49 2013",
+            "order_id": "T387967228995"
+        }
+    ]
+}

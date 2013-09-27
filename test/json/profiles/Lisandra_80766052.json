@@ -1,0 +1,64 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 25,
+        "display_name": "Lisandra Gomes",
+        "email": "Lisandra.Gomes@snailmail.com",
+        "first_name": "Lisandra",
+        "last_name": "Gomes",
+        "state": "New Hampshire"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug 17 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Darcie_20052250",
+                "Allyson_78885394",
+                "Rana_28313289",
+                "Milly_263267"
+            ],
+            "loyalty_score": 9.640436708300447,
+            "membership_type": "Platinum",
+            "redeemed_points": 1161,
+            "reward_points": 2376
+        },
+        "password": "Lisandra49",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Wed Feb 29 12:58:49 2012",
+        "user_id": "Lisandra_80766052"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama",
+                "Music & Musicals"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk",
+                "Country Music"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Jun  5 12:58:49 2013",
+            "order_id": "T132229626460"
+        }
+    ]
+}

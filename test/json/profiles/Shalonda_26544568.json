@@ -1,0 +1,45 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 35,
+        "display_name": "Shalonda Wilkes",
+        "email": "Shalonda.Wilkes@snailmail.com",
+        "first_name": "Shalonda",
+        "last_name": "Wilkes",
+        "state": "Wisconsin\n"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Aug 16 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.154465686263395,
+            "membership_type": "Silver",
+            "redeemed_points": 954,
+            "reward_points": 396
+        },
+        "password": "Shalonda95",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Thu Jan 20 12:58:49 2011",
+        "user_id": "Shalonda_26544568"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Documentary"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

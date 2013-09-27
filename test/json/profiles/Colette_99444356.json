@@ -1,0 +1,64 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 37,
+        "display_name": "Colette Clary",
+        "email": "Colette.Clary@snailmail.com",
+        "first_name": "Colette",
+        "last_name": "Clary",
+        "state": "Nebraska"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Apr  9 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.976657712721883,
+            "membership_type": "Silver",
+            "redeemed_points": 495,
+            "reward_points": 435
+        },
+        "password": "Colette28",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Fri Jul 29 12:58:49 2011",
+        "user_id": "Colette_99444356"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Jan 16 12:58:49 2012",
+            "order_id": "T317066704709"
+        },
+        {
+            "order_datetime": "Fri Aug 10 12:58:49 2012",
+            "order_id": "T243823954118"
+        },
+        {
+            "order_datetime": "Tue Oct 18 12:58:49 2011",
+            "order_id": "T924447937364"
+        },
+        {
+            "order_datetime": "Sat Nov 24 12:58:49 2012",
+            "order_id": "T303730818025"
+        },
+        {
+            "order_datetime": "Wed Oct  3 12:58:49 2012",
+            "order_id": "T819948146412"
+        }
+    ]
+}

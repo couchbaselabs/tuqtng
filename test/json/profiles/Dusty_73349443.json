@@ -1,0 +1,46 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Dusty Solomon",
+        "email": "Dusty.Solomon@snailmail.com",
+        "first_name": "Dusty",
+        "last_name": "Solomon",
+        "state": "Texas"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug 24 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Arminda_83844691",
+                "Pinkie_60677870"
+            ],
+            "loyalty_score": 7.683388582754579,
+            "membership_type": "Gold",
+            "redeemed_points": 1344,
+            "reward_points": 2079
+        },
+        "password": "Dusty88",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Sun Apr 17 12:58:49 2011",
+        "user_id": "Dusty_73349443"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Aug  7 12:58:49 2011",
+            "order_id": "T320656474362"
+        },
+        {
+            "order_datetime": "Tue Jun 11 12:58:49 2013",
+            "order_id": "T266529506144"
+        },
+        {
+            "order_datetime": "Thu Dec 20 12:58:49 2012",
+            "order_id": "T764621305544"
+        }
+    ]
+}

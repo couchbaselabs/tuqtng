@@ -1,0 +1,62 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 45,
+        "display_name": "Jenette Alfaro",
+        "email": "Jenette.Alfaro@snailmail.com",
+        "first_name": "Jenette",
+        "last_name": "Alfaro",
+        "state": "Florida"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Sep 24 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.871380510598506,
+            "membership_type": "Silver",
+            "redeemed_points": 345,
+            "reward_points": 645
+        },
+        "password": "Jenette59",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Wed Sep 18 12:58:49 2013",
+        "user_id": "Jenette_83097765"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Documentary"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "Travel"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk",
+                "Country Music"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Sep 21 12:58:49 2013",
+            "order_id": "T608749055790"
+        },
+        {
+            "order_datetime": "Tue Sep 24 12:58:49 2013",
+            "order_id": "T147552761219"
+        }
+    ]
+}

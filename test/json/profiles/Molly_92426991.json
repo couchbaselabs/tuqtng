@@ -1,0 +1,72 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 20,
+        "display_name": "Molly Atherton",
+        "email": "Molly.Atherton@snailmail.com",
+        "first_name": "Molly",
+        "last_name": "Atherton",
+        "state": "Nevada"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Jun  4 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 8.724655309983664,
+            "membership_type": "Gold",
+            "redeemed_points": 480,
+            "reward_points": 1608
+        },
+        "password": "Molly67",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Tue Nov 27 12:58:49 2012",
+        "user_id": "Molly_92426991"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Jan 24 12:58:49 2013",
+            "order_id": "T187131018624"
+        },
+        {
+            "order_datetime": "Tue Mar 26 12:58:49 2013",
+            "order_id": "T993034142267"
+        },
+        {
+            "order_datetime": "Fri Mar  8 12:58:49 2013",
+            "order_id": "T617245272944"
+        },
+        {
+            "order_datetime": "Sat Jan  5 12:58:49 2013",
+            "order_id": "T135639173826"
+        },
+        {
+            "order_datetime": "Tue Jan 22 12:58:49 2013",
+            "order_id": "T975129612446"
+        },
+        {
+            "order_datetime": "Tue Mar 19 12:58:49 2013",
+            "order_id": "T126855347984"
+        }
+    ]
+}

@@ -1,0 +1,60 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 18,
+        "display_name": "Laurence Sales",
+        "email": "Laurence.Sales@snailmail.com",
+        "first_name": "Laurence",
+        "last_name": "Sales",
+        "state": "South Carolina"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jan 28 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.7795120363474446,
+            "membership_type": "Basic",
+            "redeemed_points": 108,
+            "reward_points": 873
+        },
+        "password": "Laurence94",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Thu Oct 20 12:58:49 2011",
+        "user_id": "Laurence_65566289"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Drama",
+                "Fitness / Instructional"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Feb 20 12:58:49 2012",
+            "order_id": "T862638757930"
+        }
+    ]
+}

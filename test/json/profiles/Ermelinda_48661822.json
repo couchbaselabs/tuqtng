@@ -1,0 +1,39 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 46,
+        "display_name": "Ermelinda Swisher",
+        "email": "Ermelinda.Swisher@snailmail.com",
+        "first_name": "Ermelinda",
+        "last_name": "Swisher",
+        "state": "Kansas"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Jan 18 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.3477843471301107,
+            "membership_type": "Basic",
+            "redeemed_points": 150,
+            "reward_points": 354
+        },
+        "password": "Ermelinda27",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Mon Nov 14 12:58:49 2011",
+        "user_id": "Ermelinda_48661822"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Mar 20 12:58:49 2012",
+            "order_id": "T257142681783"
+        }
+    ]
+}

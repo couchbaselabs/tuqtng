@@ -1,0 +1,52 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 42,
+        "display_name": "Nicholas Reynoso",
+        "email": "Nicholas.Reynoso@snailmail.com",
+        "first_name": "Nicholas",
+        "last_name": "Reynoso",
+        "state": "Mississippi"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Mar 16 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.8665188562010926,
+            "membership_type": "Basic",
+            "redeemed_points": 159,
+            "reward_points": 87
+        },
+        "password": "Nicholas64",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Tue Feb 14 12:58:49 2012",
+        "user_id": "Nicholas_66386033"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Medicine",
+                "Sports & Adventure"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Jul 23 12:58:49 2012",
+            "order_id": "T308350969695"
+        }
+    ]
+}

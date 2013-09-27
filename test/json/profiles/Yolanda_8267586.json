@@ -1,0 +1,50 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 53,
+        "display_name": "Yolanda Watson",
+        "email": "Yolanda.Watson@snailmail.com",
+        "first_name": "Yolanda",
+        "last_name": "Watson",
+        "state": "Michigan"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Jan 22 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 7.622572589635866,
+            "membership_type": "Gold",
+            "redeemed_points": 315,
+            "reward_points": 2016
+        },
+        "password": "Yolanda69",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Mon Jun 13 12:58:49 2011",
+        "user_id": "Yolanda_8267586"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Oct 10 12:58:49 2012",
+            "order_id": "T187949262705"
+        },
+        {
+            "order_datetime": "Sat Oct  8 12:58:49 2011",
+            "order_id": "T472227001146"
+        },
+        {
+            "order_datetime": "Wed Feb 29 12:58:49 2012",
+            "order_id": "T548625613068"
+        },
+        {
+            "order_datetime": "Sun May 13 12:58:49 2012",
+            "order_id": "T873455585941"
+        }
+    ]
+}

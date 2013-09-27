@@ -1,0 +1,59 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 51,
+        "display_name": "Rachell Mccartney",
+        "email": "Rachell.Mccartney@snailmail.com",
+        "first_name": "Rachell",
+        "last_name": "Mccartney",
+        "state": "Louisiana"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Sep 20 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.7291660779919127,
+            "membership_type": "Basic",
+            "redeemed_points": 123,
+            "reward_points": 81
+        },
+        "password": "Rachell97",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Mon Jun 18 12:58:49 2012",
+        "user_id": "Rachell_97457908"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel",
+                "Home & Garden"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music",
+                "Jazz"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

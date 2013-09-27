@@ -1,0 +1,63 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 49,
+        "display_name": "Ranee Helms",
+        "email": "Ranee.Helms@snailmail.com",
+        "first_name": "Ranee",
+        "last_name": "Helms",
+        "state": "North Dakota"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Casey_50744697",
+                "Agnus_60177070",
+                "Delta_9541950",
+                "Lourdes_53888223"
+            ],
+            "loyalty_score": 9.503739757413827,
+            "membership_type": "Platinum",
+            "redeemed_points": 1620,
+            "reward_points": 594
+        },
+        "password": "Ranee79",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Wed Jun  5 12:58:49 2013",
+        "user_id": "Ranee_99506853"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Jun 15 12:58:49 2013",
+            "order_id": "T720846438380"
+        },
+        {
+            "order_datetime": "Mon Aug  5 12:58:49 2013",
+            "order_id": "T309162541650"
+        },
+        {
+            "order_datetime": "Mon Jun 17 12:58:49 2013",
+            "order_id": "T508769519747"
+        },
+        {
+            "order_datetime": "Tue Jun 25 12:58:49 2013",
+            "order_id": "T983365117300"
+        },
+        {
+            "order_datetime": "Thu Jul 11 12:58:49 2013",
+            "order_id": "T410946859710"
+        },
+        {
+            "order_datetime": "Mon Jul  1 12:58:49 2013",
+            "order_id": "T856923987733"
+        }
+    ]
+}

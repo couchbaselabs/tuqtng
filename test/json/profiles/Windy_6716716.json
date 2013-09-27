@@ -1,0 +1,43 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 59,
+        "display_name": "Windy Zaragoza",
+        "email": "Windy.Zaragoza@snailmail.com",
+        "first_name": "Windy",
+        "last_name": "Zaragoza",
+        "state": "Minnesota"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Sep 30 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.835593860450617,
+            "membership_type": "Silver",
+            "redeemed_points": 1440,
+            "reward_points": 1110
+        },
+        "password": "Windy82",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Sun Feb 13 12:58:49 2011",
+        "user_id": "Windy_6716716"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Mar 24 12:58:49 2011",
+            "order_id": "T309622917767"
+        },
+        {
+            "order_datetime": "Wed Jul 20 12:58:49 2011",
+            "order_id": "T241627742355"
+        },
+        {
+            "order_datetime": "Mon Nov 28 12:58:49 2011",
+            "order_id": "T925958065515"
+        }
+    ]
+}

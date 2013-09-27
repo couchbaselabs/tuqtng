@@ -1,0 +1,46 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 50,
+        "display_name": "Layla Alicea",
+        "email": "Layla.Alicea@snailmail.com",
+        "first_name": "Layla",
+        "last_name": "Alicea",
+        "state": "Georgia"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug  3 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.3393268253320434,
+            "membership_type": "Basic",
+            "redeemed_points": 420,
+            "reward_points": 324
+        },
+        "password": "Layla53",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Tue Apr 16 12:58:49 2013",
+        "user_id": "Layla_18725385"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Medicine",
+                "Home & Garden"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

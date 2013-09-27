@@ -1,0 +1,44 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 34,
+        "display_name": "Brittaney Coker",
+        "email": "Brittaney.Coker@snailmail.com",
+        "first_name": "Brittaney",
+        "last_name": "Coker",
+        "state": "Nebraska"
+    },
+    "profile_details": {
+        "last_login_time": "Fri May 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.7387182617852825,
+            "membership_type": "Basic",
+            "redeemed_points": 51,
+            "reward_points": 195
+        },
+        "password": "Brittaney10",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Wed Feb 29 12:58:49 2012",
+        "user_id": "Brittaney_99629163"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Jul 21 12:58:49 2012",
+            "order_id": "T508053269422"
+        }
+    ]
+}

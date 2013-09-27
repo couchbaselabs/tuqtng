@@ -1,0 +1,33 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 59,
+        "display_name": "Nickole Billings",
+        "email": "Nickole.Billings@snailmail.com",
+        "first_name": "Nickole",
+        "last_name": "Billings",
+        "state": "Alaska"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Sep  3 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.3288721115966162,
+            "membership_type": "Basic",
+            "redeemed_points": 132,
+            "reward_points": 12
+        },
+        "password": "Nickole62",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Sun Jul 21 12:58:49 2013",
+        "user_id": "Nickole_56815675"
+    },
+    "shipped_order_history": []
+}

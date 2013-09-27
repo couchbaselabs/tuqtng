@@ -1,0 +1,46 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Jenette Earle",
+        "email": "Jenette.Earle@snailmail.com",
+        "first_name": "Jenette",
+        "last_name": "Earle",
+        "state": "Washington"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Dec 20 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.25074740069475965,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Jenette67",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Sat Jul  9 12:58:49 2011",
+        "user_id": "Jenette_11962149"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "NonFiction"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

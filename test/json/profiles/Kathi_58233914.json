@@ -1,0 +1,53 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 38,
+        "display_name": "Kathi Carey",
+        "email": "Kathi.Carey@snailmail.com",
+        "first_name": "Kathi",
+        "last_name": "Carey",
+        "state": "Tennessee"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Sep 18 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.402581013614664,
+            "membership_type": "Silver",
+            "redeemed_points": 600,
+            "reward_points": 600
+        },
+        "password": "Kathi85",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Sat Aug 31 12:58:49 2013",
+        "user_id": "Kathi_58233914"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "Travel"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal",
+                "Kid's Music",
+                "Pop Music"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

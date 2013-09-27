@@ -1,0 +1,84 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 59,
+        "display_name": "Amos Lord",
+        "email": "Amos.Lord@snailmail.com",
+        "first_name": "Amos",
+        "last_name": "Lord",
+        "state": "Hawaii"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Sep 13 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 8.205807111551666,
+            "membership_type": "Gold",
+            "redeemed_points": 1248,
+            "reward_points": 1896
+        },
+        "password": "Amos25",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Fri Mar  1 12:58:49 2013",
+        "user_id": "Amos_51615996"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Comedy",
+                "Fitness / Instructional"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Medicine",
+                "Sports & Adventure"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Mar  9 12:58:49 2013",
+            "order_id": "T763462871277"
+        },
+        {
+            "order_datetime": "Sat Aug  3 12:58:49 2013",
+            "order_id": "T188459991207"
+        },
+        {
+            "order_datetime": "Sat Apr 20 12:58:49 2013",
+            "order_id": "T715832212160"
+        },
+        {
+            "order_datetime": "Wed Apr 24 12:58:49 2013",
+            "order_id": "T990322404838"
+        },
+        {
+            "order_datetime": "Sun Jun  2 12:58:49 2013",
+            "order_id": "T451561181159"
+        },
+        {
+            "order_datetime": "Fri Jun 14 12:58:49 2013",
+            "order_id": "T122629187998"
+        },
+        {
+            "order_datetime": "Sun Jun 30 12:58:49 2013",
+            "order_id": "T210547863262"
+        },
+        {
+            "order_datetime": "Tue Apr 30 12:58:49 2013",
+            "order_id": "T678330212003"
+        }
+    ]
+}

@@ -1,0 +1,44 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 31,
+        "display_name": "Roy Tidwell",
+        "email": "Roy.Tidwell@snailmail.com",
+        "first_name": "Roy",
+        "last_name": "Tidwell",
+        "state": "West Virginia"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Mar  2 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.914197078187799,
+            "membership_type": "Silver",
+            "redeemed_points": 420,
+            "reward_points": 864
+        },
+        "password": "Roy58",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Sat Jun 23 12:58:49 2012",
+        "user_id": "Roy_91017302"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Documentary"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Feb  2 12:58:49 2013",
+            "order_id": "T902520337755"
+        }
+    ]
+}

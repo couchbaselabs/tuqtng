@@ -1,0 +1,52 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 56,
+        "display_name": "Hoyt Nail",
+        "email": "Hoyt.Nail@snailmail.com",
+        "first_name": "Hoyt",
+        "last_name": "Nail",
+        "state": "Massachusetts"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Jun 29 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.1212574463293663,
+            "membership_type": "Basic",
+            "redeemed_points": 612,
+            "reward_points": 495
+        },
+        "password": "Hoyt71",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Tue Apr  2 12:58:49 2013",
+        "user_id": "Hoyt_59718994"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Drama"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Apr 11 12:58:49 2013",
+            "order_id": "T217846244057"
+        },
+        {
+            "order_datetime": "Thu May  2 12:58:49 2013",
+            "order_id": "T300961908095"
+        },
+        {
+            "order_datetime": "Sat Apr 20 12:58:49 2013",
+            "order_id": "T115267227408"
+        }
+    ]
+}

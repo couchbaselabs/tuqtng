@@ -1,0 +1,35 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 45,
+        "display_name": "Lyda Love",
+        "email": "Lyda.Love@snailmail.com",
+        "first_name": "Lyda",
+        "last_name": "Love",
+        "state": "Idaho"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Aug  6 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.371825908872511,
+            "membership_type": "Basic",
+            "redeemed_points": 90,
+            "reward_points": 702
+        },
+        "password": "Lyda88",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Sat Feb 12 12:58:49 2011",
+        "user_id": "Lyda_78293570"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Jun 12 12:58:49 2012",
+            "order_id": "T858447875611"
+        }
+    ]
+}

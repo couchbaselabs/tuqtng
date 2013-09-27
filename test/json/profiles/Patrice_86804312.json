@@ -1,0 +1,33 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 45,
+        "display_name": "Patrice Folse",
+        "email": "Patrice.Folse@snailmail.com",
+        "first_name": "Patrice",
+        "last_name": "Folse",
+        "state": "North Carolina"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Sep  3 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.0585243769871484,
+            "membership_type": "Basic",
+            "redeemed_points": 336,
+            "reward_points": 438
+        },
+        "password": "Patrice98",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Sun Dec 16 12:58:49 2012",
+        "user_id": "Patrice_86804312"
+    },
+    "shipped_order_history": []
+}

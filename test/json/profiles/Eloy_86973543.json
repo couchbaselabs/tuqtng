@@ -1,0 +1,30 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 25,
+        "display_name": "Eloy Haro",
+        "email": "Eloy.Haro@snailmail.com",
+        "first_name": "Eloy",
+        "last_name": "Haro",
+        "state": "Connecticut"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Sep 24 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.0448703027070447,
+            "membership_type": "Basic",
+            "redeemed_points": 180,
+            "reward_points": 342
+        },
+        "password": "Eloy47",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Thu Jul  4 12:58:49 2013",
+        "user_id": "Eloy_86973543"
+    },
+    "shipped_order_history": []
+}

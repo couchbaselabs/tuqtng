@@ -1,0 +1,65 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 38,
+        "display_name": "Phyllis Chang",
+        "email": "Phyllis.Chang@snailmail.com",
+        "first_name": "Phyllis",
+        "last_name": "Chang",
+        "state": "North Dakota"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Apr 19 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.34489683677888,
+            "membership_type": "Silver",
+            "redeemed_points": 738,
+            "reward_points": 1278
+        },
+        "password": "Phyllis65",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Thu Sep 27 12:58:49 2012",
+        "user_id": "Phyllis_58489068"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "Travel",
+                "Home & Garden"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk",
+                "Country Music"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Nov  8 12:58:49 2012",
+            "order_id": "T932144384418"
+        },
+        {
+            "order_datetime": "Sun Oct 28 12:58:49 2012",
+            "order_id": "T338442264668"
+        }
+    ]
+}

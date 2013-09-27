@@ -1,0 +1,43 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 45,
+        "display_name": "Carmella Devore",
+        "email": "Carmella.Devore@snailmail.com",
+        "first_name": "Carmella",
+        "last_name": "Devore",
+        "state": "Illinois"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Sep 23 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 7.260546979151759,
+            "membership_type": "Gold",
+            "redeemed_points": 336,
+            "reward_points": 21
+        },
+        "password": "Carmella62",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Fri Aug 16 12:58:49 2013",
+        "user_id": "Carmella_76424329"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Sep 13 12:58:49 2013",
+            "order_id": "T285356999253"
+        },
+        {
+            "order_datetime": "Thu Aug 22 12:58:49 2013",
+            "order_id": "T854569821627"
+        },
+        {
+            "order_datetime": "Wed Aug 21 12:58:49 2013",
+            "order_id": "T890421354619"
+        }
+    ]
+}

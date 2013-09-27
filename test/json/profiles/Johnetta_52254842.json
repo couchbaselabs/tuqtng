@@ -1,0 +1,57 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 41,
+        "display_name": "Johnetta Holm",
+        "email": "Johnetta.Holm@snailmail.com",
+        "first_name": "Johnetta",
+        "last_name": "Holm",
+        "state": "Pennsylvania"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Jun 19 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 7.734290001134277,
+            "membership_type": "Gold",
+            "redeemed_points": 609,
+            "reward_points": 2016
+        },
+        "password": "Johnetta55",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Mon May 14 12:58:49 2012",
+        "user_id": "Johnetta_52254842"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Documentary"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel",
+                "Home & Garden"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Sep  8 12:58:49 2012",
+            "order_id": "T929933525300"
+        }
+    ]
+}

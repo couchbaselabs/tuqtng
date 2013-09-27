@@ -1,0 +1,77 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 59,
+        "display_name": "Dewey Demers",
+        "email": "Dewey.Demers@snailmail.com",
+        "first_name": "Dewey",
+        "last_name": "Demers",
+        "state": "Connecticut"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Sep 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Delana_5609163",
+                "Tommy_42853317",
+                "Liz_29638717"
+            ],
+            "loyalty_score": 9.556893614056785,
+            "membership_type": "Platinum",
+            "redeemed_points": 486,
+            "reward_points": 2322
+        },
+        "password": "Dewey62",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Mon Sep 16 12:58:49 2013",
+        "user_id": "Dewey_8954743"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Drama",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Medicine",
+                "Diet & Health"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Sep 18 12:58:49 2013",
+            "order_id": "T317526336906"
+        },
+        {
+            "order_datetime": "Wed Sep 18 12:58:49 2013",
+            "order_id": "T271246375864"
+        },
+        {
+            "order_datetime": "Tue Sep 24 12:58:49 2013",
+            "order_id": "T394932285997"
+        },
+        {
+            "order_datetime": "Sat Sep 21 12:58:49 2013",
+            "order_id": "T843527314972"
+        },
+        {
+            "order_datetime": "Wed Sep 18 12:58:49 2013",
+            "order_id": "T762636329381"
+        },
+        {
+            "order_datetime": "Wed Sep 18 12:58:49 2013",
+            "order_id": "T677037893557"
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 20,
+        "display_name": "Chanelle Major",
+        "email": "Chanelle.Major@snailmail.com",
+        "first_name": "Chanelle",
+        "last_name": "Major",
+        "state": "North Dakota"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug 24 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.614966034619274,
+            "membership_type": "Basic",
+            "redeemed_points": 63,
+            "reward_points": 165
+        },
+        "password": "Chanelle40",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Sat Nov 24 12:58:49 2012",
+        "user_id": "Chanelle_73267438"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Mar 31 12:58:49 2013",
+            "order_id": "T184455907138"
+        }
+    ]
+}

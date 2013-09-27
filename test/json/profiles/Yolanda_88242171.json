@@ -1,0 +1,30 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 16,
+        "display_name": "Yolanda Butcher",
+        "email": "Yolanda.Butcher@snailmail.com",
+        "first_name": "Yolanda",
+        "last_name": "Butcher",
+        "state": "New Hampshire"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Aug 26 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.9227008633592435,
+            "membership_type": "Basic",
+            "redeemed_points": 9,
+            "reward_points": 126
+        },
+        "password": "Yolanda78",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Mon Feb 25 12:58:49 2013",
+        "user_id": "Yolanda_88242171"
+    },
+    "shipped_order_history": []
+}

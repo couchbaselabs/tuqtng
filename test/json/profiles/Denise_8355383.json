@@ -1,0 +1,47 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 24,
+        "display_name": "Denise Reiter",
+        "email": "Denise.Reiter@snailmail.com",
+        "first_name": "Denise",
+        "last_name": "Reiter",
+        "state": "Montana"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Jun 16 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Charles_1700350",
+                "Elden_28479205",
+                "Kate_68629843"
+            ],
+            "loyalty_score": 8.113439271657665,
+            "membership_type": "Gold",
+            "redeemed_points": 768,
+            "reward_points": 1656
+        },
+        "password": "Denise46",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Mon Dec 31 12:58:49 2012",
+        "user_id": "Denise_8355383"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Feb 15 12:58:49 2013",
+            "order_id": "T251856533728"
+        },
+        {
+            "order_datetime": "Mon May 20 12:58:49 2013",
+            "order_id": "T666932227912"
+        },
+        {
+            "order_datetime": "Thu Jan 31 12:58:49 2013",
+            "order_id": "T894132018055"
+        }
+    ]
+}

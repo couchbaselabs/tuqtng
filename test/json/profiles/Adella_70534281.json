@@ -1,0 +1,58 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 57,
+        "display_name": "Adella Lamm",
+        "email": "Adella.Lamm@snailmail.com",
+        "first_name": "Adella",
+        "last_name": "Lamm",
+        "state": "California"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Nov 20 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [
+                "Isa_63958772",
+                "Domitila_73514008"
+            ],
+            "loyalty_score": 7.140723542839416,
+            "membership_type": "Gold",
+            "redeemed_points": 714,
+            "reward_points": 1554
+        },
+        "password": "Adella30",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Wed Aug 10 12:58:49 2011",
+        "user_id": "Adella_70534281"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Aug 14 12:58:49 2012",
+            "order_id": "T965949122008"
+        },
+        {
+            "order_datetime": "Thu Mar 29 12:58:49 2012",
+            "order_id": "T202839144045"
+        },
+        {
+            "order_datetime": "Tue Aug 14 12:58:49 2012",
+            "order_id": "T810754188149"
+        },
+        {
+            "order_datetime": "Thu Oct 27 12:58:49 2011",
+            "order_id": "T608053582031"
+        },
+        {
+            "order_datetime": "Sun Feb 26 12:58:49 2012",
+            "order_id": "T754554342594"
+        },
+        {
+            "order_datetime": "Thu Mar 29 12:58:49 2012",
+            "order_id": "T829227245478"
+        }
+    ]
+}

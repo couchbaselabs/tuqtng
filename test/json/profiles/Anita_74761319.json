@@ -1,0 +1,45 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 18,
+        "display_name": "Anita Groff",
+        "email": "Anita.Groff@snailmail.com",
+        "first_name": "Anita",
+        "last_name": "Groff",
+        "state": "Rhode Island"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Sep  9 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.121216434078587,
+            "membership_type": "Basic",
+            "redeemed_points": 150,
+            "reward_points": 450
+        },
+        "password": "Anita59",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Thu Aug  1 12:58:49 2013",
+        "user_id": "Anita_74761319"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Comedy",
+                "Music & Musicals"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

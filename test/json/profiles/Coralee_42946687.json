@@ -1,0 +1,71 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 43,
+        "display_name": "Coralee Otis",
+        "email": "Coralee.Otis@snailmail.com",
+        "first_name": "Coralee",
+        "last_name": "Otis",
+        "state": "Arizona"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Feb 10 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Austin_9883331"
+            ],
+            "loyalty_score": 9.524559329280127,
+            "membership_type": "Platinum",
+            "redeemed_points": 1269,
+            "reward_points": 2484
+        },
+        "password": "Coralee94",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Sat Dec 17 12:58:49 2011",
+        "user_id": "Coralee_42946687"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Drama",
+                "Music & Musicals"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Jul 17 12:58:49 2012",
+            "order_id": "T592260734356"
+        },
+        {
+            "order_datetime": "Wed Jul 25 12:58:49 2012",
+            "order_id": "T260565809847"
+        },
+        {
+            "order_datetime": "Fri Dec 23 12:58:49 2011",
+            "order_id": "T780032891835"
+        },
+        {
+            "order_datetime": "Wed Feb 22 12:58:49 2012",
+            "order_id": "T320330789481"
+        },
+        {
+            "order_datetime": "Fri Jul  6 12:58:49 2012",
+            "order_id": "T681048531444"
+        },
+        {
+            "order_datetime": "Wed Jun 13 12:58:49 2012",
+            "order_id": "T318327908572"
+        },
+        {
+            "order_datetime": "Sat Jan 12 12:58:49 2013",
+            "order_id": "T733052505039"
+        }
+    ]
+}

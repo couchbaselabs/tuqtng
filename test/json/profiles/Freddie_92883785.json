@@ -1,0 +1,47 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 59,
+        "display_name": "Freddie Peeler",
+        "email": "Freddie.Peeler@snailmail.com",
+        "first_name": "Freddie",
+        "last_name": "Peeler",
+        "state": "Hawaii"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Sep 17 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Lyda_78293570",
+                "Irish_8563660",
+                "Nguyet_44592591"
+            ],
+            "loyalty_score": 8.531055928143568,
+            "membership_type": "Gold",
+            "redeemed_points": 552,
+            "reward_points": 2208
+        },
+        "password": "Freddie90",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Wed Aug 28 12:58:49 2013",
+        "user_id": "Freddie_92883785"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Documentary",
+                "Music & Musicals"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

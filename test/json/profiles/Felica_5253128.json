@@ -1,0 +1,30 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 28,
+        "display_name": "Felica Kunkel",
+        "email": "Felica.Kunkel@snailmail.com",
+        "first_name": "Felica",
+        "last_name": "Kunkel",
+        "state": "Vermont"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Aug 14 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.5539020668472245,
+            "membership_type": "Basic",
+            "redeemed_points": 891,
+            "reward_points": 387
+        },
+        "password": "Felica56",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Wed Jul 25 12:58:49 2012",
+        "user_id": "Felica_5253128"
+    },
+    "shipped_order_history": []
+}

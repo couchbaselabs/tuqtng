@@ -1,0 +1,51 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 22,
+        "display_name": "Soon Kinard",
+        "email": "Soon.Kinard@snailmail.com",
+        "first_name": "Soon",
+        "last_name": "Kinard",
+        "state": "Connecticut"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Sep  9 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.326131728981057,
+            "membership_type": "Silver",
+            "redeemed_points": 1566,
+            "reward_points": 360
+        },
+        "password": "Soon14",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Tue Apr 12 12:58:49 2011",
+        "user_id": "Soon_69159793"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Oct 11 12:58:49 2012",
+            "order_id": "T777462898965"
+        },
+        {
+            "order_datetime": "Tue Jan 22 12:58:49 2013",
+            "order_id": "T863968066612"
+        },
+        {
+            "order_datetime": "Sun Apr  1 12:58:49 2012",
+            "order_id": "T845039869253"
+        },
+        {
+            "order_datetime": "Fri Mar 30 12:58:49 2012",
+            "order_id": "T695524692961"
+        },
+        {
+            "order_datetime": "Sun May 29 12:58:49 2011",
+            "order_id": "T936323472241"
+        }
+    ]
+}

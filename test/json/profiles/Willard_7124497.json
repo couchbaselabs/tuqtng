@@ -1,0 +1,55 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 36,
+        "display_name": "Willard Palacios",
+        "email": "Willard.Palacios@snailmail.com",
+        "first_name": "Willard",
+        "last_name": "Palacios",
+        "state": "Illinois"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug 24 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.1165935751333356,
+            "membership_type": "Basic",
+            "redeemed_points": 204,
+            "reward_points": 240
+        },
+        "password": "Willard57",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Thu Jan 10 12:58:49 2013",
+        "user_id": "Willard_7124497"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel",
+                "Diet & Health"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Jun  2 12:58:49 2013",
+            "order_id": "T370934501749"
+        }
+    ]
+}

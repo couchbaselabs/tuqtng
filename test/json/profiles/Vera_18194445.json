@@ -1,0 +1,46 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 41,
+        "display_name": "Vera Schulz",
+        "email": "Vera.Schulz@snailmail.com",
+        "first_name": "Vera",
+        "last_name": "Schulz",
+        "state": "West Virginia"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Jun 20 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.177700755510812,
+            "membership_type": "Basic",
+            "redeemed_points": 72,
+            "reward_points": 267
+        },
+        "password": "Vera44",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Thu Oct 20 12:58:49 2011",
+        "user_id": "Vera_18194445"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "NonFiction",
+                "Sports & Adventure"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

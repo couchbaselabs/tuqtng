@@ -1,0 +1,60 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 40,
+        "display_name": "Elsa Garnett",
+        "email": "Elsa.Garnett@snailmail.com",
+        "first_name": "Elsa",
+        "last_name": "Garnett",
+        "state": "Ohio"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jul 29 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.61560360205084,
+            "membership_type": "Silver",
+            "redeemed_points": 72,
+            "reward_points": 144
+        },
+        "password": "Elsa63",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Mon Nov  5 12:58:49 2012",
+        "user_id": "Elsa_70795877"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Comedy"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Dec 28 12:58:49 2012",
+            "order_id": "T384846237242"
+        },
+        {
+            "order_datetime": "Wed Mar 20 12:58:49 2013",
+            "order_id": "T389632021242"
+        },
+        {
+            "order_datetime": "Sat Jun 15 12:58:49 2013",
+            "order_id": "T690750912999"
+        },
+        {
+            "order_datetime": "Tue Mar 19 12:58:49 2013",
+            "order_id": "T132635241171"
+        }
+    ]
+}

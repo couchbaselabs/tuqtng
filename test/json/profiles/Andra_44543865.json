@@ -1,0 +1,72 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 22,
+        "display_name": "Andra Thorpe",
+        "email": "Andra.Thorpe@snailmail.com",
+        "first_name": "Andra",
+        "last_name": "Thorpe",
+        "state": "New Mexico"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Aug 30 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Latrisha_50167693",
+                "Kirstin_1133247",
+                "Garrett_53151591"
+            ],
+            "loyalty_score": 9.368779157663884,
+            "membership_type": "Platinum",
+            "redeemed_points": 351,
+            "reward_points": 1080
+        },
+        "password": "Andra49",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Sun Aug  4 12:58:49 2013",
+        "user_id": "Andra_44543865"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Comedy",
+                "Fitness / Instructional"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Aug  9 12:58:49 2013",
+            "order_id": "T627024969862"
+        },
+        {
+            "order_datetime": "Sun Aug 18 12:58:49 2013",
+            "order_id": "T624247492650"
+        },
+        {
+            "order_datetime": "Fri Aug 23 12:58:49 2013",
+            "order_id": "T473621643857"
+        },
+        {
+            "order_datetime": "Fri Aug 16 12:58:49 2013",
+            "order_id": "T252824327813"
+        },
+        {
+            "order_datetime": "Tue Aug 13 12:58:49 2013",
+            "order_id": "T893829697312"
+        },
+        {
+            "order_datetime": "Mon Aug  5 12:58:49 2013",
+            "order_id": "T648454924865"
+        }
+    ]
+}

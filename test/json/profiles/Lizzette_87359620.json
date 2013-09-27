@@ -1,0 +1,81 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 47,
+        "display_name": "Lizzette Harley",
+        "email": "Lizzette.Harley@snailmail.com",
+        "first_name": "Lizzette",
+        "last_name": "Harley",
+        "state": "New Hampshire"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Nov 25 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [
+                "Shalanda_30509721",
+                "Carmelo_90515535"
+            ],
+            "loyalty_score": 8.306823748157196,
+            "membership_type": "Gold",
+            "redeemed_points": 1488,
+            "reward_points": 528
+        },
+        "password": "Lizzette98",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Wed Sep 21 12:58:49 2011",
+        "user_id": "Lizzette_87359620"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Medicine"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Jul 15 12:58:49 2012",
+            "order_id": "T464832856278"
+        },
+        {
+            "order_datetime": "Wed Oct 12 12:58:49 2011",
+            "order_id": "T831831886305"
+        },
+        {
+            "order_datetime": "Mon Jul 30 12:58:49 2012",
+            "order_id": "T476061878660"
+        },
+        {
+            "order_datetime": "Thu Feb  9 12:58:49 2012",
+            "order_id": "T951165245383"
+        },
+        {
+            "order_datetime": "Thu Nov 15 12:58:49 2012",
+            "order_id": "T830549595959"
+        },
+        {
+            "order_datetime": "Sat Apr  7 12:58:49 2012",
+            "order_id": "T185568758550"
+        },
+        {
+            "order_datetime": "Fri Sep 30 12:58:49 2011",
+            "order_id": "T771859627067"
+        },
+        {
+            "order_datetime": "Fri Jun  1 12:58:49 2012",
+            "order_id": "T805054062556"
+        }
+    ]
+}

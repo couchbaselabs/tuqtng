@@ -1,0 +1,35 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 48,
+        "display_name": "Ezequiel Somerville",
+        "email": "Ezequiel.Somerville@snailmail.com",
+        "first_name": "Ezequiel",
+        "last_name": "Somerville",
+        "state": "Nevada"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Jul 21 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.898657616056719,
+            "membership_type": "Silver",
+            "redeemed_points": 960,
+            "reward_points": 540
+        },
+        "password": "Ezequiel48",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Sat Sep 17 12:58:49 2011",
+        "user_id": "Ezequiel_5211674"
+    },
+    "shipped_order_history": []
+}

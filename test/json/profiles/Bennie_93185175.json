@@ -1,0 +1,65 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 44,
+        "display_name": "Bennie Ladner",
+        "email": "Bennie.Ladner@snailmail.com",
+        "first_name": "Bennie",
+        "last_name": "Ladner",
+        "state": "Georgia"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Aug  7 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.7847235900133978,
+            "membership_type": "Basic",
+            "redeemed_points": 234,
+            "reward_points": 891
+        },
+        "password": "Bennie99",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Thu Jan 31 12:58:49 2013",
+        "user_id": "Bennie_93185175"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Documentary"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk",
+                "Jazz"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun May 26 12:58:49 2013",
+            "order_id": "T908567907000"
+        },
+        {
+            "order_datetime": "Tue Apr 16 12:58:49 2013",
+            "order_id": "T287242775571"
+        },
+        {
+            "order_datetime": "Wed Feb  6 12:58:49 2013",
+            "order_id": "T368258173791"
+        }
+    ]
+}

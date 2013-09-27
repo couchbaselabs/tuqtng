@@ -1,0 +1,35 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 30,
+        "display_name": "Brian Tejeda",
+        "email": "Brian.Tejeda@snailmail.com",
+        "first_name": "Brian",
+        "last_name": "Tejeda",
+        "state": "Rhode Island"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Sep  8 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.24259383910988475,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Brian74",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Sat Jul 27 12:58:49 2013",
+        "user_id": "Brian_36763711"
+    },
+    "shipped_order_history": []
+}

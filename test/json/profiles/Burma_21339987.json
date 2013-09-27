@@ -1,0 +1,53 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 43,
+        "display_name": "Burma Thiel",
+        "email": "Burma.Thiel@snailmail.com",
+        "first_name": "Burma",
+        "last_name": "Thiel",
+        "state": "Washington"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Mar 19 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Coralee_42946687"
+            ],
+            "loyalty_score": 7.792718567849427,
+            "membership_type": "Gold",
+            "redeemed_points": 1218,
+            "reward_points": 609
+        },
+        "password": "Burma54",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Sun May  6 12:58:49 2012",
+        "user_id": "Burma_21339987"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Jul 31 12:58:49 2012",
+            "order_id": "T207547203662"
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 26,
+        "display_name": "Lenita Watt",
+        "email": "Lenita.Watt@snailmail.com",
+        "first_name": "Lenita",
+        "last_name": "Watt",
+        "state": "Oregon"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Aug 21 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Ngan_36277740",
+                "Harry_97288849",
+                "Lorene_32822201",
+                "Melinda_72603150"
+            ],
+            "loyalty_score": 9.238134152434112,
+            "membership_type": "Platinum",
+            "redeemed_points": 594,
+            "reward_points": 270
+        },
+        "password": "Lenita45",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Sat Jul  6 12:58:49 2013",
+        "user_id": "Lenita_56382724"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Jul 11 12:58:49 2013",
+            "order_id": "T837647744178"
+        }
+    ]
+}

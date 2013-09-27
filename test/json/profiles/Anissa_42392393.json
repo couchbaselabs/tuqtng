@@ -1,0 +1,83 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 34,
+        "display_name": "Anissa Bolling",
+        "email": "Anissa.Bolling@snailmail.com",
+        "first_name": "Anissa",
+        "last_name": "Bolling",
+        "state": "Oregon"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Sep 19 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Rutha_34757936",
+                "Trudie_1535567"
+            ],
+            "loyalty_score": 9.486558218101706,
+            "membership_type": "Platinum",
+            "redeemed_points": 1512,
+            "reward_points": 1782
+        },
+        "password": "Anissa65",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Thu Feb  3 12:58:49 2011",
+        "user_id": "Anissa_42392393"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Feb 25 12:58:49 2013",
+            "order_id": "T227446716639"
+        },
+        {
+            "order_datetime": "Sat Nov 17 12:58:49 2012",
+            "order_id": "T380858254359"
+        },
+        {
+            "order_datetime": "Sun Jul 14 12:58:49 2013",
+            "order_id": "T947632974254"
+        },
+        {
+            "order_datetime": "Thu Oct 27 12:58:49 2011",
+            "order_id": "T784549865467"
+        },
+        {
+            "order_datetime": "Sun Oct  2 12:58:49 2011",
+            "order_id": "T380738159932"
+        },
+        {
+            "order_datetime": "Thu Jun 23 12:58:49 2011",
+            "order_id": "T876740695289"
+        },
+        {
+            "order_datetime": "Wed Mar 14 12:58:49 2012",
+            "order_id": "T386362069761"
+        },
+        {
+            "order_datetime": "Sat Jan 26 12:58:49 2013",
+            "order_id": "T189832903289"
+        },
+        {
+            "order_datetime": "Mon Feb 27 12:58:49 2012",
+            "order_id": "T553761947027"
+        }
+    ]
+}

@@ -1,0 +1,59 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 16,
+        "display_name": "Veronica Peterman",
+        "email": "Veronica.Peterman@snailmail.com",
+        "first_name": "Veronica",
+        "last_name": "Peterman",
+        "state": "West Virginia"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Jul 24 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.1093018483047397,
+            "membership_type": "Basic",
+            "redeemed_points": 42,
+            "reward_points": 102
+        },
+        "password": "Veronica96",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Fri Mar  1 12:58:49 2013",
+        "user_id": "Veronica_65472756"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "Travel"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon May 27 12:58:49 2013",
+            "order_id": "T943940966601"
+        },
+        {
+            "order_datetime": "Mon Jun  3 12:58:49 2013",
+            "order_id": "T248540623381"
+        }
+    ]
+}

@@ -1,0 +1,77 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Jonna Brigham",
+        "email": "Jonna.Brigham@snailmail.com",
+        "first_name": "Jonna",
+        "last_name": "Brigham",
+        "state": "Montana"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Aug  5 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 8.736681479048945,
+            "membership_type": "Gold",
+            "redeemed_points": 1656,
+            "reward_points": 192
+        },
+        "password": "Jonna89",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Sun Apr 14 12:58:49 2013",
+        "user_id": "Jonna_56538767"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Comedy"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music",
+                "Jazz"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Jun 15 12:58:49 2013",
+            "order_id": "T125154819894"
+        },
+        {
+            "order_datetime": "Sat Jun 29 12:58:49 2013",
+            "order_id": "T319852117836"
+        },
+        {
+            "order_datetime": "Mon Aug  5 12:58:49 2013",
+            "order_id": "T723858591119"
+        },
+        {
+            "order_datetime": "Thu Jul 11 12:58:49 2013",
+            "order_id": "T428049206571"
+        },
+        {
+            "order_datetime": "Mon Jun 10 12:58:49 2013",
+            "order_id": "T887051143834"
+        }
+    ]
+}

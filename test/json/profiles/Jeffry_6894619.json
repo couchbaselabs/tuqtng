@@ -1,0 +1,42 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 30,
+        "display_name": "Jeffry Laplante",
+        "email": "Jeffry.Laplante@snailmail.com",
+        "first_name": "Jeffry",
+        "last_name": "Laplante",
+        "state": "Rhode Island"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Sep 22 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.9703045231856375,
+            "membership_type": "Basic",
+            "redeemed_points": 108,
+            "reward_points": 144
+        },
+        "password": "Jeffry72",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Wed Feb  6 12:58:49 2013",
+        "user_id": "Jeffry_6894619"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

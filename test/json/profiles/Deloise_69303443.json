@@ -1,0 +1,61 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 18,
+        "display_name": "Deloise Southard",
+        "email": "Deloise.Southard@snailmail.com",
+        "first_name": "Deloise",
+        "last_name": "Southard",
+        "state": "Utah"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Aug 22 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Cathie_43642244"
+            ],
+            "loyalty_score": 8.282374628911262,
+            "membership_type": "Gold",
+            "redeemed_points": 1632,
+            "reward_points": 1800
+        },
+        "password": "Deloise82",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Wed Jul 25 12:58:49 2012",
+        "user_id": "Deloise_69303443"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Apr 29 12:58:49 2013",
+            "order_id": "T961062993034"
+        },
+        {
+            "order_datetime": "Sat Oct  6 12:58:49 2012",
+            "order_id": "T863031644521"
+        },
+        {
+            "order_datetime": "Wed Jun 26 12:58:49 2013",
+            "order_id": "T946858164663"
+        },
+        {
+            "order_datetime": "Sun Dec  2 12:58:49 2012",
+            "order_id": "T836566887530"
+        },
+        {
+            "order_datetime": "Wed Jul 10 12:58:49 2013",
+            "order_id": "T915462755715"
+        }
+    ]
+}

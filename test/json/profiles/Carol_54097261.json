@@ -1,0 +1,67 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 16,
+        "display_name": "Carol Ward",
+        "email": "Carol.Ward@snailmail.com",
+        "first_name": "Carol",
+        "last_name": "Ward",
+        "state": "Hawaii"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Apr 12 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.739590788888616,
+            "membership_type": "Silver",
+            "redeemed_points": 456,
+            "reward_points": 300
+        },
+        "password": "Carol56",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Ocean"
+        },
+        "user_creation_time": "Wed Jul 27 12:58:49 2011",
+        "user_id": "Carol_54097261"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Travel"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Feb 27 12:58:49 2013",
+            "order_id": "T278569102929"
+        },
+        {
+            "order_datetime": "Tue May 15 12:58:49 2012",
+            "order_id": "T666925884437"
+        },
+        {
+            "order_datetime": "Tue Oct 25 12:58:49 2011",
+            "order_id": "T382522125023"
+        },
+        {
+            "order_datetime": "Sat Oct 15 12:58:49 2011",
+            "order_id": "T113127603897"
+        }
+    ]
+}

@@ -1,0 +1,33 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 56,
+        "display_name": "Kirsten Ledford",
+        "email": "Kirsten.Ledford@snailmail.com",
+        "first_name": "Kirsten",
+        "last_name": "Ledford",
+        "state": "Rhode Island"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Sep 14 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.5823946975048877,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Kirsten49",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Tue Jul 16 12:58:49 2013",
+        "user_id": "Kirsten_35297435"
+    },
+    "shipped_order_history": []
+}

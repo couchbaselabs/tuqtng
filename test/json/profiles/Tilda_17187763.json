@@ -1,0 +1,30 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 44,
+        "display_name": "Tilda Reis",
+        "email": "Tilda.Reis@snailmail.com",
+        "first_name": "Tilda",
+        "last_name": "Reis",
+        "state": "Oregon"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Sep  9 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.2390585251102282,
+            "membership_type": "Basic",
+            "redeemed_points": 48,
+            "reward_points": 24
+        },
+        "password": "Tilda17",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Tue Feb  7 12:58:49 2012",
+        "user_id": "Tilda_17187763"
+    },
+    "shipped_order_history": []
+}

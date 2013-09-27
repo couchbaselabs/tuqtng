@@ -1,0 +1,38 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 41,
+        "display_name": "Aura Franks",
+        "email": "Aura.Franks@snailmail.com",
+        "first_name": "Aura",
+        "last_name": "Franks",
+        "state": "New Jersey"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Aug  6 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.358268622623939,
+            "membership_type": "Basic",
+            "redeemed_points": 456,
+            "reward_points": 330
+        },
+        "password": "Aura86",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Thu Apr 21 12:58:49 2011",
+        "user_id": "Aura_99972571"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Oct 25 12:58:49 2012",
+            "order_id": "T211421816241"
+        }
+    ]
+}

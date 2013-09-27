@@ -1,0 +1,47 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 58,
+        "display_name": "Denita Brock",
+        "email": "Denita.Brock@snailmail.com",
+        "first_name": "Denita",
+        "last_name": "Brock",
+        "state": "New Mexico"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Feb 18 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.651818025831635,
+            "membership_type": "Basic",
+            "redeemed_points": 384,
+            "reward_points": 228
+        },
+        "password": "Denita28",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Wed Feb 29 12:58:49 2012",
+        "user_id": "Denita_8764181"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Jun 18 12:58:49 2012",
+            "order_id": "T558450894408"
+        },
+        {
+            "order_datetime": "Mon Aug  6 12:58:49 2012",
+            "order_id": "T625651256301"
+        }
+    ]
+}

@@ -1,0 +1,59 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 18,
+        "display_name": "Darcey Robinette",
+        "email": "Darcey.Robinette@snailmail.com",
+        "first_name": "Darcey",
+        "last_name": "Robinette",
+        "state": "Nevada"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Nov  5 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.528646498608676,
+            "membership_type": "Silver",
+            "redeemed_points": 1110,
+            "reward_points": 585
+        },
+        "password": "Darcey21",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Mon Jan 24 12:58:49 2011",
+        "user_id": "Darcey_26423392"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Travel",
+                "Sports & Adventure"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Nov 29 12:58:49 2011",
+            "order_id": "T975049497806"
+        },
+        {
+            "order_datetime": "Sat Apr 28 12:58:49 2012",
+            "order_id": "T136620528974"
+        },
+        {
+            "order_datetime": "Fri Mar 23 12:58:49 2012",
+            "order_id": "T456921933326"
+        }
+    ]
+}

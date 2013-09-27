@@ -1,0 +1,33 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 38,
+        "display_name": "Meredith Seymour",
+        "email": "Meredith.Seymour@snailmail.com",
+        "first_name": "Meredith",
+        "last_name": "Seymour",
+        "state": "West Virginia"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Feb 23 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Jessenia_30347557",
+                "Waneta_54442342"
+            ],
+            "loyalty_score": 9.842649086359401,
+            "membership_type": "Platinum",
+            "redeemed_points": 864,
+            "reward_points": 729
+        },
+        "password": "Meredith39",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Sun Mar 20 12:58:49 2011",
+        "user_id": "Meredith_52893014"
+    },
+    "shipped_order_history": []
+}

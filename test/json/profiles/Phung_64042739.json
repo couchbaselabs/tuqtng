@@ -1,0 +1,64 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 16,
+        "display_name": "Phung Aiello",
+        "email": "Phung.Aiello@snailmail.com",
+        "first_name": "Phung",
+        "last_name": "Aiello",
+        "state": "Tennessee"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Jul 28 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.7021740379949613,
+            "membership_type": "Basic",
+            "redeemed_points": 162,
+            "reward_points": 246
+        },
+        "password": "Phung49",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Sun Feb 19 12:58:49 2012",
+        "user_id": "Phung_64042739"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Comedy",
+                "Music & Musicals"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Travel",
+                "Home & Garden"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk",
+                "Country Music"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri May 24 12:58:49 2013",
+            "order_id": "T164036726886"
+        },
+        {
+            "order_datetime": "Sat Jun  1 12:58:49 2013",
+            "order_id": "T106257535627"
+        }
+    ]
+}

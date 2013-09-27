@@ -1,0 +1,64 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 53,
+        "display_name": "Reginia Richards",
+        "email": "Reginia.Richards@snailmail.com",
+        "first_name": "Reginia",
+        "last_name": "Richards",
+        "state": "Arizona"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Jan 13 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.806156088020233,
+            "membership_type": "Silver",
+            "redeemed_points": 444,
+            "reward_points": 168
+        },
+        "password": "Reginia96",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Tue Feb 28 12:58:49 2012",
+        "user_id": "Reginia_68062734"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Documentary"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "NonFiction"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Fri Jan 11 12:58:49 2013",
+            "order_id": "T268949277573"
+        },
+        {
+            "order_datetime": "Sun Apr 15 12:58:49 2012",
+            "order_id": "T353133659870"
+        },
+        {
+            "order_datetime": "Wed May  2 12:58:49 2012",
+            "order_id": "T789962348785"
+        }
+    ]
+}

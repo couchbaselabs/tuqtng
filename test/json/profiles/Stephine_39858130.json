@@ -1,0 +1,71 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 41,
+        "display_name": "Stephine Draper",
+        "email": "Stephine.Draper@snailmail.com",
+        "first_name": "Stephine",
+        "last_name": "Draper",
+        "state": "Missouri"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Aug 21 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 9.357015747795169,
+            "membership_type": "Platinum",
+            "redeemed_points": 1026,
+            "reward_points": 459
+        },
+        "password": "Stephine72",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Fri Jul 12 12:58:49 2013",
+        "user_id": "Stephine_39858130"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Drama"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "Medicine"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Jul 20 12:58:49 2013",
+            "order_id": "T277256414264"
+        },
+        {
+            "order_datetime": "Thu Aug  1 12:58:49 2013",
+            "order_id": "T535536599027"
+        },
+        {
+            "order_datetime": "Wed Jul 31 12:58:49 2013",
+            "order_id": "T467624133995"
+        },
+        {
+            "order_datetime": "Sat Jul 27 12:58:49 2013",
+            "order_id": "T483945977025"
+        },
+        {
+            "order_datetime": "Thu Aug  8 12:58:49 2013",
+            "order_id": "T228952126809"
+        },
+        {
+            "order_datetime": "Tue Aug  6 12:58:49 2013",
+            "order_id": "T753841797451"
+        }
+    ]
+}

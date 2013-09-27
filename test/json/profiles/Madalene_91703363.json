@@ -1,0 +1,33 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 49,
+        "display_name": "Madalene Bowers",
+        "email": "Madalene.Bowers@snailmail.com",
+        "first_name": "Madalene",
+        "last_name": "Bowers",
+        "state": "Connecticut"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Aug 24 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.725653899523796,
+            "membership_type": "Basic",
+            "redeemed_points": 621,
+            "reward_points": 171
+        },
+        "password": "Madalene86",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Thu Jan 31 12:58:49 2013",
+        "user_id": "Madalene_91703363"
+    },
+    "shipped_order_history": []
+}

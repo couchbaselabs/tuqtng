@@ -1,0 +1,45 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 59,
+        "display_name": "Rochelle Crist",
+        "email": "Rochelle.Crist@snailmail.com",
+        "first_name": "Rochelle",
+        "last_name": "Crist",
+        "state": "Kansas"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Jun 18 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 0.9724693993556599,
+            "membership_type": "Basic",
+            "redeemed_points": 0,
+            "reward_points": 0
+        },
+        "password": "Rochelle95",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Fri Feb  8 12:58:49 2013",
+        "user_id": "Rochelle_40892777"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy",
+                "Fitness / Instructional"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

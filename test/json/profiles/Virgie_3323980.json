@@ -1,0 +1,46 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 25,
+        "display_name": "Virgie Hammonds",
+        "email": "Virgie.Hammonds@snailmail.com",
+        "first_name": "Virgie",
+        "last_name": "Hammonds",
+        "state": "Louisiana"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Aug 22 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Lauren_14956481"
+            ],
+            "loyalty_score": 8.000200369571193,
+            "membership_type": "Gold",
+            "redeemed_points": 1368,
+            "reward_points": 168
+        },
+        "password": "Virgie25",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Thu Feb 14 12:58:49 2013",
+        "user_id": "Virgie_3323980"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Drama",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

@@ -1,0 +1,59 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 28,
+        "display_name": "Evia Nance",
+        "email": "Evia.Nance@snailmail.com",
+        "first_name": "Evia",
+        "last_name": "Nance",
+        "state": "Connecticut"
+    },
+    "profile_details": {
+        "last_login_time": "Thu Dec 27 12:58:49 2012",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.276957632221382,
+            "membership_type": "Silver",
+            "redeemed_points": 480,
+            "reward_points": 135
+        },
+        "password": "Evia99",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Wed Jul 27 12:58:49 2011",
+        "user_id": "Evia_36215415"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Religion",
+                "Travel",
+                "Sports & Adventure"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Classical Music",
+                "Country Music",
+                "Pop Music"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

@@ -1,0 +1,49 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 51,
+        "display_name": "Gretchen Brice",
+        "email": "Gretchen.Brice@snailmail.com",
+        "first_name": "Gretchen",
+        "last_name": "Brice",
+        "state": "Arizona"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Sep 13 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.8896104314590556,
+            "membership_type": "Basic",
+            "redeemed_points": 210,
+            "reward_points": 270
+        },
+        "password": "Gretchen63",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Sun Mar 11 12:58:49 2012",
+        "user_id": "Gretchen_46335115"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Documentary"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Aug 25 12:58:49 2013",
+            "order_id": "T601028149801"
+        }
+    ]
+}

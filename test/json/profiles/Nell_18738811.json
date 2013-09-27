@@ -1,0 +1,40 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 24,
+        "display_name": "Nell Mcgovern",
+        "email": "Nell.Mcgovern@snailmail.com",
+        "first_name": "Nell",
+        "last_name": "Mcgovern",
+        "state": "Rhode Island"
+    },
+    "profile_details": {
+        "last_login_time": "Fri Sep 20 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 4.498304686687367,
+            "membership_type": "Silver",
+            "redeemed_points": 540,
+            "reward_points": 1140
+        },
+        "password": "Nell78",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Wed Sep 21 12:58:49 2011",
+        "user_id": "Nell_18738811"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Documentary",
+                "Music & Musicals"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

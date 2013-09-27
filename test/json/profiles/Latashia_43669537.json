@@ -1,0 +1,55 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 51,
+        "display_name": "Latashia Money",
+        "email": "Latashia.Money@snailmail.com",
+        "first_name": "Latashia",
+        "last_name": "Money",
+        "state": "Nevada"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Aug 20 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 7.643015071462637,
+            "membership_type": "Gold",
+            "redeemed_points": 1470,
+            "reward_points": 1449
+        },
+        "password": "Latashia20",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "Spanish",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Wed Mar 13 12:58:49 2013",
+        "user_id": "Latashia_43669537"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy",
+                "Music & Musicals"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Thu Aug  1 12:58:49 2013",
+            "order_id": "T225066027136"
+        }
+    ]
+}

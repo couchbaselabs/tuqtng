@@ -1,0 +1,60 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 60,
+        "display_name": "Gaylene Mann",
+        "email": "Gaylene.Mann@snailmail.com",
+        "first_name": "Gaylene",
+        "last_name": "Mann",
+        "state": "Maine"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Feb 19 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.22732019956257,
+            "membership_type": "Basic",
+            "redeemed_points": 192,
+            "reward_points": 138
+        },
+        "password": "Gaylene63",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "French",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Mon Nov 28 12:58:49 2011",
+        "user_id": "Gaylene_54293892"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Documentary",
+                "Music & Musicals"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Medicine"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal",
+                "Kid's Music",
+                "New Age"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Oct 13 12:58:49 2012",
+            "order_id": "T353961334052"
+        }
+    ]
+}

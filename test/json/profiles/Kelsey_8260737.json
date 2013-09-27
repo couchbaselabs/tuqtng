@@ -1,0 +1,47 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 60,
+        "display_name": "Kelsey Stevens",
+        "email": "Kelsey.Stevens@snailmail.com",
+        "first_name": "Kelsey",
+        "last_name": "Stevens",
+        "state": "Tennessee"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jul  1 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Chia_26631557",
+                "Amalia_7012238",
+                "Stacia_2362574"
+            ],
+            "loyalty_score": 8.46108326357722,
+            "membership_type": "Gold",
+            "redeemed_points": 1512,
+            "reward_points": 1920
+        },
+        "password": "Kelsey35",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Mon Apr 18 12:58:49 2011",
+        "user_id": "Kelsey_8260737"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sun Feb 26 12:58:49 2012",
+            "order_id": "T681967419119"
+        },
+        {
+            "order_datetime": "Tue Dec 18 12:58:49 2012",
+            "order_id": "T256162779069"
+        },
+        {
+            "order_datetime": "Sun May 26 12:58:49 2013",
+            "order_id": "T134669091563"
+        }
+    ]
+}

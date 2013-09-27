@@ -1,0 +1,85 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 37,
+        "display_name": "Marilou Demers",
+        "email": "Marilou.Demers@snailmail.com",
+        "first_name": "Marilou",
+        "last_name": "Demers",
+        "state": "Alaska"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Sep  4 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Floyd_56944800"
+            ],
+            "loyalty_score": 6.689385689520239,
+            "membership_type": "Silver",
+            "redeemed_points": 1206,
+            "reward_points": 576
+        },
+        "password": "Marilou54",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Pebbles"
+        },
+        "user_creation_time": "Wed Mar 14 12:58:49 2012",
+        "user_id": "Marilou_12035648"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation",
+                "Documentary"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor",
+                "Medicine"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Blues and Folk",
+                "Kid's Music",
+                "Pop Music"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Sep 29 12:58:49 2012",
+            "order_id": "T117942674820"
+        },
+        {
+            "order_datetime": "Sun Nov  4 12:58:49 2012",
+            "order_id": "T226862252244"
+        },
+        {
+            "order_datetime": "Fri Feb 22 12:58:49 2013",
+            "order_id": "T947425517393"
+        },
+        {
+            "order_datetime": "Fri Dec 21 12:58:49 2012",
+            "order_id": "T178426302988"
+        },
+        {
+            "order_datetime": "Sat Jun 23 12:58:49 2012",
+            "order_id": "T798420377704"
+        },
+        {
+            "order_datetime": "Sat Mar 24 12:58:49 2012",
+            "order_id": "T301329636110"
+        }
+    ]
+}

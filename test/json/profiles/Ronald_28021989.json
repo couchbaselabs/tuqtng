@@ -1,0 +1,69 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 38,
+        "display_name": "Ronald Pressley",
+        "email": "Ronald.Pressley@snailmail.com",
+        "first_name": "Ronald",
+        "last_name": "Pressley",
+        "state": "New Hampshire"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jun 24 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Janey_1219578"
+            ],
+            "loyalty_score": 7.826550312746971,
+            "membership_type": "Gold",
+            "redeemed_points": 1323,
+            "reward_points": 1974
+        },
+        "password": "Ronald66",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Thu Aug  4 12:58:49 2011",
+        "user_id": "Ronald_28021989"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Animation"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Oct 22 12:58:49 2011",
+            "order_id": "T895639468375"
+        },
+        {
+            "order_datetime": "Tue Mar 27 12:58:49 2012",
+            "order_id": "T709336368632"
+        },
+        {
+            "order_datetime": "Thu Apr  5 12:58:49 2012",
+            "order_id": "T479530755036"
+        },
+        {
+            "order_datetime": "Fri Dec 30 12:58:49 2011",
+            "order_id": "T752323142815"
+        },
+        {
+            "order_datetime": "Mon May  6 12:58:49 2013",
+            "order_id": "T240450754537"
+        },
+        {
+            "order_datetime": "Wed May 22 12:58:49 2013",
+            "order_id": "T769337728306"
+        },
+        {
+            "order_datetime": "Thu Jan 24 12:58:49 2013",
+            "order_id": "T129741453885"
+        }
+    ]
+}

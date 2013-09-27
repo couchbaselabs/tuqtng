@@ -1,0 +1,46 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 33,
+        "display_name": "Phylis Meehan",
+        "email": "Phylis.Meehan@snailmail.com",
+        "first_name": "Phylis",
+        "last_name": "Meehan",
+        "state": "Massachusetts"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Sep  3 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Taylor_11682986"
+            ],
+            "loyalty_score": 6.301222651384233,
+            "membership_type": "Silver",
+            "redeemed_points": 810,
+            "reward_points": 1170
+        },
+        "password": "Phylis28",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Tree Tops"
+        },
+        "user_creation_time": "Sat Jan 26 12:58:49 2013",
+        "user_id": "Phylis_32511515"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

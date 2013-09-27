@@ -1,0 +1,48 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 55,
+        "display_name": "Ricarda Rojas",
+        "email": "Ricarda.Rojas@snailmail.com",
+        "first_name": "Ricarda",
+        "last_name": "Rojas",
+        "state": "New Mexico"
+    },
+    "profile_details": {
+        "last_login_time": "Sun May 19 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Eloy_86973543",
+                "Kenna_8593124"
+            ],
+            "loyalty_score": 7.673657904069432,
+            "membership_type": "Gold",
+            "redeemed_points": 441,
+            "reward_points": 1554
+        },
+        "password": "Ricarda74",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "English",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Mon Oct 24 12:58:49 2011",
+        "user_id": "Ricarda_40644136"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Drama",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue Dec 20 12:58:49 2011",
+            "order_id": "T786556082038"
+        }
+    ]
+}

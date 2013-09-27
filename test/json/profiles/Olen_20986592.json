@@ -1,0 +1,43 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 47,
+        "display_name": "Olen Whitley",
+        "email": "Olen.Whitley@snailmail.com",
+        "first_name": "Olen",
+        "last_name": "Whitley",
+        "state": "Kansas"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Jul 22 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.798745846917013,
+            "membership_type": "Silver",
+            "redeemed_points": 180,
+            "reward_points": 480
+        },
+        "password": "Olen36",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "German",
+            "ui_theme": "Beach"
+        },
+        "user_creation_time": "Fri Apr 19 12:58:49 2013",
+        "user_id": "Olen_20986592"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Tue May  7 12:58:49 2013",
+            "order_id": "T255837756305"
+        },
+        {
+            "order_datetime": "Mon Jun  3 12:58:49 2013",
+            "order_id": "T458838214551"
+        },
+        {
+            "order_datetime": "Mon Jul  1 12:58:49 2013",
+            "order_id": "T134649431356"
+        }
+    ]
+}

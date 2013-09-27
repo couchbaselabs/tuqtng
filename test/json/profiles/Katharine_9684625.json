@@ -1,0 +1,51 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Katharine Mulkey",
+        "email": "Katharine.Mulkey@snailmail.com",
+        "first_name": "Katharine",
+        "last_name": "Mulkey",
+        "state": "Illinois"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Apr 24 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 1.484227537383146,
+            "membership_type": "Basic",
+            "redeemed_points": 297,
+            "reward_points": 102
+        },
+        "password": "Katharine85",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Sat Aug 27 12:58:49 2011",
+        "user_id": "Katharine_9684625"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Comedy",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "Medicine"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

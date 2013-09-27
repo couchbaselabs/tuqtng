@@ -1,0 +1,48 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 26,
+        "display_name": "Lorene Redmon",
+        "email": "Lorene.Redmon@snailmail.com",
+        "first_name": "Lorene",
+        "last_name": "Redmon",
+        "state": "Connecticut"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Jul 30 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.990532734182264,
+            "membership_type": "Silver",
+            "redeemed_points": 855,
+            "reward_points": 720
+        },
+        "password": "Lorene24",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Tue Apr 12 12:58:49 2011",
+        "user_id": "Lorene_32822201"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Sep 19 12:58:49 2012",
+            "order_id": "T631548843209"
+        },
+        {
+            "order_datetime": "Thu Sep 27 12:58:49 2012",
+            "order_id": "T529065527493"
+        },
+        {
+            "order_datetime": "Thu Jul 11 12:58:49 2013",
+            "order_id": "T528646408524"
+        }
+    ]
+}

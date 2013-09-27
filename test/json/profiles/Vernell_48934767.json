@@ -1,0 +1,34 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 16,
+        "display_name": "Vernell Gandy",
+        "email": "Vernell.Gandy@snailmail.com",
+        "first_name": "Vernell",
+        "last_name": "Gandy",
+        "state": "Virginia"
+    },
+    "profile_details": {
+        "last_login_time": "Tue Jan 15 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 2.5656709964307014,
+            "membership_type": "Basic",
+            "redeemed_points": 60,
+            "reward_points": 450
+        },
+        "password": "Vernell27",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Mon May  9 12:58:49 2011",
+        "user_id": "Vernell_48934767"
+    },
+    "shipped_order_history": []
+}

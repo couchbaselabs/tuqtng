@@ -1,0 +1,47 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 53,
+        "display_name": "Fidelia Lopez",
+        "email": "Fidelia.Lopez@snailmail.com",
+        "first_name": "Fidelia",
+        "last_name": "Lopez",
+        "state": "Vermont"
+    },
+    "profile_details": {
+        "last_login_time": "Sat Jun 15 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 5.695107038635065,
+            "membership_type": "Silver",
+            "redeemed_points": 840,
+            "reward_points": 585
+        },
+        "password": "Fidelia36",
+        "prefs": {
+            "promotion_email": false,
+            "ui_language": "Spanish",
+            "ui_theme": "Mountains"
+        },
+        "user_creation_time": "Mon Feb 18 12:58:49 2013",
+        "user_id": "Fidelia_74426056"
+    },
+    "shipped_order_history": [
+        {
+            "order_datetime": "Sat Mar 16 12:58:49 2013",
+            "order_id": "T754832564690"
+        },
+        {
+            "order_datetime": "Wed Apr  3 12:58:49 2013",
+            "order_id": "T997358781130"
+        },
+        {
+            "order_datetime": "Tue May 14 12:58:49 2013",
+            "order_id": "T173321901227"
+        },
+        {
+            "order_datetime": "Sat Mar 16 12:58:49 2013",
+            "order_id": "T621153819073"
+        }
+    ]
+}

@@ -1,0 +1,54 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 15,
+        "display_name": "Mia Rohde",
+        "email": "Mia.Rohde@snailmail.com",
+        "first_name": "Mia",
+        "last_name": "Rohde",
+        "state": "Utah"
+    },
+    "profile_details": {
+        "last_login_time": "Sun Aug 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 6.5893397314194395,
+            "membership_type": "Silver",
+            "redeemed_points": 756,
+            "reward_points": 1242
+        },
+        "password": "Mia56",
+        "prefs": {
+            "promotion_category": [
+                "Books"
+            ],
+            "promotion_email": true,
+            "ui_language": "German",
+            "ui_theme": "Grafitti"
+        },
+        "user_creation_time": "Tue Oct  9 12:58:49 2012",
+        "user_id": "Mia_51542833"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "History",
+                "NonFiction"
+            ]
+        },
+        {
+            "category": "Music",
+            "sub-category": [
+                "Broadway and Vocal"
+            ]
+        }
+    ],
+    "shipped_order_history": []
+}

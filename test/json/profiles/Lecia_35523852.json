@@ -1,0 +1,57 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 32,
+        "display_name": "Lecia Cathey",
+        "email": "Lecia.Cathey@snailmail.com",
+        "first_name": "Lecia",
+        "last_name": "Cathey",
+        "state": "Rhode Island"
+    },
+    "profile_details": {
+        "last_login_time": "Mon Apr 29 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [],
+            "loyalty_score": 3.722441310393977,
+            "membership_type": "Basic",
+            "redeemed_points": 207,
+            "reward_points": 45
+        },
+        "password": "Lecia20",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music"
+            ],
+            "promotion_email": true,
+            "ui_language": "English",
+            "ui_theme": "Wood"
+        },
+        "user_creation_time": "Sat Oct 22 12:58:49 2011",
+        "user_id": "Lecia_35523852"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Foreign Films",
+                "Comedy",
+                "Sci-Fi, Fantasy & Horror"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Mon Sep 10 12:58:49 2012",
+            "order_id": "T700837622617"
+        },
+        {
+            "order_datetime": "Wed Sep 26 12:58:49 2012",
+            "order_id": "T889052317353"
+        },
+        {
+            "order_datetime": "Wed Oct  3 12:58:49 2012",
+            "order_id": "T763945554381"
+        }
+    ]
+}

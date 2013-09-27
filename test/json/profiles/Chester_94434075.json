@@ -1,0 +1,81 @@
+{
+    "doc_type": "user_profile",
+    "personal_details": {
+        "age": 52,
+        "display_name": "Chester Griswold",
+        "email": "Chester.Griswold@snailmail.com",
+        "first_name": "Chester",
+        "last_name": "Griswold",
+        "state": "New Jersey"
+    },
+    "profile_details": {
+        "last_login_time": "Wed Sep 25 12:58:49 2013",
+        "loyalty": {
+            "friends_referred": [
+                "Yu_74648261"
+            ],
+            "loyalty_score": 7.286861453112065,
+            "membership_type": "Gold",
+            "redeemed_points": 1785,
+            "reward_points": 126
+        },
+        "password": "Chester45",
+        "prefs": {
+            "promotion_category": [
+                "Books",
+                "Music",
+                "Films"
+            ],
+            "promotion_email": true,
+            "ui_language": "French",
+            "ui_theme": "Planets"
+        },
+        "user_creation_time": "Mon Aug  5 12:58:49 2013",
+        "user_id": "Chester_94434075"
+    },
+    "search_history": [
+        {
+            "category": "Films",
+            "sub-category": [
+                "Classic Films",
+                "Documentary"
+            ]
+        },
+        {
+            "category": "Books",
+            "sub-category": [
+                "Humor"
+            ]
+        }
+    ],
+    "shipped_order_history": [
+        {
+            "order_datetime": "Wed Sep 11 12:58:49 2013",
+            "order_id": "T183632724456"
+        },
+        {
+            "order_datetime": "Sun Sep 15 12:58:49 2013",
+            "order_id": "T932831101496"
+        },
+        {
+            "order_datetime": "Sun Aug 11 12:58:49 2013",
+            "order_id": "T372865399862"
+        },
+        {
+            "order_datetime": "Wed Sep 25 12:58:49 2013",
+            "order_id": "T222339605943"
+        },
+        {
+            "order_datetime": "Sat Aug 31 12:58:49 2013",
+            "order_id": "T381025437381"
+        },
+        {
+            "order_datetime": "Wed Aug 14 12:58:49 2013",
+            "order_id": "T232748694933"
+        },
+        {
+            "order_datetime": "Tue Aug  6 12:58:49 2013",
+            "order_id": "T290768605604"
+        }
+    ]
+}
