@@ -93,6 +93,11 @@ type ScanIndex interface {
 	ScanEntries(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
 
+// CountIndex represents indexes that can efficiently produce entry counts.
+type CountIndex interface {
+	EntryCount() (int64, query.Error)
+}
+
 // PrimaryIndex represents primary key indexes.
 type PrimaryIndex interface {
 	Index
@@ -145,7 +150,7 @@ type RangeIndex interface {
 // SearchIndex represents full text search indexes.
 type SearchIndex interface {
 	Index
-	Search(value string, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	SearchValue(value string, limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
 
 // RangeStatistics captures statistics for a range index.
