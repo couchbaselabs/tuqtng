@@ -208,6 +208,45 @@
         },
         {}
         ]
+    },
+
+    {
+        "description": "ARRAY expression referring to outer context",
+        "statements" : "SELECT name, ARRAY child OVER child IN children WHEN child.name > name END as chosen_one FROM contacts",
+        "results" : [
+        {
+            "chosen_one": [],
+            "name": "dave"
+        },
+        {
+            "chosen_one": [
+                {
+                    "age": 17,
+                    "gender": "f",
+                    "name": "xena"
+                },
+                {
+                    "age": 2,
+                    "gender": "m",
+                    "name": "yuri"
+                }
+            ],
+            "name": "earl"
+        },
+        {
+            "name": "fred"
+        },
+        {
+            "name": "harry"
+        },
+        {
+            "chosen_one": [],
+            "name": "ian"
+        },
+        {
+            "name": "jane"
+        }
+    ]
     }
 
 

@@ -119,6 +119,36 @@
         },
         {}
         ]
+    },
+
+    {
+        "description": "FIRST expression referring to outer context",
+        "statements" : "SELECT name, FIRST child OVER child IN children WHEN child.name > name END as chosen_one FROM contacts",
+        "results" : [
+        {
+            "name": "dave"
+        },
+        {
+            "chosen_one": {
+                "age": 17,
+                "gender": "f",
+                "name": "xena"
+            },
+            "name": "earl"
+        },
+        {
+            "name": "fred"
+        },
+        {
+            "name": "harry"
+        },
+        {
+            "name": "ian"
+        },
+        {
+            "name": "jane"
+        }
+    ]
     }
 
 ]

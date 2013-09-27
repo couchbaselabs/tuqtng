@@ -70,9 +70,10 @@ func (this *CollectionAnyOperator) Evaluate(item *dparval.Value) (*dparval.Value
 					return nil, err
 				}
 			} else {
-
-				// create a new context with this object named as the alias
-				innerContext := dparval.NewValue(map[string]interface{}{this.As: inner})
+				// duplicate the existing context
+				innerContext := item.Duplicate()
+				// add this object named as the alias
+				innerContext.SetPath(this.As, inner)
 				// now evaluate the condition in this new context
 				innerResult, err := this.Condition.Evaluate(innerContext)
 				if err != nil {

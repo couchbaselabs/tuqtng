@@ -162,6 +162,28 @@
             "id": "1236"
         }
     ]
+    },
+
+    {
+        "description": "ANY expression referring to outer context",
+        "statements" : "SELECT name, children FROM contacts WHERE ANY child.name > name OVER child IN children END",
+        "results" : [
+        {
+            "children": [
+                {
+                    "age": 17,
+                    "gender": "f",
+                    "name": "xena"
+                },
+                {
+                    "age": 2,
+                    "gender": "m",
+                    "name": "yuri"
+                }
+            ],
+            "name": "earl"
+        }
+    ]
     }
 
 ]
