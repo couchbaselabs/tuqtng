@@ -14,6 +14,7 @@ package plan
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
@@ -52,6 +53,176 @@ type ScanRange struct {
 	Limit     int64
 }
 
+func (sr *ScanRange) Overlap(other *ScanRange) (rv *ScanRange) {
+
+	if sr.Low != nil && other.High != nil {
+		res := compareTheLookupValues(sr.Low, other.High)
+		if res > 0 {
+			return
+		}
+	}
+	if sr.High != nil && other.Low != nil {
+		res := compareTheLookupValues(sr.High, other.Low)
+		if res < 0 {
+			return
+		} else if res == 0 {
+			// if our values are the same, we have both be inclusive (because we're going opposite directions)
+			if sr.Inclusion == catalog.Neither || sr.Inclusion == catalog.Low || other.Inclusion == catalog.Neither || other.Inclusion == catalog.High {
+				return
+			}
+		}
+	}
+
+	// they are overlapping
+	rv = &ScanRange{}
+
+	// first sort out the highest low
+	lowComp := compareLow(sr.Low, other.Low)
+	if lowComp < 0 {
+		rv.Low = other.Low
+		if other.Inclusion == catalog.Both || other.Inclusion == catalog.Low {
+			rv.Inclusion = catalog.Low
+		} else {
+			rv.Inclusion = catalog.Neither
+		}
+	} else if lowComp > 0 {
+		rv.Low = sr.Low
+		if sr.Inclusion == catalog.Both || sr.Inclusion == catalog.Low {
+			rv.Inclusion = catalog.Low
+		} else {
+			rv.Inclusion = catalog.Neither
+		}
+	} else {
+		rv.Low = sr.Low // either one, they are the same
+		// now we must choose the most restrive inclusion of the two
+		if sr.Inclusion == catalog.Neither || sr.Inclusion == catalog.High || other.Inclusion == catalog.Neither || other.Inclusion == catalog.High {
+			rv.Inclusion = catalog.Neither
+		} else {
+			rv.Inclusion = catalog.Low
+		}
+	}
+
+	// now sort out the lowest high
+	highComp := compareHigh(sr.High, other.High)
+	if highComp < 0 {
+		rv.High = sr.High
+		if sr.Inclusion == catalog.Both || sr.Inclusion == catalog.High {
+			if rv.Inclusion == catalog.Neither {
+				rv.Inclusion = catalog.High
+			} else {
+				rv.Inclusion = catalog.Both
+			}
+		}
+	} else if highComp > 0 {
+		rv.High = other.High
+		if other.Inclusion == catalog.Both || other.Inclusion == catalog.High {
+			if rv.Inclusion == catalog.Neither {
+				rv.Inclusion = catalog.High
+			} else {
+				rv.Inclusion = catalog.Both
+			}
+		}
+	} else {
+		rv.High = sr.High // either one, they are the same
+		// now we must choose the most restrictive inclusion of the two
+		if sr.Inclusion == catalog.Neither || sr.Inclusion == catalog.Low || other.Inclusion == catalog.Neither || other.Inclusion == catalog.Low {
+			// in this case leave it as it is (we excluded high by default when buildng low)
+		} else {
+			if rv.Inclusion == catalog.Neither {
+				rv.Inclusion = catalog.High
+			} else {
+				rv.Inclusion = catalog.Both
+			}
+		}
+	}
+
+	return
+}
+
+func compareTheLookupValues(left, right catalog.LookupValue) int {
+	for i, l := range left {
+		if i >= len(right) {
+			// left array has more elements, right sorts first
+			return 1
+		}
+		r := right[i]
+		comp := ast.CollateJSON(l.Value(), r.Value())
+		if comp != 0 {
+			return comp
+		}
+	}
+	if len(right) > len(left) {
+		return -1
+	}
+	return 0
+}
+
+func compareHigh(a, b catalog.LookupValue) int {
+	return compareLookupValues(a, b, 1)
+}
+
+func compareLow(a, b catalog.LookupValue) int {
+	return compareLookupValues(a, b, -1)
+}
+
+func compareLookupValues(left, right catalog.LookupValue, nilHighLow int) int {
+	if left == nil && right == nil {
+		return 0
+	} else if left == nil {
+		return nilHighLow
+	} else if right == nil {
+		return -nilHighLow
+	}
+	for i, l := range left {
+		if i >= len(right) {
+			// left array has more elements, right sorts first
+			return 1
+		}
+		r := right[i]
+		comp := ast.CollateJSON(l.Value(), r.Value())
+		if comp != 0 {
+			return comp
+		}
+	}
+	if len(right) > len(left) {
+		return -1
+	}
+	return 0
+}
+
+func (this *ScanRange) IsSubsetOf(that *ScanRange) bool {
+	lcomp := compareLookupValues(that.Low, this.Low, 1)
+	if lcomp > 0 {
+		// that low is lower than this low, this not a subset of that
+		return false
+	}
+	if lcomp == 0 {
+		// values the same, check inclusions
+		if that.Inclusion == catalog.High || that.Inclusion == catalog.Neither {
+			if this.Inclusion == catalog.Low || this.Inclusion == catalog.Both {
+				// that excludes but this includes, this not a subset of that
+				return false
+			}
+		}
+	}
+
+	rcomp := compareLookupValues(that.High, this.High, -1)
+	if rcomp < 0 {
+		// that high is higher this high, this is not a subset of that
+		return false
+	}
+	if rcomp == 0 {
+		// values the same, check inclusions
+		if that.Inclusion == catalog.Low || that.Inclusion == catalog.Neither {
+			if this.Inclusion == catalog.High || this.Inclusion == catalog.Both {
+				// that excludes but this includes, this not a subset of that
+				return false
+			}
+		}
+	}
+	return true
+}
+
 func (sr ScanRange) MarshalJSON() ([]byte, error) {
 	r := map[string]interface{}{"limit": sr.Limit}
 
@@ -86,6 +257,17 @@ func (sr ScanRange) MarshalJSON() ([]byte, error) {
 }
 
 type ScanRanges []*ScanRange
+
+func (sr ScanRanges) String() string {
+	rv := ""
+	for i, r := range sr {
+		if i != 0 {
+			rv = rv + ", "
+		}
+		rv = rv + fmt.Sprintf("%#v", r)
+	}
+	return rv
+}
 
 type Scan struct {
 	Type      string     `json:"type"`

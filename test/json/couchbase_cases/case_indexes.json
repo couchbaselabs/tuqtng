@@ -591,6 +591,64 @@
                 "expect": "high"
             }
         ]
+    },
+    {
+        "description": "2 mergable CONDITIONS SAME FIELD - verify that we get the same results with/without an index",
+        "preStatements": "CREATE INDEX scoreidx ON game(score)",
+        "statements": "SELECT score FROM game WHERE score > 8 AND score < 20 ORDER BY score",
+        "postStatements": "DROP INDEX game.scoreidx",
+        "matchStatements": "SELECT score FROM game WHERE score > 8 AND score < 20 ORDER BY score"
+    },
+    {
+        "description": "2 mergable CONDITIONS SAME FIELD - verify that we get the same results with/without an index",
+        "preStatements": "CREATE INDEX scoreidx ON game(score)",
+        "statements": "EXPLAIN SELECT score FROM game WHERE score > 8 AND score < 20 ORDER BY score",
+        "postStatements": "DROP INDEX game.scoreidx",
+        "resultAssertions": [
+            {
+                "pointer": "/0/input/input/input/input/index",
+                "expect": "scoreidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/low/0",
+                "expect": 8
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/high/0",
+                "expect": 20
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "neither"
+            }
+        ]
+    },
+    {
+        "description": "2 overlapping CONDITIONS SAME FIELD - verify that we get the same results with/without an index",
+        "preStatements": "CREATE INDEX scoreidx ON game(score)",
+        "statements": "SELECT score FROM game WHERE score > 8 AND score > 20 ORDER BY score",
+        "postStatements": "DROP INDEX game.scoreidx",
+        "matchStatements": "SELECT score FROM game WHERE score > 8 AND score > 20 ORDER BY score"
+    },
+    {
+        "description": "2 overlapping CONDITIONS SAME FIELD - verify that we get the same results with/without an index",
+        "preStatements": "CREATE INDEX scoreidx ON game(score)",
+        "statements": "EXPLAIN SELECT score FROM game WHERE score > 8 AND score > 20 ORDER BY score",
+        "postStatements": "DROP INDEX game.scoreidx",
+        "resultAssertions": [
+            {
+                "pointer": "/0/input/input/input/input/index",
+                "expect": "scoreidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/low/0",
+                "expect": 20
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "high"
+            }
+        ]
     }
 
 ]

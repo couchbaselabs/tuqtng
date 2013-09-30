@@ -115,13 +115,22 @@ func CanIUseThisIndexForThisWhereClause(index catalog.RangeIndex, where ast.Expr
 	switch whereCNF := whereCNF.(type) {
 	case *ast.AndOperator:
 		// this is an and, we can try to satisfy individual operands
+		found := false
+		rranges := plan.ScanRanges{}
 		for _, oper := range whereCNF.Operands {
 			// see if the where clause expression is sargable with respect to the index key
 			es := NewExpressionSargable(indexKeyFormal[0])
 			oper.Accept(es)
 			if es.IsSargable() {
-				return true, es.ScanRanges(), nil, nil
+				found = true
+				for _, ran := range es.ScanRanges() {
+					rranges = MergeRanges(rranges, ran)
+					clog.To(planner.CHANNEL, "now ranges are: %v", rranges)
+				}
 			}
+		}
+		if found {
+			return true, rranges, nil, nil
 		}
 	default:
 		// not an and, we must satisfy the whole expression
@@ -135,6 +144,36 @@ func CanIUseThisIndexForThisWhereClause(index catalog.RangeIndex, where ast.Expr
 
 	// cannot use this index
 	return false, nil, nil, nil
+}
+
+func MergeRanges(origr plan.ScanRanges, newr *plan.ScanRange) plan.ScanRanges {
+	rv := plan.ScanRanges{}
+
+	merged := false
+	for _, orig := range origr {
+
+		if !merged {
+			mergedRange := orig.Overlap(newr)
+			if mergedRange != nil {
+				merged = true
+				rv = append(rv, mergedRange)
+
+			} else {
+				// not successful
+				rv = append(rv, orig)
+			}
+		} else {
+			// already merged, just append the orig
+			rv = append(rv, orig)
+		}
+	}
+
+	// never merged it
+	if !merged {
+		rv = append(rv, newr)
+	}
+
+	return rv
 }
 
 func IndexKeyInFormalNotation(key catalog.IndexKey, bucket string) (catalog.IndexKey, error) {
