@@ -62,10 +62,6 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 				return nil, err
 			}
 			currentOperator = xpipeline.NewFetch(bucket, currentElement.Projection, currentElement.As)
-			if currentElement.Ids != nil {
-				fetchOperator := currentOperator.(*xpipeline.Fetch)
-				fetchOperator.SetIds(currentElement.Ids)
-			}
 		case *plan.Filter:
 			currentOperator = xpipeline.NewFilter(currentElement.Expr)
 		case *plan.Order:
