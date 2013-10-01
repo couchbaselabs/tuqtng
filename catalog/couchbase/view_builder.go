@@ -293,9 +293,27 @@ func (idx *viewIndex) putDesignDoc() error {
 		return err
 	}
 
-	saved, err := getDesignDoc(idx.bucket, idx.DDocName())
-	if err != nil || saved.IndexChecksum != idx.ddoc.checksum() {
-		return errors.New("Index creation failed: " + idx.name)
+	var saved *ddocJSON = nil
+	var err error = nil
+
+	// give the PUT some time to register
+	for i := 0; i < 3; i++ {
+		if i > 1 {
+			time.Sleep(time.Duration(i*3) * time.Second)
+		}
+
+		saved, err = getDesignDoc(idx.bucket, idx.DDocName())
+		if err == nil {
+			break
+		}
+	}
+
+	if err != nil {
+		return errors.New("Creating index '" + idx.name + "' failed: " + err.Error())
+	}
+
+	if saved.IndexChecksum != idx.ddoc.checksum() {
+		return errors.New("Checksum mismatch after creating index '" + idx.name + "'")
 	}
 
 	return nil

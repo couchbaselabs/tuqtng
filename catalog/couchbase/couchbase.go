@@ -282,8 +282,6 @@ func (b *bucket) Fetch(id string) (*dparval.Value, query.Error) {
 
 func (b *bucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
 
-	// TODO - add USING as a parameter to this call (needs catalog change)
-
 	if _, exists := b.indexes[PRIMARY_INDEX]; exists {
 		return nil, query.NewError(nil, "Primary index already exists")
 	}
