@@ -23,6 +23,34 @@ func WhereClauseFindById(where ast.Expression) []string {
 	case *ast.OrOperator:
 		docIds := isOrOperatorComparisonOnIds(where)
 		return docIds
+	case *ast.CollectionAnyOperator:
+		docIds := isAnyOperatorComparisonOnIds(where)
+		return docIds
+	}
+	return nil
+}
+
+func isAnyOperatorComparisonOnIds(any *ast.CollectionAnyOperator) []string {
+	// OVER must be a literal array
+	docIds, ok := any.Over.(*ast.LiteralArray)
+	if ok {
+		// all items in the array must be a literal string
+		rv := make([]string, len(docIds.Val))
+		for i, docId := range docIds.Val {
+			docId, ok := docId.(*ast.LiteralString)
+			rv[i] = docId.Val
+			if !ok {
+				return nil
+			}
+		}
+
+		// condition must be equals comparison
+		cond, ok := any.Condition.(*ast.EqualToOperator)
+		if ok {
+			if isEqualsComparisonOnPropertyPath(cond, any.As) {
+				return rv
+			}
+		}
 	}
 	return nil
 }
@@ -50,6 +78,31 @@ func isOrOperatorComparisonOnIds(or *ast.OrOperator) []string {
 		}
 	}
 	return docIds
+}
+
+func isEqualsComparisonOnPropertyPath(equals *ast.EqualToOperator, path string) bool {
+	prop, ok := equals.Right.(*ast.Property)
+	if ok && prop.Path == path {
+		// RHS is property matching any IN, need LHS to be dot member
+		dotMember, ok := equals.Left.(*ast.DotMemberOperator)
+		if ok {
+			if isDotMemberMetaDotId(dotMember) {
+				return true
+			}
+		}
+	} else {
+		prop, ok = equals.Left.(*ast.Property)
+		if ok && prop.Path == path {
+			// LHS is property matching any IN, need RHS to be dot member
+			dotMember, ok := equals.Right.(*ast.DotMemberOperator)
+			if ok {
+				if isDotMemberMetaDotId(dotMember) {
+					return true
+				}
+			}
+		}
+	}
+	return false
 }
 
 func isEqualsComparisonOnId(equals *ast.EqualToOperator) string {

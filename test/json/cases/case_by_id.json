@@ -109,5 +109,53 @@
                 "expect": "scan"
             }
         ]
+    },
+    {
+        "description": "query with WHERE clause matches multiple IDs nested in ANY comparison with literal array of ids should not scan",
+        "statements": "EXPLAIN SELECT * FROM game WHERE ANY META().id = id OVER id IN [\"damien\", \"dustin\", \"junyi\"] END",
+        "resultAssertions": [
+            {
+                "pointer": "/0/input/type",
+                "expect": "fetch"
+            },
+            {
+                "pointer": "/0/input/ids/0",
+                "expect": "damien"
+            },
+            {
+                "pointer": "/0/input/ids/1",
+                "expect": "dustin"
+            },
+            {
+                "pointer": "/0/input/ids/2",
+                "expect": "junyi"
+            },
+            {
+                "pointer": "/0/input/input",
+                "expect": null
+            }
+        ]
+    },
+    {
+        "description": "query with WHERE clause matches multiple IDs (some non-existant) nested in ANY comparison with literal array of ids should not give error",
+        "statements": "SELECT META().id FROM game WHERE ANY META().id = id OVER id IN [\"damien\", \"dustin\", \"does_not_exist\"] END",
+        "results": [
+        {
+            "id": "damien"
+        },
+        {
+            "id": "dustin"
+        }
+    ]
+    },
+    {
+        "description": "query with WHERE clause using ANY but not just comparison with literal array of docids should scan",
+        "statements": "EXPLAIN SELECT * FROM game WHERE ANY META().id = id OR id IS NOT NULL OVER id IN [\"damien\", \"dustin\", \"does_not_exist\"] END",
+        "resultAssertions": [
+            {
+                "pointer": "/0/input/input/input/type",
+                "expect": "scan"
+            }
+        ]
     }
 ]
