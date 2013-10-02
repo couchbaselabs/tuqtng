@@ -154,7 +154,13 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 	for _, lastStep := range planHeads {
 
 		if stmt.GetWhere() != nil {
-			lastStep = plan.NewFilter(lastStep, stmt.GetWhere())
+			ids := WhereClauseFindById(stmt.GetWhere())
+			fetch, ok := lastStep.(*plan.Fetch)
+			if ids != nil && ok {
+				fetch.ConvertToIds(ids)
+			} else {
+				lastStep = plan.NewFilter(lastStep, stmt.GetWhere())
+			}
 		}
 
 		if stmt.GetGroupBy() != nil {

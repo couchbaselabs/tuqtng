@@ -298,6 +298,7 @@ type Fetch struct {
 	Pool       string         `json:"pool"`
 	Projection ast.Expression `json:"projection"`
 	As         string         `json:"as"`
+	Ids        []string       `json:"ids"`
 }
 
 func NewFetch(input PlanElement, pool string, bucket string, projection ast.Expression, as string) *Fetch {
@@ -309,6 +310,11 @@ func NewFetch(input PlanElement, pool string, bucket string, projection ast.Expr
 		Projection: projection,
 		As:         as,
 	}
+}
+
+func (this *Fetch) ConvertToIds(ids []string) {
+	this.Input = nil
+	this.Ids = ids
 }
 
 func (this *Fetch) Sources() []PlanElement {

@@ -278,7 +278,9 @@ func (b *bucket) BulkFetch(ids []string) (map[string]*dparval.Value, query.Error
 		if e != nil {
 			return nil, e
 		}
-		rv[id] = item
+		if item != nil {
+			rv[id] = item
+		}
 	}
 	return rv, nil
 }
@@ -399,6 +401,10 @@ func (pi *primaryIndex) ScanEntries(limit int64, ch dparval.ValueChannel, warnch
 func fetch(path string) (item *dparval.Value, e query.Error) {
 	bytes, err := ioutil.ReadFile(path)
 	if err != nil {
+		if os.IsNotExist(err) {
+			// file doesn't exist should simply return nil,nil
+			return
+		}
 		return nil, query.NewError(err, "")
 	}
 

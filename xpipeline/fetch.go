@@ -10,8 +10,6 @@
 package xpipeline
 
 import (
-	"fmt"
-
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
@@ -28,6 +26,7 @@ type Fetch struct {
 	batch      dparval.ValueCollection
 	projection ast.Expression
 	as         string
+	ids        []string
 }
 
 func NewFetch(bucket catalog.Bucket, projection ast.Expression, as string) *Fetch {
@@ -44,13 +43,29 @@ func (this *Fetch) SetSource(source Operator) {
 	this.Base.SetSource(source)
 }
 
+func (this *Fetch) SetIds(ids []string) {
+	this.ids = ids
+}
+
 func (this *Fetch) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.Base.GetChannels()
 }
 
 func (this *Fetch) Run(stopChannel misc.StopChannel) {
 	clog.To(CHANNEL, "fetch operator starting")
-	this.Base.RunOperator(this, stopChannel)
+	if this.Base.Source != nil {
+		this.Base.RunOperator(this, stopChannel)
+	} else {
+		defer close(this.Base.itemChannel)
+		defer close(this.Base.supportChannel)
+		defer close(this.Base.upstreamStopChannel)
+		for _, id := range this.ids {
+			doc := dparval.NewValue(map[string]interface{}{})
+			doc.SetAttachment("meta", map[string]interface{}{"id": id})
+			this.processItem(doc)
+		}
+		this.afterItems()
+	}
 	clog.To(CHANNEL, "fetch operator finished")
 }
 
@@ -103,9 +118,7 @@ func (this *Fetch) flushBatch() bool {
 	// now we need to emit the bulk fetched items in the correct order (from the id list)
 	for _, v := range ids {
 		item, ok := bulkResponse[v]
-		if !ok {
-			return this.Base.SendError(query.NewError(nil, fmt.Sprintf("missing value bulk response for key `%s`", v)))
-		} else {
+		if ok {
 			if this.projection != nil {
 				projectedVal, err := projectedValueOfResultExpression(item, ast.NewResultExpression(this.projection))
 				if err != nil {

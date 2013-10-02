@@ -1,0 +1,43 @@
+[
+    {
+        "description": "query with WHERE clause only matching ID should not scan",
+        "statements": "EXPLAIN SELECT * FROM game WHERE META().id = \"damien\"",
+        "resultAssertions": [
+            {
+                "pointer": "/0/input/type",
+                "expect": "fetch"
+            },
+            {
+                "pointer": "/0/input/ids/0",
+                "expect": "damien"
+            },
+            {
+                "pointer": "/0/input/input",
+                "expect": null
+            }
+        ]
+    },
+    {
+        "description": "query with WHERE clause only matching ID should not scan",
+        "statements": "EXPLAIN SELECT * FROM game WHERE \"damien\" = META().id",
+        "resultAssertions": [
+            {
+                "pointer": "/0/input/type",
+                "expect": "fetch"
+            },
+            {
+                "pointer": "/0/input/ids/0",
+                "expect": "damien"
+            },
+            {
+                "pointer": "/0/input/input",
+                "expect": null
+            }
+        ]
+    },
+    {
+        "description": "non-existant id not an error, just empty results",
+        "statements": "SELECT * FROM game WHERE META().id = \"x\"",
+        "results": []
+    }
+]
