@@ -50,7 +50,7 @@ func (this *FunctionArgExpression) EquivalentTo(that *FunctionArgExpression) boo
 	if this.Star != that.Star {
 		return false
 	}
-	if !this.Expr.EquivalentTo(that.Expr) {
+	if this.Expr != nil && !this.Expr.EquivalentTo(that.Expr) {
 		return false
 	}
 	return true

@@ -17,7 +17,6 @@ import (
 
 type FunctionCallCount struct {
 	AggregateFunctionCall
-	unique map[string]bool
 }
 
 func NewFunctionCallCount(operands FunctionArgExpressionList) FunctionCallExpression {
@@ -31,7 +30,6 @@ func NewFunctionCallCount(operands FunctionArgExpressionList) FunctionCallExpres
 				maxArgs:  1,
 			},
 		},
-		nil,
 	}
 }
 
@@ -42,10 +40,12 @@ func (this *FunctionCallCount) Evaluate(item *dparval.Value) (*dparval.Value, er
 }
 
 func (this *FunctionCallCount) DefaultAggregate(group *dparval.Value) error {
-	if this.Distinct {
-		this.unique = make(map[string]bool)
-	}
 	aggregate_key := this.Key()
+	if this.Distinct {
+		aggregate_unique_key := aggregate_key + "_unique"
+		uniqueness_map := dparval.NewValue(map[string]interface{}{})
+		setAggregateValue(group, aggregate_unique_key, uniqueness_map)
+	}
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
 		currentVal = dparval.NewValue(0.0)
@@ -80,13 +80,18 @@ func (this *FunctionCallCount) UpdateAggregate(group *dparval.Value, item *dparv
 		if val != nil {
 
 			if this.Distinct {
+				uniqueness_map, err := aggregateValue(group, aggregate_key+"_unique")
+				if err != nil {
+					return fmt.Errorf("group uniqueness defaults not set correctly")
+				}
 				// check to see if we already have this value
 				valkey := string(val.Bytes())
-				_, ok := this.unique[valkey]
-				if ok {
+				exists, _ := uniqueness_map.Path(valkey)
+				if exists != nil {
 					return nil
 				} else {
-					this.unique[valkey] = true
+					uniqueness_map.SetPath(valkey, true)
+					setAggregateValue(group, aggregate_key+"_unique", uniqueness_map)
 					// and allow it to continue
 				}
 			}
@@ -103,13 +108,18 @@ func (this *FunctionCallCount) UpdateAggregate(group *dparval.Value, item *dparv
 		if val != nil {
 
 			if this.Distinct {
+				uniqueness_map, err := aggregateValue(group, aggregate_key+"_unique")
+				if err != nil {
+					return fmt.Errorf("group uniqueness defaults not set correctly")
+				}
 				// check to see if we already have this value
 				valkey := string(val.Bytes())
-				_, ok := this.unique[valkey]
-				if ok {
+				exists, _ := uniqueness_map.Path(valkey)
+				if exists != nil {
 					return nil
 				} else {
-					this.unique[valkey] = true
+					uniqueness_map.SetPath(valkey, true)
+					setAggregateValue(group, aggregate_key+"_unique", uniqueness_map)
 					// and allow it to continue
 				}
 			}
@@ -442,7 +452,6 @@ func (this *FunctionCallMax) Accept(ev ExpressionVisitor) (Expression, error) {
 
 type FunctionCallArrayAgg struct {
 	AggregateFunctionCall
-	unique map[string]bool
 }
 
 func NewFunctionCallArrayAgg(operands FunctionArgExpressionList) FunctionCallExpression {
@@ -456,7 +465,6 @@ func NewFunctionCallArrayAgg(operands FunctionArgExpressionList) FunctionCallExp
 				maxArgs:  1,
 			},
 		},
-		nil,
 	}
 }
 
@@ -466,10 +474,12 @@ func (this *FunctionCallArrayAgg) Evaluate(item *dparval.Value) (*dparval.Value,
 }
 
 func (this *FunctionCallArrayAgg) DefaultAggregate(group *dparval.Value) error {
-	if this.Distinct {
-		this.unique = make(map[string]bool)
-	}
 	aggregate_key := this.Key()
+	if this.Distinct {
+		aggregate_unique_key := aggregate_key + "_unique"
+		uniqueness_map := dparval.NewValue(map[string]interface{}{})
+		setAggregateValue(group, aggregate_unique_key, uniqueness_map)
+	}
 	currentVal, err := aggregateValue(group, aggregate_key)
 	if err != nil {
 		currentVal = dparval.NewValue([]interface{}{})
@@ -497,13 +507,18 @@ func (this *FunctionCallArrayAgg) UpdateAggregate(group *dparval.Value, item *dp
 			nextVal := val.Value()
 
 			if this.Distinct {
+				uniqueness_map, err := aggregateValue(group, aggregate_key+"_unique")
+				if err != nil {
+					return fmt.Errorf("group uniqueness defaults not set correctly")
+				}
 				// check to see if we already have this value
 				valkey := string(val.Bytes())
-				_, ok := this.unique[valkey]
-				if ok {
+				exists, _ := uniqueness_map.Path(valkey)
+				if exists != nil {
 					return nil
 				} else {
-					this.unique[valkey] = true
+					uniqueness_map.SetPath(valkey, true)
+					setAggregateValue(group, aggregate_key+"_unique", uniqueness_map)
 					// and allow it to continue
 				}
 			}

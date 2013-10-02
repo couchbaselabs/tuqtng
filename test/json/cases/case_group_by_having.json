@@ -241,8 +241,95 @@
             "ui_theme": "Tree Tops"
         }
     ]
+    },
+
+    {
+        "description": "test that distinct count works with group by",
+        "statements": "SELECT COUNT(DISTINCT job_title) AS distinct_title_count, join_yr FROM jobs GROUP BY join_yr",
+        "results": [
+        {
+            "distinct_title_count": 3,
+            "join_yr": 2010
+        },
+        {
+            "distinct_title_count": 3,
+            "join_yr": 2011
+        }
+    ]
+    },
+
+    {
+        "description": "test that distinct array agg works with group by",
+        "statements": "SELECT ARRAY_AGG(DISTINCT job_title) AS distinct_titles, join_yr FROM jobs GROUP BY join_yr",
+        "results": [
+        {
+            "distinct_titles": [
+                "Support",
+                "Engineer",
+                "Sales"
+            ],
+            "join_yr": 2010
+        },
+        {
+            "distinct_titles": [
+                "Support",
+                "Engineer",
+                "Sales"
+            ],
+            "join_yr": 2011
+        }
+    ]
+    },
+
+    {
+        "description": "test that distinct count and count work at the same time",
+        "statements": "SELECT COUNT(DISTINCT job_title) AS distinct_title_count, COUNT(job_title) AS title_count, join_yr FROM jobs GROUP BY join_yr",
+        "results": [
+        {
+            "distinct_title_count": 3,
+            "join_yr": 2010,
+            "title_count": 3
+        },
+        {
+            "distinct_title_count": 3,
+            "join_yr": 2011,
+            "title_count": 4
+        }
+    ]
+    },
+
+    {
+        "description": "test that distinct array agg and array agg work at the same time",
+        "statements": "SELECT ARRAY_AGG(DISTINCT job_title) AS distinct_titles, ARRAY_AGG(job_title) AS titles, join_yr FROM jobs GROUP BY join_yr",
+        "results": [
+        {
+            "distinct_titles": [
+                "Support",
+                "Engineer",
+                "Sales"
+            ],
+            "join_yr": 2010,
+            "titles": [
+                "Support",
+                "Engineer",
+                "Sales"
+            ]
+        },
+        {
+            "distinct_titles": [
+                "Support",
+                "Engineer",
+                "Sales"
+            ],
+            "join_yr": 2011,
+            "titles": [
+                "Support",
+                "Engineer",
+                "Sales",
+                "Sales"
+            ]
+        }
+    ]
     }
-
-
 
 ]

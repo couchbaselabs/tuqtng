@@ -22,7 +22,7 @@ type AggregateFunctionCall struct {
 // create a unique key where the current value for this
 // aggregate function will be stored
 func (this AggregateFunctionCall) Key() string {
-	return fmt.Sprintf("%s-%t-%v", this.FunctionCall.Name, this.FunctionCall.Operands[0].Star, this.FunctionCall.Operands[0].Expr)
+	return fmt.Sprintf("%s-%t-%v-%t", this.FunctionCall.Name, this.FunctionCall.Operands[0].Star, this.FunctionCall.Operands[0].Expr, this.FunctionCall.Distinct)
 }
 
 // lookup the current value of the aggregate stored

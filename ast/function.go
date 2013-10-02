@@ -63,6 +63,11 @@ func (this *FunctionCall) EquivalentTo(t Expression) bool {
 		return false
 	}
 
+	// same distinctness?
+	if this.Distinct != that.IsDistinct() {
+		return false
+	}
+
 	// same number of operands?
 	if len(this.Operands) != len(that.GetOperands()) {
 		return false

@@ -333,14 +333,23 @@ func (this *SelectStatement) findAggregateFunctionReferences() ExpressionList {
 	}
 
 	//finally we need to remove duplicates from this list
-	dar := make(map[string]Expression)
-	for _, agg := range ar {
-		dar[agg.String()] = agg
+	for i, agga := range ar {
+		if agga != nil {
+			for j, aggb := range ar[i+1:] {
+				if aggb != nil {
+					if agga.EquivalentTo(aggb) {
+						ar[i+j+1] = nil
+					}
+				}
+			}
+		}
 	}
 
 	rv := make(ExpressionList, 0)
-	for _, agg := range dar {
-		rv = append(rv, agg)
+	for _, agg := range ar {
+		if agg != nil {
+			rv = append(rv, agg)
+		}
 	}
 
 	return rv
