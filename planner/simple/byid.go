@@ -16,30 +16,66 @@ import (
 func WhereClauseFindById(where ast.Expression) []string {
 	switch where := where.(type) {
 	case *ast.EqualToOperator:
-		docId, ok := where.Right.(*ast.LiteralString)
+		docId := isEqualsComparisonOnId(where)
+		if docId != "" {
+			return []string{docId}
+		}
+	case *ast.OrOperator:
+		docIds := isOrOperatorComparisonOnIds(where)
+		return docIds
+	}
+	return nil
+}
+
+func isOrOperatorComparisonOnIds(or *ast.OrOperator) []string {
+	docIds := []string{}
+	for _, operand := range or.Operands {
+		switch operand := operand.(type) {
+		case *ast.EqualToOperator:
+			docId := isEqualsComparisonOnId(operand)
+			if docId != "" {
+				docIds = append(docIds, docId)
+			} else {
+				return nil
+			}
+		case *ast.OrOperator:
+			orDocIds := isOrOperatorComparisonOnIds(operand)
+			if orDocIds != nil {
+				docIds = append(docIds, orDocIds...)
+			} else {
+				return nil
+			}
+		default:
+			return nil
+		}
+	}
+	return docIds
+}
+
+func isEqualsComparisonOnId(equals *ast.EqualToOperator) string {
+	docId, ok := equals.Right.(*ast.LiteralString)
+	if ok {
+		// RHS is a literal string, need LHS to be dot member
+		dotMember, ok := equals.Left.(*ast.DotMemberOperator)
 		if ok {
-			// RHS is a literal string, need LHS to be dot member
-			dotMember, ok := where.Left.(*ast.DotMemberOperator)
+			if isDotMemberMetaDotId(dotMember) {
+				return docId.Val
+			}
+		}
+	} else {
+
+		docId, ok = equals.Left.(*ast.LiteralString)
+		if ok {
+			// LHS is a literal string, need RHS to be dot member
+			dotMember, ok := equals.Right.(*ast.DotMemberOperator)
 			if ok {
 				if isDotMemberMetaDotId(dotMember) {
-					return []string{docId.Val}
-				}
-			}
-		} else {
-
-			docId, ok = where.Left.(*ast.LiteralString)
-			if ok {
-				// LHS is a literal string, need RHS to be dot member
-				dotMember, ok := where.Right.(*ast.DotMemberOperator)
-				if ok {
-					if isDotMemberMetaDotId(dotMember) {
-						return []string{docId.Val}
-					}
+					return docId.Val
 				}
 			}
 		}
 	}
-	return nil
+	return ""
 }
 
 func isDotMemberMetaDotId(dotMember *ast.DotMemberOperator) bool {
