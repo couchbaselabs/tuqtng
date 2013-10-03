@@ -330,6 +330,40 @@
             ]
         }
     ]
+    },
+    {
+        "description": "query with only COUNT(*) should perform fast count",
+        "statements": "EXPLAIN SELECT COUNT(*) FROM game",
+        "resultAssertions": [
+            {
+                "pointer": "/0/input/type",
+                "expect": "fastcount"
+            },
+            {
+                "pointer": "/0/input/input",
+                "expect": null
+            }
+        ]
+    },
+    {
+        "description": "query with COUNT(*) and anything else should perform scan",
+        "statements": "EXPLAIN SELECT COUNT(*), MIN(score) FROM game",
+        "resultAssertions": [
+            {
+                "pointer": "/0/input/input/input/type",
+                "expect": "scan"
+            }
+        ]
+    },
+    {
+        "description": "query with COUNT(*) with WHERE clause should perform scan",
+        "statements": "EXPLAIN SELECT COUNT(*) FROM game WHERE score > 5",
+        "resultAssertions": [
+            {
+                "pointer": "/0/input/input/input/input/type",
+                "expect": "scan"
+            }
+        ]
     }
 
 ]

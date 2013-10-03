@@ -80,12 +80,18 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 
 	clog.To(planner.CHANNEL, "Indexes in bucket %v", indexes)
 
+	doingFastCount := false
 	for _, index := range indexes {
 		var lastStep plan.PlanElement
 		switch index := index.(type) {
 		case catalog.PrimaryIndex:
 			clog.To(planner.CHANNEL, "See primary index %v", index.Name())
-			lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name(), nil)
+			if from.Over == nil && stmt.Where == nil && stmt.GroupBy != nil && len(stmt.GroupBy) == 0 && CanFastCountBucket(stmt.Select) {
+				lastStep = plan.NewFastCount(pool.Name(), bucket.Name(), "", nil)
+				doingFastCount = true
+			} else {
+				lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name(), nil)
+			}
 		case catalog.RangeIndex:
 			// see if this index can be used
 			clog.To(planner.CHANNEL, "See index %v", index.Name())
@@ -135,12 +141,17 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 			clog.To(planner.CHANNEL, "Unsupported type of index %T", index)
 			continue
 		}
-		lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
-		nextFrom := from.Over
-		for nextFrom != nil {
-			// add document joins
-			lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
-			nextFrom = nextFrom.Over
+		theScan, lastStepWasScan := lastStep.(*plan.Scan)
+		if lastStepWasScan {
+			clog.TEMPf("last step was scan %v", theScan)
+			lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
+			nextFrom := from.Over
+			for nextFrom != nil {
+				// add document joins
+				lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+				nextFrom = nextFrom.Over
+			}
+
 		}
 		planHeads = append(planHeads, lastStep)
 	}
@@ -163,7 +174,7 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 			}
 		}
 
-		if stmt.GetGroupBy() != nil {
+		if stmt.GetGroupBy() != nil && !doingFastCount {
 			lastStep = plan.NewGroup(lastStep, stmt.GetGroupBy(), stmt.GetAggregateReferences())
 		}
 

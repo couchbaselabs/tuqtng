@@ -291,6 +291,28 @@ func (this *Scan) Sources() []PlanElement {
 	return []PlanElement{}
 }
 
+type FastCount struct {
+	Type       string     `json:"type"`
+	CountIndex string     `json:"index"`
+	Bucket     string     `json:"bucket"`
+	Pool       string     `json:"pool"`
+	Ranges     ScanRanges `json:"ranges"`
+}
+
+func NewFastCount(pool string, bucket string, index string, ranges ScanRanges) *FastCount {
+	return &FastCount{
+		Type:       "fastcount",
+		Pool:       pool,
+		Bucket:     bucket,
+		CountIndex: index,
+		Ranges:     ranges,
+	}
+}
+
+func (this *FastCount) Sources() []PlanElement {
+	return []PlanElement{}
+}
+
 type Fetch struct {
 	Type       string         `json:"type"`
 	Input      PlanElement    `json:"input"`
