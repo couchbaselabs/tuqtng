@@ -88,6 +88,15 @@ type Index interface {
 	Drop() query.Error // PrimaryIndexes cannot be dropped
 }
 
+type LookupValue []*dparval.Value
+
+type IndexEntry struct {
+	entryKey   LookupValue
+	primaryKey string
+}
+
+type EntryChannel chan IndexEntry
+
 // ScanIndex represents scanning indexes.
 type ScanIndex interface {
 	ScanEntries(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
@@ -104,8 +113,6 @@ type PrimaryIndex interface {
 	ScanIndex
 	ScanBucket(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
 }
-
-type LookupValue []*dparval.Value
 
 // ExistenceIndex represents existence indexes.
 type ExistenceIndex interface {
