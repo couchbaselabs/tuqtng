@@ -37,7 +37,7 @@ func aggregateValue(item *dparval.Value, key string) (*dparval.Value, error) {
 			return valuedparval, nil
 		}
 	}
-	return nil, fmt.Errorf("Unable to find aggregate")
+	return nil, fmt.Errorf("Unable to find aggregate %s", key)
 }
 
 func setAggregateValue(item *dparval.Value, key string, val *dparval.Value) {
