@@ -91,8 +91,8 @@ type Index interface {
 type LookupValue []*dparval.Value
 
 type IndexEntry struct {
-	entryKey   LookupValue
-	primaryKey string
+	EntryKey   LookupValue
+	PrimaryKey string
 }
 
 type EntryChannel chan IndexEntry
