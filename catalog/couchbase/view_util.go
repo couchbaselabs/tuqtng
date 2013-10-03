@@ -33,6 +33,21 @@ const TYPE_OBJECT = 224
 var MIN_ID = cb.DocId("")
 var MAX_ID = cb.DocId(strings.Repeat(string([]byte{0xff}), 251))
 
+func ViewTotalRows(bucket *cb.Bucket, ddoc string, view string, options map[string]interface{}) (int64, query.Error) {
+	options["limit"] = 0
+
+	logURL, err := bucket.ViewURL(ddoc, view, options)
+	if err == nil {
+		clog.To(NETWORK_CHANNEL, "Request View: %v", logURL)
+	}
+	vres, err := bucket.View(ddoc, view, options)
+	if err != nil {
+		return 0, query.NewError(err, "Unable to access view")
+	}
+
+	return int64(vres.TotalRows), nil
+}
+
 func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *cb.Bucket,
 	ddoc string, view string, options map[string]interface{}, batchSize int64, limit int64) {
 

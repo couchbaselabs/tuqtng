@@ -183,7 +183,7 @@ func (b *bucket) Name() string {
 }
 
 func (b *bucket) Count() (int64, query.Error) {
-	return 0, query.NewError(nil, fmt.Sprintf("Count not supported on Couchbase at this time"))
+	return ViewTotalRows(b.cbbucket, "", "_all_docs", map[string]interface{}{})
 }
 
 func (b *bucket) IndexIds() ([]string, query.Error) {

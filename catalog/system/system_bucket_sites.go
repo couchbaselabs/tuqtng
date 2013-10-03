@@ -37,7 +37,7 @@ func (b *sitebucket) Name() string {
 }
 
 func (b *sitebucket) Count() (int64, query.Error) {
-	return 0, query.NewError(nil, "Not Supported")
+	return 1, nil
 }
 
 func (b *sitebucket) IndexIds() ([]string, query.Error) {

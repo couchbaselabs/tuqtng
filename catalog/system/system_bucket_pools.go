@@ -37,7 +37,11 @@ func (b *poolbucket) Name() string {
 }
 
 func (b *poolbucket) Count() (int64, query.Error) {
-	return 0, query.NewError(nil, "Not Supported")
+	poolIds, err := b.pool.site.actualSite.PoolIds()
+	if err == nil {
+		return int64(len(poolIds)), nil
+	}
+	return 0, query.NewError(err, "")
 }
 
 func (b *poolbucket) IndexIds() ([]string, query.Error) {

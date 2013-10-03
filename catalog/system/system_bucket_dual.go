@@ -37,7 +37,7 @@ func (b *dualbucket) Name() string {
 }
 
 func (b *dualbucket) Count() (int64, query.Error) {
-	return 0, query.NewError(nil, "Not Supported")
+	return 1, nil
 }
 
 func (b *dualbucket) IndexIds() ([]string, query.Error) {

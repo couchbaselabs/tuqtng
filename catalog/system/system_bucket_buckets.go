@@ -40,7 +40,25 @@ func (b *bucketbucket) Name() string {
 }
 
 func (b *bucketbucket) Count() (int64, query.Error) {
-	return 0, query.NewError(nil, "Not Supported")
+	count := int64(0)
+	poolIds, err := b.pool.site.actualSite.PoolIds()
+	if err == nil {
+		for _, poolId := range poolIds {
+			pool, err := b.pool.site.actualSite.PoolById(poolId)
+			if err == nil {
+				bucketIds, err := pool.BucketIds()
+				if err == nil {
+					count += int64(len(bucketIds))
+				} else {
+					return 0, query.NewError(err, "")
+				}
+			} else {
+				return 0, query.NewError(err, "")
+			}
+		}
+		return count, nil
+	}
+	return 0, query.NewError(err, "")
 }
 
 func (b *bucketbucket) IndexIds() ([]string, query.Error) {
