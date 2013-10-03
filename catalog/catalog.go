@@ -104,7 +104,7 @@ type ScanIndex interface {
 
 // CountIndex represents indexes that can efficiently produce entry counts.
 type CountIndex interface {
-	EntryCount() (int64, query.Error)
+	ValueCount() (int64, query.Error)
 }
 
 // PrimaryIndex represents primary key indexes.
