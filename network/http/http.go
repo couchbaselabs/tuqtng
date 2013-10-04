@@ -32,14 +32,16 @@ func NewHttpEndpoint(address string, includeProfileHandlers bool, staticPath str
 	r := mux.NewRouter()
 
 	r.Handle("/query", rv).Methods("GET", "POST")
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir(staticPath)))
 
 	if includeProfileHandlers {
+		clog.To(CHANNEL, "Enabling HTTP Profiling Handlers")
 		r.Handle("/debug/pprof/", http.HandlerFunc(pprof.Index))
 		r.Handle("/debug/pprof/cmdline", http.HandlerFunc(pprof.Cmdline))
 		r.Handle("/debug/pprof/profile", http.HandlerFunc(pprof.Profile))
 		r.Handle("/debug/pprof/symbol", http.HandlerFunc(pprof.Symbol))
 	}
+
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir(staticPath)))
 
 	go func() {
 		err := http.ListenAndServe(address, r)
