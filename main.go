@@ -11,6 +11,8 @@ package main
 
 import (
 	"flag"
+	realhttp "net/http"
+	_ "net/http/pprof"
 	"os"
 	"os/signal"
 	"runtime/pprof"
@@ -50,13 +52,20 @@ func main() {
 		}
 	}
 
+	if *profileMode {
+		clog.Log("Enabling HTTP Profiling on :6060")
+		go func() {
+			realhttp.ListenAndServe("localhost:6060", nil)
+		}()
+	}
+
 	go dumpOnSignalForPlatform()
 
 	// create a QueryChannel
 	queryChannel := make(network.QueryChannel)
 
 	// create one or more network endpoints
-	httpEndpoint := http.NewHttpEndpoint(*addr, *profileMode, *staticPath)
+	httpEndpoint := http.NewHttpEndpoint(*addr, *staticPath)
 	httpEndpoint.SendQueriesTo(queryChannel)
 
 	err := server.Server(VERSION, *couchbaseSite, *defaultPoolName, queryChannel, queryTimeout)
