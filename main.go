@@ -55,7 +55,7 @@ func main() {
 	if *profileMode {
 		clog.Log("Enabling HTTP Profiling on :6060")
 		go func() {
-			realhttp.ListenAndServe("localhost:6060", nil)
+			realhttp.ListenAndServe(":6060", nil)
 		}()
 	}
 
