@@ -111,6 +111,40 @@ func (vi *viewIndex) ScanEntries(limit int64, ch dparval.ValueChannel, warnch, e
 	vi.ScanRange(nil, nil, catalog.Both, limit, ch, warnch, errch)
 }
 
+func (vi *viewIndex) ValueCount() (int64, query.Error) {
+	indexItemChannel := make(dparval.ValueChannel)
+	indexWarnChannel := make(query.ErrorChannel)
+	indexErrorChannel := make(query.ErrorChannel)
+
+	go vi.ScanRange(catalog.LookupValue{dparval.NewValue(nil)}, catalog.LookupValue{dparval.NewValue(nil)}, catalog.Both, 0, indexItemChannel, indexWarnChannel, indexErrorChannel)
+
+	var err query.Error
+	nullCount := int64(0)
+	ok := true
+	for ok {
+		select {
+		case _, ok = <-indexItemChannel:
+			if ok {
+				nullCount += 1
+			}
+		case _, ok = <-indexWarnChannel:
+			// ignore warnings here
+		case err, ok = <-indexErrorChannel:
+			if err != nil {
+				return 0, err
+			}
+		}
+	}
+
+	totalCount, err := ViewTotalRows(vi.bucket.cbbucket, vi.DDocName(), vi.ViewName(), map[string]interface{}{})
+	if err != nil {
+		return 0, err
+	}
+
+	return totalCount - nullCount, nil
+
+}
+
 func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue, inclusion catalog.RangeInclusion, limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
 
 	viewOptions := generateViewOptions(low, high, inclusion)

@@ -80,15 +80,13 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 
 	clog.To(planner.CHANNEL, "Indexes in bucket %v", indexes)
 
-	doingFastCount := false
 	for _, index := range indexes {
 		var lastStep plan.PlanElement
 		switch index := index.(type) {
 		case catalog.PrimaryIndex:
 			clog.To(planner.CHANNEL, "See primary index %v", index.Name())
 			if from.Over == nil && stmt.Where == nil && stmt.GroupBy != nil && len(stmt.GroupBy) == 0 && CanFastCountBucket(stmt.Select) {
-				lastStep = plan.NewFastCount(pool.Name(), bucket.Name(), "", nil)
-				doingFastCount = true
+				lastStep = plan.NewFastCount(pool.Name(), bucket.Name(), "", nil, nil)
 			} else {
 				lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name(), nil)
 			}
@@ -119,8 +117,21 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 					continue
 				}
 			} else {
+
+				// try to do a fast count if its possible
+				doingFastCount := false
+				countIndex, isCountIndex := index.(catalog.CountIndex)
+				if isCountIndex {
+					fastCountIndexOnExpr := CanFastCountIndex(countIndex, stmt.From.Bucket, stmt.Select)
+					if fastCountIndexOnExpr != nil && from.Over == nil && stmt.Where == nil && stmt.GroupBy != nil && len(stmt.GroupBy) == 0 {
+						lastStep = plan.NewFastCount(pool.Name(), bucket.Name(), countIndex.Name(), fastCountIndexOnExpr, nil)
+						doingFastCount = true
+					}
+
+				}
+
 				// this works for aggregates on the whole bucket
-				if stmt.GroupBy != nil && len(stmt.GroupBy) == 0 {
+				if !doingFastCount && stmt.GroupBy != nil && len(stmt.GroupBy) == 0 {
 					possible, ranges, _, err := CanIUseThisIndexForThisProjectionNoWhereNoGroupClause(index, stmt.Select, stmt.From.Bucket)
 					if err != nil {
 						clog.Error(err)
@@ -132,7 +143,7 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 					} else {
 						continue
 					}
-				} else {
+				} else if !doingFastCount {
 					continue
 				}
 			}
@@ -141,9 +152,8 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 			clog.To(planner.CHANNEL, "Unsupported type of index %T", index)
 			continue
 		}
-		theScan, lastStepWasScan := lastStep.(*plan.Scan)
+		_, lastStepWasScan := lastStep.(*plan.Scan)
 		if lastStepWasScan {
-			clog.TEMPf("last step was scan %v", theScan)
 			lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
 			nextFrom := from.Over
 			for nextFrom != nil {
@@ -174,8 +184,11 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 			}
 		}
 
-		if stmt.GetGroupBy() != nil && !doingFastCount {
-			lastStep = plan.NewGroup(lastStep, stmt.GetGroupBy(), stmt.GetAggregateReferences())
+		if stmt.GetGroupBy() != nil {
+			_, isFastCount := lastStep.(*plan.FastCount)
+			if !isFastCount {
+				lastStep = plan.NewGroup(lastStep, stmt.GetGroupBy(), stmt.GetAggregateReferences())
+			}
 		}
 
 		if stmt.GetHaving() != nil {

@@ -10,7 +10,10 @@
 package simple
 
 import (
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/tuqtng/ast"
+	"github.com/couchbaselabs/tuqtng/catalog"
+	"github.com/couchbaselabs/tuqtng/planner"
 )
 
 func CanFastCountBucket(resultExprList ast.ResultExpressionList) bool {
@@ -42,4 +45,51 @@ func CanFastCountBucket(resultExprList ast.ResultExpressionList) bool {
 
 	// if we made it this far, can do fast count on bucket
 	return true
+}
+
+func CanFastCountIndex(index catalog.CountIndex, bucket string, resultExprList ast.ResultExpressionList) ast.Expression {
+
+	// convert the index key to formal notation
+	indexKeyFormal, err := IndexKeyInFormalNotation(index.Key(), bucket)
+	if err != nil {
+		return nil
+	}
+
+	deps := ast.ExpressionList{indexKeyFormal[0]}
+	clog.To(planner.CHANNEL, "index deps are: %v", deps)
+	depChecker := ast.NewExpressionFunctionalDependencyCheckerFull(deps)
+
+	// start looking at the projection
+	for _, resultExpr := range resultExprList {
+
+		// cannot be *
+		if resultExpr.Star {
+			return nil
+		}
+
+		switch resultExpr := resultExpr.Expr.(type) {
+		case *ast.FunctionCallCount:
+			// aggregates all take 1 operand
+			operands := resultExpr.GetOperands()
+			if len(operands) < 1 {
+				return nil
+			}
+			aggOperand := operands[0]
+			// must NOT be *
+			if aggOperand.Star {
+				return nil
+			}
+
+			// look at dependencies inside this operand
+			_, err := depChecker.Visit(aggOperand.Expr)
+			if err != nil {
+				return nil
+			}
+		default:
+			return nil
+		}
+	}
+
+	// if we made it this far, can do fast count on bucket
+	return indexKeyFormal[0]
 }

@@ -55,7 +55,7 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 				}
 				countIndex = index.(catalog.CountIndex) // FIXME: need static type safety
 			}
-			currentOperator = xpipeline.NewFastCount(bucket, countIndex, currentElement.Ranges)
+			currentOperator = xpipeline.NewFastCount(bucket, countIndex, currentElement.Expr, currentElement.Ranges)
 		case *plan.Scan:
 			pool, err := this.site.PoolByName(currentElement.Pool)
 			if err != nil {

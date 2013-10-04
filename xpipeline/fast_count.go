@@ -15,6 +15,7 @@ import (
 
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/plan"
@@ -28,10 +29,12 @@ type FastCount struct {
 	index                 catalog.CountIndex
 	downstreamStopChannel misc.StopChannel
 	ranges                plan.ScanRanges
+	expr                  ast.Expression
 }
 
-func NewFastCount(bucket catalog.Bucket, index catalog.CountIndex, ranges plan.ScanRanges) *FastCount {
+func NewFastCount(bucket catalog.Bucket, index catalog.CountIndex, expr ast.Expression, ranges plan.ScanRanges) *FastCount {
 	return &FastCount{
+		expr:           expr,
 		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 		bucket:         bucket,
@@ -65,8 +68,18 @@ func (this *FastCount) Run(stopChannel misc.StopChannel) {
 				groupDoc.SetAttachment("aggregates", aggregates)
 				this.SendItem(groupDoc)
 			}
+		} else {
+			count, err := this.index.ValueCount()
+			if err != nil {
+				this.SendError(query.NewError(err, "Error counting values in index"))
+			} else {
+				groupDoc := dparval.NewValue(map[string]interface{}{})
+				aggkey := fmt.Sprintf("COUNT-false-%v-false", this.expr)
+				aggregates := map[string]interface{}{aggkey: dparval.NewValue(float64(count))}
+				groupDoc.SetAttachment("aggregates", aggregates)
+				this.SendItem(groupDoc)
+			}
 		}
-		// FIXME eventually we can support counting index values
 	}
 	// FIXME eventually we can support counting ranges
 
