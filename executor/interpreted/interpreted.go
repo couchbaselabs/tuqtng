@@ -73,7 +73,6 @@ func (this *InterpretedExecutor) executeInternal(optimalPlan *plan.Plan, q netwo
 
 	// create a stop channel
 	stopChannel := make(misc.StopChannel)
-	defer close(stopChannel)
 	// set it on the query object, so HTTP layer can
 	// stop us if the client goes away
 	q.SetStopChannel(stopChannel)
