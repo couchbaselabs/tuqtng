@@ -12,7 +12,6 @@ package file
 import (
 	"testing"
 
-	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -84,7 +83,7 @@ func TestFile(t *testing.T) {
 	switch index := index.(type) {
 	case catalog.ScanIndex:
 		si := index.(catalog.ScanIndex)
-		itemChannel := make(dparval.ValueChannel)
+		itemChannel := make(catalog.EntryChannel)
 		warnChannel := make(query.ErrorChannel)
 		errorChannel := make(query.ErrorChannel)
 		go si.ScanEntries(0, itemChannel, warnChannel, errorChannel)

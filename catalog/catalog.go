@@ -95,11 +95,11 @@ type IndexEntry struct {
 	PrimaryKey string
 }
 
-type EntryChannel chan IndexEntry
+type EntryChannel chan *IndexEntry
 
 // ScanIndex represents scanning indexes.
 type ScanIndex interface {
-	ScanEntries(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	ScanEntries(limit int64, ch EntryChannel, warnch, errch query.ErrorChannel)
 }
 
 // CountIndex represents indexes that can efficiently produce entry counts.
@@ -112,18 +112,18 @@ type CountIndex interface {
 type PrimaryIndex interface {
 	Index
 	ScanIndex
-	ScanBucket(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	ScanBucket(limit int64, ch EntryChannel, warnch, errch query.ErrorChannel)
 }
 
 // ExistenceIndex represents existence indexes.
 type ExistenceIndex interface {
-	Check(value LookupValue, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	Check(value LookupValue, ch EntryChannel, warnch, errch query.ErrorChannel)
 }
 
 // LookupIndex represents lookup indexes.
 type LookupIndex interface {
 	ExistenceIndex
-	Lookup(value LookupValue, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	Lookup(value LookupValue, ch EntryChannel, warnch, errch query.ErrorChannel)
 }
 
 // Direction represents ASC and DESC
@@ -152,13 +152,13 @@ type RangeIndex interface {
 	LookupIndex
 	Direction() Direction
 	Statistics() (RangeStatistics, query.Error)
-	ScanRange(low LookupValue, high LookupValue, inclusion RangeInclusion, limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	ScanRange(low LookupValue, high LookupValue, inclusion RangeInclusion, limit int64, ch EntryChannel, warnch, errch query.ErrorChannel)
 }
 
 // SearchIndex represents full text search indexes.
 type SearchIndex interface {
 	Index
-	SearchValue(value string, limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel)
+	SearchValue(value string, limit int64, ch EntryChannel, warnch, errch query.ErrorChannel)
 }
 
 // RangeStatistics captures statistics for a range index.

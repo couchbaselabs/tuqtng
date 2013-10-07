@@ -70,7 +70,7 @@ func (this *Scan) Run(stopChannel misc.StopChannel) {
 
 func (this *Scan) scanRange(scanRange *plan.ScanRange) bool {
 
-	indexItemChannel := make(dparval.ValueChannel)
+	indexItemChannel := make(catalog.EntryChannel)
 	indexWarnChannel := make(query.ErrorChannel)
 	indexErrorChannel := make(query.ErrorChannel)
 
@@ -87,7 +87,7 @@ func (this *Scan) scanRange(scanRange *plan.ScanRange) bool {
 		}
 	}
 
-	var item *dparval.Value
+	var item *catalog.IndexEntry
 	var warn query.Error
 	var err query.Error
 
@@ -96,7 +96,14 @@ func (this *Scan) scanRange(scanRange *plan.ScanRange) bool {
 		select {
 		case item, ok = <-indexItemChannel:
 			if ok {
-				this.SendItem(item)
+				// rematerialize an object from the data returned by this index entry
+
+				// FIXME rematerialize more than just the id
+
+				doc := dparval.NewValue(map[string]interface{}{})
+				doc.SetAttachment("meta", map[string]interface{}{"id": item.PrimaryKey})
+
+				this.SendItem(doc)
 			}
 		case warn, ok = <-indexWarnChannel:
 			if warn != nil {

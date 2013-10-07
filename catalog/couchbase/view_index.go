@@ -107,12 +107,12 @@ func (b *bucket) loadIndexes() query.Error {
 	return nil
 }
 
-func (vi *viewIndex) ScanEntries(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (vi *viewIndex) ScanEntries(limit int64, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
 	vi.ScanRange(nil, nil, catalog.Both, limit, ch, warnch, errch)
 }
 
 func (vi *viewIndex) ValueCount() (int64, query.Error) {
-	indexItemChannel := make(dparval.ValueChannel)
+	indexItemChannel := make(catalog.EntryChannel)
 	indexWarnChannel := make(query.ErrorChannel)
 	indexErrorChannel := make(query.ErrorChannel)
 
@@ -145,7 +145,7 @@ func (vi *viewIndex) ValueCount() (int64, query.Error) {
 
 }
 
-func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue, inclusion catalog.RangeInclusion, limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue, inclusion catalog.RangeInclusion, limit int64, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
 
 	viewOptions := generateViewOptions(low, high, inclusion)
 
@@ -165,9 +165,8 @@ func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue
 		select {
 		case viewRow, ok = <-viewRowChannel:
 			if ok {
-				doc := dparval.NewValue(map[string]interface{}{})
-				doc.SetAttachment("meta", map[string]interface{}{"id": viewRow.ID})
-				ch <- doc
+				entry := catalog.IndexEntry{PrimaryKey: viewRow.ID}
+				ch <- &entry
 				sentRows = true
 			}
 		case err, ok = <-viewErrChannel:
@@ -204,15 +203,15 @@ func (pi *primaryIndex) IsPrimary() bool {
 	return true
 }
 
-func (pi *primaryIndex) ScanBucket(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (pi *primaryIndex) ScanBucket(limit int64, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
 	pi.ScanEntries(limit, ch, warnch, errch)
 }
 
-func (vi *viewIndex) Check(value catalog.LookupValue, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (vi *viewIndex) Check(value catalog.LookupValue, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
 	vi.ScanRange(value, value, catalog.Both, 0, ch, warnch, errch)
 }
 
-func (vi *viewIndex) Lookup(value catalog.LookupValue, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (vi *viewIndex) Lookup(value catalog.LookupValue, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
 	vi.ScanRange(value, value, catalog.Both, 0, ch, warnch, errch)
 }
 

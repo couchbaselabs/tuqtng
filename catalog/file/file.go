@@ -371,11 +371,11 @@ func (pi *primaryIndex) Drop() query.Error {
 	return query.NewError(nil, "Primary index cannot be dropped.")
 }
 
-func (pi *primaryIndex) ScanBucket(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (pi *primaryIndex) ScanBucket(limit int64, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
 	pi.ScanEntries(limit, ch, warnch, errch)
 }
 
-func (pi *primaryIndex) ScanEntries(limit int64, ch dparval.ValueChannel, warnch, errch query.ErrorChannel) {
+func (pi *primaryIndex) ScanEntries(limit int64, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)
@@ -391,9 +391,8 @@ func (pi *primaryIndex) ScanEntries(limit int64, ch dparval.ValueChannel, warnch
 			break
 		}
 		if !dirEntry.IsDir() {
-			doc := dparval.NewValue(map[string]interface{}{})
-			doc.SetAttachment("meta", map[string]interface{}{"id": documentPathToId(dirEntry.Name())})
-			ch <- doc
+			entry := catalog.IndexEntry{PrimaryKey: documentPathToId(dirEntry.Name())}
+			ch <- &entry
 		}
 	}
 }
