@@ -37,7 +37,7 @@ func TestFetch(t *testing.T) {
 	}
 
 	scanIndex := index.(catalog.ScanIndex)
-	scan := NewScan(bucket, scanIndex, nil)
+	scan := NewScan(bucket, scanIndex, nil, "")
 	fetch := NewFetch(bucket, nil, "bucket")
 	fetch.SetSource(scan)
 

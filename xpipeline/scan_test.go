@@ -37,7 +37,7 @@ func TestScan(t *testing.T) {
 	}
 
 	scanIndex := index.(catalog.ScanIndex)
-	scan := NewScan(bucket, scanIndex, nil)
+	scan := NewScan(bucket, scanIndex, nil, "")
 
 	scanItemChannel, _ := scan.GetChannels()
 

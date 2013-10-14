@@ -15,6 +15,7 @@ import (
 
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/plan"
@@ -28,15 +29,17 @@ type Scan struct {
 	index                 catalog.ScanIndex
 	downstreamStopChannel misc.StopChannel
 	ranges                plan.ScanRanges
+	as                    string
 }
 
-func NewScan(bucket catalog.Bucket, index catalog.ScanIndex, ranges plan.ScanRanges) *Scan {
+func NewScan(bucket catalog.Bucket, index catalog.ScanIndex, ranges plan.ScanRanges, as string) *Scan {
 	return &Scan{
 		itemChannel:    make(dparval.ValueChannel),
 		supportChannel: make(PipelineSupportChannel),
 		bucket:         bucket,
 		index:          index,
 		ranges:         ranges,
+		as:             as,
 	}
 }
 
@@ -97,13 +100,26 @@ func (this *Scan) scanRange(scanRange *plan.ScanRange) bool {
 		case item, ok = <-indexItemChannel:
 			if ok {
 				// rematerialize an object from the data returned by this index entry
-
-				// FIXME rematerialize more than just the id
-
 				doc := dparval.NewValue(map[string]interface{}{})
+
+				hackIndex, ok := this.index.(catalog.Index)
+				if ok {
+					if hackIndex.Key() != nil && item.EntryKey != nil && len(hackIndex.Key()) == len(item.EntryKey) {
+						for i, key := range hackIndex.Key() {
+							entry := item.EntryKey[i]
+							doc = this.buildValue(key, entry)
+						}
+					}
+				}
+
+				// attach metadata
 				doc.SetAttachment("meta", map[string]interface{}{"id": item.PrimaryKey})
 
-				this.SendItem(doc)
+				if this.as != "" {
+					this.SendItem(dparval.NewValue(map[string]interface{}{this.as: doc}))
+				} else {
+					this.SendItem(doc)
+				}
 			}
 		case warn, ok = <-indexWarnChannel:
 			if warn != nil {
@@ -164,4 +180,23 @@ func (this *Scan) RecoverPanic() {
 		clog.Error(fmt.Errorf("Query Execution Panic: %v\n%s", r, debug.Stack()))
 		this.SendError(query.NewError(nil, "Panic In Exeuction Pipeline"))
 	}
+}
+
+func (this *Scan) buildValue(key ast.Expression, val *dparval.Value) *dparval.Value {
+	doc := dparval.NewValue(map[string]interface{}{})
+	switch key := key.(type) {
+	case *ast.LiteralNumber:
+		doc = dparval.NewValue([]interface{}{})
+		index := int(key.Val)
+		doc.SetIndex(index, val)
+	case *ast.Property:
+		doc.SetPath(key.Path, val)
+	case *ast.DotMemberOperator:
+		doc = this.buildValue(key.Left, this.buildValue(key.Right, val))
+	case *ast.BracketMemberOperator:
+		doc = this.buildValue(key.Left, this.buildValue(key.Right, val))
+	default:
+		clog.Error(fmt.Errorf("Unsupported key type %T encountered uncovering query", key))
+	}
+	return doc
 }

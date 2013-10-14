@@ -16,6 +16,7 @@ import (
 	"strings"
 
 	"github.com/couchbaselabs/clog"
+	"github.com/couchbaselabs/dparval"
 	cb "github.com/couchbaselabs/go-couchbase"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
@@ -160,6 +161,19 @@ func encodeStringAsNumericArray(str string) []float64 {
 	return rv
 }
 
+func decodeNumericArrayAsString(na []interface{}) (string, error) {
+	rv := ""
+	for _, num := range na {
+		switch num := num.(type) {
+		case float64:
+			rv = rv + string(rune(num))
+		default:
+			return "", fmt.Errorf("numeric array contained non-number")
+		}
+	}
+	return rv, nil
+}
+
 func encodeObjectAsCompoundArray(obj map[string]interface{}) []interface{} {
 	keys := make([]string, len(obj))
 	counter := 0
@@ -173,4 +187,87 @@ func encodeObjectAsCompoundArray(obj map[string]interface{}) []interface{} {
 		vals[i] = encodeValue(obj[key])
 	}
 	return []interface{}{keys, vals}
+}
+
+func decodeCompoundArrayAsObject(ca []interface{}) (map[string]interface{}, error) {
+	rv := map[string]interface{}{}
+
+	if len(ca)%2 != 0 {
+		return nil, fmt.Errorf("compound object array must be even length")
+	}
+	midpoint := len(ca) / 2
+	for i := 0; i < midpoint; i++ {
+		key, ok := ca[i].(string)
+		if !ok {
+			return nil, fmt.Errorf("compound object array contains non-string in key position")
+		}
+		val := ca[i+midpoint]
+		// recursively decode object contents
+		decodedVal, err := convertCouchbaseViewKeyEntryToDparval(val)
+		if err != nil {
+			return nil, err
+		}
+		rv[key] = decodedVal
+	}
+	return rv, nil
+}
+
+func convertCouchbaseViewKeyToLookupValue(key interface{}) (catalog.LookupValue, error) {
+
+	switch key := key.(type) {
+	case []interface{}:
+		// top-level key MUST be an array
+		rv := make(catalog.LookupValue, len(key))
+		for i, keyEntry := range key {
+			val, err := convertCouchbaseViewKeyEntryToDparval(keyEntry)
+			if err != nil {
+				return nil, err
+			}
+			rv[i] = val
+		}
+		return rv, nil
+	}
+	return nil, fmt.Errorf("Couchbase view key top-level MUST be an array")
+}
+
+func convertCouchbaseViewKeyEntryToDparval(keyEntry interface{}) (*dparval.Value, error) {
+	switch keyEntry := keyEntry.(type) {
+	case []interface{}:
+		// key-entries MUST also be arrays at the top-level
+		if len(keyEntry) != 2 {
+			return nil, fmt.Errorf("Key entries array must have length 2")
+		}
+		keyEntryType, ok := keyEntry[0].(float64)
+		if !ok {
+			return nil, fmt.Errorf("Key entry type must be number")
+		}
+		switch keyEntryType {
+		case TYPE_NULL:
+			return dparval.NewValue(nil), nil
+		case TYPE_BOOLEAN, TYPE_NUMBER, TYPE_ARRAY:
+			return dparval.NewValue(keyEntry[1]), nil
+		case TYPE_STRING:
+			keyStringValue, ok := keyEntry[1].([]interface{})
+			if !ok {
+				return nil, fmt.Errorf("key entry type string value must be array")
+			}
+			decodedString, err := decodeNumericArrayAsString(keyStringValue)
+			if err != nil {
+				return nil, err
+			}
+			return dparval.NewValue(decodedString), nil
+		case TYPE_OBJECT:
+			keyObjectValue, ok := keyEntry[1].([]interface{})
+			if !ok {
+				return nil, fmt.Errorf("key entry type object value must be array")
+			}
+			decodedObject, err := decodeCompoundArrayAsObject(keyObjectValue)
+			if err != nil {
+				return nil, err
+			}
+			return dparval.NewValue(decodedObject), nil
+		}
+		return nil, fmt.Errorf("Unkown type of key entry")
+	}
+	return nil, fmt.Errorf("Key entries top-level MUST be an array")
 }

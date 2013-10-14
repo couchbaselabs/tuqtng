@@ -93,8 +93,9 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 		case catalog.RangeIndex:
 			// see if this index can be used
 			clog.To(planner.CHANNEL, "See index %v", index.Name())
-			if stmt.Where != nil {
-				possible, ranges, _, err := CanIUseThisIndexForThisWhereClause(index, stmt.Where, stmt.From.Bucket)
+			clog.To(planner.CHANNEL, "with Key %v", index.Key())
+			if stmt.Where != nil && from.Projection == nil {
+				possible, ranges, _, err := CanIUseThisIndexForThisWhereClause(index, stmt.Where, stmt.From.As)
 				if err != nil {
 					clog.Error(err)
 					continue
@@ -104,7 +105,7 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 
 					// great, but lets check for a min optimizatin too
 					if stmt.GroupBy != nil && len(stmt.GroupBy) == 0 {
-						possible, minranges, _, _ := CanIUseThisIndexForThisProjectionNoWhereNoGroupClause(index, stmt.Select, stmt.From.Bucket)
+						possible, minranges, _, _ := CanIUseThisIndexForThisProjectionNoWhereNoGroupClause(index, stmt.Select, stmt.From.As)
 						if possible {
 							for _, r := range ranges {
 								r.Limit = minranges[0].Limit
@@ -112,17 +113,23 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 						}
 					}
 
-					lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name(), ranges)
+					scan := plan.NewScan(pool.Name(), bucket.Name(), index.Name(), ranges)
+					// see if this index covers the query
+					if DoesIndexCoverStatement(index, stmt) {
+						scan.Cover = true
+						scan.As = from.As
+					}
+					lastStep = scan
 				} else {
 					continue
 				}
-			} else {
+			} else if from.Projection == nil {
 
 				// try to do a fast count if its possible
 				doingFastCount := false
 				countIndex, isCountIndex := index.(catalog.CountIndex)
 				if isCountIndex {
-					fastCountIndexOnExpr := CanFastCountIndex(countIndex, stmt.From.Bucket, stmt.Select)
+					fastCountIndexOnExpr := CanFastCountIndex(countIndex, stmt.From.As, stmt.Select)
 					if fastCountIndexOnExpr != nil && from.Over == nil && stmt.Where == nil && stmt.GroupBy != nil && len(stmt.GroupBy) == 0 {
 						lastStep = plan.NewFastCount(pool.Name(), bucket.Name(), countIndex.Name(), fastCountIndexOnExpr, nil)
 						doingFastCount = true
@@ -132,7 +139,7 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 
 				// this works for aggregates on the whole bucket
 				if !doingFastCount && stmt.GroupBy != nil && len(stmt.GroupBy) == 0 {
-					possible, ranges, _, err := CanIUseThisIndexForThisProjectionNoWhereNoGroupClause(index, stmt.Select, stmt.From.Bucket)
+					possible, ranges, _, err := CanIUseThisIndexForThisProjectionNoWhereNoGroupClause(index, stmt.Select, stmt.From.As)
 					if err != nil {
 						clog.Error(err)
 						continue
@@ -152,16 +159,17 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 			clog.To(planner.CHANNEL, "Unsupported type of index %T", index)
 			continue
 		}
-		_, lastStepWasScan := lastStep.(*plan.Scan)
+		scanOp, lastStepWasScan := lastStep.(*plan.Scan)
 		if lastStepWasScan {
-			lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
-			nextFrom := from.Over
-			for nextFrom != nil {
-				// add document joins
-				lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
-				nextFrom = nextFrom.Over
+			if !scanOp.Cover {
+				lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
+				nextFrom := from.Over
+				for nextFrom != nil {
+					// add document joins
+					lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+					nextFrom = nextFrom.Over
+				}
 			}
-
 		}
 		planHeads = append(planHeads, lastStep)
 	}

@@ -275,6 +275,8 @@ type Scan struct {
 	Bucket    string     `json:"bucket"`
 	Pool      string     `json:"pool"`
 	Ranges    ScanRanges `json:"ranges"`
+	Cover     bool       `json:"cover"`
+	As        string     `json:"as"`
 }
 
 func NewScan(pool string, bucket string, index string, ranges ScanRanges) *Scan {
@@ -284,6 +286,8 @@ func NewScan(pool string, bucket string, index string, ranges ScanRanges) *Scan 
 		Bucket:    bucket,
 		ScanIndex: index,
 		Ranges:    ranges,
+		Cover:     false,
+		As:        "",
 	}
 }
 

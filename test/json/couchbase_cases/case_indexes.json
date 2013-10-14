@@ -3,14 +3,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "SELECT name FROM contacts WHERE name > \"harry\" ORDER BY name",
+        "statements": "SELECT name, type FROM contacts WHERE name > \"harry\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
-        "matchStatements": "SELECT name FROM contacts WHERE name > \"harry\" ORDER BY name"
+        "matchStatements": "SELECT name, type FROM contacts WHERE name > \"harry\" ORDER BY name"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "EXPLAIN SELECT name FROM contacts WHERE name > \"harry\" ORDER BY name",
+        "statements": "EXPLAIN SELECT name, type FROM contacts WHERE name > \"harry\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
         "resultAssertions": [
             {
@@ -32,14 +32,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "SELECT name FROM contacts WHERE name < \"harry\" ORDER BY name",
+        "statements": "SELECT name, type FROM contacts WHERE name < \"harry\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
-        "matchStatements": "SELECT name FROM contacts WHERE name < \"harry\" ORDER BY name"
+        "matchStatements": "SELECT name, type FROM contacts WHERE name < \"harry\" ORDER BY name"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "EXPLAIN SELECT name FROM contacts WHERE name < \"harry\" ORDER BY name",
+        "statements": "EXPLAIN SELECT name, type FROM contacts WHERE name < \"harry\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
         "resultAssertions": [
             {
@@ -61,14 +61,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "SELECT name FROM contacts WHERE name >= \"harry\" ORDER BY name",
+        "statements": "SELECT name, type FROM contacts WHERE name >= \"harry\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
-        "matchStatements": "SELECT name FROM contacts WHERE name >= \"harry\" ORDER BY name"
+        "matchStatements": "SELECT name, type FROM contacts WHERE name >= \"harry\" ORDER BY name"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "EXPLAIN SELECT name FROM contacts WHERE name >= \"harry\" ORDER BY name",
+        "statements": "EXPLAIN SELECT name, type FROM contacts WHERE name >= \"harry\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
         "resultAssertions": [
             {
@@ -90,14 +90,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "SELECT name FROM contacts WHERE name <= \"harry\" ORDER BY name",
+        "statements": "SELECT name, type FROM contacts WHERE name <= \"harry\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
-        "matchStatements": "SELECT name FROM contacts WHERE name <= \"harry\" ORDER BY name"
+        "matchStatements": "SELECT name, type FROM contacts WHERE name <= \"harry\" ORDER BY name"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "EXPLAIN SELECT name FROM contacts WHERE name <= \"harry\" ORDER BY name",
+        "statements": "EXPLAIN SELECT name, type FROM contacts WHERE name <= \"harry\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
         "resultAssertions": [
             {
@@ -119,14 +119,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "SELECT name FROM contacts WHERE name = \"harry\" ORDER BY name",
+        "statements": "SELECT name, type FROM contacts WHERE name = \"harry\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
-        "matchStatements": "SELECT name FROM contacts WHERE name = \"harry\" ORDER BY name"
+        "matchStatements": "SELECT name, type FROM contacts WHERE name = \"harry\" ORDER BY name"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "EXPLAIN SELECT name FROM contacts WHERE name = \"harry\" ORDER BY name",
+        "statements": "EXPLAIN SELECT name, type FROM contacts WHERE name = \"harry\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
         "resultAssertions": [
             {
@@ -152,14 +152,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "SELECT name FROM contacts WHERE name <> \"harry\" ORDER BY name",
+        "statements": "SELECT name, type FROM contacts WHERE name <> \"harry\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
-        "matchStatements": "SELECT name FROM contacts WHERE name <> \"harry\" ORDER BY name"
+        "matchStatements": "SELECT name, type FROM contacts WHERE name <> \"harry\" ORDER BY name"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "EXPLAIN SELECT name FROM contacts WHERE name <> \"harry\" ORDER BY name",
+        "statements": "EXPLAIN SELECT name, type FROM contacts WHERE name <> \"harry\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
         "resultAssertions": [
             {
@@ -188,14 +188,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "SELECT name FROM contacts WHERE name LIKE \"har%\" ORDER BY name",
+        "statements": "SELECT name, type FROM contacts WHERE name LIKE \"har%\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
-        "matchStatements": "SELECT name FROM contacts WHERE name LIKE \"har%\" ORDER BY name"
+        "matchStatements": "SELECT name, type FROM contacts WHERE name LIKE \"har%\" ORDER BY name"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "EXPLAIN SELECT name FROM contacts WHERE name LIKE \"har%\" ORDER BY name",
+        "statements": "EXPLAIN SELECT name, type FROM contacts WHERE name LIKE \"har%\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
         "resultAssertions": [
             {
@@ -220,14 +220,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "SELECT name FROM contacts WHERE name NOT LIKE \"har%\" ORDER BY name",
+        "statements": "SELECT name, type FROM contacts WHERE name NOT LIKE \"har%\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
-        "matchStatements": "SELECT name FROM contacts WHERE name NOT LIKE \"har%\" ORDER BY name"
+        "matchStatements": "SELECT name, type FROM contacts WHERE name NOT LIKE \"har%\" ORDER BY name"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX nameidx ON contacts(name)",
-        "statements": "EXPLAIN SELECT name FROM contacts WHERE name NOT LIKE \"har%\" ORDER BY name",
+        "statements": "EXPLAIN SELECT name, type FROM contacts WHERE name NOT LIKE \"har%\" ORDER BY name",
         "postStatements": "DROP INDEX contacts.nameidx",
         "resultAssertions": [
             {
@@ -258,14 +258,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "SELECT score FROM game WHERE score > 8 ORDER BY score",
+        "statements": "SELECT score, type FROM game WHERE score > 8 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
-        "matchStatements": "SELECT score FROM game WHERE score > 8 ORDER BY score"
+        "matchStatements": "SELECT score, type FROM game WHERE score > 8 ORDER BY score"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "EXPLAIN SELECT score FROM game WHERE score > 8 ORDER BY score",
+        "statements": "EXPLAIN SELECT score, type FROM game WHERE score > 8 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
         "resultAssertions": [
             {
@@ -287,14 +287,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "SELECT score FROM game WHERE score < 8 ORDER BY score",
+        "statements": "SELECT score, type FROM game WHERE score < 8 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
-        "matchStatements": "SELECT score FROM game WHERE score < 8 ORDER BY score"
+        "matchStatements": "SELECT score, type FROM game WHERE score < 8 ORDER BY score"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "EXPLAIN SELECT score FROM game WHERE score < 8 ORDER BY score",
+        "statements": "EXPLAIN SELECT score, type FROM game WHERE score < 8 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
         "resultAssertions": [
             {
@@ -316,14 +316,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "SELECT score FROM game WHERE score >= 8 ORDER BY score",
+        "statements": "SELECT score, type FROM game WHERE score >= 8 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
-        "matchStatements": "SELECT score FROM game WHERE score >= 8 ORDER BY score"
+        "matchStatements": "SELECT score, type FROM game WHERE score >= 8 ORDER BY score"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "EXPLAIN SELECT score FROM game WHERE score >= 8 ORDER BY score",
+        "statements": "EXPLAIN SELECT score, type FROM game WHERE score >= 8 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
         "resultAssertions": [
             {
@@ -345,14 +345,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "SELECT score FROM game WHERE score <= 8 ORDER BY score",
+        "statements": "SELECT score, type FROM game WHERE score <= 8 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
-        "matchStatements": "SELECT score FROM game WHERE score <= 8 ORDER BY score"
+        "matchStatements": "SELECT score, type FROM game WHERE score <= 8 ORDER BY score"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "EXPLAIN SELECT score FROM game WHERE score <= 8 ORDER BY score",
+        "statements": "EXPLAIN SELECT score, type FROM game WHERE score <= 8 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
         "resultAssertions": [
             {
@@ -374,14 +374,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "SELECT score FROM game WHERE score = 8 ORDER BY score",
+        "statements": "SELECT score, type FROM game WHERE score = 8 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
-        "matchStatements": "SELECT score FROM game WHERE score = 8 ORDER BY score"
+        "matchStatements": "SELECT score, type FROM game WHERE score = 8 ORDER BY score"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "EXPLAIN SELECT score FROM game WHERE score = 8 ORDER BY score",
+        "statements": "EXPLAIN SELECT score, type FROM game WHERE score = 8 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
         "resultAssertions": [
             {
@@ -407,14 +407,14 @@
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "SELECT score FROM game WHERE score <> 8 ORDER BY score",
+        "statements": "SELECT score, type FROM game WHERE score <> 8 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
-        "matchStatements": "SELECT score FROM game WHERE score <> 8 ORDER BY score"
+        "matchStatements": "SELECT score, type FROM game WHERE score <> 8 ORDER BY score"
     },
     {
         "description": "verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "EXPLAIN SELECT score FROM game WHERE score <> 8 ORDER BY score",
+        "statements": "EXPLAIN SELECT score, type FROM game WHERE score <> 8 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
         "resultAssertions": [
             {
@@ -595,14 +595,14 @@
     {
         "description": "2 mergable CONDITIONS SAME FIELD - verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "SELECT score FROM game WHERE score > 8 AND score < 20 ORDER BY score",
+        "statements": "SELECT score, type FROM game WHERE score > 8 AND score < 20 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
-        "matchStatements": "SELECT score FROM game WHERE score > 8 AND score < 20 ORDER BY score"
+        "matchStatements": "SELECT score, type FROM game WHERE score > 8 AND score < 20 ORDER BY score"
     },
     {
         "description": "2 mergable CONDITIONS SAME FIELD - verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "EXPLAIN SELECT score FROM game WHERE score > 8 AND score < 20 ORDER BY score",
+        "statements": "EXPLAIN SELECT score, type FROM game WHERE score > 8 AND score < 20 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
         "resultAssertions": [
             {
@@ -626,14 +626,14 @@
     {
         "description": "2 overlapping CONDITIONS SAME FIELD - verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "SELECT score FROM game WHERE score > 8 AND score > 20 ORDER BY score",
+        "statements": "SELECT score, type FROM game WHERE score > 8 AND score > 20 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
-        "matchStatements": "SELECT score FROM game WHERE score > 8 AND score > 20 ORDER BY score"
+        "matchStatements": "SELECT score, type FROM game WHERE score > 8 AND score > 20 ORDER BY score"
     },
     {
         "description": "2 overlapping CONDITIONS SAME FIELD - verify that we get the same results with/without an index",
         "preStatements": "CREATE INDEX scoreidx ON game(score)",
-        "statements": "EXPLAIN SELECT score FROM game WHERE score > 8 AND score > 20 ORDER BY score",
+        "statements": "EXPLAIN SELECT score, type FROM game WHERE score > 8 AND score > 20 ORDER BY score",
         "postStatements": "DROP INDEX game.scoreidx",
         "resultAssertions": [
             {
@@ -643,6 +643,26 @@
             {
                 "pointer": "/0/input/input/input/input/ranges/0/low/0",
                 "expect": 20
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/inclusion",
+                "expect": "high"
+            }
+        ]
+    },
+    {
+        "description": "verify that index is used even when table is aliased",
+        "preStatements": "CREATE INDEX nameidx ON contacts(name)",
+        "statements": "EXPLAIN SELECT name, type FROM contacts AS c WHERE name > \"harry\" ORDER BY name",
+        "postStatements": "DROP INDEX contacts.nameidx",
+        "resultAssertions": [
+            {
+                "pointer": "/0/input/input/input/input/index",
+                "expect": "nameidx"
+            },
+            {
+                "pointer": "/0/input/input/input/input/ranges/0/low/0",
+                "expect": "harry"
             },
             {
                 "pointer": "/0/input/input/input/input/ranges/0/inclusion",

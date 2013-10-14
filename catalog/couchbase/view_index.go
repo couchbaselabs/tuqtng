@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	cb "github.com/couchbaselabs/go-couchbase"
 	"github.com/couchbaselabs/tuqtng/catalog"
@@ -166,6 +167,15 @@ func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue
 		case viewRow, ok = <-viewRowChannel:
 			if ok {
 				entry := catalog.IndexEntry{PrimaryKey: viewRow.ID}
+
+				// try to add the view row key as the entry key
+				lookupValue, err := convertCouchbaseViewKeyToLookupValue(viewRow.Key)
+				if err == nil {
+					entry.EntryKey = lookupValue
+				} else {
+					clog.To(catalog.CHANNEL, "unable to convert index key to lookup value:%v", err)
+				}
+
 				ch <- &entry
 				sentRows = true
 			}

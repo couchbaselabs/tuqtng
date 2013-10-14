@@ -180,11 +180,81 @@ func IndexKeyInFormalNotation(key catalog.IndexKey, bucket string) (catalog.Inde
 	fkey := make(catalog.IndexKey, len(key))
 	fnot := ast.NewExpressionFormalNotationConverter([]string{}, []string{bucket}, bucket)
 	for i, kp := range key {
-		nkey, err := kp.Accept(fnot)
+		kpc := kp.Copy()
+		nkey, err := kpc.Accept(fnot)
 		if err != nil {
 			return nil, err
 		}
 		fkey[i] = nkey
 	}
 	return fkey, nil
+}
+
+func DoesIndexCoverStatement(index catalog.RangeIndex, stmt *ast.SelectStatement) bool {
+
+	if stmt.From.Over != nil {
+		// index cannot cover queries containing OVER right now
+		return false
+	}
+
+	// convert the index key to formal notation
+	indexKeyFormal, err := IndexKeyInFormalNotation(index.Key(), stmt.From.As)
+	if err != nil {
+		return false
+	}
+
+	deps := ast.ExpressionList{}
+	for _, indexKey := range indexKeyFormal {
+		deps = append(deps, indexKey)
+	}
+	clog.To(planner.CHANNEL, "index deps are: %v", deps)
+	depChecker := ast.NewExpressionFunctionalDependencyCheckerFull(deps)
+
+	// first check the projection
+	for _, resultExpr := range stmt.Select {
+		if resultExpr.Star == true || resultExpr.Expr == nil {
+			// currently cannot cover *
+			return false
+		}
+
+		_, err := depChecker.Visit(resultExpr.Expr)
+		if err != nil {
+			return false
+		}
+	}
+
+	if stmt.Where != nil {
+		_, err = depChecker.Visit(stmt.Where)
+		if err != nil {
+			return false
+		}
+	}
+
+	if stmt.GroupBy != nil {
+		for _, groupExpr := range stmt.GroupBy {
+			_, err = depChecker.Visit(groupExpr)
+			if err != nil {
+				return false
+			}
+		}
+
+		if stmt.Having != nil {
+			_, err = depChecker.Visit(stmt.Having)
+			if err != nil {
+				return false
+			}
+		}
+	}
+
+	if stmt.OrderBy != nil {
+		for _, orderExpr := range stmt.OrderBy {
+			_, err = depChecker.Visit(orderExpr.Expr)
+			if err != nil {
+				return false
+			}
+		}
+	}
+
+	// if we go this far it is covered
+	return true
 }
