@@ -260,7 +260,7 @@ func (b *bucket) BulkFetch(ids []string) (map[string]*dparval.Value, query.Error
 		}
 		doc.SetAttachment("meta", map[string]interface{}{
 			"id":    k,
-			"case":  float64(v.Cas),
+			"cas":   float64(v.Cas),
 			"type":  meta_type,
 			"flags": float64(meta_flags),
 		})
