@@ -31,6 +31,18 @@ func NewFunctionCallLower(operands FunctionArgExpressionList) FunctionCallExpres
 	}
 }
 
+func (this *FunctionCallLower) Copy() Expression {
+	return &FunctionCallLower{
+		FunctionCall{
+			Type:     "function",
+			Name:     "LOWER",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
 func (this *FunctionCallLower) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := this.Operands[0].Expr.Evaluate(item)
@@ -78,6 +90,18 @@ func NewFunctionCallUpper(operands FunctionArgExpressionList) FunctionCallExpres
 	}
 }
 
+func (this *FunctionCallUpper) Copy() Expression {
+	return &FunctionCallUpper{
+		FunctionCall{
+			Type:     "function",
+			Name:     "UPPER",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
 func (this *FunctionCallUpper) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := this.Operands[0].Expr.Evaluate(item)
@@ -119,6 +143,18 @@ func NewFunctionCallLTrim(operands FunctionArgExpressionList) FunctionCallExpres
 			Type:     "function",
 			Name:     "LTRIM",
 			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallLTrim) Copy() Expression {
+	return &FunctionCallLTrim{
+		FunctionCall{
+			Type:     "function",
+			Name:     "LTRIM",
+			Operands: this.Operands.Copy(),
 			minArgs:  2,
 			maxArgs:  2,
 		},
@@ -194,6 +230,18 @@ func NewFunctionCallRTrim(operands FunctionArgExpressionList) FunctionCallExpres
 	}
 }
 
+func (this *FunctionCallRTrim) Copy() Expression {
+	return &FunctionCallRTrim{
+		FunctionCall{
+			Type:     "function",
+			Name:     "RTRIM",
+			Operands: this.Operands.Copy(),
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
 func (this *FunctionCallRTrim) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := this.Operands[0].Expr.Evaluate(item)
@@ -262,6 +310,18 @@ func NewFunctionCallTrim(operands FunctionArgExpressionList) FunctionCallExpress
 	}
 }
 
+func (this *FunctionCallTrim) Copy() Expression {
+	return &FunctionCallTrim{
+		FunctionCall{
+			Type:     "function",
+			Name:     "TRIM",
+			Operands: this.Operands.Copy(),
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
 func (this *FunctionCallTrim) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := this.Operands[0].Expr.Evaluate(item)
@@ -324,6 +384,18 @@ func NewFunctionCallSubStr(operands FunctionArgExpressionList) FunctionCallExpre
 			Type:     "function",
 			Name:     "SUBSTR",
 			Operands: operands,
+			minArgs:  2,
+			maxArgs:  3,
+		},
+	}
+}
+
+func (this *FunctionCallSubStr) Copy() Expression {
+	return &FunctionCallSubStr{
+		FunctionCall{
+			Type:     "function",
+			Name:     "SUBSTR",
+			Operands: this.Operands.Copy(),
 			minArgs:  2,
 			maxArgs:  3,
 		},

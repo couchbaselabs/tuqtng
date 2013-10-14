@@ -29,6 +29,18 @@ func NewFunctionCallGreatest(operands FunctionArgExpressionList) FunctionCallExp
 	}
 }
 
+func (this *FunctionCallGreatest) Copy() Expression {
+	return &FunctionCallGreatest{
+		FunctionCall{
+			Type:     "function",
+			Name:     "GREATEST",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  -1,
+		},
+	}
+}
+
 func (this *FunctionCallGreatest) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 
 	var rv interface{} = nil
@@ -71,6 +83,18 @@ func NewFunctionCallLeast(operands FunctionArgExpressionList) FunctionCallExpres
 			Type:     "function",
 			Name:     "LEAST",
 			Operands: operands,
+			minArgs:  1,
+			maxArgs:  -1,
+		},
+	}
+}
+
+func (this *FunctionCallLeast) Copy() Expression {
+	return &FunctionCallLeast{
+		FunctionCall{
+			Type:     "function",
+			Name:     "LEAST",
+			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  -1,
 		},
@@ -127,6 +151,18 @@ func NewFunctionCallIfMissing(operands FunctionArgExpressionList) FunctionCallEx
 	}
 }
 
+func (this *FunctionCallIfMissing) Copy() Expression {
+	return &FunctionCallIfMissing{
+		FunctionCall{
+			Type:     "function",
+			Name:     "IFMISSING",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  -1,
+		},
+	}
+}
+
 func (this *FunctionCallIfMissing) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	for _, arg := range this.Operands {
 		av, err := arg.Expr.Evaluate(item)
@@ -163,6 +199,18 @@ func NewFunctionCallIfNull(operands FunctionArgExpressionList) FunctionCallExpre
 			Type:     "function",
 			Name:     "IFNULL",
 			Operands: operands,
+			minArgs:  1,
+			maxArgs:  -1,
+		},
+	}
+}
+
+func (this *FunctionCallIfNull) Copy() Expression {
+	return &FunctionCallIfNull{
+		FunctionCall{
+			Type:     "function",
+			Name:     "IFNULL",
+			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  -1,
 		},
@@ -214,6 +262,18 @@ func NewFunctionCallIfMissingOrNull(operands FunctionArgExpressionList) Function
 	}
 }
 
+func (this *FunctionCallIfMissingOrNull) Copy() Expression {
+	return &FunctionCallIfMissingOrNull{
+		FunctionCall{
+			Type:     "function",
+			Name:     "IFMISSINGORNULL",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  -1,
+		},
+	}
+}
+
 func (this *FunctionCallIfMissingOrNull) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	for _, arg := range this.Operands {
 		av, err := arg.Expr.Evaluate(item)
@@ -252,6 +312,18 @@ func NewFunctionCallMissingIf(operands FunctionArgExpressionList) FunctionCallEx
 			Type:     "function",
 			Name:     "MISSINGIF",
 			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallMissingIf) Copy() Expression {
+	return &FunctionCallMissingIf{
+		FunctionCall{
+			Type:     "function",
+			Name:     "MISSINGIF",
+			Operands: this.Operands.Copy(),
 			minArgs:  2,
 			maxArgs:  2,
 		},
@@ -319,6 +391,18 @@ func NewFunctionCallNullIf(operands FunctionArgExpressionList) FunctionCallExpre
 			Type:     "function",
 			Name:     "NULLIF",
 			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallNullIf) Copy() Expression {
+	return &FunctionCallNullIf{
+		FunctionCall{
+			Type:     "function",
+			Name:     "NULLIF",
+			Operands: this.Operands.Copy(),
 			minArgs:  2,
 			maxArgs:  2,
 		},

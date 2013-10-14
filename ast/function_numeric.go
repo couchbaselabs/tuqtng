@@ -31,6 +31,18 @@ func NewFunctionCallCeil(operands FunctionArgExpressionList) FunctionCallExpress
 	}
 }
 
+func (this *FunctionCallCeil) Copy() Expression {
+	return &FunctionCallCeil{
+		FunctionCall{
+			Type:     "function",
+			Name:     "CEIL",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
 func (this *FunctionCallCeil) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := this.Operands[0].Expr.Evaluate(item)
@@ -73,6 +85,18 @@ func NewFunctionCallFloor(operands FunctionArgExpressionList) FunctionCallExpres
 			Type:     "function",
 			Name:     "FLOOR",
 			Operands: operands,
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
+func (this *FunctionCallFloor) Copy() Expression {
+	return &FunctionCallFloor{
+		FunctionCall{
+			Type:     "function",
+			Name:     "FLOOR",
+			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
 		},
@@ -145,6 +169,18 @@ func NewFunctionCallRound(operands FunctionArgExpressionList) FunctionCallExpres
 			Type:     "function",
 			Name:     "ROUND",
 			Operands: operands,
+			minArgs:  1,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallRound) Copy() Expression {
+	return &FunctionCallRound{
+		FunctionCall{
+			Type:     "function",
+			Name:     "ROUND",
+			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  2,
 		},
@@ -231,6 +267,18 @@ func NewFunctionCallTrunc(operands FunctionArgExpressionList) FunctionCallExpres
 			Type:     "function",
 			Name:     "TRUNC",
 			Operands: operands,
+			minArgs:  1,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallTrunc) Copy() Expression {
+	return &FunctionCallTrunc{
+		FunctionCall{
+			Type:     "function",
+			Name:     "TRUNC",
+			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  2,
 		},

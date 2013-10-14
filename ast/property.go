@@ -27,6 +27,13 @@ func NewProperty(path string) *Property {
 	}
 }
 
+func (this *Property) Copy() Expression {
+	return &Property{
+		Type: "property",
+		Path: this.Path,
+	}
+}
+
 func (this *Property) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	if item == nil {
 		return nil, &dparval.Undefined{this.Path}

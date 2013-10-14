@@ -39,6 +39,23 @@ func NewCollectionAnyOperator(condition Expression, over Expression, as string) 
 	}
 }
 
+func (this *CollectionAnyOperator) Copy() Expression {
+	rv := CollectionAnyOperator{
+		"any",
+		CollectionOperator{
+			operator: "ANY",
+			Over:     this.Over.Copy(),
+			As:       this.As,
+		},
+	}
+
+	if this.Condition != nil {
+		rv.Condition = this.Condition.Copy()
+	}
+
+	return &rv
+}
+
 func (this *CollectionAnyOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the over
 	ov, err := this.Over.Evaluate(item)

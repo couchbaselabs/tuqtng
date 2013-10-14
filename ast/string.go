@@ -33,6 +33,17 @@ func NewStringConcatenateOperator(left, right Expression) *StringConcatenateOper
 	}
 }
 
+func (this *StringConcatenateOperator) Copy() Expression {
+	return &StringConcatenateOperator{
+		"string_concat",
+		BinaryOperator{
+			operator: "||",
+			Left:     this.Left.Copy(),
+			Right:    this.Right.Copy(),
+		},
+	}
+}
+
 func (this *StringConcatenateOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
 	var result interface{} = nil
 	lv, rv, bothString, err := this.EvaluateBothRequireString(context)

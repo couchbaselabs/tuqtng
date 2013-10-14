@@ -37,6 +37,19 @@ func NewPlusOperator(left, right Expression) *PlusOperator {
 	}
 }
 
+func (this *PlusOperator) Copy() Expression {
+	return &PlusOperator{
+		"plus",
+		CommutativeBinaryOperator{
+			BinaryOperator{
+				operator: "+",
+				Left:     this.Left.Copy(),
+				Right:    this.Right.Copy(),
+			},
+		},
+	}
+}
+
 func (this *PlusOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
 	var result interface{} = nil
 	lv, rv, bothNumeric, err := this.EvaluateBothRequireNumber(context)
@@ -69,6 +82,17 @@ func NewSubtractOperator(left, right Expression) *SubtractOperator {
 			operator: "-",
 			Left:     left,
 			Right:    right,
+		},
+	}
+}
+
+func (this *SubtractOperator) Copy() Expression {
+	return &SubtractOperator{
+		"minus",
+		BinaryOperator{
+			operator: "-",
+			Left:     this.Left.Copy(),
+			Right:    this.Right.Copy(),
 		},
 	}
 }
@@ -111,6 +135,19 @@ func NewMultiplyOperator(left, right Expression) *MultiplyOperator {
 	}
 }
 
+func (this *MultiplyOperator) Copy() Expression {
+	return &MultiplyOperator{
+		"multiply",
+		CommutativeBinaryOperator{
+			BinaryOperator{
+				operator: "*",
+				Left:     this.Left.Copy(),
+				Right:    this.Right.Copy(),
+			},
+		},
+	}
+}
+
 func (this *MultiplyOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
 	var result interface{} = nil
 	lv, rv, bothNumeric, err := this.EvaluateBothRequireNumber(context)
@@ -143,6 +180,17 @@ func NewDivideOperator(left, right Expression) *DivideOperator {
 			operator: "/",
 			Left:     left,
 			Right:    right,
+		},
+	}
+}
+
+func (this *DivideOperator) Copy() Expression {
+	return &DivideOperator{
+		"divide",
+		BinaryOperator{
+			operator: "/",
+			Left:     this.Left.Copy(),
+			Right:    this.Right.Copy(),
 		},
 	}
 }
@@ -183,6 +231,17 @@ func NewModuloOperator(left, right Expression) *ModuloOperator {
 	}
 }
 
+func (this *ModuloOperator) Copy() Expression {
+	return &ModuloOperator{
+		"modulo",
+		BinaryOperator{
+			operator: "%",
+			Left:     this.Left.Copy(),
+			Right:    this.Right.Copy(),
+		},
+	}
+}
+
 func (this *ModuloOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
 	var result interface{} = nil
 	lv, rv, bothNumeric, err := this.EvaluateBothRequireNumber(context)
@@ -215,6 +274,18 @@ func NewChangeSignOperator(operand Expression) *ChangeSignOperator {
 			UnaryOperator{
 				operator: "-",
 				Operand:  operand,
+			},
+		},
+	}
+}
+
+func (this *ChangeSignOperator) Copy() Expression {
+	return &ChangeSignOperator{
+		"changesign",
+		PrefixUnaryOperator{
+			UnaryOperator{
+				operator: "-",
+				Operand:  this.Operand.Copy(),
 			},
 		},
 	}

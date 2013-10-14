@@ -32,6 +32,23 @@ func NewCaseOperator() *CaseOperator {
 	}
 }
 
+func (this *CaseOperator) Copy() Expression {
+	rv := CaseOperator{
+		Type:      "case",
+		WhenThens: make([]*WhenThen, len(this.WhenThens)),
+	}
+
+	for i, wt := range this.WhenThens {
+		rv.WhenThens[i] = &WhenThen{When: wt.When.Copy(), Then: wt.Then.Copy()}
+	}
+
+	if this.Else != nil {
+		rv.Else = this.Else.Copy()
+	}
+
+	return &rv
+}
+
 func (this *CaseOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// walk through the WhenThens in order
 	for _, WhenThen := range this.WhenThens {

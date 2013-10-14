@@ -27,6 +27,9 @@ type Expression interface {
 
 	// Vistor Pattern
 	Accept(ExpressionVisitor) (Expression, error)
+
+	// Return a complete copy of yourself
+	Copy() Expression
 }
 
 type OperatorExpression interface {

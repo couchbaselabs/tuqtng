@@ -136,6 +136,10 @@ type internalErrorExpression struct {
 
 var internalError = fmt.Errorf("Internal Error")
 
+func (this *internalErrorExpression) Copy() Expression {
+	return &internalErrorExpression{}
+}
+
 func (this *internalErrorExpression) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	return nil, fmt.Errorf("Internal Error")
 }

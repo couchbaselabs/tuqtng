@@ -34,6 +34,14 @@ func NewDotMemberOperator(left Expression, right *Property) *DotMemberOperator {
 	}
 }
 
+func (this *DotMemberOperator) Copy() Expression {
+	return &DotMemberOperator{
+		Type:  "dot_member",
+		Left:  this.Left.Copy(),
+		Right: this.Right.Copy().(*Property),
+	}
+}
+
 func (this *DotMemberOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	lv, err := this.Left.Evaluate(item)
 	if err != nil {
@@ -135,6 +143,14 @@ func NewBracketMemberOperator(left, right Expression) *BracketMemberOperator {
 		Type:  "bracket_member",
 		Left:  left,
 		Right: right,
+	}
+}
+
+func (this *BracketMemberOperator) Copy() Expression {
+	return &BracketMemberOperator{
+		Type:  "bracket_member",
+		Left:  this.Left.Copy(),
+		Right: this.Right.Copy(),
 	}
 }
 

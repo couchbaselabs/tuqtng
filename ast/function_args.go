@@ -15,6 +15,14 @@ import (
 
 type FunctionArgExpressionList []*FunctionArgExpression
 
+func (this FunctionArgExpressionList) Copy() FunctionArgExpressionList {
+	rv := make(FunctionArgExpressionList, len(this))
+	for i, fae := range this {
+		rv[i] = fae.Copy()
+	}
+	return rv
+}
+
 func (this FunctionArgExpressionList) String() string {
 	inside := ""
 	for i, arg := range this {
@@ -29,6 +37,18 @@ func (this FunctionArgExpressionList) String() string {
 type FunctionArgExpression struct {
 	Star bool       `json:"star"`
 	Expr Expression `json:"expr"`
+}
+
+func (this *FunctionArgExpression) Copy() *FunctionArgExpression {
+	rv := FunctionArgExpression{
+		Star: this.Star,
+	}
+
+	if this.Expr != nil {
+		rv.Expr = this.Expr.Copy()
+	}
+
+	return &rv
 }
 
 func (this *FunctionArgExpression) String() string {

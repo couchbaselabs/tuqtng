@@ -33,6 +33,20 @@ func NewFunctionCallCount(operands FunctionArgExpressionList) FunctionCallExpres
 	}
 }
 
+func (this *FunctionCallCount) Copy() Expression {
+	return &FunctionCallCount{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "COUNT",
+				Operands: this.Operands.Copy(),
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
+	}
+}
+
 func (this *FunctionCallCount) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	aggregate_key := this.Key()
 	val, err := aggregateValue(item, aggregate_key)
@@ -152,6 +166,20 @@ func NewFunctionCallSum(operands FunctionArgExpressionList) FunctionCallExpressi
 	}
 }
 
+func (this *FunctionCallSum) Copy() Expression {
+	return &FunctionCallSum{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "SUM",
+				Operands: this.Operands.Copy(),
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
+	}
+}
+
 func (this *FunctionCallSum) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	aggregate_key := this.Key()
 	return aggregateValue(item, aggregate_key)
@@ -212,6 +240,20 @@ func NewFunctionCallAvg(operands FunctionArgExpressionList) FunctionCallExpressi
 				Type:     "function",
 				Name:     "AVG",
 				Operands: operands,
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
+	}
+}
+
+func (this *FunctionCallAvg) Copy() Expression {
+	return &FunctionCallAvg{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "AVG",
+				Operands: this.Operands.Copy(),
 				minArgs:  1,
 				maxArgs:  1,
 			},
@@ -330,6 +372,20 @@ func NewFunctionCallMin(operands FunctionArgExpressionList) FunctionCallExpressi
 	}
 }
 
+func (this *FunctionCallMin) Copy() Expression {
+	return &FunctionCallMin{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "MIN",
+				Operands: this.Operands.Copy(),
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
+	}
+}
+
 func (this *FunctionCallMin) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	aggregate_key := this.Key()
 	return aggregateValue(item, aggregate_key)
@@ -401,6 +457,20 @@ func NewFunctionCallMax(operands FunctionArgExpressionList) FunctionCallExpressi
 	}
 }
 
+func (this *FunctionCallMax) Copy() Expression {
+	return &FunctionCallMax{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "MAX",
+				Operands: this.Operands.Copy(),
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
+	}
+}
+
 func (this *FunctionCallMax) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	aggregate_key := this.Key()
 	return aggregateValue(item, aggregate_key)
@@ -461,6 +531,20 @@ func NewFunctionCallArrayAgg(operands FunctionArgExpressionList) FunctionCallExp
 				Type:     "function",
 				Name:     "ARRAY_AGG",
 				Operands: operands,
+				minArgs:  1,
+				maxArgs:  1,
+			},
+		},
+	}
+}
+
+func (this *FunctionCallArrayAgg) Copy() Expression {
+	return &FunctionCallArrayAgg{
+		AggregateFunctionCall{
+			FunctionCall{
+				Type:     "function",
+				Name:     "ARRAY_AGG",
+				Operands: this.Operands.Copy(),
 				minArgs:  1,
 				maxArgs:  1,
 			},

@@ -40,6 +40,24 @@ func NewCollectionArrayOperator(condition Expression, over Expression, as string
 	}
 }
 
+func (this *CollectionArrayOperator) Copy() Expression {
+	rv := CollectionArrayOperator{
+		"array",
+		CollectionOperator{
+			operator: "ARRAY",
+			Over:     this.Over.Copy(),
+			As:       this.As,
+			Output:   this.Output.Copy(),
+		},
+	}
+
+	if this.Condition != nil {
+		rv.Condition = this.Condition.Copy()
+	}
+
+	return &rv
+}
+
 func (this *CollectionArrayOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the over
 	ov, err := this.Over.Evaluate(item)

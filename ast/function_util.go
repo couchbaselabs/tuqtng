@@ -29,6 +29,18 @@ func NewFunctionCallLength(operands FunctionArgExpressionList) FunctionCallExpre
 	}
 }
 
+func (this *FunctionCallLength) Copy() Expression {
+	return &FunctionCallLength{
+		FunctionCall{
+			Type:     "function",
+			Name:     "LENGTH",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
 func (this *FunctionCallLength) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := this.Operands[0].Expr.Evaluate(item)

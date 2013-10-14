@@ -40,6 +40,24 @@ func NewCollectionFirstOperator(condition Expression, over Expression, as string
 	}
 }
 
+func (this *CollectionFirstOperator) Copy() Expression {
+	rv := CollectionFirstOperator{
+		"first",
+		CollectionOperator{
+			operator: "FIRST",
+			Over:     this.Over.Copy(),
+			As:       this.As,
+			Output:   this.Output.Copy(),
+		},
+	}
+
+	if this.Condition != nil {
+		rv.Condition = this.Condition.Copy()
+	}
+
+	return &rv
+}
+
 func (this *CollectionFirstOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the over
 	ov, err := this.Over.Evaluate(item)

@@ -46,6 +46,17 @@ func NewGreaterThanOperator(left, right Expression) *GreaterThanOperator {
 	}
 }
 
+func (this *GreaterThanOperator) Copy() Expression {
+	return &GreaterThanOperator{
+		"greater_than",
+		BinaryOperator{
+			operator: ">",
+			Left:     this.Left.Copy(),
+			Right:    this.Right.Copy(),
+		},
+	}
+}
+
 func (this *GreaterThanOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	compare, err := this.compare(item)
 	if err != nil {
@@ -90,6 +101,17 @@ func NewGreaterThanOrEqualOperator(left, right Expression) *GreaterThanOrEqualOp
 			operator: ">=",
 			Left:     left,
 			Right:    right,
+		},
+	}
+}
+
+func (this *GreaterThanOrEqualOperator) Copy() Expression {
+	return &GreaterThanOrEqualOperator{
+		"greater_than_or_equal",
+		BinaryOperator{
+			operator: ">=",
+			Left:     this.Left.Copy(),
+			Right:    this.Right.Copy(),
 		},
 	}
 }
@@ -142,6 +164,17 @@ func NewLessThanOperator(left, right Expression) *LessThanOperator {
 	}
 }
 
+func (this *LessThanOperator) Copy() Expression {
+	return &LessThanOperator{
+		"less_than",
+		BinaryOperator{
+			operator: "<",
+			Left:     this.Left.Copy(),
+			Right:    this.Right.Copy(),
+		},
+	}
+}
+
 func (this *LessThanOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	compare, err := this.compare(item)
 	if err != nil {
@@ -186,6 +219,17 @@ func NewLessThanOrEqualOperator(left, right Expression) *LessThanOrEqualOperator
 			operator: "<=",
 			Left:     left,
 			Right:    right,
+		},
+	}
+}
+
+func (this *LessThanOrEqualOperator) Copy() Expression {
+	return &LessThanOrEqualOperator{
+		"less_than_or_equal",
+		BinaryOperator{
+			operator: "<=",
+			Left:     this.Left.Copy(),
+			Right:    this.Right.Copy(),
 		},
 	}
 }
@@ -235,6 +279,19 @@ func NewEqualToOperator(left, right Expression) *EqualToOperator {
 				operator: "=",
 				Left:     left,
 				Right:    right,
+			},
+		},
+	}
+}
+
+func (this *EqualToOperator) Copy() Expression {
+	return &EqualToOperator{
+		"equals",
+		CommutativeBinaryOperator{
+			BinaryOperator{
+				operator: "=",
+				Left:     this.Left.Copy(),
+				Right:    this.Right.Copy(),
 			},
 		},
 	}
@@ -290,6 +347,19 @@ func NewNotEqualToOperator(left, right Expression) *NotEqualToOperator {
 	}
 }
 
+func (this *NotEqualToOperator) Copy() Expression {
+	return &NotEqualToOperator{
+		"not_equals",
+		CommutativeBinaryOperator{
+			BinaryOperator{
+				operator: "!=",
+				Left:     this.Left.Copy(),
+				Right:    this.Right.Copy(),
+			},
+		},
+	}
+}
+
 func (this *NotEqualToOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	compare, err := this.compare(item)
 	if err != nil {
@@ -339,6 +409,17 @@ func NewLikeOperator(left, right Expression) *LikeOperator {
 	}
 }
 
+func (this *LikeOperator) Copy() Expression {
+	return &LikeOperator{
+		"like",
+		BinaryOperator{
+			operator: "LIKE",
+			Left:     this.Left.Copy(),
+			Right:    this.Right.Copy(),
+		},
+	}
+}
+
 func (this *LikeOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
 	var result interface{} = nil
 	lv, rv, bothString, err := this.EvaluateBothRequireString(context)
@@ -378,6 +459,17 @@ func NewNotLikeOperator(left, right Expression) *NotLikeOperator {
 			operator: "NOT LIKE",
 			Left:     left,
 			Right:    right,
+		},
+	}
+}
+
+func (this *NotLikeOperator) Copy() Expression {
+	return &NotLikeOperator{
+		"not_like",
+		BinaryOperator{
+			operator: "NOT LIKE",
+			Left:     this.Left.Copy(),
+			Right:    this.Right.Copy(),
 		},
 	}
 }
@@ -424,6 +516,16 @@ func NewIsNullOperator(operand Expression) *IsNullOperator {
 	}
 }
 
+func (this *IsNullOperator) Copy() Expression {
+	return &IsNullOperator{
+		"is_null",
+		UnaryOperator{
+			operator: "IS NULL",
+			Operand:  this.Operand.Copy(),
+		},
+	}
+}
+
 func (this *IsNullOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
 	var result interface{} = false
 	ov, isMissing, err := this.EvaluateFlagMissing(context)
@@ -456,6 +558,16 @@ func NewIsNotNullOperator(operand Expression) *IsNotNullOperator {
 		UnaryOperator{
 			operator: "IS NOT NULL",
 			Operand:  operand,
+		},
+	}
+}
+
+func (this *IsNotNullOperator) Copy() Expression {
+	return &IsNotNullOperator{
+		"is_not_null",
+		UnaryOperator{
+			operator: "IS NOT NULL",
+			Operand:  this.Operand.Copy(),
 		},
 	}
 }
@@ -496,6 +608,16 @@ func NewIsMissingOperator(operand Expression) *IsMissingOperator {
 	}
 }
 
+func (this *IsMissingOperator) Copy() Expression {
+	return &IsMissingOperator{
+		"is_missing",
+		UnaryOperator{
+			operator: "IS MISSING",
+			Operand:  this.Operand.Copy(),
+		},
+	}
+}
+
 func (this *IsMissingOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
 	var result interface{} = false
 	_, isMissing, err := this.EvaluateFlagMissing(context)
@@ -528,6 +650,16 @@ func NewIsNotMissingOperator(operand Expression) *IsNotMissingOperator {
 		UnaryOperator{
 			operator: "IS NOT MISSING",
 			Operand:  operand,
+		},
+	}
+}
+
+func (this *IsNotMissingOperator) Copy() Expression {
+	return &IsNotMissingOperator{
+		"is_not_missing",
+		UnaryOperator{
+			operator: "IS NOT MISSING",
+			Operand:  this.Operand.Copy(),
 		},
 	}
 }
@@ -568,6 +700,16 @@ func NewIsValuedOperator(operand Expression) *IsValuedOperator {
 	}
 }
 
+func (this *IsValuedOperator) Copy() Expression {
+	return &IsValuedOperator{
+		"is_valued",
+		UnaryOperator{
+			operator: "IS VALUED",
+			Operand:  this.Operand.Copy(),
+		},
+	}
+}
+
 func (this *IsValuedOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
 	var result interface{} = true
 	ov, isMissing, err := this.EvaluateFlagMissing(context)
@@ -600,6 +742,16 @@ func NewIsNotValuedOperator(operand Expression) *IsNotValuedOperator {
 		UnaryOperator{
 			operator: "IS NOT VALUED",
 			Operand:  operand,
+		},
+	}
+}
+
+func (this *IsNotValuedOperator) Copy() Expression {
+	return &IsNotValuedOperator{
+		"is_not_valued",
+		UnaryOperator{
+			operator: "IS NOT VALUED",
+			Operand:  this.Operand.Copy(),
 		},
 	}
 }

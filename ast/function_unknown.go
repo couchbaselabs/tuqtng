@@ -29,6 +29,16 @@ func NewFunctionCallUnknown(operands FunctionArgExpressionList, name string) Fun
 	}
 }
 
+func (this *FunctionCallUnknown) Copy() Expression {
+	return &FunctionCallUnknown{
+		FunctionCall{
+			Type:     "function",
+			Name:     this.Name,
+			Operands: this.Operands.Copy(),
+		},
+	}
+}
+
 func (this *FunctionCallUnknown) Arity() (int, int) {
 	return -1, -1
 }

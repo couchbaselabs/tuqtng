@@ -49,6 +49,18 @@ func NewFunctionCallEnableLog(operands FunctionArgExpressionList) FunctionCallEx
 	}
 }
 
+func (this *FunctionCallEnableLog) Copy() Expression {
+	return &FunctionCallEnableLog{
+		FunctionCall{
+			Type:     "function",
+			Name:     "ENABLE_LOG",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
 func (this *FunctionCallEnableLog) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := this.Operands[0].Expr.Evaluate(item)
@@ -84,6 +96,18 @@ func NewFunctionCallDisableLog(operands FunctionArgExpressionList) FunctionCallE
 			Type:     "function",
 			Name:     "DISABLE_LOG",
 			Operands: operands,
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
+func (this *FunctionCallDisableLog) Copy() Expression {
+	return &FunctionCallDisableLog{
+		FunctionCall{
+			Type:     "function",
+			Name:     "DISABLE_LOG",
+			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
 		},
@@ -131,6 +155,18 @@ func NewFunctionCallError(operands FunctionArgExpressionList) FunctionCallExpres
 	}
 }
 
+func (this *FunctionCallError) Copy() Expression {
+	return &FunctionCallError{
+		FunctionCall{
+			Type:     "function",
+			Name:     "ERROR",
+			Operands: this.Operands.Copy(),
+			minArgs:  -1,
+			maxArgs:  1,
+		},
+	}
+}
+
 func (this *FunctionCallError) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// if there was an argument, see if it evaluates to true
 	if len(this.Operands) == 1 {
@@ -169,6 +205,18 @@ func NewFunctionCallPanic(operands FunctionArgExpressionList) FunctionCallExpres
 			Type:     "function",
 			Name:     "PANIC",
 			Operands: operands,
+			minArgs:  -1,
+			maxArgs:  1,
+		},
+	}
+}
+
+func (this *FunctionCallPanic) Copy() Expression {
+	return &FunctionCallPanic{
+		FunctionCall{
+			Type:     "function",
+			Name:     "PANIC",
+			Operands: this.Operands.Copy(),
 			minArgs:  -1,
 			maxArgs:  1,
 		},

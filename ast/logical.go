@@ -33,6 +33,22 @@ func NewAndOperator(operands ExpressionList) *AndOperator {
 	}
 }
 
+func (this *AndOperator) Copy() Expression {
+	rv := AndOperator{
+		"and",
+		NaryOperator{
+			operator: "AND",
+			Operands: make(ExpressionList, len(this.Operands)),
+		},
+	}
+
+	for i, oper := range this.Operands {
+		rv.Operands[i] = oper.Copy()
+	}
+
+	return &rv
+}
+
 func (this *AndOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	var rv interface{}
 	var re error
@@ -93,6 +109,22 @@ func NewOrOperator(operands ExpressionList) *OrOperator {
 	}
 }
 
+func (this *OrOperator) Copy() Expression {
+	rv := OrOperator{
+		"or",
+		NaryOperator{
+			operator: "OR",
+			Operands: make(ExpressionList, len(this.Operands)),
+		},
+	}
+
+	for i, oper := range this.Operands {
+		rv.Operands[i] = oper.Copy()
+	}
+
+	return &rv
+}
+
 func (this *OrOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	var rv interface{}
 	var re error
@@ -149,6 +181,18 @@ func NewNotOperator(operand Expression) *NotOperator {
 			UnaryOperator{
 				operator: "NOT ",
 				Operand:  operand,
+			},
+		},
+	}
+}
+
+func (this *NotOperator) Copy() Expression {
+	return &NotOperator{
+		"not",
+		PrefixUnaryOperator{
+			UnaryOperator{
+				operator: "NOT ",
+				Operand:  this.Operand.Copy(),
 			},
 		},
 	}

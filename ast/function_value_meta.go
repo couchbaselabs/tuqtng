@@ -31,6 +31,18 @@ func NewFunctionCallMeta(operands FunctionArgExpressionList) FunctionCallExpress
 	}
 }
 
+func (this *FunctionCallMeta) Copy() Expression {
+	return &FunctionCallMeta{
+		FunctionCall{
+			Type:     "function",
+			Name:     "META",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
 func (this *FunctionCallMeta) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 
 	av, err := this.Operands[0].Expr.Evaluate(item)
@@ -62,6 +74,18 @@ func NewFunctionCallValue(operands FunctionArgExpressionList) FunctionCallExpres
 	}
 }
 
+func (this *FunctionCallValue) Copy() Expression {
+	return &FunctionCallValue{
+		FunctionCall{
+			Type:     "function",
+			Name:     "VALUE",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
 func (this *FunctionCallValue) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := this.Operands[0].Expr.Evaluate(item)
@@ -85,6 +109,18 @@ func NewFunctionCallBase64Value(operands FunctionArgExpressionList) FunctionCall
 			Type:     "function",
 			Name:     "BASE64_VALUE",
 			Operands: operands,
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
+func (this *FunctionCallBase64Value) Copy() Expression {
+	return &FunctionCallBase64Value{
+		FunctionCall{
+			Type:     "function",
+			Name:     "BASE64_VALUE",
+			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
 		},

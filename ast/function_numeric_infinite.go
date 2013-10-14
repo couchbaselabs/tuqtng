@@ -31,6 +31,18 @@ func NewFunctionCallIfNaN(operands FunctionArgExpressionList) FunctionCallExpres
 	}
 }
 
+func (this *FunctionCallIfNaN) Copy() Expression {
+	return &FunctionCallIfNaN{
+		FunctionCall{
+			Type:     "function",
+			Name:     "IFNAN",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  -1,
+		},
+	}
+}
+
 func (this *FunctionCallIfNaN) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	for _, arg := range this.Operands {
 		av, err := arg.Expr.Evaluate(item)
@@ -69,6 +81,18 @@ func NewFunctionCallIfPosInf(operands FunctionArgExpressionList) FunctionCallExp
 			Type:     "function",
 			Name:     "IFPOSINF",
 			Operands: operands,
+			minArgs:  1,
+			maxArgs:  -1,
+		},
+	}
+}
+
+func (this *FunctionCallIfPosInf) Copy() Expression {
+	return &FunctionCallIfPosInf{
+		FunctionCall{
+			Type:     "function",
+			Name:     "IFPOSINF",
+			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  -1,
 		},
@@ -119,6 +143,18 @@ func NewFunctionCallIfNegInf(operands FunctionArgExpressionList) FunctionCallExp
 	}
 }
 
+func (this *FunctionCallIfNegInf) Copy() Expression {
+	return &FunctionCallIfNegInf{
+		FunctionCall{
+			Type:     "function",
+			Name:     "IFNEGINF",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  -1,
+		},
+	}
+}
+
 func (this *FunctionCallIfNegInf) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	for _, arg := range this.Operands {
 		av, err := arg.Expr.Evaluate(item)
@@ -157,6 +193,18 @@ func NewFunctionCallIfInf(operands FunctionArgExpressionList) FunctionCallExpres
 			Type:     "function",
 			Name:     "IFINF",
 			Operands: operands,
+			minArgs:  1,
+			maxArgs:  -1,
+		},
+	}
+}
+
+func (this *FunctionCallIfInf) Copy() Expression {
+	return &FunctionCallIfInf{
+		FunctionCall{
+			Type:     "function",
+			Name:     "IFINF",
+			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  -1,
 		},
@@ -207,6 +255,18 @@ func NewFunctionCallIfNaNOrInf(operands FunctionArgExpressionList) FunctionCallE
 	}
 }
 
+func (this *FunctionCallIfNaNOrInf) Copy() Expression {
+	return &FunctionCallIfNaNOrInf{
+		FunctionCall{
+			Type:     "function",
+			Name:     "IFNANORINF",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  -1,
+		},
+	}
+}
+
 func (this *FunctionCallIfNaNOrInf) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	for _, arg := range this.Operands {
 		av, err := arg.Expr.Evaluate(item)
@@ -245,6 +305,18 @@ func NewFunctionCallFirstNum(operands FunctionArgExpressionList) FunctionCallExp
 			Type:     "function",
 			Name:     "FIRSTNUM",
 			Operands: operands,
+			minArgs:  1,
+			maxArgs:  -1,
+		},
+	}
+}
+
+func (this *FunctionCallFirstNum) Copy() Expression {
+	return &FunctionCallFirstNum{
+		FunctionCall{
+			Type:     "function",
+			Name:     "FIRSTNUM",
+			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  -1,
 		},
@@ -295,6 +367,18 @@ func NewFunctionCallNaNIf(operands FunctionArgExpressionList) FunctionCallExpres
 			Type:     "function",
 			Name:     "NANIF",
 			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallNaNIf) Copy() Expression {
+	return &FunctionCallNaNIf{
+		FunctionCall{
+			Type:     "function",
+			Name:     "NANIF",
+			Operands: this.Operands.Copy(),
 			minArgs:  2,
 			maxArgs:  2,
 		},
@@ -368,6 +452,18 @@ func NewFunctionCallPosInfIf(operands FunctionArgExpressionList) FunctionCallExp
 	}
 }
 
+func (this *FunctionCallPosInfIf) Copy() Expression {
+	return &FunctionCallPosInfIf{
+		FunctionCall{
+			Type:     "function",
+			Name:     "POSINFIF",
+			Operands: this.Operands.Copy(),
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
 func (this *FunctionCallPosInfIf) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
 	lav, lerr := this.Operands[0].Expr.Evaluate(item)
@@ -429,6 +525,18 @@ func NewFunctionCallNegInfIf(operands FunctionArgExpressionList) FunctionCallExp
 			Type:     "function",
 			Name:     "NEGINFIF",
 			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallNegInfIf) Copy() Expression {
+	return &FunctionCallNegInfIf{
+		FunctionCall{
+			Type:     "function",
+			Name:     "NEGINFIF",
+			Operands: this.Operands.Copy(),
 			minArgs:  2,
 			maxArgs:  2,
 		},

@@ -29,6 +29,12 @@ func NewLiteralNull() *LiteralNull {
 	}
 }
 
+func (this *LiteralNull) Copy() Expression {
+	return &LiteralNull{
+		Type: "literal_null",
+	}
+}
+
 func (this *LiteralNull) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	return dparval.NewValue(nil), nil
 }
@@ -63,6 +69,13 @@ func NewLiteralBool(val bool) *LiteralBool {
 	return &LiteralBool{
 		Type: "literal_bool",
 		Val:  val,
+	}
+}
+
+func (this *LiteralBool) Copy() Expression {
+	return &LiteralBool{
+		Type: "literal_bool",
+		Val:  this.Val,
 	}
 }
 
@@ -111,6 +124,13 @@ func NewLiteralNumber(val float64) *LiteralNumber {
 	}
 }
 
+func (this *LiteralNumber) Copy() Expression {
+	return &LiteralNumber{
+		Type: "literal_number",
+		Val:  this.Val,
+	}
+}
+
 func (this *LiteralNumber) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	return dparval.NewValue(this.Val), nil
 }
@@ -153,6 +173,13 @@ func NewLiteralString(val string) *LiteralString {
 	return &LiteralString{
 		Type: "literal_string",
 		Val:  val,
+	}
+}
+
+func (this *LiteralString) Copy() Expression {
+	return &LiteralString{
+		Type: "literal_string",
+		Val:  this.Val,
 	}
 }
 
@@ -199,6 +226,19 @@ func NewLiteralArray(val ExpressionList) *LiteralArray {
 		Type: "literal_array",
 		Val:  val,
 	}
+}
+
+func (this *LiteralArray) Copy() Expression {
+	rv := LiteralArray{
+		Type: "literal_array",
+		Val:  make(ExpressionList, len(this.Val)),
+	}
+
+	for i, expr := range this.Val {
+		rv.Val[i] = expr.Copy()
+	}
+
+	return &rv
 }
 
 func (this *LiteralArray) Evaluate(item *dparval.Value) (*dparval.Value, error) {
@@ -277,6 +317,19 @@ func NewLiteralObject(val map[string]Expression) *LiteralObject {
 		Type: "literal_object",
 		Val:  val,
 	}
+}
+
+func (this *LiteralObject) Copy() Expression {
+	rv := LiteralObject{
+		Type: "literal_object",
+		Val:  make(map[string]Expression, len(this.Val)),
+	}
+
+	for key, expr := range this.Val {
+		rv.Val[key] = expr.Copy()
+	}
+
+	return &rv
 }
 
 func (this *LiteralObject) Evaluate(item *dparval.Value) (*dparval.Value, error) {
