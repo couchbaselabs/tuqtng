@@ -602,6 +602,52 @@
             "D": 2
         }
     ]
+    },
+
+    {
+        "statements": "SELECT DATE_PART(\"year\", \"2004-07-09\") AS year, DATE_PART(\"month\", \"2004-07-09\") AS month, DATE_PART(\"day\", \"2004-07-09\") AS day",
+        "results": [
+        {
+            "day": 9,
+            "month": 7,
+            "year": 2004
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT DATE_PART(\"hour\", \"11:42:01Z\") AS hour, DATE_PART(\"minute\", \"11:42:01Z\") AS minute, DATE_PART(\"second\", \"11:42:01Z\") AS second",
+        "results": [
+        {
+            "hour": 11,
+            "minute": 42,
+            "second": 1
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT DATE_PART(\"year\", \"2004-07-09T11:42:01Z\") AS year, DATE_PART(\"month\", \"2004-07-09T11:42:01Z\") AS month, DATE_PART(\"day\", \"2004-07-09T11:42:01Z\") AS day, DATE_PART(\"hour\", \"2004-07-09T11:42:01Z\") AS hour, DATE_PART(\"minute\", \"2004-07-09T11:42:01Z\") AS minute, DATE_PART(\"second\", \"2004-07-09T11:42:01Z\") AS second",
+        "results": [
+        {
+            "day": 9,
+            "hour": 11,
+            "minute": 42,
+            "month": 7,
+            "second": 1,
+            "year": 2004
+        }
+    ]
+    },
+
+    {
+        "description": "test fraction seconds",
+        "statements": "SELECT DATE_PART(\"milliseconds\", \"2013-10-13T11:42:01.56723-05:01\") AS ms",
+        "results": [
+        {
+            "ms": 1567
+        }
+    ]
     }
 
 ]
