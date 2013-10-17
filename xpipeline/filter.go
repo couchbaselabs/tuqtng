@@ -14,6 +14,7 @@ import (
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -44,7 +45,7 @@ func (this *Filter) Run(stopChannel misc.StopChannel) {
 }
 
 func (this *Filter) processItem(item *dparval.Value) bool {
-	val, err := this.Expr.Evaluate(item)
+	val, err := this.Base.Evaluate(this.Expr, item)
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
@@ -67,3 +68,7 @@ func (this *Filter) processItem(item *dparval.Value) bool {
 }
 
 func (this *Filter) afterItems() {}
+
+func (this *Filter) SetQuery(q network.Query) {
+	this.Base.SetQuery(q)
+}

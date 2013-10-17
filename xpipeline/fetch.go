@@ -15,6 +15,7 @@ import (
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -120,7 +121,7 @@ func (this *Fetch) flushBatch() bool {
 		item, ok := bulkResponse[v]
 		if ok {
 			if this.projection != nil {
-				projectedVal, err := projectedValueOfResultExpression(item, ast.NewResultExpression(this.projection))
+				projectedVal, err := this.Base.projectedValueOfResultExpression(item, ast.NewResultExpression(this.projection))
 				if err != nil {
 					switch err := err.(type) {
 					case *dparval.Undefined:
@@ -146,4 +147,8 @@ func (this *Fetch) flushBatch() bool {
 		}
 	}
 	return true
+}
+
+func (this *Fetch) SetQuery(q network.Query) {
+	this.Base.SetQuery(q)
 }

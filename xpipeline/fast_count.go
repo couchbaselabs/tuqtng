@@ -18,6 +18,7 @@ import (
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -30,6 +31,7 @@ type FastCount struct {
 	downstreamStopChannel misc.StopChannel
 	ranges                plan.ScanRanges
 	expr                  ast.Expression
+	query                 network.Query
 }
 
 func NewFastCount(bucket catalog.Bucket, index catalog.CountIndex, expr ast.Expression, ranges plan.ScanRanges) *FastCount {
@@ -127,4 +129,8 @@ func (this *FastCount) RecoverPanic() {
 		clog.Error(fmt.Errorf("Query Execution Panic: %v\n%s", r, debug.Stack()))
 		this.SendError(query.NewError(nil, "Panic In Exeuction Pipeline"))
 	}
+}
+
+func (this *FastCount) SetQuery(q network.Query) {
+	this.query = q
 }

@@ -66,4 +66,5 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 
 	// date functions
 	"DATE_PART": NewFunctionCallDatePart,
+	"NOW_STR":   NewFunctionCallNowStr,
 }

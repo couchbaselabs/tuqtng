@@ -12,6 +12,7 @@ package xpipeline
 import (
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 )
 
 type ExecutablePipeline struct {
@@ -24,6 +25,7 @@ type Operator interface {
 	Run(misc.StopChannel)
 	processItem(item *dparval.Value) bool
 	afterItems()
+	SetQuery(q network.Query)
 }
 
 type PipelineSupportChannel chan interface{}

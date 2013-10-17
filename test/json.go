@@ -22,6 +22,7 @@ type MockQuery struct {
 	request     network.QueryRequest
 	response    *MockResponse
 	stopChannel misc.StopChannel
+	startTime   time.Time
 }
 
 func (this *MockQuery) Request() network.QueryRequest {
@@ -34,6 +35,10 @@ func (this *MockQuery) Response() network.QueryResponse {
 
 func (this *MockQuery) SetStopChannel(stopChannel misc.StopChannel) {
 	this.stopChannel = stopChannel
+}
+
+func (this *MockQuery) StartTime() time.Time {
+	return this.startTime
 }
 
 type MockResponse struct {
@@ -66,8 +71,9 @@ func Run(qc network.QueryChannel, q string) ([]interface{}, []query.Error, query
 	}
 
 	query := MockQuery{
-		request:  network.StringQueryRequest{QueryString: q},
-		response: mr,
+		request:   network.StringQueryRequest{QueryString: q},
+		response:  mr,
+		startTime: time.Now(),
 	}
 	qc <- &query
 	<-mr.done

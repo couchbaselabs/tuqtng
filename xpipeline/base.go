@@ -15,7 +15,9 @@ import (
 
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -25,6 +27,7 @@ type BaseOperator struct {
 	supportChannel        PipelineSupportChannel
 	upstreamStopChannel   misc.StopChannel
 	downstreamStopChannel misc.StopChannel
+	query                 network.Query
 }
 
 func NewBaseOperator() *BaseOperator {
@@ -129,4 +132,41 @@ func (this *BaseOperator) RecoverPanic() {
 		clog.Error(fmt.Errorf("Query Execution Panic: %v\n%s", r, debug.Stack()))
 		this.SendError(query.NewError(nil, "Panic In Exeuction Pipeline"))
 	}
+}
+
+func (this *BaseOperator) SetQuery(q network.Query) {
+	this.query = q
+}
+
+func (this *BaseOperator) Evaluate(e ast.Expression, item *dparval.Value) (*dparval.Value, error) {
+	// first ensure the query is avaliable
+	item.SetAttachment("query", this.query)
+	return e.Evaluate(item)
+}
+
+func (this *BaseOperator) projectedValueOfResultExpression(item *dparval.Value, resultExpr *ast.ResultExpression) (*dparval.Value, error) {
+
+	if resultExpr.Star {
+		if resultExpr.Expr != nil {
+			// evaluate this expression first
+			val, err := this.Evaluate(resultExpr.Expr, item)
+			if err != nil {
+				return nil, err
+			}
+			if val.Type() == dparval.OBJECT {
+				return val, nil
+			}
+		} else {
+			return item, nil
+		}
+	} else if resultExpr.Expr != nil {
+		// evaluate the expression
+		val, err := this.Evaluate(resultExpr.Expr, item)
+		if err != nil {
+			return nil, err
+		}
+		return val, err
+	}
+
+	return nil, nil
 }

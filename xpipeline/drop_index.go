@@ -17,6 +17,7 @@ import (
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -25,6 +26,7 @@ type DropIndex struct {
 	supportChannel        PipelineSupportChannel
 	index                 catalog.Index
 	downstreamStopChannel misc.StopChannel
+	query                 network.Query
 }
 
 func NewDropIndex(index catalog.Index) *DropIndex {
@@ -103,4 +105,8 @@ func (this *DropIndex) RecoverPanic() {
 		clog.Error(fmt.Errorf("Query Execution Panic: %v\n%s", r, debug.Stack()))
 		this.SendError(query.NewError(nil, "Panic In Exeuction Pipeline"))
 	}
+}
+
+func (this *DropIndex) SetQuery(q network.Query) {
+	this.query = q
 }

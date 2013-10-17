@@ -14,6 +14,7 @@ import (
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -46,7 +47,7 @@ func (this *DocumentJoin) Run(stopChannel misc.StopChannel) {
 }
 
 func (this *DocumentJoin) processItem(item *dparval.Value) bool {
-	val, err := this.Over.Evaluate(item)
+	val, err := this.Base.Evaluate(this.Over, item)
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
@@ -82,3 +83,7 @@ func (this *DocumentJoin) processItem(item *dparval.Value) bool {
 }
 
 func (this *DocumentJoin) afterItems() {}
+
+func (this *DocumentJoin) SetQuery(q network.Query) {
+	this.Base.SetQuery(q)
+}

@@ -10,10 +10,11 @@
 package xpipelinebuilder
 
 import (
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/xpipeline"
 )
 
 type ExecutablePipelineBuilder interface {
-	Build(*plan.Plan) (*xpipeline.ExecutablePipeline, error)
+	Build(*plan.Plan, network.Query) (*xpipeline.ExecutablePipeline, error)
 }

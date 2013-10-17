@@ -17,6 +17,7 @@ import (
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -26,6 +27,7 @@ type Explain struct {
 	supportChannel        PipelineSupportChannel
 	downstreamStopChannel misc.StopChannel
 	Plan                  plan.PlanElement
+	query                 network.Query
 }
 
 func NewExplain(plan plan.PlanElement) *Explain {
@@ -105,4 +107,8 @@ func (this *Explain) RecoverPanic() {
 		clog.Error(fmt.Errorf("Query Execution Panic: %v\n%s", r, debug.Stack()))
 		this.SendError(query.NewError(nil, "Panic In Exeuction Pipeline"))
 	}
+}
+
+func (this *Explain) SetQuery(q network.Query) {
+	this.query = q
 }

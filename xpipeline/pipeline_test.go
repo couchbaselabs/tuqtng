@@ -13,6 +13,7 @@ import (
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 )
 
 type StubSource struct {
@@ -52,3 +53,7 @@ func (this *StubSource) processItem(item *dparval.Value) bool {
 }
 
 func (this *StubSource) afterItems() {}
+
+func (this *StubSource) SetQuery(q network.Query) {
+
+}

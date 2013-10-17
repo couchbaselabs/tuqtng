@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/tuqtng/network"
 )
 
 var supportedDateFormats = []string{
@@ -191,5 +192,49 @@ func (this *FunctionCallDatePart) Evaluate(item *dparval.Value) (*dparval.Value,
 }
 
 func (this *FunctionCallDatePart) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+type FunctionCallNowStr struct {
+	FunctionCall
+}
+
+func NewFunctionCallNowStr(operands FunctionArgExpressionList) FunctionCallExpression {
+	return &FunctionCallNowStr{
+		FunctionCall{
+			Type:     "function",
+			Name:     "NOW_STR",
+			Operands: operands,
+			minArgs:  0,
+			maxArgs:  0,
+		},
+	}
+}
+
+func (this *FunctionCallNowStr) Copy() Expression {
+	return &FunctionCallNowStr{
+		FunctionCall{
+			Type:     "function",
+			Name:     "DATE_PART",
+			Operands: this.Operands.Copy(),
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallNowStr) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	// first retrieve the query object
+	q := item.GetAttachment("query")
+
+	query, ok := q.(network.Query)
+	if !ok {
+		return dparval.NewValue(nil), nil
+	}
+
+	return dparval.NewValue(query.StartTime().Format(supportedDateFormats[0])), nil
+}
+
+func (this *FunctionCallNowStr) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }

@@ -64,7 +64,7 @@ func (this *InterpretedExecutor) executeInternal(optimalPlan *plan.Plan, q netwo
 	clog.To(executor.CHANNEL, "simple executor started")
 
 	// first make the plan excutable
-	executablePipeline, berr := this.xpipelinebuilder.Build(optimalPlan)
+	executablePipeline, berr := this.xpipelinebuilder.Build(optimalPlan, q)
 	if berr != nil {
 		q.Response().SendError(query.NewError(berr, ""))
 		return

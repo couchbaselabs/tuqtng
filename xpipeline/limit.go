@@ -13,6 +13,7 @@ import (
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 )
 
 type Limit struct {
@@ -52,3 +53,7 @@ func (this *Limit) processItem(item *dparval.Value) bool {
 }
 
 func (this *Limit) afterItems() {}
+
+func (this *Limit) SetQuery(q network.Query) {
+	this.Base.SetQuery(q)
+}

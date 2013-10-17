@@ -12,6 +12,7 @@ package simple
 import (
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/tuqtng/catalog"
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/xpipeline"
 )
@@ -28,7 +29,7 @@ func NewSimpleExecutablePipelineBuilder(site catalog.Site, defaultPool string) *
 	}
 }
 
-func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.ExecutablePipeline, error) {
+func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan, q network.Query) (*xpipeline.ExecutablePipeline, error) {
 	rv := &xpipeline.ExecutablePipeline{}
 
 	var lastOperator xpipeline.Operator = nil
@@ -128,6 +129,9 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan) (*xpipeline.Exe
 			}
 			currentOperator = xpipeline.NewDropIndex(index)
 		}
+
+		// pass reference to query
+		currentOperator.SetQuery(q)
 
 		//link root of xpipeline
 		if rv.Root == nil {

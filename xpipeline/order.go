@@ -16,6 +16,7 @@ import (
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 )
 
 type Order struct {
@@ -76,6 +77,10 @@ func (this *Order) afterItems() {
 	}
 }
 
+func (this *Order) SetQuery(q network.Query) {
+	this.Base.SetQuery(q)
+}
+
 // sort.Interface interface
 
 func (this *Order) Len() int      { return len(this.buffer) }
@@ -85,7 +90,7 @@ func (this *Order) Less(i, j int) bool {
 	right := this.buffer[j]
 
 	for _, oe := range this.OrderBy {
-		leftVal, lerr := oe.Expr.Evaluate(left)
+		leftVal, lerr := this.Base.Evaluate(oe.Expr, left)
 		if lerr != nil {
 			switch lerr := lerr.(type) {
 			case *dparval.Undefined:
@@ -94,7 +99,7 @@ func (this *Order) Less(i, j int) bool {
 				return false
 			}
 		}
-		rightVal, rerr := oe.Expr.Evaluate(right)
+		rightVal, rerr := this.Base.Evaluate(oe.Expr, right)
 		if rerr != nil {
 			switch rerr := rerr.(type) {
 			case *dparval.Undefined:

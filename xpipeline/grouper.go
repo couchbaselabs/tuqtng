@@ -14,6 +14,7 @@ import (
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -57,7 +58,7 @@ func (this *Grouper) Run(stopChannel misc.StopChannel) {
 func (this *Grouper) processItem(item *dparval.Value) bool {
 	groupkey := dparval.NewValue(make([]interface{}, len(this.GroupBy)))
 	for i, groupElement := range this.GroupBy {
-		groupkeyval, err := groupElement.Evaluate(item)
+		groupkeyval, err := this.Base.Evaluate(groupElement, item)
 		if err == nil {
 			groupkey.SetIndex(i, groupkeyval)
 		} else {
@@ -122,4 +123,8 @@ func (this *Grouper) afterItems() {
 		this.setGroupDefaults(group)
 		this.Base.SendItem(group)
 	}
+}
+
+func (this *Grouper) SetQuery(q network.Query) {
+	this.Base.SetQuery(q)
 }

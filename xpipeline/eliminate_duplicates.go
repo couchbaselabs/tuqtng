@@ -14,6 +14,7 @@ import (
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 )
 
 const DEBUG_DUP_CHANNEL = "OP_DUP"
@@ -82,4 +83,8 @@ func (this *EliminateDuplicates) afterItems() {
 			this.Base.SendItem(item)
 		}
 	}
+}
+
+func (this *EliminateDuplicates) SetQuery(q network.Query) {
+	this.Base.SetQuery(q)
 }

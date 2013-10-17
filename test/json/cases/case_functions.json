@@ -648,6 +648,16 @@
             "ms": 1567
         }
     ]
+    },
+
+    {
+        "description": "test now_str",
+        "statements": "SELECT DATE_PART(\"millennium\", NOW_STR()) AS millennium WHERE NOW_STR() = NOW_STR() GROUP BY NOW_STR() HAVING NOW_STR() = NOW_STR()",
+        "results": [
+        {
+            "millennium": 3
+        }
+    ]
     }
 
 ]

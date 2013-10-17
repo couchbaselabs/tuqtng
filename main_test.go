@@ -11,6 +11,7 @@ package main
 
 import (
 	"testing"
+	"time"
 
 	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/network"
@@ -22,6 +23,7 @@ type BenchmarkMockQuery struct {
 	request     network.QueryRequest
 	response    *MockBenchmarkResponse
 	stopChannel misc.StopChannel
+	startTime   time.Time
 }
 
 func (this *BenchmarkMockQuery) Request() network.QueryRequest {
@@ -34,6 +36,10 @@ func (this *BenchmarkMockQuery) Response() network.QueryResponse {
 
 func (this *BenchmarkMockQuery) SetStopChannel(stopChannel misc.StopChannel) {
 	this.stopChannel = stopChannel
+}
+
+func (this *BenchmarkMockQuery) StartTime() time.Time {
+	return this.startTime
 }
 
 func BenchmarkMock(b *testing.B) {
@@ -70,8 +76,9 @@ func (this *MockBenchmarkResponse) NoMoreResults() {
 func runBenchmarkMock(qc network.QueryChannel, q string) (int, []query.Error, query.Error) {
 	mr := &MockBenchmarkResponse{warnings: []query.Error{}, done: make(chan bool)}
 	query := BenchmarkMockQuery{
-		request:  network.StringQueryRequest{QueryString: q},
-		response: mr,
+		request:   network.StringQueryRequest{QueryString: q},
+		response:  mr,
+		startTime: time.Now(),
 	}
 	qc <- &query
 	<-mr.done

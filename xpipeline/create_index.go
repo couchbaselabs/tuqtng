@@ -19,6 +19,7 @@ import (
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -31,6 +32,7 @@ type CreateIndex struct {
 	primary               bool
 	on                    ast.ExpressionList
 	downstreamStopChannel misc.StopChannel
+	query                 network.Query
 }
 
 func NewCreateIndex(bucket catalog.Bucket, name string, index_type string, primary bool, on ast.ExpressionList) *CreateIndex {
@@ -134,4 +136,8 @@ func (this *CreateIndex) RecoverPanic() {
 		clog.Error(fmt.Errorf("Query Execution Panic: %v\n%s", r, debug.Stack()))
 		this.SendError(query.NewError(nil, "Panic In Exeuction Pipeline"))
 	}
+}
+
+func (this *CreateIndex) SetQuery(q network.Query) {
+	this.query = q
 }

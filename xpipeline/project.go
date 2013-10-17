@@ -14,6 +14,7 @@ import (
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
@@ -51,7 +52,7 @@ func (this *Project) processItem(item *dparval.Value) bool {
 	resultMap := map[string]interface{}{}
 	for _, resultItem := range this.Result {
 
-		val, err := projectedValueOfResultExpression(item, resultItem)
+		val, err := this.Base.projectedValueOfResultExpression(item, resultItem)
 		if err != nil {
 			switch err := err.(type) {
 			case *dparval.Undefined:
@@ -96,3 +97,7 @@ func (this *Project) processItem(item *dparval.Value) bool {
 }
 
 func (this *Project) afterItems() {}
+
+func (this *Project) SetQuery(q network.Query) {
+	this.Base.SetQuery(q)
+}

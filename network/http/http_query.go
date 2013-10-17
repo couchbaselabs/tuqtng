@@ -45,6 +45,10 @@ func NewHttpQuery(w http.ResponseWriter, r *http.Request) *HttpQuery {
 	return &q
 }
 
+func (this *HttpQuery) StartTime() time.Time {
+	return this.startTime
+}
+
 func (this *HttpQuery) Duration() time.Duration {
 	return time.Since(this.startTime)
 }

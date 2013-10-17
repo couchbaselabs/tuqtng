@@ -13,6 +13,7 @@ import (
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 )
 
 type Offset struct {
@@ -52,3 +53,7 @@ func (this *Offset) processItem(item *dparval.Value) bool {
 }
 
 func (this *Offset) afterItems() {}
+
+func (this *Offset) SetQuery(q network.Query) {
+	this.Base.SetQuery(q)
+}

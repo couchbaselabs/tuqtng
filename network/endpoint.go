@@ -10,6 +10,8 @@
 package network
 
 import (
+	"time"
+
 	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -31,6 +33,7 @@ type Query interface {
 	Request() QueryRequest
 	Response() QueryResponse
 	SetStopChannel(misc.StopChannel)
+	StartTime() time.Time
 }
 
 type QueryChannel chan Query

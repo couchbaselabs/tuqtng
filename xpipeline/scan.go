@@ -18,6 +18,7 @@ import (
 	"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/misc"
+	"github.com/couchbaselabs/tuqtng/network"
 	"github.com/couchbaselabs/tuqtng/plan"
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -30,6 +31,7 @@ type Scan struct {
 	downstreamStopChannel misc.StopChannel
 	ranges                plan.ScanRanges
 	as                    string
+	query                 network.Query
 }
 
 func NewScan(bucket catalog.Bucket, index catalog.ScanIndex, ranges plan.ScanRanges, as string) *Scan {
@@ -199,4 +201,8 @@ func (this *Scan) buildValue(key ast.Expression, val *dparval.Value) *dparval.Va
 		clog.Error(fmt.Errorf("Unsupported key type %T encountered uncovering query", key))
 	}
 	return doc
+}
+
+func (this *Scan) SetQuery(q network.Query) {
+	this.query = q
 }
