@@ -168,12 +168,14 @@ func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue
 			if ok {
 				entry := catalog.IndexEntry{PrimaryKey: viewRow.ID}
 
-				// try to add the view row key as the entry key
-				lookupValue, err := convertCouchbaseViewKeyToLookupValue(viewRow.Key)
-				if err == nil {
-					entry.EntryKey = lookupValue
-				} else {
-					clog.To(catalog.CHANNEL, "unable to convert index key to lookup value:%v", err)
+				// try to add the view row key as the entry key (unless this is _all_docs)
+				if vi.DDocName() != "" {
+					lookupValue, err := convertCouchbaseViewKeyToLookupValue(viewRow.Key)
+					if err == nil {
+						entry.EntryKey = lookupValue
+					} else {
+						clog.To(catalog.CHANNEL, "unable to convert index key to lookup value:%v", err)
+					}
 				}
 
 				ch <- &entry
