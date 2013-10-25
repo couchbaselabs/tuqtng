@@ -32,6 +32,7 @@ type Scan struct {
 	ranges                plan.ScanRanges
 	as                    string
 	query                 network.Query
+	rowsScanned           int
 }
 
 func NewScan(bucket catalog.Bucket, index catalog.ScanIndex, ranges plan.ScanRanges, as string) *Scan {
@@ -70,7 +71,7 @@ func (this *Scan) Run(stopChannel misc.StopChannel) {
 		}
 	}
 
-	clog.To(CHANNEL, "scan operator finished")
+	clog.To(CHANNEL, "scan operator finished, scanned %d", this.rowsScanned)
 }
 
 func (this *Scan) scanRange(scanRange *plan.ScanRange) bool {
@@ -101,6 +102,7 @@ func (this *Scan) scanRange(scanRange *plan.ScanRange) bool {
 		select {
 		case item, ok = <-indexItemChannel:
 			if ok {
+				this.rowsScanned += 1
 				// rematerialize an object from the data returned by this index entry
 				doc := dparval.NewValue(map[string]interface{}{})
 

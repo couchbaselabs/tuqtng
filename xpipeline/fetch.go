@@ -22,12 +22,13 @@ import (
 const FETCH_BATCH_SIZE = 1000
 
 type Fetch struct {
-	Base       *BaseOperator
-	bucket     catalog.Bucket
-	batch      dparval.ValueCollection
-	projection ast.Expression
-	as         string
-	ids        []string
+	Base        *BaseOperator
+	bucket      catalog.Bucket
+	batch       dparval.ValueCollection
+	projection  ast.Expression
+	as          string
+	ids         []string
+	rowsFetched int
 }
 
 func NewFetch(bucket catalog.Bucket, projection ast.Expression, as string) *Fetch {
@@ -67,7 +68,7 @@ func (this *Fetch) Run(stopChannel misc.StopChannel) {
 		}
 		this.afterItems()
 	}
-	clog.To(CHANNEL, "fetch operator finished")
+	clog.To(CHANNEL, "fetch operator finished, fetched %d", this.rowsFetched)
 }
 
 func (this *Fetch) processItem(item *dparval.Value) bool {
@@ -144,6 +145,7 @@ func (this *Fetch) flushBatch() bool {
 					this.Base.SendItem(item)
 				}
 			}
+			this.rowsFetched += len(bulkResponse)
 		}
 	}
 	return true

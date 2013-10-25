@@ -183,10 +183,13 @@ func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue
 			}
 		case err, ok = <-viewErrChannel:
 			if err != nil {
+				clog.Error(err)
 				// check to possibly detect a bucket that was already deleted
 				if !sentRows {
+					clog.Printf("Checking bucket URI: %v", vi.bucket.cbbucket.URI)
 					_, err := http.Get(vi.bucket.cbbucket.URI)
 					if err != nil {
+						clog.Error(err)
 						// remove this specific bucket from the pool cache
 						delete(vi.bucket.pool.bucketCache, vi.bucket.Name())
 						// close this bucket
