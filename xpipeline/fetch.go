@@ -145,7 +145,7 @@ func (this *Fetch) flushBatch() bool {
 					this.Base.SendItem(item)
 				}
 			}
-			this.rowsFetched += len(bulkResponse)
+			this.rowsFetched += 1
 		}
 	}
 	return true
