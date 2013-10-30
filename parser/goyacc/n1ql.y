@@ -352,9 +352,16 @@ expression {
 }
 |
 expression AS IDENTIFIER {
-	logDebugGrammar("SORT EXPR ASC")
+	logDebugGrammar("RESULT EXPR AS ID")
 	expr_part := parsingStack.Pop().(ast.Expression)
 	result_expr := ast.NewResultExpressionWithAlias(expr_part, $3.s)
+	parsingStack.Push(result_expr)
+}
+|
+expression IDENTIFIER {
+	logDebugGrammar("RESULT EXPR ID")
+	expr_part := parsingStack.Pop().(ast.Expression)
+	result_expr := ast.NewResultExpressionWithAlias(expr_part, $2.s)
 	parsingStack.Push(result_expr)
 }
 ;
@@ -472,10 +479,18 @@ path {
 |
 path AS IDENTIFIER {
     // fixme support over as
-	logDebugGrammar("FROM DATASOURCE AS")
+	logDebugGrammar("FROM DATASOURCE AS ID")
 	proj := parsingStack.Pop().(ast.Expression)
 	parsingStack.Push(&ast.From{Projection: proj, As: $3.s})
 }
+|
+path IDENTIFIER {
+    // fixme support over as
+	logDebugGrammar("FROM DATASOURCE ID")
+	proj := parsingStack.Pop().(ast.Expression)
+	parsingStack.Push(&ast.From{Projection: proj, As: $2.s})
+}
+;
 
 select_where:
 /* empty */ {

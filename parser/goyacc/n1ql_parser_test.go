@@ -83,6 +83,7 @@ var validQueries = []string{
 	`SELECT bob FROM cat WHERE foo = bar and 3 > 4`,
 	`SELECT bob, bill FROM cat WHERE foo = bar and 3 > 4`,
 	`SELECT bob AS bill, bill AS bob FROM cat WHERE foo = bar and 3 > 4`,
+	`SELECT bob bill, bill bob FROM cat WHERE foo = bar and 3 > 4`,
 	`SELECT *, bob AS bill, bill AS bob FROM cat WHERE foo = bar and 3 > 4`,
 	`SELECT *, names.*, bob AS bill, bill AS bob FROM cat WHERE foo = bar and 3 > 4`,
 	`SELECT *, names.*, bob AS bill, bill AS bob FROM cat WHERE foo = bar or 3 > 4`,
@@ -110,6 +111,7 @@ var validQueries = []string{
 
 	// from clause
 	`SELECT * FROM abucket AS buck`,
+	`SELECT * FROM abucket buck`,
 	`SELECT * FROM abucket AS buck OVER address IN buck.addresses`,
 	`SELECT * FROM abucket AS buck OVER address IN buck.addresses OVER line IN address.lines`,
 	`SELECT * FROM abucket AS buck OVER buck.addresses`,
@@ -184,9 +186,9 @@ var validQueries = []string{
 }
 
 var invalidQueries = []string{
-	`bob`,         // must have select
-	`SELECT 01`,   // numbers cannot start with leading zeros
-	`SELECT 3dog`, // unescaped identifiers cannot start with number
+	`bob`,                                                                          // must have select
+	`SELECT 01`,                                                                    // numbers cannot start with leading zeros
+	`SELECT 3dog AS y`,                                                             // unescaped identifiers cannot start with number
 	`SELECT bob FROM cat WHERE foo = bar ORDER BY this OFFSET 20`,                  // offset requires limit
 	`SELECT * AS all, bob AS bill, bill AS bob FROM cat WHERE foo = bar and 3 > 4`, // cannot alias *
 	`SELECT * WHERE true AND`,
@@ -313,7 +315,29 @@ func TestParserASTOutput(t *testing.T) {
 				Limit:    -1,
 			},
 		},
+		{"SELECT a FROM test t2",
+			&ast.SelectStatement{
+				Select: ast.ResultExpressionList{
+					ast.NewResultExpression(ast.NewProperty("a")),
+				},
+				Distinct: false,
+				From:     &ast.From{Projection: ast.NewProperty("test"), As: "t2"},
+				Where:    nil,
+				Limit:    -1,
+			},
+		},
 		{"SELECT 1+1*30 as steve",
+			&ast.SelectStatement{
+				Select: ast.ResultExpressionList{
+					ast.NewResultExpressionWithAlias(ast.NewPlusOperator(ast.NewLiteralNumber(1.0), ast.NewMultiplyOperator(ast.NewLiteralNumber(1.0), ast.NewLiteralNumber(30.0))), "steve"),
+				},
+				Distinct: false,
+				From:     nil,
+				Where:    nil,
+				Limit:    -1,
+			},
+		},
+		{"SELECT 1+1*30 steve",
 			&ast.SelectStatement{
 				Select: ast.ResultExpressionList{
 					ast.NewResultExpressionWithAlias(ast.NewPlusOperator(ast.NewLiteralNumber(1.0), ast.NewMultiplyOperator(ast.NewLiteralNumber(1.0), ast.NewLiteralNumber(30.0))), "steve"),
