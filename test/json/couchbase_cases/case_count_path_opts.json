@@ -1,6 +1,7 @@
 [
 
 	{
+        "disabled": true,
         "description": "verify projection of just COUNT(expr) on the same field with no where clause uses fastcount",
         "preStatements": "CREATE INDEX ageidx ON contacts(age)",
         "statements": "EXPLAIN SELECT COUNT(age) FROM contacts",
