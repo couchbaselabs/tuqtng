@@ -332,6 +332,7 @@
     ]
     },
     {
+        "disabled": true,
         "description": "query with only COUNT(*) should perform fast count",
         "statements": "EXPLAIN SELECT COUNT(*) FROM game",
         "resultAssertions": [

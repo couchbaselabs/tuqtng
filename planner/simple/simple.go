@@ -85,11 +85,11 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 		switch index := index.(type) {
 		case catalog.PrimaryIndex:
 			clog.To(planner.CHANNEL, "See primary index %v", index.Name())
-			if from.Over == nil && stmt.Where == nil && stmt.GroupBy != nil && len(stmt.GroupBy) == 0 && CanFastCountBucket(stmt.Select) {
-				lastStep = plan.NewFastCount(pool.Name(), bucket.Name(), "", nil, nil)
-			} else {
-				lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name(), nil)
-			}
+			// if from.Over == nil && stmt.Where == nil && stmt.GroupBy != nil && len(stmt.GroupBy) == 0 && CanFastCountBucket(stmt.Select) {
+			// 	lastStep = plan.NewFastCount(pool.Name(), bucket.Name(), "", nil, nil)
+			// } else {
+			lastStep = plan.NewScan(pool.Name(), bucket.Name(), index.Name(), nil)
+			// }
 		case catalog.RangeIndex:
 			// see if this index can be used
 			clog.To(planner.CHANNEL, "See index %v", index.Name())
@@ -127,15 +127,15 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 
 				// try to do a fast count if its possible
 				doingFastCount := false
-				countIndex, isCountIndex := index.(catalog.CountIndex)
-				if isCountIndex {
-					fastCountIndexOnExpr := CanFastCountIndex(countIndex, stmt.From.As, stmt.Select)
-					if fastCountIndexOnExpr != nil && from.Over == nil && stmt.Where == nil && stmt.GroupBy != nil && len(stmt.GroupBy) == 0 {
-						lastStep = plan.NewFastCount(pool.Name(), bucket.Name(), countIndex.Name(), fastCountIndexOnExpr, nil)
-						doingFastCount = true
-					}
+				// countIndex, isCountIndex := index.(catalog.CountIndex)
+				// if isCountIndex {
+				// 	fastCountIndexOnExpr := CanFastCountIndex(countIndex, stmt.From.As, stmt.Select)
+				// 	if fastCountIndexOnExpr != nil && from.Over == nil && stmt.Where == nil && stmt.GroupBy != nil && len(stmt.GroupBy) == 0 {
+				// 		lastStep = plan.NewFastCount(pool.Name(), bucket.Name(), countIndex.Name(), fastCountIndexOnExpr, nil)
+				// 		doingFastCount = true
+				// 	}
 
-				}
+				// }
 
 				// this works for aggregates on the whole bucket
 				if !doingFastCount && stmt.GroupBy != nil && len(stmt.GroupBy) == 0 {
