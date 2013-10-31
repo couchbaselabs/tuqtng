@@ -86,6 +86,13 @@ func testCaseFile(t *testing.T, fname string, qc network.QueryChannel) {
 		return
 	}
 	for i, c := range cases {
+		d, ok := c["disabled"]
+		if ok {
+			disabled := d.(bool)
+			if disabled == true {
+				continue
+			}
+		}
 		v, ok := c["preStatements"]
 		if ok {
 			preStatements := v.(string)
