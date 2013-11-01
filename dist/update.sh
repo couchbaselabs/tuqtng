@@ -70,7 +70,7 @@ builddistpackages() {
     mkdir -p $DIST/stage/data/default/tutorial
     unzip tutorial/data/sampledb.zip -d $DIST/stage/data/default/
     cd $DIST/stage
-    zip $DIST/couchbase-query_dev_preview1_x86_64_mac.zip -r .
+    zip $DIST/couchbase-query_dev_preview2_x86_64_mac.zip -r .
     cd $top
     rm -rf $DIST/stage
 
@@ -87,7 +87,7 @@ builddistpackages() {
     mkdir -p $DIST/stage/data/default/tutorial
     unzip tutorial/data/sampledb.zip -d $DIST/stage/data/default/
     cd $DIST/stage
-    tar zcvf $DIST/couchbase-query_dev_preview1_x86_linux.tar.gz .
+    tar zcvf $DIST/couchbase-query_dev_preview2_x86_linux.tar.gz .
     cd $top
     rm -rf $DIST/stage
 
@@ -104,7 +104,7 @@ builddistpackages() {
     mkdir -p $DIST/stage/data/default/tutorial
     unzip tutorial/data/sampledb.zip -d $DIST/stage/data/default/
     cd $DIST/stage
-    tar zcvf $DIST/couchbase-query_dev_preview1_x86_64_linux.tar.gz .
+    tar zcvf $DIST/couchbase-query_dev_preview2_x86_64_linux.tar.gz .
     cd $top
     rm -rf $DIST/stage
 
@@ -121,7 +121,7 @@ builddistpackages() {
     mkdir -p $DIST/stage/data/default/tutorial
     unzip tutorial/data/sampledb.zip -d $DIST/stage/data/default/
     cd $DIST/stage
-    zip $DIST/couchbase-query_dev_preview1_x86_win.zip -r .
+    zip $DIST/couchbase-query_dev_preview2_x86_win.zip -r .
     cd $top
     rm -rf $DIST/stage
 
@@ -138,7 +138,7 @@ builddistpackages() {
     mkdir -p $DIST/stage/data/default/tutorial
     unzip tutorial/data/sampledb.zip -d $DIST/stage/data/default/
     cd $DIST/stage
-    zip $DIST/couchbase-query_dev_preview1_x86_64_win.zip -r .
+    zip $DIST/couchbase-query_dev_preview2_x86_64_win.zip -r .
     cd $top
     rm -rf $DIST/stage
 
