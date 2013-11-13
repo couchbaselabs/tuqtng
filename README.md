@@ -7,7 +7,7 @@
 ### Users
 
     $ go get github.com/couchbaselabs/tuqtng
-    $ tuqtnq -couchbase http://localhost:8091
+    $ tuqtng -couchbase http://localhost:8091
 
 ### Developers
 
