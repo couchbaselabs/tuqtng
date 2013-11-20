@@ -226,7 +226,7 @@ Because there is no consistency between index scans and document fetches, we cou
 
 #### MAX(expr) not optimized
 
-Because of the collation order, we can ensure a mechanism to scan the first non-eliminated row for a MIN() query (we want the first non-null, non-missing value).  We do this by starting a scan a null, non-inclusive.  Unfortunately there is no such corresponding high-value from which we can do the same for MAX().  Its possible a new API method could emulate this behavior.
+Because of the collation order, we can ensure a mechanism to scan the first non-eliminated row for a MIN() query (we want the first non-null, non-missing value).  We do this by starting a scan at null, non-inclusive.  Unfortunately there is no such corresponding high-value from which we can do the same for MAX().  Its possible a new API method could emulate this behavior.
 
 #### Fast Count optimization disabled
 
