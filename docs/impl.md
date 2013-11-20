@@ -1,7 +1,7 @@
 # tuqtng implementation notes
 
 * Latest: [implementation notes](https://github.com/couchbaselabs/tuqtng/blob/master/docs/impl.md)
-* Modified: 2013-11-18
+* Modified: 2013-11-20
 
 ## Summary
 
