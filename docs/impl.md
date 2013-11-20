@@ -231,3 +231,56 @@ Because of the collation order, we can ensure a mechanism to scan the first non-
 #### Fast Count optimization disabled
 
 We implemented an optimization to perform fast COUNT() queries.  Unforunately we also later found out that the "total_rows" field returned by the view engine can be wrong during a rebalance operation.  There seemed to be no easy way to know for sure that a rebalance was occurring at the same time we read the "total_rows" field, so we disable this optimization.  (the code is there but commented out)
+
+### Developer Commands
+
+#### Debugging
+
+I almost always start the server with the *-dev* flag.  This enables reasonable default logging, and also enables some developer functions.  See ast/function_dev.go for details.  Basic functions are:
+
+* ENABLE_LOG() - 1 argument, name of log level to enable
+* DISABLE_LOG() - 1 argument, name of log level to disable
+* ERROR() - optional argument, if evaluates to true trigger error, if no arguemnt, always trigger error
+* PANIC() - optional argument, if evaluates to true trigger panic, if no argument, always trigger panic
+
+#### Running tests against Couchbase (or cbgb) not just in memory
+
+Normally when we run
+
+    go test ./...
+
+The tests are only run against the file system catalog implementation.  However, its also possible to run the tests against Couchbase (usually cbgb), this will also run some additional tests which test indexes (these tests cannot be run against the filesystem because there is no indexing there)
+
+1.  Start cbgb (I recommend cbgb because we need to load all the test buckets, and Couchbase doesn't like having that many buckets right now)
+2.  Run a helper script to load all the test buckets into couchbase
+
+        catalog/couchbase/load_test_data.sh
+
+
+3.  Now run the tests with the additional "couchbase" flag
+
+        go test ./... -tags couchbase
+
+### Continuous Integration
+
+We use drone.io and travis to perform continuous integration.
+
+The Travis CI setup was older and probably should be turned off.  You can find it here:
+
+[https://travis-ci.org/couchbaselabs/tuqtng](https://travis-ci.org/couchbaselabs/tuqtng)
+
+It builds and runs, the tests.
+
+The Drone.io set up is newer and does more testing (including indexes against cbgb).
+
+[https://drone.io/github.com/couchbaselabs/tuqtng](https://drone.io/github.com/couchbaselabs/tuqtng)
+
+This downloads cbgb, loads the test data, builds tuqtng, and runs the tests against the filesystem and couchbase catalogs.
+
+### Automated Builds / Download Site
+
+We operate a deveoper build/download site at:
+
+[http://cbfs-ext.hq.couchbase.com/tuqtng/](http://cbfs-ext.hq.couchbase.com/tuqtng/)
+
+Dustin runs a machine which gets the latest code from github and runs our script dist/update.sh.  This script performs the cross-compilation, and uploads all the files to cbfs.
