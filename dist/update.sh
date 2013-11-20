@@ -147,9 +147,9 @@ builddistpackages() {
 }
 
 compress() {
-    rm -f $DIST/tuqtng.*.gz $DIST/tuq_client.*.gz $DIST/tuq_tutorial.*.gz || true
+    rm -f $DIST/cbq-engine.*.gz $DIST/cbq.*.gz || true
 
-    for i in $DIST/tuqtng.* $DIST/tuq_client.*
+    for i in $DIST/cbq-engine.* $DIST/cbq.*
     do
         gzip -9v $i &
     done
