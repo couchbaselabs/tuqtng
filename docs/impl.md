@@ -29,7 +29,7 @@ tuqtng uses the [dparval](github.com/couchbaselabs/dparval) package to efficient
 
 This library was built specifically for tuqtng.  Its major design goal is to allow working with JSON-like data, without parsing unnecessary portions of a document.  dparval.Value objects can be instantiated either from a raw byte array, or using existing in-memory object structures (JSON compatible).
 
-The library also allows for attaching other related data to the object, while not contaminating the object itself.  This allows the query engine to attach its own internal data to objects during proecssing.
+The library also allows for attaching other related data to the object, while not contaminating the object itself.  This allows the query engine to attach its own internal data to objects during processing.
 
 Throughout the codebase when components are passing user data around, they pass dparval.Value objects.
 
@@ -43,14 +43,14 @@ The main package does very little work.  It parses the command-line parameters, 
 
 The catalog package is an abstraction around the capabilities of the underlying database.  All access to index and data goes through the catalog API.
 
-There are 4 implemenations of the catalog API:
+There are 4 implementations of the catalog API:
 
 * couchbase - uses go-couchbase client library to talk to a couchbase server cluster
 * file - uses json files and a specific directory layout
 * mock - uses in memory representation
 * system - a wrapper catalog which is able to introspect the catalog it wraps, and expose the system catalog as additional buckets in a pool named "system"
 
-The current code will instantiate the type of system catalog that the user requested with the commmand-line arguments.  Next it will instantiate an instance of the system catalog to wrap the one the user requested.  Subseqeuntly, all code will use the system catalog implementation (calls to non-system buckets are passed through to the underlying catalog implementation)
+The current code will instantiate the type of system catalog that the user requested with the commmand-line arguments.  Next it will instantiate an instance of the system catalog to wrap the one the user requested.  Subsequently, all code will use the system catalog implementation (calls to non-system buckets are passed through to the underlying catalog implementation)
 
 ### Network
 
