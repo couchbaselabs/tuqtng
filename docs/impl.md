@@ -50,7 +50,7 @@ There are 4 implemenations of the catalog API:
 * mock - uses in memory representation
 * system - a wrapper catalog which is able to introspect the catalog it wraps, and expose the system catalog as additional buckets in a pool named "system"
 
-The current code will instantiate the type of system catalog that the user requested with the commmand-line arguments.  Next it will instantiate an instance of the system catalog to wrap the one the user requested.  Subseqeuntly, all code will use the system catalog implemenation (calls to non-system buckets are passed through to the underlying catalog implemenation)
+The current code will instantiate the type of system catalog that the user requested with the commmand-line arguments.  Next it will instantiate an instance of the system catalog to wrap the one the user requested.  Subseqeuntly, all code will use the system catalog implementation (calls to non-system buckets are passed through to the underlying catalog implementation)
 
 ### Network
 
@@ -58,7 +58,7 @@ The network package is an abstraction around the interaction between the tuqtng 
 
 A network endpoint is given a QueryChannel, to which is should send all incoming queries.  Queries are represented with the Query object, which contains a QueryRequest, QueryReponse, and a StopChannel.
 
-There is only one network endpoint implemenation, HTTP.  This endpoint is responsible for turning incoming HTTP requests into QueryRequest objects.  Currently, this is just a string representation StringQueryRequest.  It is also responsible for creating a QueryResponse object.  This is done by HttpResponse which is responsible for serializing results, errors and warnings and returning them to the client.
+There is only one network endpoint implementation, HTTP.  This endpoint is responsible for turning incoming HTTP requests into QueryRequest objects.  Currently, this is just a string representation StringQueryRequest.  It is also responsible for creating a QueryResponse object.  This is done by HttpResponse which is responsible for serializing results, errors and warnings and returning them to the client.
 
 The StopChannel is a channel, which the network endpoint will close, if for any reason it thinks the client is gone and no longer interested in receiving results.  This allows the server to abort execution and stop any expensive processing.
 
@@ -86,7 +86,7 @@ The parser package is an abstraction around the component which turns a query st
 
 There is one implementation of the parser named goyacc, which uses the [nex](http://www-cs-students.stanford.edu/~blynn//nex/) lexer and the [go yacc](http://golang.org/cmd/yacc/) parser generator.
 
-There is a separate build.sh file in this directory which will regenerate the go source files corresponding to the n1ql.nex and n1ql.y grammar files.  The generaged go files are checked into the github repo so that developers not interested in changing the grammar can still install/build the server using the built-in go tooling.
+There is a separate build.sh file in this directory which will regenerate the go source files corresponding to the n1ql.nex and n1ql.y grammar files.  The generated go files are checked into the github repo so that developers not interested in changing the grammar can still install/build the server using the built-in go tooling.
 
 nex uses regular expressions to create tokens from the input.
 
@@ -129,17 +129,17 @@ After all plan heads have been built into plan.Plans, the PlanChannel is closed.
 
 The optimizer package is an abstraction around the component which considers multiple plans and chooses the best one.
 
-Currently there is one implemenation named SimpleOptimizer.  The SimpleOptimizer does not currently do any quantitative comparison of the plans.  Instead, it simply returns the last plan emitted by the planner.
+Currently there is one implementation named SimpleOptimizer.  The SimpleOptimizer does not currently do any quantitative comparison of the plans.  Instead, it simply returns the last plan emitted by the planner.
 
 ### Executor
 
 The executor package is an abstraction around the component which takes a single plan.Plan and executes it to produce results, warnings and errors.
 
-There is one implemenation of Executor named InterpretedExecutor.  This implementation uses another package *xpipelinebuilder* to do instantiate xpipeline.Operator objects from their corresponding plan.PlanElement objects.
+There is one implementation of Executor named InterpretedExecutor.  This implementation uses another package *xpipelinebuilder* to do instantiate xpipeline.Operator objects from their corresponding plan.PlanElement objects.
 
 The Operator elements are connected to one another as described in the plan.  Its helpful to think of this as a pipeline.  Typically a SCAN operator at the head of the pipeline generates documents, which flow through the pipeline, and result objects come out the end of the pipeline.
 
-Each plan.Operator is connected to its upstream operator.  When an operator is asked to run, it asks its source operator for the channel to read objects from, and then invokes source.Run() on a separte go routine.  This in turn starts the source operator.  After starting its source operator, it attempts to read objects from the sources channel.
+Each plan.Operator is connected to its upstream operator.  When an operator is asked to run, it asks its source operator for the channel to read objects from, and then invokes source.Run() on a separate go routine.  This in turn starts the source operator.  After starting its source operator, it attempts to read objects from the sources channel.
 
 Each operator also has a StopChannel that can be closed to signal upstream operators that they should stop doing any work.  All operators must monitor their downstreams StopChannel and be prepared to stop as soon as possible in the event it is closed.
 
@@ -171,12 +171,12 @@ The following steps are performed to verify that a select statement is valid (wi
 
 1.  A list of explicit aliases introduced in the projection is computed.  (SELECT abc AS xyz ...)  This list is checked for duplicates.  Duplicate aliases are an error.
 2.  All expressions in the projection that were NOT explicitly named are assigned a name.  This could either be a meaningful name (the document property age gets the alias "age") or they could be meaningless (the expression 1+1 gets the alias "$1")  If an assigned alias conflicts with an explicitly specified alias, this is an error.  If two assigned aliases are duplicates, this is also an error.
-3. The FROM clause is then fixed up.  Sereral things happen at this stage:
+3. The FROM clause is then fixed up.  Several things happen at this stage:
     1.  The bucket is identified.  (sometimes its part of a complex expression, like beer-sample.addresses)
     2.  If the bucket was part of a complex expression, the projection sub-expression is fixed up (beer-sample.addresses[0] separates out the bucket portion and leaves the remaining projection as addresses[0])
     3.  Aliases for the bucket is generated (if it wasn't explicitly specified).  Most but not all from expressions can be automatically assigned a name.  Alias assignment is invoked recursively on any nested FROM expression (due to an OVER clause)  **NOTE**: we use the same FROM structure to represent chained OVERs
-4.  Now that all buckets and OVERs have proper aliases, all path expressions are rewritten into *formal notation*.  Formal notation means all paths begin with a bucket alias or OVER alias.  For example, *SELECT name FROM beer-sample* becomes *SELECT beer-sample.name FROM beer-sample*.  For queries queries with more than one named source (like bucket alias and an OVER alias) we REQUIRE that they fully-qualify all references.  This means that *SELECT name FROM bucket OVER path* would be an error, because *name* was not properly qualified.  Errors like this are detected at this phase because we have a list of all the valid aliases.  In the single alias case we prefix the alias if it is missing, in the multiple alias case there is no default and an error is generated.
-5.  At this point, all expressions need to be validated.  This step invovles invoking an expression validator on all parts of the statement where an Expression can occur.  Expression validators are built using the Visitor pattern.  Validation currently checks the following things:
+4.  Now that all buckets and OVERs have proper aliases, all path expressions are rewritten into *formal notation*.  Formal notation means all paths begin with a bucket alias or OVER alias.  For example, *SELECT name FROM beer-sample* becomes *SELECT beer-sample.name FROM beer-sample*.  For queries with more than one named source (like bucket alias and an OVER alias) we REQUIRE that they fully-qualify all references.  This means that *SELECT name FROM bucket OVER path* would be an error, because *name* was not properly qualified.  Errors like this are detected at this phase because we have a list of all the valid aliases.  In the single alias case we prefix the alias if it is missing, in the multiple alias case there is no default and an error is generated.
+5.  At this point, all expressions need to be validated.  This step involves invoking an expression validator on all parts of the statement where an Expression can occur.  Expression validators are built using the Visitor pattern.  Validation currently checks the following things:
     1.  Some clauses cannot contain aggregate functions (WHERE, GROUP BY clauses)
     2.  Only the COUNT() function allows * as an argument
     3.  Only COUNT() and ARRAY_AGG() functions allow the DISTINCT qualifier
@@ -190,7 +190,7 @@ The following steps are performed to verify that a select statement is valid (wi
 
 ### Query Optimization
 
-Currently all query optimizations are chosen based on the existance and suitability of a single index.  Essentially the list of access paths is walked sequentially and compared with various aspects of the query.  Depending on the type of optimization in question, if everything matches, a query head is produced.  The following optimizations are supported.
+Currently all query optimizations are chosen based on the existence and suitability of a single index.  Essentially the list of access paths is walked sequentially and compared with various aspects of the query.  Depending on the type of optimization in question, if everything matches, a query head is produced.  The following optimizations are supported.
 
 #### Portion of the WHERE clause can be converted into one or more range scans on an index
 
@@ -202,12 +202,12 @@ The following steps are performed given an index.
 4.  The first expression that the index was built (could be multi-part key, other parts currently ignored) on is converted to formal notation (in the context of this query).  So if the index was built on the field "abv", and in this query the bucket was given alias "b".  Then for our purposes, the index expression in formal notation is "b.abv".
 5.  WHERE clause is converted to Negation Normal Form.
 6.  WHERE clause is converted to Conjunctive Normal Form.  WHERE clause should now either be a simple predicate or an AND expression.
-7.  If the clause is a simple expression, we check to see if it is sargable.  If the clause is an AND expression we check each consituent piece, to see if any of them are sargable.
+7.  If the clause is a simple expression, we check to see if it is searchable.  If the clause is an AND expression we check each constituent piece, to see if any of them are searchable.
 8.  If a simple expression was sargeable, then we get a single range to scan returned.  If it was an AND expression and multiple constituents were sargable, and attempt is made to combine them and return the smallest sets of ranges.  (abv > 5 AND abv < 7, should yield a single range between 5 and 7)
 
 #### Projection of MIN(expr) can scan a single row
 
-1.  If we've already deteremined that we can do a range scan AND we determine that the projection only contains MIN() on an expression that only depends on the same expression as the index, then we can scan one row.  (ie, MIN(abv) WHERE abv > 5, can scan single row)
+1.  If we've already determined that we can do a range scan AND we determine that the projection only contains MIN() on an expression that only depends on the same expression as the index, then we can scan one row.  (ie, MIN(abv) WHERE abv > 5, can scan single row)
 2.  If we're not doing a range scan on an index, but there is NO group by clause (aggregating across whole bucket) AND the projection is ONLY MIN(*), then we can scan one row from all_docs.
 
 #### Index covers projection
@@ -230,7 +230,7 @@ Because of the collation order, we can ensure a mechanism to scan the first non-
 
 #### Fast Count optimization disabled
 
-We implemented an optimization to perform fast COUNT() queries.  Unforunately we also later found out that the "total_rows" field returned by the view engine can be wrong during a rebalance operation.  There seemed to be no easy way to know for sure that a rebalance was occurring at the same time we read the "total_rows" field, so we disable this optimization.  (the code is there but commented out)
+We implemented an optimization to perform fast COUNT() queries.  Unfortunately we also later found out that the "total_rows" field returned by the view engine can be wrong during a rebalance operation.  There seemed to be no easy way to know for sure that a rebalance was occurring at the same time we read the "total_rows" field, so we disable this optimization.  (the code is there but commented out)
 
 ### Developer Commands
 
@@ -240,7 +240,7 @@ I almost always start the server with the *-dev* flag.  This enables reasonable 
 
 * ENABLE_LOG() - 1 argument, name of log level to enable
 * DISABLE_LOG() - 1 argument, name of log level to disable
-* ERROR() - optional argument, if evaluates to true trigger error, if no arguemnt, always trigger error
+* ERROR() - optional argument, if evaluates to true trigger error, if no argument, always trigger error
 * PANIC() - optional argument, if evaluates to true trigger panic, if no argument, always trigger panic
 
 #### Running tests against Couchbase (or cbgb) not just in memory
@@ -279,7 +279,7 @@ This downloads cbgb, loads the test data, builds tuqtng, and runs the tests agai
 
 ### Automated Builds / Download Site
 
-We operate a deveoper build/download site at:
+We operate a developer build/download site at:
 
 [http://cbfs-ext.hq.couchbase.com/tuqtng/](http://cbfs-ext.hq.couchbase.com/tuqtng/)
 
