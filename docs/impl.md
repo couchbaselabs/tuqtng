@@ -27,7 +27,7 @@ This package was chosen because it easily allowed us to turn on/off debug level 
 
 tuqtng uses the [dparval](github.com/couchbaselabs/dparval) package to efficiently work with JSON-like data.
 
-This library was built specifically for tuqtng.  Its major design goal is to allow working with JSON-like data, without parsing unnecessary portsin of a document.  dparval.Value objects can be instantiated either from a raw byte array, or using existing in-memory object structures (JSON compatible).
+This library was built specifically for tuqtng.  Its major design goal is to allow working with JSON-like data, without parsing unnecessary portions of a document.  dparval.Value objects can be instantiated either from a raw byte array, or using existing in-memory object structures (JSON compatible).
 
 The library also allows for attaching other related data to the object, while not contaminating the object itself.  This allows the query engine to attach its own internal data to objects during proecssing.
 
