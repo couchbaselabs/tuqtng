@@ -15,7 +15,7 @@ tuqtng is a query execution server process.  At the highest level, the server wa
 
 ## Core
 
-There are a few external dependencies and data strucures used throughout the codebase.
+There are a few external dependencies and data structures used throughout the codebase.
 
 ### Logging
 
