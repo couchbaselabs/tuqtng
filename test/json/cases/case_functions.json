@@ -563,7 +563,7 @@
     },
 
     {
-        "statements": "SELECT LENGTH(details) FROM catalog",
+        "statements": "SELECT OBJECT_LENGTH(details) FROM catalog",
         "results": [
         {
             "$1": 5
@@ -587,13 +587,28 @@
             "$1": 15
         },
         {
+            "$1": null
+        }
+    ]
+    },
+
+    {
+        "statements": "SELECT ARRAY_LENGTH(details.director) FROM catalog",
+        "results": [
+        {
+            "$1": null
+        },
+        {
+            "$1": null
+        },
+        {
             "$1": 2
         }
     ]
     },
 
     {
-        "statements": "SELECT  LENGTH(ARRAY director OVER director IN details.director  END) AS D FROM catalog WHERE LENGTH(details.director) > 1",
+        "statements": "SELECT  ARRAY_LENGTH(ARRAY director OVER director IN details.director  END) AS D FROM catalog WHERE POLY_LENGTH(details.director) > 1",
         "results": [
         {
             "D": null

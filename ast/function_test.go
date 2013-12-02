@@ -305,7 +305,7 @@ func TestFunction(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("LENGTH", FunctionArgExpressionList{
+			NewFunctionCall("ARRAY_LENGTH", FunctionArgExpressionList{
 				NewFunctionArgExpression(
 					NewLiteralArray(ExpressionList{
 						NewLiteralString("hello"),
@@ -314,7 +314,7 @@ func TestFunction(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("LENGTH", FunctionArgExpressionList{
+			NewFunctionCall("OBJECT_LENGTH", FunctionArgExpressionList{
 				NewFunctionArgExpression(
 					NewLiteralObject(map[string]Expression{
 						"val1": NewLiteralString("hello"),
