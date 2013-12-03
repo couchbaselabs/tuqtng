@@ -16,17 +16,17 @@
     $ git clone git@github.com:couchbaselabs/tuqtng.git
     $ cd tuqtng
     $ go get -d -v ./...
-    $ go build
-    $ ./tuqtng -couchbase http://localhost:8091
+    $ ./build.sh
+    $ ./cbq_engine -couchbase http://localhost:8091
 
 To run against the test json files as your "site":
 
-    $ ./tuqtng -couchbase dir:./test -pool=json
+    $ ./cbq_engine -couchbase dir:./test -pool=json
 
-Then in your tuq_client:
+Then in your cbq_client:
 
-    $ ./tuq_client/tuq_client
-    tuq> select * from orders;
+    $ ./cbq_client/cbq_client
+    cbq_client> select * from orders;
 
 To run unit tests:
 
@@ -34,12 +34,12 @@ To run unit tests:
 
 ## Querying via interactive command-line tool
 
-    $ tuq_client
-    tuq> SELECT * FROM beer-sample LIMIT 5
+    $ cbq_client
+    cbq_client> SELECT * FROM beer-sample LIMIT 5
 
-The --tuqtng parameter let's you specify the tuqtng server:
+The --cbq_engine parameter let's you specify the cbq_engine server:
 
-    $ tuq_client --tuqtng="http://localhost:8093/"
+    $ cbq_client --cbq_engine="http://localhost:8093/"
 
 ## Querying via HTTP
 
