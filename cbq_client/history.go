@@ -19,14 +19,14 @@ import (
 
 func LoadHistory(liner *liner.State, dir string) {
 	if dir != "" {
-		ReadHistoryFromFile(liner, dir+"/.tuq_history")
+		ReadHistoryFromFile(liner, dir+"/.cbq_history")
 	}
 }
 
 func UpdateHistory(liner *liner.State, dir, line string) {
 	liner.AppendHistory(line)
 	if dir != "" {
-		WriteHistoryToFile(liner, dir+"/.tuq_history")
+		WriteHistoryToFile(liner, dir+"/.cbq_history")
 	}
 }
 
@@ -42,7 +42,7 @@ func WriteHistoryToFile(liner *liner.State, path string) {
 	writer := bufio.NewWriter(f)
 	_, err = liner.WriteHistory(writer)
 	if err != nil {
-		fmt.Printf("Error updating .tuq_history file: %v\n", err)
+		fmt.Printf("Error updating .cbq_history file: %v\n", err)
 	} else {
 		writer.Flush()
 	}
