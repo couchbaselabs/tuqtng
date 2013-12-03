@@ -17,16 +17,16 @@
     $ cd tuqtng
     $ go get -d -v ./...
     $ ./build.sh
-    $ ./cbq_engine -couchbase http://localhost:8091
+    $ ./cbq-engine -couchbase http://localhost:8091
 
 To run against the test json files as your "site":
 
-    $ ./cbq_engine -couchbase dir:./test -pool=json
+    $ ./cbq-engine -couchbase dir:./test -pool=json
 
-Then in your cbq_client:
+Then in your cbq:
 
-    $ ./cbq_client/cbq_client
-    cbq_client> select * from orders;
+    $ ./cbq/cbq
+    cbq> select * from orders;
 
 To run unit tests:
 
@@ -34,12 +34,12 @@ To run unit tests:
 
 ## Querying via interactive command-line tool
 
-    $ cbq_client
-    cbq_client> SELECT * FROM beer-sample LIMIT 5
+    $ cbq
+    cbq> SELECT * FROM beer-sample LIMIT 5
 
-The --cbq_engine parameter let's you specify the cbq_engine server:
+The --engine parameter let's you specify the cbq-engine server:
 
-    $ cbq_client --cbq_engine="http://localhost:8093/"
+    $ cbq --engine="http://localhost:8093/"
 
 ## Querying via HTTP
 
