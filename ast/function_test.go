@@ -343,11 +343,7 @@ func TestFunction(t *testing.T) {
 					NewLiteralArray(ExpressionList{
 						NewLiteralString("Enter light"),
 						NewLiteralString("Exit Light")}))}),
-			NewLiteralArray(ExpressionList{
-				NewLiteralString("Hello world"),
-				NewLiteralString("Live free or die"),
-				NewLiteralString("Enter light"),
-				NewLiteralString("Exit Light")}),
+			[]interface{}{"Hello world", "Live free or die", "Enter light", "Exit Light"},
 			nil,
 		},
 

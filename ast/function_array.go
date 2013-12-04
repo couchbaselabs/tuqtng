@@ -52,7 +52,7 @@ func (this *FunctionCallArrayConcat) Evaluate(context *dparval.Value) (*dparval.
 	}
 
 	if bothArray {
-		result = append(lv, rv)
+		result = append(lv, rv...)
 		return dparval.NewValue(result), nil
 	}
 	return nil, err
