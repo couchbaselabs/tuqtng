@@ -12,6 +12,8 @@ package ast
 import (
 	"fmt"
 	"strings"
+
+	"github.com/couchbaselabs/dparval"
 )
 
 type FunctionCall struct {
@@ -147,4 +149,37 @@ func (this *FunctionCall) ValidateArity() error {
 	}
 
 	return nil
+}
+
+func (this *FunctionCall) EvaluateBoth(context *dparval.Value) (*dparval.Value, *dparval.Value, error) {
+	lv, err := this.Operands[0].Expr.Evaluate(context)
+	if err != nil {
+		return nil, nil, err
+	}
+	rv, err := this.Operands[1].Expr.Evaluate(context)
+	if err != nil {
+		return nil, nil, err
+	}
+	return lv, rv, nil
+}
+
+func (this *FunctionCall) EvaluateBothRequireArray(context *dparval.Value) ([]interface{}, []interface{}, bool, error) {
+	lv, rv, err := this.EvaluateBoth(context)
+	if err != nil {
+		return nil, nil, true, err
+	}
+
+	if lv.Type() == rv.Type() && rv.Type() == dparval.ARRAY {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+		switch lvalue := lvalue.(type) {
+		case []interface{}:
+			switch rvalue := rvalue.(type) {
+			case []interface{}:
+				return lvalue, rvalue, true, nil
+			}
+		}
+	}
+
+	return nil, nil, false, fmt.Errorf("the %s() function requires operands to be of type ARRAY", this.Name)
 }

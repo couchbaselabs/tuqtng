@@ -20,6 +20,9 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	"OBJECT_LENGTH": NewFunctionCallObjectLength,
 	"POLY_LENGTH":   NewFunctionCallPolyLength,
 
+	//array utility functions
+	"ARRAY_CONCAT": NewFunctionCallArrayConcat,
+
 	// aggregate functions
 	"COUNT":     NewFunctionCallCount,
 	"SUM":       NewFunctionCallSum,

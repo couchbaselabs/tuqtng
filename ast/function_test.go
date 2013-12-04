@@ -333,6 +333,23 @@ func TestFunction(t *testing.T) {
 			nil,
 			nil,
 		},
+		{
+			NewFunctionCall("ARRAY_CONCAT", FunctionArgExpressionList{
+				NewFunctionArgExpression(
+					NewLiteralArray(ExpressionList{
+						NewLiteralString("Hello world"),
+						NewLiteralString("Live free or die")})),
+				NewFunctionArgExpression(
+					NewLiteralArray(ExpressionList{
+						NewLiteralString("Enter light"),
+						NewLiteralString("Exit Light")}))}),
+			NewLiteralArray(ExpressionList{
+				NewLiteralString("Hello world"),
+				NewLiteralString("Live free or die"),
+				NewLiteralString("Enter light"),
+				NewLiteralString("Exit Light")}),
+			nil,
+		},
 
 		// numeric functions
 		{
