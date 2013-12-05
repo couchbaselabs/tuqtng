@@ -391,7 +391,7 @@ func TestFunction(t *testing.T) {
 		{
 			NewFunctionCall("ARRAY_PREPEND", FunctionArgExpressionList{
 				NewFunctionArgExpression(
-						NewLiteralString("Live free or die")),
+					NewLiteralString("Live free or die")),
 				NewFunctionArgExpression(
 					NewLiteralArray(ExpressionList{
 						NewLiteralString("Enter light"),
@@ -416,7 +416,7 @@ func TestFunction(t *testing.T) {
 		{
 			NewFunctionCall("ARRAY_PREPEND", FunctionArgExpressionList{
 				NewFunctionArgExpression(
-						NewLiteralNumber(7.0)),
+					NewLiteralNumber(7.0)),
 				NewFunctionArgExpression(
 					NewLiteralArray(ExpressionList{
 						NewLiteralString("Enter light"),
