@@ -166,7 +166,7 @@ func (this *FunctionCall) EvaluateBoth(context *dparval.Value) (*dparval.Value, 
 func (this *FunctionCall) EvaluateBothRequireArray(context *dparval.Value) ([]interface{}, []interface{}, bool, error) {
 	lv, rv, err := this.EvaluateBoth(context)
 	if err != nil {
-		return nil, nil, true, err
+		return nil, nil, false, err
 	}
 
 	if lv.Type() == rv.Type() && rv.Type() == dparval.ARRAY {
@@ -182,4 +182,64 @@ func (this *FunctionCall) EvaluateBothRequireArray(context *dparval.Value) ([]in
 	}
 
 	return nil, nil, false, fmt.Errorf("the %s() function requires operands to be of type ARRAY", this.Name)
+}
+
+func (this *FunctionCall) EvaluateOperandsForArrayAppend(context *dparval.Value) ([]interface{}, interface{}, bool, error) {
+
+	lv, err := this.Operands[0].Expr.Evaluate(context)
+	if err != nil {
+		return nil, nil, false, err
+	}
+
+	rv, err := this.Operands[1].Expr.Evaluate(context)
+	if err != nil {
+		return nil, nil, false, err
+	}
+
+	if lv.Type() == dparval.ARRAY && rv.Type() != dparval.ARRAY {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+
+		switch lvalue := lvalue.(type) {
+		case []interface{}:
+			switch rvalue := rvalue.(type) {
+			case interface{}:
+				return lvalue, rvalue, true, nil
+			}
+		}
+
+	}
+
+	return nil, nil, false, fmt.Errorf("the %s() function requires that first operand be of type ARRAY and second operand to be not of type ARRAY", this.Name)
+
+}
+
+func (this *FunctionCall) EvaluateOperandsForArrayPrepend(context *dparval.Value) (interface{}, []interface{}, bool, error) {
+
+	lv, err := this.Operands[0].Expr.Evaluate(context)
+	if err != nil {
+		return nil, nil, false, err
+	}
+
+	rv, err := this.Operands[1].Expr.Evaluate(context)
+	if err != nil {
+		return nil, nil, false, err
+	}
+
+	if lv.Type() != dparval.ARRAY && rv.Type() == dparval.ARRAY {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+
+		switch lvalue := lvalue.(type) {
+		case interface{}:
+			switch rvalue := rvalue.(type) {
+			case []interface{}:
+				return lvalue, rvalue, true, nil
+			}
+		}
+
+	}
+
+	return nil, nil, false, fmt.Errorf("the %s() function requires that first operand be not of type ARRAY and second operand of type ARRAY", this.Name)
+
 }
