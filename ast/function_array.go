@@ -61,3 +61,108 @@ func (this *FunctionCallArrayConcat) Evaluate(context *dparval.Value) (*dparval.
 func (this *FunctionCallArrayConcat) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
+
+// append an element to the array. Only the first operand should be an array
+type FunctionCallArrayAppend struct {
+	FunctionCall
+}
+
+func NewFunctionCallArrayAppend(operands FunctionArgExpressionList) FunctionCallExpression {
+	return &FunctionCallArrayAppend{
+		FunctionCall{
+			Type:     "function",
+			Name:     "ARRAY_APPEND",
+			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallArrayAppend) Copy() Expression {
+	return &FunctionCallArrayAppend{
+		FunctionCall{
+			Type:     "function",
+			Name:     "ARRAY_APPEND",
+			Operands: this.Operands.Copy(),
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallArrayAppend) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+
+	var result interface{} = nil
+
+	lv, rv, ok, err := this.EvaluateOperandsForArrayAppend(context)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if ok {
+		result = append(lv, rv)
+		return dparval.NewValue(result), nil
+	}
+
+	return nil, err
+}
+
+func (this *FunctionCallArrayAppend) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+// prepend an element to the array. Only the second operand should be an array
+
+type FunctionCallArrayPrepend struct {
+	FunctionCall
+}
+
+func NewFunctionCallArrayPrepend(operands FunctionArgExpressionList) FunctionCallExpression {
+	return &FunctionCallArrayPrepend{
+		FunctionCall{
+			Type:     "function",
+			Name:     "ARRAY_PREPEND",
+			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallArrayPrepend) Copy() Expression {
+	return &FunctionCallArrayPrepend{
+		FunctionCall{
+			Type:     "function",
+			Name:     "ARRAY_PREPEND",
+			Operands: this.Operands.Copy(),
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallArrayPrepend) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+
+	var result []interface{} = nil
+
+	lv, rv, ok, err := this.EvaluateOperandsForArrayPrepend(context)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if ok {
+		result = make([]interface{}, 1)
+		result[0] = lv
+		result = append(result, rv...)
+		return dparval.NewValue(result), nil
+	}
+
+	return nil, err
+}
+
+func (this *FunctionCallArrayPrepend) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}

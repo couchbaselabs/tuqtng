@@ -21,7 +21,9 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	"POLY_LENGTH":   NewFunctionCallPolyLength,
 
 	//array utility functions
-	"ARRAY_CONCAT": NewFunctionCallArrayConcat,
+	"ARRAY_CONCAT":  NewFunctionCallArrayConcat,
+	"ARRAY_APPEND":  NewFunctionCallArrayAppend,
+	"ARRAY_PREPEND": NewFunctionCallArrayPrepend,
 
 	// aggregate functions
 	"COUNT":     NewFunctionCallCount,
