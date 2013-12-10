@@ -285,6 +285,7 @@ func (b *bucket) CreatePrimaryIndex() (catalog.PrimaryIndex, query.Error) {
 	if _, exists := b.indexes[PRIMARY_INDEX]; exists {
 		return nil, query.NewError(nil, "Primary index already exists")
 	}
+
 	idx, err := newPrimaryIndex(b)
 	if err != nil {
 		return nil, query.NewError(err, "Error creating primary index")
@@ -300,12 +301,22 @@ func (b *bucket) CreateIndex(name string, key catalog.IndexKey, using catalog.In
 		using = catalog.VIEW
 	}
 
+	//index names are unique across IndexType
+	if _, exists := b.indexes[name]; exists {
+		return nil, query.NewError(nil, fmt.Sprintf("Index already exists: %s", name))
+	}
+
 	switch using {
 	case catalog.VIEW:
-		if _, exists := b.indexes[name]; exists {
-			return nil, query.NewError(nil, fmt.Sprintf("Index already exists: %s", name))
-		}
 		idx, err := newViewIndex(name, key, b)
+		if err != nil {
+			return nil, query.NewError(err, fmt.Sprintf("Error creating index: %s", name))
+		}
+		b.indexes[idx.Name()] = idx
+		return idx, nil
+
+	case catalog.LSM:
+		idx, err := newLsmIndex(name, key, b)
 		if err != nil {
 			return nil, query.NewError(err, fmt.Sprintf("Error creating index: %s", name))
 		}
@@ -315,6 +326,36 @@ func (b *bucket) CreateIndex(name string, key catalog.IndexKey, using catalog.In
 	default:
 		return nil, query.NewError(nil, "Not yet implemented.")
 	}
+}
+
+func (b *bucket) loadIndexes() query.Error {
+	// #alldocs implicitly exists
+	pi := newAllDocsIndex(b)
+	b.indexes[pi.name] = pi
+
+	// and recreate remaining from ddocs
+	indexes, err := loadViewIndexes(b)
+	if err != nil {
+		return query.NewError(err, "Error loading view indexes")
+	}
+
+	for _, index := range indexes {
+		name := (*index).Name()
+		b.indexes[name] = *index
+	}
+
+	// and recreate remaining from LSM indexes
+	indexes, err = loadLsmIndexesForBucket(b)
+	if err != nil {
+		return query.NewError(err, "Error loading lsm indexes")
+	}
+
+	for _, index := range indexes {
+		name := (*index).Name()
+		b.indexes[name] = *index
+	}
+
+	return nil
 }
 
 func newBucket(p *pool, name string) (*bucket, query.Error) {

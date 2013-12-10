@@ -167,6 +167,8 @@ func loadViewIndexes(b *bucket) ([]*catalog.Index, error) {
 	return indexes, nil
 }
 
+// Primary Index will be LSM based
+/*
 func newPrimaryIndex(b *bucket) (*primaryIndex, error) {
 	ddoc := newPrimaryDDoc()
 	meta := ast.NewFunctionCall("meta", ast.FunctionArgExpressionList{})
@@ -193,6 +195,7 @@ func newPrimaryIndex(b *bucket) (*primaryIndex, error) {
 
 	return &inst, nil
 }
+*/
 
 func newAllDocsIndex(b *bucket) *primaryIndex {
 	meta := ast.NewFunctionCall("meta", ast.FunctionArgExpressionList{})
