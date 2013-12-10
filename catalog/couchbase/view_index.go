@@ -89,25 +89,6 @@ func (vi *viewIndex) Drop() query.Error {
 	return nil
 }
 
-func (b *bucket) loadIndexes() query.Error {
-	// #alldocs implicitly exists
-	pi := newAllDocsIndex(b)
-	b.indexes[pi.name] = pi
-
-	// and recreate remaining from ddocs
-	indexes, err := loadViewIndexes(b)
-	if err != nil {
-		return query.NewError(err, "Error loading indexes")
-	}
-
-	for _, index := range indexes {
-		name := (*index).Name()
-		b.indexes[name] = *index
-	}
-
-	return nil
-}
-
 func (vi *viewIndex) ScanEntries(limit int64, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
 	vi.ScanRange(nil, nil, catalog.Both, limit, ch, warnch, errch)
 }
