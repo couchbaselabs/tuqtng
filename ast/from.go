@@ -57,7 +57,7 @@ func (this *From) GenerateAlias() {
 			this.As = proj.Right.Path
 		case *BracketMemberOperator:
 		case *BracketSliceMemberOperator:
-			// we decided to NOT assign an alias for this type at this time
+			// we decided to NOT assign an alias for these type at this time
 		default:
 			panic(fmt.Sprintf("unexpected type %T in FROM", proj))
 		}

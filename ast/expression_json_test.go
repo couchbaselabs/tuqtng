@@ -75,6 +75,31 @@ func TestExpressionUnmarshal(t *testing.T) {
             }`,
 			NewBracketMemberOperator(NewDotMemberOperator(NewProperty("beer-sample"), NewProperty("name")), NewLiteralNumber(1.0)),
 		},
+		{
+			`{  
+                             "type": "bracket_slice_member",
+                                "left": {
+                                        "type": "dot_member",
+                                        "left": {
+                                                "type": "property",
+                        "path": "contacts"
+                    },
+                    "right": {
+                        "type": "property",
+                        "path": "children"
+                        }
+                },
+                "middle": {
+                    "type": "literal_number",
+                    "value": 1
+                },
+                "right": {
+                    "type": "literal_number",
+                    "value": 2
+                }
+                    }`,
+			NewBracketSliceMemberOperator(NewDotMemberOperator(NewProperty("contacts"), NewProperty("children")), NewLiteralNumber(1.0), NewLiteralNumber(2.0)),
+		},
 	}
 
 	for _, test := range tests {
