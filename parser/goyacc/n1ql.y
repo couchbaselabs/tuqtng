@@ -753,6 +753,28 @@ expr LBRACKET expr RBRACKET {
 	parsingStack.Push(thisExpression)
 }
 |
+expr LBRACKET INT COLON INT RBRACKET {
+    logDebugGrammar("EXPR COLON EXPR SLICE BRACKET MEMBER")
+    left := parsingStack.Pop()
+    thisExpression := ast.NewBracketSliceMemberOperator(left.(ast.Expression), ast.NewLiteralNumber(float64($3.n)), ast.NewLiteralNumber(float64($5.n)))
+    parsingStack.Push(thisExpression)
+}
+|
+expr LBRACKET INT COLON RBRACKET {
+    logDebugGrammar("EXPR COLON SLICE BRACKET MEMBER")
+    left := parsingStack.Pop()
+    thisExpression := ast.NewBracketSliceMemberOperator(left.(ast.Expression), ast.NewLiteralNumber(float64($3.n)), ast.NewLiteralNumber(float64(0)))
+    parsingStack.Push(thisExpression)
+
+}
+|
+expr LBRACKET COLON INT RBRACKET {
+    logDebugGrammar("COLON EXPR SLICE BRACKET MEMBER")
+    left := parsingStack.Pop()
+    thisExpression := ast.NewBracketSliceMemberOperator(left.(ast.Expression), ast.NewLiteralNumber(float64(0)), ast.NewLiteralNumber(float64($4.n)))
+    parsingStack.Push(thisExpression)
+}
+|
 expr IS NULL {
 	logDebugGrammar("SUFFIX_EXPR IS NULL")
 	operand := parsingStack.Pop()
