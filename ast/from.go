@@ -56,6 +56,7 @@ func (this *From) GenerateAlias() {
 			// becomes FROM bucket.propa.propb AS propb
 			this.As = proj.Right.Path
 		case *BracketMemberOperator:
+		case *BracketSliceMemberOperator:
 			// we decided to NOT assign an alias for this type at this time
 		default:
 			panic(fmt.Sprintf("unexpected type %T in FROM", proj))
@@ -81,7 +82,7 @@ func (this *From) ConvertToBucketFrom() {
 		return
 	}
 	// walk the Projection Expression
-	// there are only 3 valid types in this limited cae
+	// there are only 3 valid types in this limited case
 	// dot memeber, bracket memeber, and property
 	// for dot/bracket member we keep walking to the left
 	// until we eventually get the base property

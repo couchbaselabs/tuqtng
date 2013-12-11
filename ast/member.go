@@ -248,3 +248,169 @@ func (this *BracketMemberOperator) UnmarshalJSON(data []byte) error {
 
 	return nil
 }
+
+// ****************************************************************************
+// BRACKET SLICE MEMBER : operates on slices
+// ****************************************************************************
+
+type BracketSliceMemberOperator struct {
+	Type   string     `json:"type"`
+	Left   Expression `json:"left"`
+	Middle Expression `json:"middle"`
+	Right  Expression `json:"right"`
+}
+
+func NewBracketSliceMemberOperator(left, middle, right Expression) *BracketSliceMemberOperator {
+	return &BracketSliceMemberOperator{
+		Type:   "bracket_slice_member",
+		Left:   left,
+		Middle: middle,
+		Right:  right,
+	}
+}
+
+func (this *BracketSliceMemberOperator) Copy() Expression {
+	return &BracketSliceMemberOperator{
+		Type:   "bracket_slice_member",
+		Left:   this.Left.Copy(),
+		Middle: this.Middle.Copy(),
+		Right:  this.Right.Copy(),
+	}
+}
+
+func (this *BracketSliceMemberOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	// evaluting RHS first is more correct in case of side-effects
+
+	rv, err := this.Right.Evaluate(item)
+	if err != nil {
+		return nil, err
+	}
+
+	mv, err := this.Middle.Evaluate(item)
+	if err != nil {
+		return nil, err
+	}
+
+	lv, err := this.Left.Evaluate(item)
+	if err != nil {
+		return nil, err
+	}
+
+	if lv.Type() == dparval.OBJECT {
+		return nil, fmt.Errorf("Slice operations can only be performed on ARRAY types")
+	} else if lv.Type() == dparval.ARRAY {
+		if rv.Type() == dparval.NUMBER && mv.Type() == dparval.NUMBER {
+
+			rval := rv.Value()
+			mval := mv.Value()
+
+			switch mval := mval.(type) {
+			case float64:
+				switch rval := rval.(type) {
+				case float64:
+					start := int(mval)
+					end := int(rval)
+					// if end is not specified then get the length of the array
+					if end == 0 {
+						lval := lv.Value()
+						switch lval := lval.(type) {
+						case []interface{}:
+							end = len(lval)
+						default:
+							return nil, fmt.Errorf("Unexpeted error, cannot determine ARRAY length of %v", lv)
+						}
+					}
+
+					if start > end {
+						return nil, &dparval.Undefined{}
+					}
+					if start == end {
+						return nil, &dparval.Undefined{}
+					}
+					returnArray := make([]interface{}, 0)
+					for i := start; i < end; i++ {
+						elem, err := lv.Index(i)
+						if err != nil {
+							return nil, fmt.Errorf("Array index out of range")
+						}
+						returnArray = append(returnArray, elem.Value())
+					}
+					return dparval.NewValue(returnArray), nil
+				}
+			}
+
+		}
+	}
+
+	return nil, &dparval.Undefined{}
+}
+
+func (this *BracketSliceMemberOperator) String() string {
+	return fmt.Sprintf("%v[%v:%v]", this.Left, this.Middle, this.Right)
+}
+
+func (this *BracketSliceMemberOperator) EquivalentTo(t Expression) bool {
+	that, ok := t.(*BracketSliceMemberOperator)
+	if !ok {
+		return false
+	}
+
+	if !this.Left.EquivalentTo(that.Left) {
+		return false
+	}
+
+	if !this.Middle.EquivalentTo(that.Middle) {
+		return false
+	}
+
+	if !this.Right.EquivalentTo(that.Right) {
+		return false
+	}
+
+	return true
+}
+
+func (this *BracketSliceMemberOperator) Dependencies() ExpressionList {
+	rv := ExpressionList{this.Left, this.Middle, this.Right}
+	return rv
+}
+
+func (this *BracketSliceMemberOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+func (this *BracketSliceMemberOperator) UnmarshalJSON(data []byte) error {
+	var temp struct {
+		Type   string          `json:"type"`
+		Left   json.RawMessage `json:"left"`
+		Middle json.RawMessage `json:"middle"`
+		Right  json.RawMessage `json:"right"`
+	}
+
+	err := json.Unmarshal(data, &temp)
+	if err != nil {
+		return err
+	}
+
+	if temp.Type != "bracket_slice_member" {
+		return fmt.Errorf("Attempt to unmarshal type %v into bracket_slice_member", temp.Type)
+	}
+
+	this.Type = temp.Type
+	this.Left, err = UnmarshalExpression(temp.Left)
+	if err != nil {
+		return err
+	}
+
+	this.Middle, err = UnmarshalExpression(temp.Middle)
+	if err != nil {
+		return err
+	}
+
+	this.Right, err = UnmarshalExpression(temp.Right)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
