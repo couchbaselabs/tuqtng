@@ -93,20 +93,11 @@ func (this *FunctionCallArrayAppend) Copy() Expression {
 
 func (this *FunctionCallArrayAppend) Evaluate(context *dparval.Value) (*dparval.Value, error) {
 
-	var result interface{} = nil
-
-	lv, rv, ok, err := this.EvaluateOperandsForArrayAppend(context)
-
+	result, err := this.EvaluateOperandsForArrayAppend(context)
 	if err != nil {
 		return nil, err
 	}
-
-	if ok {
-		result = append(lv, rv)
-		return dparval.NewValue(result), nil
-	}
-
-	return nil, err
+	return dparval.NewValue(result), nil
 }
 
 func (this *FunctionCallArrayAppend) Accept(ev ExpressionVisitor) (Expression, error) {
@@ -145,22 +136,11 @@ func (this *FunctionCallArrayPrepend) Copy() Expression {
 
 func (this *FunctionCallArrayPrepend) Evaluate(context *dparval.Value) (*dparval.Value, error) {
 
-	var result []interface{} = nil
-
-	lv, rv, ok, err := this.EvaluateOperandsForArrayPrepend(context)
-
+	result, err := this.EvaluateOperandsForArrayPrepend(context)
 	if err != nil {
 		return nil, err
 	}
-
-	if ok {
-		result = make([]interface{}, 1)
-		result[0] = lv
-		result = append(result, rv...)
-		return dparval.NewValue(result), nil
-	}
-
-	return nil, err
+	return dparval.NewValue(result), nil
 }
 
 func (this *FunctionCallArrayPrepend) Accept(ev ExpressionVisitor) (Expression, error) {

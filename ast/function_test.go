@@ -351,15 +351,13 @@ func TestFunction(t *testing.T) {
 		{
 			NewFunctionCall("ARRAY_APPEND", FunctionArgExpressionList{
 				NewFunctionArgExpression(
-					NewLiteralArray(ExpressionList{
-						NewLiteralString("Hello world"),
-						NewLiteralString("Live free or die")})),
+					NewLiteralString("Hello world")),
 				NewFunctionArgExpression(
 					NewLiteralArray(ExpressionList{
 						NewLiteralString("Enter light"),
 						NewLiteralString("Exit Light")}))}),
 			nil,
-			fmt.Errorf("the ARRAY_APPEND() function requires that first operand be of type ARRAY and second operand to be not of type ARRAY"),
+			fmt.Errorf("the ARRAY_APPEND() function requires that first operand be of type ARRAY"),
 		},
 
 		{
@@ -381,11 +379,9 @@ func TestFunction(t *testing.T) {
 						NewLiteralString("Hello world"),
 						NewLiteralString("Live free or die")})),
 				NewFunctionArgExpression(
-					NewLiteralArray(ExpressionList{
-						NewLiteralString("Enter light"),
-						NewLiteralString("Exit Light")}))}),
+					NewLiteralString("Exit Light"))}),
 			nil,
-			fmt.Errorf("the ARRAY_PREPEND() function requires that first operand be not of type ARRAY and second operand of type ARRAY"),
+			fmt.Errorf("the ARRAY_PREPEND() function requires that the second operand be of type ARRAY"),
 		},
 
 		{
