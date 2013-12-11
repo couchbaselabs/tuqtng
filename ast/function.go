@@ -184,62 +184,66 @@ func (this *FunctionCall) EvaluateBothRequireArray(context *dparval.Value) ([]in
 	return nil, nil, false, fmt.Errorf("the %s() function requires operands to be of type ARRAY", this.Name)
 }
 
-func (this *FunctionCall) EvaluateOperandsForArrayAppend(context *dparval.Value) ([]interface{}, interface{}, bool, error) {
+func (this *FunctionCall) EvaluateOperandsForArrayAppend(context *dparval.Value) ([]interface{}, error) {
 
 	lv, err := this.Operands[0].Expr.Evaluate(context)
 	if err != nil {
-		return nil, nil, false, err
+		return nil, err
 	}
 
 	rv, err := this.Operands[1].Expr.Evaluate(context)
 	if err != nil {
-		return nil, nil, false, err
+		return nil, err
 	}
 
-	if lv.Type() == dparval.ARRAY && rv.Type() != dparval.ARRAY {
+	if lv.Type() == dparval.ARRAY {
 		lvalue := lv.Value()
 		rvalue := rv.Value()
 
 		switch lvalue := lvalue.(type) {
 		case []interface{}:
 			switch rvalue := rvalue.(type) {
-			case interface{}:
-				return lvalue, rvalue, true, nil
+			case []interface{}:
+				return append(lvalue, rvalue...), nil
+			default:
+				return append(lvalue, rvalue), nil
 			}
 		}
 
 	}
-
-	return nil, nil, false, fmt.Errorf("the %s() function requires that first operand be of type ARRAY and second operand to be not of type ARRAY", this.Name)
-
+	return nil, fmt.Errorf("the %s() function requires that first operand be of type ARRAY", this.Name)
 }
 
-func (this *FunctionCall) EvaluateOperandsForArrayPrepend(context *dparval.Value) (interface{}, []interface{}, bool, error) {
+func (this *FunctionCall) EvaluateOperandsForArrayPrepend(context *dparval.Value) ([]interface{}, error) {
 
 	lv, err := this.Operands[0].Expr.Evaluate(context)
 	if err != nil {
-		return nil, nil, false, err
+		return nil, err
 	}
 
 	rv, err := this.Operands[1].Expr.Evaluate(context)
 	if err != nil {
-		return nil, nil, false, err
+		return nil, err
 	}
 
-	if lv.Type() != dparval.ARRAY && rv.Type() == dparval.ARRAY {
+	if rv.Type() == dparval.ARRAY {
 		lvalue := lv.Value()
 		rvalue := rv.Value()
 
-		switch lvalue := lvalue.(type) {
-		case interface{}:
-			switch rvalue := rvalue.(type) {
+		switch rvalue := rvalue.(type) {
+		case []interface{}:
+			switch lvalue := lvalue.(type) {
 			case []interface{}:
-				return lvalue, rvalue, true, nil
+				return append(lvalue, rvalue...), nil
+			default:
+				result := make([]interface{}, 1)
+				result[0] = lv
+				result[0] = lvalue
+				return append(result, rvalue...), nil
 			}
 		}
 
 	}
 
-	return nil, nil, false, fmt.Errorf("the %s() function requires that first operand be not of type ARRAY and second operand of type ARRAY", this.Name)
-
+	return nil, fmt.Errorf("the %s() function requires that the second operand be of type ARRAY", this.Name)
 }
