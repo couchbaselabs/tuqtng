@@ -247,7 +247,166 @@
             "name": "jane"
         }
     ]
+    },
+
+    {
+        "description" : "ARRAY tests for slicing",
+        "statements" : "SELECT children[0:2] as first_two_children from contacts",
+        "results": [
+        {
+            "first_two_children": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "aiden"
+                },
+                {
+                    "age": 2,
+                    "gender": "f",
+                    "name": "bill"
+                }
+            ]
+        },
+        {
+            "first_two_children": [
+                {
+                    "age": 17,
+                    "gender": "f",
+                    "name": "xena"
+                },
+                {
+                    "age": 2,
+                    "gender": "m",
+                    "name": "yuri"
+                }
+            ]
+        },
+        {},
+        {},
+        {
+            "first_two_children": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "abama"
+                },
+                {
+                    "age": 21,
+                    "gender": "m",
+                    "name": "bebama"
+                }
+            ]
+        },
+        {}
+    ] 
+    },
+    {
+        "description" : "ARRAY tests for slicing",
+        "statements" : "SELECT children[:1] from contacts",
+        "results": [
+        {
+            "$1": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "aiden"
+                }
+            ]
+        },
+        {
+            "$1": [
+                {
+                    "age": 17,
+                    "gender": "f",
+                    "name": "xena"
+                }
+            ]
+        },
+        {},
+        {},
+        {
+            "$1": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "abama"
+                }
+            ]
+        },
+        {}
+    ]
+
+    },
+    {
+        "description" : "ARRAY tests for slicing",
+        "statements"  : "SELECT children[0:]  from contacts",
+        "results": [
+        {
+            "$1": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "aiden"
+                },
+                {
+                    "age": 2,
+                    "gender": "f",
+                    "name": "bill"
+                }
+            ]
+        },
+        {
+            "$1": [
+                {
+                    "age": 17,
+                    "gender": "f",
+                    "name": "xena"
+                },
+                {
+                    "age": 2,
+                    "gender": "m",
+                    "name": "yuri"
+                }
+            ]
+        },
+        {},
+        {},
+        {
+            "$1": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "abama"
+                },
+                {
+                    "age": 21,
+                    "gender": "m",
+                    "name": "bebama"
+                }
+            ]
+        },
+        {}
+    ]
+    },
+    {
+        "description" : "Array slicing with OVER test",
+        "statements" : "select name, children[0:2] as two_teenagers from contacts where all child.age > 10 over child in contacts.children end",
+        "results": [
+        {
+            "name": "ian",
+            "two_teenagers": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "abama"
+                },
+                {
+                    "age": 21,
+                    "gender": "m",
+                    "name": "bebama"
+                }
+            ]
+        }
+    ]
     }
-
-
 ]

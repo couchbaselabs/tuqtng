@@ -12,6 +12,8 @@ package ast
 import (
 	"fmt"
 	"strings"
+
+	"github.com/couchbaselabs/dparval"
 )
 
 type FunctionCall struct {
@@ -147,4 +149,101 @@ func (this *FunctionCall) ValidateArity() error {
 	}
 
 	return nil
+}
+
+func (this *FunctionCall) EvaluateBoth(context *dparval.Value) (*dparval.Value, *dparval.Value, error) {
+	lv, err := this.Operands[0].Expr.Evaluate(context)
+	if err != nil {
+		return nil, nil, err
+	}
+	rv, err := this.Operands[1].Expr.Evaluate(context)
+	if err != nil {
+		return nil, nil, err
+	}
+	return lv, rv, nil
+}
+
+func (this *FunctionCall) EvaluateBothRequireArray(context *dparval.Value) ([]interface{}, []interface{}, bool, error) {
+	lv, rv, err := this.EvaluateBoth(context)
+	if err != nil {
+		return nil, nil, false, err
+	}
+
+	if lv.Type() == rv.Type() && rv.Type() == dparval.ARRAY {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+		switch lvalue := lvalue.(type) {
+		case []interface{}:
+			switch rvalue := rvalue.(type) {
+			case []interface{}:
+				return lvalue, rvalue, true, nil
+			}
+		}
+	}
+
+	return nil, nil, false, fmt.Errorf("the %s() function requires operands to be of type ARRAY", this.Name)
+}
+
+func (this *FunctionCall) EvaluateOperandsForArrayAppend(context *dparval.Value) ([]interface{}, error) {
+
+	lv, err := this.Operands[0].Expr.Evaluate(context)
+	if err != nil {
+		return nil, err
+	}
+
+	rv, err := this.Operands[1].Expr.Evaluate(context)
+	if err != nil {
+		return nil, err
+	}
+
+	if lv.Type() == dparval.ARRAY {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+
+		switch lvalue := lvalue.(type) {
+		case []interface{}:
+			switch rvalue := rvalue.(type) {
+			case []interface{}:
+				return append(lvalue, rvalue...), nil
+			default:
+				return append(lvalue, rvalue), nil
+			}
+		}
+
+	}
+	return nil, fmt.Errorf("the %s() function requires that first operand be of type ARRAY", this.Name)
+}
+
+func (this *FunctionCall) EvaluateOperandsForArrayPrepend(context *dparval.Value) ([]interface{}, error) {
+
+	lv, err := this.Operands[0].Expr.Evaluate(context)
+	if err != nil {
+		return nil, err
+	}
+
+	rv, err := this.Operands[1].Expr.Evaluate(context)
+	if err != nil {
+		return nil, err
+	}
+
+	if rv.Type() == dparval.ARRAY {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+
+		switch rvalue := rvalue.(type) {
+		case []interface{}:
+			switch lvalue := lvalue.(type) {
+			case []interface{}:
+				return append(lvalue, rvalue...), nil
+			default:
+				result := make([]interface{}, 1)
+				result[0] = lv
+				result[0] = lvalue
+				return append(result, rvalue...), nil
+			}
+		}
+
+	}
+
+	return nil, fmt.Errorf("the %s() function requires that the second operand be of type ARRAY", this.Name)
 }

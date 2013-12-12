@@ -147,6 +147,21 @@ func VisitChildren(v ExpressionVisitor, e Expression) (Expression, error) {
 		if err != nil {
 			return expr, err
 		}
+	case *BracketSliceMemberOperator:
+		expr.Left, err = expr.Left.Accept(v)
+		if err != nil {
+			return expr, err
+		}
+		expr.Middle, err = expr.Middle.Accept(v)
+		if err != nil {
+			return expr, err
+		}
+
+		expr.Right, err = expr.Right.Accept(v)
+		if err != nil {
+			return expr, err
+		}
+
 	// property
 	case *Property:
 	}

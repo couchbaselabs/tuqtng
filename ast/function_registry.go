@@ -15,7 +15,15 @@ type FunctionCallConstructor func(operands FunctionArgExpressionList) FunctionCa
 
 var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]FunctionCallConstructor{
 	// utility functions
-	"LENGTH": NewFunctionCallLength,
+	"LENGTH":        NewFunctionCallLength,
+	"ARRAY_LENGTH":  NewFunctionCallArrayLength,
+	"OBJECT_LENGTH": NewFunctionCallObjectLength,
+	"POLY_LENGTH":   NewFunctionCallPolyLength,
+
+	//array utility functions
+	"ARRAY_CONCAT":  NewFunctionCallArrayConcat,
+	"ARRAY_APPEND":  NewFunctionCallArrayAppend,
+	"ARRAY_PREPEND": NewFunctionCallArrayPrepend,
 
 	// aggregate functions
 	"COUNT":     NewFunctionCallCount,

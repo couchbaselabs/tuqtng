@@ -53,6 +53,13 @@ func UnmarshalExpression(bytes []byte) (Expression, error) {
 			return nil, err
 		}
 		return &bm, nil
+	case "bracket_slice_member":
+		var bsm BracketSliceMemberOperator
+		err := json.Unmarshal(bytes, &bsm)
+		if err != nil {
+			return nil, err
+		}
+		return &bsm, nil
 	default:
 		panic(fmt.Sprintf("Unable to Unmarshall this type of Expression: %v", temp.Type))
 	}

@@ -139,6 +139,60 @@
     },
 
     {
+        "statements": "select value() from catalog.tags[:3] as slice",
+        "results": [
+        {
+            "$1": [
+                "bestseller",
+                "imported",
+                "free delivery"
+            ]
+        },
+        {
+            "$1": [
+                "new release",
+                "english",
+                "movie"
+            ]
+        },
+        {
+            "$1": [
+                "cash on delivery",
+                "english",
+                "TV"
+            ]
+        }
+    ]
+    },
+
+    {
+        "statements": "select value() from catalog.tags[0:3] as slice",
+        "results": [
+        {
+            "$1": [
+                "bestseller",
+                "imported",
+                "free delivery"
+            ]
+        },
+        {
+            "$1": [
+                "new release",
+                "english",
+                "movie"
+            ]
+        },
+        {
+            "$1": [
+                "cash on delivery",
+                "english",
+                "TV"
+            ]
+        }
+    ]
+    },
+
+    {
         "statements": "SELECT details.* FROM catalog",
         "results": [
         {

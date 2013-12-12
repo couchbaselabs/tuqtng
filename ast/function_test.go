@@ -305,7 +305,7 @@ func TestFunction(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("LENGTH", FunctionArgExpressionList{
+			NewFunctionCall("ARRAY_LENGTH", FunctionArgExpressionList{
 				NewFunctionArgExpression(
 					NewLiteralArray(ExpressionList{
 						NewLiteralString("hello"),
@@ -314,7 +314,7 @@ func TestFunction(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("LENGTH", FunctionArgExpressionList{
+			NewFunctionCall("OBJECT_LENGTH", FunctionArgExpressionList{
 				NewFunctionArgExpression(
 					NewLiteralObject(map[string]Expression{
 						"val1": NewLiteralString("hello"),
@@ -331,6 +331,93 @@ func TestFunction(t *testing.T) {
 		{
 			NewFunctionCall("LENGTH", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(0.0))}),
 			nil,
+			nil,
+		},
+		// array utility functions
+		{
+			NewFunctionCall("ARRAY_CONCAT", FunctionArgExpressionList{
+				NewFunctionArgExpression(
+					NewLiteralArray(ExpressionList{
+						NewLiteralString("Hello world"),
+						NewLiteralString("Live free or die")})),
+				NewFunctionArgExpression(
+					NewLiteralArray(ExpressionList{
+						NewLiteralString("Enter light"),
+						NewLiteralString("Exit Light")}))}),
+			[]interface{}{"Hello world", "Live free or die", "Enter light", "Exit Light"},
+			nil,
+		},
+
+		{
+			NewFunctionCall("ARRAY_APPEND", FunctionArgExpressionList{
+				NewFunctionArgExpression(
+					NewLiteralString("Hello world")),
+				NewFunctionArgExpression(
+					NewLiteralArray(ExpressionList{
+						NewLiteralString("Enter light"),
+						NewLiteralString("Exit Light")}))}),
+			nil,
+			fmt.Errorf("the ARRAY_APPEND() function requires that first operand be of type ARRAY"),
+		},
+
+		{
+			NewFunctionCall("ARRAY_APPEND", FunctionArgExpressionList{
+				NewFunctionArgExpression(
+					NewLiteralArray(ExpressionList{
+						NewLiteralString("Hello world"),
+						NewLiteralString("Live free or die")})),
+				NewFunctionArgExpression(
+					NewLiteralString("Exit Light"))}),
+			[]interface{}{"Hello world", "Live free or die", "Exit Light"},
+			nil,
+		},
+
+		{
+			NewFunctionCall("ARRAY_PREPEND", FunctionArgExpressionList{
+				NewFunctionArgExpression(
+					NewLiteralArray(ExpressionList{
+						NewLiteralString("Hello world"),
+						NewLiteralString("Live free or die")})),
+				NewFunctionArgExpression(
+					NewLiteralString("Exit Light"))}),
+			nil,
+			fmt.Errorf("the ARRAY_PREPEND() function requires that the second operand be of type ARRAY"),
+		},
+
+		{
+			NewFunctionCall("ARRAY_PREPEND", FunctionArgExpressionList{
+				NewFunctionArgExpression(
+					NewLiteralString("Live free or die")),
+				NewFunctionArgExpression(
+					NewLiteralArray(ExpressionList{
+						NewLiteralString("Enter light"),
+						NewLiteralString("Exit Light")}))}),
+			[]interface{}{"Live free or die", "Enter light", "Exit Light"},
+			nil,
+		},
+
+		// append numerics to arrays
+		{
+			NewFunctionCall("ARRAY_APPEND", FunctionArgExpressionList{
+				NewFunctionArgExpression(
+					NewLiteralArray(ExpressionList{
+						NewLiteralString("Hello world"),
+						NewLiteralString("Live free or die")})),
+				NewFunctionArgExpression(
+					NewLiteralNumber(7.0))}),
+			[]interface{}{"Hello world", "Live free or die", 7.0},
+			nil,
+		},
+
+		{
+			NewFunctionCall("ARRAY_PREPEND", FunctionArgExpressionList{
+				NewFunctionArgExpression(
+					NewLiteralNumber(7.0)),
+				NewFunctionArgExpression(
+					NewLiteralArray(ExpressionList{
+						NewLiteralString("Enter light"),
+						NewLiteralString("Exit Light")}))}),
+			[]interface{}{7.0, "Enter light", "Exit Light"},
 			nil,
 		},
 
