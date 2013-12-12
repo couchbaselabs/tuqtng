@@ -1054,6 +1054,28 @@ path LBRACKET INT RBRACKET {
 	parsingStack.Push(thisExpression)
 }
 |
+path LBRACKET INT COLON INT RBRACKET {
+    logDebugGrammar("PATH SLICE BRACKET MEMBER - %v[%v-%v]", $1.s,$3.n, $5.n)
+    left := parsingStack.Pop()
+    thisExpression := ast.NewBracketSliceMemberOperator(left.(ast.Expression), ast.NewLiteralNumber(float64($3.n)), ast.NewLiteralNumber(float64($5.n)))
+    parsingStack.Push(thisExpression)
+}
+|
+path LBRACKET INT COLON RBRACKET {
+    logDebugGrammar("PATH SLICE BRACKET MEMBER - %v[%v:]", $1.s, $3.n)
+    left := parsingStack.Pop()
+    thisExpression := ast.NewBracketSliceMemberOperator(left.(ast.Expression), ast.NewLiteralNumber(float64($3.n)), ast.NewLiteralNumber(float64(0)))
+    parsingStack.Push(thisExpression)
+
+}
+|
+path LBRACKET COLON INT RBRACKET {
+    logDebugGrammar(" PATH SLICE BRACKET MEMBER -%v[:%v]", $1.s, $4.n)
+    left := parsingStack.Pop()
+    thisExpression := ast.NewBracketSliceMemberOperator(left.(ast.Expression), ast.NewLiteralNumber(float64(0)), ast.NewLiteralNumber(float64($4.n)))
+    parsingStack.Push(thisExpression)
+}
+|
 path DOT IDENTIFIER {
 	logDebugGrammar("PATH DOT PATH - $1.s")
 	right := ast.NewProperty($3.s)

@@ -82,9 +82,9 @@ func (this *From) ConvertToBucketFrom() {
 		return
 	}
 	// walk the Projection Expression
-	// there are only 3 valid types in this limited case
+	// there are only 4 valid types in this limited case
 	// dot memeber, bracket memeber, and property
-	// for dot/bracket member we keep walking to the left
+	// for dot/slice + bracket member we keep walking to the left
 	// until we eventually get the base property
 	var prevprev Expression
 	var prev Expression
@@ -97,6 +97,10 @@ func (this *From) ConvertToBucketFrom() {
 			prev = curri
 			curr = curri.Left
 		case *BracketMemberOperator:
+			prevprev = prev
+			prev = curri
+			curr = curri.Left
+		case *BracketSliceMemberOperator:
 			prevprev = prev
 			prev = curri
 			curr = curri.Left
@@ -137,8 +141,13 @@ func (this *From) ConvertToBucketFrom() {
 				case *DotMemberOperator:
 					// replace the LHS of the previous previous
 					prevprev.Left = rhs
+				case *BracketSliceMemberOperator:
+					// replace the LHS of the previous previous
+					prevprev.Left = rhs
 				}
+
 			}
+
 			found = true
 		}
 	}
