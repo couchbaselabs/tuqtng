@@ -214,6 +214,18 @@
                   {
                     logDebugTokens("POOL"); return POOL
                   }
+/[sS][aA][tT][iI][sS][fF][iI][eE][sS]/
+                  {
+                    logDebugTokens("SATISFIES"); return SATISFIES
+                  }
+/[eE][vV][eE][rR][yY]/
+                  {
+                    logDebugTokens("EVERY"); return EVERY
+                  }
+/[uU][nN][nN][eE][sS][tT]/
+                  {
+                    logDebugTokens("UNNEST"); return UNNEST
+                  }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }
