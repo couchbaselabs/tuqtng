@@ -226,6 +226,10 @@
                   {
                     logDebugTokens("UNNEST"); return UNNEST
                   }
+/[fF][oO][rR]/
+                  {
+                    logDebugTokens("FOR"); return FOR
+                  }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }

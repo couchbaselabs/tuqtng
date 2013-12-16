@@ -37,7 +37,7 @@ f float64}
 %token LIKE IS VALUED MISSING
 %token DOT
 %token CASE WHEN THEN ELSE END
-%token ANY ALL OVER FIRST ARRAY IN SATISFIES EVERY UNNEST
+%token ANY ALL OVER FIRST ARRAY IN SATISFIES EVERY UNNEST FOR
 %left OR
 %left AND
 %left EQ LT LTE GT GTE NE LIKE
@@ -941,7 +941,7 @@ EVERY IDENTIFIER IN expr SATISFIES expr END {
     parsingStack.Push(collectionAny)
 }
 |
-FIRST expr OVER IDENTIFIER IN expr WHEN expr END {
+FIRST expr FOR IDENTIFIER IN expr WHEN expr END {
 	logDebugGrammar("FIRST OVER")
 	condition := parsingStack.Pop().(ast.Expression)
 	sub := parsingStack.Pop().(ast.Expression)
@@ -950,7 +950,7 @@ FIRST expr OVER IDENTIFIER IN expr WHEN expr END {
 	parsingStack.Push(collectionFirst)
 }
 |
-FIRST expr OVER expr WHEN expr END {
+FIRST expr IN expr WHEN expr END {
 	logDebugGrammar("FIRST OVER")
 	condition := parsingStack.Pop().(ast.Expression)
 	sub := parsingStack.Pop().(ast.Expression)
@@ -959,7 +959,7 @@ FIRST expr OVER expr WHEN expr END {
 	parsingStack.Push(collectionFirst)
 }
 |
-FIRST expr OVER IDENTIFIER IN expr END {
+FIRST expr FOR IDENTIFIER IN expr END {
 	logDebugGrammar("FIRST OVER")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
@@ -967,7 +967,7 @@ FIRST expr OVER IDENTIFIER IN expr END {
 	parsingStack.Push(collectionFirst)
 }
 |
-FIRST expr OVER expr END {
+FIRST expr IN expr END {
 	logDebugGrammar("FIRST OVER")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
@@ -975,7 +975,7 @@ FIRST expr OVER expr END {
 	parsingStack.Push(collectionFirst)
 }
 |
-ARRAY expr OVER IDENTIFIER IN expr WHEN expr END {
+ARRAY expr FOR IDENTIFIER IN expr WHEN expr END {
 	logDebugGrammar("ARRAY OVER WHEN")
 	condition := parsingStack.Pop().(ast.Expression)
 	sub := parsingStack.Pop().(ast.Expression)
@@ -984,7 +984,7 @@ ARRAY expr OVER IDENTIFIER IN expr WHEN expr END {
 	parsingStack.Push(collectionArray)
 }
 |
-ARRAY expr OVER expr WHEN expr END {
+ARRAY expr IN expr WHEN expr END {
 	logDebugGrammar("ARRAY OVER WHEN")
 	condition := parsingStack.Pop().(ast.Expression)
 	sub := parsingStack.Pop().(ast.Expression)
@@ -993,7 +993,7 @@ ARRAY expr OVER expr WHEN expr END {
 	parsingStack.Push(collectionArray)
 }
 |
-ARRAY expr OVER IDENTIFIER IN expr END {
+ARRAY expr FOR IDENTIFIER IN expr END {
 	logDebugGrammar("ARRAY OVER")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
@@ -1001,7 +1001,7 @@ ARRAY expr OVER IDENTIFIER IN expr END {
 	parsingStack.Push(collectionArray)
 }
 |
-ARRAY expr OVER expr END {
+ARRAY expr IN expr END {
 	logDebugGrammar("ARRAY OVER")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)

@@ -1,6 +1,6 @@
 [
     {
-        "statements": "SELECT ARRAY child OVER child IN children END AS all_children FROM contacts",
+        "statements": "SELECT ARRAY child FOR child IN children END AS all_children FROM contacts",
         "results": [
         {
             "all_children": [
@@ -50,7 +50,7 @@
         ]
     },
     {
-        "statements": "SELECT ARRAY child OVER child IN children WHEN child.age > 14 AND child.gender = \"m\" END AS all_males_over_14 FROM contacts",
+        "statements": "SELECT ARRAY child FOR child IN children WHEN child.age > 14 AND child.gender = \"m\" END AS all_males_over_14 FROM contacts",
         "results": [
         {
             "all_males_over_14": [
@@ -84,7 +84,7 @@
         ]
     },
     {
-        "statements" : "select DISTINCT (ARRAY ol.productId OVER ol IN orderlines END) AS A FROM orders",
+        "statements" : "select DISTINCT (ARRAY ol.productId FOR ol IN orderlines END) AS A FROM orders",
         "results" : [
         {
             "A": [
@@ -109,7 +109,7 @@
     },
 
     {
-        "statements" : "select id FROM orders WHERE ANY product = \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "statements" : "select id FROM orders WHERE ANY product IN ARRAY ol.productId FOR ol IN orderlines END SATISFIES product = \"tea111\" END",
         "results" : [
         {
             "id": "1234"
@@ -121,7 +121,7 @@
     },
 
     {
-        "statements" : "select id from orders WHERE ARRAY ol.productId OVER ol IN orderlines END = [ \"coffee01\", \"sugar22\" ]",
+        "statements" : "select id from orders WHERE ARRAY ol.productId FOR ol IN orderlines END = [ \"coffee01\", \"sugar22\" ]",
         "results" : [
         {
             "id": "1200"
@@ -133,7 +133,7 @@
     },
 
     {
-        "statements" : "SELECT profile_details.user_id, profile_details.loyalty, personal_details.age FROM user_profile WHERE (profile_details.loyalty.loyalty_score > 6.7 AND profile_details.loyalty.loyalty_score < 9) AND ( ANY friend OVER friend IN profile_details.loyalty.friends_referred END AND (profile_details.loyalty.reward_points + profile_details.loyalty.redeemed_points) > 1100) AND  ( (personal_details.age > 45 OR personal_details.age < 35) ) OR profile_details.loyalty.board_member <> True ORDER BY profile_details.user_id",
+        "statements" : "SELECT profile_details.user_id, profile_details.loyalty, personal_details.age FROM user_profile WHERE (profile_details.loyalty.loyalty_score > 6.7 AND profile_details.loyalty.loyalty_score < 9) AND ( ANY friend IN profile_details.loyalty.friends_referred SATISFIES friend END AND (profile_details.loyalty.reward_points + profile_details.loyalty.redeemed_points) > 1100) AND  ( (personal_details.age > 45 OR personal_details.age < 35) ) OR profile_details.loyalty.board_member <> True ORDER BY profile_details.user_id",
         "results" : [
         {
             "age": 49,
@@ -152,7 +152,7 @@
     },
 
     {
-        "statements" : "SELECT id FROM orders WHERE ANY product == \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END AND ANY qty > 1 OVER qty IN ARRAY ol.qty OVER ol IN orderlines END END",
+        "statements" : "SELECT id FROM orders WHERE ANY product IN ARRAY ol.productId FOR ol IN orderlines END SATISFIES product == \"tea111\" END AND ANY qty IN ARRAY ol.qty FOR ol IN orderlines END SATISFIES qty > 1 END",
         "results" : [
         {
             "id": "1234"
@@ -160,7 +160,7 @@
     ]
     },
     {
-        "statements": "SELECT ARRAY children OVER children END AS all_children FROM contacts",
+        "statements": "SELECT ARRAY children IN children END AS all_children FROM contacts",
         "results": [
         {
             "all_children": [
@@ -212,7 +212,7 @@
 
     {
         "description": "ARRAY expression referring to outer context",
-        "statements" : "SELECT name, ARRAY child OVER child IN children WHEN child.name > name END as chosen_one FROM contacts",
+        "statements" : "SELECT name, ARRAY child FOR child IN children WHEN child.name > name END as chosen_one FROM contacts",
         "results" : [
         {
             "chosen_one": [],
@@ -390,7 +390,7 @@
     },
     {
         "description" : "Array slicing with OVER test",
-        "statements" : "select name, children[0:2] as two_teenagers from contacts where all child.age > 10 over child in contacts.children end",
+        "statements" : "select name, children[0:2] as two_teenagers from contacts where every child in contacts.children satisfies child.age > 10 end",
         "results": [
         {
             "name": "ian",

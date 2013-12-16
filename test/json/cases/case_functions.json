@@ -608,7 +608,7 @@
     },
 
     {
-        "statements": "SELECT  ARRAY_LENGTH(ARRAY director OVER director IN details.director  END) AS D FROM catalog WHERE POLY_LENGTH(details.director) > 1",
+        "statements": "SELECT  ARRAY_LENGTH(ARRAY director FOR director IN details.director  END) AS D FROM catalog WHERE POLY_LENGTH(details.director) > 1",
         "results": [
         {
             "D": null
