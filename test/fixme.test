@@ -1,0 +1,25 @@
+Following tests are broken :
+
+    {
+-        "statements" : "SELECT id FROM orders WHERE ANY product LIKE \"______\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+-        "results" : [
+-        {
+-            "id": "1234"
+-        },
+-        {
+-            "id": "1235"
+-        }
+-    ]
+-    },
+
+ {
+-        "statements" : "SELECT id FROM orders WHERE NOT ALL product != \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+-        "results" : [
+-        {
+-            "id": "1234"
+-        },
+-        {
+-            "id": "1235"
+-        }
+-    ]
+-    },

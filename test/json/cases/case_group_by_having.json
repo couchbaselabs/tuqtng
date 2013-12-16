@@ -153,7 +153,7 @@
     },
 
     {
-        "statements": "SELECT details.director AS D, count(*) AS count FROM catalog WHERE ANY director OVER director IN details.director  END GROUP BY details.director HAVING ARRAY_LENGTH(details.director) > 1",
+        "statements": "SELECT details.director AS D, count(*) AS count FROM catalog WHERE ANY director IN details.director SATISFIES director END GROUP BY details.director HAVING ARRAY_LENGTH(details.director) > 1",
         "results": [
         {
             "D": [
@@ -166,7 +166,7 @@
     },
 
     {
-        "statements": "SELECT title, SUM(dimensions.length), SUM(dimensions.width) FROM catalog WHERE dimensions.height > 0.5 AND ANY gen = \"Thriller\" OVER gen IN details.genre END GROUP BY title HAVING SUM(dimensions.width) > 1 and SUM(dimensions.length) > 1",
+        "statements": "SELECT title, SUM(dimensions.length), SUM(dimensions.width) FROM catalog WHERE dimensions.height > 0.5 AND ANY gen IN details.genre SATISFIES gen = \"Thriller\" END GROUP BY title HAVING SUM(dimensions.width) > 1 and SUM(dimensions.length) > 1",
         "results": [
         {
             "$1": 7,
