@@ -231,12 +231,12 @@
     },
 
     {
-        "statements": "SELECT  META().id FROM contacts AS contact OVER child IN contact.children",
+        "statements": "SELECT  META().id FROM contacts AS contact UNNEST contact.children AS child",
         "error": "the META() function requires exactly 1 argument"
     },
 
     {
-        "statements": "SELECT  META(contact).id FROM contacts AS contact OVER child IN contact.children",
+        "statements": "SELECT  META(contact).id FROM contacts AS contact UNNEST contact.children AS child",
         "results": [
         {
             "id": "dave"
@@ -608,7 +608,7 @@
     },
 
     {
-        "statements": "SELECT  ARRAY_LENGTH(ARRAY director OVER director IN details.director  END) AS D FROM catalog WHERE POLY_LENGTH(details.director) > 1",
+        "statements": "SELECT  ARRAY_LENGTH(ARRAY director FOR director IN details.director  END) AS D FROM catalog WHERE POLY_LENGTH(details.director) > 1",
         "results": [
         {
             "D": null

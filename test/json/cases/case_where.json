@@ -148,7 +148,7 @@
     },
 
     {
-        "statements": "SELECT title FROM catalog WHERE (ANY genre = \"Crime\" OVER genre IN details.genre END AND ANY tags = \"english\" OVER tags IN tags END) AND  pricing.pct_savings > 10.55",
+        "statements": "SELECT title FROM catalog WHERE (ANY genre IN details.genre SATISFIES genre = \"Crime\"  END AND ANY tags in tags SATISFIES tags = \"english\" END) AND  pricing.pct_savings > 10.55",
         "results": [
         {
             "title": "Sherlock: Series 1"
@@ -157,7 +157,7 @@
     },
 
    {
-        "statements": "SELECT title FROM catalog WHERE (ALL length(genre) > 5 OVER genre IN details.genre END)",
+        "statements": "SELECT title FROM catalog WHERE (EVERY genre IN details.genre SATISFIES length(genre) > 5 END)",
         "results": [
         {
             "title": "Inferno"
@@ -169,7 +169,7 @@
     },
 
     {
-        "statements": "SELECT title FROM catalog WHERE (ANY genre = \"Crime\" OVER genre IN details.genre END AND ANY tags = \"english\" OVER tags IN tags END) AND  NOT (pricing.pct_savings < 15)",
+        "statements": "SELECT title FROM catalog WHERE (ANY genre IN details.genre SATISFIES genre = \"Crime\" END AND ANY tags IN tags SATISFIES tags = \"english\" END) AND NOT (pricing.pct_savings < 15)",
         "results": [
         {
             "title": "Sherlock: Series 1"
@@ -392,7 +392,7 @@
         "matchStatements": "SELECT name FROM tweets WHERE \"6253287\" = user.id_str"
     },
     {
-        "statements": "SELECT title FROM catalog WHERE (ALL length(genre) > 5 OVER details.genre END)",
+        "statements": "SELECT title FROM catalog WHERE (EVERY details.genre SATISFIES length(genre) > 5 END)",
         "results": [
         {
             "title": "Inferno"
@@ -403,7 +403,7 @@
     ]
     },
     {
-        "statements" : "SELECT id FROM orders WHERE ANY product == \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "statements" : "SELECT id FROM orders WHERE ANY product IN ARRAY ol.productId FOR ol IN orderlines END SATISFIES product == \"tea111\" END",
         "results" : [
         {
             "id": "1234"
@@ -415,7 +415,7 @@
     },
 
     {
-        "statements" : "SELECT id FROM orders WHERE ALL product <> \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "statements" : "SELECT id FROM orders WHERE EVERY product IN ARRAY ol.productId FOR ol IN orderlines END SATISFIES product <> \"tea111\" END",
         "results" : [
         {
             "id": "1200"
@@ -427,19 +427,7 @@
     },
 
     {
-        "statements" : "SELECT id FROM orders WHERE NOT ALL product != \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
-        "results" : [
-        {
-            "id": "1234"
-        },
-        {
-            "id": "1235"
-        }
-    ]
-    },
-
-    {
-        "statements" : "SELECT id FROM orders WHERE ALL product != \"tea111\" OVER product IN ARRAY ol.productId OVER ol IN orderlines END END",
+        "statements" : "SELECT id FROM orders WHERE EVERY product IN ARRAY ol.productId FOR ol IN orderlines END SATISFIES product != \"tea111\" END",
         "results" : [
         {
             "id": "1200"
@@ -452,7 +440,7 @@
 
     {
         "description": "ALL expression referring to outer context",
-        "statements" : "SELECT name, children FROM contacts WHERE ALL child.name > name OVER child IN children END",
+        "statements" : "SELECT name, children FROM contacts WHERE EVERY child IN children SATISFIES child.name > name END",
         "results" : [
         {
             "children": [

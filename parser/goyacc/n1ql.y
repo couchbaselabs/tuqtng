@@ -37,7 +37,7 @@ f float64}
 %token LIKE IS VALUED MISSING
 %token DOT
 %token CASE WHEN THEN ELSE END
-%token ANY ALL OVER FIRST ARRAY IN
+%token ANY ALL FIRST ARRAY IN SATISFIES EVERY UNNEST FOR
 %left OR
 %left AND
 %left EQ LT LTE GT GTE NE LIKE
@@ -386,7 +386,7 @@ select_from:
 	logDebugGrammar("SELECT FROM - EMPTY")
 }
 |
-FROM data_source_over {
+FROM data_source_unnest {
 	logDebugGrammar("SELECT FROM - DATASOURCE")
 	from := parsingStack.Pop().(*ast.From)
 	switch parsingStatement := parsingStatement.(type) {
@@ -397,7 +397,7 @@ FROM data_source_over {
 	}
 }
 |
-FROM COLON IDENTIFIER DOT data_source_over {
+FROM COLON IDENTIFIER DOT data_source_unnest {
 	logDebugGrammar("SELECT FROM - DATASOURCE WITH POOL")
 	from := parsingStack.Pop().(*ast.From)
 	from.Pool = $3.s
@@ -411,7 +411,7 @@ FROM COLON IDENTIFIER DOT data_source_over {
 ;
 
 select_from_required:
-FROM data_source_over {
+FROM data_source_unnest {
 	logDebugGrammar("SELECT FROM - DATASOURCE")
 	from := parsingStack.Pop().(*ast.From)
 	switch parsingStatement := parsingStatement.(type) {
@@ -422,7 +422,7 @@ FROM data_source_over {
 	}
 }
 |
-FROM COLON IDENTIFIER DOT data_source_over {
+FROM COLON IDENTIFIER DOT data_source_unnest {
 	logDebugGrammar("SELECT FROM - DATASOURCE WITH POOL")
 	from := parsingStack.Pop().(*ast.From)
 	from.Pool = $3.s
@@ -435,13 +435,13 @@ FROM COLON IDENTIFIER DOT data_source_over {
 }
 ;
 
-data_source_over:
+data_source_unnest:
 data_source {
-	logDebugGrammar("FROM DATASOURCE WITHOUT OVER")
+	logDebugGrammar("FROM DATASOURCE WITHOUT UNNEST")
 }
 |
-data_source over_source {
-	logDebugGrammar("FROM DATASOURCE WITH OVER")
+data_source unnest_source {
+	logDebugGrammar("FROM DATASOURCE WITH UNNEST")
 	rest := parsingStack.Pop().(*ast.From)
 	last := parsingStack.Pop().(*ast.From)
 	last.Over = rest
@@ -449,24 +449,34 @@ data_source over_source {
 }
 ;
 
-over_source:
-OVER path {
-	logDebugGrammar("OVER IN")
-	proj := parsingStack.Pop().(ast.Expression)
-	parsingStack.Push(&ast.From{Projection: proj, As: ""})
+/*unnest_source:*/
+unnest_source:
+UNNEST path {
+    logDebugGrammar("UNNEST")
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:""})
 }
 |
-OVER IDENTIFIER IN path {
-	logDebugGrammar("OVER IN")
-	proj := parsingStack.Pop().(ast.Expression)
-	parsingStack.Push(&ast.From{Projection: proj, As: $2.s})
+/* unnest subpath AS alias */
+UNNEST path AS IDENTIFIER {
+    logDebugGrammar("UNNEST AS")
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:$4.s})
 }
 |
-OVER IDENTIFIER IN path over_source {
-	logDebugGrammar("OVER IN nested")
-	rest := parsingStack.Pop().(*ast.From)
-	proj := parsingStack.Pop().(ast.Expression)
-	parsingStack.Push(&ast.From{Projection: proj, As: $2.s, Over:rest})
+/* nested unnest */
+UNNEST path unnest_source {
+    logDebugGrammar("UNNEST nested")
+    rest := parsingStack.Pop().(*ast.From)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As: "", Over:rest})
+}
+|
+UNNEST path AS IDENTIFIER unnest_source {
+    logDebugGrammar("UNNEST AS nested")
+    rest := parsingStack.Pop().(*ast.From)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As: $4.s, Over:rest})
 }
 ;
 
@@ -879,40 +889,40 @@ CASE WHEN then_list else_expr END {
 	parsingStack.Push(cwtee)
 }
 |
-ANY expr OVER IDENTIFIER IN expr END {
-	logDebugGrammar("ANY OVER")
-	sub := parsingStack.Pop().(ast.Expression)
-	condition := parsingStack.Pop().(ast.Expression)
-	collectionAny := ast.NewCollectionAnyOperator(condition, sub, $4.s)
-	parsingStack.Push(collectionAny)
+ANY expr SATISFIES expr END {
+    logDebugGrammar("ANY SATISFIES")
+    condition := parsingStack.Pop().(ast.Expression)
+    sub := parsingStack.Pop().(ast.Expression)
+    collectionAny := ast.NewCollectionAnyOperator(condition, sub, "")
+    parsingStack.Push(collectionAny)
 }
 |
-ANY expr OVER expr END {
-	logDebugGrammar("ANY OVER")
-	sub := parsingStack.Pop().(ast.Expression)
-	condition := parsingStack.Pop().(ast.Expression)
-	collectionAny := ast.NewCollectionAnyOperator(condition, sub, "")
-	parsingStack.Push(collectionAny)
+ANY IDENTIFIER IN expr SATISFIES expr END {
+    logDebugGrammar("ANY IN SATISFIES")
+    condition := parsingStack.Pop().(ast.Expression)
+    sub := parsingStack.Pop().(ast.Expression)
+    collectionAny := ast.NewCollectionAnyOperator(condition, sub, $2.s)
+    parsingStack.Push(collectionAny)
 }
 |
-ALL expr OVER IDENTIFIER IN expr END {
-	logDebugGrammar("ALL OVER")
-	sub := parsingStack.Pop().(ast.Expression)
-	condition := parsingStack.Pop().(ast.Expression)
-	collectionAny := ast.NewCollectionAllOperator(condition, sub, $4.s)
-	parsingStack.Push(collectionAny)
+EVERY IDENTIFIER IN expr SATISFIES expr END {
+    logDebugGrammar("ANY IN SATISFIES")
+    condition := parsingStack.Pop().(ast.Expression)
+    sub := parsingStack.Pop().(ast.Expression)
+    collectionAny := ast.NewCollectionAllOperator(condition, sub, $2.s)
+    parsingStack.Push(collectionAny)
 }
 |
-ALL expr OVER expr END {
-	logDebugGrammar("ALL OVER")
-	sub := parsingStack.Pop().(ast.Expression)
-	condition := parsingStack.Pop().(ast.Expression)
-	collectionAny := ast.NewCollectionAllOperator(condition, sub, "")
-	parsingStack.Push(collectionAny)
+ EVERY expr SATISFIES expr END {
+    logDebugGrammar("ANY SATISFIES")
+    condition := parsingStack.Pop().(ast.Expression)
+    sub := parsingStack.Pop().(ast.Expression)
+    collectionAny := ast.NewCollectionAllOperator(condition, sub, "")
+    parsingStack.Push(collectionAny)
 }
 |
-FIRST expr OVER IDENTIFIER IN expr WHEN expr END {
-	logDebugGrammar("FIRST OVER")
+FIRST expr FOR IDENTIFIER IN expr WHEN expr END {
+	logDebugGrammar("FIRST FOR IN WHEN")
 	condition := parsingStack.Pop().(ast.Expression)
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
@@ -920,8 +930,8 @@ FIRST expr OVER IDENTIFIER IN expr WHEN expr END {
 	parsingStack.Push(collectionFirst)
 }
 |
-FIRST expr OVER expr WHEN expr END {
-	logDebugGrammar("FIRST OVER")
+FIRST expr IN expr WHEN expr END {
+	logDebugGrammar("FIRST IN WHEN")
 	condition := parsingStack.Pop().(ast.Expression)
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
@@ -929,24 +939,24 @@ FIRST expr OVER expr WHEN expr END {
 	parsingStack.Push(collectionFirst)
 }
 |
-FIRST expr OVER IDENTIFIER IN expr END {
-	logDebugGrammar("FIRST OVER")
+FIRST expr FOR IDENTIFIER IN expr END {
+	logDebugGrammar("FIRST FOR IN")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
 	collectionFirst := ast.NewCollectionFirstOperator(nil, sub, $4.s, output)
 	parsingStack.Push(collectionFirst)
 }
 |
-FIRST expr OVER expr END {
-	logDebugGrammar("FIRST OVER")
+FIRST expr IN expr END {
+	logDebugGrammar("FIRST IN")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
 	collectionFirst := ast.NewCollectionFirstOperator(nil, sub, "", output)
 	parsingStack.Push(collectionFirst)
 }
 |
-ARRAY expr OVER IDENTIFIER IN expr WHEN expr END {
-	logDebugGrammar("ARRAY OVER WHEN")
+ARRAY expr FOR IDENTIFIER IN expr WHEN expr END {
+	logDebugGrammar("ARRAY FOR IN WHEN")
 	condition := parsingStack.Pop().(ast.Expression)
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
@@ -954,8 +964,8 @@ ARRAY expr OVER IDENTIFIER IN expr WHEN expr END {
 	parsingStack.Push(collectionArray)
 }
 |
-ARRAY expr OVER expr WHEN expr END {
-	logDebugGrammar("ARRAY OVER WHEN")
+ARRAY expr IN expr WHEN expr END {
+	logDebugGrammar("ARRAY IN WHEN")
 	condition := parsingStack.Pop().(ast.Expression)
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
@@ -963,16 +973,16 @@ ARRAY expr OVER expr WHEN expr END {
 	parsingStack.Push(collectionArray)
 }
 |
-ARRAY expr OVER IDENTIFIER IN expr END {
-	logDebugGrammar("ARRAY OVER")
+ARRAY expr FOR IDENTIFIER IN expr END {
+	logDebugGrammar("ARRAY FOR IN")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
 	collectionArray := ast.NewCollectionArrayOperator(nil, sub, $4.s, output)
 	parsingStack.Push(collectionArray)
 }
 |
-ARRAY expr OVER expr END {
-	logDebugGrammar("ARRAY OVER")
+ARRAY expr IN expr END {
+	logDebugGrammar("ARRAY IN")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
 	collectionArray := ast.NewCollectionArrayOperator(nil, sub, "", output)
@@ -1070,7 +1080,7 @@ path LBRACKET INT COLON RBRACKET {
 }
 |
 path LBRACKET COLON INT RBRACKET {
-    logDebugGrammar(" PATH SLICE BRACKET MEMBER -%v[:%v]", $1.s, $4.n)
+    logDebugGrammar("PATH SLICE BRACKET MEMBER -%v[:%v]", $1.s, $4.n)
     left := parsingStack.Pop()
     thisExpression := ast.NewBracketSliceMemberOperator(left.(ast.Expression), ast.NewLiteralNumber(float64(0)), ast.NewLiteralNumber(float64($4.n)))
     parsingStack.Push(thisExpression)

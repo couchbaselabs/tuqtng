@@ -91,9 +91,6 @@
 /[aA][lL][lL]/    {
                     logDebugTokens("ALL"); return ALL
                   }
-/[oO][vV][eE][rR]/{
-                    logDebugTokens("OVER"); return OVER
-                  }
 /[gG][rR][oO][uU][pP]/
                   {
                     logDebugTokens("GROUP"); return GROUP
@@ -213,6 +210,22 @@
 /[pP][oO][oO][lL]/
                   {
                     logDebugTokens("POOL"); return POOL
+                  }
+/[sS][aA][tT][iI][sS][fF][iI][eE][sS]/
+                  {
+                    logDebugTokens("SATISFIES"); return SATISFIES
+                  }
+/[eE][vV][eE][rR][yY]/
+                  {
+                    logDebugTokens("EVERY"); return EVERY
+                  }
+/[uU][nN][nN][eE][sS][tT]/
+                  {
+                    logDebugTokens("UNNEST"); return UNNEST
+                  }
+/[fF][oO][rR]/
+                  {
+                    logDebugTokens("FOR"); return FOR
                   }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
