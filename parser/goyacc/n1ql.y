@@ -37,7 +37,7 @@ f float64}
 %token LIKE IS VALUED MISSING
 %token DOT
 %token CASE WHEN THEN ELSE END
-%token ANY ALL OVER FIRST ARRAY IN SATISFIES EVERY UNNEST FOR
+%token ANY ALL FIRST ARRAY IN SATISFIES EVERY UNNEST FOR
 %left OR
 %left AND
 %left EQ LT LTE GT GTE NE LIKE
@@ -437,11 +437,11 @@ FROM COLON IDENTIFIER DOT data_source_unnest {
 
 data_source_unnest:
 data_source {
-	logDebugGrammar("FROM DATASOURCE WITHOUT OVER")
+	logDebugGrammar("FROM DATASOURCE WITHOUT UNNEST")
 }
 |
 data_source unnest_source {
-	logDebugGrammar("FROM DATASOURCE WITH OVER")
+	logDebugGrammar("FROM DATASOURCE WITH UNNEST")
 	rest := parsingStack.Pop().(*ast.From)
 	last := parsingStack.Pop().(*ast.From)
 	last.Over = rest
@@ -477,26 +477,6 @@ UNNEST path AS IDENTIFIER unnest_source {
     rest := parsingStack.Pop().(*ast.From)
     proj := parsingStack.Pop().(ast.Expression)
     parsingStack.Push(&ast.From{Projection: proj, As: $4.s, Over:rest})
-}
-/* depricated */
-|
-OVER path {
-	logDebugGrammar("OVER ")
-	proj := parsingStack.Pop().(ast.Expression)
-	parsingStack.Push(&ast.From{Projection: proj, As: ""})
-}
-|
-OVER IDENTIFIER IN path {
-	logDebugGrammar("OVER IN")
-	proj := parsingStack.Pop().(ast.Expression)
-	parsingStack.Push(&ast.From{Projection: proj, As: $2.s})
-}
-|
-OVER IDENTIFIER IN path unnest_source {
-	logDebugGrammar("OVER IN nested")
-	rest := parsingStack.Pop().(*ast.From)
-	proj := parsingStack.Pop().(ast.Expression)
-	parsingStack.Push(&ast.From{Projection: proj, As: $2.s, Over:rest})
 }
 ;
 
@@ -942,7 +922,7 @@ EVERY IDENTIFIER IN expr SATISFIES expr END {
 }
 |
 FIRST expr FOR IDENTIFIER IN expr WHEN expr END {
-	logDebugGrammar("FIRST OVER")
+	logDebugGrammar("FIRST FOR IN WHEN")
 	condition := parsingStack.Pop().(ast.Expression)
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
@@ -951,7 +931,7 @@ FIRST expr FOR IDENTIFIER IN expr WHEN expr END {
 }
 |
 FIRST expr IN expr WHEN expr END {
-	logDebugGrammar("FIRST OVER")
+	logDebugGrammar("FIRST IN WHEN")
 	condition := parsingStack.Pop().(ast.Expression)
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
@@ -960,7 +940,7 @@ FIRST expr IN expr WHEN expr END {
 }
 |
 FIRST expr FOR IDENTIFIER IN expr END {
-	logDebugGrammar("FIRST OVER")
+	logDebugGrammar("FIRST FOR IN")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
 	collectionFirst := ast.NewCollectionFirstOperator(nil, sub, $4.s, output)
@@ -968,7 +948,7 @@ FIRST expr FOR IDENTIFIER IN expr END {
 }
 |
 FIRST expr IN expr END {
-	logDebugGrammar("FIRST OVER")
+	logDebugGrammar("FIRST IN")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
 	collectionFirst := ast.NewCollectionFirstOperator(nil, sub, "", output)
@@ -976,7 +956,7 @@ FIRST expr IN expr END {
 }
 |
 ARRAY expr FOR IDENTIFIER IN expr WHEN expr END {
-	logDebugGrammar("ARRAY OVER WHEN")
+	logDebugGrammar("ARRAY FOR IN WHEN")
 	condition := parsingStack.Pop().(ast.Expression)
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
@@ -985,7 +965,7 @@ ARRAY expr FOR IDENTIFIER IN expr WHEN expr END {
 }
 |
 ARRAY expr IN expr WHEN expr END {
-	logDebugGrammar("ARRAY OVER WHEN")
+	logDebugGrammar("ARRAY IN WHEN")
 	condition := parsingStack.Pop().(ast.Expression)
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
@@ -994,7 +974,7 @@ ARRAY expr IN expr WHEN expr END {
 }
 |
 ARRAY expr FOR IDENTIFIER IN expr END {
-	logDebugGrammar("ARRAY OVER")
+	logDebugGrammar("ARRAY FOR IN")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
 	collectionArray := ast.NewCollectionArrayOperator(nil, sub, $4.s, output)
@@ -1002,7 +982,7 @@ ARRAY expr FOR IDENTIFIER IN expr END {
 }
 |
 ARRAY expr IN expr END {
-	logDebugGrammar("ARRAY OVER")
+	logDebugGrammar("ARRAY IN")
 	sub := parsingStack.Pop().(ast.Expression)
 	output := parsingStack.Pop().(ast.Expression)
 	collectionArray := ast.NewCollectionArrayOperator(nil, sub, "", output)
