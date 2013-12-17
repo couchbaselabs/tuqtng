@@ -389,7 +389,7 @@
     ]
     },
     {
-        "description" : "Array slicing with OVER test",
+        "description" : "Array slicing and unnesting test",
         "statements" : "select name, children[0:2] as two_teenagers from contacts where every child in contacts.children satisfies child.age > 10 end",
         "results": [
         {

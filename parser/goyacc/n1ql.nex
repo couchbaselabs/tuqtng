@@ -91,9 +91,6 @@
 /[aA][lL][lL]/    {
                     logDebugTokens("ALL"); return ALL
                   }
-/[oO][vV][eE][rR]/{
-                    logDebugTokens("OVER"); return OVER
-                  }
 /[gG][rR][oO][uU][pP]/
                   {
                     logDebugTokens("GROUP"); return GROUP

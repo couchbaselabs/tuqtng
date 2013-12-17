@@ -112,9 +112,9 @@ var validQueries = []string{
 	// from clause
 	`SELECT * FROM abucket AS buck`,
 	`SELECT * FROM abucket buck`,
-	`SELECT * FROM abucket AS buck OVER address IN buck.addresses`,
-	`SELECT * FROM abucket AS buck OVER address IN buck.addresses OVER line IN address.lines`,
-	`SELECT * FROM abucket AS buck OVER buck.addresses`,
+	`SELECT * FROM abucket AS buck UNNEST buck.addresses AS address`,
+	`SELECT * FROM abucket AS buck UNNEST buck.addresses AS address UNNEST address.lines AS line`,
+	`SELECT * FROM abucket AS buck UNNEST buck.addresses`,
 
 	`SELECT DISTINCT name from abucket`,
 	`SELECT UNIQUE name from abucket`,
@@ -145,7 +145,7 @@ var validQueries = []string{
 	`SELECT DISTINCT organization.address FROM organizations WHERE address.city = "Mountain View"`,
 	`SELECT LENGTH(some_array) FROM tutorial`,
 	`SELECT some_array[0] FROM tutorial`,
-	`SELECT * FROM organizations AS organization OVER employee IN organization.employees`,
+	`SELECT * FROM organizations AS organization UNNEST organization.employees AS employee`,
 	`SELECT * FROM tutorial WHERE ANY name IN collection SATISFIES predicate END`,
 	`SELECT * FROM tutorial WHERE FIRST expression FOR name IN collection END`,
 	`SELECT * FROM tutorial WHERE FIRST collection IN collection END`,

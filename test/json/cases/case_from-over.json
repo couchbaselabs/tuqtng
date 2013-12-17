@@ -1,6 +1,6 @@
 [
     {
-        "statements": "SELECT * FROM contacts AS contact OVER child IN contact.children",
+        "statements": "SELECT * FROM contacts AS contact UNNEST contact.children AS child",
         "results": [
         {
             "child": {
@@ -166,7 +166,7 @@
     },
 
     {
-        "statements": "SELECT * FROM contacts AS contact OVER child IN contact.children WHERE child.name = \"aiden\"",
+        "statements": "SELECT * FROM contacts AS contact UNNEST contact.children AS child WHERE child.name = \"aiden\"",
         "results": [
         {
             "child": {
@@ -199,7 +199,7 @@
     },
 
     {
-        "statements": "SELECT child FROM contacts AS contact OVER child IN contact.children WHERE child.name = \"aiden\"",
+        "statements": "SELECT child FROM contacts AS contact UNNEST contact.children AS child WHERE child.name = \"aiden\"",
         "results": [
         {
             "child": {
@@ -212,7 +212,7 @@
     },
 
     {
-        "statements": "SELECT contact FROM contacts AS contact OVER child IN contact.children WHERE child.name = \"aiden\"",
+        "statements": "SELECT contact FROM contacts AS contact UNNEST contact.children[0:1] AS child WHERE child.name = \"aiden\"",
         "results": [
         {
             "contact": {
@@ -240,7 +240,7 @@
     },
 
     {
-        "statements": "SELECT contact.* FROM contacts AS contact OVER child IN contact.children WHERE child.name = \"aiden\"",
+        "statements": "SELECT contact.* FROM contacts AS contact UNNEST contact.children AS child WHERE child.name = \"aiden\"",
         "results": [
         {
                 "children": [
@@ -267,7 +267,7 @@
 
 
     {
-        "statements": "SELECT search.category AS most_searched_category, count(*) AS count FROM user_profile AS search_hist OVER search IN search_hist.search_history GROUP BY search.category",
+        "statements": "SELECT search.category AS most_searched_category, count(*) AS count FROM user_profile AS search_hist UNNEST search_hist.search_history AS search GROUP BY search.category",
         "results": [
         {
             "count": 11,
@@ -285,7 +285,7 @@
     },
 
     {
-        "statements": "SELECT search.category, subcat, count(*) AS C FROM user_profile AS search_hist OVER search IN search_hist.search_history OVER subcat IN search.sub-category GROUP BY search.category, subcat HAVING search.category = \"Films\" ORDER BY subcat",
+        "statements": "SELECT search.category, subcat, count(*) AS C FROM user_profile AS search_hist UNNEST search_hist.search_history AS search UNNEST search.sub-category AS subcat GROUP BY search.category, subcat HAVING search.category = \"Films\" ORDER BY subcat",
         "results": [
         {
             "C": 4,
@@ -336,7 +336,7 @@
     
     },
     {
-        "statements": "SELECT * FROM contacts AS contact OVER contact.children",
+        "statements": "SELECT * FROM contacts AS contact UNNEST contact.children",
         "results": [
         {
             "children": {
