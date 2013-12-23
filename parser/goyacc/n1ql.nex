@@ -227,6 +227,14 @@
                   {
                     logDebugTokens("FOR"); return FOR
                   }
+/[kK][eE][yY]/
+                  {
+                    logDebugTokens("KEY"); return KEY
+                  }
+/[kK][eE][yY][sS]/
+                  {
+                    logDebugTokens("KEYS"); return KEYS
+                  }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }
