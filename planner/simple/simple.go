@@ -91,7 +91,10 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 		return
 	}
 
-	keylist := stmt.Keys.GetKeys()
+	var keylist []string
+	if stmt.Keys != nil {
+		keylist = stmt.Keys.GetKeys()
+	}
 
 	clog.To(planner.CHANNEL, "Indexes in bucket %v", indexes)
 
@@ -188,11 +191,19 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 				}
 			}
 			planHeads = append(planHeads, lastStep)
+
 		}
 	} else if keylist != nil {
+		// if keylist is present then we avoid a bucket scan
 		var lastStep plan.PlanElement
 		lastStep = plan.NewKeyScan(keylist)
 		lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
+		nextFrom := from.Over
+		for nextFrom != nil {
+			// add document joins
+			lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+			nextFrom = nextFrom.Over
+		}
 		planHeads = append(planHeads, lastStep)
 	}
 

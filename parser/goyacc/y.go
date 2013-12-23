@@ -1248,7 +1248,7 @@ yydefault:
 			logDebugGrammar("This statement does not support KEYS")
 		}
 		proj := parsingStack.Pop().(ast.Expression)
-		parsingStack.Push(&ast.From{Projection: proj, Keys: keys})
+		parsingStack.Push(&ast.From{Projection: proj})
 	}
 	case 56:
 		//line n1ql.y:519

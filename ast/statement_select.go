@@ -9,10 +9,6 @@
 
 package ast
 
-import (
-	"fmt"
-)
-
 type SelectStatement struct {
 	Distinct                  bool                 `json:"distinct"`
 	Select                    ResultExpressionList `json:"select"`
@@ -229,9 +225,11 @@ func (this *SelectStatement) validate() error {
 	}
 
 	// validate the key/keys expression
-	err = this.Keys.Validate()
-	if err != nil {
-		return err
+	if this.Keys != nil {
+		err = this.Keys.Validate()
+		if err != nil {
+			return err
+		}
 	}
 
 	// validate the order by
@@ -280,6 +278,13 @@ func (this *SelectStatement) verifyFormalNotation(explicitProjectionAliases []st
 	// verify the where (references to projection aliases not allowed)
 	if this.Where != nil {
 		this.Where, err = this.Where.Accept(formalNotation)
+		if err != nil {
+			return err
+		}
+	}
+
+	if this.Keys != nil {
+		this.Keys.Expr, err = this.Keys.Expr.Accept(formalNotation)
 		if err != nil {
 			return err
 		}
@@ -373,6 +378,14 @@ func (this *SelectStatement) Simplify() error {
 	if this.Where != nil {
 		es := NewExpressionSimplifier()
 		this.Where, err = this.Where.Accept(es)
+		if err != nil {
+			return err
+		}
+	}
+
+	if this.Keys != nil {
+		es := NewExpressionSimplifier()
+		this.Keys.Expr, err = this.Keys.Expr.Accept(es)
 		if err != nil {
 			return err
 		}

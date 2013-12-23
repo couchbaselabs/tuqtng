@@ -513,7 +513,7 @@ path KEYS expr {
 		logDebugGrammar("This statement does not support KEYS")
 	}
 	proj := parsingStack.Pop().(ast.Expression)
-	parsingStack.Push(&ast.From{Projection: proj, Keys: keys})
+	parsingStack.Push(&ast.From{Projection: proj})
 }
 |
 path AS IDENTIFIER {
