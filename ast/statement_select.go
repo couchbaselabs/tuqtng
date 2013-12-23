@@ -9,7 +9,9 @@
 
 package ast
 
-import ()
+import (
+	"fmt"
+)
 
 type SelectStatement struct {
 	Distinct                  bool                 `json:"distinct"`
@@ -22,6 +24,7 @@ type SelectStatement struct {
 	Limit                     int                  `json:"limit"`
 	Offset                    int                  `json:"offset"`
 	ExplainOnly               bool                 `json:"explain"`
+	Keys                      *KeyExpression       `json:"keys"`
 	explicitProjectionAliases []string
 	aggregateReferences       ExpressionList
 }
@@ -225,6 +228,12 @@ func (this *SelectStatement) validate() error {
 		}
 	}
 
+	// validate the key/keys expression
+	err = this.Keys.Validate()
+	if err != nil {
+		return err
+	}
+
 	// validate the order by
 	err = this.OrderBy.Validate()
 	if err != nil {
@@ -369,13 +378,13 @@ func (this *SelectStatement) Simplify() error {
 		}
 	}
 
-	// validate the order by
+	// simplify the order by
 	err = this.OrderBy.Simplify()
 	if err != nil {
 		return err
 	}
 
-	// validate the group by
+	// simplify the group by
 	if this.GroupBy != nil {
 		err = this.GroupBy.Simplify()
 		if err != nil {
@@ -383,7 +392,7 @@ func (this *SelectStatement) Simplify() error {
 		}
 	}
 
-	// validate the having
+	// simlify the having
 	if this.Having != nil {
 		es := NewExpressionSimplifier()
 		this.Having, err = this.Having.Accept(es)

@@ -208,3 +208,95 @@ func (this *Scan) buildValue(key ast.Expression, val *dparval.Value) *dparval.Va
 func (this *Scan) SetQuery(q network.Query) {
 	this.query = q
 }
+
+// KeyScan, dummy scan that just writes the list of keys
+
+type KeyScan struct {
+	itemChannel           dparval.ValueChannel
+	supportChannel        PipelineSupportChannel
+	downstreamStopChannel misc.StopChannel
+	keylist               []string
+	query                 network.Query
+	rowsKeyScanned        int
+}
+
+func NewKeyScan(keylist []string) *KeyScan {
+	return &KeyScan{
+		itemChannel:    make(dparval.ValueChannel),
+		supportChannel: make(PipelineSupportChannel),
+		keylist:        keylist,
+	}
+}
+
+func (this *KeyScan) SetSource(source Operator) {}
+
+func (this *KeyScan) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
+	return this.itemChannel, this.supportChannel
+}
+
+func (this *KeyScan) Run(stopChannel misc.StopChannel) {
+	defer close(this.itemChannel)
+	defer close(this.supportChannel)
+	// this MUST be here so that it runs before the channels are closed
+	defer this.RecoverPanic()
+
+	clog.To(CHANNEL, "key scan operator starting")
+
+	for _, item := range this.keylist {
+		this.rowsKeyScanned += 1
+		// rematerialize an object from the data returned by this index entry
+		doc := dparval.NewValue(map[string]interface{}{})
+		// attach metadata
+		doc.SetAttachment("meta", map[string]interface{}{"id": item})
+		this.SendItem(doc)
+	}
+
+	clog.To(CHANNEL, "key scan operator finished, scanned %d", this.rowsKeyScanned)
+}
+
+func (this *KeyScan) processItem(item *dparval.Value) bool {
+	return true
+}
+
+func (this *KeyScan) afterItems() {}
+
+func (this *KeyScan) SendItem(item *dparval.Value) bool {
+	ok := true
+	for ok {
+		select {
+		case this.itemChannel <- item:
+			return true
+		case _, ok = <-this.downstreamStopChannel:
+			// someone closed the stop channel
+		}
+	}
+	return ok
+}
+
+func (this *KeyScan) SendError(err query.Error) bool {
+	ok := true
+	for ok {
+		select {
+		case this.supportChannel <- err:
+			if err.IsFatal() {
+				return false
+			}
+			return true
+		case _, ok = <-this.downstreamStopChannel:
+			// someone closed the stop channel
+		}
+	}
+	return false
+}
+
+func (this *KeyScan) RecoverPanic() {
+	r := recover()
+	if r != nil {
+		clog.Error(fmt.Errorf("Query Execution Panic: %v\n%s", r, debug.Stack()))
+		this.SendError(query.NewError(nil, "Panic In Exeuction Pipeline"))
+	}
+}
+
+func (this *KeyScan) SetQuery(q network.Query) {
+	this.query = q
+}

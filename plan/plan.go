@@ -295,6 +295,22 @@ func (this *Scan) Sources() []PlanElement {
 	return []PlanElement{}
 }
 
+type KeyScan struct {
+	Type    string   `json:"type"`
+	KeyList []string `json:"keys"`
+}
+
+func NewKeyScan(keylist []string) *KeyScan {
+	return &KeyScan{
+		Type:    "keyscan",
+		KeyList: keylist,
+	}
+}
+
+func (this *KeyScan) Sources() []PlanElement {
+	return []PlanElement{}
+}
+
 type FastCount struct {
 	Type       string         `json:"type"`
 	CountIndex string         `json:"index"`

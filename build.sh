@@ -20,6 +20,10 @@ elif [ $1 == "clean" ]
 elif [ $1 == "fmt" ]
     then
     go fmt ./...
+elif [ $1 == "tags" ]
+then
+    find . -name "*.go" > cscope.files
+    find . -name "*.go" | xargs gotags > ctags 
 else
     echo "No comprehendo senor !"
 fi
