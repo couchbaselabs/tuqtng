@@ -408,5 +408,142 @@
             ]
         }
     ]
+    },
+    {
+        "statements" : "SELECT name, array_append(array_agg(name), [1,2]) AS names FROM contacts GROUP BY contacts.name",
+        "resultset": [
+        {
+            "name": "dave",
+            "names": [
+                "dave",
+                [
+                    1,
+                    2
+                ]
+            ]
+        },
+        {
+            "name": "earl",
+            "names": [
+                "earl",
+                [
+                    1,
+                    2
+                ]
+            ]
+        },
+        {
+            "name": "fred",
+            "names": [
+                "fred",
+                [
+                    1,
+                    2
+                ]
+            ]
+        },
+        {
+            "name": "harry",
+            "names": [
+                "harry",
+                [
+                    1,
+                    2
+                ]
+            ]
+        },
+        {
+            "name": "ian",
+            "names": [
+                "ian",
+                [
+                    1,
+                    2
+                ]
+            ]
+        },
+        {
+            "name": "jane",
+            "names": [
+                "jane",
+                [
+                    1,
+                    2
+                ]
+            ]
+        }
+    ]
+    },
+
+    {
+        "statements" : "SELECT name, array_prepend([\"manik\", \"gerald\", \"steve\"], array_agg(name)) AS names FROM contacts GROUP BY contacts.name",
+        "resultset": [
+        {
+            "name": "dave",
+            "names": [
+                [
+                    "manik",
+                    "gerald",
+                    "steve"
+                ],
+                "dave"
+            ]
+        },
+        {
+            "name": "earl",
+            "names": [
+                [
+                    "manik",
+                    "gerald",
+                    "steve"
+                ],
+                "earl"
+            ]
+        },
+        {
+            "name": "fred",
+            "names": [
+                [
+                    "manik",
+                    "gerald",
+                    "steve"
+                ],
+                "fred"
+            ]
+        },
+        {
+            "name": "harry",
+            "names": [
+                [
+                    "manik",
+                    "gerald",
+                    "steve"
+                ],
+                "harry"
+            ]
+        },
+        {
+            "name": "ian",
+            "names": [
+                [
+                    "manik",
+                    "gerald",
+                    "steve"
+                ],
+                "ian"
+            ]
+        },
+        {
+            "name": "jane",
+            "names": [
+                [
+                    "manik",
+                    "gerald",
+                    "steve"
+                ],
+                "jane"
+            ]
+        }
+    ]
     }
 ]
