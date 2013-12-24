@@ -4,6 +4,7 @@ import "github.com/couchbaselabs/clog"
 import "github.com/couchbaselabs/tuqtng/parser"
 import "github.com/couchbaselabs/tuqtng/ast"
 
+
 func logDebugGrammar(format string, v ...interface{}) {
     clog.To(parser.PARSER_CHANNEL, format, v...)
 }
@@ -21,7 +22,7 @@ f float64}
 %token EXPLAIN
 %token CREATE DROP PRIMARY VIEW INDEX ON USING
 %token DISTINCT UNIQUE
-%token SELECT AS FROM WHERE
+%token SELECT AS FROM WHERE KEY KEYS
 %token ORDER BY ASC DESC
 %token LIMIT OFFSET
 %token GROUP BY HAVING
@@ -182,6 +183,7 @@ CREATE INDEX IDENTIFIER ON COLON IDENTIFIER DOT IDENTIFIER LPAREN expression_lis
 	parsingStatement = createIndexStmt
 }
 ;
+
 
 view_using:
 VIEW {
@@ -408,11 +410,12 @@ FROM COLON IDENTIFIER DOT data_source_unnest {
 		logDebugGrammar("This statement does not support FROM")
 	}
 }
+
 ;
 
 select_from_required:
 FROM data_source_unnest {
-	logDebugGrammar("SELECT FROM - DATASOURCE")
+	logDebugGrammar("SELECT FROM - DATASOURCE over here")
 	from := parsingStack.Pop().(*ast.From)
 	switch parsingStatement := parsingStatement.(type) {
 	case *ast.SelectStatement:
@@ -483,6 +486,32 @@ UNNEST path AS IDENTIFIER unnest_source {
 data_source:
 path {
 	logDebugGrammar("FROM DATASOURCE")
+	proj := parsingStack.Pop().(ast.Expression)
+	parsingStack.Push(&ast.From{Projection: proj})
+}
+|
+path KEY expr {
+        logDebugGrammar("FROM DATASOURCE with KEY")
+        keys := parsingStack.Pop().(ast.Expression)
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.Keys = ast.NewKeyExpression(keys, "key") 
+	default:
+		logDebugGrammar("This statement does not support KEY")
+	}
+	proj := parsingStack.Pop().(ast.Expression)
+	parsingStack.Push(&ast.From{Projection: proj})
+}
+|
+path KEYS expr {
+        logDebugGrammar("FROM DATASOURCE with KEYS")
+        keys := parsingStack.Pop().(ast.Expression)
+	switch parsingStatement := parsingStatement.(type) {
+	case *ast.SelectStatement:
+		parsingStatement.Keys = ast.NewKeyExpression(keys, "keys")
+	default:
+		logDebugGrammar("This statement does not support KEYS")
+	}
 	proj := parsingStack.Pop().(ast.Expression)
 	parsingStack.Push(&ast.From{Projection: proj})
 }
@@ -612,6 +641,7 @@ OFFSET INT {
 };
 
 //EXPRESSION
+
 
 expression:
 expr {

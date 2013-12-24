@@ -9,8 +9,6 @@
 
 package ast
 
-import ()
-
 type SelectStatement struct {
 	Distinct                  bool                 `json:"distinct"`
 	Select                    ResultExpressionList `json:"select"`
@@ -22,6 +20,7 @@ type SelectStatement struct {
 	Limit                     int                  `json:"limit"`
 	Offset                    int                  `json:"offset"`
 	ExplainOnly               bool                 `json:"explain"`
+	Keys                      *KeyExpression       `json:"keys"`
 	explicitProjectionAliases []string
 	aggregateReferences       ExpressionList
 }
@@ -225,6 +224,14 @@ func (this *SelectStatement) validate() error {
 		}
 	}
 
+	// validate the key/keys expression
+	if this.Keys != nil {
+		err = this.Keys.Validate()
+		if err != nil {
+			return err
+		}
+	}
+
 	// validate the order by
 	err = this.OrderBy.Validate()
 	if err != nil {
@@ -271,6 +278,13 @@ func (this *SelectStatement) verifyFormalNotation(explicitProjectionAliases []st
 	// verify the where (references to projection aliases not allowed)
 	if this.Where != nil {
 		this.Where, err = this.Where.Accept(formalNotation)
+		if err != nil {
+			return err
+		}
+	}
+
+	if this.Keys != nil {
+		this.Keys.Expr, err = this.Keys.Expr.Accept(formalNotation)
 		if err != nil {
 			return err
 		}
@@ -369,13 +383,21 @@ func (this *SelectStatement) Simplify() error {
 		}
 	}
 
-	// validate the order by
+	if this.Keys != nil {
+		es := NewExpressionSimplifier()
+		this.Keys.Expr, err = this.Keys.Expr.Accept(es)
+		if err != nil {
+			return err
+		}
+	}
+
+	// simplify the order by
 	err = this.OrderBy.Simplify()
 	if err != nil {
 		return err
 	}
 
-	// validate the group by
+	// simplify the group by
 	if this.GroupBy != nil {
 		err = this.GroupBy.Simplify()
 		if err != nil {
@@ -383,7 +405,7 @@ func (this *SelectStatement) Simplify() error {
 		}
 	}
 
-	// validate the having
+	// simlify the having
 	if this.Having != nil {
 		es := NewExpressionSimplifier()
 		this.Having, err = this.Having.Accept(es)

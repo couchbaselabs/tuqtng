@@ -203,8 +203,6 @@ func (this *FunctionCall) EvaluateOperandsForArrayAppend(context *dparval.Value)
 		switch lvalue := lvalue.(type) {
 		case []interface{}:
 			switch rvalue := rvalue.(type) {
-			case []interface{}:
-				return append(lvalue, rvalue...), nil
 			default:
 				return append(lvalue, rvalue), nil
 			}
@@ -233,8 +231,6 @@ func (this *FunctionCall) EvaluateOperandsForArrayPrepend(context *dparval.Value
 		switch rvalue := rvalue.(type) {
 		case []interface{}:
 			switch lvalue := lvalue.(type) {
-			case []interface{}:
-				return append(lvalue, rvalue...), nil
 			default:
 				result := make([]interface{}, 1)
 				result[0] = lv

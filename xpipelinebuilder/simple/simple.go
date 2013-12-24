@@ -72,6 +72,9 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan, q network.Query
 			}
 			scanIndex := index.(catalog.ScanIndex) // FIXME: need static type safety
 			currentOperator = xpipeline.NewScan(bucket, scanIndex, currentElement.Ranges, currentElement.As)
+		case *plan.KeyScan:
+			currentOperator = xpipeline.NewKeyScan(currentElement.KeyList)
+
 		case *plan.Fetch:
 			pool, err := this.site.PoolByName(currentElement.Pool)
 			if err != nil {
