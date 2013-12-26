@@ -235,6 +235,18 @@
                   {
                     logDebugTokens("KEYS"); return KEYS
                   }
+/[iI][nN][nN][eE][rR]/
+                  {
+                    logDebugTokens("INNER"); return INNER
+                  }
+/[oO][uU][tT][eE][rR]/
+                  {
+                    logDebugTokens("OUTER"); return OUTER
+                  }
+/[lL][eE][fF][tT]/
+                  {
+                    logDebugTokens("LEFT"); return LEFT
+                  }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }

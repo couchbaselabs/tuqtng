@@ -120,6 +120,12 @@ func (this *SelectStatement) VerifySemantics() error {
 		this.From.GenerateAlias()
 	}
 
+	nextJoin := this.From.Join
+	for nextJoin != nil {
+		nextJoin.ConvertToBucketFrom()
+		nextJoin = nextJoin.Join
+	}
+
 	// verify formal notations
 	err = this.verifyFormalNotation(this.explicitProjectionAliases)
 	if err != nil {

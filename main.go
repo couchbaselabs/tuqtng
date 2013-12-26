@@ -36,7 +36,7 @@ var profileMode = flag.Bool("profile", false, "Profile Mode")
 var staticPath = flag.String("staticPath", "static", "Path to static content")
 var queryTimeout = flag.Duration("queryTimeout", -1*time.Second, "Query execution timeout, negative values disable timeout")
 
-var devModeDefaultLogKeys = []string{"HTTP", "NETWORK", "PIPELINE", "CATALOG", "PLANNER", "SCAN", "OPTIMIZER"}
+var devModeDefaultLogKeys = []string{"HTTP", "NETWORK", "PIPELINE", "CATALOG", "PLANNER", "SCAN", "OPTIMIZER", "PARSER"}
 
 func main() {
 	flag.Parse()
