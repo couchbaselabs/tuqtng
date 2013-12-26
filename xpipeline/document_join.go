@@ -47,6 +47,7 @@ func (this *DocumentJoin) Run(stopChannel misc.StopChannel) {
 }
 
 func (this *DocumentJoin) processItem(item *dparval.Value) bool {
+
 	val, err := this.Base.Evaluate(this.Over, item)
 	if err != nil {
 		switch err := err.(type) {

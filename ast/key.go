@@ -41,11 +41,11 @@ func (this *KeyExpression) Validate() error {
 		//expr := this.Expr.Evaluate(this.Expr.value())
 	}
 
-	if this.Type == "key" && len(this.Keys) > 1 {
+	if this.Keys != nil && this.Type == "KEY" && len(this.Keys) > 1 {
 		//array specifed for a single key
 		return fmt.Errorf("KEY expression used with multiple values")
 	}
-	if this.Type == "keys" && len(this.Keys) < 2 {
+	if this.Keys != nil && this.Type == "KEYS" && len(this.Keys) < 2 {
 		return fmt.Errorf("KEYS expression used with a single value")
 	}
 

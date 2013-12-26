@@ -497,6 +497,32 @@ func (this *DocumentJoin) Sources() []PlanElement {
 	return []PlanElement{this.Input}
 }
 
+type KeyJoin struct {
+	Type       string            `json:"type"`
+	Input      PlanElement       `json:"input"`
+	Pool       string            `json:"pool"`
+	Bucket     string            `json:"bucket"`
+	Projection ast.Expression    `json:"projection"`
+	Keys       ast.KeyExpression `json:"keys"`
+	As         string            `json:"as"`
+}
+
+func NewKeyJoin(input PlanElement, pool string, bucket string, projection ast.Expression, keys ast.KeyExpression, as string) *KeyJoin {
+	return &KeyJoin{
+		Type:       "key-join",
+		Input:      input,
+		Pool:       pool,
+		Bucket:     bucket,
+		Projection: projection,
+		Keys:       keys,
+		As:         as,
+	}
+}
+
+func (this *KeyJoin) Sources() []PlanElement {
+	return []PlanElement{this.Input}
+}
+
 type EliminateDuplicates struct {
 	Type  string      `json:"type"`
 	Input PlanElement `json:"input"`

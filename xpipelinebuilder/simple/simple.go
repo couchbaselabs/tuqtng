@@ -74,7 +74,16 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan, q network.Query
 			currentOperator = xpipeline.NewScan(bucket, scanIndex, currentElement.Ranges, currentElement.As)
 		case *plan.KeyScan:
 			currentOperator = xpipeline.NewKeyScan(currentElement.KeyList)
-
+		case *plan.KeyJoin:
+			pool, err := this.site.PoolByName(currentElement.Pool)
+			if err != nil {
+				return nil, err
+			}
+			bucket, err := pool.BucketByName(currentElement.Bucket)
+			if err != nil {
+				return nil, err
+			}
+			currentOperator = xpipeline.NewKeyJoin(bucket, currentElement.Projection, currentElement.Keys, currentElement.As)
 		case *plan.Fetch:
 			pool, err := this.site.PoolByName(currentElement.Pool)
 			if err != nil {
