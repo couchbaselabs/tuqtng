@@ -601,6 +601,10 @@ path {
 	parsingStack.Push(&ast.From{Projection: proj})
 }
 |
+path key_expr {
+    logDebugGrammar("FROM KEY(S) DATASOURCE")
+}
+|
 path AS IDENTIFIER {
     // fixme support over as
 	logDebugGrammar("FROM DATASOURCE AS ID")
