@@ -7,7 +7,6 @@ script:
 - go vet ./...
 notifications:
   email:
-  - marty.schoch@gmail.com
   - siri@couchbase.com
   - gerald@couchbase.com
   - steve@couchbase.com
