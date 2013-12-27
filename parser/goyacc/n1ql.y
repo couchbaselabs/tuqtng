@@ -456,7 +456,7 @@ data_source join_source {
     	logDebugGrammar("FROM DATASOURCE WITH JOIN") 
         rest := parsingStack.Pop().(*ast.From)
 	last := parsingStack.Pop().(*ast.From)
-	last.Join = rest
+	last.Over = rest
 	parsingStack.Push(last)
 }
 ;
@@ -476,6 +476,13 @@ UNNEST path AS IDENTIFIER {
     parsingStack.Push(&ast.From{Projection: proj, As:$4.s})
 }
 |
+/* unnest subpath AS alias */
+UNNEST path IDENTIFIER {
+    logDebugGrammar("UNNEST AS")
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:$3.s})
+}
+|
 /* nested unnest */
 UNNEST path unnest_source {
     logDebugGrammar("UNNEST nested")
@@ -490,31 +497,55 @@ UNNEST path AS IDENTIFIER unnest_source {
     proj := parsingStack.Pop().(ast.Expression)
     parsingStack.Push(&ast.From{Projection: proj, As: $4.s, Over:rest})
 }
-;
-
-
-join_source:
-JOIN path join_key_expr {
-    logDebugGrammar("JOIN KEY")
-    proj := parsingStack.Pop().(ast.Expression)
-    parsingStack.Push(&ast.From{Projection: proj, As:""})
-}
 |
-JOIN path key_expr join_source {
-    logDebugGrammar("JOIN KEY")
+JOIN path join_key_expr {
+    logDebugGrammar("JOIN KEY") 
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:"", Keys: key_expr})
 }
 |
 JOIN path AS IDENTIFIER join_key_expr  {
     logDebugGrammar("JOIN AS KEY") 
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
     proj := parsingStack.Pop().(ast.Expression)
-    parsingStack.Push(&ast.From{Projection: proj, As:$4.s})
-
+    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Keys: key_expr})
 }
 |
-JOIN path AS IDENTIFIER key_expr join_source  {
+JOIN path IDENTIFIER join_key_expr  {
     logDebugGrammar("JOIN AS KEY") 
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:$3.s, Keys: key_expr})
 }
 |
+JOIN path join_key_expr unnest_source {
+    logDebugGrammar("JOIN KEY NESTED")
+    rest := parsingStack.Pop().(*ast.From)
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:"", Keys: key_expr, Over: rest})
+}
+|
+JOIN path AS IDENTIFIER join_key_expr unnest_source  {
+    logDebugGrammar("JOIN AS KEY NESTED") 
+    rest := parsingStack.Pop().(*ast.From)
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Keys: key_expr, Over: rest})
+}
+|
+JOIN path IDENTIFIER join_key_expr unnest_source  {
+    logDebugGrammar("JOIN AS KEY NESTED") 
+    rest := parsingStack.Pop().(*ast.From)
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:$3.s, Keys: key_expr, Over: rest})
+}
+;
+
+join_source:
+
 join_type JOIN path key_expr {
     logDebugGrammar("TYPE JOIN KEY")
 }
@@ -532,6 +563,23 @@ join_type JOIN path AS IDENTIFIER key_expr join_source {
 }
 ;
 
+join_key_expr:
+KEY expr {
+        logDebugGrammar("FROM JOIN DATASOURCE with KEY")
+        key := parsingStack.Pop().(ast.Expression)
+        key_expr := ast.NewKeyExpression(key, "KEY")
+        parsingStack.Push(key_expr)
+}
+|
+KEYS expr {
+        logDebugGrammar("FROM DATASOURCE with KEYS")
+        keys := parsingStack.Pop().(ast.Expression)
+        keys_expr := ast.NewKeyExpression(keys, "KEYS")
+        parsingStack.Push(keys_expr)
+
+};
+
+|
 join_type:
 INNER {
     logDebugGrammar("INNER")
@@ -551,10 +599,6 @@ path {
 	logDebugGrammar("FROM DATASOURCE")
 	proj := parsingStack.Pop().(ast.Expression)
 	parsingStack.Push(&ast.From{Projection: proj})
-}
-|
-path key_expr {
-    logDebugGrammar("PATH KEY(S) EXPRESSION")
 }
 |
 path AS IDENTIFIER {
@@ -599,28 +643,6 @@ KEYS expr {
 	parsingStack.Push(&ast.From{Projection: proj})
 };
 
-join_key_expr:
-KEY expr {
-        logDebugGrammar("FROM DATASOURCE with KEY")
-        keys := parsingStack.Pop().(ast.Expression)
-	switch parsingStatement := parsingStatement.(type) {
-	case *ast.SelectStatement:
-		parsingStatement.Keys = ast.NewKeyExpression(keys, "KEY") 
-	default:
-		logDebugGrammar("This statement does not support KEY")
-	}
-}
-|
-KEYS expr {
-        logDebugGrammar("FROM DATASOURCE with KEYS")
-        keys := parsingStack.Pop().(ast.Expression)
-	switch parsingStatement := parsingStatement.(type) {
-	case *ast.SelectStatement:
-		parsingStatement.Keys = ast.NewKeyExpression(keys, "KEYS")
-	default:
-		logDebugGrammar("This statement does not support KEYS")
-	}
-};
 
 select_where:
 /* empty */ {
