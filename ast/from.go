@@ -18,8 +18,8 @@ type From struct {
 	Bucket     string
 	Projection Expression
 	As         string
-	Over       *From // used with in-document joins
-	Join       *From // used with key-joins
+	Keys       *KeyExpression // Used with Key-joins
+	Over       *From          // used with document joins
 }
 
 func (this *From) GetAliases() []string {
@@ -28,12 +28,6 @@ func (this *From) GetAliases() []string {
 	rv := []string{this.As}
 	if this.Over != nil {
 		otherAliases := this.Over.GetAliases()
-		for _, alias := range otherAliases {
-			rv = append(rv, alias)
-		}
-	}
-	if this.Join != nil {
-		otherAliases := this.Join.GetAliases()
 		for _, alias := range otherAliases {
 			rv = append(rv, alias)
 		}
@@ -73,10 +67,6 @@ func (this *From) GenerateAlias() {
 	// if there is an over, reccurse this call
 	if this.Over != nil {
 		this.Over.GenerateAlias()
-	}
-	// if there is an join, recurse this call
-	if this.Join != nil {
-		this.Join.GenerateAlias()
 	}
 
 }

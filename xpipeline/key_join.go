@@ -68,6 +68,7 @@ func (this *KeyJoin) Run(stopChannel misc.StopChannel) {
 
 func (this *KeyJoin) processItem(item *dparval.Value) bool {
 	// add this item to the batch
+	fmt.Printf(" key Expression %v, item expression %v", this.Keys.Expr, item)
 	val, err := this.Base.Evaluate(this.Keys.Expr, item)
 	if err != nil {
 		switch err := err.(type) {

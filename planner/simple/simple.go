@@ -185,17 +185,14 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 					lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
 					nextFrom := from.Over
 					for nextFrom != nil {
-						// add in-document joins
-						lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
-						nextFrom = nextFrom.Over
-					}
-					if from.Join != nil {
-						planHeads = append(planHeads, lastStep)
-						nextJoin := from.Join
-						for nextJoin != nil {
-							lastStep = plan.NewKeyJoin(lastStep, pool.Name(), nextJoin.Bucket, nextJoin.Projection, *stmt.Keys, nextJoin.As)
-							nextJoin = nextJoin.Join
+						// add document joins
+						if nextFrom.Keys != nil {
+							// This is a key-join
+							lastStep = plan.NewKeyJoin(lastStep, pool.Name(), nextFrom.Bucket, nextFrom.Projection, *nextFrom.Keys, nextFrom.As)
+						} else {
+							lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
 						}
+						nextFrom = nextFrom.Over
 					}
 				}
 			}
