@@ -120,14 +120,16 @@ func (this *SelectStatement) VerifySemantics() error {
 		this.From.GenerateAlias()
 	}
 
-	nextOver := this.From.Over
-	for nextOver != nil {
-		// If Keys is present then this is a key-join,
-		// and we need to make sure that the from clause bucket contains a bucket
-		if nextOver.Keys != nil {
-			nextOver.ConvertToBucketFrom()
+	if this.From != nil {
+		nextOver := this.From.Over
+		for nextOver != nil {
+			// If Keys is present then this is a key-join,
+			// and we need to make sure that the from clause bucket contains a bucket
+			if nextOver.Keys != nil {
+				nextOver.ConvertToBucketFrom()
+			}
+			nextOver = nextOver.Over
 		}
-		nextOver = nextOver.Over
 	}
 
 	// verify formal notations
@@ -235,15 +237,17 @@ func (this *SelectStatement) validate() error {
 	}
 
 	// validate the keys expression in the From clause
-	fromOver := this.From.Over
-	for fromOver != nil {
-		if fromOver.Keys != nil {
-			err = fromOver.Keys.Validate()
-			if err != nil {
-				return err
+	if this.From != nil {
+		fromOver := this.From.Over
+		for fromOver != nil {
+			if fromOver.Keys != nil {
+				err = fromOver.Keys.Validate()
+				if err != nil {
+					return err
+				}
 			}
+			fromOver = fromOver.Over
 		}
-		fromOver = fromOver.Over
 	}
 
 	if this.Keys != nil {
