@@ -1,41 +1,21 @@
 [
     {
-        "statements": "SELECT s.order_id oid FROM users_with_orders u KEY \"Adaline_67672807\" UNNEST u.shipped_order_history s,
+        "statements": "SELECT s.order_id oid FROM users_with_orders u KEY \"Adaline_67672807\" UNNEST u.shipped_order_history s",
         "results": [
         ]
     },
     {
-        "statements": "SELECT META(o).id oid FROM users_with_orders u KEY \"Adaline_67672807\" JOIN users_with_orders o KEYS ARRAY s.order_id FOR s IN u.shipped_order_history END,
+        "statements": "SELECT META(o).id oid FROM users_with_orders u KEY \"Adaline_67672807\" JOIN users_with_orders o KEYS ARRAY s.order_id FOR s IN u.shipped_order_history END",
         "results": [
         ]
     },
     {
-        "statements": "SELECT META(o).id oid FROM users_with_orders u KEY \"Adaline_67672807\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id,
+        "statements": "SELECT META(o).id oid FROM users_with_orders u KEY \"Adaline_67672807\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id",
         "results": [
         ]
     },
     {
-        "statements": "SELECT s.order_id oid FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s,
-        "results": [
-          {
-            "oid": "T638751835595"
-          },
-          {
-	    "oid": "T870351974549"
-          },
-          {
-            "oid": "T769348087819"
-          },
-          {
-            "oid": "T183428307793"
-          },
-          {
-            "oid": "T703068425987"
-          }
-        ]
-    },
-    {
-        "statements": "SELECT META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" JOIN users_with_orders o KEYS ARRAY s.order_id FOR s IN u.shipped_order_history END,
+        "statements": "SELECT s.order_id oid FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s",
         "results": [
           {
             "oid": "T638751835595"
@@ -55,7 +35,7 @@
         ]
     },
     {
-        "statements": "SELECT META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id,
+        "statements": "SELECT META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" JOIN users_with_orders o KEYS ARRAY s.order_id FOR s IN u.shipped_order_history END",
         "results": [
           {
             "oid": "T638751835595"
@@ -75,7 +55,27 @@
         ]
     },
     {
-        "statements": "SELECT META(o).id oid, META(u2).id uid FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id JOIN users_with_orders u2 KEY META(u).id
+        "statements": "SELECT META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id",
+        "results": [
+          {
+            "oid": "T638751835595"
+          },
+          {
+	    "oid": "T870351974549"
+          },
+          {
+            "oid": "T769348087819"
+          },
+          {
+            "oid": "T183428307793"
+          },
+          {
+            "oid": "T703068425987"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT META(o).id oid, META(u2).id uid FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id JOIN users_with_orders u2 KEY META(u).id",
         "results": [
           {
             "oid": "T638751835595",
@@ -98,5 +98,5 @@
             "uid": "Aide_48687583"
           }
         ]
-    },
+    }
 ]
