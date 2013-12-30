@@ -23,7 +23,7 @@ function init() {
 	re.setDisplayIndentGuides(true);
 	re.setShowFoldWidgets(true);
 
-	if ($('max').length > 0) max = $('#max').val();
+	if ($('#max').length > 0) max = $('#max').val();
 	if (max < 1) max = guessmax();
 
 	$('#run').click(run);
