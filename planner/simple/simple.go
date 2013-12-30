@@ -207,7 +207,11 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 		nextFrom := from.Over
 		for nextFrom != nil {
 			// add in-document joins
-			lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+			if nextFrom.Keys != nil {
+				lastStep = plan.NewKeyJoin(lastStep, pool.Name(), nextFrom.Bucket, nextFrom.Projection, *nextFrom.Keys, nextFrom.As)
+			} else {
+				lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+			}
 			nextFrom = nextFrom.Over
 		}
 		planHeads = append(planHeads, lastStep)

@@ -10,6 +10,31 @@
         ]
     },
     {
+        "statements": "SELECT META(u).id uid, META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" JOIN users_with_orders o KEYS ARRAY s.order_id FOR s IN u.shipped_order_history END", 
+   "results": [
+        {
+            "oid": "T638751835595",
+            "uid": "Aide_48687583"
+        },
+        {
+            "oid": "T870351974549",
+            "uid": "Aide_48687583"
+        },
+        {
+            "oid": "T769348087819",
+            "uid": "Aide_48687583"
+        },
+        {
+            "oid": "T183428307793",
+            "uid": "Aide_48687583"
+        },
+        {
+            "oid": "T703068425987",
+            "uid": "Aide_48687583"
+        }
+        ] 
+    },
+    {
         "statements": "SELECT META(o).id oid FROM users_with_orders u KEY \"Adaline_67672807\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id",
         "results": [
         ]
@@ -35,7 +60,8 @@
         ]
     },
     {
-        "statements": "SELECT META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" JOIN users_with_orders o KEYS ARRAY s.order_id FOR s IN u.shipped_order_history END",
+        "description": "SELECT META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" JOIN users_with_orders o KEYS ARRAY s.order_id FOR s IN u.shipped_order_history END",
+        "statements": "SELECT o.order_details.order_id AS oid FROM users_with_orders u KEY \"Aide_48687583\" JOIN users_with_orders o KEYS ARRAY s.order_id FOR s IN u.shipped_order_history END",
         "results": [
           {
             "oid": "T638751835595"
@@ -55,7 +81,8 @@
         ]
     },
     {
-        "statements": "SELECT META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id",
+        "description": "SELECT META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id",
+        "statements" : "SELECT  o.order_details.order_id as oid FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id",
         "results": [
           {
             "oid": "T638751835595"
@@ -76,57 +103,58 @@
     },
     {
         "statements": "SELECT META(o).id oid, META(u2).id uid, search.category cat FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id JOIN users_with_orders u2 KEY META(u).id UNNEST u.search_history search",
-        "results": [
-          {
+
+        "resultset": [
+        {
+            "cat": "Films",
             "oid": "T638751835595",
-            "uid": "Aide_48687583",
-            "cat": "Films"
-          },
-          {
-	    "oid": "T870351974549",
-            "uid": "Aide_48687583",
-            "cat": "Films"
-          },
-          {
-            "oid": "T769348087819",
-            "uid": "Aide_48687583",
-            "cat": "Films"
-          },
-          {
-            "oid": "T183428307793",
-            "uid": "Aide_48687583",
-            "cat": "Films"
-          },
-          {
-            "oid": "T703068425987",
-            "uid": "Aide_48687583",
-            "cat": "Films"
-          },
-          {
+            "uid": "Aide_48687583"
+        },
+        {
+            "cat": "Books",
             "oid": "T638751835595",
-            "uid": "Aide_48687583",
-            "cat": "Books"
-          },
-          {
-	    "oid": "T870351974549",
-            "uid": "Aide_48687583",
-            "cat": "Books"
-          },
-          {
+            "uid": "Aide_48687583"
+        },
+        {
+            "cat": "Films",
+            "oid": "T870351974549",
+            "uid": "Aide_48687583"
+        },
+        {
+            "cat": "Books",
+            "oid": "T870351974549",
+            "uid": "Aide_48687583"
+        },
+        {
+            "cat": "Films",
             "oid": "T769348087819",
-            "uid": "Aide_48687583",
-            "cat": "Books"
-          },
-          {
+            "uid": "Aide_48687583"
+        },
+        {
+            "cat": "Books",
+            "oid": "T769348087819",
+            "uid": "Aide_48687583"
+        },
+        {
+            "cat": "Films",
             "oid": "T183428307793",
-            "uid": "Aide_48687583",
-            "cat": "Books"
-          },
-          {
+            "uid": "Aide_48687583"
+        },
+        {
+            "cat": "Books",
+            "oid": "T183428307793",
+            "uid": "Aide_48687583"
+        },
+        {
+            "cat": "Films",
             "oid": "T703068425987",
-            "uid": "Aide_48687583",
-            "cat": "Books"
-          }
+            "uid": "Aide_48687583"
+        },
+        {
+            "cat": "Books",
+            "oid": "T703068425987",
+            "uid": "Aide_48687583"
+        }
         ]
     }
 ]

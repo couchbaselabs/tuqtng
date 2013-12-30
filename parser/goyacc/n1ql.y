@@ -491,11 +491,25 @@ UNNEST path unnest_source {
     parsingStack.Push(&ast.From{Projection: proj, As: "", Over:rest})
 }
 |
+UNNEST path key_expr {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:"", Keys: key_expr}) 
+}
+|
 UNNEST path AS IDENTIFIER unnest_source {
     logDebugGrammar("UNNEST AS nested")
     rest := parsingStack.Pop().(*ast.From)
     proj := parsingStack.Pop().(ast.Expression)
     parsingStack.Push(&ast.From{Projection: proj, As: $4.s, Over:rest})
+}
+|
+UNNEST path IDENTIFIER unnest_source {
+    logDebugGrammar("UNNEST AS nested")
+    rest := parsingStack.Pop().(*ast.From)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As: $3.s, Over:rest})
 }
 |
 JOIN path join_key_expr {
@@ -603,6 +617,8 @@ path {
 |
 path key_expr {
     logDebugGrammar("FROM KEY(S) DATASOURCE")
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection:proj})
 }
 |
 path AS IDENTIFIER {
@@ -618,6 +634,20 @@ path IDENTIFIER {
 	proj := parsingStack.Pop().(ast.Expression)
 	parsingStack.Push(&ast.From{Projection: proj, As: $2.s})
 }
+|
+path AS IDENTIFIER key_expr {
+        logDebugGrammar("FROM DATASOURCE AS ID KEY(S)")
+	proj := parsingStack.Pop().(ast.Expression)
+	parsingStack.Push(&ast.From{Projection: proj, As: $3.s})
+
+}
+|
+path IDENTIFIER key_expr {
+        logDebugGrammar("FROM DATASOURCE ID KEY(s)")
+	proj := parsingStack.Pop().(ast.Expression)
+	parsingStack.Push(&ast.From{Projection: proj, As: $2.s})
+
+}
 ;
 
 key_expr:
@@ -630,8 +660,6 @@ KEY expr {
 	default:
 		logDebugGrammar("This statement does not support KEY")
 	}
-	proj := parsingStack.Pop().(ast.Expression)
-	parsingStack.Push(&ast.From{Projection:proj})
 }
 |
 KEYS expr {
@@ -643,9 +671,8 @@ KEYS expr {
 	default:
 		logDebugGrammar("This statement does not support KEYS")
 	}
-	proj := parsingStack.Pop().(ast.Expression)
-	parsingStack.Push(&ast.From{Projection: proj})
-};
+}
+;
 
 
 select_where:
