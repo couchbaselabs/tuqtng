@@ -183,6 +183,18 @@ var validQueries = []string{
 	`CREATE PRIMARY INDEX ON :apool.beer-sample USING magic`,
 	`DROP INDEX abucket.name`,
 	`DROP INDEX :apool.abucket.name`,
+
+	//KEY/JOIN/UNNEST statements
+	`SELECT vm FROM default de UNNEST de.VMs vm`,
+	`SELECT * FROM customer_orders JOIN contacts.name KEY customer.orders.custId`,
+	`SELECT * FROM orders JOIN contacts.name KEYS orders.customers`,
+	`SELECT META(o).id FROM orders UNNEST order_id AS o JOIN customer_id KEYS orders.custId`,
+	`SELECT * FROM orders JOIN contacts.name contacts KEYS orders.customers`,
+	`SELECT order_id as oid FROM orders JOIN customers KEYS oid.custId JOIN invoices KEYS oid.invoices`,
+	`select * from bucket1 UNNEST bucket1.f1 JOIN b2.k1 KEYS bucket1.k1 JOIN b3.k1 KEY b1.k2`,
+	`SELECT * FROM contacts.name KEY "dave"`,
+	`SELECT * FROM contacts.name KEYS ["dave", "ian", "smith"]`,
+	`SELECT * FROM contacts.name KEYS ARRAY_APPEND(["dave", "ian"], "smith")`,
 }
 
 var invalidQueries = []string{
