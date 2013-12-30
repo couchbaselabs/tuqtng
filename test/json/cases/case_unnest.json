@@ -32,7 +32,7 @@
         ]
     },
     {
-        "statements": "SELECT `s.sub-category` FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.search_history s",
+        "statements": "SELECT s.sub-category FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.search_history s",
         "results": [
         {
             "sub-category": [
@@ -51,7 +51,7 @@
         ]
     },
     {
-        "statements": "SELECT c FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.search_history s UNNEST `s.sub-category` c",
+        "statements": "SELECT c FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.search_history s UNNEST s.sub-category c",
         "results": [
         {
                 "c": "Animation"

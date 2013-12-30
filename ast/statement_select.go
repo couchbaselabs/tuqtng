@@ -120,6 +120,18 @@ func (this *SelectStatement) VerifySemantics() error {
 		this.From.GenerateAlias()
 	}
 
+	if this.From != nil {
+		nextOver := this.From.Over
+		for nextOver != nil {
+			// If Keys is present then this is a key-join,
+			// and we need to make sure that the from clause bucket contains a bucket
+			if nextOver.Keys != nil {
+				nextOver.ConvertToBucketFrom()
+			}
+			nextOver = nextOver.Over
+		}
+	}
+
 	// verify formal notations
 	err = this.verifyFormalNotation(this.explicitProjectionAliases)
 	if err != nil {
@@ -224,7 +236,20 @@ func (this *SelectStatement) validate() error {
 		}
 	}
 
-	// validate the key/keys expression
+	// validate the keys expression in the From clause
+	if this.From != nil {
+		fromOver := this.From.Over
+		for fromOver != nil {
+			if fromOver.Keys != nil {
+				err = fromOver.Keys.Validate()
+				if err != nil {
+					return err
+				}
+			}
+			fromOver = fromOver.Over
+		}
+	}
+
 	if this.Keys != nil {
 		err = this.Keys.Validate()
 		if err != nil {

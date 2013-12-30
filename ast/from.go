@@ -18,7 +18,8 @@ type From struct {
 	Bucket     string
 	Projection Expression
 	As         string
-	Over       *From
+	Keys       *KeyExpression // Used with Key-joins
+	Over       *From          // used with document joins
 }
 
 func (this *From) GetAliases() []string {
@@ -67,6 +68,7 @@ func (this *From) GenerateAlias() {
 	if this.Over != nil {
 		this.Over.GenerateAlias()
 	}
+
 }
 
 // FROM is a generic structure capturing both top-level FROMs and OVER constructs

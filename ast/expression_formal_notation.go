@@ -134,7 +134,14 @@ func (this *ExpressionFormalNotationConverter) VisitFunctionCall(expr FunctionCa
 			// check to see that the correct bucket is referenced (currently always aliases[0])
 			switch operexpr := expr.GetOperands()[0].Expr.(type) {
 			case *Property:
-				if operexpr.Path != this.aliases[0] {
+				found := false
+				for _, alias := range this.aliases {
+					if operexpr.Path == alias {
+						found = true
+						break
+					}
+				}
+				if found == false {
 					return fmt.Errorf("invalid argument to META() function, must be bucket name/alias")
 				}
 			default:

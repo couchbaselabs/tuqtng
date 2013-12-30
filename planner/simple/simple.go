@@ -101,6 +101,7 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 	if keylist == nil {
 		for _, index := range indexes {
 			var lastStep plan.PlanElement
+
 			switch index := index.(type) {
 			case catalog.PrimaryIndex:
 				clog.To(planner.CHANNEL, "See primary index %v", index.Name())
@@ -185,7 +186,12 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 					nextFrom := from.Over
 					for nextFrom != nil {
 						// add document joins
-						lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+						if nextFrom.Keys != nil {
+							// This is a key-join
+							lastStep = plan.NewKeyJoin(lastStep, pool.Name(), nextFrom.Bucket, nextFrom.Projection, *nextFrom.Keys, nextFrom.As)
+						} else {
+							lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+						}
 						nextFrom = nextFrom.Over
 					}
 				}
@@ -200,8 +206,12 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 		lastStep = plan.NewFetch(lastStep, pool.Name(), bucket.Name(), from.Projection, from.As)
 		nextFrom := from.Over
 		for nextFrom != nil {
-			// add document joins
-			lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+			// add in-document joins
+			if nextFrom.Keys != nil {
+				lastStep = plan.NewKeyJoin(lastStep, pool.Name(), nextFrom.Bucket, nextFrom.Projection, *nextFrom.Keys, nextFrom.As)
+			} else {
+				lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+			}
 			nextFrom = nextFrom.Over
 		}
 		planHeads = append(planHeads, lastStep)
