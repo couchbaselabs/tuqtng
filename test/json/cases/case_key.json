@@ -174,7 +174,7 @@
     },
     {
         "statements" : "SELECT * FROM contacts keys [\"dave\", \"jane\", \"ian\"] UNNEST contacts.contacts",
-        "resultset": [
+        "results": [
         {
             "contacts": {
                 "name": "fred"
@@ -186,5 +186,75 @@
             }
         }
     ]
+    },
+    {
+        "statements" : "SELECT * FROM contacts KEYS ARRAY c.name FOR c IN [{\"name\":\"dave\"},{\"name\":\"ian\"}] END",
+        "results": [
+        {
+            "children": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "aiden"
+                },
+                {
+                    "age": 2,
+                    "gender": "f",
+                    "name": "bill"
+                }
+            ],
+            "hobbies": [
+                "golf",
+                "surfing"
+            ],
+            "name": "dave",
+            "type": "contact"
+        },
+        {
+            "children": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "abama"
+                },
+                {
+                    "age": 21,
+                    "gender": "m",
+                    "name": "bebama"
+                }
+            ],
+            "hobbies": [
+                "golf",
+                "surfing"
+            ],
+            "name": "ian",
+            "type": "contact"
+        }
+        ]
+    },
+    {
+        "statements" : "select * FROM contacts KEYS FIRST c.name FOR c IN [{\"name\":\"dave\"},{\"name\":\"ian\"}] END",
+        "results": [
+        {
+            "children": [
+                {
+                    "age": 17,
+                    "gender": "m",
+                    "name": "aiden"
+                },
+                {
+                    "age": 2,
+                    "gender": "f",
+                    "name": "bill"
+                }
+            ],
+            "hobbies": [
+                "golf",
+                "surfing"
+            ],
+            "name": "dave",
+            "type": "contact"
+        }
+        ]
     }
 ]
