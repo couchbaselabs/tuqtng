@@ -29,16 +29,17 @@ type KeyJoin struct {
 	bucket      catalog.Bucket
 	Projection  ast.Expression
 	Keys        ast.KeyExpression
-	joinType    int
+	Type        string
 	As          string
 	batch       []string
 	rowsFetched int
 }
 
-func NewKeyJoin(bucket catalog.Bucket, projection ast.Expression, keys ast.KeyExpression, as string) *KeyJoin {
+func NewKeyJoin(bucket catalog.Bucket, projection ast.Expression, Type string, keys ast.KeyExpression, as string) *KeyJoin {
 	return &KeyJoin{
 		Base:       NewBaseOperator(),
 		bucket:     bucket,
+		Type:       Type,
 		Keys:       keys,
 		Projection: projection,
 		As:         as,
@@ -61,12 +62,16 @@ func (this *KeyJoin) Run(stopChannel misc.StopChannel) {
 		this.Base.SendError(query.NewError(fmt.Errorf("missing source operator"), ""))
 	}
 
-	clog.To(CHANNEL, "key operator finished, fetched %d", this.rowsFetched)
+	clog.To(CHANNEL, "key join operator finished, fetched %d", this.rowsFetched)
 }
 
 // evaluate the key expression from the item and fetch the keys from the bucket
 
 func (this *KeyJoin) processItem(item *dparval.Value) bool {
+
+	if item == nil {
+		return true
+	}
 	// add this item to the batch
 	val, err := this.Base.Evaluate(this.Keys.Expr, item)
 	if err != nil {
@@ -131,6 +136,13 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 
 func (this *KeyJoin) joinItems(item *dparval.Value, keyItem *dparval.Value) bool {
 
+	if keyItem == nil {
+		if this.Type == "LEFT" {
+			return this.Base.SendItem(item)
+		}
+		return true
+	}
+
 	newItem := item.Duplicate()
 	/* join the item and ship it */
 	if this.Projection != nil {
@@ -148,6 +160,7 @@ func (this *KeyJoin) joinItems(item *dparval.Value, keyItem *dparval.Value) bool
 	} else {
 		newItem.SetPath(this.As, keyItem)
 	}
+	this.rowsFetched += 1
 	this.Base.SendItem(newItem)
 	return true
 }
@@ -162,9 +175,16 @@ func (this *KeyJoin) flushBatch(baseItem *dparval.Value, ids []string) bool {
 	}
 
 	// now we need to emit the bulk fetched items in the correct order (from the id list)
+
 	for _, v := range ids {
 		item, ok := bulkResponse[v]
 		newItem := baseItem.Duplicate()
+		if item == nil {
+			if this.Type == "LEFT" {
+				this.Base.SendItem(newItem)
+			}
+			continue
+		}
 		if ok {
 			if this.Projection != nil {
 				projectedVal, err := this.Base.projectedValueOfResultExpression(item, ast.NewResultExpression(this.Projection))

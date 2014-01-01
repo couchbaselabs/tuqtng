@@ -195,6 +195,10 @@ var validQueries = []string{
 	`SELECT * FROM contacts.name KEY "dave"`,
 	`SELECT * FROM contacts.name KEYS ["dave", "ian", "smith"]`,
 	`SELECT * FROM contacts.name KEYS ARRAY_APPEND(["dave", "ian"], "smith")`,
+	`SELECT * FROM orders LEFT JOIN contacts.name KEY orders.custId`,
+	`SELECT * FROM orders LEFT OUTER JOIN contacts.name KEY orders.custId`,
+	`SELECT * FROM orders INNER JOIN contacts.name KEYS orders.custId LEFT JOIN contacts.children KEY orders.gifts.custId`,
+	`SELECT DISTINCT * FROM orders JOIN contacts.name KEYS orders.custId`,
 }
 
 var invalidQueries = []string{
