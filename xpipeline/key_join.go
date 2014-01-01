@@ -29,16 +29,17 @@ type KeyJoin struct {
 	bucket      catalog.Bucket
 	Projection  ast.Expression
 	Keys        ast.KeyExpression
-	joinType    int
+	Type        string
 	As          string
 	batch       []string
 	rowsFetched int
 }
 
-func NewKeyJoin(bucket catalog.Bucket, projection ast.Expression, keys ast.KeyExpression, as string) *KeyJoin {
+func NewKeyJoin(bucket catalog.Bucket, projection ast.Expression, Type string, keys ast.KeyExpression, as string) *KeyJoin {
 	return &KeyJoin{
 		Base:       NewBaseOperator(),
 		bucket:     bucket,
+		Type:       Type,
 		Keys:       keys,
 		Projection: projection,
 		As:         as,
@@ -61,12 +62,16 @@ func (this *KeyJoin) Run(stopChannel misc.StopChannel) {
 		this.Base.SendError(query.NewError(fmt.Errorf("missing source operator"), ""))
 	}
 
-	clog.To(CHANNEL, "key operator finished, fetched %d", this.rowsFetched)
+	clog.To(CHANNEL, "key join operator finished, fetched %d", this.rowsFetched)
 }
 
 // evaluate the key expression from the item and fetch the keys from the bucket
 
 func (this *KeyJoin) processItem(item *dparval.Value) bool {
+
+	if item == nil {
+		return true
+	}
 	// add this item to the batch
 	val, err := this.Base.Evaluate(this.Keys.Expr, item)
 	if err != nil {
@@ -95,6 +100,8 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 		ok := true
 		index := 0
 
+		ids := make([]string, 0, FETCH_BATCH_SIZE)
+
 		if this.Keys.Type == "KEY" {
 			this.Base.SendError(query.NewError(fmt.Errorf("KEY used with an array argument"), ""))
 			return false
@@ -103,15 +110,24 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 			id, err := val.Index(index)
 			index = index + 1
 			if err != nil {
+				if len(ids) != 0 {
+					return this.flushBatch(item, ids)
+				}
 				return true
 			}
 			fetch_id := (*id).Value().(string)
-			keyItem, err := this.bucket.Fetch(fetch_id)
-			if err != nil {
-				this.Base.SendError(query.NewError(err, "Unable to fetch key"))
+			ids = append(ids, fetch_id)
+
+			if this.rowsFetched != 0 && index%FETCH_BATCH_SIZE == 0 {
+				// do a bulk fetch
+				err := this.flushBatch(item, ids)
+				if err != true {
+					return false
+				}
+				ids = make([]string, 0, FETCH_BATCH_SIZE)
+
 			}
-			ok = this.joinItems(item, keyItem)
-			this.rowsFetched += 1
+
 		}
 	}
 
@@ -119,6 +135,13 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 }
 
 func (this *KeyJoin) joinItems(item *dparval.Value, keyItem *dparval.Value) bool {
+
+	if keyItem == nil {
+		if this.Type == "LEFT" {
+			return this.Base.SendItem(item)
+		}
+		return true
+	}
 
 	newItem := item.Duplicate()
 	/* join the item and ship it */
@@ -137,49 +160,34 @@ func (this *KeyJoin) joinItems(item *dparval.Value, keyItem *dparval.Value) bool
 	} else {
 		newItem.SetPath(this.As, keyItem)
 	}
+	this.rowsFetched += 1
 	this.Base.SendItem(newItem)
 	return true
 }
 
 func (this *KeyJoin) afterItems() {}
 
-/*
-func (this *KeyJoin) flushBatch() bool {
+func (this *KeyJoin) flushBatch(baseItem *dparval.Value, ids []string) bool {
 
-	defer func() {
-		// no matter what hapens in this function
-		// clear out the batch and start a new one
-		this.batch = make(dparval.ValueCollection, 0, FETCH_BATCH_SIZE)
-	}()
-
-	// gather the ids
-	ids := make([]string, 0, FETCH_BATCH_SIZE)
-	for _, v := range this.batch {
-		meta := v.GetAttachment("meta")
-		if meta != nil {
-			id, ok := meta.(map[string]interface{})["id"]
-			if !ok {
-				return this.Base.SendError(query.NewError(nil, "asked to fetch an item without a key"))
-			} else {
-				ids = append(ids, id.(string)) //FIXME assert ids always strings
-			}
-		} else {
-			return this.Base.SendError(query.NewError(nil, "asked to fetch an item without a meta"))
-		}
-	}
-
-	// now do a bulk fetch
 	bulkResponse, err := this.bucket.BulkFetch(ids)
 	if err != nil {
 		return this.Base.SendError(query.NewError(err, "error getting bulk response"))
 	}
 
 	// now we need to emit the bulk fetched items in the correct order (from the id list)
+
 	for _, v := range ids {
 		item, ok := bulkResponse[v]
+		newItem := baseItem.Duplicate()
+		if item == nil {
+			if this.Type == "LEFT" {
+				this.Base.SendItem(newItem)
+			}
+			continue
+		}
 		if ok {
-			if this.projection != nil {
-				projectedVal, err := this.Base.projectedValueOfResultExpression(item, ast.NewResultExpression(this.projection))
+			if this.Projection != nil {
+				projectedVal, err := this.Base.projectedValueOfResultExpression(item, ast.NewResultExpression(this.Projection))
 				if err != nil {
 					switch err := err.(type) {
 					case *dparval.Undefined:
@@ -189,25 +197,18 @@ func (this *KeyJoin) flushBatch() bool {
 						return this.Base.SendError(query.NewError(err, "unexpected error projecting fetch expression"))
 					}
 				} else {
-					if this.as != "" {
-						this.Base.SendItem(dparval.NewValue(map[string]interface{}{this.as: projectedVal}))
-					} else {
-						this.Base.SendItem(projectedVal)
-					}
+					newItem.SetPath(this.As, projectedVal)
 				}
 			} else {
-				if this.as != "" {
-					this.Base.SendItem(dparval.NewValue(map[string]interface{}{this.as: item}))
-				} else {
-					this.Base.SendItem(item)
-				}
+				newItem.SetPath(this.As, item)
 			}
+			this.Base.SendItem(newItem)
 			this.rowsFetched += 1
 		}
 	}
+
 	return true
 }
-*/
 
 func (this *KeyJoin) SetQuery(q network.Query) {
 	this.Base.SetQuery(q)

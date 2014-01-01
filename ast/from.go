@@ -19,7 +19,8 @@ type From struct {
 	Projection Expression
 	As         string
 	Keys       *KeyExpression // Used with Key-joins
-	Over       *From          // used with document joins
+	Type       string
+	Over       *From // used with document joins
 }
 
 func (this *From) GetAliases() []string {
