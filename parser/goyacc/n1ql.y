@@ -451,14 +451,6 @@ data_source unnest_source {
 	last.Over = rest
 	parsingStack.Push(last)
 }
-|
-data_source join_source {
-    	logDebugGrammar("FROM DATASOURCE WITH JOIN") 
-        rest := parsingStack.Pop().(*ast.From)
-	last := parsingStack.Pop().(*ast.From)
-	last.Over = rest
-	parsingStack.Push(last)
-}
 ;
 
 /*unnest_source:*/
@@ -556,24 +548,58 @@ JOIN path IDENTIFIER join_key_expr unnest_source  {
     proj := parsingStack.Pop().(ast.Expression)
     parsingStack.Push(&ast.From{Projection: proj, As:$3.s, Keys: key_expr, Over: rest})
 }
-;
-
-join_source:
-
-join_type JOIN path key_expr {
+|
+join_type JOIN path join_key_expr {
     logDebugGrammar("TYPE JOIN KEY")
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:"", Type: Type, Keys: key_expr})
+
 }
 |
-join_type JOIN path key_expr join_source {
-    logDebugGrammar("TYPE JOIN KEY")
+join_type JOIN path join_key_expr unnest_source {
+    logDebugGrammar("TYPE JOIN KEY NESTED")
+    rest := parsingStack.Pop().(*ast.From)
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:"", Type: Type, Keys: key_expr, Over: rest})
 }
 |
-join_type JOIN path AS IDENTIFIER key_expr {
-    logDebugGrammar("TYPE JOIN AS KEY")
+join_type JOIN path IDENTIFIER join_key_expr {
+    logDebugGrammar("TYPE JOIN KEY IDENTIFIER")
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Type:Type, Keys: key_expr})
+
 }
 |
-join_type JOIN path AS IDENTIFIER key_expr join_source {
-    logDebugGrammar("TYPE JOIN AS KEY")
+join_type JOIN path IDENTIFIER join_key_expr unnest_source {
+    logDebugGrammar("TYPE JOIN KEY IDENTIFIER NESTED")
+    rest := parsingStack.Pop().(*ast.From)
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Type:Type, Keys: key_expr, Over: rest})
+}
+|
+join_type JOIN path AS IDENTIFIER join_key_expr {
+    logDebugGrammar("TYPE JOIN KEY AS IDENTIFIER")
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:$5.s, Type:Type, Keys: key_expr})
+}
+|
+join_type JOIN path AS IDENTIFIER join_key_expr unnest_source {
+    logDebugGrammar("TYPE JOIN KEY AS IDENTIFIER NESTED")
+    rest := parsingStack.Pop().(*ast.From)
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:$5.s, Type:Type, Keys: key_expr, Over: rest})
 }
 ;
 
@@ -593,18 +619,20 @@ KEYS expr {
 
 };
 
-|
 join_type:
 INNER {
     logDebugGrammar("INNER")
+    parsingStack.Push("INNER")
 }
 |
 LEFT {
     logDebugGrammar("OUTER")
+    parsingStack.Push("LEFT")
 }
 |
-OUTER {
-    logDebugGrammar("OUTER")
+LEFT OUTER {
+    logDebugGrammar("LEFT OUTER")
+    parsingStack.Push("LEFT")
 };
 
 

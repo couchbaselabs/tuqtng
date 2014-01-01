@@ -742,5 +742,271 @@
             "uid": "Aide_48687583"
         }
         ]
+    },
+    {
+        "statements" : "SELECT DISTINCT * FROM orders3 LEFT OUTER JOIN contacts.name KEYS orders3.customers",
+        "results": [
+        {
+            "name": "fred",
+            "orders3": {
+                "customers": [
+                    "fred",
+                    "dave"
+                ],
+                "id": "1222",
+                "orderlines": [
+                    {
+                        "productId": "tea111",
+                        "qty": 1
+                    },
+                    {
+                        "productId": "sugar22",
+                        "qty": 1
+                    }
+                ],
+                "type": "order"
+            }
+        },
+        {
+            "name": "dave",
+            "orders3": {
+                "customers": [
+                    "fred",
+                    "dave"
+                ],
+                "id": "1222",
+                "orderlines": [
+                    {
+                        "productId": "tea111",
+                        "qty": 1
+                    },
+                    {
+                        "productId": "sugar22",
+                        "qty": 1
+                    }
+                ],
+                "type": "order"
+            }
+        },
+        {
+            "name": "fred",
+            "orders3": {
+                "customers": [
+                    "fred",
+                    "ian"
+                ],
+                "id": "1234",
+                "orderlines": [
+                    {
+                        "productId": "coffee01",
+                        "qty": 2
+                    },
+                    {
+                        "productId": "tea111",
+                        "qty": 1
+                    }
+                ],
+                "type": "order"
+            }
+        },
+        {
+            "name": "ian",
+            "orders3": {
+                "customers": [
+                    "fred",
+                    "ian"
+                ],
+                "id": "1234",
+                "orderlines": [
+                    {
+                        "productId": "coffee01",
+                        "qty": 2
+                    },
+                    {
+                        "productId": "tea111",
+                        "qty": 1
+                    }
+                ],
+                "type": "order"
+            }
+        },
+        {
+            "name": "jane",
+            "orders3": {
+                "customers": [
+                    "jane",
+                    "earl"
+                ],
+                "id": "1235",
+                "orderlines": [
+                    {
+                        "productId": "tea111",
+                        "qty": 1
+                    },
+                    {
+                        "productId": "sugar22",
+                        "qty": 1
+                    }
+                ],
+                "type": "order"
+            }
+        },
+        {
+            "name": "earl",
+            "orders3": {
+                "customers": [
+                    "jane",
+                    "earl"
+                ],
+                "id": "1235",
+                "orderlines": [
+                    {
+                        "productId": "tea111",
+                        "qty": 1
+                    },
+                    {
+                        "productId": "sugar22",
+                        "qty": 1
+                    }
+                ],
+                "type": "order"
+            }
+        },
+        {
+            "orders3": {
+                "customers": [
+                    "manik",
+                    "gerald"
+                ],
+                "id": "1373",
+                "orderlines": [
+                    {
+                        "productId": "tea111",
+                        "qty": 1
+                    },
+                    {
+                        "productId": "sugar22",
+                        "qty": 1
+                    }
+                ],
+                "type": "order"
+            }
+        }
+        ]
+    },
+    {
+        "statements" : "SELECT DISTINCT customer_name, orders3.id  FROM orders3 LEFT JOIN contacts.name customer_name  KEYS orders3.customers",
+        "results": [
+        {
+            "customer_name": "fred",
+            "id": "1222"
+        },
+        {
+            "customer_name": "dave",
+            "id": "1222"
+        },
+        {
+            "customer_name": "fred",
+            "id": "1234"
+        },
+        {
+            "customer_name": "ian",
+            "id": "1234"
+        },
+        {
+            "customer_name": "jane",
+            "id": "1235"
+        },
+        {
+            "customer_name": "earl",
+            "id": "1235"
+        },
+        {
+            "id": "1373"
+        }
+       ]
+    },
+    {
+        "statements" : "SELECT DISTINCT customer_name, orders3.orderlines FROM orders3 INNER JOIN contacts.name customer_name  KEYS orders3.customers",
+        "results": [
+        {
+            "customer_name": "fred",
+            "orderlines": [
+                {
+                    "productId": "tea111",
+                    "qty": 1
+                },
+                {
+                    "productId": "sugar22",
+                    "qty": 1
+                }
+            ]
+        },
+        {
+            "customer_name": "dave",
+            "orderlines": [
+                {
+                    "productId": "tea111",
+                    "qty": 1
+                },
+                {
+                    "productId": "sugar22",
+                    "qty": 1
+                }
+            ]
+        },
+        {
+            "customer_name": "fred",
+            "orderlines": [
+                {
+                    "productId": "coffee01",
+                    "qty": 2
+                },
+                {
+                    "productId": "tea111",
+                    "qty": 1
+                }
+            ]
+        },
+        {
+            "customer_name": "ian",
+            "orderlines": [
+                {
+                    "productId": "coffee01",
+                    "qty": 2
+                },
+                {
+                    "productId": "tea111",
+                    "qty": 1
+                }
+            ]
+        },
+        {
+            "customer_name": "jane",
+            "orderlines": [
+                {
+                    "productId": "tea111",
+                    "qty": 1
+                },
+                {
+                    "productId": "sugar22",
+                    "qty": 1
+                }
+            ]
+        },
+        {
+            "customer_name": "earl",
+            "orderlines": [
+                {
+                    "productId": "tea111",
+                    "qty": 1
+                },
+                {
+                    "productId": "sugar22",
+                    "qty": 1
+                }
+            ]
+        }
+    ]
     }
 ]
