@@ -73,7 +73,7 @@ type IndexType string
 const (
 	UNSPECIFIED IndexType = "unspecified" // used by non-view primary_indexes
 	VIEW        IndexType = "view"
-	LSM         IndexType = "llrb"
+	LSM         IndexType = "leveldb"
 )
 
 type IndexKey []ast.Expression
