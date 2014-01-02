@@ -6,97 +6,109 @@ import (
 
 //REQUEST DATA FORMATS
 
-type RequestType int
+type RequestType string
 
 const (
-	CREATE RequestType = iota
-	DROP   RequestType = iota
-	LIST   RequestType = iota
-	NOTIFY RequestType = iota
-	NODES  RequestType = iota
-	SCAN   RequestType = iota
-	STATS  RequestType = iota
+	CREATE RequestType = "create"
+	DROP   RequestType = "drop"
+	LIST   RequestType = "list"
+	NOTIFY RequestType = "notify"
+	NODES  RequestType = "nodes"
+	SCAN   RequestType = "scan"
+	STATS  RequestType = "stats"
 )
 
 type IndexRequest struct {
-	Type       RequestType
-	Index      IndexInfo
-	ServerUuid string
-	Params     QueryParams
+	Type       RequestType `json:"type,omitempty"`
+	Index      IndexInfo   `json:"index,omitempty"`
+	ServerUuid string      `json:"serverUuid,omitempty"`
+	Params     QueryParams `json:"params,omitempty"`
 }
 
 type IndexInfo struct {
-	Name       string
-	Uuid       string
-	Using      catalog.IndexType
-	OnExprList []string
-	Bucket     string
-	IsPrimary  bool
+	Name       string            `json:"name,omitempty"`
+	Uuid       string            `json:"uuid, omitempty"`
+	Using      catalog.IndexType `json:"using,omitempty"`
+	OnExprList []string          `json:"onExprList,omitempty"`
+	Bucket     string            `json:"bucket,omitempty"`
+	IsPrimary  bool              `json:"isPrimary,omitempty"`
 }
 
 type QueryParams struct {
-	Low       string
-	High      string
-	Inclusion catalog.RangeInclusion
-	Limit     int64
+	ScanType  ScanType               `json:"scanType,omitempty"`
+	Low       [][]byte               `json:"low,omitempty"`
+	High      [][]byte               `json:"high,omitempty"`
+	Inclusion catalog.RangeInclusion `json:"inclusion,omitempty"`
+	Limit     int64                  `json:"limit,omitempty"`
 }
+
+type ScanType string
+
+const (
+	COUNT      ScanType = "count"
+	EXISTS     ScanType = "exists"
+	LOOKUP     ScanType = "lookup"
+	RANGESCAN  ScanType = "rangeScan"
+	FULLSCAN   ScanType = "fullScan"
+	RANGECOUNT ScanType = "rangeCount"
+)
 
 //RESPONSE DATA FORMATS
 
-type ResponseStatus int
+type ResponseStatus string
 
 const (
-	SUCCESS       ResponseStatus = iota
-	ERROR         ResponseStatus = iota
-	INVALID_CACHE ResponseStatus = iota
+	SUCCESS       ResponseStatus = "success"
+	ERROR         ResponseStatus = "error"
+	INVALID_CACHE ResponseStatus = "invalid_cache"
 )
 
 type IndexScanResponse struct {
-	Status    ResponseStatus
-	TotalRows int64
-	Rows      []IndexRow
-	Errors    []IndexError
+	Status    ResponseStatus `json:"status,omitempty"`
+	TotalRows uint64         `json:"totalrows,omitempty"`
+	Rows      []IndexRow     `json:"rows,omitempty"`
+	Errors    []IndexError   `json:"errors,omitempty"`
 }
 
 type IndexMetaResponse struct {
-	Status     ResponseStatus
-	Indexes    []IndexInfo
-	ServerUuid string
-	Nodes      []NodeInfo
-	Errors     []IndexError
+	Status     ResponseStatus `json:"status,omitempty"`
+	Indexes    []IndexInfo    `json:"indexes,omitempty"`
+	ServerUuid string         `json:"serverUuid,omitempty"`
+	Nodes      []NodeInfo     `json:"nodes,omitempty"`
+	Errors     []IndexError   `json:"errors,omitempty"`
 }
 
 type IndexStatsResponse struct {
-	Status ResponseStatus
-	Stats  IndexStats
-	Errors []IndexError
+	Status ResponseStatus `json:"status,omitempty"`
+	Stats  IndexStats     `json:"stats,omitempty"`
+	Errors []IndexError   `json:"errors,omitempty"`
 }
 
 type IndexRow struct {
-	Key   interface{}
-	Value interface{}
+	Key   [][]byte `json:"key,omitempty"`
+	Value string   `json:"value,omitempty"`
 }
 
 type IndexError struct {
-	Code string
-	Msg  string
+	Code string `json:"code,omitempty"`
+	Msg  string `json:"msg,omitempty"`
 }
 
 type NodeInfo struct {
-	IndexerURL string
+	IndexerURL string `json:"indexerURL,omitempty"`
 }
 
 type IndexStats struct {
-	Count         int64
-	Min           string
-	Max           string
-	DistinctCount int64
-	Bins          []IndexBin
+	Count         int64      `json:"count,omitempty"`
+	Min           string     `json:"min,omitempty"`
+	Max           string     `json:"max,omitempty"`
+	DistinctCount int64      `json:"distinctCount,omitempty"`
+	Bins          []IndexBin `json:"bins,omitempty"`
 }
 
 type IndexBin struct {
-	Count         int64
-	Min           string
-	Max           string
-	DistinctCount int64
+	Count         int64  `json:"count,omitempty"`
+	Min           string `json:"min,omitempty"`
+	Max           string `json:"max,omitempty"`
+	DistinctCount int64  `json:"distinctCount,omitempty"`
 }
