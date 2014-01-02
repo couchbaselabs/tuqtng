@@ -45,9 +45,11 @@ func (client *RestClient) Create(indexinfo IndexInfo) (
 		clog.To(catalog.CHANNEL, "Posting %v to URL %v", bodybuf, url)
 		if resp, err = client.httpc.Post(url, "application/json", bodybuf); err == nil {
 			defer resp.Body.Close()
-			mresp, err = metaResponse(resp)
-			//FIXME: Do we need to check for err here and return conditionally
-			serverUuid, indexinfo = mresp.ServerUuid, mresp.Indexes[0]
+			if mresp, err = metaResponse(resp); err == nil {
+				serverUuid, indexinfo = mresp.ServerUuid, mresp.Indexes[0]
+			} else {
+				return "", indexinfo, err
+			}
 		}
 	}
 	return serverUuid, indexinfo, err
@@ -71,9 +73,11 @@ func (client *RestClient) Drop(uuid string) (string, error) {
 		clog.To(catalog.CHANNEL, "Posting %v to URL %v", bodybuf, url)
 		if resp, err := client.httpc.Post(url, "application/json", bodybuf); err == nil {
 			defer resp.Body.Close()
-			mresp, err = metaResponse(resp)
-			//FIXME: Do we need to check for err here and return conditionally
-			serverUuid = mresp.ServerUuid
+			if mresp, err = metaResponse(resp); err == nil {
+				serverUuid = mresp.ServerUuid
+			} else {
+				return "", err
+			}
 		}
 	}
 	return serverUuid, err
@@ -136,38 +140,44 @@ func (client *RestClient) Trait(index *IndexInfo, op interface{}) (
 }
 */
 // Scan for index entries.
-func (client *RestClient) Scan(index *IndexInfo, q QueryParams) (
-	[]IndexRow, error) {
+func (client *RestClient) Scan(uuid string, q QueryParams) (
+	[]IndexRow, uint64, error) {
 
 	var body []byte
 	var rows []IndexRow
+	var totalRows uint64
 	var err error
 
 	// Construct request body.
-	indexreq := IndexRequest{Type: SCAN, Index: *index, Params: q}
+	indexreq := IndexRequest{Type: SCAN, Index: IndexInfo{Uuid: uuid}, Params: q}
 	if body, err = json.Marshal(indexreq); err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	// Post HTTP request.
 	bodybuf := bytes.NewBuffer(body)
 	url := client.addr + "/scan"
 	clog.To(catalog.CHANNEL, "Posting %v to URL %v", bodybuf, url)
-	if resp, err := client.httpc.Post(url, "application/json", bodybuf); err == nil {
-		defer resp.Body.Close()
-		// Gather indexinfo
-		indexres := IndexScanResponse{}
-		if body, err = ioutil.ReadAll(resp.Body); err == nil {
-			if err = json.Unmarshal(body, &indexres); err == nil {
-				if indexres.Status == ERROR {
-					err = errors.New(indexres.Errors[0].Msg)
-				} else {
-					rows = indexres.Rows
-				}
+	var resp *http.Response
+	if resp, err = client.httpc.Post(url, "application/json", bodybuf); err != nil {
+		return nil, 0, err
+	}
+
+	defer resp.Body.Close()
+	// Gather indexinfo
+	indexres := IndexScanResponse{}
+	if body, err = ioutil.ReadAll(resp.Body); err == nil {
+		if err = json.Unmarshal(body, &indexres); err == nil {
+			clog.To(catalog.CHANNEL, "Received raw response %s", string(body))
+			if indexres.Status == ERROR {
+				err = errors.New(indexres.Errors[0].Msg)
+			} else {
+				rows = indexres.Rows
+				totalRows = indexres.TotalRows
 			}
 		}
 	}
-	return rows, err
+	return rows, totalRows, err
 }
 
 func (client *RestClient) Nodes() ([]NodeInfo, error) {
