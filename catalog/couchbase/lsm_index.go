@@ -3,8 +3,8 @@ package couchbase
 import (
 	"bytes"
 	"fmt"
-	//	"github.com/couchbaselabs/clog"
-	//	"github.com/couchbaselabs/dparval"
+	"github.com/couchbaselabs/clog"
+	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
 )
@@ -15,7 +15,6 @@ type lsmIndex struct {
 	using  catalog.IndexType
 	on     catalog.IndexKey
 	bucket catalog.Bucket
-	//	createStmt string
 }
 
 type primaryLsmIndex struct {
@@ -60,11 +59,13 @@ func (li *lsmIndex) Drop() query.Error {
 }
 
 func (li *lsmIndex) Check(value catalog.LookupValue, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
-	li.ScanRange(value, value, catalog.Both, 0, ch, warnch, errch)
+	//FIXME This should use EXISTS. But that's possible only once Check method return
+	//bool rather than a channel
+	li.executeScanQuery(LOOKUP, value, value, catalog.Both, 0, ch, warnch, errch)
 }
 
 func (li *lsmIndex) Lookup(value catalog.LookupValue, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
-	li.ScanRange(value, value, catalog.Both, 0, ch, warnch, errch)
+	li.executeScanQuery(LOOKUP, value, value, catalog.Both, 0, ch, warnch, errch)
 }
 
 func (li *lsmIndex) Statistics() (catalog.RangeStatistics, query.Error) {
@@ -76,16 +77,100 @@ func (li *lsmIndex) Direction() catalog.Direction {
 }
 
 func (li *lsmIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue, inclusion catalog.RangeInclusion, limit int64, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
-	//	TODO
+
+	li.executeScanQuery(RANGESCAN, low, high, inclusion, limit, ch, warnch, errch)
+}
+
+func (li *lsmIndex) executeScanQuery(scanType ScanType, low catalog.LookupValue, high catalog.LookupValue, inclusion catalog.RangeInclusion, limit int64, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
+
+	defer close(ch)
+	defer close(warnch)
+	defer close(errch)
+
+	var q QueryParams
+
+	//FIXME convert to a function
+	lv := make([][]byte, len(low))
+	for i, v := range low {
+		lv[i] = v.Bytes()
+	}
+
+	hv := make([][]byte, len(high))
+	for i, v := range high {
+		hv[i] = v.Bytes()
+	}
+
+	q.Low = lv
+	q.High = hv
+
+	q.Inclusion = inclusion
+	q.Limit = limit
+	q.ScanType = scanType
+
+	nodes, _ := client.Nodes()
+	//FIXME choose a random node
+	indexerClient := NewRestClient(nodes[0].IndexerURL)
+	clog.To(catalog.CHANNEL, "Requesting Scan with Params %v", q)
+	//FIXME Send multiple scan requests in batches
+	rows, _, err := indexerClient.Scan(li.Id(), q)
+
+	if err != nil {
+		clog.To(catalog.CHANNEL, "Error in Scan response %v", err)
+		errch <- query.NewError(err, "Error in Scan response")
+		return
+	}
+
+	for _, row := range rows {
+		clog.To(catalog.CHANNEL, "Received Row %v", row)
+
+		entry := catalog.IndexEntry{PrimaryKey: row.Value}
+		for _, key := range row.Key {
+			val := dparval.NewValueFromBytes(key)
+			entry.EntryKey = append(entry.EntryKey, val)
+		}
+		ch <- &entry
+	}
+}
+
+func (li *lsmIndex) executeCountQuery(scanType ScanType, low catalog.LookupValue, high catalog.LookupValue, inclusion catalog.RangeInclusion, limit int64) (uint64, query.Error) {
+
+	var q QueryParams
+
+	//FIXME convert to a function
+	lv := make([][]byte, len(low))
+	for i, v := range low {
+		lv[i] = v.Bytes()
+	}
+
+	hv := make([][]byte, len(high))
+	for i, v := range high {
+		hv[i] = v.Bytes()
+	}
+
+	q.Low = lv
+	q.High = hv
+
+	q.Inclusion = inclusion
+	q.Limit = limit
+	q.ScanType = scanType
+
+	nodes, _ := client.Nodes()
+	//FIXME choose a random node
+	indexerClient := NewRestClient(nodes[0].IndexerURL)
+
+	clog.To(catalog.CHANNEL, "Requesting Count with Params %v", q)
+	//FIXME Send multiple scan requests in batches
+	_, totalRows, err := indexerClient.Scan(li.Id(), q)
+	return totalRows, query.NewError(err, "Error In Scan Response")
 }
 
 func (li *lsmIndex) ScanEntries(limit int64, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
-	li.ScanRange(nil, nil, catalog.Both, limit, ch, warnch, errch)
+	li.executeScanQuery(FULLSCAN, nil, nil, catalog.Both, limit, ch, warnch, errch)
 }
 
 func (li *lsmIndex) ValueCount() (int64, query.Error) {
-	//	TODO
-	return 0, nil
+	totalRows, err := li.executeCountQuery(COUNT, nil, nil, catalog.Both, 0)
+	return int64(totalRows), err
 }
 
 func (pi *primaryLsmIndex) IsPrimary() bool {
