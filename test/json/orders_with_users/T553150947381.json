@@ -1,0 +1,24 @@
+{
+    "doc_type": "order",
+    "order_details": {
+        "order_datetime": "Sun Dec 22 18:53:39 2013",
+        "order_id": "T553150947381"
+    },
+    "payment_details": {
+        "payment_mode": "Cash On Delivery",
+        "total_charges": 669
+    },
+    "product_details": {
+        "currency": "USD",
+        "list_price": 885,
+        "pct_discount": 25,
+        "product_id": "P8406402856",
+        "sale_price": 664
+    },
+    "shipping_details": {
+        "shipping_charges": 5,
+        "shipping_status": "Delivered",
+        "shipping_type": "Express"
+    },
+    "user_id": "Leann_56519658"
+}
