@@ -148,11 +148,11 @@ func (vi *viewIndex) ValueCount() (int64, query.Error) {
 
 func (vi *viewIndex) ScanRange(low catalog.LookupValue, high catalog.LookupValue, inclusion catalog.RangeInclusion, limit int64, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
 
-	viewOptions := generateViewOptions(low, high, inclusion)
-
 	defer close(ch)
 	defer close(warnch)
 	defer close(errch)
+
+	viewOptions := generateViewOptions(low, high, inclusion)
 
 	viewRowChannel := make(chan cb.ViewRow)
 	viewErrChannel := make(query.ErrorChannel)
@@ -220,10 +220,6 @@ func (pi *primaryIndex) IsPrimary() bool {
 
 func (pi *primaryIndex) ScanBucket(limit int64, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
 	pi.ScanEntries(limit, ch, warnch, errch)
-}
-
-func (vi *viewIndex) Check(value catalog.LookupValue, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
-	vi.ScanRange(value, value, catalog.Both, 0, ch, warnch, errch)
 }
 
 func (vi *viewIndex) Lookup(value catalog.LookupValue, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {

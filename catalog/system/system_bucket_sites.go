@@ -10,6 +10,8 @@
 package system
 
 import (
+	"strings"
+
 	"github.com/couchbaselabs/dparval"
 	"github.com/couchbaselabs/tuqtng/catalog"
 	"github.com/couchbaselabs/tuqtng/query"
@@ -158,4 +160,26 @@ func (pi *siteIndex) ScanEntries(limit int64, ch catalog.EntryChannel, warnch, e
 
 	entry := catalog.IndexEntry{PrimaryKey: pi.bucket.pool.site.actualSite.Id()}
 	ch <- &entry
+}
+
+func (pi *siteIndex) Lookup(value catalog.LookupValue, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
+	defer close(ch)
+	defer close(warnch)
+	defer close(errch)
+
+	if value == nil || len(value) != 1 || value[0].Type() != dparval.STRING {
+		errch <- query.NewError(nil, "Invalid lookup value: string required.")
+		return
+	}
+
+	val, ok := value[0].Value().(string)
+	if !ok {
+		errch <- query.NewError(nil, "Invalid lookup value: string required.")
+		return
+	}
+
+	if strings.EqualFold(val, pi.bucket.pool.site.actualSite.Id()) {
+		entry := catalog.IndexEntry{PrimaryKey: pi.bucket.pool.site.actualSite.Id()}
+		ch <- &entry
+	}
 }

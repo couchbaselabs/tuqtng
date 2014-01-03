@@ -397,6 +397,34 @@ func (pi *primaryIndex) ScanEntries(limit int64, ch catalog.EntryChannel, warnch
 	}
 }
 
+func (pi *primaryIndex) Lookup(value catalog.LookupValue, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
+	defer close(ch)
+	defer close(warnch)
+	defer close(errch)
+
+	if value == nil || len(value) != 1 || value[0].Type() != dparval.STRING {
+		errch <- query.NewError(nil, "Invalid lookup value: string required.")
+		return
+	}
+
+	val, ok := value[0].Value().(string)
+	if !ok {
+		errch <- query.NewError(nil, "Invalid lookup value: string required.")
+		return
+	}
+
+	fi, err := os.Lstat(filepath.Join(pi.bucket.path(), val+".json"))
+	if err != nil && !os.IsNotExist(err) {
+		errch <- query.NewError(err, "IO error during lookup.")
+		return
+	}
+
+	if fi != nil {
+		entry := catalog.IndexEntry{EntryKey: value, PrimaryKey: val}
+		ch <- &entry
+	}
+}
+
 func fetch(path string) (item *dparval.Value, e query.Error) {
 	bytes, err := ioutil.ReadFile(path)
 	if err != nil {

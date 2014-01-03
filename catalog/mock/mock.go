@@ -330,6 +330,29 @@ func (pi *primaryIndex) scanEntries(limit int64, ch catalog.EntryChannel, warnch
 	}
 }
 
+func (pi *primaryIndex) Lookup(value catalog.LookupValue, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
+	defer close(ch)
+	defer close(warnch)
+	defer close(errch)
+
+	if value == nil || len(value) != 1 || value[0].Type() != dparval.STRING {
+		errch <- query.NewError(nil, "Invalid lookup value: string required.")
+		return
+	}
+
+	val, ok := value[0].Value().(string)
+	if !ok {
+		errch <- query.NewError(nil, "Invalid lookup value: string required.")
+		return
+	}
+
+	ival, err := strconv.Atoi(val)
+	if err == nil && ival < pi.bucket.nitems {
+		entry := catalog.IndexEntry{PrimaryKey: val}
+		ch <- &entry
+	}
+}
+
 func genItem(i int, nitems int) (*dparval.Value, query.Error) {
 	if i < 0 || i >= nitems {
 		return nil, query.NewError(nil,
