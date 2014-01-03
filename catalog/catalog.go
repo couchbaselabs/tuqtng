@@ -113,6 +113,7 @@ type CountIndex interface {
 type PrimaryIndex interface {
 	Index
 	ScanIndex
+	LookupIndex
 	ScanBucket(limit int64, ch EntryChannel, warnch, errch query.ErrorChannel)
 }
 
@@ -123,7 +124,6 @@ type ExistenceIndex interface {
 
 // LookupIndex represents lookup indexes.
 type LookupIndex interface {
-	ExistenceIndex
 	Lookup(value LookupValue, ch EntryChannel, warnch, errch query.ErrorChannel)
 }
 

@@ -204,3 +204,36 @@ func (pi *bucketIndex) ScanEntries(limit int64, ch catalog.EntryChannel, warnch,
 		}
 	}
 }
+
+func (pi *bucketIndex) Lookup(value catalog.LookupValue, ch catalog.EntryChannel, warnch, errch query.ErrorChannel) {
+	defer close(ch)
+	defer close(warnch)
+	defer close(errch)
+
+	if value == nil || len(value) != 1 || value[0].Type() != dparval.STRING {
+		errch <- query.NewError(nil, "Invalid lookup value: string required.")
+		return
+	}
+
+	val, ok := value[0].Value().(string)
+	if !ok {
+		errch <- query.NewError(nil, "Invalid lookup value: string required.")
+		return
+	}
+
+	ids := strings.SplitN(val, "/", 2)
+	if len(ids) != 2 {
+		return
+	}
+
+	pool, _ := pi.bucket.pool.site.actualSite.PoolById(ids[0])
+	if pool == nil {
+		return
+	}
+
+	bucket, _ := pool.BucketById(ids[1])
+	if bucket != nil {
+		entry := catalog.IndexEntry{PrimaryKey: fmt.Sprintf("%s/%s", pool.Id(), bucket.Id())}
+		ch <- &entry
+	}
+}
