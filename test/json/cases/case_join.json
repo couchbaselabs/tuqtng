@@ -646,7 +646,6 @@
         ]
     },
     {
-        "description": "SELECT META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" JOIN users_with_orders o KEYS ARRAY s.order_id FOR s IN u.shipped_order_history END",
         "statements": "SELECT o.order_details.order_id AS oid FROM users_with_orders u KEY \"Aide_48687583\" JOIN users_with_orders o KEYS ARRAY s.order_id FOR s IN u.shipped_order_history END",
         "results": [
           {
@@ -667,7 +666,6 @@
         ]
     },
     {
-        "description": "SELECT META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id",
         "statements" : "SELECT  o.order_details.order_id as oid FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s JOIN users_with_orders o KEY s.order_id",
         "results": [
           {
@@ -741,6 +739,23 @@
             "oid": "T703068425987",
             "uid": "Aide_48687583"
         }
+        ]
+    },
+    {
+        "statements": "SELECT user_id FROM orders_with_users o KEY \"T103929516925\"",
+        "results": [
+          {
+            "user_id": "Elinor_33313792"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT META(o).id oid, META(u).id uid FROM orders_with_users o KEY \"T103929516925\" JOIN orders_with_users u KEY o.user_id",
+        "results": [
+          {
+            "oid": "T103929516925",
+            "uid": "Elinor_33313792"
+          }
         ]
     },
     {

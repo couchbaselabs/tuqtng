@@ -1,0 +1,24 @@
+{
+    "doc_type": "order",
+    "order_details": {
+        "order_datetime": "Thu Feb 21 18:53:39 2013",
+        "order_id": "T376222094938"
+    },
+    "payment_details": {
+        "payment_mode": "Debit Card",
+        "total_charges": 388
+    },
+    "product_details": {
+        "currency": "EUR",
+        "list_price": 497,
+        "pct_discount": 25,
+        "product_id": "P9126524007",
+        "sale_price": 373
+    },
+    "shipping_details": {
+        "shipping_charges": 15,
+        "shipping_status": "Delivered",
+        "shipping_type": "Priority"
+    },
+    "user_id": "Dorothea_44046955"
+}
