@@ -504,11 +504,12 @@ type KeyJoin struct {
 	Bucket     string            `json:"bucket"`
 	Projection ast.Expression    `json:"projection"`
 	JoinType   string            `json:"jointype"`
+	Oper       string            `json:"operator"`
 	Keys       ast.KeyExpression `json:"keys"`
 	As         string            `json:"as"`
 }
 
-func NewKeyJoin(input PlanElement, pool string, bucket string, projection ast.Expression, joinType string, keys ast.KeyExpression, as string) *KeyJoin {
+func NewKeyJoin(input PlanElement, pool string, bucket string, projection ast.Expression, joinType string, oper string, keys ast.KeyExpression, as string) *KeyJoin {
 	return &KeyJoin{
 		Type:       "key-join",
 		Input:      input,
@@ -516,6 +517,7 @@ func NewKeyJoin(input PlanElement, pool string, bucket string, projection ast.Ex
 		Bucket:     bucket,
 		Projection: projection,
 		JoinType:   joinType,
+		Oper:       oper,
 		Keys:       keys,
 		As:         as,
 	}
