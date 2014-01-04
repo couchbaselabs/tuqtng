@@ -247,6 +247,10 @@
                   {
                     logDebugTokens("LEFT"); return LEFT
                   }
+/[nN][eE][sS][tT]/
+                  {
+                    logDebugTokens("NEST"); return NEST
+                  }
 /\|\|/            { logDebugTokens("CONCAT"); return CONCAT }
 /\(/              { logDebugTokens("LPAREN"); return LPAREN }
 /\)/              { logDebugTokens("RPAREN"); return RPAREN }

@@ -17,6 +17,7 @@ type From struct {
 	Pool       string
 	Bucket     string
 	Projection Expression
+	Oper       string //differentiate between NEST/UNNEST/JOIN
 	As         string
 	Keys       *KeyExpression // Used with Key-joins
 	Type       string

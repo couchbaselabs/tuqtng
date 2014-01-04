@@ -83,7 +83,11 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan, q network.Query
 			if err != nil {
 				return nil, err
 			}
-			currentOperator = xpipeline.NewKeyJoin(bucket, currentElement.Projection, currentElement.JoinType, currentElement.Keys, currentElement.As)
+			if currentElement.Oper == "NEST" {
+				currentOperator = xpipeline.NewKeyNest(bucket, currentElement.Projection, currentElement.JoinType, currentElement.Keys, currentElement.As)
+			} else {
+				currentOperator = xpipeline.NewKeyJoin(bucket, currentElement.Projection, currentElement.JoinType, currentElement.Keys, currentElement.As)
+			}
 		case *plan.Fetch:
 			pool, err := this.site.PoolByName(currentElement.Pool)
 			if err != nil {
