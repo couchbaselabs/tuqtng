@@ -37,6 +37,28 @@ func (this *From) GetAliases() []string {
 	return rv
 }
 
+func (this *From) VerifyBucket(aliases []string) error {
+	// Ensure that the Bucket referred to in the from statement
+	// is present in the list of aliases
+
+	found := false
+	proj := this.Projection.Copy()
+	from := From{Projection: proj}
+	from.ConvertToBucketFrom()
+	if aliases != nil {
+		for _, alias := range aliases {
+			if alias == from.Bucket {
+				found = true
+			}
+		}
+	}
+	if found == false {
+		return fmt.Errorf("Invalid Bucket in UNNEST clause %s", from.Bucket)
+	}
+
+	return nil
+}
+
 func (this *From) GenerateAlias() {
 	// if there was no alias
 	// try to generate one
