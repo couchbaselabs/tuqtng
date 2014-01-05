@@ -38,6 +38,10 @@ func (this *KeyExpression) Validate() error {
 
 	val, err := this.Expr.Evaluate(dparval.NewValue(map[string]interface{}{}))
 
+	if err != nil {
+		return nil
+	}
+
 	if val.Type() == dparval.ARRAY && this.Type == "KEY" {
 		return fmt.Errorf("KEY expression used with multiple values")
 	}

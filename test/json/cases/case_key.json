@@ -233,7 +233,7 @@
         ]
     },
     {
-        "statements" : "select * FROM contacts KEYS FIRST c.name FOR c IN [{\"name\":\"dave\"},{\"name\":\"ian\"}] END",
+        "statements" : "select * FROM contacts KEY FIRST c.name FOR c IN [{\"name\":\"dave\"},{\"name\":\"ian\"}] END",
         "results": [
         {
             "children": [
