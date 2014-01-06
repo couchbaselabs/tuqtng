@@ -1,0 +1,8 @@
+{
+    "uuid": "zid-pork-0003",
+    "messages" : [
+        {"user": "zid-pork-0001", "type" : "gift", "content" : "salt", "message" : "less work more salt "},
+        {"user": "zid-pork-0004", "type" : "request", "content": "Add me", "message" : "oink oink"},
+        {"user": "zid-pork-0004", "type" : "request", "content": "Add me", "message": "hungry like the wolf"}
+    ]
+}
