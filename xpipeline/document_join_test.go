@@ -53,7 +53,7 @@ func TestDocumentJoin(t *testing.T) {
 
 	stubSource := NewStubSource(joinerTestData)
 
-	joiner := NewDocumentJoin(ast.NewProperty("children"), "child")
+	joiner := NewDocumentJoin(ast.NewProperty("children"), "INNER", "child")
 	joiner.SetSource(stubSource)
 
 	joinerItemChannel, _ := joiner.GetChannels()

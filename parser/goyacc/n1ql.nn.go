@@ -31,241 +31,37 @@ func init() {
 	{
 		var acc [18]bool
 		var fun [18]func(rune) int
-		fun[2] = func(r rune) int {
-			switch r {
-			case 34:
-				return 5
-			case 98:
-				return 6
-			case 102:
-				return 7
-			case 110:
-				return 8
-			case 114:
-				return 9
-			case 117:
-				return 10
-			case 92:
-				return 11
-			case 47:
-				return 12
-			case 116:
-				return 13
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 3
-				case 65 <= r && r <= 70:
-					return 3
-				case 97 <= r && r <= 102:
-					return 3
-				default:
-					return 3
-				}
-			}
-			panic("unreachable")
-		}
-		acc[4] = true
-		fun[4] = func(r rune) int {
-			switch r {
-			case 92:
-				return -1
-			case 47:
-				return -1
-			case 116:
-				return -1
-			case 34:
-				return -1
-			case 98:
-				return -1
-			case 102:
-				return -1
-			case 110:
-				return -1
-			case 114:
-				return -1
-			case 117:
-				return -1
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return -1
-				case 65 <= r && r <= 70:
-					return -1
-				case 97 <= r && r <= 102:
-					return -1
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[11] = func(r rune) int {
-			switch r {
-			case 34:
-				return 5
-			case 98:
-				return 6
-			case 102:
-				return 7
-			case 110:
-				return 8
-			case 114:
-				return 9
-			case 117:
-				return 10
-			case 92:
-				return 11
-			case 47:
-				return 12
-			case 116:
-				return 13
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 3
-				case 65 <= r && r <= 70:
-					return 3
-				case 97 <= r && r <= 102:
-					return 3
-				default:
-					return 3
-				}
-			}
-			panic("unreachable")
-		}
+		acc[3] = true
 		fun[3] = func(r rune) int {
 			switch r {
-			case 34:
-				return 4
-			case 98:
-				return 3
-			case 102:
-				return 3
-			case 110:
-				return 3
-			case 114:
-				return 3
 			case 117:
-				return 3
+				return -1
+			case 34:
+				return -1
 			case 92:
-				return 2
+				return -1
 			case 47:
-				return 3
+				return -1
+			case 98:
+				return -1
+			case 102:
+				return -1
+			case 110:
+				return -1
+			case 114:
+				return -1
 			case 116:
-				return 3
+				return -1
 			default:
 				switch {
 				case 48 <= r && r <= 57:
-					return 3
+					return -1
 				case 65 <= r && r <= 70:
-					return 3
+					return -1
 				case 97 <= r && r <= 102:
-					return 3
+					return -1
 				default:
-					return 3
-				}
-			}
-			panic("unreachable")
-		}
-		fun[9] = func(r rune) int {
-			switch r {
-			case 34:
-				return 4
-			case 98:
-				return 3
-			case 102:
-				return 3
-			case 110:
-				return 3
-			case 114:
-				return 3
-			case 117:
-				return 3
-			case 92:
-				return 2
-			case 47:
-				return 3
-			case 116:
-				return 3
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 3
-				case 65 <= r && r <= 70:
-					return 3
-				case 97 <= r && r <= 102:
-					return 3
-				default:
-					return 3
-				}
-			}
-			panic("unreachable")
-		}
-		fun[13] = func(r rune) int {
-			switch r {
-			case 92:
-				return 2
-			case 47:
-				return 3
-			case 116:
-				return 3
-			case 34:
-				return 4
-			case 98:
-				return 3
-			case 102:
-				return 3
-			case 110:
-				return 3
-			case 114:
-				return 3
-			case 117:
-				return 3
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 3
-				case 65 <= r && r <= 70:
-					return 3
-				case 97 <= r && r <= 102:
-					return 3
-				default:
-					return 3
-				}
-			}
-			panic("unreachable")
-		}
-		fun[6] = func(r rune) int {
-			switch r {
-			case 92:
-				return 2
-			case 47:
-				return 3
-			case 116:
-				return 3
-			case 34:
-				return 4
-			case 98:
-				return 3
-			case 102:
-				return 3
-			case 110:
-				return 3
-			case 114:
-				return 3
-			case 117:
-				return 3
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 3
-				case 65 <= r && r <= 70:
-					return 3
-				case 97 <= r && r <= 102:
-					return 3
-				default:
-					return 3
+					return -1
 				}
 			}
 			panic("unreachable")
@@ -273,33 +69,33 @@ func init() {
 		fun[7] = func(r rune) int {
 			switch r {
 			case 34:
-				return 4
-			case 98:
-				return 3
-			case 102:
-				return 3
-			case 110:
-				return 3
-			case 114:
-				return 3
-			case 117:
 				return 3
 			case 92:
-				return 2
+				return 4
 			case 47:
-				return 3
+				return 2
+			case 98:
+				return 2
+			case 102:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
 			case 116:
-				return 3
+				return 2
+			case 117:
+				return 2
 			default:
 				switch {
 				case 48 <= r && r <= 57:
-					return 3
+					return 2
 				case 65 <= r && r <= 70:
-					return 3
+					return 2
 				case 97 <= r && r <= 102:
-					return 3
+					return 2
 				default:
-					return 3
+					return 2
 				}
 			}
 			panic("unreachable")
@@ -307,237 +103,339 @@ func init() {
 		fun[8] = func(r rune) int {
 			switch r {
 			case 34:
-				return 4
-			case 98:
-				return 3
-			case 102:
-				return 3
-			case 110:
-				return 3
-			case 114:
-				return 3
-			case 117:
 				return 3
 			case 92:
-				return 2
+				return 4
 			case 47:
-				return 3
+				return 2
+			case 98:
+				return 2
+			case 102:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
 			case 116:
-				return 3
+				return 2
+			case 117:
+				return 2
 			default:
 				switch {
 				case 48 <= r && r <= 57:
-					return 3
+					return 2
 				case 65 <= r && r <= 70:
-					return 3
+					return 2
 				case 97 <= r && r <= 102:
-					return 3
+					return 2
 				default:
-					return 3
+					return 2
 				}
 			}
 			panic("unreachable")
 		}
-		fun[10] = func(r rune) int {
+		fun[9] = func(r rune) int {
 			switch r {
 			case 34:
-				return 4
-			case 98:
-				return 14
-			case 102:
-				return 14
-			case 110:
-				return 3
-			case 114:
-				return 3
-			case 117:
 				return 3
 			case 92:
-				return 2
+				return 4
 			case 47:
-				return 3
+				return 2
+			case 98:
+				return 2
+			case 102:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
 			case 116:
-				return 3
+				return 2
+			case 117:
+				return 2
 			default:
 				switch {
 				case 48 <= r && r <= 57:
-					return 14
+					return 2
 				case 65 <= r && r <= 70:
-					return 14
+					return 2
 				case 97 <= r && r <= 102:
-					return 14
+					return 2
 				default:
-					return 3
-				}
-			}
-			panic("unreachable")
-		}
-		fun[12] = func(r rune) int {
-			switch r {
-			case 92:
-				return 2
-			case 47:
-				return 3
-			case 116:
-				return 3
-			case 34:
-				return 4
-			case 98:
-				return 3
-			case 102:
-				return 3
-			case 110:
-				return 3
-			case 114:
-				return 3
-			case 117:
-				return 3
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 3
-				case 65 <= r && r <= 70:
-					return 3
-				case 97 <= r && r <= 102:
-					return 3
-				default:
-					return 3
+					return 2
 				}
 			}
 			panic("unreachable")
 		}
 		fun[15] = func(r rune) int {
 			switch r {
-			case 92:
+			case 117:
 				return 2
-			case 47:
-				return 3
-			case 116:
-				return 3
 			case 34:
+				return 3
+			case 92:
 				return 4
+			case 47:
+				return 2
 			case 98:
 				return 16
 			case 102:
 				return 16
 			case 110:
-				return 3
-			case 114:
-				return 3
-			case 117:
-				return 3
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 16
-				case 65 <= r && r <= 70:
-					return 16
-				case 97 <= r && r <= 102:
-					return 16
-				default:
-					return 3
-				}
-			}
-			panic("unreachable")
-		}
-		fun[16] = func(r rune) int {
-			switch r {
-			case 92:
 				return 2
-			case 47:
-				return 3
-			case 116:
-				return 3
-			case 34:
-				return 4
-			case 98:
-				return 17
-			case 102:
-				return 17
-			case 110:
-				return 3
 			case 114:
-				return 3
-			case 117:
-				return 3
+				return 2
+			case 116:
+				return 2
 			default:
 				switch {
 				case 48 <= r && r <= 57:
-					return 17
+					return 16
 				case 65 <= r && r <= 70:
-					return 17
+					return 16
 				case 97 <= r && r <= 102:
-					return 17
+					return 16
 				default:
-					return 3
-				}
-			}
-			panic("unreachable")
-		}
-		fun[0] = func(r rune) int {
-			switch r {
-			case 92:
-				return -1
-			case 47:
-				return -1
-			case 116:
-				return -1
-			case 34:
-				return 1
-			case 98:
-				return -1
-			case 102:
-				return -1
-			case 110:
-				return -1
-			case 114:
-				return -1
-			case 117:
-				return -1
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return -1
-				case 65 <= r && r <= 70:
-					return -1
-				case 97 <= r && r <= 102:
-					return -1
-				default:
-					return -1
+					return 2
 				}
 			}
 			panic("unreachable")
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 92:
-				return 2
-			case 47:
-				return 3
-			case 116:
-				return 3
-			case 34:
-				return 4
-			case 98:
-				return 3
-			case 102:
-				return 3
-			case 110:
-				return 3
-			case 114:
-				return 3
 			case 117:
+				return 2
+			case 34:
 				return 3
+			case 92:
+				return 4
+			case 47:
+				return 2
+			case 98:
+				return 2
+			case 102:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
+			case 116:
+				return 2
 			default:
 				switch {
 				case 48 <= r && r <= 57:
-					return 3
+					return 2
 				case 65 <= r && r <= 70:
-					return 3
+					return 2
 				case 97 <= r && r <= 102:
-					return 3
+					return 2
 				default:
-					return 3
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[4] = func(r rune) int {
+			switch r {
+			case 34:
+				return 5
+			case 92:
+				return 6
+			case 47:
+				return 7
+			case 98:
+				return 8
+			case 102:
+				return 9
+			case 110:
+				return 10
+			case 114:
+				return 11
+			case 116:
+				return 12
+			case 117:
+				return 13
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 2
+				case 65 <= r && r <= 70:
+					return 2
+				case 97 <= r && r <= 102:
+					return 2
+				default:
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[11] = func(r rune) int {
+			switch r {
+			case 34:
+				return 3
+			case 92:
+				return 4
+			case 47:
+				return 2
+			case 98:
+				return 2
+			case 102:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
+			case 116:
+				return 2
+			case 117:
+				return 2
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 2
+				case 65 <= r && r <= 70:
+					return 2
+				case 97 <= r && r <= 102:
+					return 2
+				default:
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[12] = func(r rune) int {
+			switch r {
+			case 34:
+				return 3
+			case 92:
+				return 4
+			case 47:
+				return 2
+			case 98:
+				return 2
+			case 102:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
+			case 116:
+				return 2
+			case 117:
+				return 2
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 2
+				case 65 <= r && r <= 70:
+					return 2
+				case 97 <= r && r <= 102:
+					return 2
+				default:
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[13] = func(r rune) int {
+			switch r {
+			case 117:
+				return 2
+			case 34:
+				return 3
+			case 92:
+				return 4
+			case 47:
+				return 2
+			case 98:
+				return 14
+			case 102:
+				return 14
+			case 110:
+				return 2
+			case 114:
+				return 2
+			case 116:
+				return 2
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 14
+				case 65 <= r && r <= 70:
+					return 14
+				case 97 <= r && r <= 102:
+					return 14
+				default:
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[0] = func(r rune) int {
+			switch r {
+			case 117:
+				return -1
+			case 34:
+				return 1
+			case 92:
+				return -1
+			case 47:
+				return -1
+			case 98:
+				return -1
+			case 102:
+				return -1
+			case 110:
+				return -1
+			case 114:
+				return -1
+			case 116:
+				return -1
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return -1
+				case 65 <= r && r <= 70:
+					return -1
+				case 97 <= r && r <= 102:
+					return -1
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[2] = func(r rune) int {
+			switch r {
+			case 117:
+				return 2
+			case 34:
+				return 3
+			case 92:
+				return 4
+			case 47:
+				return 2
+			case 98:
+				return 2
+			case 102:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
+			case 116:
+				return 2
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 2
+				case 65 <= r && r <= 70:
+					return 2
+				case 97 <= r && r <= 102:
+					return 2
+				default:
+					return 2
 				}
 			}
 			panic("unreachable")
@@ -545,58 +443,126 @@ func init() {
 		acc[5] = true
 		fun[5] = func(r rune) int {
 			switch r {
-			case 92:
-				return 2
-			case 47:
-				return 3
-			case 116:
-				return 3
 			case 34:
+				return 3
+			case 92:
 				return 4
+			case 47:
+				return 2
 			case 98:
-				return 3
+				return 2
 			case 102:
-				return 3
+				return 2
 			case 110:
-				return 3
+				return 2
 			case 114:
-				return 3
+				return 2
+			case 116:
+				return 2
 			case 117:
-				return 3
+				return 2
 			default:
 				switch {
 				case 48 <= r && r <= 57:
-					return 3
+					return 2
 				case 65 <= r && r <= 70:
-					return 3
+					return 2
 				case 97 <= r && r <= 102:
-					return 3
+					return 2
 				default:
-					return 3
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[6] = func(r rune) int {
+			switch r {
+			case 117:
+				return 13
+			case 34:
+				return 5
+			case 92:
+				return 6
+			case 47:
+				return 7
+			case 98:
+				return 8
+			case 102:
+				return 9
+			case 110:
+				return 10
+			case 114:
+				return 11
+			case 116:
+				return 12
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 2
+				case 65 <= r && r <= 70:
+					return 2
+				case 97 <= r && r <= 102:
+					return 2
+				default:
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[10] = func(r rune) int {
+			switch r {
+			case 34:
+				return 3
+			case 92:
+				return 4
+			case 47:
+				return 2
+			case 98:
+				return 2
+			case 102:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
+			case 116:
+				return 2
+			case 117:
+				return 2
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 2
+				case 65 <= r && r <= 70:
+					return 2
+				case 97 <= r && r <= 102:
+					return 2
+				default:
+					return 2
 				}
 			}
 			panic("unreachable")
 		}
 		fun[14] = func(r rune) int {
 			switch r {
+			case 117:
+				return 2
 			case 34:
+				return 3
+			case 92:
 				return 4
+			case 47:
+				return 2
 			case 98:
 				return 15
 			case 102:
 				return 15
 			case 110:
-				return 3
-			case 114:
-				return 3
-			case 117:
-				return 3
-			case 92:
 				return 2
-			case 47:
-				return 3
+			case 114:
+				return 2
 			case 116:
-				return 3
+				return 2
 			default:
 				switch {
 				case 48 <= r && r <= 57:
@@ -606,41 +572,75 @@ func init() {
 				case 97 <= r && r <= 102:
 					return 15
 				default:
-					return 3
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[16] = func(r rune) int {
+			switch r {
+			case 117:
+				return 2
+			case 34:
+				return 3
+			case 92:
+				return 4
+			case 47:
+				return 2
+			case 98:
+				return 17
+			case 102:
+				return 17
+			case 110:
+				return 2
+			case 114:
+				return 2
+			case 116:
+				return 2
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 17
+				case 65 <= r && r <= 70:
+					return 17
+				case 97 <= r && r <= 102:
+					return 17
+				default:
+					return 2
 				}
 			}
 			panic("unreachable")
 		}
 		fun[17] = func(r rune) int {
 			switch r {
-			case 92:
-				return 2
-			case 47:
-				return 3
-			case 116:
-				return 3
-			case 34:
-				return 4
-			case 98:
-				return 3
-			case 102:
-				return 3
-			case 110:
-				return 3
-			case 114:
-				return 3
 			case 117:
+				return 2
+			case 34:
 				return 3
+			case 92:
+				return 4
+			case 47:
+				return 2
+			case 98:
+				return 2
+			case 102:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
+			case 116:
+				return 2
 			default:
 				switch {
 				case 48 <= r && r <= 57:
-					return 3
+					return 2
 				case 65 <= r && r <= 70:
-					return 3
+					return 2
 				case 97 <= r && r <= 102:
-					return 3
+					return 2
 				default:
-					return 3
+					return 2
 				}
 			}
 			panic("unreachable")
@@ -652,27 +652,27 @@ func init() {
 	{
 		var acc [18]bool
 		var fun [18]func(rune) int
-		fun[1] = func(r rune) int {
+		fun[6] = func(r rune) int {
 			switch r {
 			case 39:
 				return 2
 			case 92:
 				return 3
-			case 102:
-				return 4
-			case 110:
-				return 4
-			case 114:
-				return 4
-			case 117:
-				return 4
-			case 34:
-				return 4
 			case 47:
 				return 4
 			case 98:
 				return 4
+			case 102:
+				return 4
+			case 114:
+				return 4
 			case 116:
+				return 4
+			case 34:
+				return 4
+			case 110:
+				return 4
+			case 117:
 				return 4
 			default:
 				switch {
@@ -688,28 +688,100 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		fun[4] = func(r rune) int {
+		fun[13] = func(r rune) int {
+			switch r {
+			case 34:
+				return 4
+			case 110:
+				return 4
+			case 117:
+				return 4
+			case 39:
+				return 2
+			case 92:
+				return 3
+			case 47:
+				return 4
+			case 98:
+				return 14
+			case 102:
+				return 14
+			case 114:
+				return 4
+			case 116:
+				return 4
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 14
+				case 65 <= r && r <= 70:
+					return 14
+				case 97 <= r && r <= 102:
+					return 14
+				default:
+					return 4
+				}
+			}
+			panic("unreachable")
+		}
+		fun[1] = func(r rune) int {
 			switch r {
 			case 39:
 				return 2
 			case 92:
 				return 3
-			case 102:
-				return 4
-			case 110:
-				return 4
-			case 114:
-				return 4
-			case 117:
-				return 4
-			case 34:
-				return 4
 			case 47:
 				return 4
 			case 98:
 				return 4
+			case 102:
+				return 4
+			case 114:
+				return 4
 			case 116:
 				return 4
+			case 34:
+				return 4
+			case 110:
+				return 4
+			case 117:
+				return 4
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 4
+				case 65 <= r && r <= 70:
+					return 4
+				case 97 <= r && r <= 102:
+					return 4
+				default:
+					return 4
+				}
+			}
+			panic("unreachable")
+		}
+		fun[5] = func(r rune) int {
+			switch r {
+			case 39:
+				return 2
+			case 92:
+				return 5
+			case 47:
+				return 6
+			case 98:
+				return 7
+			case 102:
+				return 8
+			case 114:
+				return 9
+			case 116:
+				return 10
+			case 34:
+				return 11
+			case 110:
+				return 12
+			case 117:
+				return 13
 			default:
 				switch {
 				case 48 <= r && r <= 57:
@@ -730,21 +802,21 @@ func init() {
 				return 2
 			case 92:
 				return 3
-			case 102:
-				return 4
-			case 110:
-				return 4
-			case 114:
-				return 4
-			case 117:
-				return 4
-			case 34:
-				return 4
 			case 47:
 				return 4
 			case 98:
 				return 4
+			case 102:
+				return 4
+			case 114:
+				return 4
 			case 116:
+				return 4
+			case 34:
+				return 4
+			case 110:
+				return 4
+			case 117:
 				return 4
 			default:
 				switch {
@@ -762,23 +834,239 @@ func init() {
 		}
 		fun[11] = func(r rune) int {
 			switch r {
-			case 34:
-				return 4
+			case 39:
+				return 2
+			case 92:
+				return 3
 			case 47:
 				return 4
 			case 98:
 				return 4
+			case 102:
+				return 4
+			case 114:
+				return 4
 			case 116:
+				return 4
+			case 34:
+				return 4
+			case 110:
+				return 4
+			case 117:
+				return 4
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 4
+				case 65 <= r && r <= 70:
+					return 4
+				case 97 <= r && r <= 102:
+					return 4
+				default:
+					return 4
+				}
+			}
+			panic("unreachable")
+		}
+		fun[15] = func(r rune) int {
+			switch r {
+			case 39:
+				return 2
+			case 92:
+				return 3
+			case 47:
+				return 4
+			case 98:
+				return 16
+			case 102:
+				return 16
+			case 114:
+				return 4
+			case 116:
+				return 4
+			case 34:
+				return 4
+			case 110:
+				return 4
+			case 117:
+				return 4
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 16
+				case 65 <= r && r <= 70:
+					return 16
+				case 97 <= r && r <= 102:
+					return 16
+				default:
+					return 4
+				}
+			}
+			panic("unreachable")
+		}
+		fun[16] = func(r rune) int {
+			switch r {
+			case 34:
+				return 4
+			case 110:
+				return 4
+			case 117:
 				return 4
 			case 39:
 				return 2
 			case 92:
 				return 3
+			case 47:
+				return 4
+			case 98:
+				return 17
 			case 102:
+				return 17
+			case 114:
+				return 4
+			case 116:
+				return 4
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 17
+				case 65 <= r && r <= 70:
+					return 17
+				case 97 <= r && r <= 102:
+					return 17
+				default:
+					return 4
+				}
+			}
+			panic("unreachable")
+		}
+		fun[17] = func(r rune) int {
+			switch r {
+			case 39:
+				return 2
+			case 92:
+				return 3
+			case 47:
+				return 4
+			case 98:
+				return 4
+			case 102:
+				return 4
+			case 114:
+				return 4
+			case 116:
+				return 4
+			case 34:
 				return 4
 			case 110:
 				return 4
+			case 117:
+				return 4
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 4
+				case 65 <= r && r <= 70:
+					return 4
+				case 97 <= r && r <= 102:
+					return 4
+				default:
+					return 4
+				}
+			}
+			panic("unreachable")
+		}
+		fun[0] = func(r rune) int {
+			switch r {
+			case 34:
+				return -1
+			case 110:
+				return -1
+			case 117:
+				return -1
+			case 39:
+				return 1
+			case 92:
+				return -1
+			case 47:
+				return -1
+			case 98:
+				return -1
+			case 102:
+				return -1
 			case 114:
+				return -1
+			case 116:
+				return -1
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return -1
+				case 65 <= r && r <= 70:
+					return -1
+				case 97 <= r && r <= 102:
+					return -1
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[3] = func(r rune) int {
+			switch r {
+			case 39:
+				return 2
+			case 92:
+				return 5
+			case 47:
+				return 6
+			case 98:
+				return 7
+			case 102:
+				return 8
+			case 114:
+				return 9
+			case 116:
+				return 10
+			case 34:
+				return 11
+			case 110:
+				return 12
+			case 117:
+				return 13
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 4
+				case 65 <= r && r <= 70:
+					return 4
+				case 97 <= r && r <= 102:
+					return 4
+				default:
+					return 4
+				}
+			}
+			panic("unreachable")
+		}
+		fun[7] = func(r rune) int {
+			switch r {
+			case 39:
+				return 2
+			case 92:
+				return 3
+			case 47:
+				return 4
+			case 98:
+				return 4
+			case 102:
+				return 4
+			case 114:
+				return 4
+			case 116:
+				return 4
+			case 34:
+				return 4
+			case 110:
 				return 4
 			case 117:
 				return 4
@@ -800,311 +1088,23 @@ func init() {
 			switch r {
 			case 34:
 				return 4
-			case 47:
+			case 110:
 				return 4
-			case 98:
-				return 4
-			case 116:
+			case 117:
 				return 4
 			case 39:
 				return 2
 			case 92:
 				return 3
-			case 102:
-				return 4
-			case 110:
-				return 4
-			case 114:
-				return 4
-			case 117:
-				return 4
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 4
-				case 65 <= r && r <= 70:
-					return 4
-				case 97 <= r && r <= 102:
-					return 4
-				default:
-					return 4
-				}
-			}
-			panic("unreachable")
-		}
-		fun[6] = func(r rune) int {
-			switch r {
-			case 34:
-				return 4
 			case 47:
 				return 4
 			case 98:
 				return 4
-			case 116:
-				return 4
-			case 39:
-				return 2
-			case 92:
-				return 3
 			case 102:
-				return 4
-			case 110:
 				return 4
 			case 114:
 				return 4
-			case 117:
-				return 4
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 4
-				case 65 <= r && r <= 70:
-					return 4
-				case 97 <= r && r <= 102:
-					return 4
-				default:
-					return 4
-				}
-			}
-			panic("unreachable")
-		}
-		fun[9] = func(r rune) int {
-			switch r {
-			case 39:
-				return 2
-			case 92:
-				return 9
-			case 102:
-				return 10
-			case 110:
-				return 11
-			case 114:
-				return 12
-			case 117:
-				return 13
-			case 34:
-				return 5
-			case 47:
-				return 6
-			case 98:
-				return 7
 			case 116:
-				return 8
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 4
-				case 65 <= r && r <= 70:
-					return 4
-				case 97 <= r && r <= 102:
-					return 4
-				default:
-					return 4
-				}
-			}
-			panic("unreachable")
-		}
-		fun[0] = func(r rune) int {
-			switch r {
-			case 39:
-				return 1
-			case 92:
-				return -1
-			case 102:
-				return -1
-			case 110:
-				return -1
-			case 114:
-				return -1
-			case 117:
-				return -1
-			case 34:
-				return -1
-			case 47:
-				return -1
-			case 98:
-				return -1
-			case 116:
-				return -1
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return -1
-				case 65 <= r && r <= 70:
-					return -1
-				case 97 <= r && r <= 102:
-					return -1
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[5] = func(r rune) int {
-			switch r {
-			case 39:
-				return 2
-			case 92:
-				return 3
-			case 102:
-				return 4
-			case 110:
-				return 4
-			case 114:
-				return 4
-			case 117:
-				return 4
-			case 34:
-				return 4
-			case 47:
-				return 4
-			case 98:
-				return 4
-			case 116:
-				return 4
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 4
-				case 65 <= r && r <= 70:
-					return 4
-				case 97 <= r && r <= 102:
-					return 4
-				default:
-					return 4
-				}
-			}
-			panic("unreachable")
-		}
-		fun[13] = func(r rune) int {
-			switch r {
-			case 34:
-				return 4
-			case 47:
-				return 4
-			case 98:
-				return 14
-			case 116:
-				return 4
-			case 39:
-				return 2
-			case 92:
-				return 3
-			case 102:
-				return 14
-			case 110:
-				return 4
-			case 114:
-				return 4
-			case 117:
-				return 4
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 14
-				case 65 <= r && r <= 70:
-					return 14
-				case 97 <= r && r <= 102:
-					return 14
-				default:
-					return 4
-				}
-			}
-			panic("unreachable")
-		}
-		fun[15] = func(r rune) int {
-			switch r {
-			case 39:
-				return 2
-			case 92:
-				return 3
-			case 102:
-				return 16
-			case 110:
-				return 4
-			case 114:
-				return 4
-			case 117:
-				return 4
-			case 34:
-				return 4
-			case 47:
-				return 4
-			case 98:
-				return 16
-			case 116:
-				return 4
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 16
-				case 65 <= r && r <= 70:
-					return 16
-				case 97 <= r && r <= 102:
-					return 16
-				default:
-					return 4
-				}
-			}
-			panic("unreachable")
-		}
-		fun[16] = func(r rune) int {
-			switch r {
-			case 34:
-				return 4
-			case 47:
-				return 4
-			case 98:
-				return 17
-			case 116:
-				return 4
-			case 39:
-				return 2
-			case 92:
-				return 3
-			case 102:
-				return 17
-			case 110:
-				return 4
-			case 114:
-				return 4
-			case 117:
-				return 4
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 17
-				case 65 <= r && r <= 70:
-					return 17
-				case 97 <= r && r <= 102:
-					return 17
-				default:
-					return 4
-				}
-			}
-			panic("unreachable")
-		}
-		fun[17] = func(r rune) int {
-			switch r {
-			case 34:
-				return 4
-			case 47:
-				return 4
-			case 98:
-				return 4
-			case 116:
-				return 4
-			case 39:
-				return 2
-			case 92:
-				return 3
-			case 102:
-				return 4
-			case 110:
-				return 4
-			case 114:
-				return 4
-			case 117:
 				return 4
 			default:
 				switch {
@@ -1127,21 +1127,21 @@ func init() {
 				return -1
 			case 92:
 				return -1
-			case 102:
-				return -1
-			case 110:
-				return -1
-			case 114:
-				return -1
-			case 117:
-				return -1
-			case 34:
-				return -1
 			case 47:
 				return -1
 			case 98:
 				return -1
+			case 102:
+				return -1
+			case 114:
+				return -1
 			case 116:
+				return -1
+			case 34:
+				return -1
+			case 110:
+				return -1
+			case 117:
 				return -1
 			default:
 				switch {
@@ -1157,63 +1157,27 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		fun[3] = func(r rune) int {
+		fun[4] = func(r rune) int {
 			switch r {
 			case 34:
-				return 5
-			case 47:
-				return 6
-			case 98:
-				return 7
-			case 116:
-				return 8
-			case 39:
-				return 2
-			case 92:
-				return 9
-			case 102:
-				return 10
+				return 4
 			case 110:
-				return 11
-			case 114:
-				return 12
+				return 4
 			case 117:
-				return 13
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 4
-				case 65 <= r && r <= 70:
-					return 4
-				case 97 <= r && r <= 102:
-					return 4
-				default:
-					return 4
-				}
-			}
-			panic("unreachable")
-		}
-		fun[7] = func(r rune) int {
-			switch r {
-			case 34:
-				return 4
-			case 47:
-				return 4
-			case 98:
-				return 4
-			case 116:
 				return 4
 			case 39:
 				return 2
 			case 92:
 				return 3
-			case 102:
+			case 47:
 				return 4
-			case 110:
+			case 98:
+				return 4
+			case 102:
 				return 4
 			case 114:
 				return 4
-			case 117:
+			case 116:
 				return 4
 			default:
 				switch {
@@ -1233,21 +1197,57 @@ func init() {
 			switch r {
 			case 34:
 				return 4
-			case 47:
+			case 110:
 				return 4
-			case 98:
-				return 4
-			case 116:
+			case 117:
 				return 4
 			case 39:
 				return 2
 			case 92:
 				return 3
+			case 47:
+				return 4
+			case 98:
+				return 4
 			case 102:
 				return 4
-			case 110:
+			case 114:
+				return 4
+			case 116:
+				return 4
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 4
+				case 65 <= r && r <= 70:
+					return 4
+				case 97 <= r && r <= 102:
+					return 4
+				default:
+					return 4
+				}
+			}
+			panic("unreachable")
+		}
+		fun[9] = func(r rune) int {
+			switch r {
+			case 39:
+				return 2
+			case 92:
+				return 3
+			case 47:
+				return 4
+			case 98:
+				return 4
+			case 102:
 				return 4
 			case 114:
+				return 4
+			case 116:
+				return 4
+			case 34:
+				return 4
+			case 110:
 				return 4
 			case 117:
 				return 4
@@ -1271,21 +1271,21 @@ func init() {
 				return 2
 			case 92:
 				return 3
-			case 102:
-				return 15
-			case 110:
-				return 4
-			case 114:
-				return 4
-			case 117:
-				return 4
-			case 34:
-				return 4
 			case 47:
 				return 4
 			case 98:
 				return 15
+			case 102:
+				return 15
+			case 114:
+				return 4
 			case 116:
+				return 4
+			case 34:
+				return 4
+			case 110:
+				return 4
+			case 117:
 				return 4
 			default:
 				switch {
@@ -2294,25 +2294,55 @@ func init() {
 	{
 		var acc [8]bool
 		var fun [8]func(rune) int
-		fun[2] = func(r rune) int {
+		fun[1] = func(r rune) int {
 			switch r {
+			case 77:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
 			case 109:
 				return -1
 			case 105:
+				return 2
+			case 73:
+				return 2
+			case 115:
+				return -1
+			case 83:
+				return -1
+			case 103:
+				return -1
+			case 71:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[2] = func(r rune) int {
+			switch r {
+			case 77:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 109:
+				return -1
+			case 105:
+				return -1
+			case 73:
 				return -1
 			case 115:
 				return 3
 			case 83:
 				return 3
-			case 110:
-				return -1
-			case 78:
-				return -1
 			case 103:
-				return -1
-			case 77:
-				return -1
-			case 73:
 				return -1
 			case 71:
 				return -1
@@ -2326,24 +2356,24 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 109:
-				return -1
-			case 105:
-				return 5
-			case 115:
-				return -1
-			case 83:
+			case 77:
 				return -1
 			case 110:
 				return -1
 			case 78:
 				return -1
-			case 103:
+			case 109:
 				return -1
-			case 77:
-				return -1
+			case 105:
+				return 5
 			case 73:
 				return 5
+			case 115:
+				return -1
+			case 83:
+				return -1
+			case 103:
+				return -1
 			case 71:
 				return -1
 			default:
@@ -2356,25 +2386,55 @@ func init() {
 		}
 		fun[5] = func(r rune) int {
 			switch r {
-			case 109:
-				return -1
-			case 105:
-				return -1
-			case 115:
-				return -1
-			case 83:
+			case 77:
 				return -1
 			case 110:
 				return 6
 			case 78:
 				return 6
-			case 103:
+			case 109:
 				return -1
-			case 77:
+			case 105:
 				return -1
 			case 73:
 				return -1
+			case 115:
+				return -1
+			case 83:
+				return -1
+			case 103:
+				return -1
 			case 71:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[6] = func(r rune) int {
+			switch r {
+			case 109:
+				return -1
+			case 105:
+				return -1
+			case 73:
+				return -1
+			case 115:
+				return -1
+			case 83:
+				return -1
+			case 103:
+				return 7
+			case 71:
+				return 7
+			case 77:
+				return -1
+			case 110:
+				return -1
+			case 78:
 				return -1
 			default:
 				switch {
@@ -2386,54 +2446,24 @@ func init() {
 		}
 		fun[0] = func(r rune) int {
 			switch r {
+			case 77:
+				return 1
+			case 110:
+				return -1
+			case 78:
+				return -1
 			case 109:
 				return 1
 			case 105:
+				return -1
+			case 73:
 				return -1
 			case 115:
 				return -1
 			case 83:
 				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
 			case 103:
 				return -1
-			case 77:
-				return 1
-			case 73:
-				return -1
-			case 71:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[1] = func(r rune) int {
-			switch r {
-			case 109:
-				return -1
-			case 105:
-				return 2
-			case 115:
-				return -1
-			case 83:
-				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
-			case 103:
-				return -1
-			case 77:
-				return -1
-			case 73:
-				return 2
 			case 71:
 				return -1
 			default:
@@ -2450,52 +2480,22 @@ func init() {
 				return -1
 			case 105:
 				return -1
+			case 73:
+				return -1
 			case 115:
 				return 4
 			case 83:
 				return 4
-			case 110:
-				return -1
-			case 78:
-				return -1
 			case 103:
 				return -1
-			case 77:
-				return -1
-			case 73:
-				return -1
 			case 71:
 				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[6] = func(r rune) int {
-			switch r {
 			case 77:
-				return -1
-			case 73:
-				return -1
-			case 71:
-				return 7
-			case 109:
-				return -1
-			case 105:
-				return -1
-			case 115:
-				return -1
-			case 83:
 				return -1
 			case 110:
 				return -1
 			case 78:
 				return -1
-			case 103:
-				return 7
 			default:
 				switch {
 				default:
@@ -2509,23 +2509,23 @@ func init() {
 			switch r {
 			case 77:
 				return -1
-			case 73:
+			case 110:
 				return -1
-			case 71:
+			case 78:
 				return -1
 			case 109:
 				return -1
 			case 105:
 				return -1
+			case 73:
+				return -1
 			case 115:
 				return -1
 			case 83:
 				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
 			case 103:
+				return -1
+			case 71:
 				return -1
 			default:
 				switch {
@@ -2544,29 +2544,29 @@ func init() {
 		var fun [7]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 65:
-				return -1
-			case 117:
-				return -1
-			case 85:
-				return -1
-			case 69:
-				return -1
-			case 118:
-				return 1
-			case 86:
-				return 1
 			case 97:
 				return -1
 			case 108:
 				return -1
 			case 76:
 				return -1
-			case 101:
+			case 85:
 				return -1
 			case 100:
 				return -1
 			case 68:
+				return -1
+			case 118:
+				return 1
+			case 86:
+				return 1
+			case 65:
+				return -1
+			case 117:
+				return -1
+			case 101:
+				return -1
+			case 69:
 				return -1
 			default:
 				switch {
@@ -2578,27 +2578,27 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 118:
-				return -1
-			case 86:
-				return -1
 			case 97:
 				return 2
 			case 108:
 				return -1
 			case 76:
 				return -1
-			case 101:
+			case 85:
 				return -1
 			case 100:
 				return -1
 			case 68:
 				return -1
+			case 118:
+				return -1
+			case 86:
+				return -1
 			case 65:
 				return 2
 			case 117:
 				return -1
-			case 85:
+			case 101:
 				return -1
 			case 69:
 				return -1
@@ -2616,25 +2616,25 @@ func init() {
 				return -1
 			case 86:
 				return -1
+			case 65:
+				return -1
+			case 117:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
 			case 97:
 				return -1
 			case 108:
 				return 3
 			case 76:
 				return 3
-			case 101:
+			case 85:
 				return -1
 			case 100:
 				return -1
 			case 68:
-				return -1
-			case 65:
-				return -1
-			case 117:
-				return -1
-			case 85:
-				return -1
-			case 69:
 				return -1
 			default:
 				switch {
@@ -2650,25 +2650,25 @@ func init() {
 				return -1
 			case 86:
 				return -1
+			case 65:
+				return -1
+			case 117:
+				return 4
+			case 101:
+				return -1
+			case 69:
+				return -1
 			case 97:
 				return -1
 			case 108:
 				return -1
 			case 76:
 				return -1
-			case 101:
-				return -1
+			case 85:
+				return 4
 			case 100:
 				return -1
 			case 68:
-				return -1
-			case 65:
-				return -1
-			case 117:
-				return 4
-			case 85:
-				return 4
-			case 69:
 				return -1
 			default:
 				switch {
@@ -2680,28 +2680,28 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 118:
-				return -1
-			case 86:
-				return -1
 			case 97:
 				return -1
 			case 108:
 				return -1
 			case 76:
 				return -1
-			case 101:
-				return 5
+			case 85:
+				return -1
 			case 100:
 				return -1
 			case 68:
+				return -1
+			case 118:
+				return -1
+			case 86:
 				return -1
 			case 65:
 				return -1
 			case 117:
 				return -1
-			case 85:
-				return -1
+			case 101:
+				return 5
 			case 69:
 				return 5
 			default:
@@ -2714,30 +2714,30 @@ func init() {
 		}
 		fun[5] = func(r rune) int {
 			switch r {
-			case 65:
-				return -1
-			case 117:
-				return -1
-			case 85:
-				return -1
-			case 69:
-				return -1
-			case 118:
-				return -1
-			case 86:
-				return -1
 			case 97:
 				return -1
 			case 108:
 				return -1
 			case 76:
 				return -1
-			case 101:
+			case 85:
 				return -1
 			case 100:
 				return 6
 			case 68:
 				return 6
+			case 118:
+				return -1
+			case 86:
+				return -1
+			case 65:
+				return -1
+			case 117:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
 			default:
 				switch {
 				default:
@@ -2749,27 +2749,27 @@ func init() {
 		acc[6] = true
 		fun[6] = func(r rune) int {
 			switch r {
-			case 118:
-				return -1
-			case 86:
-				return -1
 			case 97:
 				return -1
 			case 108:
 				return -1
 			case 76:
 				return -1
-			case 101:
+			case 85:
 				return -1
 			case 100:
 				return -1
 			case 68:
 				return -1
+			case 118:
+				return -1
+			case 86:
+				return -1
 			case 65:
 				return -1
 			case 117:
 				return -1
-			case 85:
+			case 101:
 				return -1
 			case 69:
 				return -1
@@ -2790,23 +2790,23 @@ func init() {
 		var fun [7]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 83:
-				return 1
+			case 101:
+				return -1
 			case 69:
 				return -1
 			case 108:
-				return -1
-			case 99:
-				return -1
-			case 67:
 				return -1
 			case 84:
 				return -1
 			case 115:
 				return 1
-			case 101:
-				return -1
+			case 83:
+				return 1
 			case 76:
+				return -1
+			case 99:
+				return -1
+			case 67:
 				return -1
 			case 116:
 				return -1
@@ -2822,21 +2822,21 @@ func init() {
 			switch r {
 			case 115:
 				return -1
-			case 101:
-				return 2
-			case 76:
-				return -1
-			case 116:
-				return -1
 			case 83:
 				return -1
-			case 69:
-				return 2
-			case 108:
+			case 76:
 				return -1
 			case 99:
 				return -1
 			case 67:
+				return -1
+			case 116:
+				return -1
+			case 101:
+				return 2
+			case 69:
+				return 2
+			case 108:
 				return -1
 			case 84:
 				return -1
@@ -2850,24 +2850,24 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
-			case 83:
+			case 101:
 				return -1
 			case 69:
 				return -1
 			case 108:
 				return 3
-			case 99:
-				return -1
-			case 67:
-				return -1
 			case 84:
 				return -1
 			case 115:
 				return -1
-			case 101:
+			case 83:
 				return -1
 			case 76:
 				return 3
+			case 99:
+				return -1
+			case 67:
+				return -1
 			case 116:
 				return -1
 			default:
@@ -2880,25 +2880,25 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 115:
-				return -1
 			case 101:
 				return 4
-			case 76:
-				return -1
-			case 116:
-				return -1
-			case 83:
-				return -1
 			case 69:
 				return 4
 			case 108:
+				return -1
+			case 84:
+				return -1
+			case 115:
+				return -1
+			case 83:
+				return -1
+			case 76:
 				return -1
 			case 99:
 				return -1
 			case 67:
 				return -1
-			case 84:
+			case 116:
 				return -1
 			default:
 				switch {
@@ -2910,25 +2910,25 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
+			case 115:
+				return -1
 			case 83:
 				return -1
-			case 69:
-				return -1
-			case 108:
+			case 76:
 				return -1
 			case 99:
 				return 5
 			case 67:
 				return 5
-			case 84:
-				return -1
-			case 115:
+			case 116:
 				return -1
 			case 101:
 				return -1
-			case 76:
+			case 69:
 				return -1
-			case 116:
+			case 108:
+				return -1
+			case 84:
 				return -1
 			default:
 				switch {
@@ -2940,25 +2940,25 @@ func init() {
 		}
 		fun[5] = func(r rune) int {
 			switch r {
-			case 115:
-				return -1
 			case 101:
-				return -1
-			case 76:
-				return -1
-			case 116:
-				return 6
-			case 83:
 				return -1
 			case 69:
 				return -1
 			case 108:
 				return -1
+			case 84:
+				return 6
+			case 115:
+				return -1
+			case 83:
+				return -1
+			case 76:
+				return -1
 			case 99:
 				return -1
 			case 67:
 				return -1
-			case 84:
+			case 116:
 				return 6
 			default:
 				switch {
@@ -2971,25 +2971,25 @@ func init() {
 		acc[6] = true
 		fun[6] = func(r rune) int {
 			switch r {
+			case 115:
+				return -1
 			case 83:
 				return -1
-			case 69:
-				return -1
-			case 108:
+			case 76:
 				return -1
 			case 99:
 				return -1
 			case 67:
 				return -1
-			case 84:
-				return -1
-			case 115:
+			case 116:
 				return -1
 			case 101:
 				return -1
-			case 76:
+			case 69:
 				return -1
-			case 116:
+			case 108:
+				return -1
+			case 84:
 				return -1
 			default:
 				switch {
@@ -4058,23 +4058,23 @@ func init() {
 		var fun [7]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 102:
-				return -1
-			case 115:
+			case 111:
+				return 1
+			case 101:
 				return -1
 			case 69:
 				return -1
-			case 116:
-				return -1
-			case 111:
-				return 1
 			case 79:
 				return 1
+			case 102:
+				return -1
 			case 70:
+				return -1
+			case 115:
 				return -1
 			case 83:
 				return -1
-			case 101:
+			case 116:
 				return -1
 			case 84:
 				return -1
@@ -4088,25 +4088,25 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 111:
-				return -1
 			case 79:
-				return -1
-			case 70:
-				return 2
-			case 83:
-				return -1
-			case 101:
-				return -1
-			case 84:
 				return -1
 			case 102:
 				return 2
+			case 70:
+				return 2
 			case 115:
 				return -1
-			case 69:
+			case 83:
 				return -1
 			case 116:
+				return -1
+			case 84:
+				return -1
+			case 111:
+				return -1
+			case 101:
+				return -1
+			case 69:
 				return -1
 			default:
 				switch {
@@ -4118,23 +4118,23 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
-			case 102:
-				return 3
-			case 115:
+			case 111:
+				return -1
+			case 101:
 				return -1
 			case 69:
 				return -1
-			case 116:
-				return -1
-			case 111:
-				return -1
 			case 79:
 				return -1
+			case 102:
+				return 3
 			case 70:
 				return 3
+			case 115:
+				return -1
 			case 83:
 				return -1
-			case 101:
+			case 116:
 				return -1
 			case 84:
 				return -1
@@ -4148,25 +4148,25 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 111:
-				return -1
 			case 79:
-				return -1
-			case 70:
-				return -1
-			case 83:
-				return 4
-			case 101:
-				return -1
-			case 84:
 				return -1
 			case 102:
 				return -1
+			case 70:
+				return -1
 			case 115:
 				return 4
-			case 69:
-				return -1
+			case 83:
+				return 4
 			case 116:
+				return -1
+			case 84:
+				return -1
+			case 111:
+				return -1
+			case 101:
+				return -1
+			case 69:
 				return -1
 			default:
 				switch {
@@ -4178,24 +4178,24 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 102:
-				return -1
-			case 115:
-				return -1
-			case 69:
-				return 5
-			case 116:
-				return -1
 			case 111:
-				return -1
-			case 79:
-				return -1
-			case 70:
-				return -1
-			case 83:
 				return -1
 			case 101:
 				return 5
+			case 69:
+				return 5
+			case 79:
+				return -1
+			case 102:
+				return -1
+			case 70:
+				return -1
+			case 115:
+				return -1
+			case 83:
+				return -1
+			case 116:
+				return -1
 			case 84:
 				return -1
 			default:
@@ -4208,26 +4208,26 @@ func init() {
 		}
 		fun[5] = func(r rune) int {
 			switch r {
-			case 111:
-				return -1
 			case 79:
+				return -1
+			case 102:
 				return -1
 			case 70:
 				return -1
-			case 83:
-				return -1
-			case 101:
-				return -1
-			case 84:
-				return 6
-			case 102:
-				return -1
 			case 115:
 				return -1
-			case 69:
+			case 83:
 				return -1
 			case 116:
 				return 6
+			case 84:
+				return 6
+			case 111:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
 			default:
 				switch {
 				default:
@@ -4239,25 +4239,25 @@ func init() {
 		acc[6] = true
 		fun[6] = func(r rune) int {
 			switch r {
-			case 102:
-				return -1
-			case 115:
-				return -1
-			case 69:
-				return -1
-			case 116:
-				return -1
-			case 111:
-				return -1
 			case 79:
+				return -1
+			case 102:
 				return -1
 			case 70:
 				return -1
+			case 115:
+				return -1
 			case 83:
+				return -1
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 111:
 				return -1
 			case 101:
 				return -1
-			case 84:
+			case 69:
 				return -1
 			default:
 				switch {
@@ -4274,35 +4274,35 @@ func init() {
 	{
 		var acc [8]bool
 		var fun [8]func(rune) int
-		fun[2] = func(r rune) int {
+		fun[1] = func(r rune) int {
 			switch r {
-			case 88:
-				return -1
-			case 112:
-				return 3
-			case 80:
-				return 3
-			case 97:
-				return -1
 			case 101:
-				return -1
-			case 120:
-				return -1
-			case 108:
-				return -1
-			case 76:
 				return -1
 			case 69:
 				return -1
-			case 65:
+			case 120:
+				return 2
+			case 88:
+				return 2
+			case 76:
+				return -1
+			case 97:
 				return -1
 			case 105:
 				return -1
-			case 73:
+			case 80:
+				return -1
+			case 108:
+				return -1
+			case 78:
 				return -1
 			case 110:
 				return -1
-			case 78:
+			case 112:
+				return -1
+			case 65:
+				return -1
+			case 73:
 				return -1
 			default:
 				switch {
@@ -4312,33 +4312,148 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		fun[3] = func(r rune) int {
+		fun[2] = func(r rune) int {
 			switch r {
-			case 88:
-				return -1
-			case 112:
-				return -1
-			case 80:
-				return -1
-			case 97:
-				return -1
 			case 101:
+				return -1
+			case 69:
 				return -1
 			case 120:
 				return -1
-			case 108:
-				return 4
-			case 76:
-				return 4
-			case 69:
+			case 88:
 				return -1
-			case 65:
+			case 76:
+				return -1
+			case 97:
 				return -1
 			case 105:
 				return -1
-			case 73:
+			case 80:
+				return 3
+			case 108:
+				return -1
+			case 78:
 				return -1
 			case 110:
+				return -1
+			case 112:
+				return 3
+			case 65:
+				return -1
+			case 73:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[5] = func(r rune) int {
+			switch r {
+			case 80:
+				return -1
+			case 108:
+				return -1
+			case 78:
+				return -1
+			case 110:
+				return -1
+			case 112:
+				return -1
+			case 65:
+				return -1
+			case 73:
+				return 6
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 120:
+				return -1
+			case 88:
+				return -1
+			case 76:
+				return -1
+			case 97:
+				return -1
+			case 105:
+				return 6
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[6] = func(r rune) int {
+			switch r {
+			case 80:
+				return -1
+			case 108:
+				return -1
+			case 78:
+				return 7
+			case 110:
+				return 7
+			case 112:
+				return -1
+			case 65:
+				return -1
+			case 73:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 120:
+				return -1
+			case 88:
+				return -1
+			case 76:
+				return -1
+			case 97:
+				return -1
+			case 105:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		acc[7] = true
+		fun[7] = func(r rune) int {
+			switch r {
+			case 110:
+				return -1
+			case 112:
+				return -1
+			case 65:
+				return -1
+			case 73:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 120:
+				return -1
+			case 88:
+				return -1
+			case 76:
+				return -1
+			case 97:
+				return -1
+			case 105:
+				return -1
+			case 80:
+				return -1
+			case 108:
 				return -1
 			case 78:
 				return -1
@@ -4352,33 +4467,33 @@ func init() {
 		}
 		fun[0] = func(r rune) int {
 			switch r {
-			case 88:
-				return -1
-			case 112:
-				return -1
-			case 80:
-				return -1
-			case 97:
-				return -1
 			case 101:
+				return 1
+			case 69:
 				return 1
 			case 120:
 				return -1
-			case 108:
+			case 88:
 				return -1
 			case 76:
 				return -1
-			case 69:
-				return 1
-			case 65:
+			case 97:
 				return -1
 			case 105:
 				return -1
-			case 73:
+			case 80:
+				return -1
+			case 108:
+				return -1
+			case 78:
 				return -1
 			case 110:
 				return -1
-			case 78:
+			case 112:
+				return -1
+			case 65:
+				return -1
+			case 73:
 				return -1
 			default:
 				switch {
@@ -4388,35 +4503,35 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		fun[1] = func(r rune) int {
+		fun[3] = func(r rune) int {
 			switch r {
-			case 88:
-				return 2
-			case 112:
-				return -1
-			case 80:
-				return -1
-			case 97:
-				return -1
 			case 101:
-				return -1
-			case 120:
-				return 2
-			case 108:
-				return -1
-			case 76:
 				return -1
 			case 69:
 				return -1
-			case 65:
+			case 120:
+				return -1
+			case 88:
+				return -1
+			case 76:
+				return 4
+			case 97:
 				return -1
 			case 105:
 				return -1
-			case 73:
+			case 80:
+				return -1
+			case 108:
+				return 4
+			case 78:
 				return -1
 			case 110:
 				return -1
-			case 78:
+			case 112:
+				return -1
+			case 65:
+				return -1
+			case 73:
 				return -1
 			default:
 				switch {
@@ -4428,148 +4543,33 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
+			case 112:
+				return -1
 			case 65:
+				return 5
+			case 73:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 120:
+				return -1
+			case 88:
+				return -1
+			case 76:
+				return -1
+			case 97:
 				return 5
 			case 105:
 				return -1
-			case 73:
-				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
-			case 88:
-				return -1
-			case 112:
-				return -1
 			case 80:
-				return -1
-			case 97:
-				return 5
-			case 101:
-				return -1
-			case 120:
 				return -1
 			case 108:
 				return -1
-			case 76:
-				return -1
-			case 69:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[5] = func(r rune) int {
-			switch r {
-			case 69:
-				return -1
-			case 65:
-				return -1
-			case 105:
-				return 6
-			case 73:
-				return 6
-			case 110:
-				return -1
 			case 78:
 				return -1
-			case 88:
-				return -1
-			case 112:
-				return -1
-			case 80:
-				return -1
-			case 97:
-				return -1
-			case 101:
-				return -1
-			case 120:
-				return -1
-			case 108:
-				return -1
-			case 76:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[6] = func(r rune) int {
-			switch r {
-			case 88:
-				return -1
-			case 112:
-				return -1
-			case 80:
-				return -1
-			case 97:
-				return -1
-			case 101:
-				return -1
-			case 120:
-				return -1
-			case 108:
-				return -1
-			case 76:
-				return -1
-			case 69:
-				return -1
-			case 65:
-				return -1
-			case 105:
-				return -1
-			case 73:
-				return -1
 			case 110:
-				return 7
-			case 78:
-				return 7
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		acc[7] = true
-		fun[7] = func(r rune) int {
-			switch r {
-			case 88:
-				return -1
-			case 112:
-				return -1
-			case 80:
-				return -1
-			case 97:
-				return -1
-			case 101:
-				return -1
-			case 120:
-				return -1
-			case 108:
-				return -1
-			case 76:
-				return -1
-			case 69:
-				return -1
-			case 65:
-				return -1
-			case 105:
-				return -1
-			case 73:
-				return -1
-			case 110:
-				return -1
-			case 78:
 				return -1
 			default:
 				switch {
@@ -4592,25 +4592,25 @@ func init() {
 				return 1
 			case 105:
 				return -1
-			case 83:
+			case 115:
 				return -1
 			case 116:
 				return -1
 			case 84:
-				return -1
-			case 99:
-				return -1
-			case 100:
-				return 1
-			case 73:
-				return -1
-			case 115:
 				return -1
 			case 110:
 				return -1
 			case 78:
 				return -1
 			case 67:
+				return -1
+			case 100:
+				return 1
+			case 73:
+				return -1
+			case 83:
+				return -1
+			case 99:
 				return -1
 			default:
 				switch {
@@ -4626,20 +4626,88 @@ func init() {
 				return -1
 			case 105:
 				return 2
-			case 83:
+			case 115:
 				return -1
 			case 116:
 				return -1
 			case 84:
 				return -1
-			case 99:
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 67:
 				return -1
 			case 100:
 				return -1
 			case 73:
 				return 2
+			case 83:
+				return -1
+			case 99:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[4] = func(r rune) int {
+			switch r {
+			case 100:
+				return -1
+			case 73:
+				return 5
+			case 83:
+				return -1
+			case 99:
+				return -1
+			case 68:
+				return -1
+			case 105:
+				return 5
 			case 115:
 				return -1
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 67:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[7] = func(r rune) int {
+			switch r {
+			case 100:
+				return -1
+			case 73:
+				return -1
+			case 83:
+				return -1
+			case 99:
+				return -1
+			case 68:
+				return -1
+			case 105:
+				return -1
+			case 115:
+				return -1
+			case 116:
+				return 8
+			case 84:
+				return 8
 			case 110:
 				return -1
 			case 78:
@@ -4660,25 +4728,25 @@ func init() {
 				return -1
 			case 105:
 				return -1
-			case 83:
+			case 115:
 				return 3
 			case 116:
 				return -1
 			case 84:
 				return -1
-			case 99:
-				return -1
-			case 100:
-				return -1
-			case 73:
-				return -1
-			case 115:
-				return 3
 			case 110:
 				return -1
 			case 78:
 				return -1
 			case 67:
+				return -1
+			case 100:
+				return -1
+			case 73:
+				return -1
+			case 83:
+				return 3
+			case 99:
 				return -1
 			default:
 				switch {
@@ -4694,25 +4762,25 @@ func init() {
 				return -1
 			case 73:
 				return -1
-			case 115:
+			case 83:
 				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
-			case 67:
+			case 99:
 				return -1
 			case 68:
 				return -1
 			case 105:
 				return -1
-			case 83:
+			case 115:
 				return -1
 			case 116:
 				return 4
 			case 84:
 				return 4
-			case 99:
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 67:
 				return -1
 			default:
 				switch {
@@ -4722,31 +4790,31 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		fun[4] = func(r rune) int {
+		fun[5] = func(r rune) int {
 			switch r {
 			case 68:
 				return -1
 			case 105:
-				return 5
-			case 83:
+				return -1
+			case 115:
 				return -1
 			case 116:
 				return -1
 			case 84:
 				return -1
-			case 99:
+			case 110:
+				return 6
+			case 78:
+				return 6
+			case 67:
 				return -1
 			case 100:
 				return -1
 			case 73:
-				return 5
-			case 115:
 				return -1
-			case 110:
+			case 83:
 				return -1
-			case 78:
-				return -1
-			case 67:
+			case 99:
 				return -1
 			default:
 				switch {
@@ -4758,23 +4826,23 @@ func init() {
 		}
 		fun[6] = func(r rune) int {
 			switch r {
-			case 68:
+			case 100:
 				return -1
-			case 105:
+			case 73:
 				return -1
 			case 83:
-				return -1
-			case 116:
-				return -1
-			case 84:
 				return -1
 			case 99:
 				return 7
-			case 100:
+			case 68:
 				return -1
-			case 73:
+			case 105:
 				return -1
 			case 115:
+				return -1
+			case 116:
+				return -1
+			case 84:
 				return -1
 			case 110:
 				return -1
@@ -4782,74 +4850,6 @@ func init() {
 				return -1
 			case 67:
 				return 7
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[5] = func(r rune) int {
-			switch r {
-			case 100:
-				return -1
-			case 73:
-				return -1
-			case 115:
-				return -1
-			case 110:
-				return 6
-			case 78:
-				return 6
-			case 67:
-				return -1
-			case 68:
-				return -1
-			case 105:
-				return -1
-			case 83:
-				return -1
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 99:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[7] = func(r rune) int {
-			switch r {
-			case 68:
-				return -1
-			case 105:
-				return -1
-			case 83:
-				return -1
-			case 116:
-				return 8
-			case 84:
-				return 8
-			case 99:
-				return -1
-			case 100:
-				return -1
-			case 73:
-				return -1
-			case 115:
-				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
-			case 67:
-				return -1
 			default:
 				switch {
 				default:
@@ -4861,11 +4861,15 @@ func init() {
 		acc[8] = true
 		fun[8] = func(r rune) int {
 			switch r {
-			case 100:
+			case 68:
 				return -1
-			case 73:
+			case 105:
 				return -1
 			case 115:
+				return -1
+			case 116:
+				return -1
+			case 84:
 				return -1
 			case 110:
 				return -1
@@ -4873,15 +4877,11 @@ func init() {
 				return -1
 			case 67:
 				return -1
-			case 68:
+			case 100:
 				return -1
-			case 105:
+			case 73:
 				return -1
 			case 83:
-				return -1
-			case 116:
-				return -1
-			case 84:
 				return -1
 			case 99:
 				return -1
@@ -4904,23 +4904,23 @@ func init() {
 			switch r {
 			case 117:
 				return 1
-			case 105:
-				return -1
-			case 81:
-				return -1
-			case 69:
-				return -1
-			case 85:
-				return 1
 			case 110:
 				return -1
 			case 78:
 				return -1
+			case 105:
+				return -1
+			case 81:
+				return -1
+			case 101:
+				return -1
+			case 85:
+				return 1
 			case 73:
 				return -1
 			case 113:
 				return -1
-			case 101:
+			case 69:
 				return -1
 			default:
 				switch {
@@ -4934,23 +4934,23 @@ func init() {
 			switch r {
 			case 85:
 				return -1
-			case 110:
-				return 2
-			case 78:
-				return 2
 			case 73:
 				return -1
 			case 113:
 				return -1
-			case 101:
+			case 69:
 				return -1
 			case 117:
 				return -1
+			case 110:
+				return 2
+			case 78:
+				return 2
 			case 105:
 				return -1
 			case 81:
 				return -1
-			case 69:
+			case 101:
 				return -1
 			default:
 				switch {
@@ -4962,23 +4962,23 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
-			case 117:
+			case 85:
 				return -1
-			case 105:
+			case 73:
 				return 3
-			case 81:
+			case 113:
 				return -1
 			case 69:
 				return -1
-			case 85:
+			case 117:
 				return -1
 			case 110:
 				return -1
 			case 78:
 				return -1
-			case 73:
+			case 105:
 				return 3
-			case 113:
+			case 81:
 				return -1
 			case 101:
 				return -1
@@ -4994,23 +4994,23 @@ func init() {
 			switch r {
 			case 85:
 				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
 			case 73:
 				return -1
 			case 113:
 				return 4
-			case 101:
+			case 69:
 				return -1
 			case 117:
+				return -1
+			case 110:
+				return -1
+			case 78:
 				return -1
 			case 105:
 				return -1
 			case 81:
 				return 4
-			case 69:
+			case 101:
 				return -1
 			default:
 				switch {
@@ -5024,23 +5024,23 @@ func init() {
 			switch r {
 			case 85:
 				return 5
-			case 110:
-				return -1
-			case 78:
-				return -1
 			case 73:
 				return -1
 			case 113:
 				return -1
-			case 101:
+			case 69:
 				return -1
 			case 117:
 				return 5
+			case 110:
+				return -1
+			case 78:
+				return -1
 			case 105:
 				return -1
 			case 81:
 				return -1
-			case 69:
+			case 101:
 				return -1
 			default:
 				switch {
@@ -5054,23 +5054,23 @@ func init() {
 			switch r {
 			case 85:
 				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
 			case 73:
 				return -1
 			case 113:
 				return -1
-			case 101:
+			case 69:
 				return 6
 			case 117:
+				return -1
+			case 110:
+				return -1
+			case 78:
 				return -1
 			case 105:
 				return -1
 			case 81:
 				return -1
-			case 69:
+			case 101:
 				return 6
 			default:
 				switch {
@@ -5083,23 +5083,23 @@ func init() {
 		acc[6] = true
 		fun[6] = func(r rune) int {
 			switch r {
-			case 85:
+			case 117:
 				return -1
 			case 110:
 				return -1
 			case 78:
 				return -1
-			case 73:
-				return -1
-			case 113:
-				return -1
-			case 101:
-				return -1
-			case 117:
-				return -1
 			case 105:
 				return -1
 			case 81:
+				return -1
+			case 101:
+				return -1
+			case 85:
+				return -1
+			case 73:
+				return -1
+			case 113:
 				return -1
 			case 69:
 				return -1
@@ -5848,17 +5848,17 @@ func init() {
 				return -1
 			case 73:
 				return -1
-			case 114:
-				return -1
-			case 102:
-				return 1
-			case 70:
-				return 1
 			case 82:
 				return -1
 			case 115:
 				return -1
 			case 83:
+				return -1
+			case 102:
+				return 1
+			case 70:
+				return 1
+			case 114:
 				return -1
 			case 116:
 				return -1
@@ -5874,25 +5874,25 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 102:
-				return -1
-			case 70:
-				return -1
+			case 105:
+				return 2
+			case 73:
+				return 2
 			case 82:
 				return -1
 			case 115:
 				return -1
 			case 83:
 				return -1
+			case 102:
+				return -1
+			case 70:
+				return -1
+			case 114:
+				return -1
 			case 116:
 				return -1
 			case 84:
-				return -1
-			case 105:
-				return 2
-			case 73:
-				return 2
-			case 114:
 				return -1
 			default:
 				switch {
@@ -5908,18 +5908,18 @@ func init() {
 				return -1
 			case 73:
 				return -1
-			case 114:
-				return 3
-			case 102:
-				return -1
-			case 70:
-				return -1
 			case 82:
 				return 3
 			case 115:
 				return -1
 			case 83:
 				return -1
+			case 102:
+				return -1
+			case 70:
+				return -1
+			case 114:
+				return 3
 			case 116:
 				return -1
 			case 84:
@@ -5938,12 +5938,8 @@ func init() {
 				return -1
 			case 70:
 				return -1
-			case 82:
+			case 114:
 				return -1
-			case 115:
-				return 4
-			case 83:
-				return 4
 			case 116:
 				return -1
 			case 84:
@@ -5952,8 +5948,12 @@ func init() {
 				return -1
 			case 73:
 				return -1
-			case 114:
+			case 82:
 				return -1
+			case 115:
+				return 4
+			case 83:
+				return 4
 			default:
 				switch {
 				default:
@@ -5968,17 +5968,17 @@ func init() {
 				return -1
 			case 73:
 				return -1
-			case 114:
-				return -1
-			case 102:
-				return -1
-			case 70:
-				return -1
 			case 82:
 				return -1
 			case 115:
 				return -1
 			case 83:
+				return -1
+			case 102:
+				return -1
+			case 70:
+				return -1
+			case 114:
 				return -1
 			case 116:
 				return 5
@@ -5995,9 +5995,9 @@ func init() {
 		acc[5] = true
 		fun[5] = func(r rune) int {
 			switch r {
-			case 102:
+			case 105:
 				return -1
-			case 70:
+			case 73:
 				return -1
 			case 82:
 				return -1
@@ -6005,15 +6005,15 @@ func init() {
 				return -1
 			case 83:
 				return -1
+			case 102:
+				return -1
+			case 70:
+				return -1
+			case 114:
+				return -1
 			case 116:
 				return -1
 			case 84:
-				return -1
-			case 105:
-				return -1
-			case 73:
-				return -1
-			case 114:
 				return -1
 			default:
 				switch {
@@ -6114,6 +6114,14 @@ func init() {
 			switch r {
 			case 103:
 				return 1
+			case 114:
+				return -1
+			case 85:
+				return -1
+			case 112:
+				return -1
+			case 80:
+				return -1
 			case 71:
 				return 1
 			case 82:
@@ -6122,15 +6130,7 @@ func init() {
 				return -1
 			case 79:
 				return -1
-			case 85:
-				return -1
-			case 80:
-				return -1
-			case 114:
-				return -1
 			case 117:
-				return -1
-			case 112:
 				return -1
 			default:
 				switch {
@@ -6142,14 +6142,6 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 114:
-				return 2
-			case 117:
-				return -1
-			case 112:
-				return -1
-			case 103:
-				return -1
 			case 71:
 				return -1
 			case 82:
@@ -6158,7 +6150,15 @@ func init() {
 				return -1
 			case 79:
 				return -1
+			case 117:
+				return -1
+			case 103:
+				return -1
+			case 114:
+				return 2
 			case 85:
+				return -1
+			case 112:
 				return -1
 			case 80:
 				return -1
@@ -6174,6 +6174,14 @@ func init() {
 			switch r {
 			case 103:
 				return -1
+			case 114:
+				return -1
+			case 85:
+				return -1
+			case 112:
+				return -1
+			case 80:
+				return -1
 			case 71:
 				return -1
 			case 82:
@@ -6182,15 +6190,7 @@ func init() {
 				return 3
 			case 79:
 				return 3
-			case 85:
-				return -1
-			case 80:
-				return -1
-			case 114:
-				return -1
 			case 117:
-				return -1
-			case 112:
 				return -1
 			default:
 				switch {
@@ -6202,8 +6202,6 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 103:
-				return -1
 			case 71:
 				return -1
 			case 82:
@@ -6212,15 +6210,17 @@ func init() {
 				return -1
 			case 79:
 				return -1
-			case 85:
+			case 117:
 				return 4
-			case 80:
+			case 103:
 				return -1
 			case 114:
 				return -1
-			case 117:
+			case 85:
 				return 4
 			case 112:
+				return -1
+			case 80:
 				return -1
 			default:
 				switch {
@@ -6232,14 +6232,16 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
+			case 103:
+				return -1
 			case 114:
 				return -1
-			case 117:
+			case 85:
 				return -1
 			case 112:
 				return 5
-			case 103:
-				return -1
+			case 80:
+				return 5
 			case 71:
 				return -1
 			case 82:
@@ -6248,10 +6250,8 @@ func init() {
 				return -1
 			case 79:
 				return -1
-			case 85:
+			case 117:
 				return -1
-			case 80:
-				return 5
 			default:
 				switch {
 				default:
@@ -6263,8 +6263,6 @@ func init() {
 		acc[5] = true
 		fun[5] = func(r rune) int {
 			switch r {
-			case 103:
-				return -1
 			case 71:
 				return -1
 			case 82:
@@ -6273,15 +6271,17 @@ func init() {
 				return -1
 			case 79:
 				return -1
-			case 85:
+			case 117:
 				return -1
-			case 80:
+			case 103:
 				return -1
 			case 114:
 				return -1
-			case 117:
+			case 85:
 				return -1
 			case 112:
+				return -1
+			case 80:
 				return -1
 			default:
 				switch {
@@ -6362,25 +6362,25 @@ func init() {
 		var fun [7]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 118:
-				return -1
+			case 104:
+				return 1
+			case 72:
+				return 1
 			case 86:
+				return -1
+			case 73:
 				return -1
 			case 110:
 				return -1
 			case 71:
 				return -1
-			case 104:
-				return 1
-			case 72:
-				return 1
 			case 97:
 				return -1
 			case 65:
 				return -1
-			case 105:
+			case 118:
 				return -1
-			case 73:
+			case 105:
 				return -1
 			case 78:
 				return -1
@@ -6400,25 +6400,25 @@ func init() {
 				return -1
 			case 72:
 				return -1
-			case 97:
-				return 2
-			case 65:
-				return 2
-			case 105:
+			case 86:
 				return -1
 			case 73:
-				return -1
-			case 78:
-				return -1
-			case 103:
-				return -1
-			case 118:
-				return -1
-			case 86:
 				return -1
 			case 110:
 				return -1
 			case 71:
+				return -1
+			case 97:
+				return 2
+			case 65:
+				return 2
+			case 118:
+				return -1
+			case 105:
+				return -1
+			case 78:
+				return -1
+			case 103:
 				return -1
 			default:
 				switch {
@@ -6430,26 +6430,26 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
-			case 104:
-				return -1
-			case 72:
-				return -1
 			case 97:
 				return -1
 			case 65:
 				return -1
+			case 118:
+				return 3
 			case 105:
-				return -1
-			case 73:
 				return -1
 			case 78:
 				return -1
 			case 103:
 				return -1
-			case 118:
-				return 3
+			case 104:
+				return -1
+			case 72:
+				return -1
 			case 86:
 				return 3
+			case 73:
+				return -1
 			case 110:
 				return -1
 			case 71:
@@ -6464,25 +6464,25 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 118:
-				return -1
-			case 86:
-				return -1
-			case 110:
-				return -1
-			case 71:
-				return -1
 			case 104:
 				return -1
 			case 72:
+				return -1
+			case 86:
+				return -1
+			case 73:
+				return 4
+			case 110:
+				return -1
+			case 71:
 				return -1
 			case 97:
 				return -1
 			case 65:
 				return -1
+			case 118:
+				return -1
 			case 105:
-				return 4
-			case 73:
 				return 4
 			case 78:
 				return -1
@@ -6498,25 +6498,25 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 118:
+			case 104:
+				return -1
+			case 72:
 				return -1
 			case 86:
+				return -1
+			case 73:
 				return -1
 			case 110:
 				return 5
 			case 71:
 				return -1
-			case 104:
-				return -1
-			case 72:
-				return -1
 			case 97:
 				return -1
 			case 65:
 				return -1
-			case 105:
+			case 118:
 				return -1
-			case 73:
+			case 105:
 				return -1
 			case 78:
 				return 5
@@ -6532,25 +6532,25 @@ func init() {
 		}
 		fun[5] = func(r rune) int {
 			switch r {
-			case 118:
+			case 104:
+				return -1
+			case 72:
 				return -1
 			case 86:
+				return -1
+			case 73:
 				return -1
 			case 110:
 				return -1
 			case 71:
 				return 6
-			case 104:
-				return -1
-			case 72:
-				return -1
 			case 97:
 				return -1
 			case 65:
 				return -1
-			case 105:
+			case 118:
 				return -1
-			case 73:
+			case 105:
 				return -1
 			case 78:
 				return -1
@@ -6567,29 +6567,29 @@ func init() {
 		acc[6] = true
 		fun[6] = func(r rune) int {
 			switch r {
+			case 97:
+				return -1
+			case 65:
+				return -1
 			case 118:
 				return -1
-			case 86:
+			case 105:
 				return -1
-			case 110:
+			case 78:
 				return -1
-			case 71:
+			case 103:
 				return -1
 			case 104:
 				return -1
 			case 72:
 				return -1
-			case 97:
-				return -1
-			case 65:
-				return -1
-			case 105:
+			case 86:
 				return -1
 			case 73:
 				return -1
-			case 78:
+			case 110:
 				return -1
-			case 103:
+			case 71:
 				return -1
 			default:
 				switch {
@@ -6608,25 +6608,25 @@ func init() {
 		var fun [7]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 99:
-				return 1
 			case 67:
 				return 1
 			case 114:
+				return -1
+			case 82:
+				return -1
+			case 69:
 				return -1
 			case 97:
 				return -1
 			case 65:
 				return -1
-			case 82:
+			case 84:
 				return -1
+			case 99:
+				return 1
 			case 101:
 				return -1
-			case 69:
-				return -1
 			case 116:
-				return -1
-			case 84:
 				return -1
 			default:
 				switch {
@@ -6638,25 +6638,25 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 82:
-				return 2
+			case 99:
+				return -1
 			case 101:
 				return -1
-			case 69:
-				return -1
 			case 116:
-				return -1
-			case 84:
-				return -1
-			case 99:
 				return -1
 			case 67:
 				return -1
 			case 114:
 				return 2
+			case 82:
+				return 2
+			case 69:
+				return -1
 			case 97:
 				return -1
 			case 65:
+				return -1
+			case 84:
 				return -1
 			default:
 				switch {
@@ -6668,25 +6668,25 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
-			case 82:
+			case 99:
 				return -1
 			case 101:
 				return 3
-			case 69:
-				return 3
 			case 116:
-				return -1
-			case 84:
-				return -1
-			case 99:
 				return -1
 			case 67:
 				return -1
 			case 114:
 				return -1
+			case 82:
+				return -1
+			case 69:
+				return 3
 			case 97:
 				return -1
 			case 65:
+				return -1
+			case 84:
 				return -1
 			default:
 				switch {
@@ -6698,26 +6698,26 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 82:
+			case 99:
 				return -1
 			case 101:
 				return -1
-			case 69:
-				return -1
 			case 116:
-				return -1
-			case 84:
-				return -1
-			case 99:
 				return -1
 			case 67:
 				return -1
 			case 114:
 				return -1
+			case 82:
+				return -1
+			case 69:
+				return -1
 			case 97:
 				return 4
 			case 65:
 				return 4
+			case 84:
+				return -1
 			default:
 				switch {
 				default:
@@ -6728,26 +6728,26 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 82:
-				return -1
-			case 101:
-				return -1
-			case 69:
-				return -1
-			case 116:
-				return 5
-			case 84:
-				return 5
-			case 99:
-				return -1
 			case 67:
 				return -1
 			case 114:
+				return -1
+			case 82:
+				return -1
+			case 69:
 				return -1
 			case 97:
 				return -1
 			case 65:
 				return -1
+			case 84:
+				return 5
+			case 99:
+				return -1
+			case 101:
+				return -1
+			case 116:
+				return 5
 			default:
 				switch {
 				default:
@@ -6760,21 +6760,21 @@ func init() {
 			switch r {
 			case 99:
 				return -1
+			case 101:
+				return 6
+			case 116:
+				return -1
 			case 67:
 				return -1
 			case 114:
 				return -1
+			case 82:
+				return -1
+			case 69:
+				return 6
 			case 97:
 				return -1
 			case 65:
-				return -1
-			case 82:
-				return -1
-			case 101:
-				return 6
-			case 69:
-				return 6
-			case 116:
 				return -1
 			case 84:
 				return -1
@@ -6789,25 +6789,25 @@ func init() {
 		acc[6] = true
 		fun[6] = func(r rune) int {
 			switch r {
-			case 82:
+			case 67:
 				return -1
-			case 101:
+			case 114:
+				return -1
+			case 82:
 				return -1
 			case 69:
 				return -1
-			case 116:
+			case 97:
+				return -1
+			case 65:
 				return -1
 			case 84:
 				return -1
 			case 99:
 				return -1
-			case 67:
+			case 101:
 				return -1
-			case 114:
-				return -1
-			case 97:
-				return -1
-			case 65:
+			case 116:
 				return -1
 			default:
 				switch {
@@ -7102,23 +7102,23 @@ func init() {
 		var fun [6]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 85:
-				return 1
-			case 83:
-				return -1
-			case 110:
-				return -1
-			case 117:
-				return 1
 			case 115:
 				return -1
 			case 105:
 				return -1
+			case 110:
+				return -1
+			case 103:
+				return -1
+			case 117:
+				return 1
+			case 85:
+				return 1
+			case 83:
+				return -1
 			case 73:
 				return -1
 			case 78:
-				return -1
-			case 103:
 				return -1
 			case 71:
 				return -1
@@ -7134,23 +7134,23 @@ func init() {
 			switch r {
 			case 117:
 				return -1
-			case 115:
-				return 2
-			case 105:
-				return -1
-			case 73:
-				return -1
-			case 78:
-				return -1
-			case 103:
-				return -1
-			case 71:
-				return -1
 			case 85:
 				return -1
 			case 83:
 				return 2
+			case 73:
+				return -1
+			case 78:
+				return -1
+			case 71:
+				return -1
+			case 115:
+				return 2
+			case 105:
+				return -1
 			case 110:
+				return -1
+			case 103:
 				return -1
 			default:
 				switch {
@@ -7164,23 +7164,23 @@ func init() {
 			switch r {
 			case 117:
 				return -1
-			case 115:
-				return -1
-			case 105:
-				return 3
-			case 73:
-				return 3
-			case 78:
-				return -1
-			case 103:
-				return -1
-			case 71:
-				return -1
 			case 85:
 				return -1
 			case 83:
 				return -1
+			case 73:
+				return 3
+			case 78:
+				return -1
+			case 71:
+				return -1
+			case 115:
+				return -1
+			case 105:
+				return 3
 			case 110:
+				return -1
+			case 103:
 				return -1
 			default:
 				switch {
@@ -7192,26 +7192,26 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 117:
-				return -1
 			case 115:
 				return -1
 			case 105:
 				return -1
-			case 73:
-				return -1
-			case 78:
+			case 110:
 				return 4
 			case 103:
 				return -1
-			case 71:
+			case 117:
 				return -1
 			case 85:
 				return -1
 			case 83:
 				return -1
-			case 110:
+			case 73:
+				return -1
+			case 78:
 				return 4
+			case 71:
+				return -1
 			default:
 				switch {
 				default:
@@ -7222,25 +7222,25 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
+			case 117:
+				return -1
 			case 85:
 				return -1
 			case 83:
-				return -1
-			case 110:
-				return -1
-			case 117:
-				return -1
-			case 115:
-				return -1
-			case 105:
 				return -1
 			case 73:
 				return -1
 			case 78:
 				return -1
-			case 103:
-				return 5
 			case 71:
+				return 5
+			case 115:
+				return -1
+			case 105:
+				return -1
+			case 110:
+				return -1
+			case 103:
 				return 5
 			default:
 				switch {
@@ -7253,25 +7253,25 @@ func init() {
 		acc[5] = true
 		fun[5] = func(r rune) int {
 			switch r {
+			case 117:
+				return -1
 			case 85:
 				return -1
 			case 83:
-				return -1
-			case 110:
-				return -1
-			case 117:
-				return -1
-			case 115:
-				return -1
-			case 105:
 				return -1
 			case 73:
 				return -1
 			case 78:
 				return -1
-			case 103:
-				return -1
 			case 71:
+				return -1
+			case 115:
+				return -1
+			case 105:
+				return -1
+			case 110:
+				return -1
+			case 103:
 				return -1
 			default:
 				switch {
@@ -7290,11 +7290,7 @@ func init() {
 		var fun [6]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 105:
-				return 1
-			case 73:
-				return 1
-			case 78:
+			case 110:
 				return -1
 			case 100:
 				return -1
@@ -7302,13 +7298,17 @@ func init() {
 				return -1
 			case 120:
 				return -1
-			case 110:
+			case 88:
+				return -1
+			case 105:
+				return 1
+			case 73:
+				return 1
+			case 78:
 				return -1
 			case 101:
 				return -1
 			case 69:
-				return -1
-			case 88:
 				return -1
 			default:
 				switch {
@@ -7320,11 +7320,7 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 105:
-				return -1
-			case 73:
-				return -1
-			case 78:
+			case 110:
 				return 2
 			case 100:
 				return -1
@@ -7332,13 +7328,17 @@ func init() {
 				return -1
 			case 120:
 				return -1
-			case 110:
+			case 88:
+				return -1
+			case 105:
+				return -1
+			case 73:
+				return -1
+			case 78:
 				return 2
 			case 101:
 				return -1
 			case 69:
-				return -1
-			case 88:
 				return -1
 			default:
 				switch {
@@ -7350,11 +7350,7 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
-			case 105:
-				return -1
-			case 73:
-				return -1
-			case 78:
+			case 110:
 				return -1
 			case 100:
 				return 3
@@ -7362,13 +7358,17 @@ func init() {
 				return 3
 			case 120:
 				return -1
-			case 110:
+			case 88:
+				return -1
+			case 105:
+				return -1
+			case 73:
+				return -1
+			case 78:
 				return -1
 			case 101:
 				return -1
 			case 69:
-				return -1
-			case 88:
 				return -1
 			default:
 				switch {
@@ -7382,10 +7382,12 @@ func init() {
 			switch r {
 			case 110:
 				return -1
-			case 101:
-				return 4
-			case 69:
-				return 4
+			case 100:
+				return -1
+			case 68:
+				return -1
+			case 120:
+				return -1
 			case 88:
 				return -1
 			case 105:
@@ -7394,12 +7396,10 @@ func init() {
 				return -1
 			case 78:
 				return -1
-			case 100:
-				return -1
-			case 68:
-				return -1
-			case 120:
-				return -1
+			case 101:
+				return 4
+			case 69:
+				return 4
 			default:
 				switch {
 				default:
@@ -7416,18 +7416,18 @@ func init() {
 				return -1
 			case 78:
 				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 110:
+				return -1
 			case 100:
 				return -1
 			case 68:
 				return -1
 			case 120:
 				return 5
-			case 110:
-				return -1
-			case 101:
-				return -1
-			case 69:
-				return -1
 			case 88:
 				return 5
 			default:
@@ -7441,11 +7441,7 @@ func init() {
 		acc[5] = true
 		fun[5] = func(r rune) int {
 			switch r {
-			case 105:
-				return -1
-			case 73:
-				return -1
-			case 78:
+			case 110:
 				return -1
 			case 100:
 				return -1
@@ -7453,13 +7449,17 @@ func init() {
 				return -1
 			case 120:
 				return -1
-			case 110:
+			case 88:
+				return -1
+			case 105:
+				return -1
+			case 73:
+				return -1
+			case 78:
 				return -1
 			case 101:
 				return -1
 			case 69:
-				return -1
-			case 88:
 				return -1
 			default:
 				switch {
@@ -7542,94 +7542,26 @@ func init() {
 			switch r {
 			case 112:
 				return -1
-			case 80:
-				return -1
 			case 114:
+				return -1
+			case 105:
+				return 3
+			case 109:
+				return -1
+			case 121:
+				return -1
+			case 80:
 				return -1
 			case 82:
 				return -1
 			case 73:
 				return 3
-			case 109:
-				return -1
 			case 77:
 				return -1
 			case 97:
 				return -1
 			case 65:
 				return -1
-			case 89:
-				return -1
-			case 105:
-				return 3
-			case 121:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[3] = func(r rune) int {
-			switch r {
-			case 112:
-				return -1
-			case 80:
-				return -1
-			case 114:
-				return -1
-			case 82:
-				return -1
-			case 73:
-				return -1
-			case 109:
-				return 4
-			case 77:
-				return 4
-			case 97:
-				return -1
-			case 65:
-				return -1
-			case 89:
-				return -1
-			case 105:
-				return -1
-			case 121:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[4] = func(r rune) int {
-			switch r {
-			case 105:
-				return -1
-			case 121:
-				return -1
-			case 112:
-				return -1
-			case 80:
-				return -1
-			case 114:
-				return -1
-			case 82:
-				return -1
-			case 73:
-				return -1
-			case 109:
-				return -1
-			case 77:
-				return -1
-			case 97:
-				return 5
-			case 65:
-				return 5
 			case 89:
 				return -1
 			default:
@@ -7644,15 +7576,19 @@ func init() {
 			switch r {
 			case 112:
 				return -1
-			case 80:
-				return -1
 			case 114:
+				return -1
+			case 105:
+				return -1
+			case 109:
+				return -1
+			case 121:
+				return 7
+			case 80:
 				return -1
 			case 82:
 				return -1
 			case 73:
-				return -1
-			case 109:
 				return -1
 			case 77:
 				return -1
@@ -7662,112 +7598,6 @@ func init() {
 				return -1
 			case 89:
 				return 7
-			case 105:
-				return -1
-			case 121:
-				return 7
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[0] = func(r rune) int {
-			switch r {
-			case 112:
-				return 1
-			case 80:
-				return 1
-			case 114:
-				return -1
-			case 82:
-				return -1
-			case 73:
-				return -1
-			case 109:
-				return -1
-			case 77:
-				return -1
-			case 97:
-				return -1
-			case 65:
-				return -1
-			case 89:
-				return -1
-			case 105:
-				return -1
-			case 121:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[1] = func(r rune) int {
-			switch r {
-			case 105:
-				return -1
-			case 121:
-				return -1
-			case 112:
-				return -1
-			case 80:
-				return -1
-			case 114:
-				return 2
-			case 82:
-				return 2
-			case 73:
-				return -1
-			case 109:
-				return -1
-			case 77:
-				return -1
-			case 97:
-				return -1
-			case 65:
-				return -1
-			case 89:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[5] = func(r rune) int {
-			switch r {
-			case 112:
-				return -1
-			case 80:
-				return -1
-			case 114:
-				return 6
-			case 82:
-				return 6
-			case 73:
-				return -1
-			case 109:
-				return -1
-			case 77:
-				return -1
-			case 97:
-				return -1
-			case 65:
-				return -1
-			case 89:
-				return -1
-			case 105:
-				return -1
-			case 121:
-				return -1
 			default:
 				switch {
 				default:
@@ -7781,15 +7611,19 @@ func init() {
 			switch r {
 			case 112:
 				return -1
-			case 80:
-				return -1
 			case 114:
+				return -1
+			case 105:
+				return -1
+			case 109:
+				return -1
+			case 121:
+				return -1
+			case 80:
 				return -1
 			case 82:
 				return -1
 			case 73:
-				return -1
-			case 109:
 				return -1
 			case 77:
 				return -1
@@ -7799,9 +7633,175 @@ func init() {
 				return -1
 			case 89:
 				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[0] = func(r rune) int {
+			switch r {
+			case 80:
+				return 1
+			case 82:
+				return -1
+			case 73:
+				return -1
+			case 77:
+				return -1
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 89:
+				return -1
+			case 112:
+				return 1
+			case 114:
+				return -1
 			case 105:
 				return -1
+			case 109:
+				return -1
 			case 121:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[1] = func(r rune) int {
+			switch r {
+			case 112:
+				return -1
+			case 114:
+				return 2
+			case 105:
+				return -1
+			case 109:
+				return -1
+			case 121:
+				return -1
+			case 80:
+				return -1
+			case 82:
+				return 2
+			case 73:
+				return -1
+			case 77:
+				return -1
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 89:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[3] = func(r rune) int {
+			switch r {
+			case 80:
+				return -1
+			case 82:
+				return -1
+			case 73:
+				return -1
+			case 77:
+				return 4
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 89:
+				return -1
+			case 112:
+				return -1
+			case 114:
+				return -1
+			case 105:
+				return -1
+			case 109:
+				return 4
+			case 121:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[4] = func(r rune) int {
+			switch r {
+			case 80:
+				return -1
+			case 82:
+				return -1
+			case 73:
+				return -1
+			case 77:
+				return -1
+			case 97:
+				return 5
+			case 65:
+				return 5
+			case 89:
+				return -1
+			case 112:
+				return -1
+			case 114:
+				return -1
+			case 105:
+				return -1
+			case 109:
+				return -1
+			case 121:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[5] = func(r rune) int {
+			switch r {
+			case 112:
+				return -1
+			case 114:
+				return 6
+			case 105:
+				return -1
+			case 109:
+				return -1
+			case 121:
+				return -1
+			case 80:
+				return -1
+			case 82:
+				return 6
+			case 73:
+				return -1
+			case 77:
+				return -1
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 89:
 				return -1
 			default:
 				switch {
@@ -7960,21 +7960,21 @@ func init() {
 		var fun [6]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
+			case 97:
+				return 1
 			case 65:
 				return 1
-			case 116:
+			case 76:
+				return -1
+			case 84:
 				return -1
 			case 114:
 				return -1
 			case 82:
 				return -1
-			case 97:
-				return 1
 			case 108:
 				return -1
-			case 76:
-				return -1
-			case 84:
+			case 116:
 				return -1
 			case 101:
 				return -1
@@ -7990,21 +7990,21 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 97:
-				return -1
 			case 108:
 				return 2
-			case 76:
-				return 2
-			case 84:
+			case 116:
 				return -1
 			case 101:
 				return -1
 			case 69:
 				return -1
+			case 97:
+				return -1
 			case 65:
 				return -1
-			case 116:
+			case 76:
+				return 2
+			case 84:
 				return -1
 			case 114:
 				return -1
@@ -8020,21 +8020,21 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
-			case 97:
-				return -1
 			case 108:
 				return -1
-			case 76:
-				return -1
-			case 84:
+			case 116:
 				return 3
 			case 101:
 				return -1
 			case 69:
 				return -1
+			case 97:
+				return -1
 			case 65:
 				return -1
-			case 116:
+			case 76:
+				return -1
+			case 84:
 				return 3
 			case 114:
 				return -1
@@ -8050,21 +8050,21 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 97:
-				return -1
 			case 108:
 				return -1
-			case 76:
-				return -1
-			case 84:
+			case 116:
 				return -1
 			case 101:
 				return 4
 			case 69:
 				return 4
+			case 97:
+				return -1
 			case 65:
 				return -1
-			case 116:
+			case 76:
+				return -1
+			case 84:
 				return -1
 			case 114:
 				return -1
@@ -8080,21 +8080,21 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
+			case 97:
+				return -1
 			case 65:
 				return -1
-			case 116:
+			case 76:
+				return -1
+			case 84:
 				return -1
 			case 114:
 				return 5
 			case 82:
 				return 5
-			case 97:
-				return -1
 			case 108:
 				return -1
-			case 76:
-				return -1
-			case 84:
+			case 116:
 				return -1
 			case 101:
 				return -1
@@ -8111,25 +8111,25 @@ func init() {
 		acc[5] = true
 		fun[5] = func(r rune) int {
 			switch r {
-			case 65:
+			case 108:
 				return -1
 			case 116:
 				return -1
-			case 114:
+			case 101:
 				return -1
-			case 82:
+			case 69:
 				return -1
 			case 97:
 				return -1
-			case 108:
+			case 65:
 				return -1
 			case 76:
 				return -1
 			case 84:
 				return -1
-			case 101:
+			case 114:
 				return -1
-			case 69:
+			case 82:
 				return -1
 			default:
 				switch {
@@ -8146,205 +8146,24 @@ func init() {
 	{
 		var acc [8]bool
 		var fun [8]func(rune) int
-		fun[1] = func(r rune) int {
-			switch r {
-			case 98:
-				return -1
-			case 69:
-				return 2
-			case 119:
-				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
-			case 66:
-				return -1
-			case 101:
-				return 2
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 87:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[2] = func(r rune) int {
-			switch r {
-			case 98:
-				return -1
-			case 69:
-				return -1
-			case 119:
-				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
-			case 66:
-				return -1
-			case 101:
-				return -1
-			case 116:
-				return 3
-			case 84:
-				return 3
-			case 87:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[5] = func(r rune) int {
-			switch r {
-			case 98:
-				return -1
-			case 69:
-				return 6
-			case 119:
-				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
-			case 66:
-				return -1
-			case 101:
-				return 6
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 87:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[6] = func(r rune) int {
-			switch r {
-			case 98:
-				return -1
-			case 69:
-				return -1
-			case 119:
-				return -1
-			case 110:
-				return 7
-			case 78:
-				return 7
-			case 66:
-				return -1
-			case 101:
-				return -1
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 87:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		acc[7] = true
-		fun[7] = func(r rune) int {
-			switch r {
-			case 66:
-				return -1
-			case 101:
-				return -1
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 87:
-				return -1
-			case 98:
-				return -1
-			case 69:
-				return -1
-			case 119:
-				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
 		fun[0] = func(r rune) int {
 			switch r {
-			case 98:
-				return 1
-			case 69:
-				return -1
-			case 119:
-				return -1
-			case 110:
-				return -1
-			case 78:
-				return -1
 			case 66:
 				return 1
 			case 101:
+				return -1
+			case 69:
 				return -1
 			case 116:
 				return -1
 			case 84:
 				return -1
-			case 87:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[3] = func(r rune) int {
-			switch r {
-			case 66:
-				return -1
-			case 101:
-				return -1
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 87:
-				return 4
 			case 98:
-				return -1
-			case 69:
-				return -1
+				return 1
 			case 119:
-				return 4
+				return -1
+			case 87:
+				return -1
 			case 110:
 				return -1
 			case 78:
@@ -8361,9 +8180,9 @@ func init() {
 			switch r {
 			case 98:
 				return -1
-			case 69:
-				return 5
 			case 119:
+				return -1
+			case 87:
 				return -1
 			case 110:
 				return -1
@@ -8373,11 +8192,192 @@ func init() {
 				return -1
 			case 101:
 				return 5
+			case 69:
+				return 5
 			case 116:
 				return -1
 			case 84:
 				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[1] = func(r rune) int {
+			switch r {
+			case 98:
+				return -1
+			case 119:
+				return -1
 			case 87:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 66:
+				return -1
+			case 101:
+				return 2
+			case 69:
+				return 2
+			case 116:
+				return -1
+			case 84:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[2] = func(r rune) int {
+			switch r {
+			case 98:
+				return -1
+			case 119:
+				return -1
+			case 87:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 66:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 116:
+				return 3
+			case 84:
+				return 3
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[3] = func(r rune) int {
+			switch r {
+			case 66:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 98:
+				return -1
+			case 119:
+				return 4
+			case 87:
+				return 4
+			case 110:
+				return -1
+			case 78:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[5] = func(r rune) int {
+			switch r {
+			case 98:
+				return -1
+			case 119:
+				return -1
+			case 87:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 66:
+				return -1
+			case 101:
+				return 6
+			case 69:
+				return 6
+			case 116:
+				return -1
+			case 84:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[6] = func(r rune) int {
+			switch r {
+			case 66:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 98:
+				return -1
+			case 119:
+				return -1
+			case 87:
+				return -1
+			case 110:
+				return 7
+			case 78:
+				return 7
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		acc[7] = true
+		fun[7] = func(r rune) int {
+			switch r {
+			case 66:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 98:
+				return -1
+			case 119:
+				return -1
+			case 87:
+				return -1
+			case 110:
+				return -1
+			case 78:
 				return -1
 			default:
 				switch {
@@ -8396,12 +8396,6 @@ func init() {
 		var fun [7]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 66:
-				return 1
-			case 99:
-				return -1
-			case 101:
-				return -1
 			case 98:
 				return 1
 			case 117:
@@ -8410,13 +8404,19 @@ func init() {
 				return -1
 			case 67:
 				return -1
-			case 107:
-				return -1
 			case 75:
 				return -1
-			case 69:
+			case 101:
 				return -1
 			case 116:
+				return -1
+			case 66:
+				return 1
+			case 99:
+				return -1
+			case 107:
+				return -1
+			case 69:
 				return -1
 			case 84:
 				return -1
@@ -8430,12 +8430,6 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 66:
-				return -1
-			case 99:
-				return -1
-			case 101:
-				return -1
 			case 98:
 				return -1
 			case 117:
@@ -8444,13 +8438,19 @@ func init() {
 				return 2
 			case 67:
 				return -1
-			case 107:
-				return -1
 			case 75:
 				return -1
-			case 69:
+			case 101:
 				return -1
 			case 116:
+				return -1
+			case 66:
+				return -1
+			case 99:
+				return -1
+			case 107:
+				return -1
+			case 69:
 				return -1
 			case 84:
 				return -1
@@ -8464,6 +8464,16 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
+			case 66:
+				return -1
+			case 99:
+				return 3
+			case 107:
+				return -1
+			case 69:
+				return -1
+			case 84:
+				return -1
 			case 98:
 				return -1
 			case 117:
@@ -8472,21 +8482,11 @@ func init() {
 				return -1
 			case 67:
 				return 3
-			case 107:
-				return -1
 			case 75:
 				return -1
-			case 69:
+			case 101:
 				return -1
 			case 116:
-				return -1
-			case 84:
-				return -1
-			case 66:
-				return -1
-			case 99:
-				return 3
-			case 101:
 				return -1
 			default:
 				switch {
@@ -8506,21 +8506,21 @@ func init() {
 				return -1
 			case 67:
 				return -1
-			case 107:
-				return 4
 			case 75:
 				return 4
-			case 69:
+			case 101:
 				return -1
 			case 116:
-				return -1
-			case 84:
 				return -1
 			case 66:
 				return -1
 			case 99:
 				return -1
-			case 101:
+			case 107:
+				return 4
+			case 69:
+				return -1
+			case 84:
 				return -1
 			default:
 				switch {
@@ -8532,12 +8532,6 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 66:
-				return -1
-			case 99:
-				return -1
-			case 101:
-				return 5
 			case 98:
 				return -1
 			case 117:
@@ -8546,14 +8540,20 @@ func init() {
 				return -1
 			case 67:
 				return -1
-			case 107:
-				return -1
 			case 75:
 				return -1
-			case 69:
+			case 101:
 				return 5
 			case 116:
 				return -1
+			case 66:
+				return -1
+			case 99:
+				return -1
+			case 107:
+				return -1
+			case 69:
+				return 5
 			case 84:
 				return -1
 			default:
@@ -8574,22 +8574,22 @@ func init() {
 				return -1
 			case 67:
 				return -1
-			case 107:
-				return -1
 			case 75:
 				return -1
-			case 69:
+			case 101:
 				return -1
 			case 116:
-				return 6
-			case 84:
 				return 6
 			case 66:
 				return -1
 			case 99:
 				return -1
-			case 101:
+			case 107:
 				return -1
+			case 69:
+				return -1
+			case 84:
+				return 6
 			default:
 				switch {
 				default:
@@ -8605,7 +8605,11 @@ func init() {
 				return -1
 			case 99:
 				return -1
-			case 101:
+			case 107:
+				return -1
+			case 69:
+				return -1
+			case 84:
 				return -1
 			case 98:
 				return -1
@@ -8615,15 +8619,11 @@ func init() {
 				return -1
 			case 67:
 				return -1
-			case 107:
-				return -1
 			case 75:
 				return -1
-			case 69:
+			case 101:
 				return -1
 			case 116:
-				return -1
-			case 84:
 				return -1
 			default:
 				switch {
@@ -8778,31 +8778,31 @@ func init() {
 	{
 		var acc [8]bool
 		var fun [8]func(rune) int
-		fun[0] = func(r rune) int {
+		fun[1] = func(r rune) int {
 			switch r {
-			case 99:
-				return 1
-			case 79:
-				return -1
 			case 76:
-				return -1
-			case 65:
-				return -1
-			case 67:
-				return 1
-			case 111:
-				return -1
-			case 108:
 				return -1
 			case 97:
 				return -1
-			case 116:
-				return -1
 			case 84:
 				return -1
-			case 101:
-				return -1
 			case 69:
+				return -1
+			case 99:
+				return -1
+			case 67:
+				return -1
+			case 111:
+				return 2
+			case 79:
+				return 2
+			case 108:
+				return -1
+			case 65:
+				return -1
+			case 116:
+				return -1
+			case 101:
 				return -1
 			default:
 				switch {
@@ -8812,29 +8812,29 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		fun[3] = func(r rune) int {
+		fun[2] = func(r rune) int {
 			switch r {
 			case 99:
-				return -1
-			case 79:
-				return -1
-			case 76:
-				return 4
-			case 65:
 				return -1
 			case 67:
 				return -1
 			case 111:
 				return -1
+			case 79:
+				return -1
 			case 108:
-				return 4
-			case 97:
+				return 3
+			case 65:
 				return -1
 			case 116:
 				return -1
-			case 84:
-				return -1
 			case 101:
+				return -1
+			case 76:
+				return 3
+			case 97:
+				return -1
+			case 84:
 				return -1
 			case 69:
 				return -1
@@ -8851,25 +8851,25 @@ func init() {
 			switch r {
 			case 99:
 				return -1
-			case 79:
-				return -1
-			case 76:
-				return -1
-			case 65:
-				return -1
 			case 67:
 				return -1
 			case 111:
 				return -1
+			case 79:
+				return -1
 			case 108:
 				return -1
-			case 97:
+			case 65:
 				return -1
 			case 116:
 				return -1
-			case 84:
-				return -1
 			case 101:
+				return -1
+			case 76:
+				return -1
+			case 97:
+				return -1
+			case 84:
 				return -1
 			case 69:
 				return -1
@@ -8881,29 +8881,29 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		fun[1] = func(r rune) int {
+		fun[0] = func(r rune) int {
 			switch r {
 			case 99:
+				return 1
+			case 67:
+				return 1
+			case 111:
 				return -1
 			case 79:
-				return 2
-			case 76:
+				return -1
+			case 108:
 				return -1
 			case 65:
 				return -1
-			case 67:
+			case 116:
 				return -1
-			case 111:
-				return 2
-			case 108:
+			case 101:
+				return -1
+			case 76:
 				return -1
 			case 97:
 				return -1
-			case 116:
-				return -1
 			case 84:
-				return -1
-			case 101:
 				return -1
 			case 69:
 				return -1
@@ -8915,31 +8915,31 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		fun[2] = func(r rune) int {
+		fun[3] = func(r rune) int {
 			switch r {
-			case 67:
-				return -1
-			case 111:
-				return -1
-			case 108:
-				return 3
+			case 76:
+				return 4
 			case 97:
 				return -1
-			case 116:
-				return -1
 			case 84:
-				return -1
-			case 101:
 				return -1
 			case 69:
 				return -1
 			case 99:
 				return -1
+			case 67:
+				return -1
+			case 111:
+				return -1
 			case 79:
 				return -1
-			case 76:
-				return 3
+			case 108:
+				return 4
 			case 65:
+				return -1
+			case 116:
+				return -1
+			case 101:
 				return -1
 			default:
 				switch {
@@ -8953,25 +8953,25 @@ func init() {
 			switch r {
 			case 99:
 				return -1
-			case 79:
-				return -1
-			case 76:
-				return -1
-			case 65:
-				return 5
 			case 67:
 				return -1
 			case 111:
 				return -1
+			case 79:
+				return -1
 			case 108:
 				return -1
-			case 97:
+			case 65:
 				return 5
 			case 116:
 				return -1
-			case 84:
-				return -1
 			case 101:
+				return -1
+			case 76:
+				return -1
+			case 97:
+				return 5
+			case 84:
 				return -1
 			case 69:
 				return -1
@@ -8985,29 +8985,29 @@ func init() {
 		}
 		fun[5] = func(r rune) int {
 			switch r {
-			case 99:
-				return -1
-			case 79:
-				return -1
 			case 76:
 				return -1
-			case 65:
+			case 97:
+				return -1
+			case 84:
+				return 6
+			case 69:
+				return -1
+			case 99:
 				return -1
 			case 67:
 				return -1
 			case 111:
 				return -1
+			case 79:
+				return -1
 			case 108:
 				return -1
-			case 97:
+			case 65:
 				return -1
 			case 116:
 				return 6
-			case 84:
-				return 6
 			case 101:
-				return -1
-			case 69:
 				return -1
 			default:
 				switch {
@@ -9019,30 +9019,30 @@ func init() {
 		}
 		fun[6] = func(r rune) int {
 			switch r {
+			case 99:
+				return -1
 			case 67:
 				return -1
 			case 111:
 				return -1
-			case 108:
-				return -1
-			case 97:
-				return -1
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 101:
-				return 7
-			case 69:
-				return 7
-			case 99:
-				return -1
 			case 79:
 				return -1
-			case 76:
+			case 108:
 				return -1
 			case 65:
 				return -1
+			case 116:
+				return -1
+			case 101:
+				return 7
+			case 76:
+				return -1
+			case 97:
+				return -1
+			case 84:
+				return -1
+			case 69:
+				return 7
 			default:
 				switch {
 				default:
@@ -9060,86 +9060,16 @@ func init() {
 		var fun [9]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 68:
-				return 1
-			case 65:
-				return -1
-			case 66:
-				return -1
-			case 69:
-				return -1
 			case 100:
 				return 1
-			case 97:
-				return -1
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 98:
-				return -1
-			case 115:
-				return -1
-			case 83:
-				return -1
-			case 101:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[1] = func(r rune) int {
-			switch r {
-			case 100:
-				return -1
-			case 97:
-				return 2
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 98:
-				return -1
-			case 115:
-				return -1
-			case 83:
-				return -1
-			case 101:
-				return -1
 			case 68:
-				return -1
-			case 65:
-				return 2
+				return 1
 			case 66:
 				return -1
-			case 69:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[3] = func(r rune) int {
-			switch r {
-			case 68:
+			case 97:
 				return -1
 			case 65:
-				return 4
-			case 66:
 				return -1
-			case 69:
-				return -1
-			case 100:
-				return -1
-			case 97:
-				return 4
 			case 116:
 				return -1
 			case 84:
@@ -9151,6 +9081,8 @@ func init() {
 			case 83:
 				return -1
 			case 101:
+				return -1
+			case 69:
 				return -1
 			default:
 				switch {
@@ -9162,9 +9094,9 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 100:
-				return -1
 			case 97:
+				return -1
+			case 65:
 				return -1
 			case 116:
 				return -1
@@ -9178,14 +9110,14 @@ func init() {
 				return -1
 			case 101:
 				return -1
-			case 68:
+			case 69:
 				return -1
-			case 65:
+			case 100:
+				return -1
+			case 68:
 				return -1
 			case 66:
 				return 5
-			case 69:
-				return -1
 			default:
 				switch {
 				default:
@@ -9196,17 +9128,15 @@ func init() {
 		}
 		fun[5] = func(r rune) int {
 			switch r {
-			case 68:
-				return -1
-			case 65:
-				return 6
-			case 66:
-				return -1
-			case 69:
-				return -1
 			case 100:
 				return -1
+			case 68:
+				return -1
+			case 66:
+				return -1
 			case 97:
+				return 6
+			case 65:
 				return 6
 			case 116:
 				return -1
@@ -9219,72 +9149,6 @@ func init() {
 			case 83:
 				return -1
 			case 101:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[6] = func(r rune) int {
-			switch r {
-			case 100:
-				return -1
-			case 97:
-				return -1
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 98:
-				return -1
-			case 115:
-				return 7
-			case 83:
-				return 7
-			case 101:
-				return -1
-			case 68:
-				return -1
-			case 65:
-				return -1
-			case 66:
-				return -1
-			case 69:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[2] = func(r rune) int {
-			switch r {
-			case 100:
-				return -1
-			case 97:
-				return -1
-			case 116:
-				return 3
-			case 84:
-				return 3
-			case 98:
-				return -1
-			case 115:
-				return -1
-			case 83:
-				return -1
-			case 101:
-				return -1
-			case 68:
-				return -1
-			case 65:
-				return -1
-			case 66:
 				return -1
 			case 69:
 				return -1
@@ -9298,17 +9162,9 @@ func init() {
 		}
 		fun[7] = func(r rune) int {
 			switch r {
-			case 68:
+			case 97:
 				return -1
 			case 65:
-				return -1
-			case 66:
-				return -1
-			case 69:
-				return 8
-			case 100:
-				return -1
-			case 97:
 				return -1
 			case 116:
 				return -1
@@ -9322,6 +9178,14 @@ func init() {
 				return -1
 			case 101:
 				return 8
+			case 69:
+				return 8
+			case 100:
+				return -1
+			case 68:
+				return -1
+			case 66:
+				return -1
 			default:
 				switch {
 				default:
@@ -9333,17 +9197,9 @@ func init() {
 		acc[8] = true
 		fun[8] = func(r rune) int {
 			switch r {
-			case 68:
+			case 97:
 				return -1
 			case 65:
-				return -1
-			case 66:
-				return -1
-			case 69:
-				return -1
-			case 100:
-				return -1
-			case 97:
 				return -1
 			case 116:
 				return -1
@@ -9356,6 +9212,150 @@ func init() {
 			case 83:
 				return -1
 			case 101:
+				return -1
+			case 69:
+				return -1
+			case 100:
+				return -1
+			case 68:
+				return -1
+			case 66:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[1] = func(r rune) int {
+			switch r {
+			case 97:
+				return 2
+			case 65:
+				return 2
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 98:
+				return -1
+			case 115:
+				return -1
+			case 83:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 100:
+				return -1
+			case 68:
+				return -1
+			case 66:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[2] = func(r rune) int {
+			switch r {
+			case 100:
+				return -1
+			case 68:
+				return -1
+			case 66:
+				return -1
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 116:
+				return 3
+			case 84:
+				return 3
+			case 98:
+				return -1
+			case 115:
+				return -1
+			case 83:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[3] = func(r rune) int {
+			switch r {
+			case 100:
+				return -1
+			case 68:
+				return -1
+			case 66:
+				return -1
+			case 97:
+				return 4
+			case 65:
+				return 4
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 98:
+				return -1
+			case 115:
+				return -1
+			case 83:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[6] = func(r rune) int {
+			switch r {
+			case 100:
+				return -1
+			case 68:
+				return -1
+			case 66:
+				return -1
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 98:
+				return -1
+			case 115:
+				return 7
+			case 83:
+				return 7
+			case 101:
+				return -1
+			case 69:
 				return -1
 			default:
 				switch {
@@ -9704,23 +9704,23 @@ func init() {
 			switch r {
 			case 101:
 				return 1
-			case 88:
-				return -1
-			case 99:
-				return -1
-			case 67:
-				return -1
-			case 112:
-				return -1
-			case 84:
-				return -1
 			case 69:
 				return 1
-			case 120:
+			case 99:
+				return -1
+			case 112:
 				return -1
 			case 80:
 				return -1
 			case 116:
+				return -1
+			case 120:
+				return -1
+			case 88:
+				return -1
+			case 67:
+				return -1
+			case 84:
 				return -1
 			default:
 				switch {
@@ -9732,25 +9732,25 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 69:
-				return -1
 			case 120:
 				return 2
-			case 80:
+			case 88:
+				return 2
+			case 67:
 				return -1
-			case 116:
+			case 84:
 				return -1
 			case 101:
 				return -1
-			case 88:
-				return 2
-			case 99:
+			case 69:
 				return -1
-			case 67:
+			case 99:
 				return -1
 			case 112:
 				return -1
-			case 84:
+			case 80:
+				return -1
+			case 116:
 				return -1
 			default:
 				switch {
@@ -9762,25 +9762,25 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
+			case 120:
+				return -1
+			case 88:
+				return -1
+			case 67:
+				return 3
+			case 84:
+				return -1
+			case 101:
+				return -1
 			case 69:
 				return -1
-			case 120:
+			case 99:
+				return 3
+			case 112:
 				return -1
 			case 80:
 				return -1
 			case 116:
-				return -1
-			case 101:
-				return -1
-			case 88:
-				return -1
-			case 99:
-				return 3
-			case 67:
-				return 3
-			case 112:
-				return -1
-			case 84:
 				return -1
 			default:
 				switch {
@@ -9792,23 +9792,23 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
+			case 101:
+				return 4
 			case 69:
 				return 4
-			case 120:
+			case 99:
+				return -1
+			case 112:
 				return -1
 			case 80:
 				return -1
 			case 116:
 				return -1
-			case 101:
-				return 4
+			case 120:
+				return -1
 			case 88:
 				return -1
-			case 99:
-				return -1
 			case 67:
-				return -1
-			case 112:
 				return -1
 			case 84:
 				return -1
@@ -9822,25 +9822,25 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 69:
-				return -1
 			case 120:
-				return -1
-			case 80:
-				return 5
-			case 116:
-				return -1
-			case 101:
 				return -1
 			case 88:
 				return -1
-			case 99:
-				return -1
 			case 67:
+				return -1
+			case 84:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 99:
 				return -1
 			case 112:
 				return 5
-			case 84:
+			case 80:
+				return 5
+			case 116:
 				return -1
 			default:
 				switch {
@@ -9854,23 +9854,23 @@ func init() {
 			switch r {
 			case 101:
 				return -1
-			case 88:
+			case 69:
 				return -1
 			case 99:
 				return -1
-			case 67:
-				return -1
 			case 112:
-				return -1
-			case 84:
-				return 6
-			case 69:
-				return -1
-			case 120:
 				return -1
 			case 80:
 				return -1
 			case 116:
+				return 6
+			case 120:
+				return -1
+			case 88:
+				return -1
+			case 67:
+				return -1
+			case 84:
 				return 6
 			default:
 				switch {
@@ -9883,25 +9883,25 @@ func init() {
 		acc[6] = true
 		fun[6] = func(r rune) int {
 			switch r {
+			case 120:
+				return -1
+			case 88:
+				return -1
+			case 67:
+				return -1
+			case 84:
+				return -1
+			case 101:
+				return -1
 			case 69:
 				return -1
-			case 120:
+			case 99:
+				return -1
+			case 112:
 				return -1
 			case 80:
 				return -1
 			case 116:
-				return -1
-			case 101:
-				return -1
-			case 88:
-				return -1
-			case 99:
-				return -1
-			case 67:
-				return -1
-			case 112:
-				return -1
-			case 84:
 				return -1
 			default:
 				switch {
@@ -9920,13 +9920,7 @@ func init() {
 		var fun [7]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 69:
-				return 1
-			case 120:
-				return -1
 			case 88:
-				return -1
-			case 105:
 				return -1
 			case 73:
 				return -1
@@ -9934,10 +9928,16 @@ func init() {
 				return -1
 			case 83:
 				return -1
-			case 116:
-				return -1
 			case 101:
 				return 1
+			case 69:
+				return 1
+			case 120:
+				return -1
+			case 105:
+				return -1
+			case 116:
+				return -1
 			case 84:
 				return -1
 			default:
@@ -9952,23 +9952,23 @@ func init() {
 			switch r {
 			case 101:
 				return -1
-			case 84:
-				return -1
 			case 69:
 				return -1
 			case 120:
 				return 2
-			case 88:
-				return 2
 			case 105:
 				return -1
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 88:
+				return 2
 			case 73:
 				return -1
 			case 115:
 				return -1
 			case 83:
-				return -1
-			case 116:
 				return -1
 			default:
 				switch {
@@ -9980,23 +9980,23 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
-			case 69:
-				return -1
-			case 120:
-				return -1
 			case 88:
 				return -1
-			case 105:
-				return 3
 			case 73:
 				return 3
 			case 115:
 				return -1
 			case 83:
 				return -1
-			case 116:
-				return -1
 			case 101:
+				return -1
+			case 69:
+				return -1
+			case 120:
+				return -1
+			case 105:
+				return 3
+			case 116:
 				return -1
 			case 84:
 				return -1
@@ -10010,13 +10010,19 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
+			case 101:
+				return -1
 			case 69:
 				return -1
 			case 120:
 				return -1
-			case 88:
-				return -1
 			case 105:
+				return -1
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 88:
 				return -1
 			case 73:
 				return -1
@@ -10024,12 +10030,6 @@ func init() {
 				return 4
 			case 83:
 				return 4
-			case 116:
-				return -1
-			case 101:
-				return -1
-			case 84:
-				return -1
 			default:
 				switch {
 				default:
@@ -10040,17 +10040,7 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 101:
-				return -1
-			case 84:
-				return 5
-			case 69:
-				return -1
-			case 120:
-				return -1
 			case 88:
-				return -1
-			case 105:
 				return -1
 			case 73:
 				return -1
@@ -10058,7 +10048,17 @@ func init() {
 				return -1
 			case 83:
 				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 120:
+				return -1
+			case 105:
+				return -1
 			case 116:
+				return 5
+			case 84:
 				return 5
 			default:
 				switch {
@@ -10072,15 +10072,17 @@ func init() {
 			switch r {
 			case 101:
 				return -1
-			case 84:
-				return -1
 			case 69:
 				return -1
 			case 120:
 				return -1
-			case 88:
-				return -1
 			case 105:
+				return -1
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 88:
 				return -1
 			case 73:
 				return -1
@@ -10088,8 +10090,6 @@ func init() {
 				return 6
 			case 83:
 				return 6
-			case 116:
-				return -1
 			default:
 				switch {
 				default:
@@ -10101,13 +10101,7 @@ func init() {
 		acc[6] = true
 		fun[6] = func(r rune) int {
 			switch r {
-			case 69:
-				return -1
-			case 120:
-				return -1
 			case 88:
-				return -1
-			case 105:
 				return -1
 			case 73:
 				return -1
@@ -10115,9 +10109,15 @@ func init() {
 				return -1
 			case 83:
 				return -1
-			case 116:
-				return -1
 			case 101:
+				return -1
+			case 69:
+				return -1
+			case 120:
+				return -1
+			case 105:
+				return -1
+			case 116:
 				return -1
 			case 84:
 				return -1
@@ -10390,13 +10390,11 @@ func init() {
 		var fun [7]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 105:
-				return 1
 			case 73:
 				return 1
-			case 110:
-				return -1
 			case 78:
+				return -1
+			case 115:
 				return -1
 			case 69:
 				return -1
@@ -10406,7 +10404,9 @@ func init() {
 				return -1
 			case 116:
 				return -1
-			case 115:
+			case 105:
+				return 1
+			case 110:
 				return -1
 			case 83:
 				return -1
@@ -10424,22 +10424,12 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 115:
-				return -1
-			case 83:
-				return -1
-			case 101:
-				return -1
-			case 84:
-				return -1
-			case 105:
-				return -1
 			case 73:
 				return -1
-			case 110:
-				return 2
 			case 78:
 				return 2
+			case 115:
+				return -1
 			case 69:
 				return -1
 			case 114:
@@ -10447,6 +10437,16 @@ func init() {
 			case 82:
 				return -1
 			case 116:
+				return -1
+			case 105:
+				return -1
+			case 110:
+				return 2
+			case 83:
+				return -1
+			case 101:
+				return -1
+			case 84:
 				return -1
 			default:
 				switch {
@@ -10458,22 +10458,22 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
-			case 115:
-				return 3
+			case 105:
+				return -1
+			case 110:
+				return -1
 			case 83:
 				return 3
 			case 101:
 				return -1
 			case 84:
 				return -1
-			case 105:
-				return -1
 			case 73:
-				return -1
-			case 110:
 				return -1
 			case 78:
 				return -1
+			case 115:
+				return 3
 			case 69:
 				return -1
 			case 114:
@@ -10492,21 +10492,11 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 115:
-				return -1
-			case 83:
-				return -1
-			case 101:
-				return 4
-			case 84:
-				return -1
-			case 105:
-				return -1
 			case 73:
 				return -1
-			case 110:
-				return -1
 			case 78:
+				return -1
+			case 115:
 				return -1
 			case 69:
 				return 4
@@ -10515,6 +10505,16 @@ func init() {
 			case 82:
 				return -1
 			case 116:
+				return -1
+			case 105:
+				return -1
+			case 110:
+				return -1
+			case 83:
+				return -1
+			case 101:
+				return 4
+			case 84:
 				return -1
 			default:
 				switch {
@@ -10526,13 +10526,11 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 105:
-				return -1
 			case 73:
 				return -1
-			case 110:
-				return -1
 			case 78:
+				return -1
+			case 115:
 				return -1
 			case 69:
 				return -1
@@ -10542,7 +10540,9 @@ func init() {
 				return 5
 			case 116:
 				return -1
-			case 115:
+			case 105:
+				return -1
+			case 110:
 				return -1
 			case 83:
 				return -1
@@ -10560,21 +10560,11 @@ func init() {
 		}
 		fun[5] = func(r rune) int {
 			switch r {
-			case 115:
-				return -1
-			case 83:
-				return -1
-			case 101:
-				return -1
-			case 84:
-				return 6
-			case 105:
-				return -1
 			case 73:
 				return -1
-			case 110:
-				return -1
 			case 78:
+				return -1
+			case 115:
 				return -1
 			case 69:
 				return -1
@@ -10583,6 +10573,16 @@ func init() {
 			case 82:
 				return -1
 			case 116:
+				return 6
+			case 105:
+				return -1
+			case 110:
+				return -1
+			case 83:
+				return -1
+			case 101:
+				return -1
+			case 84:
 				return 6
 			default:
 				switch {
@@ -10595,7 +10595,9 @@ func init() {
 		acc[6] = true
 		fun[6] = func(r rune) int {
 			switch r {
-			case 115:
+			case 105:
+				return -1
+			case 110:
 				return -1
 			case 83:
 				return -1
@@ -10603,13 +10605,11 @@ func init() {
 				return -1
 			case 84:
 				return -1
-			case 105:
-				return -1
 			case 73:
 				return -1
-			case 110:
-				return -1
 			case 78:
+				return -1
+			case 115:
 				return -1
 			case 69:
 				return -1
@@ -10634,149 +10634,35 @@ func init() {
 	{
 		var acc [10]bool
 		var fun [10]func(rune) int
-		fun[3] = func(r rune) int {
-			switch r {
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 101:
-				return 4
-			case 110:
-				return -1
-			case 82:
-				return -1
-			case 83:
-				return -1
-			case 105:
-				return -1
-			case 78:
-				return -1
-			case 115:
-				return -1
-			case 99:
-				return -1
-			case 73:
-				return -1
-			case 69:
-				return 4
-			case 114:
-				return -1
-			case 67:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[6] = func(r rune) int {
-			switch r {
-			case 110:
-				return -1
-			case 82:
-				return -1
-			case 83:
-				return -1
-			case 105:
-				return -1
-			case 78:
-				return -1
-			case 115:
-				return -1
-			case 99:
-				return -1
-			case 73:
-				return -1
-			case 69:
-				return 7
-			case 114:
-				return -1
-			case 67:
-				return -1
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 101:
-				return 7
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[7] = func(r rune) int {
-			switch r {
-			case 73:
-				return -1
-			case 69:
-				return -1
-			case 114:
-				return -1
-			case 67:
-				return 8
-			case 116:
-				return -1
-			case 84:
-				return -1
-			case 101:
-				return -1
-			case 110:
-				return -1
-			case 82:
-				return -1
-			case 83:
-				return -1
-			case 105:
-				return -1
-			case 78:
-				return -1
-			case 115:
-				return -1
-			case 99:
-				return 8
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
 		fun[0] = func(r rune) int {
 			switch r {
+			case 105:
+				return 1
+			case 110:
+				return -1
+			case 78:
+				return -1
 			case 116:
+				return -1
+			case 69:
+				return -1
+			case 83:
+				return -1
+			case 67:
 				return -1
 			case 84:
 				return -1
 			case 101:
 				return -1
-			case 110:
-				return -1
-			case 82:
-				return -1
-			case 83:
-				return -1
-			case 105:
-				return 1
-			case 78:
+			case 114:
 				return -1
 			case 115:
 				return -1
-			case 99:
-				return -1
 			case 73:
 				return 1
-			case 69:
+			case 82:
 				return -1
-			case 114:
-				return -1
-			case 67:
+			case 99:
 				return -1
 			default:
 				switch {
@@ -10788,33 +10674,33 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
+			case 105:
+				return -1
+			case 110:
+				return 2
+			case 78:
+				return 2
 			case 116:
+				return -1
+			case 69:
+				return -1
+			case 83:
+				return -1
+			case 67:
 				return -1
 			case 84:
 				return -1
 			case 101:
 				return -1
-			case 110:
-				return 2
-			case 82:
+			case 114:
 				return -1
-			case 83:
-				return -1
-			case 105:
-				return -1
-			case 78:
-				return 2
 			case 115:
-				return -1
-			case 99:
 				return -1
 			case 73:
 				return -1
-			case 69:
+			case 82:
 				return -1
-			case 114:
-				return -1
-			case 67:
+			case 99:
 				return -1
 			default:
 				switch {
@@ -10826,33 +10712,33 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
+			case 105:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
 			case 116:
 				return 3
+			case 69:
+				return -1
+			case 83:
+				return -1
+			case 67:
+				return -1
 			case 84:
 				return 3
 			case 101:
 				return -1
-			case 110:
-				return -1
-			case 82:
-				return -1
-			case 83:
-				return -1
-			case 105:
-				return -1
-			case 78:
+			case 114:
 				return -1
 			case 115:
 				return -1
-			case 99:
-				return -1
 			case 73:
 				return -1
-			case 69:
+			case 82:
 				return -1
-			case 114:
-				return -1
-			case 67:
+			case 99:
 				return -1
 			default:
 				switch {
@@ -10864,32 +10750,32 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 73:
+			case 105:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 116:
 				return -1
 			case 69:
 				return -1
-			case 114:
-				return 5
-			case 67:
+			case 83:
 				return -1
-			case 116:
+			case 67:
 				return -1
 			case 84:
 				return -1
 			case 101:
 				return -1
-			case 110:
+			case 114:
+				return 5
+			case 115:
+				return -1
+			case 73:
 				return -1
 			case 82:
 				return 5
-			case 83:
-				return -1
-			case 105:
-				return -1
-			case 78:
-				return -1
-			case 115:
-				return -1
 			case 99:
 				return -1
 			default:
@@ -10902,34 +10788,110 @@ func init() {
 		}
 		fun[5] = func(r rune) int {
 			switch r {
-			case 105:
-				return -1
-			case 78:
-				return -1
-			case 115:
-				return 6
-			case 99:
-				return -1
-			case 73:
-				return -1
-			case 69:
-				return -1
-			case 114:
-				return -1
-			case 67:
-				return -1
-			case 116:
-				return -1
 			case 84:
 				return -1
 			case 101:
 				return -1
-			case 110:
+			case 114:
+				return -1
+			case 115:
+				return 6
+			case 73:
 				return -1
 			case 82:
 				return -1
+			case 99:
+				return -1
+			case 105:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 116:
+				return -1
+			case 69:
+				return -1
 			case 83:
 				return 6
+			case 67:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[6] = func(r rune) int {
+			switch r {
+			case 84:
+				return -1
+			case 101:
+				return 7
+			case 114:
+				return -1
+			case 115:
+				return -1
+			case 73:
+				return -1
+			case 82:
+				return -1
+			case 99:
+				return -1
+			case 105:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 116:
+				return -1
+			case 69:
+				return 7
+			case 83:
+				return -1
+			case 67:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[7] = func(r rune) int {
+			switch r {
+			case 84:
+				return -1
+			case 101:
+				return -1
+			case 114:
+				return -1
+			case 115:
+				return -1
+			case 73:
+				return -1
+			case 82:
+				return -1
+			case 99:
+				return 8
+			case 105:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 116:
+				return -1
+			case 69:
+				return -1
+			case 83:
+				return -1
+			case 67:
+				return 8
 			default:
 				switch {
 				default:
@@ -10940,33 +10902,33 @@ func init() {
 		}
 		fun[8] = func(r rune) int {
 			switch r {
-			case 105:
-				return -1
-			case 78:
-				return -1
-			case 115:
-				return -1
-			case 99:
-				return -1
-			case 73:
-				return -1
-			case 69:
-				return -1
-			case 114:
-				return -1
-			case 67:
-				return -1
-			case 116:
-				return 9
 			case 84:
 				return 9
 			case 101:
 				return -1
-			case 110:
+			case 114:
+				return -1
+			case 115:
+				return -1
+			case 73:
 				return -1
 			case 82:
 				return -1
+			case 99:
+				return -1
+			case 105:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 116:
+				return 9
+			case 69:
+				return -1
 			case 83:
+				return -1
+			case 67:
 				return -1
 			default:
 				switch {
@@ -10979,33 +10941,71 @@ func init() {
 		acc[9] = true
 		fun[9] = func(r rune) int {
 			switch r {
-			case 110:
-				return -1
-			case 82:
-				return -1
-			case 83:
-				return -1
 			case 105:
+				return -1
+			case 110:
 				return -1
 			case 78:
 				return -1
-			case 115:
-				return -1
-			case 99:
-				return -1
-			case 73:
+			case 116:
 				return -1
 			case 69:
 				return -1
-			case 114:
+			case 83:
 				return -1
 			case 67:
-				return -1
-			case 116:
 				return -1
 			case 84:
 				return -1
 			case 101:
+				return -1
+			case 114:
+				return -1
+			case 115:
+				return -1
+			case 73:
+				return -1
+			case 82:
+				return -1
+			case 99:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[3] = func(r rune) int {
+			switch r {
+			case 105:
+				return -1
+			case 110:
+				return -1
+			case 78:
+				return -1
+			case 116:
+				return -1
+			case 69:
+				return 4
+			case 83:
+				return -1
+			case 67:
+				return -1
+			case 84:
+				return -1
+			case 101:
+				return 4
+			case 114:
+				return -1
+			case 115:
+				return -1
+			case 73:
+				return -1
+			case 82:
+				return -1
+			case 99:
 				return -1
 			default:
 				switch {
@@ -11602,29 +11602,29 @@ func init() {
 		var fun [7]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 117:
-				return 1
-			case 85:
-				return 1
 			case 112:
 				return -1
 			case 80:
 				return -1
 			case 100:
 				return -1
-			case 68:
-				return -1
 			case 97:
 				return -1
-			case 65:
-				return -1
 			case 116:
+				return -1
+			case 69:
+				return -1
+			case 117:
+				return 1
+			case 85:
+				return 1
+			case 68:
+				return -1
+			case 65:
 				return -1
 			case 84:
 				return -1
 			case 101:
-				return -1
-			case 69:
 				return -1
 			default:
 				switch {
@@ -11636,29 +11636,29 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 117:
-				return -1
-			case 85:
-				return -1
 			case 112:
 				return 2
 			case 80:
 				return 2
 			case 100:
 				return -1
-			case 68:
-				return -1
 			case 97:
 				return -1
-			case 65:
-				return -1
 			case 116:
+				return -1
+			case 69:
+				return -1
+			case 117:
+				return -1
+			case 85:
+				return -1
+			case 68:
+				return -1
+			case 65:
 				return -1
 			case 84:
 				return -1
 			case 101:
-				return -1
-			case 69:
 				return -1
 			default:
 				switch {
@@ -11670,19 +11670,15 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
+			case 112:
+				return -1
+			case 80:
+				return -1
 			case 100:
-				return 3
-			case 68:
 				return 3
 			case 97:
 				return -1
-			case 65:
-				return -1
 			case 116:
-				return -1
-			case 84:
-				return -1
-			case 101:
 				return -1
 			case 69:
 				return -1
@@ -11690,9 +11686,13 @@ func init() {
 				return -1
 			case 85:
 				return -1
-			case 112:
+			case 68:
+				return 3
+			case 65:
 				return -1
-			case 80:
+			case 84:
+				return -1
+			case 101:
 				return -1
 			default:
 				switch {
@@ -11704,19 +11704,15 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 100:
+			case 112:
 				return -1
-			case 68:
+			case 80:
+				return -1
+			case 100:
 				return -1
 			case 97:
 				return 4
-			case 65:
-				return 4
 			case 116:
-				return -1
-			case 84:
-				return -1
-			case 101:
 				return -1
 			case 69:
 				return -1
@@ -11724,9 +11720,13 @@ func init() {
 				return -1
 			case 85:
 				return -1
-			case 112:
+			case 68:
 				return -1
-			case 80:
+			case 65:
+				return 4
+			case 84:
+				return -1
+			case 101:
 				return -1
 			default:
 				switch {
@@ -11738,29 +11738,29 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 100:
+			case 112:
 				return -1
-			case 68:
+			case 80:
+				return -1
+			case 100:
 				return -1
 			case 97:
 				return -1
-			case 65:
-				return -1
 			case 116:
 				return 5
-			case 84:
-				return 5
-			case 101:
-				return -1
 			case 69:
 				return -1
 			case 117:
 				return -1
 			case 85:
 				return -1
-			case 112:
+			case 68:
 				return -1
-			case 80:
+			case 65:
+				return -1
+			case 84:
+				return 5
+			case 101:
 				return -1
 			default:
 				switch {
@@ -11772,30 +11772,30 @@ func init() {
 		}
 		fun[5] = func(r rune) int {
 			switch r {
-			case 100:
+			case 112:
 				return -1
-			case 68:
+			case 80:
+				return -1
+			case 100:
 				return -1
 			case 97:
 				return -1
-			case 65:
-				return -1
 			case 116:
 				return -1
-			case 84:
-				return -1
-			case 101:
-				return 6
 			case 69:
 				return 6
 			case 117:
 				return -1
 			case 85:
 				return -1
-			case 112:
+			case 68:
 				return -1
-			case 80:
+			case 65:
 				return -1
+			case 84:
+				return -1
+			case 101:
+				return 6
 			default:
 				switch {
 				default:
@@ -11807,29 +11807,29 @@ func init() {
 		acc[6] = true
 		fun[6] = func(r rune) int {
 			switch r {
-			case 100:
+			case 117:
+				return -1
+			case 85:
 				return -1
 			case 68:
 				return -1
-			case 97:
-				return -1
 			case 65:
-				return -1
-			case 116:
 				return -1
 			case 84:
 				return -1
 			case 101:
 				return -1
-			case 69:
-				return -1
-			case 117:
-				return -1
-			case 85:
-				return -1
 			case 112:
 				return -1
 			case 80:
+				return -1
+			case 100:
+				return -1
+			case 97:
+				return -1
+			case 116:
+				return -1
+			case 69:
 				return -1
 			default:
 				switch {
@@ -11966,59 +11966,25 @@ func init() {
 		var fun [10]func(rune) int
 		fun[1] = func(r rune) int {
 			switch r {
+			case 97:
+				return 2
+			case 65:
+				return 2
+			case 84:
+				return -1
+			case 102:
+				return -1
+			case 70:
+				return -1
 			case 115:
 				return -1
 			case 83:
 				return -1
-			case 65:
-				return 2
 			case 116:
 				return -1
 			case 105:
 				return -1
-			case 102:
-				return -1
-			case 97:
-				return 2
-			case 84:
-				return -1
 			case 73:
-				return -1
-			case 70:
-				return -1
-			case 101:
-				return -1
-			case 69:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[2] = func(r rune) int {
-			switch r {
-			case 115:
-				return -1
-			case 83:
-				return -1
-			case 65:
-				return -1
-			case 116:
-				return 3
-			case 105:
-				return -1
-			case 102:
-				return -1
-			case 97:
-				return -1
-			case 84:
-				return 3
-			case 73:
-				return -1
-			case 70:
 				return -1
 			case 101:
 				return -1
@@ -12036,27 +12002,61 @@ func init() {
 			switch r {
 			case 97:
 				return -1
+			case 65:
+				return -1
 			case 84:
 				return -1
-			case 73:
+			case 102:
 				return -1
 			case 70:
-				return -1
-			case 101:
-				return -1
-			case 69:
 				return -1
 			case 115:
 				return 5
 			case 83:
 				return 5
-			case 65:
-				return -1
 			case 116:
 				return -1
 			case 105:
 				return -1
+			case 73:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[6] = func(r rune) int {
+			switch r {
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 84:
+				return -1
 			case 102:
+				return -1
+			case 70:
+				return -1
+			case 115:
+				return -1
+			case 83:
+				return -1
+			case 116:
+				return -1
+			case 105:
+				return 7
+			case 73:
+				return 7
+			case 101:
+				return -1
+			case 69:
 				return -1
 			default:
 				switch {
@@ -12068,25 +12068,59 @@ func init() {
 		}
 		fun[0] = func(r rune) int {
 			switch r {
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 84:
+				return -1
+			case 102:
+				return -1
+			case 70:
+				return -1
 			case 115:
 				return 1
 			case 83:
 				return 1
-			case 65:
-				return -1
 			case 116:
 				return -1
 			case 105:
 				return -1
-			case 102:
-				return -1
-			case 97:
-				return -1
-			case 84:
-				return -1
 			case 73:
 				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			default:
+				switch {
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[2] = func(r rune) int {
+			switch r {
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 84:
+				return 3
+			case 102:
+				return -1
 			case 70:
+				return -1
+			case 115:
+				return -1
+			case 83:
+				return -1
+			case 116:
+				return 3
+			case 105:
+				return -1
+			case 73:
 				return -1
 			case 101:
 				return -1
@@ -12106,25 +12140,25 @@ func init() {
 				return -1
 			case 83:
 				return -1
-			case 65:
-				return -1
 			case 116:
 				return -1
 			case 105:
 				return 4
-			case 102:
-				return -1
-			case 97:
-				return -1
-			case 84:
-				return -1
 			case 73:
 				return 4
-			case 70:
-				return -1
 			case 101:
 				return -1
 			case 69:
+				return -1
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 84:
+				return -1
+			case 102:
+				return -1
+			case 70:
 				return -1
 			default:
 				switch {
@@ -12136,63 +12170,29 @@ func init() {
 		}
 		fun[5] = func(r rune) int {
 			switch r {
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 84:
+				return -1
+			case 102:
+				return 6
+			case 70:
+				return 6
 			case 115:
 				return -1
 			case 83:
-				return -1
-			case 65:
 				return -1
 			case 116:
 				return -1
 			case 105:
 				return -1
-			case 102:
-				return 6
-			case 97:
-				return -1
-			case 84:
-				return -1
 			case 73:
-				return -1
-			case 70:
-				return 6
-			case 101:
-				return -1
-			case 69:
-				return -1
-			default:
-				switch {
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[6] = func(r rune) int {
-			switch r {
-			case 97:
-				return -1
-			case 84:
-				return -1
-			case 73:
-				return 7
-			case 70:
 				return -1
 			case 101:
 				return -1
 			case 69:
-				return -1
-			case 115:
-				return -1
-			case 83:
-				return -1
-			case 65:
-				return -1
-			case 116:
-				return -1
-			case 105:
-				return 7
-			case 102:
 				return -1
 			default:
 				switch {
@@ -12204,29 +12204,29 @@ func init() {
 		}
 		fun[7] = func(r rune) int {
 			switch r {
-			case 97:
-				return -1
-			case 84:
-				return -1
-			case 73:
-				return -1
-			case 70:
-				return -1
-			case 101:
-				return 8
-			case 69:
-				return 8
 			case 115:
 				return -1
 			case 83:
-				return -1
-			case 65:
 				return -1
 			case 116:
 				return -1
 			case 105:
 				return -1
+			case 73:
+				return -1
+			case 101:
+				return 8
+			case 69:
+				return 8
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 84:
+				return -1
 			case 102:
+				return -1
+			case 70:
 				return -1
 			default:
 				switch {
@@ -12240,27 +12240,27 @@ func init() {
 			switch r {
 			case 97:
 				return -1
+			case 65:
+				return -1
 			case 84:
 				return -1
-			case 73:
+			case 102:
 				return -1
 			case 70:
-				return -1
-			case 101:
-				return -1
-			case 69:
 				return -1
 			case 115:
 				return 9
 			case 83:
 				return 9
-			case 65:
-				return -1
 			case 116:
 				return -1
 			case 105:
 				return -1
-			case 102:
+			case 73:
+				return -1
+			case 101:
+				return -1
+			case 69:
 				return -1
 			default:
 				switch {
@@ -12273,29 +12273,29 @@ func init() {
 		acc[9] = true
 		fun[9] = func(r rune) int {
 			switch r {
-			case 97:
-				return -1
-			case 84:
-				return -1
-			case 73:
-				return -1
-			case 70:
-				return -1
-			case 101:
-				return -1
-			case 69:
-				return -1
 			case 115:
 				return -1
 			case 83:
-				return -1
-			case 65:
 				return -1
 			case 116:
 				return -1
 			case 105:
 				return -1
+			case 73:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 84:
+				return -1
 			case 102:
+				return -1
+			case 70:
 				return -1
 			default:
 				switch {
@@ -12484,19 +12484,19 @@ func init() {
 				return 1
 			case 78:
 				return -1
-			case 101:
-				return -1
-			case 83:
-				return -1
-			case 110:
-				return -1
 			case 69:
 				return -1
-			case 115:
+			case 83:
 				return -1
 			case 116:
 				return -1
 			case 84:
+				return -1
+			case 110:
+				return -1
+			case 101:
+				return -1
+			case 115:
 				return -1
 			default:
 				switch {
@@ -12508,25 +12508,25 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
-			case 110:
-				return 2
-			case 69:
-				return -1
-			case 115:
-				return -1
-			case 116:
-				return -1
-			case 84:
-				return -1
 			case 117:
 				return -1
 			case 85:
 				return -1
 			case 78:
 				return 2
-			case 101:
+			case 69:
 				return -1
 			case 83:
+				return -1
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 110:
+				return 2
+			case 101:
+				return -1
+			case 115:
 				return -1
 			default:
 				switch {
@@ -12544,19 +12544,19 @@ func init() {
 				return -1
 			case 78:
 				return 3
-			case 101:
-				return -1
-			case 83:
-				return -1
-			case 110:
-				return 3
 			case 69:
 				return -1
-			case 115:
+			case 83:
 				return -1
 			case 116:
 				return -1
 			case 84:
+				return -1
+			case 110:
+				return 3
+			case 101:
+				return -1
+			case 115:
 				return -1
 			default:
 				switch {
@@ -12568,25 +12568,25 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 110:
-				return -1
-			case 69:
-				return 4
-			case 115:
-				return -1
-			case 116:
-				return -1
-			case 84:
-				return -1
 			case 117:
 				return -1
 			case 85:
 				return -1
 			case 78:
 				return -1
-			case 101:
+			case 69:
 				return 4
 			case 83:
+				return -1
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 110:
+				return -1
+			case 101:
+				return 4
+			case 115:
 				return -1
 			default:
 				switch {
@@ -12600,24 +12600,24 @@ func init() {
 			switch r {
 			case 110:
 				return -1
-			case 69:
+			case 101:
 				return -1
 			case 115:
 				return 5
-			case 116:
-				return -1
-			case 84:
-				return -1
 			case 117:
 				return -1
 			case 85:
 				return -1
 			case 78:
 				return -1
-			case 101:
+			case 69:
 				return -1
 			case 83:
 				return 5
+			case 116:
+				return -1
+			case 84:
+				return -1
 			default:
 				switch {
 				default:
@@ -12630,24 +12630,24 @@ func init() {
 			switch r {
 			case 110:
 				return -1
-			case 69:
+			case 101:
 				return -1
 			case 115:
 				return -1
-			case 116:
-				return 6
-			case 84:
-				return 6
 			case 117:
 				return -1
 			case 85:
 				return -1
 			case 78:
 				return -1
-			case 101:
+			case 69:
 				return -1
 			case 83:
 				return -1
+			case 116:
+				return 6
+			case 84:
+				return 6
 			default:
 				switch {
 				default:
@@ -12659,25 +12659,25 @@ func init() {
 		acc[6] = true
 		fun[6] = func(r rune) int {
 			switch r {
-			case 110:
-				return -1
-			case 69:
-				return -1
-			case 115:
-				return -1
-			case 116:
-				return -1
-			case 84:
-				return -1
 			case 117:
 				return -1
 			case 85:
 				return -1
 			case 78:
 				return -1
-			case 101:
+			case 69:
 				return -1
 			case 83:
+				return -1
+			case 116:
+				return -1
+			case 84:
+				return -1
+			case 110:
+				return -1
+			case 101:
+				return -1
+			case 115:
 				return -1
 			default:
 				switch {
@@ -13190,23 +13190,23 @@ func init() {
 		var fun [6]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
+			case 79:
+				return 1
 			case 85:
 				return -1
-			case 116:
-				return -1
 			case 84:
+				return -1
+			case 111:
+				return 1
+			case 117:
+				return -1
+			case 116:
 				return -1
 			case 101:
 				return -1
 			case 69:
 				return -1
 			case 114:
-				return -1
-			case 111:
-				return 1
-			case 79:
-				return 1
-			case 117:
 				return -1
 			case 82:
 				return -1
@@ -13220,11 +13220,17 @@ func init() {
 		}
 		fun[1] = func(r rune) int {
 			switch r {
+			case 79:
+				return -1
 			case 85:
 				return 2
-			case 116:
-				return -1
 			case 84:
+				return -1
+			case 111:
+				return -1
+			case 117:
+				return 2
+			case 116:
 				return -1
 			case 101:
 				return -1
@@ -13232,12 +13238,6 @@ func init() {
 				return -1
 			case 114:
 				return -1
-			case 111:
-				return -1
-			case 79:
-				return -1
-			case 117:
-				return 2
 			case 82:
 				return -1
 			default:
@@ -13250,23 +13250,23 @@ func init() {
 		}
 		fun[2] = func(r rune) int {
 			switch r {
+			case 79:
+				return -1
 			case 85:
 				return -1
-			case 116:
-				return 3
 			case 84:
+				return 3
+			case 111:
+				return -1
+			case 117:
+				return -1
+			case 116:
 				return 3
 			case 101:
 				return -1
 			case 69:
 				return -1
 			case 114:
-				return -1
-			case 111:
-				return -1
-			case 79:
-				return -1
-			case 117:
 				return -1
 			case 82:
 				return -1
@@ -13280,25 +13280,25 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 111:
-				return -1
 			case 79:
-				return -1
-			case 117:
-				return -1
-			case 82:
 				return -1
 			case 85:
 				return -1
-			case 116:
-				return -1
 			case 84:
+				return -1
+			case 111:
+				return -1
+			case 117:
+				return -1
+			case 116:
 				return -1
 			case 101:
 				return 4
 			case 69:
 				return 4
 			case 114:
+				return -1
+			case 82:
 				return -1
 			default:
 				switch {
@@ -13310,11 +13310,11 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 85:
+			case 111:
+				return -1
+			case 117:
 				return -1
 			case 116:
-				return -1
-			case 84:
 				return -1
 			case 101:
 				return -1
@@ -13322,14 +13322,14 @@ func init() {
 				return -1
 			case 114:
 				return 5
-			case 111:
-				return -1
-			case 79:
-				return -1
-			case 117:
-				return -1
 			case 82:
 				return 5
+			case 79:
+				return -1
+			case 85:
+				return -1
+			case 84:
+				return -1
 			default:
 				switch {
 				default:
@@ -13341,11 +13341,11 @@ func init() {
 		acc[5] = true
 		fun[5] = func(r rune) int {
 			switch r {
-			case 85:
+			case 111:
+				return -1
+			case 117:
 				return -1
 			case 116:
-				return -1
-			case 84:
 				return -1
 			case 101:
 				return -1
@@ -13353,13 +13353,13 @@ func init() {
 				return -1
 			case 114:
 				return -1
-			case 111:
+			case 82:
 				return -1
 			case 79:
 				return -1
-			case 117:
+			case 85:
 				return -1
-			case 82:
+			case 84:
 				return -1
 			default:
 				switch {
@@ -14092,25 +14092,25 @@ func init() {
 		var fun [6]func(rune) int
 		fun[0] = func(r rune) int {
 			switch r {
-			case 102:
-				return 1
-			case 108:
-				return -1
 			case 76:
 				return -1
-			case 83:
+			case 115:
 				return -1
-			case 69:
+			case 101:
 				return -1
+			case 102:
+				return 1
 			case 70:
 				return 1
 			case 97:
 				return -1
 			case 65:
 				return -1
-			case 115:
+			case 108:
 				return -1
-			case 101:
+			case 83:
+				return -1
+			case 69:
 				return -1
 			default:
 				switch {
@@ -14124,20 +14124,20 @@ func init() {
 			switch r {
 			case 102:
 				return -1
-			case 108:
-				return -1
-			case 76:
-				return -1
-			case 83:
-				return -1
-			case 69:
-				return -1
 			case 70:
 				return -1
 			case 97:
 				return 2
 			case 65:
 				return 2
+			case 108:
+				return -1
+			case 83:
+				return -1
+			case 69:
+				return -1
+			case 76:
+				return -1
 			case 115:
 				return -1
 			case 101:
@@ -14154,20 +14154,20 @@ func init() {
 			switch r {
 			case 102:
 				return -1
-			case 108:
-				return 3
-			case 76:
-				return 3
-			case 83:
-				return -1
-			case 69:
-				return -1
 			case 70:
 				return -1
 			case 97:
 				return -1
 			case 65:
 				return -1
+			case 108:
+				return 3
+			case 83:
+				return -1
+			case 69:
+				return -1
+			case 76:
+				return 3
 			case 115:
 				return -1
 			case 101:
@@ -14182,11 +14182,7 @@ func init() {
 		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 70:
-				return -1
-			case 97:
-				return -1
-			case 65:
+			case 76:
 				return -1
 			case 115:
 				return 4
@@ -14194,9 +14190,13 @@ func init() {
 				return -1
 			case 102:
 				return -1
-			case 108:
+			case 70:
 				return -1
-			case 76:
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 108:
 				return -1
 			case 83:
 				return 4
@@ -14212,11 +14212,7 @@ func init() {
 		}
 		fun[4] = func(r rune) int {
 			switch r {
-			case 70:
-				return -1
-			case 97:
-				return -1
-			case 65:
+			case 76:
 				return -1
 			case 115:
 				return -1
@@ -14224,9 +14220,13 @@ func init() {
 				return 5
 			case 102:
 				return -1
-			case 108:
+			case 70:
 				return -1
-			case 76:
+			case 97:
+				return -1
+			case 65:
+				return -1
+			case 108:
 				return -1
 			case 83:
 				return -1
@@ -14243,15 +14243,13 @@ func init() {
 		acc[5] = true
 		fun[5] = func(r rune) int {
 			switch r {
-			case 102:
-				return -1
-			case 108:
-				return -1
 			case 76:
 				return -1
-			case 83:
+			case 115:
 				return -1
-			case 69:
+			case 101:
+				return -1
+			case 102:
 				return -1
 			case 70:
 				return -1
@@ -14259,9 +14257,11 @@ func init() {
 				return -1
 			case 65:
 				return -1
-			case 115:
+			case 108:
 				return -1
-			case 101:
+			case 83:
+				return -1
+			case 69:
 				return -1
 			default:
 				switch {
@@ -14396,54 +14396,6 @@ func init() {
 	{
 		var acc [11]bool
 		var fun [11]func(rune) int
-		fun[0] = func(r rune) int {
-			switch r {
-			case 46:
-				return -1
-			case 101:
-				return -1
-			case 69:
-				return -1
-			case 43:
-				return -1
-			case 45:
-				return -1
-			default:
-				switch {
-				case 48 <= r && r <= 48:
-					return 1
-				case 49 <= r && r <= 57:
-					return 2
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[2] = func(r rune) int {
-			switch r {
-			case 46:
-				return 3
-			case 101:
-				return -1
-			case 69:
-				return -1
-			case 43:
-				return -1
-			case 45:
-				return -1
-			default:
-				switch {
-				case 48 <= r && r <= 48:
-					return 4
-				case 49 <= r && r <= 57:
-					return 4
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
 		fun[6] = func(r rune) int {
 			switch r {
 			case 46:
@@ -14493,6 +14445,30 @@ func init() {
 			}
 			panic("unreachable")
 		}
+		fun[0] = func(r rune) int {
+			switch r {
+			case 46:
+				return -1
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 43:
+				return -1
+			case 45:
+				return -1
+			default:
+				switch {
+				case 48 <= r && r <= 48:
+					return 1
+				case 49 <= r && r <= 57:
+					return 2
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
 		fun[1] = func(r rune) int {
 			switch r {
 			case 46:
@@ -14511,6 +14487,30 @@ func init() {
 					return -1
 				case 49 <= r && r <= 57:
 					return -1
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[2] = func(r rune) int {
+			switch r {
+			case 46:
+				return 3
+			case 101:
+				return -1
+			case 69:
+				return -1
+			case 43:
+				return -1
+			case 45:
+				return -1
+			default:
+				switch {
+				case 48 <= r && r <= 48:
+					return 4
+				case 49 <= r && r <= 57:
+					return 4
 				default:
 					return -1
 				}
@@ -14671,14 +14671,14 @@ func init() {
 	{
 		var acc [11]bool
 		var fun [11]func(rune) int
-		fun[0] = func(r rune) int {
+		fun[1] = func(r rune) int {
 			switch r {
 			case 46:
-				return -1
+				return 3
 			case 101:
-				return -1
+				return 4
 			case 69:
-				return -1
+				return 4
 			case 43:
 				return -1
 			case 45:
@@ -14686,9 +14686,9 @@ func init() {
 			default:
 				switch {
 				case 48 <= r && r <= 48:
-					return 1
+					return -1
 				case 49 <= r && r <= 57:
-					return 2
+					return -1
 				default:
 					return -1
 				}
@@ -14767,6 +14767,30 @@ func init() {
 			}
 			panic("unreachable")
 		}
+		fun[5] = func(r rune) int {
+			switch r {
+			case 46:
+				return 3
+			case 101:
+				return 4
+			case 69:
+				return 4
+			case 43:
+				return -1
+			case 45:
+				return -1
+			default:
+				switch {
+				case 48 <= r && r <= 48:
+					return 5
+				case 49 <= r && r <= 57:
+					return 5
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
 		fun[6] = func(r rune) int {
 			switch r {
 			case 46:
@@ -14816,15 +14840,14 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		acc[8] = true
-		fun[8] = func(r rune) int {
+		fun[9] = func(r rune) int {
 			switch r {
 			case 46:
 				return -1
 			case 101:
-				return -1
+				return 4
 			case 69:
-				return -1
+				return 4
 			case 43:
 				return -1
 			case 45:
@@ -14832,9 +14855,9 @@ func init() {
 			default:
 				switch {
 				case 48 <= r && r <= 48:
-					return 8
+					return 10
 				case 49 <= r && r <= 57:
-					return 8
+					return 10
 				default:
 					return -1
 				}
@@ -14865,14 +14888,14 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		fun[1] = func(r rune) int {
+		fun[0] = func(r rune) int {
 			switch r {
 			case 46:
-				return 3
+				return -1
 			case 101:
-				return 4
+				return -1
 			case 69:
-				return 4
+				return -1
 			case 43:
 				return -1
 			case 45:
@@ -14880,23 +14903,24 @@ func init() {
 			default:
 				switch {
 				case 48 <= r && r <= 48:
-					return -1
+					return 1
 				case 49 <= r && r <= 57:
-					return -1
+					return 2
 				default:
 					return -1
 				}
 			}
 			panic("unreachable")
 		}
-		fun[5] = func(r rune) int {
+		acc[8] = true
+		fun[8] = func(r rune) int {
 			switch r {
 			case 46:
-				return 3
+				return -1
 			case 101:
-				return 4
+				return -1
 			case 69:
-				return 4
+				return -1
 			case 43:
 				return -1
 			case 45:
@@ -14904,33 +14928,9 @@ func init() {
 			default:
 				switch {
 				case 48 <= r && r <= 48:
-					return 5
+					return 8
 				case 49 <= r && r <= 57:
-					return 5
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[9] = func(r rune) int {
-			switch r {
-			case 46:
-				return -1
-			case 101:
-				return 4
-			case 69:
-				return 4
-			case 43:
-				return -1
-			case 45:
-				return -1
-			default:
-				switch {
-				case 48 <= r && r <= 48:
-					return 10
-				case 49 <= r && r <= 57:
-					return 10
+					return 8
 				default:
 					return -1
 				}
@@ -15119,27 +15119,99 @@ func init() {
 	{
 		var acc [18]bool
 		var fun [18]func(rune) int
+		fun[0] = func(r rune) int {
+			switch r {
+			case 92:
+				return -1
+			case 47:
+				return -1
+			case 102:
+				return -1
+			case 116:
+				return -1
+			case 117:
+				return -1
+			case 96:
+				return 1
+			case 34:
+				return -1
+			case 98:
+				return -1
+			case 110:
+				return -1
+			case 114:
+				return -1
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return -1
+				case 65 <= r && r <= 70:
+					return -1
+				case 97 <= r && r <= 102:
+					return -1
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[1] = func(r rune) int {
+			switch r {
+			case 96:
+				return -1
+			case 34:
+				return 2
+			case 98:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
+			case 92:
+				return 3
+			case 47:
+				return 2
+			case 102:
+				return 2
+			case 116:
+				return 2
+			case 117:
+				return 2
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 2
+				case 65 <= r && r <= 70:
+					return 2
+				case 97 <= r && r <= 102:
+					return 2
+				default:
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
 		fun[3] = func(r rune) int {
 			switch r {
-			case 98:
-				return 4
-			case 102:
-				return 5
-			case 110:
-				return 6
-			case 117:
-				return 7
 			case 96:
+				return 4
+			case 34:
+				return 5
+			case 98:
+				return 6
+			case 110:
+				return 7
+			case 114:
 				return 8
 			case 92:
 				return 9
-			case 34:
-				return 10
 			case 47:
+				return 10
+			case 102:
 				return 11
-			case 114:
-				return 12
 			case 116:
+				return 12
+			case 117:
 				return 13
 			default:
 				switch {
@@ -15155,27 +15227,63 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		fun[4] = func(r rune) int {
+		fun[6] = func(r rune) int {
 			switch r {
-			case 98:
+			case 92:
+				return 3
+			case 47:
 				return 2
 			case 102:
 				return 2
-			case 110:
+			case 116:
 				return 2
 			case 117:
 				return 2
 			case 96:
-				return 8
-			case 92:
-				return 3
+				return 4
 			case 34:
 				return 2
-			case 47:
+			case 98:
+				return 2
+			case 110:
 				return 2
 			case 114:
 				return 2
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 2
+				case 65 <= r && r <= 70:
+					return 2
+				case 97 <= r && r <= 102:
+					return 2
+				default:
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[8] = func(r rune) int {
+			switch r {
+			case 96:
+				return 4
+			case 34:
+				return 2
+			case 98:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
+			case 92:
+				return 3
+			case 47:
+				return 2
+			case 102:
+				return 2
 			case 116:
+				return 2
+			case 117:
 				return 2
 			default:
 				switch {
@@ -15193,25 +15301,25 @@ func init() {
 		}
 		fun[5] = func(r rune) int {
 			switch r {
-			case 98:
+			case 92:
+				return 3
+			case 47:
 				return 2
 			case 102:
 				return 2
-			case 110:
+			case 116:
 				return 2
 			case 117:
 				return 2
 			case 96:
-				return 8
-			case 92:
-				return 3
+				return 4
 			case 34:
 				return 2
-			case 47:
+			case 98:
+				return 2
+			case 110:
 				return 2
 			case 114:
-				return 2
-			case 116:
 				return 2
 			default:
 				switch {
@@ -15227,99 +15335,27 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		fun[14] = func(r rune) int {
+		fun[11] = func(r rune) int {
 			switch r {
-			case 96:
-				return 8
 			case 92:
 				return 3
-			case 34:
-				return 2
 			case 47:
-				return 2
-			case 114:
-				return 2
-			case 116:
-				return 2
-			case 98:
-				return 15
-			case 102:
-				return 15
-			case 110:
-				return 2
-			case 117:
-				return 2
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 15
-				case 65 <= r && r <= 70:
-					return 15
-				case 97 <= r && r <= 102:
-					return 15
-				default:
-					return 2
-				}
-			}
-			panic("unreachable")
-		}
-		fun[16] = func(r rune) int {
-			switch r {
-			case 96:
-				return 8
-			case 92:
-				return 3
-			case 34:
-				return 2
-			case 47:
-				return 2
-			case 114:
-				return 2
-			case 116:
-				return 2
-			case 98:
-				return 17
-			case 102:
-				return 17
-			case 110:
-				return 2
-			case 117:
-				return 2
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 17
-				case 65 <= r && r <= 70:
-					return 17
-				case 97 <= r && r <= 102:
-					return 17
-				default:
-					return 2
-				}
-			}
-			panic("unreachable")
-		}
-		fun[6] = func(r rune) int {
-			switch r {
-			case 96:
-				return 8
-			case 92:
-				return 3
-			case 34:
-				return 2
-			case 47:
-				return 2
-			case 114:
-				return 2
-			case 116:
-				return 2
-			case 98:
 				return 2
 			case 102:
 				return 2
-			case 110:
+			case 116:
 				return 2
 			case 117:
+				return 2
+			case 96:
+				return 4
+			case 34:
+				return 2
+			case 98:
+				return 2
+			case 110:
+				return 2
+			case 114:
 				return 2
 			default:
 				switch {
@@ -15337,134 +15373,98 @@ func init() {
 		}
 		fun[13] = func(r rune) int {
 			switch r {
-			case 98:
-				return 2
-			case 102:
-				return 2
-			case 110:
-				return 2
-			case 117:
-				return 2
 			case 96:
-				return 8
-			case 92:
-				return 3
-			case 34:
-				return 2
-			case 47:
-				return 2
-			case 114:
-				return 2
-			case 116:
-				return 2
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 2
-				case 65 <= r && r <= 70:
-					return 2
-				case 97 <= r && r <= 102:
-					return 2
-				default:
-					return 2
-				}
-			}
-			panic("unreachable")
-		}
-		fun[1] = func(r rune) int {
-			switch r {
-			case 98:
-				return 2
-			case 102:
-				return 2
-			case 110:
-				return 2
-			case 117:
-				return 2
-			case 96:
-				return -1
-			case 92:
-				return 3
-			case 34:
-				return 2
-			case 47:
-				return 2
-			case 114:
-				return 2
-			case 116:
-				return 2
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 2
-				case 65 <= r && r <= 70:
-					return 2
-				case 97 <= r && r <= 102:
-					return 2
-				default:
-					return 2
-				}
-			}
-			panic("unreachable")
-		}
-		fun[7] = func(r rune) int {
-			switch r {
-			case 98:
-				return 14
-			case 102:
-				return 14
-			case 110:
-				return 2
-			case 117:
-				return 2
-			case 96:
-				return 8
-			case 92:
-				return 3
-			case 34:
-				return 2
-			case 47:
-				return 2
-			case 114:
-				return 2
-			case 116:
-				return 2
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 14
-				case 65 <= r && r <= 70:
-					return 14
-				case 97 <= r && r <= 102:
-					return 14
-				default:
-					return 2
-				}
-			}
-			panic("unreachable")
-		}
-		fun[9] = func(r rune) int {
-			switch r {
-			case 98:
 				return 4
-			case 102:
-				return 5
-			case 110:
-				return 6
-			case 117:
-				return 7
-			case 96:
-				return 8
-			case 92:
-				return 9
 			case 34:
-				return 10
-			case 47:
-				return 11
+				return 2
+			case 98:
+				return 14
+			case 110:
+				return 2
 			case 114:
-				return 12
+				return 2
+			case 92:
+				return 3
+			case 47:
+				return 2
+			case 102:
+				return 14
 			case 116:
-				return 13
+				return 2
+			case 117:
+				return 2
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 14
+				case 65 <= r && r <= 70:
+					return 14
+				case 97 <= r && r <= 102:
+					return 14
+				default:
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[15] = func(r rune) int {
+			switch r {
+			case 92:
+				return 3
+			case 47:
+				return 2
+			case 102:
+				return 16
+			case 116:
+				return 2
+			case 117:
+				return 2
+			case 96:
+				return 4
+			case 34:
+				return 2
+			case 98:
+				return 16
+			case 110:
+				return 2
+			case 114:
+				return 2
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 16
+				case 65 <= r && r <= 70:
+					return 16
+				case 97 <= r && r <= 102:
+					return 16
+				default:
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[17] = func(r rune) int {
+			switch r {
+			case 92:
+				return 3
+			case 47:
+				return 2
+			case 102:
+				return 2
+			case 116:
+				return 2
+			case 117:
+				return 2
+			case 96:
+				return 4
+			case 34:
+				return 2
+			case 98:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
 			default:
 				switch {
 				case 48 <= r && r <= 57:
@@ -15482,167 +15482,22 @@ func init() {
 		fun[10] = func(r rune) int {
 			switch r {
 			case 96:
-				return 8
+				return 4
+			case 34:
+				return 2
+			case 98:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
 			case 92:
 				return 3
-			case 34:
-				return 2
 			case 47:
-				return 2
-			case 114:
-				return 2
-			case 116:
-				return 2
-			case 98:
 				return 2
 			case 102:
 				return 2
-			case 110:
-				return 2
-			case 117:
-				return 2
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 2
-				case 65 <= r && r <= 70:
-					return 2
-				case 97 <= r && r <= 102:
-					return 2
-				default:
-					return 2
-				}
-			}
-			panic("unreachable")
-		}
-		fun[0] = func(r rune) int {
-			switch r {
-			case 98:
-				return -1
-			case 102:
-				return -1
-			case 110:
-				return -1
-			case 117:
-				return -1
-			case 96:
-				return 1
-			case 92:
-				return -1
-			case 34:
-				return -1
-			case 47:
-				return -1
-			case 114:
-				return -1
 			case 116:
-				return -1
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return -1
-				case 65 <= r && r <= 70:
-					return -1
-				case 97 <= r && r <= 102:
-					return -1
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[2] = func(r rune) int {
-			switch r {
-			case 96:
-				return 8
-			case 92:
-				return 3
-			case 34:
-				return 2
-			case 47:
-				return 2
-			case 114:
-				return 2
-			case 116:
-				return 2
-			case 98:
-				return 2
-			case 102:
-				return 2
-			case 110:
-				return 2
-			case 117:
-				return 2
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return 2
-				case 65 <= r && r <= 70:
-					return 2
-				case 97 <= r && r <= 102:
-					return 2
-				default:
-					return 2
-				}
-			}
-			panic("unreachable")
-		}
-		acc[8] = true
-		fun[8] = func(r rune) int {
-			switch r {
-			case 96:
-				return -1
-			case 92:
-				return -1
-			case 34:
-				return -1
-			case 47:
-				return -1
-			case 114:
-				return -1
-			case 116:
-				return -1
-			case 98:
-				return -1
-			case 102:
-				return -1
-			case 110:
-				return -1
-			case 117:
-				return -1
-			default:
-				switch {
-				case 48 <= r && r <= 57:
-					return -1
-				case 65 <= r && r <= 70:
-					return -1
-				case 97 <= r && r <= 102:
-					return -1
-				default:
-					return -1
-				}
-			}
-			panic("unreachable")
-		}
-		fun[11] = func(r rune) int {
-			switch r {
-			case 96:
-				return 8
-			case 92:
-				return 3
-			case 34:
-				return 2
-			case 47:
-				return 2
-			case 114:
-				return 2
-			case 116:
-				return 2
-			case 98:
-				return 2
-			case 102:
-				return 2
-			case 110:
 				return 2
 			case 117:
 				return 2
@@ -15662,25 +15517,25 @@ func init() {
 		}
 		fun[12] = func(r rune) int {
 			switch r {
-			case 98:
+			case 96:
+				return 4
+			case 34:
 				return 2
-			case 102:
+			case 98:
 				return 2
 			case 110:
 				return 2
-			case 117:
-				return 2
-			case 96:
-				return 8
-			case 92:
-				return 3
-			case 34:
-				return 2
-			case 47:
-				return 2
 			case 114:
 				return 2
+			case 92:
+				return 3
+			case 47:
+				return 2
+			case 102:
+				return 2
 			case 116:
+				return 2
+			case 117:
 				return 2
 			default:
 				switch {
@@ -15696,61 +15551,61 @@ func init() {
 			}
 			panic("unreachable")
 		}
-		fun[15] = func(r rune) int {
+		fun[16] = func(r rune) int {
 			switch r {
-			case 98:
-				return 16
-			case 102:
-				return 16
-			case 110:
-				return 2
-			case 117:
-				return 2
 			case 96:
-				return 8
-			case 92:
-				return 3
+				return 4
 			case 34:
 				return 2
-			case 47:
+			case 98:
+				return 17
+			case 110:
 				return 2
 			case 114:
 				return 2
+			case 92:
+				return 3
+			case 47:
+				return 2
+			case 102:
+				return 17
 			case 116:
+				return 2
+			case 117:
 				return 2
 			default:
 				switch {
 				case 48 <= r && r <= 57:
-					return 16
+					return 17
 				case 65 <= r && r <= 70:
-					return 16
+					return 17
 				case 97 <= r && r <= 102:
-					return 16
+					return 17
 				default:
 					return 2
 				}
 			}
 			panic("unreachable")
 		}
-		fun[17] = func(r rune) int {
+		fun[2] = func(r rune) int {
 			switch r {
 			case 96:
-				return 8
-			case 92:
-				return 3
+				return 4
 			case 34:
-				return 2
-			case 47:
-				return 2
-			case 114:
-				return 2
-			case 116:
 				return 2
 			case 98:
 				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
+			case 92:
+				return 3
+			case 47:
+				return 2
 			case 102:
 				return 2
-			case 110:
+			case 116:
 				return 2
 			case 117:
 				return 2
@@ -15762,6 +15617,151 @@ func init() {
 					return 2
 				case 97 <= r && r <= 102:
 					return 2
+				default:
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		acc[4] = true
+		fun[4] = func(r rune) int {
+			switch r {
+			case 96:
+				return -1
+			case 34:
+				return -1
+			case 98:
+				return -1
+			case 110:
+				return -1
+			case 114:
+				return -1
+			case 92:
+				return -1
+			case 47:
+				return -1
+			case 102:
+				return -1
+			case 116:
+				return -1
+			case 117:
+				return -1
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return -1
+				case 65 <= r && r <= 70:
+					return -1
+				case 97 <= r && r <= 102:
+					return -1
+				default:
+					return -1
+				}
+			}
+			panic("unreachable")
+		}
+		fun[7] = func(r rune) int {
+			switch r {
+			case 92:
+				return 3
+			case 47:
+				return 2
+			case 102:
+				return 2
+			case 116:
+				return 2
+			case 117:
+				return 2
+			case 96:
+				return 4
+			case 34:
+				return 2
+			case 98:
+				return 2
+			case 110:
+				return 2
+			case 114:
+				return 2
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 2
+				case 65 <= r && r <= 70:
+					return 2
+				case 97 <= r && r <= 102:
+					return 2
+				default:
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[9] = func(r rune) int {
+			switch r {
+			case 96:
+				return 4
+			case 34:
+				return 5
+			case 98:
+				return 6
+			case 110:
+				return 7
+			case 114:
+				return 8
+			case 92:
+				return 9
+			case 47:
+				return 10
+			case 102:
+				return 11
+			case 116:
+				return 12
+			case 117:
+				return 13
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 2
+				case 65 <= r && r <= 70:
+					return 2
+				case 97 <= r && r <= 102:
+					return 2
+				default:
+					return 2
+				}
+			}
+			panic("unreachable")
+		}
+		fun[14] = func(r rune) int {
+			switch r {
+			case 96:
+				return 4
+			case 34:
+				return 2
+			case 98:
+				return 15
+			case 110:
+				return 2
+			case 114:
+				return 2
+			case 92:
+				return 3
+			case 47:
+				return 2
+			case 102:
+				return 15
+			case 116:
+				return 2
+			case 117:
+				return 2
+			default:
+				switch {
+				case 48 <= r && r <= 57:
+					return 15
+				case 65 <= r && r <= 70:
+					return 15
+				case 97 <= r && r <= 102:
+					return 15
 				default:
 					return 2
 				}

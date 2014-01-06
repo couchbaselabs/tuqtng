@@ -95,8 +95,7 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 		}
 
 		return this.joinItems(item, keyItem)
-	}
-	if val.Type() == dparval.ARRAY {
+	} else if val.Type() == dparval.ARRAY {
 		ok := true
 		index := 0
 
@@ -129,6 +128,8 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 			}
 
 		}
+	} else if this.Type == "LEFT" {
+		this.Base.SendItem(item)
 	}
 
 	return true

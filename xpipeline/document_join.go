@@ -21,13 +21,15 @@ import (
 type DocumentJoin struct {
 	Base *BaseOperator
 	Over ast.Expression
+	Type string
 	As   string
 }
 
-func NewDocumentJoin(over ast.Expression, as string) *DocumentJoin {
+func NewDocumentJoin(over ast.Expression, jointype string, as string) *DocumentJoin {
 	return &DocumentJoin{
 		Base: NewBaseOperator(),
 		Over: over,
+		Type: jointype,
 		As:   as,
 	}
 }
@@ -52,6 +54,9 @@ func (this *DocumentJoin) processItem(item *dparval.Value) bool {
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
+			if val == nil && this.Type == "LEFT" {
+				return this.Base.SendItem(item)
+			}
 			return true
 		default:
 			return this.Base.SendError(query.NewError(err, "Internal Error"))
@@ -78,6 +83,9 @@ func (this *DocumentJoin) processItem(item *dparval.Value) bool {
 				this.Base.SendItem(newItem)
 			}
 		}
+	} else if this.Type == "LEFT" {
+		// send back the item since this is a left join
+		this.Base.SendItem(item)
 	}
 
 	return true
