@@ -38,23 +38,18 @@
         "statements": "SELECT META(u).id uid, META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" LEFT JOIN users_with_orders o KEYS ARRAY s.order_id || \"-non-existent\" FOR s IN u.shipped_order_history END", 
    "results": [
         {
-            "oid": null,
             "uid": "Aide_48687583"
         },
         {
-            "oid": null,
             "uid": "Aide_48687583"
         },
         {
-            "oid": null,
             "uid": "Aide_48687583"
         },
         {
-            "oid": null,
             "uid": "Aide_48687583"
         },
         {
-            "oid": null,
             "uid": "Aide_48687583"
         }
         ] 
@@ -133,24 +128,14 @@
         "statements" : "SELECT  o.order_details.order_id as oid FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.shipped_order_history s LEFT JOIN users_with_orders o KEY s.order_id || \"-non-existent\"",
         "results": [
         {
-            "oid": null,
-            "uid": "Aide_48687583"
         },
         {
-            "oid": null,
-            "uid": "Aide_48687583"
         },
         {
-            "oid": null,
-            "uid": "Aide_48687583"
         },
         {
-            "oid": null,
-            "uid": "Aide_48687583"
         },
         {
-            "oid": null,
-            "uid": "Aide_48687583"
         }
         ]
     },
@@ -177,12 +162,12 @@
             "o2id": "T906657403311"
           },
           {
-            "oid": "T906657403311",
-            "oid": "T788422224413"
+            "o1id": "T906657403311",
+            "o2id": "T788422224413"
           },
           {
-            "oid": "T906657403311",
-            "oid": "T906657403311"
+            "o1id": "T906657403311",
+            "o2id": "T906657403311"
           }
         ]
     },
@@ -195,20 +180,16 @@
         "statements": "SELECT META(o1).id o1id, META(o2).id o2id FROM users_with_orders u KEY \"Carin_66303336\" UNNEST u.shipped_order_history s LEFT JOIN users_with_orders o1 KEY s.order_id LEFT JOIN users_with_orders o2 KEY o1.order_details.order_id || \"-non-existent\"",
         "results": [
           {
-            "o1id": "T788422224413",
-            "o2id": "T788422224413"
+            "o1id": "T788422224413"
           },
           {
-            "o1id": "T788422224413",
-            "o2id": "T906657403311"
+            "o1id": "T788422224413"
           },
           {
-            "oid": "T906657403311",
-            "oid": "T788422224413"
+            "o1id": "T906657403311"
           },
           {
-            "oid": "T906657403311",
-            "oid": "T906657403311"
+            "o1id": "T906657403311"
           }
         ]
     }
