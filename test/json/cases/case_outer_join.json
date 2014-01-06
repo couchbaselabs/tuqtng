@@ -151,7 +151,7 @@
         ]
     },
     {
-        "statements": "SELECT META(o1).id o1id, META(o2).id o2id FROM users_with_orders u KEY \"Carin_66303336\" UNNEST u.shipped_order_history s LEFT OUTER JOIN users_with_orders o1 KEY s.order_id JOIN users_with_orders o2 KEY o1.order_details.order_id",
+        "statements": "SELECT META(o1).id o1id, META(o2).id o2id FROM users_with_orders u KEY \"Carin_66303336\" UNNEST u.shipped_order_history s LEFT OUTER JOIN users_with_orders o1 KEY s.order_id JOIN users_with_orders o2 KEY s.order_id",
         "results": [
           {
             "o1id": "T788422224413",
@@ -177,7 +177,7 @@
         ]
     },
     {
-        "statements": "SELECT META(o1).id o1id, META(o2).id o2id FROM users_with_orders u KEY \"Carin_66303336\" UNNEST u.shipped_order_history s LEFT OUTER JOIN users_with_orders o1 KEY s.order_id LEFT OUTER JOIN users_with_orders o2 KEY o1.order_details.order_id || \"-non-existent\"",
+        "statements": "SELECT META(o1).id o1id, META(o2).id o2id FROM users_with_orders u KEY \"Carin_66303336\" UNNEST u.shipped_order_history s LEFT OUTER JOIN users_with_orders o1 KEY s.order_id LEFT OUTER JOIN users_with_orders o2 KEY s.order_id || \"-non-existent\"",
         "results": [
           {
             "o1id": "T788422224413"
