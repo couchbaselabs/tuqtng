@@ -492,13 +492,6 @@ UNNEST path unnest_source {
     parsingStack.Push(&ast.From{Projection: proj, As: "", Over:rest})
 }
 |
-UNNEST path key_expr {
-    logDebugGrammar("UNNEST KEY_EXPR")
-    key_expr := parsingStack.Pop().(*ast.KeyExpression)
-    proj := parsingStack.Pop().(ast.Expression)
-    parsingStack.Push(&ast.From{Projection: proj, As:"", Keys: key_expr}) 
-}
-|
 UNNEST path AS IDENTIFIER unnest_source {
     logDebugGrammar("UNNEST AS nested")
     rest := parsingStack.Pop().(*ast.From)
@@ -511,6 +504,150 @@ UNNEST path IDENTIFIER unnest_source {
     rest := parsingStack.Pop().(*ast.From)
     proj := parsingStack.Pop().(ast.Expression)
     parsingStack.Push(&ast.From{Projection: proj, As: $3.s, Over:rest})
+}
+|
+UNNEST path key_expr {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:"", Keys: key_expr}) 
+}
+|
+UNNEST path IDENTIFIER key_expr {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:$3.s, Keys: key_expr}) 
+}
+|
+UNNEST path AS IDENTIFIER key_expr {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Keys: key_expr}) 
+}
+|
+UNNEST path key_expr unnest_source {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    rest := parsingStack.Pop().(*ast.From)
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:"", Keys: key_expr, Over:rest}) 
+}
+|
+UNNEST path IDENTIFIER key_expr unnest_source {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    rest := parsingStack.Pop().(*ast.From)
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:$3.s, Keys: key_expr, Over:rest}) 
+}
+|
+UNNEST path AS IDENTIFIER key_expr unnest_source {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    rest := parsingStack.Pop().(*ast.From)
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Keys: key_expr, Over:rest}) 
+}
+|
+join_type UNNEST path {
+    logDebugGrammar("UNNEST")
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:"", Type: Type})
+}
+|
+/* unnest subpath AS alias */
+join_type UNNEST path AS IDENTIFIER {
+    logDebugGrammar("UNNEST AS")
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, Type: Type,As:$4.s})
+}
+|
+/* unnest subpath AS alias */
+join_type UNNEST path IDENTIFIER {
+    logDebugGrammar("UNNEST AS")
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, Type: Type,As:$3.s})
+}
+|
+/* nested unnest */
+join_type UNNEST path unnest_source {
+    logDebugGrammar("UNNEST nested")
+    rest := parsingStack.Pop().(*ast.From)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, Type: Type, As: "", Over:rest})
+}
+|
+join_type UNNEST path AS IDENTIFIER unnest_source {
+    logDebugGrammar("UNNEST AS nested")
+    rest := parsingStack.Pop().(*ast.From)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, Type: Type, As: $4.s, Over:rest})
+}
+|
+join_type UNNEST path IDENTIFIER unnest_source {
+    logDebugGrammar("UNNEST AS nested")
+    rest := parsingStack.Pop().(*ast.From)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, Type: Type, As: $3.s, Over:rest})
+}
+|
+join_type UNNEST path key_expr {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:"", Type: Type, Keys: key_expr}) 
+}
+|
+join_type UNNEST path IDENTIFIER key_expr {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:$3.s, Type: Type, Keys: key_expr}) 
+}
+|
+join_type UNNEST path AS IDENTIFIER key_expr {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Type: Type, Keys: key_expr}) 
+}
+|
+join_type UNNEST path key_expr unnest_source {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    rest := parsingStack.Pop().(*ast.From)
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:"", Type: Type, Keys: key_expr, Over:rest}) 
+}
+|
+join_type UNNEST path IDENTIFIER key_expr unnest_source {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    rest := parsingStack.Pop().(*ast.From)
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:$3.s, Type: Type, Keys: key_expr, Over:rest}) 
+}
+|
+join_type UNNEST path AS IDENTIFIER key_expr unnest_source {
+    logDebugGrammar("UNNEST KEY_EXPR")
+    rest := parsingStack.Pop().(*ast.From)
+    key_expr := parsingStack.Pop().(*ast.KeyExpression)
+    proj := parsingStack.Pop().(ast.Expression)
+    Type := parsingStack.Pop().(string)
+    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Type: Type, Keys: key_expr, Over:rest}) 
 }
 |
 JOIN path join_key_expr {

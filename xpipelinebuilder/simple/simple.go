@@ -113,7 +113,7 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan, q network.Query
 		case *plan.Projector:
 			currentOperator = xpipeline.NewProject(currentElement.Result, currentElement.ProjectEmpty)
 		case *plan.DocumentJoin:
-			currentOperator = xpipeline.NewDocumentJoin(currentElement.Over, currentElement.As)
+			currentOperator = xpipeline.NewDocumentJoin(currentElement.Over, currentElement.JoinType, currentElement.As)
 		case *plan.EliminateDuplicates:
 			currentOperator = xpipeline.NewEliminateDuplicates()
 		case *plan.Grouper:

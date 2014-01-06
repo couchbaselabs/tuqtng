@@ -128,9 +128,8 @@ func (this *KeyNest) processItem(item *dparval.Value) bool {
 		}
 
 		this.rowsFetched += 1
-		return true
-	}
-	if val.Type() == dparval.ARRAY {
+
+	} else if val.Type() == dparval.ARRAY {
 		ok := true
 		index := 0
 
@@ -167,6 +166,8 @@ func (this *KeyNest) processItem(item *dparval.Value) bool {
 		newItem.SetPath(this.As, this.Right)
 		this.Base.SendItem(newItem)
 
+	} else if this.Type == "LEFT" {
+		this.Base.SendItem(newItem)
 	}
 
 	return true
