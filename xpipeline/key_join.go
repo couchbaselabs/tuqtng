@@ -77,6 +77,9 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
+			if val == nil && this.Type == "LEFT" {
+				return this.Base.SendItem(item)
+			}
 			return true
 		default:
 			return this.Base.SendError(query.NewError(err, "Internal error in KeyJoin"))
@@ -88,6 +91,14 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 			this.Base.SendError(query.NewError(fmt.Errorf("KEYS expression should evaluate to an array"), ""))
 			return false
 		}
+
+		if val.Value() == nil {
+			if this.Type == "LEFT" {
+				return this.Base.SendItem(item)
+			}
+			return true
+		}
+
 		fetch_id := val.Value().(string)
 		keyItem, err := this.bucket.Fetch(fetch_id)
 		if err != nil {
@@ -98,6 +109,14 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 	} else if val.Type() == dparval.ARRAY {
 		ok := true
 		index := 0
+
+		array_len := len(val.Value().([]interface{}))
+		if array_len == 0 {
+			if this.Type == "LEFT" {
+				this.Base.SendItem(item)
+			}
+			return true
+		}
 
 		ids := make([]string, 0, FETCH_BATCH_SIZE)
 
@@ -114,8 +133,14 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 				}
 				return true
 			}
-			fetch_id := (*id).Value().(string)
-			ids = append(ids, fetch_id)
+
+			fetch_id := id.Value()
+			if fetch_id != nil {
+				ids = append(ids, fetch_id.(string))
+			} else if this.Type == "LEFT" {
+				this.Base.SendItem(item)
+				continue
+			}
 
 			if this.rowsFetched != 0 && index%FETCH_BATCH_SIZE == 0 {
 				// do a bulk fetch
@@ -124,7 +149,6 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 					return false
 				}
 				ids = make([]string, 0, FETCH_BATCH_SIZE)
-
 			}
 
 		}
