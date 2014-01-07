@@ -55,6 +55,66 @@
         ] 
     },
     {
+        "statements": "SELECT META(u).id uid, META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" JOIN users_with_orders o KEYS ARRAY NULL FOR s IN u.shipped_order_history END", 
+   "results": [
+        ] 
+    },
+    {
+        "statements": "SELECT META(u).id uid, META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" INNER JOIN users_with_orders o KEYS ARRAY NULL FOR s IN u.shipped_order_history END", 
+   "results": [
+        ] 
+    },
+    {
+        "statements": "SELECT META(u).id uid, META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" LEFT JOIN users_with_orders o KEYS ARRAY NULL FOR s IN u.shipped_order_history END", 
+   "results": [
+        {
+            "uid": "Aide_48687583"
+        },
+        {
+            "uid": "Aide_48687583"
+        },
+        {
+            "uid": "Aide_48687583"
+        },
+        {
+            "uid": "Aide_48687583"
+        },
+        {
+            "uid": "Aide_48687583"
+        }
+        ] 
+    },
+    {
+        "statements": "SELECT META(u).id uid, META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" JOIN users_with_orders o KEYS ARRAY s.missing_field FOR s IN u.shipped_order_history END", 
+   "results": [
+        ] 
+    },
+    {
+        "statements": "SELECT META(u).id uid, META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" INNER JOIN users_with_orders o KEYS ARRAY s.missing_field FOR s IN u.shipped_order_history END", 
+   "results": [
+        ] 
+    },
+    {
+        "statements": "SELECT META(u).id uid, META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" LEFT JOIN users_with_orders o KEYS ARRAY s.missing_field FOR s IN u.shipped_order_history END", 
+   "results": [
+        {
+            "uid": "Aide_48687583"
+        },
+        {
+            "uid": "Aide_48687583"
+        },
+        {
+            "uid": "Aide_48687583"
+        },
+        {
+            "uid": "Aide_48687583"
+        },
+        {
+            "uid": "Aide_48687583"
+        }
+        ] 
+    },
+    {
         "statements": "SELECT META(o).id oid FROM users_with_orders u KEY \"Adaline_67672807\" UNNEST u.shipped_order_history s INNER JOIN users_with_orders o KEY s.order_id",
         "results": [
         ]
@@ -176,6 +236,56 @@
           },
           {
             "o1id": "T906657403311"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT user_id FROM orders_with_users o KEY \"T103929516925\"",
+        "results": [
+          {
+            "user_id": "Elinor_33313792"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT META(o).id oid, META(u).id uid FROM orders_with_users o KEY \"T103929516925\" INNER JOIN orders_with_users u KEY o.user_id",
+        "results": [
+          {
+            "oid": "T103929516925",
+            "uid": "Elinor_33313792"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT META(o).id oid, META(u).id uid FROM orders_with_users o KEY \"T103929516925\" LEFT JOIN orders_with_users u KEY o.user_id",
+        "results": [
+          {
+            "oid": "T103929516925",
+            "uid": "Elinor_33313792"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT META(o).id oid, META(u).id uid FROM orders_with_users o KEY \"T103929516925\" LEFT JOIN orders_with_users u KEY o.user_id || \"-non-existent\"",
+        "results": [
+          {
+            "oid": "T103929516925"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT META(o).id oid, META(u).id uid FROM orders_with_users o KEY \"T103929516925\" LEFT JOIN orders_with_users u KEY NULL",
+        "results": [
+          {
+            "oid": "T103929516925"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT META(o).id oid, META(u).id uid FROM orders_with_users o KEY \"T103929516925\" LEFT JOIN orders_with_users u KEY o.missing_field",
+        "results": [
+          {
+            "oid": "T103929516925"
           }
         ]
     }
