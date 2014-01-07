@@ -96,6 +96,13 @@ func (this *KeyNest) processItem(item *dparval.Value) bool {
 			this.Base.SendError(query.NewError(fmt.Errorf("KEYS expression should evaluate to an array"), ""))
 			return false
 		}
+		if val.Value() == nil {
+			if this.Type == "LEFT" {
+				return this.Base.SendItem(item)
+			}
+			return true
+		}
+
 		fetch_id := val.Value().(string)
 		keyitem, err := this.bucket.Fetch(fetch_id)
 		if err != nil {
@@ -143,14 +150,29 @@ func (this *KeyNest) processItem(item *dparval.Value) bool {
 		for ok {
 			id, err := val.Index(index)
 			index = index + 1
+
+			array_len := len(val.Value().([]interface{}))
+			if array_len == 0 {
+				if this.Type == "LEFT" {
+					this.Base.SendItem(item)
+				}
+				return true
+			}
+
 			if err != nil {
 				if len(ids) != 0 {
 					return this.flushBatch(item, ids)
 				}
 				return true
 			}
-			fetch_id := (*id).Value().(string)
-			ids = append(ids, fetch_id)
+
+			fetch_id := id.Value()
+			if fetch_id != nil {
+				ids = append(ids, fetch_id.(string))
+			} else if this.Type == "LEFT" {
+				this.Base.SendItem(item)
+				continue
+			}
 
 			if this.rowsFetched != 0 && index%FETCH_BATCH_SIZE == 0 {
 				// do a bulk fetch

@@ -97,19 +97,7 @@
     {
         "statements": "SELECT META(u).id uid, META(o).id oid FROM users_with_orders u KEY \"Aide_48687583\" LEFT OUTER JOIN users_with_orders o KEYS ARRAY s.missing_field FOR s IN u.shipped_order_history END", 
    "results": [
-        {
-            "uid": "Aide_48687583"
-        },
-        {
-            "uid": "Aide_48687583"
-        },
-        {
-            "uid": "Aide_48687583"
-        },
-        {
-            "uid": "Aide_48687583"
-        },
-        {
+                {
             "uid": "Aide_48687583"
         }
         ] 
