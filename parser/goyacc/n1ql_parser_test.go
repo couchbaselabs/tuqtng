@@ -199,6 +199,9 @@ var validQueries = []string{
 	`SELECT * FROM orders LEFT OUTER JOIN contacts.name KEY orders.custId`,
 	`SELECT * FROM orders INNER JOIN contacts.name KEYS orders.custId LEFT JOIN contacts.children KEY orders.gifts.custId`,
 	`SELECT DISTINCT * FROM orders JOIN contacts.name KEYS orders.custId`,
+	`SELECT ALL * FROM orders JOIN contacts.name KEYS orders.custId`,
+	`SELECT * FROM orders INNER NEST contacts.name KEYS orders.custId LEFT JOIN contacts.children KEY orders.gifts.custId`,
+	`SELECT order_id as oid FROM orders NEST customers KEYS oid.custId LEFT NEST invoices KEYS oid.invoices`,
 }
 
 var invalidQueries = []string{
