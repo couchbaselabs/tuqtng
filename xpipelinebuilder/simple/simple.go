@@ -83,7 +83,11 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan, q network.Query
 			if err != nil {
 				return nil, err
 			}
-			currentOperator = xpipeline.NewKeyJoin(bucket, currentElement.Projection, currentElement.JoinType, currentElement.Keys, currentElement.As)
+			if currentElement.Oper == "NEST" {
+				currentOperator = xpipeline.NewKeyNest(bucket, currentElement.Projection, currentElement.JoinType, currentElement.Keys, currentElement.As)
+			} else {
+				currentOperator = xpipeline.NewKeyJoin(bucket, currentElement.Projection, currentElement.JoinType, currentElement.Keys, currentElement.As)
+			}
 		case *plan.Fetch:
 			pool, err := this.site.PoolByName(currentElement.Pool)
 			if err != nil {
@@ -109,7 +113,7 @@ func (this *SimpleExecutablePipelineBuilder) Build(p *plan.Plan, q network.Query
 		case *plan.Projector:
 			currentOperator = xpipeline.NewProject(currentElement.Result, currentElement.ProjectEmpty)
 		case *plan.DocumentJoin:
-			currentOperator = xpipeline.NewDocumentJoin(currentElement.Over, currentElement.As)
+			currentOperator = xpipeline.NewDocumentJoin(currentElement.Over, currentElement.JoinType, currentElement.As)
 		case *plan.EliminateDuplicates:
 			currentOperator = xpipeline.NewEliminateDuplicates()
 		case *plan.Grouper:

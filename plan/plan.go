@@ -478,18 +478,20 @@ func (this *ProjectorInline) Sources() []PlanElement {
 }
 
 type DocumentJoin struct {
-	Type  string         `json:"type"`
-	Input PlanElement    `json:"input"`
-	Over  ast.Expression `json:"over"`
-	As    string         `json:"as"`
+	Type     string         `json:"type"`
+	Input    PlanElement    `json:"input"`
+	Over     ast.Expression `json:"over"`
+	JoinType string         `json:"jointype"`
+	As       string         `json:"as"`
 }
 
-func NewDocumentJoin(input PlanElement, over ast.Expression, as string) *DocumentJoin {
+func NewDocumentJoin(input PlanElement, over ast.Expression, jointype string, as string) *DocumentJoin {
 	return &DocumentJoin{
-		Type:  "document-join",
-		Input: input,
-		Over:  over,
-		As:    as,
+		Type:     "document-join",
+		Input:    input,
+		Over:     over,
+		JoinType: jointype,
+		As:       as,
 	}
 }
 
@@ -504,11 +506,12 @@ type KeyJoin struct {
 	Bucket     string            `json:"bucket"`
 	Projection ast.Expression    `json:"projection"`
 	JoinType   string            `json:"jointype"`
+	Oper       string            `json:"operator"`
 	Keys       ast.KeyExpression `json:"keys"`
 	As         string            `json:"as"`
 }
 
-func NewKeyJoin(input PlanElement, pool string, bucket string, projection ast.Expression, joinType string, keys ast.KeyExpression, as string) *KeyJoin {
+func NewKeyJoin(input PlanElement, pool string, bucket string, projection ast.Expression, joinType string, oper string, keys ast.KeyExpression, as string) *KeyJoin {
 	return &KeyJoin{
 		Type:       "key-join",
 		Input:      input,
@@ -516,6 +519,7 @@ func NewKeyJoin(input PlanElement, pool string, bucket string, projection ast.Ex
 		Bucket:     bucket,
 		Projection: projection,
 		JoinType:   joinType,
+		Oper:       oper,
 		Keys:       keys,
 		As:         as,
 	}

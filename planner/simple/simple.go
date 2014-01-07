@@ -14,7 +14,6 @@ package simple
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/tuqtng/ast"
@@ -42,18 +41,6 @@ func (this *SimplePlanner) Plan(stmt ast.Statement) (plan.PlanChannel, query.Err
 	ec := make(query.ErrorChannel)
 	go this.buildPlans(stmt, pc, ec)
 	return pc, ec
-}
-
-func validateKeys(keylist string) []string {
-	// remove the brackets and then split the string
-	keylist = strings.Trim(keylist, "[")
-	keylist = strings.Trim(keylist, "]")
-	keys := strings.Split(keylist, ",")
-	for i, key := range keys {
-		key = strings.TrimSpace(key)
-		keys[i] = strings.Trim(key, "\"")
-	}
-	return keys
 }
 
 func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, pc plan.PlanChannel, ec query.ErrorChannel) {
@@ -188,9 +175,9 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 						// add document joins
 						if nextFrom.Keys != nil {
 							// This is a key-join
-							lastStep = plan.NewKeyJoin(lastStep, pool.Name(), nextFrom.Bucket, nextFrom.Projection, nextFrom.Type, *nextFrom.Keys, nextFrom.As)
+							lastStep = plan.NewKeyJoin(lastStep, pool.Name(), nextFrom.Bucket, nextFrom.Projection, nextFrom.Type, nextFrom.Oper, *nextFrom.Keys, nextFrom.As)
 						} else {
-							lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+							lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.Type, nextFrom.As)
 						}
 						nextFrom = nextFrom.Over
 					}
@@ -208,9 +195,9 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 		for nextFrom != nil {
 			// add in-document joins
 			if nextFrom.Keys != nil {
-				lastStep = plan.NewKeyJoin(lastStep, pool.Name(), nextFrom.Bucket, nextFrom.Projection, nextFrom.Type, *nextFrom.Keys, nextFrom.As)
+				lastStep = plan.NewKeyJoin(lastStep, pool.Name(), nextFrom.Bucket, nextFrom.Projection, nextFrom.Type, nextFrom.Oper, *nextFrom.Keys, nextFrom.As)
 			} else {
-				lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.As)
+				lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.Type, nextFrom.As)
 			}
 			nextFrom = nextFrom.Over
 		}

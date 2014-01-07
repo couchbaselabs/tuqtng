@@ -11,7 +11,7 @@ package ast
 
 import (
 	"fmt"
-	"strings"
+	"github.com/couchbaselabs/dparval"
 )
 
 type KeyExpression struct {
@@ -36,38 +36,41 @@ func (this *KeyExpression) Validate() error {
 		return err
 	}
 
-	this.Keys = this.GetKeys()
-	if this.Keys == nil {
-		//expr := this.Expr.Evaluate(this.Expr.value())
+	val, err := this.Expr.Evaluate(dparval.NewValue(map[string]interface{}{}))
+
+	if err != nil {
+		return nil
 	}
 
-	if this.Keys != nil && this.Type == "KEY" && len(this.Keys) > 1 {
-		//array specifed for a single key
+	if val.Type() == dparval.ARRAY && this.Type == "KEY" {
 		return fmt.Errorf("KEY expression used with multiple values")
 	}
-	if this.Keys != nil && this.Type == "KEYS" && len(this.Keys) < 2 {
+
+	if val.Type() == dparval.STRING && this.Type == "KEYS" {
 		return fmt.Errorf("KEYS expression used with a single value")
 	}
 
+	// create the keylist here since we have evaluated the expression
+	this.Keys = make([]string, 0)
+
+	if val.Type() == dparval.ARRAY {
+		keylist := val.Value()
+		for _, key := range keylist.([]interface{}) {
+			this.Keys = append(this.Keys, key.(string))
+		}
+	}
+
+	if val.Type() == dparval.STRING {
+		this.Keys = append(this.Keys, val.Value().(string))
+	}
+
 	return nil
+}
+
+func (this *KeyExpression) GetKeys() []string {
+	return this.Keys
 }
 
 func (this *KeyExpression) String() string {
 	return fmt.Sprintf("%v", this.Expr)
-}
-
-func (this *KeyExpression) GetKeys() []string {
-	keylist := this.String()
-	if strings.Contains(keylist, "\"") {
-		// expr is either a string or array literal
-		keylist = strings.Trim(keylist, "[")
-		keylist = strings.Trim(keylist, "]")
-		this.Keys = strings.Split(keylist, ",")
-		for i, key := range this.Keys {
-			key = strings.TrimSpace(key)
-			this.Keys[i] = strings.Trim(key, "\"")
-		}
-		return this.Keys
-	}
-	return nil
 }

@@ -24,19 +24,20 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
-type KeyJoin struct {
+type KeyNest struct {
 	Base        *BaseOperator
 	bucket      catalog.Bucket
 	Projection  ast.Expression
 	Keys        ast.KeyExpression
+	Right       []interface{}
 	Type        string
 	As          string
 	batch       []string
 	rowsFetched int
 }
 
-func NewKeyJoin(bucket catalog.Bucket, projection ast.Expression, Type string, keys ast.KeyExpression, as string) *KeyJoin {
-	return &KeyJoin{
+func NewKeyNest(bucket catalog.Bucket, projection ast.Expression, Type string, keys ast.KeyExpression, as string) *KeyNest {
+	return &KeyNest{
 		Base:       NewBaseOperator(),
 		bucket:     bucket,
 		Type:       Type,
@@ -46,16 +47,17 @@ func NewKeyJoin(bucket catalog.Bucket, projection ast.Expression, Type string, k
 	}
 }
 
-func (this *KeyJoin) SetSource(source Operator) {
+func (this *KeyNest) SetSource(source Operator) {
 	this.Base.SetSource(source)
 }
 
-func (this *KeyJoin) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
+func (this *KeyNest) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.Base.GetChannels()
 }
 
-func (this *KeyJoin) Run(stopChannel misc.StopChannel) {
+func (this *KeyNest) Run(stopChannel misc.StopChannel) {
 	clog.To(CHANNEL, "key join operator starting")
+
 	if this.Base.Source != nil {
 		this.Base.RunOperator(this, stopChannel)
 	} else {
@@ -66,20 +68,26 @@ func (this *KeyJoin) Run(stopChannel misc.StopChannel) {
 }
 
 // evaluate the key expression from the item and fetch the keys from the bucket
+// and store it in the array Right. Once the upstream operator is finished only then
+// will this operator produce a result by combining one element from the Left along
+// with the entire array of elements from the Right
 
-func (this *KeyJoin) processItem(item *dparval.Value) bool {
+func (this *KeyNest) processItem(item *dparval.Value) bool {
 
 	if item == nil {
 		return true
 	}
-	// add this item to the batch
+
+	this.Right = make([]interface{}, 0)
+	newItem := item.Duplicate()
+
 	val, err := this.Base.Evaluate(this.Keys.Expr, item)
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
 			return true
 		default:
-			return this.Base.SendError(query.NewError(err, "Internal error in KeyJoin"))
+			return this.Base.SendError(query.NewError(err, "Internal error in KeyNest"))
 		}
 	}
 
@@ -89,12 +97,38 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 			return false
 		}
 		fetch_id := val.Value().(string)
-		keyItem, err := this.bucket.Fetch(fetch_id)
+		keyitem, err := this.bucket.Fetch(fetch_id)
 		if err != nil {
 			this.Base.SendError(query.NewError(err, "Unable to fetch key"))
+			return false
 		}
 
-		return this.joinItems(item, keyItem)
+		if keyitem != nil {
+			if this.Projection != nil {
+				keyproj, Error := this.Base.Evaluate(this.Projection, keyitem)
+				if Error != nil {
+					switch err := Error.(type) {
+					case *dparval.Undefined:
+						return true
+					default:
+						return this.Base.SendError(query.NewError(err, "Internal error in KeyNest"))
+					}
+
+				}
+				this.Right = append(this.Right, keyproj)
+			} else {
+				this.Right = append(this.Right, keyitem)
+			}
+
+			newItem.SetPath(this.As, this.Right)
+			this.Base.SendItem(newItem)
+		} else if this.Type == "LEFT" {
+
+			this.Base.SendItem(newItem)
+		}
+
+		this.rowsFetched += 1
+
 	} else if val.Type() == dparval.ARRAY {
 		ok := true
 		index := 0
@@ -105,6 +139,7 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 			this.Base.SendError(query.NewError(fmt.Errorf("KEY used with an array argument"), ""))
 			return false
 		}
+
 		for ok {
 			id, err := val.Index(index)
 			index = index + 1
@@ -119,7 +154,7 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 
 			if this.rowsFetched != 0 && index%FETCH_BATCH_SIZE == 0 {
 				// do a bulk fetch
-				err := this.flushBatch(item, ids)
+				err := this.flushBatch(newItem, ids)
 				if err != true {
 					return false
 				}
@@ -128,47 +163,17 @@ func (this *KeyJoin) processItem(item *dparval.Value) bool {
 			}
 
 		}
+		newItem.SetPath(this.As, this.Right)
+		this.Base.SendItem(newItem)
+
 	} else if this.Type == "LEFT" {
-		this.Base.SendItem(item)
+		this.Base.SendItem(newItem)
 	}
 
 	return true
 }
 
-func (this *KeyJoin) joinItems(item *dparval.Value, keyItem *dparval.Value) bool {
-
-	if keyItem == nil {
-		if this.Type == "LEFT" {
-			return this.Base.SendItem(item)
-		}
-		return true
-	}
-
-	newItem := item.Duplicate()
-	/* join the item and ship it */
-	if this.Projection != nil {
-		keyProj, Error := this.Base.Evaluate(this.Projection, keyItem)
-		if Error != nil {
-			switch err := Error.(type) {
-			case *dparval.Undefined:
-				return true
-			default:
-				return this.Base.SendError(query.NewError(err, "Internal error in KeyJoin"))
-			}
-
-		}
-		newItem.SetPath(this.As, keyProj)
-	} else {
-		newItem.SetPath(this.As, keyItem)
-	}
-	this.rowsFetched += 1
-	this.Base.SendItem(newItem)
-	return true
-}
-
-func (this *KeyJoin) afterItems() {}
-
-func (this *KeyJoin) flushBatch(baseItem *dparval.Value, ids []string) bool {
+func (this *KeyNest) flushBatch(baseItem *dparval.Value, ids []string) bool {
 
 	bulkResponse, err := this.bucket.BulkFetch(ids)
 	if err != nil {
@@ -179,13 +184,7 @@ func (this *KeyJoin) flushBatch(baseItem *dparval.Value, ids []string) bool {
 
 	for _, v := range ids {
 		item, ok := bulkResponse[v]
-		newItem := baseItem.Duplicate()
-		if item == nil {
-			if this.Type == "LEFT" {
-				this.Base.SendItem(newItem)
-			}
-			continue
-		}
+
 		if ok {
 			if this.Projection != nil {
 				projectedVal, err := this.Base.projectedValueOfResultExpression(item, ast.NewResultExpression(this.Projection))
@@ -198,19 +197,32 @@ func (this *KeyJoin) flushBatch(baseItem *dparval.Value, ids []string) bool {
 						return this.Base.SendError(query.NewError(err, "unexpected error projecting fetch expression"))
 					}
 				} else {
-					newItem.SetPath(this.As, projectedVal)
+					this.Right = append(this.Right, projectedVal)
 				}
 			} else {
-				newItem.SetPath(this.As, item)
+				this.Right = append(this.Right, item)
 			}
-			this.Base.SendItem(newItem)
 			this.rowsFetched += 1
 		}
 	}
+	if len(this.Right) > 0 {
+		baseItem.SetPath(this.As, this.Right)
+	}
+	// if the lenght of the array is 0 and the type of join is not LEFT
+	// then we return an empty result for this evaluation
+	if len(this.Right) == 0 && this.Type != "LEFT" {
+		return true
+	}
+
+	this.Base.SendItem(baseItem)
 
 	return true
 }
 
-func (this *KeyJoin) SetQuery(q network.Query) {
+func (this *KeyNest) afterItems() {
+
+}
+
+func (this *KeyNest) SetQuery(q network.Query) {
 	this.Base.SetQuery(q)
 }

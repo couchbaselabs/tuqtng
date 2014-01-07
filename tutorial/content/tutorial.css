@@ -63,14 +63,13 @@ h1, h2, h3, h4 {
 #slide {
     position: absolute;
     width: 100%;
-    top: 55px;
-    bottom: 55px;
+    top: 85px;
+    bottom: 65px;
     overflow: auto;
 }
 
 #content {
     position: absolute;
-    padding: 20px;
 }
 
 #title {
@@ -140,34 +139,32 @@ h1, h2, h3, h4 {
 }
 
 #prev {
-	float: left;
-	margin-left: 2%;
+    float: left;
+    margin-left: 2%;
 }
 
 #index {
-	display: inline-block;
-	margin-right: 2%;
+    display: inline-block;
+    margin-right: 2%;
 }
 
 #toc {
-	padding-top: 30px;
-	padding-left: 10px;
-	list-style-type: none;
+    list-style-type: none;
 }
 
 #toc a, a:visited, a:active {
     font-size: 14px;
-	color: #a30a0a;
-	cursor: pointer;
+    color: #a30a0a;
+    cursor: pointer;
 }
 .cloc {
-	list-style-type: disc;
-	color: #a30a0a;
+    list-style-type: disc;
+    color: #a30a0a;
 }
 
 #next {
-	float: right;
-	margin-right: 2%;
+    float: right;
+    margin-right: 2%;
 }
 
 #run {
@@ -176,12 +173,12 @@ h1, h2, h3, h4 {
 }
 
 .button {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .button a {
@@ -195,7 +192,7 @@ h1, h2, h3, h4 {
 
 .button.enabled a {
     background: #a30a0a;
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .button.enabled a:hover {
