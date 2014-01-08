@@ -1,0 +1,140 @@
+[
+    {
+        "statements": "SELECT META(u).id uid, s.category FROM users_with_orders u KEY \"Aide_48687583\" LEFT UNNEST u.search_history s",
+        "results": [
+          {
+            "uid": "Aide_48687583",
+            "category": "Films"
+          },
+          {
+            "uid": "Aide_48687583",
+            "category": "Books"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT META(u).id uid, s1.category cat1, s2.category cat2 FROM users_with_orders u KEY \"Aide_48687583\" LEFT UNNEST u.search_history s1 LEFT UNNEST u.search_history s2",
+        "results": [
+          {
+            "uid": "Aide_48687583",
+            "cat1": "Films",
+            "cat2": "Films"
+          },
+          {
+            "uid": "Aide_48687583",
+            "cat1": "Films",
+            "cat2": "Books"
+          },
+          {
+            "uid": "Aide_48687583",
+            "cat1": "Books",
+            "cat2": "Films"
+          },
+          {
+            "uid": "Aide_48687583",
+            "cat1": "Books",
+            "cat2": "Books"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT META(u).id uid, s.category FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.missing_field s",
+        "results": [
+        ]
+    },
+    {
+        "statements": "SELECT META(u).id uid, s.category FROM users_with_orders u KEY \"Aide_48687583\" LEFT UNNEST u.missing_field s",
+        "results": [
+          {
+            "uid": "Aide_48687583"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT META(u).id uid, s1.category cat1, s2.category cat2 FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.missing_field s1 UNNEST u.missing_field s2",
+        "results": [
+        ]
+    },
+    {
+        "statements": "SELECT META(u).id uid, s1.category cat1, s2.category cat2 FROM users_with_orders u KEY \"Aide_48687583\" LEFT UNNEST u.missing_field s1 UNNEST u.missing_field s2",
+        "results": [
+        ]
+    },
+    {
+        "statements": "SELECT META(u).id uid, s1.category cat1, s2.category cat2 FROM users_with_orders u KEY \"Aide_48687583\" UNNEST u.missing_field s1 LEFT UNNEST u.missing_field s2",
+        "results": [
+        ]
+    },
+    {
+        "statements": "SELECT META(u).id uid, s1.category cat1, s2.category cat2 FROM users_with_orders u KEY \"Aide_48687583\" LEFT UNNEST u.missing_field s1 LEFT UNNEST u.missing_field s2",
+        "results": [
+          {
+            "uid": "Aide_48687583"
+          }
+        ]
+    },
+    {
+        "statements": "SELECT s.sub-category FROM users_with_orders u KEY \"Aide_48687583\" LEFT UNNEST u.search_history s",
+        "results": [
+        {
+            "sub-category": [
+                "Animation",
+                "Drama",
+                "Music & Musicals"
+            ]
+        },
+        {
+            "sub-category": [
+                "Humor",
+                "Travel",
+                "Home & Garden"
+            ]
+        }
+        ]
+    },
+    {
+        "statements": "SELECT META(u).id uid, c FROM users_with_orders u KEY \"Aide_48687583\" LEFT UNNEST u.search_history s LEFT UNNEST s.sub-category c",
+        "results": [
+        {
+            "uid": "Aide_48687583",
+                "c": "Animation"
+        },
+        {
+            "uid": "Aide_48687583",
+                "c": "Drama"
+        },
+        {
+            "uid": "Aide_48687583",
+                "c": "Music & Musicals"
+        },
+        {
+            "uid": "Aide_48687583",
+                "c": "Humor"
+        },
+        {
+            "uid": "Aide_48687583",
+                "c": "Travel"
+        },
+        {
+            "uid": "Aide_48687583",
+                "c": "Home & Garden"
+        }
+        ]
+    },
+    {
+        "statements": "SELECT META(u).id uid, c FROM users_with_orders u KEY \"Aide_48687583\" LEFT UNNEST u.search_history s UNNEST s.missing_field c",
+        "results": [
+        ]
+    },
+    {
+        "statements": "SELECT META(u).id uid, c FROM users_with_orders u KEY \"Aide_48687583\" LEFT UNNEST u.search_history s LEFT UNNEST s.missing_field c",
+        "results": [
+        {
+            "uid": "Aide_48687583"
+        },
+        {
+            "uid": "Aide_48687583"
+        }
+        ]
+    }
+]
