@@ -56,7 +56,7 @@ func (this *KeyNest) GetChannels() (dparval.ValueChannel, PipelineSupportChannel
 }
 
 func (this *KeyNest) Run(stopChannel misc.StopChannel) {
-	clog.To(CHANNEL, "key join operator starting")
+	clog.To(CHANNEL, "key Nest  operator starting")
 
 	if this.Base.Source != nil {
 		this.Base.RunOperator(this, stopChannel)
@@ -64,7 +64,7 @@ func (this *KeyNest) Run(stopChannel misc.StopChannel) {
 		this.Base.SendError(query.NewError(fmt.Errorf("missing source operator"), ""))
 	}
 
-	clog.To(CHANNEL, "key join operator finished, fetched %d", this.rowsFetched)
+	clog.To(CHANNEL, "key Nest  operator finished, fetched %d", this.rowsFetched)
 }
 
 // evaluate the key expression from the item and fetch the keys from the bucket
@@ -85,6 +85,10 @@ func (this *KeyNest) processItem(item *dparval.Value) bool {
 	if err != nil {
 		switch err := err.(type) {
 		case *dparval.Undefined:
+			if this.Type == "LEFT" {
+				this.Base.SendItem(newItem)
+				return true
+			}
 			return true
 		default:
 			return this.Base.SendError(query.NewError(err, "Internal error in KeyNest"))
@@ -131,6 +135,7 @@ func (this *KeyNest) processItem(item *dparval.Value) bool {
 			this.Base.SendItem(newItem)
 		} else if this.Type == "LEFT" {
 
+			newItem.SetPath(this.As, this.Right)
 			this.Base.SendItem(newItem)
 		}
 
@@ -154,6 +159,7 @@ func (this *KeyNest) processItem(item *dparval.Value) bool {
 			array_len := len(val.Value().([]interface{}))
 			if array_len == 0 {
 				if this.Type == "LEFT" {
+					item.SetPath(this.As, this.Right)
 					this.Base.SendItem(item)
 				}
 				return true
@@ -167,6 +173,13 @@ func (this *KeyNest) processItem(item *dparval.Value) bool {
 			}
 
 			fetch_id := id.Value()
+			switch fetch_id.(type) {
+			case string:
+			default:
+				item.SetPath(this.As, this.Right)
+				this.Base.SendItem(item)
+				return false
+			}
 			if fetch_id != nil {
 				ids = append(ids, fetch_id.(string))
 			} else if this.Type == "LEFT" {
