@@ -1,0 +1,215 @@
+[ 
+    {
+        "description":"Messages recieved by a user",
+        "statements":"SELECT user.name, inbox.messages FROM porkville AS user KEY \"zid-pork-0001\" LEFT JOIN porkville_inbox AS inbox KEY \"zid-pork-inbox-\" || SUBSTR(user.uuid, 9)",
+        "resultset": [
+        {
+            "messages": [
+                {
+                    "content": "more pork",
+                    "message": "more pork for you ",
+                    "type": "gift",
+                    "user": "zid-pork-0002"
+                },
+                {
+                    "content": null,
+                    "message": "oink oink",
+                    "type": "help-needed",
+                    "user": "zid-pork-0002"
+                },
+                {
+                    "content": "meat-cleaver",
+                    "message": "hungry like the wolf",
+                    "type": "help-needed",
+                    "user": "zid-pork-0003"
+                }
+            ],
+            "name": "DonPinto"
+        }
+    ]
+    },
+    {
+        "description": "Messages sent by a user",
+        "statements" : "SELECT sender.name, ARRAY_AGG({\"msg\":message, \"rcvr\":inbox.uuid}) AS sent FROM porkville_inbox AS inbox UNNEST inbox.messages AS message JOIN porkville AS sender KEY message.user WHERE  message.user = \"zid-pork-0003\" GROUP BY sender",
+        "resultset": [
+        {
+            "name": "Macaroni Mollesty",
+            "sent": [
+                {
+                    "msg": {
+                        "content": "meat-cleaver",
+                        "message": "hungry like the wolf",
+                        "type": "help-needed",
+                        "user": "zid-pork-0003"
+                    },
+                    "rcvr": "zid-pork-0001"
+                },
+                {
+                    "msg": {
+                        "content": "more and more pork",
+                        "message": "more more pork for you ",
+                        "type": "gift",
+                        "user": "zid-pork-0003"
+                    },
+                    "rcvr": "zid-pork-0002"
+                },
+                {
+                    "msg": {
+                        "content": "sausages",
+                        "message": "hungry like the wolf",
+                        "type": "help-needed",
+                        "user": "zid-pork-0003"
+                    },
+                    "rcvr": "zid-pork-0002"
+                }
+            ]
+        }
+    ]
+    },
+    {
+        "description" : "PvP stats aggregation",
+        "statements": "SELECT stats.uuid AS player, hist.uuid AS opponent, SUM(CASE WHEN hist.result = \"won\" THEN 1 ELSE 0 END) AS wins, SUM(CASE WHEN hist.result = \"lost\" THEN 1 ELSE 0 END) AS losses FROM porkville_stats AS stats KEY \"zid-pork-stats-0004\" UNNEST stats.pvp-hist AS hist GROUP BY stats.uuid, hist.uuid",
+        "resultset": [
+        {
+            "losses": 0,
+            "opponent": "zid-pork-0007",
+            "player": "zid-pork-0004",
+            "wins": 1
+        },
+        {
+            "losses": 0,
+            "opponent": "zid-pork-0001",
+            "player": "zid-pork-0004",
+            "wins": 1
+        },
+        {
+            "losses": 0,
+            "opponent": "zid-pork-0003",
+            "player": "zid-pork-0004",
+            "wins": 1
+        }
+    ]
+    },
+    {
+        "description" : "Global Leaderboard",
+        "statements" : "SELECT player.name, player.uuid, player.level, stats.loadtime, SUM(CASE WHEN hist.result = \"won\" THEN 1 ELSE 0 END) AS wins FROM porkville_stats AS stats UNNEST stats.pvp-hist AS hist JOIN porkville AS player KEY stats.uuid GROUP BY player, stats ORDER BY wins DESC, player.level DESC",
+        "resultset": [
+        {
+            "level": 47,
+            "loadtime": 23,
+            "name": "Porkipine",
+            "uuid": "zid-pork-0004",
+            "wins": 3
+        },
+        {
+            "level": 14,
+            "loadtime": 13,
+            "name": "Diego Maradona",
+            "uuid": "zid-pork-0002",
+            "wins": 1
+        },
+        {
+            "level": 8,
+            "loadtime": 18,
+            "name": "Macaroni Mollesty",
+            "uuid": "zid-pork-0003",
+            "wins": 0
+        },
+        {
+            "level": 4,
+            "loadtime": 23,
+            "name": "DonPinto",
+            "uuid": "zid-pork-0001",
+            "wins": 0
+        }
+    ]
+    },
+    {
+        "description": "Friend lists",
+        "statements" : "SELECT porkville.uuid, friends as friend FROM porkville UNNEST porkville.friends WHERE porkville.uuid=\"zid-pork-0004\"",
+        "resultset": [
+        {
+            "friend": "zid-pork-0001",
+            "uuid": "zid-pork-0004"
+        },
+        {
+            "friend": "zid-pork-0002",
+            "uuid": "zid-pork-0004"
+        },
+        {
+            "friend": "zid-pork-0003",
+            "uuid": "zid-pork-0004"
+        }
+        ] 
+    },
+    {
+        "description": "Expand Friend blobs via NEST",
+        "statements": "select porkville.uuid, friends FROM porkville NEST porkville friends KEYS porkville.friends WHERE porkville.uuid=\"zid-pork-0002\"",
+        "resultset": [
+        {
+            "friends": [
+                {
+                    "friends": [
+                        "zid-pork-0002",
+                        "zid-pork-0003"
+                    ],
+                    "gameworld": {
+                        "farm-length": 32,
+                        "farm-width": 64,
+                        "piggies": [
+                            "nero",
+                            "hero",
+                            "coma"
+                        ],
+                        "position": [
+                            23,
+                            45,
+                            12
+                        ]
+                    },
+                    "lastLogin": "22nd December 2013",
+                    "level": 4,
+                    "loggedIn": false,
+                    "name": "DonPinto",
+                    "payer": false,
+                    "score": 663,
+                    "type": "player",
+                    "uuid": "zid-pork-0001"
+                },
+                {
+                    "friends": [
+                        "zid-pork-0001",
+                        "zid-pork-0002",
+                        "zid-pork-0003"
+                    ],
+                    "gameworld": {
+                        "farm-length": 132,
+                        "farm-width": 264,
+                        "piggies": [
+                            "britney",
+                            "beiber",
+                            "kama",
+                            "sutra"
+                        ],
+                        "position": [
+                            13,
+                            35,
+                            14,
+                            22
+                        ]
+                    },
+                    "lastLogin": "6th January 2014",
+                    "level": 47,
+                    "loggedIn": false,
+                    "name": "Porkipine",
+                    "payer": false,
+                    "score": 1663,
+                    "type": "cheater",
+                    "uuid": "zid-pork-0004"
+                }
+            ],
+            "uuid": "zid-pork-0002"
+        }
+    ]
+    }
+]
