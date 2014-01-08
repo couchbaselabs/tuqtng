@@ -27,15 +27,6 @@
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, o FROM orders_with_users u KEY \"Adaline_67672807\" NEST orders_with_users o KEY u.doc_type",
-        "results": [
-	    {
-	        "uid": "Adaline_67672807",
-		"o": []
-	    }
-        ]
-    },
-    {
         "statements": "SELECT META(u).id uid, o FROM orders_with_users u KEY \"Adaline_67672807\" LEFT OUTER NEST orders_with_users o KEY u.doc_type",
         "results": [
 	    {
@@ -97,52 +88,44 @@
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM orders_with_users u KEY \"Aide_48687583\" LEFT OUTER NEST orders_with_users o KEYS u.shipped_order_history",
-        "results": [
-	    {
-	        "uid": "Aide_48687583",
-		"ulen": 5,
-		"olen": 5
-	    }
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM orders_with_users u KEY \"Tatiana_15401485\" LEFT OUTER NEST orders_with_users o KEYS u.shipped_order_history",
+
+        "resultset": [
+        {
+            "olen": 0,
+            "uid": "Tatiana_15401485",
+            "ulen": 2
+        }
         ]
-    },
-    {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM orders_with_users u KEY \"Aide_48687583\" NEST orders_with_users o KEYS ARRAY sh || \"-non-existent\" FOR sh IN u.shipped_order_history END",
+       },
+
+        {
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM orders_with_users u KEY \"Adaline_67672807\" LEFT OUTER NEST orders_with_users o KEYS ARRAY sh || \"-non-existent\" FOR sh IN u.shipped_order_history END",
         "results": [
 	    {
-	        "uid": "Aide_48687583",
-		"ulen": 5,
+	        "uid": "Adaline_67672807",
+		"ulen": 0,
 		"olen": 0
 	    }
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM orders_with_users u KEY \"Aide_48687583\" LEFT OUTER NEST orders_with_users o KEYS ARRAY sh || \"-non-existent\" FOR sh IN u.shipped_order_history END",
-        "results": [
-	    {
-	        "uid": "Aide_48687583",
-		"ulen": 5,
-		"olen": 0
-	    }
-        ]
-    },
-    {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM orders_with_users u KEY \"Alishia_76728586\" LEFT OUTER NEST orders_with_users o KEYS u.shipped_order_history",
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Alishia_76728586\" LEFT OUTER NEST orders_with_users o KEYS u.shipped_order_history",
         "results": [
 	    {
 	        "uid": "Alishia_76728586",
 		"ulen": 3,
-		"olen": 3
+		"olen": 0
 	    }
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM orders_with_users u KEY \"Berry_8939806\" LEFT OUTER NEST orders_with_users o KEYS u.shipped_order_history",
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Berry_8939806\" LEFT OUTER NEST orders_with_users o KEYS u.shipped_order_history",
         "results": [
 	    {
 	        "uid": "Berry_8939806",
 		"ulen": 6,
-		"olen": 6
+		"olen": 0
 	    }
         ]
     }

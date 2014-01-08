@@ -248,6 +248,7 @@ select_from_required select_where select_group_having select_select{
 }
 ;
 
+
 select_group_having:
 /* empty */ {
 }
@@ -563,7 +564,7 @@ join_type UNNEST path AS IDENTIFIER {
     logDebugGrammar("UNNEST AS")
     proj := parsingStack.Pop().(ast.Expression)
     Type := parsingStack.Pop().(string)
-    parsingStack.Push(&ast.From{Projection: proj, Type: Type,As:$4.s})
+    parsingStack.Push(&ast.From{Projection: proj, Type: Type,As:$5.s})
 }
 |
 /* unnest subpath AS alias */
@@ -571,7 +572,7 @@ join_type UNNEST path IDENTIFIER {
     logDebugGrammar("UNNEST AS")
     proj := parsingStack.Pop().(ast.Expression)
     Type := parsingStack.Pop().(string)
-    parsingStack.Push(&ast.From{Projection: proj, Type: Type,As:$3.s})
+    parsingStack.Push(&ast.From{Projection: proj, Type: Type,As:$4.s})
 }
 |
 /* nested unnest */
@@ -588,7 +589,7 @@ join_type UNNEST path AS IDENTIFIER unnest_source {
     rest := parsingStack.Pop().(*ast.From)
     proj := parsingStack.Pop().(ast.Expression)
     Type := parsingStack.Pop().(string)
-    parsingStack.Push(&ast.From{Projection: proj, Type: Type, As: $4.s, Over:rest})
+    parsingStack.Push(&ast.From{Projection: proj, Type: Type, As: $5.s, Over:rest})
 }
 |
 join_type UNNEST path IDENTIFIER unnest_source {
@@ -596,7 +597,7 @@ join_type UNNEST path IDENTIFIER unnest_source {
     rest := parsingStack.Pop().(*ast.From)
     proj := parsingStack.Pop().(ast.Expression)
     Type := parsingStack.Pop().(string)
-    parsingStack.Push(&ast.From{Projection: proj, Type: Type, As: $3.s, Over:rest})
+    parsingStack.Push(&ast.From{Projection: proj, Type: Type, As: $4.s, Over:rest})
 }
 |
 join_type UNNEST path key_expr {
@@ -612,7 +613,7 @@ join_type UNNEST path IDENTIFIER key_expr {
     key_expr := parsingStack.Pop().(*ast.KeyExpression)
     proj := parsingStack.Pop().(ast.Expression)
     Type := parsingStack.Pop().(string)
-    parsingStack.Push(&ast.From{Projection: proj, As:$3.s, Type: Type, Keys: key_expr}) 
+    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Type: Type, Keys: key_expr}) 
 }
 |
 join_type UNNEST path AS IDENTIFIER key_expr {
@@ -620,7 +621,7 @@ join_type UNNEST path AS IDENTIFIER key_expr {
     key_expr := parsingStack.Pop().(*ast.KeyExpression)
     proj := parsingStack.Pop().(ast.Expression)
     Type := parsingStack.Pop().(string)
-    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Type: Type, Keys: key_expr}) 
+    parsingStack.Push(&ast.From{Projection: proj, As:$5.s, Type: Type, Keys: key_expr}) 
 }
 |
 join_type UNNEST path key_expr unnest_source {
@@ -638,7 +639,7 @@ join_type UNNEST path IDENTIFIER key_expr unnest_source {
     key_expr := parsingStack.Pop().(*ast.KeyExpression)
     proj := parsingStack.Pop().(ast.Expression)
     Type := parsingStack.Pop().(string)
-    parsingStack.Push(&ast.From{Projection: proj, As:$3.s, Type: Type, Keys: key_expr, Over:rest}) 
+    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Type: Type, Keys: key_expr, Over:rest}) 
 }
 |
 join_type UNNEST path AS IDENTIFIER key_expr unnest_source {
@@ -647,7 +648,7 @@ join_type UNNEST path AS IDENTIFIER key_expr unnest_source {
     key_expr := parsingStack.Pop().(*ast.KeyExpression)
     proj := parsingStack.Pop().(ast.Expression)
     Type := parsingStack.Pop().(string)
-    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Type: Type, Keys: key_expr, Over:rest}) 
+    parsingStack.Push(&ast.From{Projection: proj, As:$5.s, Type: Type, Keys: key_expr, Over:rest}) 
 }
 |
 JOIN path join_key_expr {
@@ -1062,6 +1063,19 @@ OFFSET INT {
 expression:
 expr {
 	logDebugGrammar("EXPRESSION")
+}
+|
+subquery_expr {
+};
+
+subquery_expr: 
+LBRACE select_stmt RBRACE {
+    logDebugGrammar("sub-query EXPRESSION")
+    
+}
+|
+LBRACE select_stmt RBRACE subquery_expr {
+    logDebugGrammar("sub-query NESTED EXPRESSION")
 }
 ;
 

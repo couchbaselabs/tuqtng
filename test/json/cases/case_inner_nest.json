@@ -1,41 +1,36 @@
 [
     {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM orders_with_users u KEY \"Adaline_67672807\" INNER NEST orders_with_users o KEYS u.shipped_order_history",
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Adaline_67672807\" INNER NEST orders_with_users o KEYS u.shipped_order_history",
+        "results": [
+	            ]
+    },
+    {
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Aide_48687583\" INNER NEST orders_with_users o KEYS u.shipped_order_history",
         "results": [
 	    {
-	        "uid": "Adaline_67672807",
-		"ulen": 0,
+	        "uid": "Aide_48687583",
+		"ulen": 5,
 		"olen": 0
 	    }
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM orders_with_users u KEY \"Aide_48687583\" INNER NEST orders_with_users o KEYS u.shipped_order_history",
-        "results": [
-	    {
-	        "uid": "Aide_48687583",
-		"ulen": 5,
-		"olen": 5
-	    }
-        ]
-    },
-    {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM orders_with_users u KEY \"Alishia_76728586\" INNER NEST orders_with_users o KEYS u.shipped_order_history",
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Alishia_76728586\" INNER NEST orders_with_users o KEYS u.shipped_order_history",
         "results": [
 	    {
 	        "uid": "Alishia_76728586",
 		"ulen": 3,
-		"olen": 3
+		"olen": 0
 	    }
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM orders_with_users u KEY \"Berry_8939806\" INNER NEST orders_with_users o KEYS u.shipped_order_history",
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Berry_8939806\" INNER NEST orders_with_users o KEYS u.shipped_order_history",
         "results": [
 	    {
 	        "uid": "Berry_8939806",
 		"ulen": 6,
-		"olen": 6
+		"olen": 0
 	    }
         ]
     }
