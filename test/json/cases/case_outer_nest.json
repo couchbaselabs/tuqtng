@@ -1,6 +1,6 @@
 [
     {
-        "statements": "SELECT META(u).id uid, o FROM users_with_orders u KEY \"Adaline_67672807\" LEFT OUTER NEST orders_with_users o KEYS u.shipped_order_history",
+        "statements": "SELECT META(u).id uid, o FROM orders_with_users u KEY \"Adaline_67672807\" LEFT OUTER NEST orders_with_users o KEYS u.shipped_order_history",
         "results": [
 	    {
 	        "uid": "Adaline_67672807",
@@ -9,7 +9,7 @@
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, o FROM users_with_orders u KEY \"Adaline_67672807\" NEST orders_with_users o KEYS u.search_history",
+        "statements": "SELECT META(u).id uid, o FROM orders_with_users u KEY \"Adaline_67672807\" NEST orders_with_users o KEYS u.search_history",
         "results": [
 	    {
 	        "uid": "Adaline_67672807",
@@ -18,7 +18,7 @@
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, o FROM users_with_orders  u KEY \"Adaline_67672807\" LEFT OUTER NEST orders_with_users o KEYS u.search_history",
+        "statements": "SELECT META(u).id uid, o FROM orders_with_users u KEY \"Adaline_67672807\" LEFT OUTER NEST orders_with_users o KEYS u.search_history",
         "results": [
 	    {
 	        "uid": "Adaline_67672807",
@@ -27,12 +27,12 @@
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, o FROM users_with_orders u KEY \"Adaline_67672807\" NEST orders_with_users o KEY u.doc_type",
+        "statements": "SELECT META(u).id uid, o FROM orders_with_users u KEY \"Adaline_67672807\" NEST orders_with_users o KEY u.doc_type",
         "results": [
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, o FROM users_with_orders  u KEY \"Adaline_67672807\" LEFT OUTER NEST orders_with_users o KEY u.doc_type",
+        "statements": "SELECT META(u).id uid, o FROM orders_with_users u KEY \"Adaline_67672807\" LEFT OUTER NEST orders_with_users o KEY u.doc_type",
         "results": [
 	    {
 	        "uid": "Adaline_67672807",
@@ -41,7 +41,7 @@
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, o FROM users_with_orders u KEY \"Adaline_67672807\" NEST orders_with_users o KEY NULL",
+        "statements": "SELECT META(u).id uid, o FROM orders_with_users u KEY \"Adaline_67672807\" NEST orders_with_users o KEY NULL",
         "results": [
         ]
     },
@@ -103,7 +103,7 @@
     ]
     },
     {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Aide_48687583\" NEST orders_with_users o KEYS ARRAY sh || \"-non-existent\" FOR sh IN u.shipped_order_history END",
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Aide_48687583\" NEST users_with_orders o KEYS ARRAY sh || \"-non-existent\" FOR sh IN u.shipped_order_history END",
         "results": [
 	    {
 	        "uid": "Aide_48687583",
@@ -113,7 +113,7 @@
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Aide_48687583\" LEFT OUTER NEST orders_with_users o KEYS ARRAY sh || \"-non-existent\" FOR sh IN u.shipped_order_history END",
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Aide_48687583\" LEFT OUTER NEST users_with_orders o KEYS ARRAY sh || \"-non-existent\" FOR sh IN u.shipped_order_history END",
         "results": [
 	    {
 	        "uid": "Aide_48687583",
