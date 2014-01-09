@@ -123,7 +123,7 @@
         ]
     },
     {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Alishia_76728586\" LEFT OUTER NEST orders_with_users o KEYS ARRAY sh.order_id FOR sh IN u.shipped_order_history END",
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Alishia_76728586\" LEFT OUTER NEST users_with_orders o KEYS ARRAY sh.order_id FOR sh IN u.shipped_order_history END",
         "results": [
 	    {
 	        "uid": "Alishia_76728586",
