@@ -113,7 +113,27 @@
         ]
     },
     {
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Aide_48687583\" NEST users_with_orders o KEYS ARRAY NULL FOR sh IN u.shipped_order_history END",
+        "results": [
+	    {
+	        "uid": "Aide_48687583",
+		"ulen": 5,
+		"olen": 0
+	    }
+        ]
+    },
+    {
         "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Aide_48687583\" LEFT NEST users_with_orders o KEYS ARRAY sh || \"-non-existent\" FOR sh IN u.shipped_order_history END",
+        "results": [
+	    {
+	        "uid": "Aide_48687583",
+		"ulen": 5,
+		"olen": 0
+	    }
+        ]
+    },
+    {
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Aide_48687583\" LEFT NEST users_with_orders o KEYS ARRAY NULL FOR sh IN u.shipped_order_history END",
         "results": [
 	    {
 	        "uid": "Aide_48687583",
