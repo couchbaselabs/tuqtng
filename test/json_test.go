@@ -108,7 +108,7 @@ func testCaseFile(t *testing.T, fname string, qc network.QueryChannel) {
 			return
 		}
 		statements := v.(string)
-		t.Logf("  %d: %v\n", i, statements)
+		//t.Logf("  %d: %v\n", i, statements) // Commenting this out to make error output more readable
 		resultsActual, _, errActual := Run(qc, statements)
 
 		v, ok = c["postStatements"]
