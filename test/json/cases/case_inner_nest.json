@@ -1,6 +1,6 @@
 [
     {
-        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM users_with_orders u KEY \"Adaline_67672807\" INNER NEST orders_with_users o KEYS u.shipped_order_history",
+        "statements": "SELECT META(u).id uid, ARRAY_LENGTH(u.shipped_order_history) ulen, ARRAY_LENGTH(o) olen FROM orders_with_users u KEY \"Adaline_67672807\" INNER NEST orders_with_users o KEYS u.shipped_order_history",
         "results": [
         ]
     },
