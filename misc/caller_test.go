@@ -10,8 +10,8 @@
 package misc
 
 import (
-	"testing"
 	"strings"
+	"testing"
 )
 
 func TestCaller(t *testing.T) {
@@ -53,7 +53,7 @@ func TestCallerLevel(t *testing.T) {
 
 func testCallerLevel(t *testing.T, uplevel int, expect string) {
 	c := CallerN(uplevel)
-	if !strings.HasPrefix(c, expect + ":") {
+	if !strings.HasPrefix(c, expect+":") {
 		t.Errorf("expected prefix: %v, got c: %v", expect, c)
 	}
 }
