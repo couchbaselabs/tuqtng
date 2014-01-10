@@ -75,4 +75,11 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	// date functions
 	"DATE_PART": NewFunctionCallDatePart,
 	"NOW_STR":   NewFunctionCallNowStr,
+
+	// typecast functions
+	"TONUM":   NewFunctionCallToNum,
+	"TOSTR":   NewFunctionCallToStr,
+	"TOBOOL":  NewFunctionCallToBool,
+	"TOATOM":  NewFunctionCallToAtom,
+	"TOARRAY": NewFunctionCallToArray,
 }
