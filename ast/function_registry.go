@@ -82,4 +82,12 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	"TOBOOL":  NewFunctionCallToBool,
 	"TOATOM":  NewFunctionCallToAtom,
 	"TOARRAY": NewFunctionCallToArray,
+
+	// typecheck functions
+	"ISNUM":   NewFunctionCallIsNum,
+	"ISSTR":   NewFunctionCallIsStr,
+	"ISBOOL":  NewFunctionCallIsBool,
+	"ISATOM":  NewFunctionCallIsAtom,
+	"ISARRAY": NewFunctionCallIsArray,
+	"ISOBJ":   NewFunctionCallIsObj,
 }
