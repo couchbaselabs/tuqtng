@@ -254,8 +254,19 @@ func TestFunctionToAtom(t *testing.T) {
 			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
-					NewLiteralString("hello")}))}),
+					NewLiteralString("hello"),
+				}))}),
 			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+				ExpressionList{
+					NewLiteralObject(
+						map[string]Expression{
+							"zero": NewLiteralNumber(0),
+						})}))}),
+			0.0,
 			nil,
 		},
 		{
@@ -278,6 +289,16 @@ func TestFunctionToAtom(t *testing.T) {
 					"hello": NewLiteralString("hello"),
 				}))}),
 			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+				map[string]Expression{
+					"zero": NewLiteralArray(
+						ExpressionList{
+							NewLiteralNumber(0),
+						})}))}),
+			0.0,
 			nil,
 		},
 	}
