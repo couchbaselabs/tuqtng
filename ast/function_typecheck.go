@@ -13,6 +13,71 @@ import (
 	"github.com/couchbaselabs/dparval"
 )
 
+type FunctionCallType struct {
+	FunctionCall
+}
+
+func NewFunctionCallType(operands FunctionArgExpressionList) FunctionCallExpression {
+	return &FunctionCallType{
+		FunctionCall{
+			Type:     "function",
+			Name:     "TYPE",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
+func (this *FunctionCallType) Copy() Expression {
+	return &FunctionCallType{
+		FunctionCall{
+			Type:     "function",
+			Name:     "TYPE",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  1,
+		},
+	}
+}
+
+func (this *FunctionCallType) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	// first evaluate the argument
+	av, err := this.Operands[0].Expr.Evaluate(item)
+
+	if err != nil {
+		switch err := err.(type) {
+		case *dparval.Undefined:
+			// undefined returns "missing"
+			return dparval.NewValue("missing"), nil
+		default:
+			// any other error return to caller
+			return nil, err
+		}
+	}
+
+	switch av.Type() {
+	case dparval.NUMBER:
+		return dparval.NewValue("number"), nil
+	case dparval.STRING:
+		return dparval.NewValue("string"), nil
+	case dparval.BOOLEAN:
+		return dparval.NewValue("boolean"), nil
+	case dparval.ARRAY:
+		return dparval.NewValue("array"), nil
+	case dparval.OBJECT:
+		return dparval.NewValue("object"), nil
+	case dparval.NULL:
+		return dparval.NewValue("null"), nil
+	default:
+		return dparval.NewValue(nil), nil
+	}
+}
+
+func (this *FunctionCallType) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
 type FunctionCallIsNum struct {
 	FunctionCall
 }

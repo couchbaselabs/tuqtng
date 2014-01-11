@@ -13,6 +13,79 @@ import (
 	"testing"
 )
 
+func TestFunctionType(t *testing.T) {
+	tests := ExpressionTestSet{
+		{
+			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			"number",
+			nil,
+		},
+		{
+			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			"number",
+			nil,
+		},
+		{
+			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-1.0))}),
+			"number",
+			nil,
+		},
+		{
+			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
+			"string",
+			nil,
+		},
+		{
+			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			"string",
+			nil,
+		},
+		{
+			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			"boolean",
+			nil,
+		},
+		{
+			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			"boolean",
+			nil,
+		},
+		{
+			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			"null",
+			nil,
+		},
+		{
+			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			"array",
+			nil,
+		},
+		{
+			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+				ExpressionList{
+					NewLiteralNumber(0),
+				}))}),
+			"array",
+			nil,
+		},
+		{
+			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			"object",
+			nil,
+		},
+		{
+			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+				map[string]Expression{
+					"zero": NewLiteralNumber(0),
+				}))}),
+			"object",
+			nil,
+		},
+	}
+
+	tests.Run(t)
+}
+
 func TestFunctionIsNum(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
