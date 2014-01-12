@@ -177,7 +177,7 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 							// This is a key-join
 							lastStep = plan.NewKeyJoin(lastStep, pool.Name(), nextFrom.Bucket, nextFrom.Projection, nextFrom.Type, nextFrom.Oper, *nextFrom.Keys, nextFrom.As)
 						} else {
-							lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.Type, nextFrom.As)
+							lastStep = plan.NewUnnest(lastStep, nextFrom.Projection, nextFrom.Type, nextFrom.As)
 						}
 						nextFrom = nextFrom.Over
 					}
@@ -197,7 +197,7 @@ func (this *SimplePlanner) buildSelectStatementPlans(stmt *ast.SelectStatement, 
 			if nextFrom.Keys != nil {
 				lastStep = plan.NewKeyJoin(lastStep, pool.Name(), nextFrom.Bucket, nextFrom.Projection, nextFrom.Type, nextFrom.Oper, *nextFrom.Keys, nextFrom.As)
 			} else {
-				lastStep = plan.NewDocumentJoin(lastStep, nextFrom.Projection, nextFrom.Type, nextFrom.As)
+				lastStep = plan.NewUnnest(lastStep, nextFrom.Projection, nextFrom.Type, nextFrom.As)
 			}
 			nextFrom = nextFrom.Over
 		}

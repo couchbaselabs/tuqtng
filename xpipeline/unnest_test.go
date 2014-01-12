@@ -49,11 +49,11 @@ func init() {
 	joinerTestData = append(joinerTestData, doc)
 }
 
-func TestDocumentJoin(t *testing.T) {
+func TestUnnest(t *testing.T) {
 
 	stubSource := NewStubSource(joinerTestData)
 
-	joiner := NewDocumentJoin(ast.NewProperty("children"), "INNER", "child")
+	joiner := NewUnnest(ast.NewProperty("children"), "INNER", "child")
 	joiner.SetSource(stubSource)
 
 	joinerItemChannel, _ := joiner.GetChannels()
