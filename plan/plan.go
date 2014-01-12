@@ -477,7 +477,7 @@ func (this *ProjectorInline) Sources() []PlanElement {
 	return []PlanElement{this.Input}
 }
 
-type DocumentJoin struct {
+type Unnest struct {
 	Type     string         `json:"type"`
 	Input    PlanElement    `json:"input"`
 	Over     ast.Expression `json:"over"`
@@ -485,9 +485,9 @@ type DocumentJoin struct {
 	As       string         `json:"as"`
 }
 
-func NewDocumentJoin(input PlanElement, over ast.Expression, jointype string, as string) *DocumentJoin {
-	return &DocumentJoin{
-		Type:     "document-join",
+func NewUnnest(input PlanElement, over ast.Expression, jointype string, as string) *Unnest {
+	return &Unnest{
+		Type:     "unnest",
 		Input:    input,
 		Over:     over,
 		JoinType: jointype,
@@ -495,7 +495,7 @@ func NewDocumentJoin(input PlanElement, over ast.Expression, jointype string, as
 	}
 }
 
-func (this *DocumentJoin) Sources() []PlanElement {
+func (this *Unnest) Sources() []PlanElement {
 	return []PlanElement{this.Input}
 }
 

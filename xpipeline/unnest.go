@@ -18,15 +18,15 @@ import (
 	"github.com/couchbaselabs/tuqtng/query"
 )
 
-type DocumentJoin struct {
+type Unnest struct {
 	Base *BaseOperator
 	Over ast.Expression
 	Type string
 	As   string
 }
 
-func NewDocumentJoin(over ast.Expression, jointype string, as string) *DocumentJoin {
-	return &DocumentJoin{
+func NewUnnest(over ast.Expression, jointype string, as string) *Unnest {
+	return &Unnest{
 		Base: NewBaseOperator(),
 		Over: over,
 		Type: jointype,
@@ -34,21 +34,21 @@ func NewDocumentJoin(over ast.Expression, jointype string, as string) *DocumentJ
 	}
 }
 
-func (this *DocumentJoin) SetSource(source Operator) {
+func (this *Unnest) SetSource(source Operator) {
 	this.Base.SetSource(source)
 }
 
-func (this *DocumentJoin) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
+func (this *Unnest) GetChannels() (dparval.ValueChannel, PipelineSupportChannel) {
 	return this.Base.GetChannels()
 }
 
-func (this *DocumentJoin) Run(stopChannel misc.StopChannel) {
+func (this *Unnest) Run(stopChannel misc.StopChannel) {
 	clog.To(CHANNEL, "document join operator starting")
 	this.Base.RunOperator(this, stopChannel)
 	clog.To(CHANNEL, "document join operator finished")
 }
 
-func (this *DocumentJoin) processItem(item *dparval.Value) bool {
+func (this *Unnest) processItem(item *dparval.Value) bool {
 
 	val, err := this.Base.Evaluate(this.Over, item)
 	if err != nil {
@@ -91,8 +91,8 @@ func (this *DocumentJoin) processItem(item *dparval.Value) bool {
 	return true
 }
 
-func (this *DocumentJoin) afterItems() {}
+func (this *Unnest) afterItems() {}
 
-func (this *DocumentJoin) SetQuery(q network.Query) {
+func (this *Unnest) SetQuery(q network.Query) {
 	this.Base.SetQuery(q)
 }
