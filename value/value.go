@@ -71,8 +71,6 @@ func NewValue(val interface{}) Value {
 		return boolValue(val)
 	case nil:
 		return nullValue{}
-	case []byte:
-		return NewValueFromBytes(val)
 	case []interface{}:
 		return &arrayValue{val}
 	case map[string]interface{}:
@@ -127,6 +125,8 @@ func NewAnnotatedValue(val interface{}) AnnotatedValue {
 		}
 
 		return &av
+	case []byte:
+		return NewAnnotatedValue(NewValueFromBytes(val))
 	default:
 		return NewAnnotatedValue(NewValue(val))
 	}
@@ -330,11 +330,11 @@ func (this *arrayValue) Index(index int) (Value, error) {
 
 func (this *arrayValue) SetIndex(index int, val interface{}) {
 	if index >= 0 && index < len(this.actual) {
-		this.actual[index] = NewValue(val)
+		this.actual[index] = val
 	} else if index >= 0 {
 		av := make([]interface{}, index+1)
 		copy(av, this.actual)
-		av[index] = NewValue(val)
+		av[index] = val
 		this.actual = av
 	}
 }
@@ -372,7 +372,7 @@ func (this objectValue) Field(field string) (Value, error) {
 }
 
 func (this objectValue) SetField(field string, val interface{}) {
-	this[field] = NewValue(val)
+	this[field] = val
 }
 
 func (this objectValue) Index(index int) (Value, error) {
@@ -480,7 +480,7 @@ func (this *parsedValue) SetIndex(index int, val interface{}) {
 		return
 	}
 
-	this.parse().SetIndex(index, NewValue(val))
+	this.parse().SetIndex(index, val)
 }
 
 func (this *parsedValue) parse() Value {
