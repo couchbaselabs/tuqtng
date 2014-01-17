@@ -95,7 +95,7 @@ func NewValueFromBytes(bytes []byte) Value {
 			var p interface{}
 			err := json.Unmarshal(bytes, &p)
 			if err != nil {
-				panic("unexpected parse error on valid JSON")
+				panic("Unexpected parse error on valid JSON")
 			}
 
 			return NewValue(p)
@@ -332,7 +332,7 @@ func (this *arrayValue) SetIndex(index int, val interface{}) {
 	if index >= 0 && index < len(this.actual) {
 		this.actual[index] = NewValue(val)
 	} else if index >= 0 {
-		av := make([]interface{}, index+2)
+		av := make([]interface{}, index+1)
 		copy(av, this.actual)
 		av[index] = NewValue(val)
 		this.actual = av
@@ -480,7 +480,7 @@ func (this *parsedValue) SetIndex(index int, val interface{}) {
 		return
 	}
 
-	this.parse().SetIndex(index, val)
+	this.parse().SetIndex(index, NewValue(val))
 }
 
 func (this *parsedValue) parse() Value {
@@ -492,7 +492,7 @@ func (this *parsedValue) parse() Value {
 		var p interface{}
 		err := json.Unmarshal(this.raw, &p)
 		if err != nil {
-			panic("unexpected parse error on valid JSON")
+			panic("Unexpected parse error on valid JSON")
 		}
 		this.parsed = NewValue(p)
 	}
