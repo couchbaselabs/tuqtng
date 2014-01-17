@@ -31,6 +31,20 @@ func (this Undefined) Error() string {
 
 var _UNDEFINED = Undefined("")
 
+// When you try to set a nested property or index that does not exist,
+// the return error will be Unsettable.
+type Unsettable string
+
+// Description of which property or index was unsettable (if known).
+func (this Unsettable) Error() string {
+	if string(this) != "" {
+		return fmt.Sprintf("%s is not settable.", string(this))
+	}
+	return "Not settable."
+}
+
+var _UNSETTABLE = Unsettable("")
+
 const _MARSHAL_ERROR = "Unexpected marshal error on valid data."
 
 // A channel of Value objects
@@ -46,9 +60,9 @@ type Value interface {
 	Duplicate() Value
 	Bytes() []byte
 	Field(field string) (Value, error)
-	SetField(field string, val interface{})
+	SetField(field string, val interface{}) error
 	Index(index int) (Value, error)
-	SetIndex(index int, val interface{})
+	SetIndex(index int, val interface{}) error
 }
 
 type AnnotatedValue interface {
@@ -71,6 +85,8 @@ func NewValue(val interface{}) Value {
 		return boolValue(val)
 	case nil:
 		return nullValue{}
+	case []byte:
+		return NewValueFromBytes(val)
 	case []interface{}:
 		return &arrayValue{val}
 	case map[string]interface{}:
@@ -123,7 +139,6 @@ func NewAnnotatedValue(val interface{}) AnnotatedValue {
 			Value:    val,
 			attacher: attacher{nil},
 		}
-
 		return &av
 	case []byte:
 		return NewAnnotatedValue(NewValueFromBytes(val))
@@ -169,14 +184,16 @@ func (this floatValue) Field(field string) (Value, error) {
 	return nil, Undefined(field)
 }
 
-func (this floatValue) SetField(field string, val interface{}) {
+func (this floatValue) SetField(field string, val interface{}) error {
+	return Unsettable(field)
 }
 
 func (this floatValue) Index(index int) (Value, error) {
 	return nil, _UNDEFINED
 }
 
-func (this floatValue) SetIndex(index int, val interface{}) {
+func (this floatValue) SetIndex(index int, val interface{}) error {
+	return _UNSETTABLE
 }
 
 type stringValue string
@@ -205,14 +222,16 @@ func (this stringValue) Field(field string) (Value, error) {
 	return nil, Undefined(field)
 }
 
-func (this stringValue) SetField(field string, val interface{}) {
+func (this stringValue) SetField(field string, val interface{}) error {
+	return Unsettable(field)
 }
 
 func (this stringValue) Index(index int) (Value, error) {
 	return nil, _UNDEFINED
 }
 
-func (this stringValue) SetIndex(index int, val interface{}) {
+func (this stringValue) SetIndex(index int, val interface{}) error {
+	return _UNSETTABLE
 }
 
 type boolValue bool
@@ -241,14 +260,16 @@ func (this boolValue) Field(field string) (Value, error) {
 	return nil, Undefined(field)
 }
 
-func (this boolValue) SetField(field string, val interface{}) {
+func (this boolValue) SetField(field string, val interface{}) error {
+	return Unsettable(field)
 }
 
 func (this boolValue) Index(index int) (Value, error) {
 	return nil, _UNDEFINED
 }
 
-func (this boolValue) SetIndex(index int, val interface{}) {
+func (this boolValue) SetIndex(index int, val interface{}) error {
+	return _UNSETTABLE
 }
 
 type nullValue struct {
@@ -278,14 +299,16 @@ func (this nullValue) Field(field string) (Value, error) {
 	return nil, Undefined(field)
 }
 
-func (this nullValue) SetField(field string, val interface{}) {
+func (this nullValue) SetField(field string, val interface{}) error {
+	return Unsettable(field)
 }
 
 func (this nullValue) Index(index int) (Value, error) {
 	return nil, _UNDEFINED
 }
 
-func (this nullValue) SetIndex(index int, val interface{}) {
+func (this nullValue) SetIndex(index int, val interface{}) error {
+	return _UNSETTABLE
 }
 
 type arrayValue struct {
@@ -316,7 +339,8 @@ func (this *arrayValue) Field(field string) (Value, error) {
 	return nil, Undefined(field)
 }
 
-func (this *arrayValue) SetField(field string, val interface{}) {
+func (this *arrayValue) SetField(field string, val interface{}) error {
+	return Unsettable(field)
 }
 
 func (this *arrayValue) Index(index int) (Value, error) {
@@ -328,15 +352,17 @@ func (this *arrayValue) Index(index int) (Value, error) {
 	return nil, _UNDEFINED
 }
 
-func (this *arrayValue) SetIndex(index int, val interface{}) {
+func (this *arrayValue) SetIndex(index int, val interface{}) error {
 	if index >= 0 && index < len(this.actual) {
 		this.actual[index] = val
 	} else if index >= 0 {
-		av := make([]interface{}, index+1)
+		av := make([]interface{}, index+1, (index+1)<<1)
 		copy(av, this.actual)
 		av[index] = val
 		this.actual = av
 	}
+
+	return nil
 }
 
 type objectValue map[string]interface{}
@@ -371,15 +397,17 @@ func (this objectValue) Field(field string) (Value, error) {
 	return nil, _UNDEFINED
 }
 
-func (this objectValue) SetField(field string, val interface{}) {
+func (this objectValue) SetField(field string, val interface{}) error {
 	this[field] = val
+	return nil
 }
 
 func (this objectValue) Index(index int) (Value, error) {
 	return nil, _UNDEFINED
 }
 
-func (this objectValue) SetIndex(index int, val interface{}) {
+func (this objectValue) SetIndex(index int, val interface{}) error {
+	return _UNSETTABLE
 }
 
 // A structure for storing and manipulating a (possibly JSON) value.
@@ -445,12 +473,12 @@ func (this *parsedValue) Field(field string) (Value, error) {
 	return nil, Undefined(field)
 }
 
-func (this *parsedValue) SetField(field string, val interface{}) {
+func (this *parsedValue) SetField(field string, val interface{}) error {
 	if this.parsedType != OBJECT {
-		return
+		return Unsettable(field)
 	}
 
-	this.parse().SetField(field, val)
+	return this.parse().SetField(field, val)
 }
 
 func (this *parsedValue) Index(index int) (Value, error) {
@@ -475,12 +503,12 @@ func (this *parsedValue) Index(index int) (Value, error) {
 	return nil, _UNDEFINED
 }
 
-func (this *parsedValue) SetIndex(index int, val interface{}) {
+func (this *parsedValue) SetIndex(index int, val interface{}) error {
 	if this.parsedType != ARRAY {
-		return
+		return _UNSETTABLE
 	}
 
-	this.parse().SetIndex(index, val)
+	return this.parse().SetIndex(index, val)
 }
 
 func (this *parsedValue) parse() Value {
