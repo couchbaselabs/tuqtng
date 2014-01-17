@@ -84,7 +84,7 @@ func NewValue(val interface{}) Value {
 	case bool:
 		return boolValue(val)
 	case nil:
-		return nullValue{}
+		return &_NULL_VALUE
 	case []byte:
 		return NewValueFromBytes(val)
 	case []interface{}:
@@ -275,19 +275,21 @@ func (this boolValue) SetIndex(index int, val interface{}) error {
 type nullValue struct {
 }
 
-func (this nullValue) Type() int {
+var _NULL_VALUE = nullValue{}
+
+func (this *nullValue) Type() int {
 	return NULL
 }
 
-func (this nullValue) Actual() interface{} {
+func (this *nullValue) Actual() interface{} {
 	return nil
 }
 
-func (this nullValue) Duplicate() Value {
+func (this *nullValue) Duplicate() Value {
 	return this
 }
 
-func (this nullValue) Bytes() []byte {
+func (this *nullValue) Bytes() []byte {
 	bytes, err := json.Marshal(this.Actual())
 	if err != nil {
 		panic(_MARSHAL_ERROR)
@@ -295,19 +297,19 @@ func (this nullValue) Bytes() []byte {
 	return bytes
 }
 
-func (this nullValue) Field(field string) (Value, error) {
+func (this *nullValue) Field(field string) (Value, error) {
 	return nil, Undefined(field)
 }
 
-func (this nullValue) SetField(field string, val interface{}) error {
+func (this *nullValue) SetField(field string, val interface{}) error {
 	return Unsettable(field)
 }
 
-func (this nullValue) Index(index int) (Value, error) {
+func (this *nullValue) Index(index int) (Value, error) {
 	return nil, _UNDEFINED
 }
 
-func (this nullValue) SetIndex(index int, val interface{}) error {
+func (this *nullValue) SetIndex(index int, val interface{}) error {
 	return _UNSETTABLE
 }
 
