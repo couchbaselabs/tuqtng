@@ -71,14 +71,6 @@ func TestTypeRecognition(t *testing.T) {
 			t.Errorf("Expected type of %s to be %d, got %d", string(test.input), test.expectedType, actualType)
 		}
 	}
-
-	for _, test := range tests {
-		val := NewValue(test.input)
-		actualType := val.Type()
-		if actualType != test.expectedType {
-			t.Errorf("Expected type of %s to be %d, got %d", string(test.input), test.expectedType, actualType)
-		}
-	}
 }
 
 func TestFieldAccess(t *testing.T) {
@@ -292,7 +284,7 @@ func TestValue(t *testing.T) {
 func TestValueOverlay(t *testing.T) {
 	val := NewValueFromBytes([]byte("{\"marty\": \"cool\"}"))
 	val.SetField("marty", "ok")
-	expectedVal := map[string]interface{}{"marty": stringValue("ok")}
+	expectedVal := map[string]interface{}{"marty": "ok"}
 	actualVal := val.Actual()
 	if !reflect.DeepEqual(expectedVal, actualVal) {
 		t.Errorf("Expected %v, got %v, for value of %v", expectedVal, actualVal, val)
@@ -307,7 +299,7 @@ func TestValueOverlay(t *testing.T) {
 
 	val = NewValueFromBytes([]byte("[\"marty\"]"))
 	val.SetIndex(0, "gerald")
-	expectedVal2 := []interface{}{stringValue("gerald")}
+	expectedVal2 := []interface{}{"gerald"}
 	actualVal = val.Actual()
 	if !reflect.DeepEqual(expectedVal2, actualVal) {
 		t.Errorf("Expected %v, got %v, for value of %v", expectedVal2, actualVal, val)
@@ -328,7 +320,7 @@ func TestComplexOverlay(t *testing.T) {
 	// then call value again, which goes through a different field with the already parsed data
 	val := NewValueFromBytes([]byte("{\"marty\": \"cool\"}"))
 	val.SetField("marty", "ok")
-	expectedVal := map[string]interface{}{"marty": stringValue("ok")}
+	expectedVal := map[string]interface{}{"marty": "ok"}
 	actualVal := val.Actual()
 	if !reflect.DeepEqual(expectedVal, actualVal) {
 		t.Errorf("Expected %v, got %v, for value of %v", expectedVal, actualVal, val)
@@ -536,7 +528,7 @@ func TestArraySetIndexLongerThanExistingArray(t *testing.T) {
 	val.SetIndex(1, "gerald")
 
 	valval := val.Actual()
-	if !reflect.DeepEqual(valval, []interface{}{"x", stringValue("gerald")}) {
+	if !reflect.DeepEqual(valval, []interface{}{"x", "gerald"}) {
 		t.Errorf("Expected [x, gerald] -- got %v", valval)
 	}
 }
