@@ -262,11 +262,11 @@ func (this boolValue) DuplicateForUpdate() Value {
 }
 
 func (this boolValue) Bytes() []byte {
-	bytes, err := json.Marshal(this.Actual())
-	if err != nil {
-		panic(_MARSHAL_ERROR)
+	if this {
+		return []byte("true")
+	} else {
+		return []byte("false")
 	}
-	return bytes
 }
 
 func (this boolValue) Field(field string) (Value, error) {
@@ -307,11 +307,7 @@ func (this *nullValue) DuplicateForUpdate() Value {
 }
 
 func (this *nullValue) Bytes() []byte {
-	bytes, err := json.Marshal(this.Actual())
-	if err != nil {
-		panic(_MARSHAL_ERROR)
-	}
-	return bytes
+	return []byte("null")
 }
 
 func (this *nullValue) Field(field string) (Value, error) {
