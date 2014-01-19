@@ -109,7 +109,7 @@ func TestIndexAccess(t *testing.T) {
 	}{
 		{0, stringValue("marty"), nil},
 		{1, &parsedValue{raw: []byte(`{"type":"contact"}`), parsedType: OBJECT}, nil},
-		{2, nil, Undefined("")},
+		{2, nil, Undefined(2)},
 	}
 
 	for _, test := range tests {
@@ -131,7 +131,7 @@ func TestIndexAccess(t *testing.T) {
 	}{
 		{0, stringValue("marty"), nil},
 		{1, objectValue(map[string]interface{}{"type": "contact"}), nil},
-		{2, nil, Undefined("")},
+		{2, nil, Undefined(2)},
 	}
 
 	for _, test := range tests {
