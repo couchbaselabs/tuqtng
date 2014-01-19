@@ -59,7 +59,7 @@ type Value interface {
 	Actual() interface{}                          // Native Go representation
 	Duplicate() Value                             // Shallow copy
 	DuplicateForUpdate() Value                    // Deep copy for UPDATE statements; returns Values whose SetIndex() will extend arrays as needed
-	Bytes() []byte                                // JSON byte enconding
+	Bytes() []byte                                // JSON byte encoding
 	Field(field string) (Value, error)            // Object field dereference
 	SetField(field string, val interface{}) error // Object field setting
 	Index(index int) (Value, error)               // Array index dereference
@@ -106,7 +106,7 @@ func NewValueFromBytes(bytes []byte) Value {
 		parsedType = identifyType(bytes)
 
 		switch parsedType {
-		case NUMBER, STRING, BOOLEAN, NULL:
+		case NUMBER, STRING, BOOLEAN:
 			var p interface{}
 			err := json.Unmarshal(bytes, &p)
 			if err != nil {
@@ -114,6 +114,8 @@ func NewValueFromBytes(bytes []byte) Value {
 			}
 
 			return NewValue(p)
+		case NULL:
+			return &_NULL_VALUE
 		}
 	}
 
