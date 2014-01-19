@@ -57,8 +57,8 @@ type ValueCollection []Value
 type Value interface {
 	Type() int                                    // Data type constant
 	Actual() interface{}                          // Native Go representation
-	Duplicate() Value                             // Deep copy
-	DuplicateForUpdate() Value                    // Deep copy for UPDATE statements; SetIndex() will extend arrays as needed
+	Duplicate() Value                             // Shallow copy
+	DuplicateForUpdate() Value                    // Deep copy for UPDATE statements; returns Values whose SetIndex() will extend arrays as needed
 	Bytes() []byte                                // JSON byte enconding
 	Field(field string) (Value, error)            // Object field dereference
 	SetField(field string, val interface{}) error // Object field setting
@@ -93,7 +93,7 @@ func NewValue(val interface{}) Value {
 	case map[string]interface{}:
 		return objectValue(val)
 	default:
-		panic(fmt.Sprintf("Cannot create value for type %T", val))
+		panic(fmt.Sprintf("Cannot create value for type %T.", val))
 	}
 }
 
@@ -620,13 +620,13 @@ func (this *parsedValue) parse() Value {
 	return this.parsed
 }
 
-type dupFunc func(interface{}) Value
+type dupFunc func(interface{}) interface{}
 
-func duplicate(val interface{}) Value {
-	return NewValue(val).Duplicate()
+func duplicate(val interface{}) interface{} {
+	return val
 }
 
-func duplicateForUpdate(val interface{}) Value {
+func duplicateForUpdate(val interface{}) interface{} {
 	return NewValue(val).DuplicateForUpdate()
 }
 
