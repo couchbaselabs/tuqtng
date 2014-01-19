@@ -374,7 +374,7 @@ func (this sliceValue) Index(index int) (Value, error) {
 // NOTE: Slices do NOT extend beyond length.
 func (this sliceValue) SetIndex(index int, val interface{}) error {
 	if index < 0 || index >= len(this) {
-		return Unsettable(strconv.Itoa(index))
+		return Unsettable(index)
 	}
 
 	this[index] = val
