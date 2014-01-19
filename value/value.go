@@ -29,8 +29,6 @@ func (this Undefined) Error() string {
 	return "Not defined."
 }
 
-var _UNDEFINED = Undefined("")
-
 // When you try to set a nested property or index that does not exist,
 // the return error will be Unsettable.
 type Unsettable string
@@ -42,8 +40,6 @@ func (this Unsettable) Error() string {
 	}
 	return "Not settable."
 }
-
-var _UNSETTABLE = Unsettable("")
 
 const _MARSHAL_ERROR = "Unexpected marshal error on valid data."
 
@@ -194,11 +190,11 @@ func (this floatValue) SetField(field string, val interface{}) error {
 }
 
 func (this floatValue) Index(index int) (Value, error) {
-	return nil, _UNDEFINED
+	return nil, Undefined(index)
 }
 
 func (this floatValue) SetIndex(index int, val interface{}) error {
-	return _UNSETTABLE
+	return Unsettable(index)
 }
 
 type stringValue string
@@ -236,11 +232,11 @@ func (this stringValue) SetField(field string, val interface{}) error {
 }
 
 func (this stringValue) Index(index int) (Value, error) {
-	return nil, _UNDEFINED
+	return nil, Undefined(index)
 }
 
 func (this stringValue) SetIndex(index int, val interface{}) error {
-	return _UNSETTABLE
+	return Unsettable(index)
 }
 
 type boolValue bool
@@ -261,11 +257,14 @@ func (this boolValue) DuplicateForUpdate() Value {
 	return this
 }
 
+var _FALSE_BYTES = []byte("false")
+var _TRUE_BYTES = []byte("true")
+
 func (this boolValue) Bytes() []byte {
 	if this {
-		return []byte("true")
+		return _TRUE_BYTES
 	} else {
-		return []byte("false")
+		return _FALSE_BYTES
 	}
 }
 
@@ -278,11 +277,11 @@ func (this boolValue) SetField(field string, val interface{}) error {
 }
 
 func (this boolValue) Index(index int) (Value, error) {
-	return nil, _UNDEFINED
+	return nil, Undefined(index)
 }
 
 func (this boolValue) SetIndex(index int, val interface{}) error {
-	return _UNSETTABLE
+	return Unsettable(index)
 }
 
 type nullValue struct {
@@ -306,8 +305,10 @@ func (this *nullValue) DuplicateForUpdate() Value {
 	return this
 }
 
+var _NULL_BYTES = []byte("null")
+
 func (this *nullValue) Bytes() []byte {
-	return []byte("null")
+	return _NULL_BYTES
 }
 
 func (this *nullValue) Field(field string) (Value, error) {
@@ -319,11 +320,11 @@ func (this *nullValue) SetField(field string, val interface{}) error {
 }
 
 func (this *nullValue) Index(index int) (Value, error) {
-	return nil, _UNDEFINED
+	return nil, Undefined(index)
 }
 
 func (this *nullValue) SetIndex(index int, val interface{}) error {
-	return _UNSETTABLE
+	return Unsettable(index)
 }
 
 type sliceValue []interface{}
@@ -366,7 +367,7 @@ func (this sliceValue) Index(index int) (Value, error) {
 	}
 
 	// consistent with parsedValue
-	return nil, _UNDEFINED
+	return nil, Undefined(index)
 }
 
 // NOTE: Slices do NOT extend beyond length.
@@ -421,7 +422,7 @@ func (this *listValue) Index(index int) (Value, error) {
 	}
 
 	// consistent with parsedValue
-	return nil, _UNDEFINED
+	return nil, Undefined(index)
 }
 
 func (this *listValue) SetIndex(index int, val interface{}) error {
@@ -476,7 +477,7 @@ func (this objectValue) Field(field string) (Value, error) {
 	}
 
 	// consistent with parsedValue
-	return nil, _UNDEFINED
+	return nil, Undefined(field)
 }
 
 func (this objectValue) SetField(field string, val interface{}) error {
@@ -485,11 +486,11 @@ func (this objectValue) SetField(field string, val interface{}) error {
 }
 
 func (this objectValue) Index(index int) (Value, error) {
-	return nil, _UNDEFINED
+	return nil, Undefined(index)
 }
 
 func (this objectValue) SetIndex(index int, val interface{}) error {
-	return _UNSETTABLE
+	return Unsettable(index)
 }
 
 // A structure for storing and manipulating a (possibly JSON) value.
@@ -577,7 +578,7 @@ func (this *parsedValue) Index(index int) (Value, error) {
 	}
 
 	if this.parsedType != ARRAY {
-		return nil, _UNDEFINED
+		return nil, Undefined(index)
 	}
 
 	if this.raw != nil {
@@ -590,12 +591,12 @@ func (this *parsedValue) Index(index int) (Value, error) {
 		}
 	}
 
-	return nil, _UNDEFINED
+	return nil, Undefined(index)
 }
 
 func (this *parsedValue) SetIndex(index int, val interface{}) error {
 	if this.parsedType != ARRAY {
-		return _UNSETTABLE
+		return Unsettable(index)
 	}
 
 	return this.parse().SetIndex(index, val)
