@@ -24,7 +24,7 @@ type Undefined string
 // Description of which property or index was undefined (if known).
 func (this Undefined) Error() string {
 	if string(this) != "" {
-		return fmt.Sprintf("%s is not defined.", string(this))
+		return fmt.Sprintf("Field or index %s is not defined.", string(this))
 	}
 	return "Not defined."
 }
@@ -38,7 +38,7 @@ type Unsettable string
 // Description of which property or index was unsettable (if known).
 func (this Unsettable) Error() string {
 	if string(this) != "" {
-		return fmt.Sprintf("%s is not settable.", string(this))
+		return fmt.Sprintf("Field or index %s is not settable.", string(this))
 	}
 	return "Not settable."
 }
@@ -55,14 +55,15 @@ type ValueCollection []Value
 
 // An interface for storing and manipulating a (possibly JSON) value.
 type Value interface {
-	Type() int
-	Actual() interface{}
-	Duplicate() Value
-	Bytes() []byte
-	Field(field string) (Value, error)
-	SetField(field string, val interface{}) error
-	Index(index int) (Value, error)
-	SetIndex(index int, val interface{}) error
+	Type() int                                    // Data type constant
+	Actual() interface{}                          // Native Go representation
+	Duplicate() Value                             // Deep copy
+	DuplicateForUpdate() Value                    // Deep copy for UPDATE statements; SetIndex() will extend arrays as needed
+	Bytes() []byte                                // JSON byte enconding
+	Field(field string) (Value, error)            // Object field dereference
+	SetField(field string, val interface{}) error // Object field setting
+	Index(index int) (Value, error)               // Array index dereference
+	SetIndex(index int, val interface{}) error    // Array index setting
 }
 
 type AnnotatedValue interface {
@@ -88,7 +89,7 @@ func NewValue(val interface{}) Value {
 	case []byte:
 		return NewValueFromBytes(val)
 	case []interface{}:
-		return &arrayValue{val}
+		return sliceValue(val)
 	case map[string]interface{}:
 		return objectValue(val)
 	default:
@@ -109,7 +110,7 @@ func NewValueFromBytes(bytes []byte) Value {
 			var p interface{}
 			err := json.Unmarshal(bytes, &p)
 			if err != nil {
-				panic("Unexpected parse error on valid JSON")
+				panic("Unexpected parse error on valid JSON.")
 			}
 
 			return NewValue(p)
@@ -140,8 +141,6 @@ func NewAnnotatedValue(val interface{}) AnnotatedValue {
 			attacher: attacher{nil},
 		}
 		return &av
-	case []byte:
-		return NewAnnotatedValue(NewValueFromBytes(val))
 	default:
 		return NewAnnotatedValue(NewValue(val))
 	}
@@ -169,6 +168,10 @@ func (this floatValue) Actual() interface{} {
 }
 
 func (this floatValue) Duplicate() Value {
+	return this
+}
+
+func (this floatValue) DuplicateForUpdate() Value {
 	return this
 }
 
@@ -210,6 +213,10 @@ func (this stringValue) Duplicate() Value {
 	return this
 }
 
+func (this stringValue) DuplicateForUpdate() Value {
+	return this
+}
+
 func (this stringValue) Bytes() []byte {
 	bytes, err := json.Marshal(this.Actual())
 	if err != nil {
@@ -245,6 +252,10 @@ func (this boolValue) Actual() interface{} {
 }
 
 func (this boolValue) Duplicate() Value {
+	return this
+}
+
+func (this boolValue) DuplicateForUpdate() Value {
 	return this
 }
 
@@ -289,6 +300,10 @@ func (this *nullValue) Duplicate() Value {
 	return this
 }
 
+func (this *nullValue) DuplicateForUpdate() Value {
+	return this
+}
+
 func (this *nullValue) Bytes() []byte {
 	bytes, err := json.Marshal(this.Actual())
 	if err != nil {
@@ -313,23 +328,25 @@ func (this *nullValue) SetIndex(index int, val interface{}) error {
 	return _UNSETTABLE
 }
 
-type arrayValue struct {
-	actual []interface{}
-}
+type sliceValue []interface{}
 
-func (this *arrayValue) Type() int {
+func (this sliceValue) Type() int {
 	return ARRAY
 }
 
-func (this *arrayValue) Actual() interface{} {
-	return this.actual
+func (this sliceValue) Actual() interface{} {
+	return ([]interface{})(this)
 }
 
-func (this *arrayValue) Duplicate() Value {
-	return &arrayValue{duplicateSlice(this.actual)}
+func (this sliceValue) Duplicate() Value {
+	return sliceValue(duplicateSlice(this, duplicate))
 }
 
-func (this *arrayValue) Bytes() []byte {
+func (this sliceValue) DuplicateForUpdate() Value {
+	return &listValue{duplicateSlice(this, duplicateForUpdate)}
+}
+
+func (this sliceValue) Bytes() []byte {
 	bytes, err := json.Marshal(this.Actual())
 	if err != nil {
 		panic(_MARSHAL_ERROR)
@@ -337,15 +354,70 @@ func (this *arrayValue) Bytes() []byte {
 	return bytes
 }
 
-func (this *arrayValue) Field(field string) (Value, error) {
+func (this sliceValue) Field(field string) (Value, error) {
 	return nil, Undefined(field)
 }
 
-func (this *arrayValue) SetField(field string, val interface{}) error {
+func (this sliceValue) SetField(field string, val interface{}) error {
 	return Unsettable(field)
 }
 
-func (this *arrayValue) Index(index int) (Value, error) {
+func (this sliceValue) Index(index int) (Value, error) {
+	if index >= 0 && index < len(this) {
+		return NewValue(this[index]), nil
+	}
+
+	// consistent with parsedValue
+	return nil, _UNDEFINED
+}
+
+// NOTE: Slices do NOT extend beyond length.
+func (this sliceValue) SetIndex(index int, val interface{}) error {
+	if index < 0 || index >= len(this) {
+		return Unsettable(strconv.Itoa(index))
+	}
+
+	this[index] = val
+	return nil
+}
+
+type listValue struct {
+	actual []interface{}
+}
+
+func (this *listValue) Type() int {
+	return ARRAY
+}
+
+func (this *listValue) Actual() interface{} {
+	return this.actual
+}
+
+func (this *listValue) Duplicate() Value {
+	return &listValue{duplicateSlice(this.actual, duplicate)}
+}
+
+func (this *listValue) DuplicateForUpdate() Value {
+	return &listValue{duplicateSlice(this.actual, duplicateForUpdate)}
+}
+
+func (this *listValue) Bytes() []byte {
+	bytes, err := json.Marshal(this.Actual())
+	if err != nil {
+		panic(_MARSHAL_ERROR)
+	}
+	return bytes
+}
+
+func (this *listValue) Field(field string) (Value, error) {
+	return nil, Undefined(field)
+}
+
+func (this *listValue) SetField(field string, val interface{}) error {
+	return Unsettable(field)
+}
+
+func (this *listValue) Index(index int) (Value, error) {
 	if index >= 0 && index < len(this.actual) {
 		return NewValue(this.actual[index]), nil
 	}
@@ -354,16 +426,22 @@ func (this *arrayValue) Index(index int) (Value, error) {
 	return nil, _UNDEFINED
 }
 
-func (this *arrayValue) SetIndex(index int, val interface{}) error {
-	if index >= 0 && index < len(this.actual) {
-		this.actual[index] = val
-	} else if index >= 0 {
-		av := make([]interface{}, index+1, (index+1)<<1)
-		copy(av, this.actual)
-		av[index] = val
-		this.actual = av
+func (this *listValue) SetIndex(index int, val interface{}) error {
+	if index < 0 {
+		return Unsettable(index)
 	}
 
+	if index >= len(this.actual) {
+		if index < cap(this.actual) {
+			this.actual = this.actual[0 : index+1]
+		} else {
+			act := make([]interface{}, index+1, (index+1)<<1)
+			copy(act, this.actual)
+			this.actual = act
+		}
+	}
+
+	this.actual[index] = val
 	return nil
 }
 
@@ -378,7 +456,11 @@ func (this objectValue) Actual() interface{} {
 }
 
 func (this objectValue) Duplicate() Value {
-	return objectValue(duplicateMap(this))
+	return objectValue(duplicateMap(this, duplicate))
+}
+
+func (this objectValue) DuplicateForUpdate() Value {
+	return objectValue(duplicateMap(this, duplicateForUpdate))
 }
 
 func (this objectValue) Bytes() []byte {
@@ -432,16 +514,24 @@ func (this *parsedValue) Actual() interface{} {
 }
 
 func (this *parsedValue) Duplicate() Value {
+	if this.parsed != nil {
+		return this.parsed.Duplicate()
+	}
+
 	rv := parsedValue{
 		raw:        this.raw,
 		parsedType: this.parsedType,
 	}
 
-	if this.parsed != nil {
-		rv.parsed = this.parsed.Duplicate()
+	return &rv
+}
+
+func (this *parsedValue) DuplicateForUpdate() Value {
+	if this.parsedType == NOT_JSON {
+		return this.Duplicate()
 	}
 
-	return &rv
+	return this.parse().DuplicateForUpdate()
 }
 
 func (this *parsedValue) Bytes() []byte {
@@ -522,7 +612,7 @@ func (this *parsedValue) parse() Value {
 		var p interface{}
 		err := json.Unmarshal(this.raw, &p)
 		if err != nil {
-			panic("Unexpected parse error on valid JSON")
+			panic("Unexpected parse error on valid JSON.")
 		}
 		this.parsed = NewValue(p)
 	}
@@ -530,40 +620,37 @@ func (this *parsedValue) parse() Value {
 	return this.parsed
 }
 
-func duplicateSlice(source []interface{}) []interface{} {
+type dupFunc func(interface{}) Value
+
+func duplicate(val interface{}) Value {
+	return NewValue(val).Duplicate()
+}
+
+func duplicateForUpdate(val interface{}) Value {
+	return NewValue(val).DuplicateForUpdate()
+}
+
+func duplicateSlice(source []interface{}, dup dupFunc) []interface{} {
 	if source == nil {
 		return nil
 	}
 
 	result := make([]interface{}, len(source))
 	for i, v := range source {
-		result[i] = NewValue(v).Duplicate()
+		result[i] = dup(v)
 	}
 
 	return result
 }
 
-func duplicateMap(source map[string]interface{}) map[string]interface{} {
+func duplicateMap(source map[string]interface{}, dup dupFunc) map[string]interface{} {
 	if source == nil {
 		return nil
 	}
 
 	result := make(map[string]interface{}, len(source))
 	for k, v := range source {
-		result[k] = NewValue(v).Duplicate()
-	}
-
-	return result
-}
-
-func copyMap(source map[string]interface{}) map[string]interface{} {
-	if source == nil {
-		return nil
-	}
-
-	result := make(map[string]interface{}, len(source))
-	for k, v := range source {
-		result[k] = v
+		result[k] = dup(v)
 	}
 
 	return result
@@ -586,22 +673,13 @@ func identifyType(bytes []byte) int {
 			return NULL
 		}
 	}
-	panic("Unable to identify type of valid JSON")
+	panic("Unable to identify type of valid JSON.")
 	return -1
 }
 
 type annotatedValue struct {
 	Value
 	attacher
-}
-
-func (this *annotatedValue) Duplicate() Value {
-	av := annotatedValue{
-		Value:    this.Value.Duplicate(),
-		attacher: attacher{copyMap(this.attacher.attachments)},
-	}
-
-	return &av
 }
 
 type attacher struct {

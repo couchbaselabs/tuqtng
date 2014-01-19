@@ -228,8 +228,8 @@ func TestUndefined(t *testing.T) {
 	x := Undefined("property")
 	err := x.Error()
 
-	if err != "property is not defined." {
-		t.Errorf("Expected property is not defined, got %v", err)
+	if err != "Field or index property is not defined." {
+		t.Errorf("Expected field or index property is not defined, got %v", err)
 	}
 
 	y := Undefined("")
@@ -408,7 +408,7 @@ func BenchmarkLargeValue(b *testing.B) {
 }
 
 /* This benchmark contains a mix of Value creation of various data
-types, Value() dereferencing, and SetIndex() and SetPath(). */
+types, Actual() dereferencing, and SetIndex() and SetField(). */
 func BenchmarkProcessing(b *testing.B) {
 	vals := make([]Value, 1<<16)
 
@@ -524,11 +524,12 @@ func TestDuplicateValueFromValue(t *testing.T) {
 }
 
 func TestArraySetIndexLongerThanExistingArray(t *testing.T) {
-	val := NewValueFromBytes([]byte(`["x"]`))
-	val.SetIndex(1, "gerald")
+	val := NewValueFromBytes([]byte(`[]`))
+	val = val.DuplicateForUpdate()
+	val.SetIndex(0, "gerald")
 
 	valval := val.Actual()
-	if !reflect.DeepEqual(valval, []interface{}{"x", "gerald"}) {
-		t.Errorf("Expected [x, gerald] -- got %v", valval)
+	if !reflect.DeepEqual(valval, []interface{}{"gerald"}) {
+		t.Errorf("Expected [gerald] got %v", valval)
 	}
 }
