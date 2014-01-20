@@ -11,7 +11,7 @@ package value
 
 import (
 	"compress/gzip"
-	// "encoding/json"
+	"encoding/json"
 	"io/ioutil"
 	"os"
 	"reflect"
@@ -435,6 +435,25 @@ func BenchmarkProcessing(b *testing.B) {
 					val[k] = v
 				}
 			}
+		}
+	}
+}
+
+func BenchmarkLargeMap(b *testing.B) {
+	keys := []string{
+		"/tree/kids/0/kids/0/kids/0/kids/0/kids/0/name",
+	}
+	b.SetBytes(int64(len(codeJSON)))
+
+	for i := 0; i < b.N; i++ {
+		m := map[string]interface{}{}
+		err := json.Unmarshal(codeJSON, &m)
+		if err != nil {
+			b.Fatalf("Error parsing JSON: %v", err)
+		}
+		value := jsonpointer.Get(m, keys[0])
+		if value.(string) != "ssh" {
+			b.Errorf("expected value ssh, got %v", value)
 		}
 	}
 }
