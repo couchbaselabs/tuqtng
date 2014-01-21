@@ -507,51 +507,6 @@ UNNEST path IDENTIFIER unnest_source {
     parsingStack.Push(&ast.From{Projection: proj, As: $3.s, Over:rest})
 }
 |
-UNNEST path key_expr {
-    logDebugGrammar("UNNEST KEY_EXPR")
-    key_expr := parsingStack.Pop().(*ast.KeyExpression)
-    proj := parsingStack.Pop().(ast.Expression)
-    parsingStack.Push(&ast.From{Projection: proj, As:"", Keys: key_expr}) 
-}
-|
-UNNEST path IDENTIFIER key_expr {
-    logDebugGrammar("UNNEST KEY_EXPR")
-    key_expr := parsingStack.Pop().(*ast.KeyExpression)
-    proj := parsingStack.Pop().(ast.Expression)
-    parsingStack.Push(&ast.From{Projection: proj, As:$3.s, Keys: key_expr}) 
-}
-|
-UNNEST path AS IDENTIFIER key_expr {
-    logDebugGrammar("UNNEST KEY_EXPR")
-    key_expr := parsingStack.Pop().(*ast.KeyExpression)
-    proj := parsingStack.Pop().(ast.Expression)
-    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Keys: key_expr}) 
-}
-|
-UNNEST path key_expr unnest_source {
-    logDebugGrammar("UNNEST KEY_EXPR")
-    rest := parsingStack.Pop().(*ast.From)
-    key_expr := parsingStack.Pop().(*ast.KeyExpression)
-    proj := parsingStack.Pop().(ast.Expression)
-    parsingStack.Push(&ast.From{Projection: proj, As:"", Keys: key_expr, Over:rest}) 
-}
-|
-UNNEST path IDENTIFIER key_expr unnest_source {
-    logDebugGrammar("UNNEST KEY_EXPR")
-    rest := parsingStack.Pop().(*ast.From)
-    key_expr := parsingStack.Pop().(*ast.KeyExpression)
-    proj := parsingStack.Pop().(ast.Expression)
-    parsingStack.Push(&ast.From{Projection: proj, As:$3.s, Keys: key_expr, Over:rest}) 
-}
-|
-UNNEST path AS IDENTIFIER key_expr unnest_source {
-    logDebugGrammar("UNNEST KEY_EXPR")
-    rest := parsingStack.Pop().(*ast.From)
-    key_expr := parsingStack.Pop().(*ast.KeyExpression)
-    proj := parsingStack.Pop().(ast.Expression)
-    parsingStack.Push(&ast.From{Projection: proj, As:$4.s, Keys: key_expr, Over:rest}) 
-}
-|
 join_type UNNEST path {
     logDebugGrammar("UNNEST")
     proj := parsingStack.Pop().(ast.Expression)
