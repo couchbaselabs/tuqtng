@@ -681,6 +681,13 @@ type annotatedValue struct {
 	attacher
 }
 
+func (this *annotatedValue) DuplicateForUpdate() Value {
+	return &annotatedValue{
+		Value:    this.Value.DuplicateForUpdate(),
+		attacher: attacher{this.attacher.attachments},
+	}
+}
+
 type attacher struct {
 	attachments map[string]interface{}
 }
