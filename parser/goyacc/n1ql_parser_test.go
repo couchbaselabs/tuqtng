@@ -158,6 +158,8 @@ var validQueries = []string{
 	`SELECT AVG(employee.age) AS av_age FROM emp`,
 	`SELECT MIN(employee.age) AS min_age FROM emp`,
 	`SELECT MAX(employee.age) AS max_age FROM emp`,
+	`SELECT name FROM contacts WHERE name BETWEEN "x" and "y"`,
+	`SELECT name FROM contacts WHERE name NOT BETWEEN "x" and "y"`,
 
 	// index statements
 	`CREATE INDEX abv_idx ON beer-sample(abv)`,

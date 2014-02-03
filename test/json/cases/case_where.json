@@ -458,5 +458,81 @@
             "name": "earl"
         }
     ]
-    }
+    },
+    {
+        "statements" : "SELECT banned-on FROM tags where banned-on NOT BETWEEN \"2012/02/02\" AND \"2012/04/02\"",
+        "results": [
+        {
+            "banned-on": "2001/12/07"
+        }
+    ]
+    },
+    {
+        "statements": "select name from contacts where name NOT BETWEEN \"earl\" and \"ian\" order by name asc",
+        "resultset": [
+        {
+            "name": "dave"
+        },
+        {
+            "name": "jane"
+        }
+    ]
+    },
+    {
+        "statements": "select name from contacts where name BETWEEN \"earl\" and \"ian\" order by name asc",
+        "resultset": [
+        {
+            "name": "earl"
+        },
+        {
+            "name": "fred"
+        },
+        {
+            "name": "harry"
+        },
+        {
+            "name": "ian"
+        }
+    ]
+    },
+    {
+        "statements": "select children from contacts UNNEST contacts.children where children.age BETWEEN 2 and 17",
+        "resultset": [
+        {
+            "children": {
+                "age": 17,
+                "gender": "m",
+                "name": "aiden"
+            }
+        },
+        {
+            "children": {
+                "age": 2,
+                "gender": "f",
+                "name": "bill"
+            }
+        },
+        {
+            "children": {
+                "age": 17,
+                "gender": "f",
+                "name": "xena"
+            }
+        },
+        {
+            "children": {
+                "age": 2,
+                "gender": "m",
+                "name": "yuri"
+            }
+        },
+        {
+            "children": {
+                "age": 17,
+                "gender": "m",
+                "name": "abama"
+            }
+        }
+    ]
+    } 
 ]
