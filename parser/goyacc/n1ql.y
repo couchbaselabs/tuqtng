@@ -15,7 +15,7 @@ s string
 n int
 f float64}
 
-%token ALTER BETWEEN BUCKET CAST COLLATE
+%token ALTER  BUCKET CAST COLLATE
 %token DATABASE DELETE EACH EXCEPT EXISTS
 %token IF INLINE INSERT INTERSECT INTO
 %token JOIN PATH UNION UPDATE POOL
@@ -35,14 +35,14 @@ f float64}
 %token AND OR NOT
 %token EQ NE GT GTE LT LTE
 %token LPAREN RPAREN
-%token LIKE IS VALUED MISSING
+%token LIKE IS VALUED MISSING BETWEEN
 %token DOT
 %token CASE WHEN THEN ELSE END
 %token ANY ALL FIRST ARRAY IN SATISFIES EVERY UNNEST FOR
 %token JOIN NEST INNER LEFT OUTER
 %left OR
 %left AND
-%left EQ LT LTE GT GTE NE LIKE
+%left EQ LT LTE GT GTE NE LIKE BETWEEN
 %left PLUS MINUS
 %left MULT DIV MOD CONCAT
 %left IS
@@ -1020,6 +1020,28 @@ expr {
 	logDebugGrammar("EXPRESSION")
 }
 |
+expr BETWEEN expr AND expr {
+    logDebugGrammar(" BETWEEN EXPRESSION")
+    high := parsingStack.Pop()
+    low := parsingStack.Pop()
+    element := parsingStack.Pop()
+    leftExpression := ast.NewGreaterThanOrEqualOperator(element.(ast.Expression), low.(ast.Expression))
+    rightExpression := ast.NewLessThanOrEqualOperator(element.(ast.Expression), high.(ast.Expression))
+    thisExpression := ast.NewAndOperator(ast.ExpressionList{leftExpression, rightExpression})
+    parsingStack.Push(thisExpression)
+}
+|
+expr NOT BETWEEN expr AND expr {
+    logDebugGrammar(" BETWEEN EXPRESSION")
+    high := parsingStack.Pop()
+    low := parsingStack.Pop()
+    element := parsingStack.Pop()
+    leftExpression := ast.NewLessThanOperator(element.(ast.Expression), low.(ast.Expression))
+    rightExpression := ast.NewGreaterThanOperator(element.(ast.Expression), high.(ast.Expression))
+    thisExpression := ast.NewOrOperator(ast.ExpressionList{leftExpression, rightExpression})
+    parsingStack.Push(thisExpression)
+}
+|
 subquery_expr {
 };
 
@@ -1098,6 +1120,16 @@ expr OR expr {
 	thisExpression := ast.NewOrOperator(ast.ExpressionList{left.(ast.Expression), right.(ast.Expression)})
 	parsingStack.Push(thisExpression)
 }
+/*
+|
+expr BETWEEN expr AND expr  {
+	high := parsingStack.Pop()
+	low := parsingStack.Pop()
+        compare := parsingStack.Pop()
+	thisExpression := ast.NewBetweenExpression(compare.(ast.Expression), low.(ast.Expression), high.(ast.Expression))
+	parsingStack.Push(thisExpression)
+}
+*/
 |
 expr EQ expr {
 	logDebugGrammar("EXPR - EQ")
@@ -1160,7 +1192,8 @@ expr NOT LIKE expr {
 	right := parsingStack.Pop()
 	left := parsingStack.Pop()
 	thisExpression := ast.NewNotLikeOperator(left.(ast.Expression), right.(ast.Expression))
-	parsingStack.Push(thisExpression)
+        parsingStack.Push(thisExpression)
+
 }
 |
 expr DOT IDENTIFIER {
