@@ -17,7 +17,7 @@ import (
 )
 
 type ddocJSON struct {
-	cb.DDocJSON
+	cb.DDoc
 	IndexOn       []string `json:"indexOn"`
 	IndexChecksum int      `json:"indexChecksum"`
 }
