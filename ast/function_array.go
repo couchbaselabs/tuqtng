@@ -146,3 +146,46 @@ func (this *FunctionCallArrayPrepend) Evaluate(context *dparval.Value) (*dparval
 func (this *FunctionCallArrayPrepend) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
+
+// remove an element from the array
+
+type FunctionCallArrayRemove struct {
+	FunctionCall
+}
+
+func NewFunctionCallArrayRemove(operands FunctionArgExpressionList) FunctionCallExpression {
+	return &FunctionCallArrayRemove{
+		FunctionCall{
+			Type:     "function",
+			Name:     "ARRAY_REMOVE",
+			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallArrayRemove) Copy() Expression {
+	return &FunctionCallArrayRemove{
+		FunctionCall{
+			Type:     "function",
+			Name:     "ARRAY_REMOVE",
+			Operands: this.Operands.Copy(),
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallArrayRemove) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+
+	result, err := this.EvaluateOperandsForArrayRemove(context)
+	if err != nil {
+		return nil, err
+	}
+	return dparval.NewValue(result), nil
+}
+
+func (this *FunctionCallArrayRemove) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
