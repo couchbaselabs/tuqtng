@@ -24,6 +24,7 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	"ARRAY_CONCAT":  NewFunctionCallArrayConcat,
 	"ARRAY_APPEND":  NewFunctionCallArrayAppend,
 	"ARRAY_PREPEND": NewFunctionCallArrayPrepend,
+	"ARRAY_REMOVE":  NewFunctionCallArrayRemove,
 
 	// aggregate functions
 	"COUNT":     NewFunctionCallCount,

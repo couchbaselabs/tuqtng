@@ -243,3 +243,35 @@ func (this *FunctionCall) EvaluateOperandsForArrayPrepend(context *dparval.Value
 
 	return nil, fmt.Errorf("the %s() function requires that the second operand be of type ARRAY", this.Name)
 }
+
+func (this *FunctionCall) EvaluateOperandsForArrayRemove(context *dparval.Value) ([]interface{}, error) {
+
+	lv, err := this.Operands[0].Expr.Evaluate(context)
+	if err != nil {
+		return nil, err
+	}
+
+	rv, err := this.Operands[1].Expr.Evaluate(context)
+	if err != nil {
+		return nil, err
+	}
+
+	if lv.Type() == dparval.ARRAY {
+		lvalue := lv.Value()
+		rvalue := rv.Value()
+
+		switch lvalue := lvalue.(type) {
+		case []interface{}:
+			result := make([]interface{}, 0)
+			for _, value := range lvalue {
+				if value != rvalue {
+					result = append(result, value)
+				}
+			}
+
+			return result, nil
+		}
+
+	}
+	return nil, fmt.Errorf("the %s() function requires that the first operand be of type ARRAY", this.Name)
+}

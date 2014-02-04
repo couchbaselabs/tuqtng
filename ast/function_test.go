@@ -420,6 +420,30 @@ func TestFunction(t *testing.T) {
 			[]interface{}{7.0, "Enter light", "Exit Light"},
 			nil,
 		},
+		// array remove functions
+		{
+			NewFunctionCall("ARRAY_REMOVE", FunctionArgExpressionList{
+				NewFunctionArgExpression(
+					NewLiteralArray(ExpressionList{
+						NewLiteralString("Hello world"),
+						NewLiteralString("Live free or die")})),
+				NewFunctionArgExpression(
+					NewLiteralString("Hello world"))}),
+			[]interface{}{"Live free or die"},
+			nil,
+		},
+		{
+			NewFunctionCall("ARRAY_REMOVE", FunctionArgExpressionList{
+				NewFunctionArgExpression(
+					NewLiteralArray(ExpressionList{
+						NewLiteralString("Hello world"),
+						NewLiteralString("Live free or die"),
+						NewLiteralString("Hello world")})),
+				NewFunctionArgExpression(
+					NewLiteralString("Hello world"))}),
+			[]interface{}{"Live free or die"},
+			nil,
+		},
 
 		// numeric functions
 		{
