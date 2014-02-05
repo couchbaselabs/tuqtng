@@ -43,7 +43,7 @@ func TestHttpResponseNoResults(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	resrec := httptest.NewRecorder()
-	q := NewHttpQuery(resrec, req)
+	q := NewHttpQuery(resrec, req, true)
 
 	res := q.Response()
 	go func() {
@@ -85,7 +85,7 @@ func TestHttpResponseSomeResults(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	resrec := httptest.NewRecorder()
-	q := NewHttpQuery(resrec, req)
+	q := NewHttpQuery(resrec, req, true)
 
 	res := q.Response()
 	go func() {
@@ -131,7 +131,7 @@ func TestHttpErrorResponseNoResults(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	resrec := httptest.NewRecorder()
-	q := NewHttpQuery(resrec, req)
+	q := NewHttpQuery(resrec, req, true)
 
 	res := q.Response()
 	go func() {
@@ -172,7 +172,7 @@ func TestHttpErrorResponseSomeResults(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	resrec := httptest.NewRecorder()
-	q := NewHttpQuery(resrec, req)
+	q := NewHttpQuery(resrec, req, true)
 
 	res := q.Response()
 	go func() {
