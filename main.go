@@ -37,7 +37,7 @@ var staticPath = flag.String("staticPath", "static", "Path to static content")
 var queryTimeout = flag.Duration("queryTimeout", -1*time.Second, "Query execution timeout, negative values disable timeout")
 
 var devModeDefaultLogKeys = []string{"HTTP", "NETWORK", "PIPELINE", "CATALOG", "PLANNER", "SCAN", "OPTIMIZER", "PARSER"}
-var infoEnable = flag.Bool("infoEnable", true, "Enable query info line")
+var disableInfo = flag.Bool("disableInfo", false, "Enable query info line")
 
 func main() {
 	flag.Parse()
@@ -53,7 +53,7 @@ func main() {
 		}
 	}
 
-	clog.Log("Info line enabled %v", *infoEnable)
+	clog.Log("Info line disabled %v", *disableInfo)
 
 	if *profileMode {
 		clog.Log("Enabling HTTP Profiling on :6060")
@@ -68,7 +68,7 @@ func main() {
 	queryChannel := make(network.QueryChannel)
 
 	// create one or more network endpoints
-	httpEndpoint := http.NewHttpEndpoint(*addr, *staticPath, *infoEnable)
+	httpEndpoint := http.NewHttpEndpoint(*addr, *staticPath, !(*disableInfo))
 	httpEndpoint.SendQueriesTo(queryChannel)
 
 	err := server.Server(VERSION, *couchbaseSite, *defaultPoolName, queryChannel, queryTimeout)
