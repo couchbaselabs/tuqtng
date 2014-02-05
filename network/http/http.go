@@ -23,15 +23,17 @@ const CHANNEL = "HTTP"
 
 type HttpEndpoint struct {
 	queryChannel network.QueryChannel
+	infoEnable   bool
 }
 
-func NewHttpEndpoint(address string, staticPath string) *HttpEndpoint {
+func NewHttpEndpoint(address string, staticPath string, infoEnable bool) *HttpEndpoint {
 	rv := &HttpEndpoint{}
 
 	r := mux.NewRouter()
 
 	r.Handle("/query", rv).Methods("GET", "POST")
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir(staticPath)))
+	rv.infoEnable = infoEnable
 
 	go func() {
 		err := http.ListenAndServe(address, r)
@@ -49,7 +51,7 @@ func (this *HttpEndpoint) SendQueriesTo(queryChannel network.QueryChannel) {
 
 func (this *HttpEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	clog.To(CHANNEL, "request received")
-	q := NewHttpQuery(w, r)
+	q := NewHttpQuery(w, r, this.infoEnable)
 	if q != nil {
 		this.queryChannel <- q
 		q.Process()

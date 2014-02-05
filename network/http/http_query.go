@@ -24,10 +24,11 @@ type HttpQuery struct {
 	response  *HttpResponse
 	stop      misc.StopChannel
 	startTime time.Time
+	info      bool
 }
 
-func NewHttpQuery(w http.ResponseWriter, r *http.Request) *HttpQuery {
-	q := HttpQuery{startTime: time.Now()}
+func NewHttpQuery(w http.ResponseWriter, r *http.Request, info bool) *HttpQuery {
+	q := HttpQuery{startTime: time.Now(), info: info}
 
 	queryString := findQueryStringInRequest(r)
 
@@ -39,7 +40,7 @@ func NewHttpQuery(w http.ResponseWriter, r *http.Request) *HttpQuery {
 	}
 
 	q.request = network.StringQueryRequest{QueryString: queryString}
-	httpResponse := &HttpResponse{query: &q, w: w, results: make(chan interface{})}
+	httpResponse := &HttpResponse{query: &q, w: w, results: make(chan interface{}), returnInfo: info}
 	q.response = httpResponse
 
 	return &q

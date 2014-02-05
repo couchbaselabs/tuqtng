@@ -19,13 +19,14 @@ import (
 )
 
 type HttpResponse struct {
-	query    *HttpQuery
-	w        http.ResponseWriter
-	results  chan interface{}
-	warnings []query.Error
-	info     []query.Error
-	err      query.Error
-	count    int
+	query      *HttpQuery
+	w          http.ResponseWriter
+	results    chan interface{}
+	warnings   []query.Error
+	info       []query.Error
+	err        query.Error
+	count      int
+	returnInfo bool
 }
 
 func (this *HttpResponse) SendError(err query.Error) {
@@ -136,13 +137,20 @@ func (this *HttpResponse) ProcessResults() (int, error) {
 }
 
 func (this *HttpResponse) ProcessWarningsAndInfo() (int, error) {
-	_, err := this.continueResponse()
-	if err != nil {
-		return 0, err
+
+	if this.returnInfo == false && len(this.warnings) == 0 {
+		return 0, nil
 	}
 
+	continueResponse := false
 	if len(this.warnings) > 0 {
-		_, err := this.printArrayOfErrors("warnings", this.warnings)
+		_, err := this.continueResponse()
+		if err != nil {
+			return 0, err
+		}
+
+		continueResponse = true
+		_, err = this.printArrayOfErrors("warnings", this.warnings)
 		if err != nil {
 			return 0, err
 		}
@@ -153,7 +161,13 @@ func (this *HttpResponse) ProcessWarningsAndInfo() (int, error) {
 	elapsed_duration := this.query.Duration()
 	this.SendError(query.NewTotalElapsedTimeInfo(elapsed_duration.String()))
 
-	if len(this.info) > 0 {
+	if len(this.info) > 0 && this.returnInfo == true {
+		if continueResponse == false {
+			_, err := this.continueResponse()
+			if err != nil {
+				return 0, err
+			}
+		}
 		_, err := this.printArrayOfErrors("info", this.info)
 		if err != nil {
 			return 0, err
