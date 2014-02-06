@@ -426,7 +426,7 @@ FROM COLON IDENTIFIER DOT data_source_unnest {
 
 select_from_required:
 FROM data_source_unnest {
-	logDebugGrammar("SELECT FROM - DATASOURCE over here")
+	logDebugGrammar("SELECT FROM - DATASOURCE ")
 	from := parsingStack.Pop().(*ast.From)
 	switch parsingStatement := parsingStatement.(type) {
 	case *ast.SelectStatement:
@@ -1039,6 +1039,22 @@ expr NOT BETWEEN expr AND expr {
     leftExpression := ast.NewLessThanOperator(element.(ast.Expression), low.(ast.Expression))
     rightExpression := ast.NewGreaterThanOperator(element.(ast.Expression), high.(ast.Expression))
     thisExpression := ast.NewOrOperator(ast.ExpressionList{leftExpression, rightExpression})
+    parsingStack.Push(thisExpression)
+}
+|
+expr IN expression {
+    logDebugGrammar(" IN expression ")
+    right := parsingStack.Pop()
+    left := parsingStack.Pop()
+    thisExpression := ast.NewInOperator(left.(ast.Expression), right.(ast.Expression))
+    parsingStack.Push(thisExpression)
+}
+|
+expr NOT IN expression {
+    logDebugGrammar(" IN expression ")
+    right := parsingStack.Pop()
+    left := parsingStack.Pop()
+    thisExpression := ast.NewNotInOperator(left.(ast.Expression), right.(ast.Expression))
     parsingStack.Push(thisExpression)
 }
 |

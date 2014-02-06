@@ -26,6 +26,8 @@ func TestCompare(t *testing.T) {
 	patternMatchSingle := NewLiteralString("b_b")
 	patternMatchMulti := NewLiteralString("b%")
 	patternNoMatch := NewLiteralString("____")
+	simple_array := NewLiteralArray(ExpressionList{NewLiteralString("manik"), NewLiteralString("steve"), NewLiteralString("bob")})
+	boolean_array := NewLiteralArray(ExpressionList{NewLiteralBool(true), NewLiteralBool(false), null})
 
 	tests := ExpressionTestSet{
 		{NewGreaterThanOperator(numberSixty, numberSixty), false, nil},
@@ -89,6 +91,17 @@ func TestCompare(t *testing.T) {
 		{NewNotLikeOperator(numberNine, patternMatchSingle), nil, nil},
 		{NewNotLikeOperator(stringBob, nonExistantProperty), nil, &dparval.Undefined{"dne"}},
 		{NewNotLikeOperator(nonExistantProperty, stringBob), nil, &dparval.Undefined{"dne"}},
+
+		{NewInOperator(stringBob, simple_array), true, nil},
+		{NewInOperator(stringCat, simple_array), false, nil},
+		{NewInOperator(NewLiteralBool(false), boolean_array), true, nil},
+		{NewInOperator(null, boolean_array), true, nil},
+		{NewNotInOperator(stringBob, simple_array), false, nil},
+		{NewNotInOperator(stringCat, simple_array), true, nil},
+		{NewNotInOperator(NewLiteralBool(false), boolean_array), false, nil},
+		{NewNotInOperator(null, boolean_array), false, nil},
+		{NewInOperator(simple_array, NewLiteralArray(ExpressionList{simple_array})), true, nil},
+		{NewNotInOperator(simple_array, NewLiteralArray(ExpressionList{})), true, nil},
 
 		// these tests all conform to the table in the specification
 		{NewIsNullOperator(stringBob), false, nil},
