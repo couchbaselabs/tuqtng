@@ -22,6 +22,7 @@ type WhenThen struct {
 
 type CaseOperator struct {
 	Type      string      `json:"type"`
+	Switch    Expression  `json:"switch"`
 	WhenThens []*WhenThen `json:"whenthens"`
 	Else      Expression  `json:"else"`
 }
@@ -38,6 +39,10 @@ func (this *CaseOperator) Copy() Expression {
 		WhenThens: make([]*WhenThen, len(this.WhenThens)),
 	}
 
+	if this.Switch != nil {
+		rv.Switch = this.Switch.Copy()
+	}
+
 	for i, wt := range this.WhenThens {
 		rv.WhenThens[i] = &WhenThen{When: wt.When.Copy(), Then: wt.Then.Copy()}
 	}
@@ -50,6 +55,17 @@ func (this *CaseOperator) Copy() Expression {
 }
 
 func (this *CaseOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+
+	var switchItem *dparval.Value
+
+	if this.Switch != nil {
+		var err error
+		switchItem, err = this.Switch.Evaluate(item)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	// walk through the WhenThens in order
 	for _, WhenThen := range this.WhenThens {
 		// evalute the when
@@ -65,10 +81,19 @@ func (this *CaseOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) 
 			}
 		}
 
+		var match bool
 		whenValVal := whenVal.Value()
 
-		whenBoolVal := ValueInBooleanContext(whenValVal)
-		if whenBoolVal == true {
+		if switchItem != nil {
+			if switchItem.Value() == whenValVal {
+				match = true
+			}
+		} else {
+
+			match = ValueInBooleanContext(whenValVal).(bool)
+		}
+
+		if match == true {
 			// evalauate the then
 			thenVal, err := WhenThen.Then.Evaluate(item)
 			if err != nil {
@@ -93,6 +118,7 @@ func (this *CaseOperator) Evaluate(item *dparval.Value) (*dparval.Value, error) 
 
 func (this *CaseOperator) String() string {
 	inside := ""
+
 	for i, wt := range this.WhenThens {
 		if i != 0 {
 			inside = inside + " "
@@ -102,6 +128,9 @@ func (this *CaseOperator) String() string {
 	if this.Else != nil {
 		inside = inside + fmt.Sprintf(" ELSE %v", this.Else)
 	}
+	if this.Switch != nil {
+		return fmt.Sprintf("CASE %v %v END", this.Switch, inside)
+	}
 	return fmt.Sprintf("CASE %v END", inside)
 }
 
@@ -109,6 +138,15 @@ func (this *CaseOperator) EquivalentTo(t Expression) bool {
 	that, ok := t.(*CaseOperator)
 	if !ok {
 		return false
+	}
+
+	if this.Switch != nil || that.Switch != nil {
+		if (this.Switch != nil && this.Switch == nil) || (this.Switch == nil && this.Switch != nil) {
+			return false
+		}
+		if !this.Switch.EquivalentTo(that.Switch) {
+			return false
+		}
 	}
 
 	// order of the when/the conditions does matter
@@ -137,6 +175,9 @@ func (this *CaseOperator) EquivalentTo(t Expression) bool {
 func (this *CaseOperator) Dependencies() ExpressionList {
 	rv := ExpressionList{}
 
+	if this.Switch != nil {
+		rv = append(rv, this.Switch)
+	}
 	for _, WhenThen := range this.WhenThens {
 		rv = append(rv, WhenThen.When)
 		rv = append(rv, WhenThen.Then)

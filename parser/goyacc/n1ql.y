@@ -1354,6 +1354,24 @@ CASE WHEN then_list else_expr END {
 	parsingStack.Push(cwtee)
 }
 |
+CASE expr WHEN then_list else_expr END {
+	logDebugGrammar("CASE WHEN THEN ELSE END")
+	cwtee := ast.NewCaseOperator()
+	topStack := parsingStack.Pop()
+	switch topStack := topStack.(type) {
+	case ast.Expression:
+		cwtee.Else = topStack
+		// now look for whenthens
+		nextStack := parsingStack.Pop().([]*ast.WhenThen)
+		cwtee.WhenThens = nextStack
+	case []*ast.WhenThen:
+		// no else
+		cwtee.WhenThens = topStack
+	}
+        cwtee.Switch = parsingStack.Pop().(ast.Expression)
+	parsingStack.Push(cwtee)
+}
+|
 ANY expr SATISFIES expr END {
     logDebugGrammar("ANY SATISFIES")
     condition := parsingStack.Pop().(ast.Expression)

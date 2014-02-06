@@ -28,5 +28,69 @@
                 { "shipped": "not-shipped-yet" },
                 { "shipped": "not-shipped-yet" }
         ]
+    },
+    {
+        "statements": "SELECT CASE shipped-on IS NOT NULL WHEN true THEN shipped-on ELSE \"not-shipped-yet\" END AS shipped FROM orders",
+        "resultset": [
+        {
+            "shipped": "2012/01/02"
+        },
+        {
+            "shipped": "not-shipped-yet"
+        },
+        {
+            "shipped": "not-shipped-yet"
+        },
+        {
+            "shipped": "not-shipped-yet"
+        }
+    ]
+    },
+    {
+        "statements" : "select case name when \"jane\" then \"jane is not around\" else name END from contacts",
+        "resultset": [
+        {
+            "$1": "dave"
+        },
+        {
+            "$1": "earl"
+        },
+        {
+            "$1": "fred"
+        },
+        {
+            "$1": "harry"
+        },
+        {
+            "$1": "ian"
+        },
+        {
+            "$1": "jane is not around"
+        }
+    ]
+    },
+    {
+        "statements": "select CASE ARRAY_LENGTH(contacts.children) WHEN 2 THEN name ELSE type  END FROM contacts",
+        "resultset": [
+        {
+            "$1": "dave"
+        },
+        {
+            "$1": "earl"
+        },
+        {
+            "$1": "contact"
+        },
+        {
+            "$1": "contact"
+        },
+        {
+            "$1": "ian"
+        },
+        {
+            "$1": "contact"
+        }
+    ]
     }
+
 ]
