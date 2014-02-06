@@ -23,6 +23,12 @@ func VisitChildren(v ExpressionVisitor, e Expression) (Expression, error) {
 	switch expr := e.(type) {
 	//case
 	case *CaseOperator:
+		if expr.Switch != nil {
+			expr.Switch, err = expr.Switch.Accept(v)
+			if err != nil {
+				return expr, err
+			}
+		}
 		for _, wt := range expr.WhenThens {
 			wt.When, err = wt.When.Accept(v)
 			if err != nil {
