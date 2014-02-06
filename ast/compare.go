@@ -11,6 +11,7 @@ package ast
 
 import (
 	"fmt"
+	"reflect"
 	"regexp"
 	"strings"
 
@@ -494,6 +495,175 @@ func (this *NotLikeOperator) Evaluate(context *dparval.Value) (*dparval.Value, e
 }
 
 func (this *NotLikeOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+// ****************************************************************************
+// IN operator
+// ****************************************************************************
+type InOperator struct {
+	Type string `json:"type"`
+	BinaryOperator
+}
+
+func NewInOperator(left, right Expression) *InOperator {
+	return &InOperator{
+		"in",
+		BinaryOperator{
+			operator: "IN",
+			Left:     left,
+			Right:    right,
+		},
+	}
+}
+
+func (this *InOperator) Copy() Expression {
+	return &InOperator{
+		"in",
+		BinaryOperator{
+			operator: "IN",
+			Left:     this.Left.Copy(),
+			Right:    this.Right.Copy(),
+		},
+	}
+}
+
+func (this *InOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+
+	false_result := dparval.NewValue(false)
+	true_result := dparval.NewValue(true)
+
+	lv, err := this.Left.Evaluate(context)
+	if err != nil {
+		return nil, err
+	}
+
+	rv, err := this.Right.Evaluate(context)
+	if err != nil {
+		return nil, err
+	}
+
+	lvalue := lv.Value()
+	if rv.Type() == dparval.ARRAY {
+		ok := true
+		index := 0
+		for ok {
+			inner, err := rv.Index(index)
+			index = index + 1
+			if err != nil {
+				switch err := err.(type) {
+				case *dparval.Undefined:
+					ok = false
+				default:
+					return nil, err
+				}
+			} else {
+				if lv.Type() != inner.Type() {
+					continue
+				} else {
+					iv := inner.Value()
+					switch lvalue := lvalue.(type) {
+					case string:
+						if lvalue == iv {
+							return true_result, nil
+						}
+					default:
+						if reflect.DeepEqual(lvalue, iv) == true {
+							return true_result, nil
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return false_result, nil
+}
+
+func (this *InOperator) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
+// ****************************************************************************
+// NOT IN operator
+// ****************************************************************************
+type NotInOperator struct {
+	Type string `json:"type"`
+	BinaryOperator
+}
+
+func NewNotInOperator(left, right Expression) *NotInOperator {
+	return &NotInOperator{
+		"not in",
+		BinaryOperator{
+			operator: "NOT IN",
+			Left:     left,
+			Right:    right,
+		},
+	}
+}
+
+func (this *NotInOperator) Copy() Expression {
+	return &NotInOperator{
+		"not in",
+		BinaryOperator{
+			operator: "NOT IN",
+			Left:     this.Left.Copy(),
+			Right:    this.Right.Copy(),
+		},
+	}
+}
+
+func (this *NotInOperator) Evaluate(context *dparval.Value) (*dparval.Value, error) {
+
+	lv, err := this.Left.Evaluate(context)
+	if err != nil {
+		return nil, err
+	}
+
+	rv, err := this.Right.Evaluate(context)
+	if err != nil {
+		return nil, err
+	}
+
+	lvalue := lv.Value()
+	if rv.Type() == dparval.ARRAY {
+		ok := true
+		index := 0
+		for ok {
+			inner, err := rv.Index(index)
+			index = index + 1
+			if err != nil {
+				switch err := err.(type) {
+				case *dparval.Undefined:
+					ok = false
+				default:
+					return nil, err
+				}
+			} else {
+				if lv.Type() != inner.Type() {
+					continue
+				} else {
+					iv := inner.Value()
+					switch lvalue := lvalue.(type) {
+					case string:
+						if lvalue == iv {
+							return dparval.NewValue(false), nil
+						}
+					default:
+						if reflect.DeepEqual(lvalue, iv) == true {
+							return dparval.NewValue(false), nil
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return dparval.NewValue(true), nil
+}
+
+func (this *NotInOperator) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
 

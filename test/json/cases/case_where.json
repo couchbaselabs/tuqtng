@@ -534,5 +534,58 @@
             }
         }
     ]
-    } 
+    },
+    {
+        "statements" : "select name from contacts where name IN [\"jane\", \"manik\", \"steve\"]",
+        "resultset": [
+        {
+            "name": "jane"
+        }
+        ] 
+    },
+    {
+        "statements" : "select name from contacts where name NOT IN [\"hula\", \"jane\", \"steve\"]",
+        "resultset": [
+        {
+            "name": "dave"
+        },
+        {
+            "name": "earl"
+        },
+        {
+            "name": "fred"
+        },
+        {
+            "name": "harry"
+        },
+        {
+            "name": "ian"
+        }
+        ]
+    },
+    {
+        "statements" : "select name from contacts where (name IN [\"jane\", \"manik\", \"steve\"]) OR (name IN [\"bob\", \"dave\", \"fred\"])",
+        "resultset": [
+        {
+            "name": "dave"
+        },
+        {
+            "name": "fred"
+        },
+        {
+            "name": "jane"
+        }
+        ]
+    },
+    {
+        "statements": "select name from contacts where (name NOT IN [\"jane\", \"manik\", \"steve\"]) AND (name IN [\"jane\", \"dave\", \"fred\"])",
+        "resultset": [
+        {
+            "name": "dave"
+        },
+        {
+            "name": "fred"
+        }
+        ]
+    }
 ]
