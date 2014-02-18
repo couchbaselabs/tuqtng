@@ -31,8 +31,8 @@ const TYPE_STRING = 160
 const TYPE_ARRAY = 192
 const TYPE_OBJECT = 224
 
-var MIN_ID = cb.DocId("")
-var MAX_ID = cb.DocId(strings.Repeat(string([]byte{0xff}), 251))
+var MIN_ID = cb.DocID("")
+var MAX_ID = cb.DocID(strings.Repeat(string([]byte{0xff}), 251))
 
 func ViewTotalRows(bucket *cb.Bucket, ddoc string, view string, options map[string]interface{}) (int64, query.Error) {
 	options["limit"] = 0
@@ -97,7 +97,7 @@ func WalkViewInBatches(result chan cb.ViewRow, errs query.ErrorChannel, bucket *
 			skey := vres.Rows[batchSize].Key
 			skeydocid := vres.Rows[batchSize].ID
 			options["startkey"] = skey
-			options["startkey_docid"] = cb.DocId(skeydocid)
+			options["startkey_docid"] = cb.DocID(skeydocid)
 		} else {
 			// stop
 			ok = false
