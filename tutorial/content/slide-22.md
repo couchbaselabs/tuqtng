@@ -1,7 +1,12 @@
-## Advanced Queries
+## Array Comprehensions
 
-We will now explore more advanced queries. We will now use a new dataset, the profile bucket. This bucket contains user profile and order documents.
+Array comprehensions allow you to build new arrays from existing ones.
+
+In the example on the right we build a new array containing just the childrens names for all people that have children.
 
 <pre id="example">
-SELECT DISTINCT doc_type FROM profiles
+	SELECT 
+		ARRAY child.fname OVER child IN tutorial.children END AS children_names
+			FROM tutorial 
+				WHERE children IS NOT NULL
 </pre>

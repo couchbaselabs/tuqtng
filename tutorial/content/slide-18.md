@@ -1,14 +1,14 @@
-## Filtering Grouped Data with HAVING
+## Pagination with LIMIT/OFFSET
 
-Sometimes you want to filter which groups are returned.
+Sometimes queries return a large number of results and it can be helpful to process them in smaller batches.  After processing a smaller batch, you also want to skip over a batch to process the next one.
 
-Similar to filter documents with the WHERE clause we can filter groups with the HAVING clause.
+In the example on the right we ask that it return no more than 2 results.
 
-Here we filter to only include groups with more than 1 member.
+Try adding OFFSET 2 to get the next 2 results.
 
 <pre id="example">
-SELECT relation, COUNT(*) AS count
-    FROM tutorial
-        GROUP BY relation
-        	HAVING COUNT(*) > 1
+SELECT fname, age
+    FROM tutorial 
+        ORDER BY age 
+            LIMIT 2
 </pre>

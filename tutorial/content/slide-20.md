@@ -1,14 +1,11 @@
-## In-Document Joins
+## Grouping data with GROUP BY
 
-In-Document joins allow us to take the contents of nested arrays and join them with the parent object.
+Sometimes you want to break the data up into your own groups.
 
-Some people in the tutorial database have an array of children.  If we had 3 people, each with 2 children, we would get 6 documents out, each containing 1 person and 1 child.
-
-The query on the right joins Dave with each of his 2 children.
+In this example we form groups based on our relation to the person.
 
 <pre id="example">
-SELECT * 
-    FROM tutorial AS contact
-    	OVER child IN contact.children
-        	WHERE contact.fname = 'Dave' 
+SELECT relation, COUNT(*) AS count
+    FROM tutorial
+        GROUP BY relation
 </pre>

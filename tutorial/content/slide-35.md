@@ -1,12 +1,11 @@
-## Search Categories for Music Lovers?
+## Search for music? 
 
-What other categories do the music lovers search for?
+How many of our users have searched for music?
 
-<pre id="example">
+<pre id="example">	
 SELECT 
-  ARRAY search.category OVER search IN profiles.search_history 
-  WHEN search.category != "Music" END AS search_categories
-    FROM profiles
-		WHERE 
-			ANY search.category = "Music" OVER search IN profiles.search_history END
+    COUNT(*) music_lovers
+        FROM users_with_orders
+            WHERE ANY search IN search_history SATISFIES search.category = "Music" END
+
 </pre>

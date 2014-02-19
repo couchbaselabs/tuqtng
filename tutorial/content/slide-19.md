@@ -1,12 +1,10 @@
-## Array Comprehensions
+## Aggregate Functions
 
-Array comprehensions allow you to build new arrays from existing ones.
+Sometimes you want information about a whole group of data.
 
-In the example on the right we build a new array containing just the childrens names for all people that have children.
+In the example on the right we use the COUNT() function to tell us how many documents are in the bucket.
 
 <pre id="example">
-	SELECT 
-		ARRAY child.fname OVER child IN tutorial.children END AS children_names
-			FROM tutorial 
-				WHERE children IS NOT NULL
+SELECT COUNT(*) AS count
+    FROM tutorial 
 </pre>

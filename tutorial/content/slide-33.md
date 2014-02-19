@@ -1,13 +1,21 @@
-## When do people order?
+## Fraudulent Accounts?
 
-What's the most popular day to place an order?
+We've decided that users with a lot more orders than searches are fraudulent.  Let's find them.
+
+N1QL supports different types of LENGTH functions. 
+
+1. use LENTGH() when the argument is a string
+2. use ARRAY_LENGTH() when the argument is an array
+3. use OBJECT_LENGTH() when the argument is a map
+4. use POLY_LENGTH() when the type of argument is not known
+
+In this query we are computing the number of searches being carried out by a user and the number of orders placed. If the number of orders placed is 8 times the number of searches then that user is probably doing something fishy. 
 
 <pre id="example">
 SELECT 
-  SUBSTR(shipped_order.order_datetime,0,3) AS day,
-  COUNT(*) AS count
-    FROM profiles AS profile
-        OVER shipped_order IN profile.shipped_order_history
-            GROUP BY SUBSTR(shipped_order.order_datetime,0,3)
-                ORDER BY count DESC
+  personal_details.display_name, 
+  POLY_LENGTH(shipped_order_history) AS num_orders, 
+  ARRAY_LENGTH(search_history) AS num_searches 
+	FROM users_with_orders
+		WHERE POLY_LENGTH(shipped_order_history) > 8*ARRAY_LENGTH(search_history)
 </pre>

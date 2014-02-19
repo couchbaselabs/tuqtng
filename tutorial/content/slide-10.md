@@ -1,13 +1,12 @@
-## NULL and Missing Values
+## Select DISTINCT 
 
-JSON documents can contain explicit NULL values and omit fields entirely.  The IS/IS NOT NULL/MISSING family of operators lets you test these conditions.
+The DISTINCT keyword can be used to eliminate dulicates from the output. 
 
-The query on the right looks for people where the children field is explicitly set to NULL.
+The query on the right used the DISTINCT keyword in the SELECT statement to produce a set of 3 unique results. 
 
-Try changing the query to IS MISSING.
+Try removing the DISTINCT keyword from the query to see the difference. 
 
 <pre id="example">
-	SELECT fname, children
-		FROM tutorial 
-			WHERE children IS NULL
+    SELECT DISTINCT orderlines[0].productId
+        FROM orders
 </pre>

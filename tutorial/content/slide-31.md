@@ -1,13 +1,12 @@
-## Users' Searches
+## Currencies being used 
 
-How many searches have the users run?
+How many different currencies are being used and the number of users using each of the currencies 
 
 <pre id="example">
-SELECT 
-  LENGTH(search_history) AS num_searches, 
-  COUNT(*) AS num_profiles 
-	FROM profiles 
-		WHERE doc_type = "user_profile"
-			GROUP BY LENGTH(search_history) 
-				ORDER BY num_searches
+    SELECT 
+        COUNT(product_details.currency) num_users, 
+        product_details.currency 
+            FROM  users_with_orders 
+                WHERE product_details.currency IS NOT NULL 
+                    GROUP BY product_details.currency
 </pre>

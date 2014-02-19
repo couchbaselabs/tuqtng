@@ -1,12 +1,13 @@
-## Review
+## Combining Multiple Conditions with AND
 
-Lets stop and review a powerful query we can do with what we've learned so far.
+The AND operator allows us to match documents satisfying two or more conditions.
 
-Here we match people having a yahoo email address or having all of their children over the age of 10.  For each person satisfying these requirements, we display their full name, email address, and the full list of children.
+In the example on the right we only return people having at least one child and having a gmail address.
+
+Try changing AND to OR.
 
 <pre id="example">
-SELECT fname || " " || lname AS full_name, email, children 
+SELECT fname, email, children
     FROM tutorial 
-        WHERE email LIKE '%@yahoo.com' 
-        OR ALL child.age > 10 OVER child IN tutorial.children END
+        WHERE LENGTH(children) > 0 AND email LIKE '%@gmail.com'
 </pre>
