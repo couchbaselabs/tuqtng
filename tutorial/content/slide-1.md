@@ -1,8 +1,12 @@
-## Welcome!
+## Section 1. N1QL Basics
+Welcome!
 
-This tutorial walks you through the basics of using N1QL.
+N1QL ("nickel") is the query language from Couchbase. 
+N1QL aims to meet the query needs of distributed document-oriented databases. This document specifies the syntax and semantics of the SELECT statement in N1QL.
 
-On the right hand side you see a query editor. All of the queries in this tutorial will be against a bucket named "tutorial".
+N1QL stands for Non-1st Query Language. The name reflects the fact that the Couchbase document-oriented data model is based on Non-1st Normal Form (N1NF).
+
+On the right hand side you see a query editor.
 
 Go ahead, run your first query now!
 

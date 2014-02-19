@@ -1,11 +1,14 @@
-## Grouping data with GROUP BY
+## Section 2. Collation Queries
+## Ordering results with ORDER BY
 
-Sometimes you want to break the data up into your own groups.
+Queries can optionally include an ORDER BY clause describing how the results should be sorted.
 
-In this example we form groups based on our relation to the person.
+In the example on the right we ask that the people be listed by age in ascending order.
+
+Try adding DESC after age.
 
 <pre id="example">
-SELECT relation, COUNT(*) AS count
-    FROM tutorial
-        GROUP BY relation
+SELECT fname, age 
+    FROM tutorial 
+        ORDER BY age
 </pre>

@@ -1,9 +1,13 @@
-## Search for music? 
+## When do people order?
 
-How many of our users have searched for music?
+What's the most popular day to place an order?
 
-<pre id="example">	
-SELECT COUNT(*)
-    FROM profiles
-		WHERE ANY search.category = "Music" OVER search IN profiles.search_history END
+<pre id="example">
+SELECT 
+  SUBSTR(shipped_order.order_datetime,0,3) AS day,
+  COUNT(*) AS count
+    FROM users_with_orders AS profiles
+        UNNEST profiles.shipped_order_history AS shipped_order
+            GROUP BY SUBSTR(shipped_order.order_datetime,0,3)
+                ORDER BY count DESC
 </pre>

@@ -1,14 +1,29 @@
-## Pagination with LIMIT/OFFSET
+## Array Operations and Slicing 
 
-Sometimes queries return a large number of results and it can be helpful to process them in smaller batches.  After processing a smaller batch, you also want to skip over a batch to process the next one.
+Array slicing refers to using a subset of an array. N1QL allows slices to appear in the appear anywhere in a SELECT query. 
 
-In the example on the right we ask that it return no more than 2 results.
+The query on the right will return all the children between offset 0 and 2
 
-Try adding OFFSET 2 to get the next 2 results.
+Try the typing out the following query on the right hand pane. This query will return all the children between offset 1 and the end of the array.
+
+```
+SELECT VALUE( c )
+    FROM tutorial.children[1:] as c
+```
+
+The difference between the first and second example is that in the second the slice operation appears in the FROM clase
+
+
+N1QL also supports ARRAY functions such as ARRAY_PREPEND, ARRAY_APPEND and ARRAY_CONCAT. Try typing out the following query
+
+```
+SELECT ARRAY_CONCAT(children[:1], children[1:]) FROM tutorial
+```
 
 <pre id="example">
-SELECT fname, age
+SELECT children[0:2] 
     FROM tutorial 
-        ORDER BY age 
-            LIMIT 2
+        WHERE children[0:2] IS NOT MISSING
 </pre>
+
+
