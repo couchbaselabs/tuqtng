@@ -13,55 +13,55 @@ import (
 	"testing"
 )
 
-func TestFunctionType(t *testing.T) {
+func TestFunctionTypeName(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
-			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			NewFunctionCall("TYPE_NAME", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
 			"number",
 			nil,
 		},
 		{
-			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			NewFunctionCall("TYPE_NAME", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(0.0))}),
 			"number",
 			nil,
 		},
 		{
-			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-1.0))}),
+			NewFunctionCall("TYPE_NAME", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-1.0))}),
 			"number",
 			nil,
 		},
 		{
-			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
+			NewFunctionCall("TYPE_NAME", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
 			"string",
 			nil,
 		},
 		{
-			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			NewFunctionCall("TYPE_NAME", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			"string",
 			nil,
 		},
 		{
-			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			NewFunctionCall("TYPE_NAME", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
 			"boolean",
 			nil,
 		},
 		{
-			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			NewFunctionCall("TYPE_NAME", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
 			"boolean",
 			nil,
 		},
 		{
-			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			NewFunctionCall("TYPE_NAME", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
 			"null",
 			nil,
 		},
 		{
-			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			NewFunctionCall("TYPE_NAME", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
 			"array",
 			nil,
 		},
 		{
-			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("TYPE_NAME", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 				}))}),
@@ -69,12 +69,12 @@ func TestFunctionType(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			NewFunctionCall("TYPE_NAME", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
 			"object",
 			nil,
 		},
 		{
-			NewFunctionCall("TYPE", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("TYPE_NAME", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero": NewLiteralNumber(0),
 				}))}),
@@ -89,52 +89,52 @@ func TestFunctionType(t *testing.T) {
 func TestFunctionIsNum(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
-			NewFunctionCall("ISNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			NewFunctionCall("IS_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			NewFunctionCall("IS_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(0.0))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-1.0))}),
+			NewFunctionCall("IS_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-1.0))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
+			NewFunctionCall("IS_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			NewFunctionCall("IS_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			NewFunctionCall("IS_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			NewFunctionCall("IS_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			NewFunctionCall("IS_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("ISNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			NewFunctionCall("IS_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("IS_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 				}))}),
@@ -142,12 +142,12 @@ func TestFunctionIsNum(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("ISNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			NewFunctionCall("IS_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISNUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("IS_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero": NewLiteralNumber(0),
 				}))}),
@@ -162,47 +162,47 @@ func TestFunctionIsNum(t *testing.T) {
 func TestFunctionIsStr(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
-			NewFunctionCall("ISSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			NewFunctionCall("IS_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
+			NewFunctionCall("IS_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			NewFunctionCall("IS_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString(""))}),
+			NewFunctionCall("IS_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString(""))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			NewFunctionCall("IS_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			NewFunctionCall("IS_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			NewFunctionCall("IS_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("ISSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			NewFunctionCall("IS_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("IS_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNull(),
 					NewLiteralNumber(0),
@@ -212,12 +212,12 @@ func TestFunctionIsStr(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("ISSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			NewFunctionCall("IS_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("IS_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero":  NewLiteralNumber(0),
 					"hello": NewLiteralString("hello"),
@@ -233,47 +233,47 @@ func TestFunctionIsStr(t *testing.T) {
 func TestFunctionIsBool(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
-			NewFunctionCall("ISBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			NewFunctionCall("IS_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			NewFunctionCall("IS_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(0.0))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
+			NewFunctionCall("IS_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString(""))}),
+			NewFunctionCall("IS_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString(""))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			NewFunctionCall("IS_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			NewFunctionCall("IS_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			NewFunctionCall("IS_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("ISBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			NewFunctionCall("IS_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("IS_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 				}))}),
@@ -281,12 +281,12 @@ func TestFunctionIsBool(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("ISBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			NewFunctionCall("IS_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("IS_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero": NewLiteralNumber(0),
 				}))}),
@@ -301,37 +301,37 @@ func TestFunctionIsBool(t *testing.T) {
 func TestFunctionIsAtom(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
-			NewFunctionCall("ISATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			NewFunctionCall("IS_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			NewFunctionCall("IS_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			NewFunctionCall("IS_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			NewFunctionCall("IS_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			NewFunctionCall("IS_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("ISATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			NewFunctionCall("IS_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("IS_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 				}))}),
@@ -339,7 +339,7 @@ func TestFunctionIsAtom(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("ISATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("IS_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 					NewLiteralString("hello")}))}),
@@ -347,12 +347,12 @@ func TestFunctionIsAtom(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("ISATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			NewFunctionCall("IS_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("IS_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero": NewLiteralNumber(0),
 				}))}),
@@ -360,7 +360,7 @@ func TestFunctionIsAtom(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("ISATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("IS_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero":  NewLiteralNumber(0),
 					"hello": NewLiteralString("hello"),
@@ -376,37 +376,37 @@ func TestFunctionIsAtom(t *testing.T) {
 func TestFunctionIsArray(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
-			NewFunctionCall("ISARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			NewFunctionCall("IS_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			NewFunctionCall("IS_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			NewFunctionCall("IS_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			NewFunctionCall("IS_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			NewFunctionCall("IS_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("ISARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			NewFunctionCall("IS_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("IS_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 				}))}),
@@ -414,7 +414,7 @@ func TestFunctionIsArray(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("ISARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("IS_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 					NewLiteralString("hello")}))}),
@@ -422,12 +422,12 @@ func TestFunctionIsArray(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("ISARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			NewFunctionCall("IS_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("IS_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero": NewLiteralNumber(0),
 				}))}),
@@ -435,7 +435,7 @@ func TestFunctionIsArray(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("ISARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("IS_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero":  NewLiteralNumber(0),
 					"hello": NewLiteralString("hello"),
@@ -451,37 +451,37 @@ func TestFunctionIsArray(t *testing.T) {
 func TestFunctionIsObj(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
-			NewFunctionCall("ISOBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			NewFunctionCall("IS_OBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISOBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			NewFunctionCall("IS_OBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISOBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			NewFunctionCall("IS_OBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISOBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			NewFunctionCall("IS_OBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISOBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			NewFunctionCall("IS_OBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("ISOBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			NewFunctionCall("IS_OBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("ISOBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("IS_OBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 				}))}),
@@ -489,7 +489,7 @@ func TestFunctionIsObj(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("ISOBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("IS_OBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 					NewLiteralString("hello"),
@@ -498,12 +498,12 @@ func TestFunctionIsObj(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("ISOBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			NewFunctionCall("IS_OBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("ISOBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("IS_OBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero": NewLiteralNumber(0),
 				}))}),
@@ -511,7 +511,7 @@ func TestFunctionIsObj(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("ISOBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("IS_OBJ", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero":  NewLiteralNumber(0),
 					"hello": NewLiteralString("hello"),
