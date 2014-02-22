@@ -16,42 +16,42 @@ import (
 func TestFunctionToNum(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
-			NewFunctionCall("TONUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			NewFunctionCall("TO_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
 			1.0,
 			nil,
 		},
 		{
-			NewFunctionCall("TONUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
+			NewFunctionCall("TO_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
 			1.5,
 			nil,
 		},
 		{
-			NewFunctionCall("TONUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			NewFunctionCall("TO_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("TONUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			NewFunctionCall("TO_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
 			1.0,
 			nil,
 		},
 		{
-			NewFunctionCall("TONUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			NewFunctionCall("TO_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
 			0.0,
 			nil,
 		},
 		{
-			NewFunctionCall("TONUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			NewFunctionCall("TO_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("TONUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			NewFunctionCall("TO_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("TONUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("TO_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 				}))}),
@@ -59,12 +59,12 @@ func TestFunctionToNum(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("TONUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			NewFunctionCall("TO_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("TONUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("TO_NUM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero": NewLiteralNumber(0),
 				}))}),
@@ -79,42 +79,42 @@ func TestFunctionToNum(t *testing.T) {
 func TestFunctionToStr(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
-			NewFunctionCall("TOSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			NewFunctionCall("TO_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
 			"1",
 			nil,
 		},
 		{
-			NewFunctionCall("TOSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
+			NewFunctionCall("TO_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
 			"1.5",
 			nil,
 		},
 		{
-			NewFunctionCall("TOSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			NewFunctionCall("TO_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			"hello",
 			nil,
 		},
 		{
-			NewFunctionCall("TOSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			NewFunctionCall("TO_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
 			"true",
 			nil,
 		},
 		{
-			NewFunctionCall("TOSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			NewFunctionCall("TO_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
 			"false",
 			nil,
 		},
 		{
-			NewFunctionCall("TOSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			NewFunctionCall("TO_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("TOSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			NewFunctionCall("TO_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
 			"[]",
 			nil,
 		},
 		{
-			NewFunctionCall("TOSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("TO_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNull(),
 					NewLiteralNumber(0),
@@ -124,12 +124,12 @@ func TestFunctionToStr(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("TOSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			NewFunctionCall("TO_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
 			"{}",
 			nil,
 		},
 		{
-			NewFunctionCall("TOSTR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("TO_STR", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero":  NewLiteralNumber(0),
 					"hello": NewLiteralString("hello"),
@@ -145,47 +145,47 @@ func TestFunctionToStr(t *testing.T) {
 func TestFunctionToBool(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
-			NewFunctionCall("TOBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			NewFunctionCall("TO_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("TOBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(0.0))}),
+			NewFunctionCall("TO_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(0.0))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("TOBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
+			NewFunctionCall("TO_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("1.5"))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("TOBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString(""))}),
+			NewFunctionCall("TO_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString(""))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("TOBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			NewFunctionCall("TO_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("TOBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			NewFunctionCall("TO_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("TOBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			NewFunctionCall("TO_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("TOBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			NewFunctionCall("TO_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("TOBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("TO_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 				}))}),
@@ -193,12 +193,12 @@ func TestFunctionToBool(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("TOBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			NewFunctionCall("TO_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("TOBOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("TO_BOOL", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero": NewLiteralNumber(0),
 				}))}),
@@ -213,37 +213,37 @@ func TestFunctionToBool(t *testing.T) {
 func TestFunctionToAtom(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
 			1.0,
 			nil,
 		},
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			"hello",
 			nil,
 		},
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
 			true,
 			nil,
 		},
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
 			false,
 			nil,
 		},
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 				}))}),
@@ -251,7 +251,7 @@ func TestFunctionToAtom(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 					NewLiteralString("hello"),
@@ -260,7 +260,7 @@ func TestFunctionToAtom(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralObject(
 						map[string]Expression{
@@ -270,12 +270,12 @@ func TestFunctionToAtom(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero": NewLiteralNumber(0),
 				}))}),
@@ -283,7 +283,7 @@ func TestFunctionToAtom(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero":  NewLiteralNumber(0),
 					"hello": NewLiteralString("hello"),
@@ -292,7 +292,7 @@ func TestFunctionToAtom(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("TOATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("TO_ATOM", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero": NewLiteralArray(
 						ExpressionList{
@@ -309,37 +309,37 @@ func TestFunctionToAtom(t *testing.T) {
 func TestFunctionToArray(t *testing.T) {
 	tests := ExpressionTestSet{
 		{
-			NewFunctionCall("TOARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
+			NewFunctionCall("TO_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(1.0))}),
 			[]interface{}{1.0},
 			nil,
 		},
 		{
-			NewFunctionCall("TOARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			NewFunctionCall("TO_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
 			[]interface{}{"hello"},
 			nil,
 		},
 		{
-			NewFunctionCall("TOARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
+			NewFunctionCall("TO_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(true))}),
 			[]interface{}{true},
 			nil,
 		},
 		{
-			NewFunctionCall("TOARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
+			NewFunctionCall("TO_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralBool(false))}),
 			[]interface{}{false},
 			nil,
 		},
 		{
-			NewFunctionCall("TOARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
+			NewFunctionCall("TO_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNull())}),
 			nil,
 			nil,
 		},
 		{
-			NewFunctionCall("TOARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
+			NewFunctionCall("TO_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(ExpressionList{}))}),
 			[]interface{}{},
 			nil,
 		},
 		{
-			NewFunctionCall("TOARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("TO_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 				}))}),
@@ -347,7 +347,7 @@ func TestFunctionToArray(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("TOARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
+			NewFunctionCall("TO_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralArray(
 				ExpressionList{
 					NewLiteralNumber(0),
 					NewLiteralString("hello"),
@@ -356,12 +356,12 @@ func TestFunctionToArray(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("TOARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
+			NewFunctionCall("TO_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(map[string]Expression{}))}),
 			[]interface{}{map[string]interface{}{}},
 			nil,
 		},
 		{
-			NewFunctionCall("TOARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("TO_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero": NewLiteralNumber(0),
 				}))}),
@@ -369,7 +369,7 @@ func TestFunctionToArray(t *testing.T) {
 			nil,
 		},
 		{
-			NewFunctionCall("TOARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
+			NewFunctionCall("TO_ARRAY", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralObject(
 				map[string]Expression{
 					"zero":  NewLiteralNumber(0),
 					"hello": NewLiteralString("hello"),

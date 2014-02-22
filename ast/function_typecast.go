@@ -24,7 +24,7 @@ func NewFunctionCallToNum(operands FunctionArgExpressionList) FunctionCallExpres
 	return &FunctionCallToNum{
 		FunctionCall{
 			Type:     "function",
-			Name:     "TONUM",
+			Name:     "TO_NUM",
 			Operands: operands,
 			minArgs:  1,
 			maxArgs:  1,
@@ -36,7 +36,7 @@ func (this *FunctionCallToNum) Copy() Expression {
 	return &FunctionCallToNum{
 		FunctionCall{
 			Type:     "function",
-			Name:     "TONUM",
+			Name:     "TO_NUM",
 			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
@@ -94,7 +94,7 @@ func NewFunctionCallToStr(operands FunctionArgExpressionList) FunctionCallExpres
 	return &FunctionCallToStr{
 		FunctionCall{
 			Type:     "function",
-			Name:     "TOSTR",
+			Name:     "TO_STR",
 			Operands: operands,
 			minArgs:  1,
 			maxArgs:  1,
@@ -106,7 +106,7 @@ func (this *FunctionCallToStr) Copy() Expression {
 	return &FunctionCallToStr{
 		FunctionCall{
 			Type:     "function",
-			Name:     "TOSTR",
+			Name:     "TO_STR",
 			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
@@ -211,7 +211,7 @@ func NewFunctionCallToBool(operands FunctionArgExpressionList) FunctionCallExpre
 	return &FunctionCallToBool{
 		FunctionCall{
 			Type:     "function",
-			Name:     "TOBOOL",
+			Name:     "TO_BOOL",
 			Operands: operands,
 			minArgs:  1,
 			maxArgs:  1,
@@ -223,7 +223,7 @@ func (this *FunctionCallToBool) Copy() Expression {
 	return &FunctionCallToBool{
 		FunctionCall{
 			Type:     "function",
-			Name:     "TOBOOL",
+			Name:     "TO_BOOL",
 			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
@@ -278,7 +278,7 @@ func NewFunctionCallToAtom(operands FunctionArgExpressionList) FunctionCallExpre
 	return &FunctionCallToAtom{
 		FunctionCall{
 			Type:     "function",
-			Name:     "TOATOM",
+			Name:     "TO_ATOM",
 			Operands: operands,
 			minArgs:  1,
 			maxArgs:  1,
@@ -290,7 +290,7 @@ func (this *FunctionCallToAtom) Copy() Expression {
 	return &FunctionCallToAtom{
 		FunctionCall{
 			Type:     "function",
-			Name:     "TOATOM",
+			Name:     "TO_ATOM",
 			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
@@ -354,7 +354,7 @@ func NewFunctionCallToArray(operands FunctionArgExpressionList) FunctionCallExpr
 	return &FunctionCallToArray{
 		FunctionCall{
 			Type:     "function",
-			Name:     "TOARRAY",
+			Name:     "TO_ARRAY",
 			Operands: operands,
 			minArgs:  1,
 			maxArgs:  1,
@@ -366,7 +366,7 @@ func (this *FunctionCallToArray) Copy() Expression {
 	return &FunctionCallToArray{
 		FunctionCall{
 			Type:     "function",
-			Name:     "TOARRAY",
+			Name:     "TO_ARRAY",
 			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,

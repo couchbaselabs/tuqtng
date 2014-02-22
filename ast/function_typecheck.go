@@ -13,15 +13,15 @@ import (
 	"github.com/couchbaselabs/dparval"
 )
 
-type FunctionCallType struct {
+type FunctionCallTypeName struct {
 	FunctionCall
 }
 
-func NewFunctionCallType(operands FunctionArgExpressionList) FunctionCallExpression {
-	return &FunctionCallType{
+func NewFunctionCallTypeName(operands FunctionArgExpressionList) FunctionCallExpression {
+	return &FunctionCallTypeName{
 		FunctionCall{
 			Type:     "function",
-			Name:     "TYPE",
+			Name:     "TYPE_NAME",
 			Operands: operands,
 			minArgs:  1,
 			maxArgs:  1,
@@ -29,11 +29,11 @@ func NewFunctionCallType(operands FunctionArgExpressionList) FunctionCallExpress
 	}
 }
 
-func (this *FunctionCallType) Copy() Expression {
-	return &FunctionCallType{
+func (this *FunctionCallTypeName) Copy() Expression {
+	return &FunctionCallTypeName{
 		FunctionCall{
 			Type:     "function",
-			Name:     "TYPE",
+			Name:     "TYPE_NAME",
 			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
@@ -41,7 +41,7 @@ func (this *FunctionCallType) Copy() Expression {
 	}
 }
 
-func (this *FunctionCallType) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+func (this *FunctionCallTypeName) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument
 	av, err := this.Operands[0].Expr.Evaluate(item)
 
@@ -74,7 +74,7 @@ func (this *FunctionCallType) Evaluate(item *dparval.Value) (*dparval.Value, err
 	}
 }
 
-func (this *FunctionCallType) Accept(ev ExpressionVisitor) (Expression, error) {
+func (this *FunctionCallTypeName) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
 
@@ -86,7 +86,7 @@ func NewFunctionCallIsNum(operands FunctionArgExpressionList) FunctionCallExpres
 	return &FunctionCallIsNum{
 		FunctionCall{
 			Type:     "function",
-			Name:     "ISNUM",
+			Name:     "IS_NUM",
 			Operands: operands,
 			minArgs:  1,
 			maxArgs:  1,
@@ -98,7 +98,7 @@ func (this *FunctionCallIsNum) Copy() Expression {
 	return &FunctionCallIsNum{
 		FunctionCall{
 			Type:     "function",
-			Name:     "ISNUM",
+			Name:     "IS_NUM",
 			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
@@ -141,7 +141,7 @@ func NewFunctionCallIsStr(operands FunctionArgExpressionList) FunctionCallExpres
 	return &FunctionCallIsStr{
 		FunctionCall{
 			Type:     "function",
-			Name:     "ISSTR",
+			Name:     "IS_STR",
 			Operands: operands,
 			minArgs:  1,
 			maxArgs:  1,
@@ -153,7 +153,7 @@ func (this *FunctionCallIsStr) Copy() Expression {
 	return &FunctionCallIsStr{
 		FunctionCall{
 			Type:     "function",
-			Name:     "ISSTR",
+			Name:     "IS_STR",
 			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
@@ -196,7 +196,7 @@ func NewFunctionCallIsBool(operands FunctionArgExpressionList) FunctionCallExpre
 	return &FunctionCallIsBool{
 		FunctionCall{
 			Type:     "function",
-			Name:     "ISBOOL",
+			Name:     "IS_BOOL",
 			Operands: operands,
 			minArgs:  1,
 			maxArgs:  1,
@@ -208,7 +208,7 @@ func (this *FunctionCallIsBool) Copy() Expression {
 	return &FunctionCallIsBool{
 		FunctionCall{
 			Type:     "function",
-			Name:     "ISBOOL",
+			Name:     "IS_BOOL",
 			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
@@ -251,7 +251,7 @@ func NewFunctionCallIsAtom(operands FunctionArgExpressionList) FunctionCallExpre
 	return &FunctionCallIsAtom{
 		FunctionCall{
 			Type:     "function",
-			Name:     "ISATOM",
+			Name:     "IS_ATOM",
 			Operands: operands,
 			minArgs:  1,
 			maxArgs:  1,
@@ -263,7 +263,7 @@ func (this *FunctionCallIsAtom) Copy() Expression {
 	return &FunctionCallIsAtom{
 		FunctionCall{
 			Type:     "function",
-			Name:     "ISATOM",
+			Name:     "IS_ATOM",
 			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
@@ -308,7 +308,7 @@ func NewFunctionCallIsArray(operands FunctionArgExpressionList) FunctionCallExpr
 	return &FunctionCallIsArray{
 		FunctionCall{
 			Type:     "function",
-			Name:     "ISARRAY",
+			Name:     "IS_ARRAY",
 			Operands: operands,
 			minArgs:  1,
 			maxArgs:  1,
@@ -320,7 +320,7 @@ func (this *FunctionCallIsArray) Copy() Expression {
 	return &FunctionCallIsArray{
 		FunctionCall{
 			Type:     "function",
-			Name:     "ISARRAY",
+			Name:     "IS_ARRAY",
 			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,
@@ -363,7 +363,7 @@ func NewFunctionCallIsObj(operands FunctionArgExpressionList) FunctionCallExpres
 	return &FunctionCallIsObj{
 		FunctionCall{
 			Type:     "function",
-			Name:     "ISOBJ",
+			Name:     "IS_OBJ",
 			Operands: operands,
 			minArgs:  1,
 			maxArgs:  1,
@@ -375,7 +375,7 @@ func (this *FunctionCallIsObj) Copy() Expression {
 	return &FunctionCallIsObj{
 		FunctionCall{
 			Type:     "function",
-			Name:     "ISOBJ",
+			Name:     "IS_OBJ",
 			Operands: this.Operands.Copy(),
 			minArgs:  1,
 			maxArgs:  1,

@@ -82,18 +82,18 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	"MILLIS_TO_STR":    NewFunctionCallMillisToStr,
 
 	// typecast functions
-	"TONUM":   NewFunctionCallToNum,
-	"TOSTR":   NewFunctionCallToStr,
-	"TOBOOL":  NewFunctionCallToBool,
-	"TOATOM":  NewFunctionCallToAtom,
-	"TOARRAY": NewFunctionCallToArray,
+	"TO_NUM":   NewFunctionCallToNum,
+	"TO_STR":   NewFunctionCallToStr,
+	"TO_BOOL":  NewFunctionCallToBool,
+	"TO_ATOM":  NewFunctionCallToAtom,
+	"TO_ARRAY": NewFunctionCallToArray,
 
 	// typecheck functions
-	"TYPE":    NewFunctionCallType,
-	"ISNUM":   NewFunctionCallIsNum,
-	"ISSTR":   NewFunctionCallIsStr,
-	"ISBOOL":  NewFunctionCallIsBool,
-	"ISATOM":  NewFunctionCallIsAtom,
-	"ISARRAY": NewFunctionCallIsArray,
-	"ISOBJ":   NewFunctionCallIsObj,
+	"TYPE_NAME": NewFunctionCallTypeName,
+	"IS_NUM":    NewFunctionCallIsNum,
+	"IS_STR":    NewFunctionCallIsStr,
+	"IS_BOOL":   NewFunctionCallIsBool,
+	"IS_ATOM":   NewFunctionCallIsAtom,
+	"IS_ARRAY":  NewFunctionCallIsArray,
+	"IS_OBJ":    NewFunctionCallIsObj,
 }
