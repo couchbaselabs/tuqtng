@@ -12,9 +12,11 @@ package xpipeline
 import (
 	"github.com/couchbaselabs/clog"
 	"github.com/couchbaselabs/dparval"
-	"github.com/couchbaselabs/tuqtng/ast"
+	//"github.com/couchbaselabs/tuqtng/ast"
 	"github.com/couchbaselabs/tuqtng/misc"
 	"github.com/couchbaselabs/tuqtng/network"
+
+	"fmt"
 )
 
 const DEBUG_DUP_CHANNEL = "OP_DUP"
@@ -25,14 +27,14 @@ const DEBUG_DUP_CHANNEL = "OP_DUP"
 // FIXME improve implementation
 
 type EliminateDuplicates struct {
-	Base   *BaseOperator
-	buffer dparval.ValueCollection
+	Base         *BaseOperator
+	uniqueBuffer map[interface{}]*dparval.Value
 }
 
 func NewEliminateDuplicates() *EliminateDuplicates {
 	return &EliminateDuplicates{
-		Base:   NewBaseOperator(),
-		buffer: make(dparval.ValueCollection, 0),
+		Base:         NewBaseOperator(),
+		uniqueBuffer: make(map[interface{}]*dparval.Value),
 	}
 }
 
@@ -51,38 +53,23 @@ func (this *EliminateDuplicates) Run(stopChannel misc.StopChannel) {
 }
 
 func (this *EliminateDuplicates) processItem(item *dparval.Value) bool {
-	this.buffer = append(this.buffer, item)
+	projection, _ := item.GetAttachment("projection").(*dparval.Value)
+	if projection != nil {
+		hashval := fmt.Sprintf("%s", projection.Value())
+		found := this.uniqueBuffer[hashval]
+		if found == nil {
+			this.uniqueBuffer[hashval] = item
+		}
+	}
 	return true
 }
 
 func (this *EliminateDuplicates) afterItems() {
 	// write the output
-	for pos, item := range this.buffer {
-		// we will nil out duplicates and then skip over those entries in the buffer
-		if item != nil {
-			if pos < len(this.buffer) {
-				// look to see if the exact same item appears later in the buffer
-				for nextpos, nextitem := range this.buffer[pos+1:] {
-					itemProj, ok := item.GetAttachment("projection").(*dparval.Value)
-					if ok {
-						itemVal := itemProj.Value()
-						if nextitem != nil {
-							nextItemProj, ok := nextitem.GetAttachment("projection").(*dparval.Value)
-							if ok {
-								nextItemVal := nextItemProj.Value()
-								comp := ast.CollateJSON(itemVal, nextItemVal)
-								if comp == 0 {
-									this.buffer[pos+nextpos+1] = nil
-								}
-							}
-						}
-					}
-				}
-			}
-			clog.To(DEBUG_DUP_CHANNEL, "distinct: %v", item)
-			this.Base.SendItem(item)
-		}
+	for _, item := range this.uniqueBuffer {
+		this.Base.SendItem(item)
 	}
+	this.uniqueBuffer = make(map[interface{}]*dparval.Value)
 }
 
 func (this *EliminateDuplicates) SetQuery(q network.Query) {
