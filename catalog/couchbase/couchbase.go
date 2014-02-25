@@ -138,7 +138,20 @@ func newPool(s *site, name string) (*pool, query.Error) {
 	clog.To(catalog.CHANNEL, "Created New Pool %s", name)
 	cbpool, err := s.client.GetPool(name)
 	if err != nil {
-		return nil, query.NewError(nil, fmt.Sprintf("Pool %v not found.", name))
+		if name == "default" {
+			// if default pool is not available, try reconnecting to the server
+			url := s.URL()
+			client, err := cb.Connect(url)
+			if err != nil {
+				return nil, query.NewError(nil, fmt.Sprintf("Pool %v not found.", name))
+			}
+			// check if the default pool exists
+			cbpool, err = client.GetPool(name)
+			if err != nil {
+				return nil, query.NewError(nil, fmt.Sprintf("Pool %v not found.", name))
+			}
+			s.client = client
+		}
 	}
 	rv := pool{
 		site:        s,
@@ -152,7 +165,7 @@ func newPool(s *site, name string) (*pool, query.Error) {
 
 func keepPoolFresh(p *pool) {
 
-	tickChan := time.Tick(5 * time.Minute)
+	tickChan := time.Tick(1 * time.Minute)
 
 	for _ = range tickChan {
 		p.refresh()
