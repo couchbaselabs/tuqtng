@@ -128,7 +128,19 @@ func (p *pool) refresh() {
 	clog.To(catalog.CHANNEL, "Refreshing Pool %s", p.name)
 	newpool, err := p.site.client.GetPool(p.name)
 	if err != nil {
-		clog.Warnf("Error updating pool: %v", err)
+		clog.Warnf("Error updating pool name %s: Error %v", p.name, err)
+		url := p.site.URL()
+		client, err := cb.Connect(url)
+		if err != nil {
+			clog.Warnf("Error connecting to URL %s", url)
+		}
+		// check if the default pool exists
+		newpool, err = client.GetPool(p.name)
+		if err != nil {
+			clog.Warnf("Retry Failed Error updating pool name %s: Error %v", p.name, err)
+		}
+		p.site.client = client
+
 		return
 	}
 	p.cbpool = newpool
