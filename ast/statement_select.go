@@ -9,6 +9,10 @@
 
 package ast
 
+import (
+	"fmt"
+)
+
 type SelectStatement struct {
 	Distinct                  bool                 `json:"distinct"`
 	Select                    ResultExpressionList `json:"select"`
@@ -260,6 +264,9 @@ func (this *SelectStatement) validate() error {
 		err = this.Keys.Validate()
 		if err != nil {
 			return err
+		}
+		if len(this.Keys.GetKeys()) == 0 {
+			return fmt.Errorf("KEY clause contains an invalid expression")
 		}
 	}
 
