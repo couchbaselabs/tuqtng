@@ -6,7 +6,7 @@ To run the tutorial...
 * Open two consoles, cd to ~/tutorial in each and run:	
 
 ```Shell
-./tuqtng -couchbase dir:test -pool json
+./cbq-engine -couchbase dir:test -pool json
 ./tutorial
 ```
 
