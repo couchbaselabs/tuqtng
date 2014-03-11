@@ -34,7 +34,7 @@ build() {
 }
 
 buildclient() {
-    pkg=$project/tuq_client
+    pkg=$project/cbq
     goflags="-v -ldflags '-X main.VERSION $version'"
 
     eval env GOARCH=386   GOOS=linux CGO_ENABLED=0 go build $goflags -o $DIST/cbq.lin32 $pkg &
@@ -60,7 +60,7 @@ builddistpackages() {
     # mac build
     mkdir -p $DIST/stage
     cp $DIST/README $DIST/stage
-    cp $DIST/license-ce-2013.txt $DIST/stage/LICENSE.txt
+    cp $DIST/license-ce.txt $DIST/stage/LICENSE.txt
     cp $DIST/start_tutorial.sh $DIST/stage
     cp $DIST/cbq-engine.mac $DIST/stage/cbq-engine
     cp $DIST/cbq.mac $DIST/stage/cbq
@@ -70,14 +70,14 @@ builddistpackages() {
     mkdir -p $DIST/stage/data/default/tutorial
     unzip tutorial/data/sampledb.zip -d $DIST/stage/data/default/
     cd $DIST/stage
-    zip $DIST/couchbase-query_dev_preview2_x86_64_mac.zip -r .
+    zip $DIST/couchbase-query_dev_preview3_x86_64_mac.zip -r .
     cd $top
     rm -rf $DIST/stage
 
     #linux 32
     mkdir -p $DIST/stage
     cp $DIST/README $DIST/stage
-    cp $DIST/license-ce-2013.txt $DIST/stage/LICENSE.txt
+    cp $DIST/license-ce.txt $DIST/stage/LICENSE.txt
     cp $DIST/start_tutorial.sh $DIST/stage
     cp $DIST/cbq-engine.lin32 $DIST/stage/cbq-engine
     cp $DIST/cbq.lin32 $DIST/stage/cbq
@@ -87,14 +87,14 @@ builddistpackages() {
     mkdir -p $DIST/stage/data/default/tutorial
     unzip tutorial/data/sampledb.zip -d $DIST/stage/data/default/
     cd $DIST/stage
-    tar zcvf $DIST/couchbase-query_dev_preview2_x86_linux.tar.gz .
+    tar zcvf $DIST/couchbase-query_dev_preview3_x86_linux.tar.gz .
     cd $top
     rm -rf $DIST/stage
 
     #linux 64
     mkdir -p $DIST/stage
     cp $DIST/README $DIST/stage
-    cp $DIST/license-ce-2013.txt $DIST/stage/LICENSE.txt
+    cp $DIST/license-ce.txt $DIST/stage/LICENSE.txt
     cp $DIST/start_tutorial.sh $DIST/stage
     cp $DIST/cbq-engine.lin64 $DIST/stage/cbq-engine
     cp $DIST/cbq.lin64 $DIST/stage/cbq
@@ -104,14 +104,14 @@ builddistpackages() {
     mkdir -p $DIST/stage/data/default/tutorial
     unzip tutorial/data/sampledb.zip -d $DIST/stage/data/default/
     cd $DIST/stage
-    tar zcvf $DIST/couchbase-query_dev_preview2_x86_64_linux.tar.gz .
+    tar zcvf $DIST/couchbase-query_dev_preview3_x86_64_linux.tar.gz .
     cd $top
     rm -rf $DIST/stage
 
     #win 32
     mkdir -p $DIST/stage
     cp $DIST/README $DIST/stage
-    cp $DIST/license-ce-2013.txt $DIST/stage/LICENSE.txt
+    cp $DIST/license-ce.txt $DIST/stage/LICENSE.txt
     cp $DIST/start_tutorial.bat $DIST/stage
     cp $DIST/cbq-engine.win32.exe $DIST/stage/cbq-engine.exe
     cp $DIST/cbq.win32.exe $DIST/stage/cbq.exe
@@ -121,14 +121,14 @@ builddistpackages() {
     mkdir -p $DIST/stage/data/default/tutorial
     unzip tutorial/data/sampledb.zip -d $DIST/stage/data/default/
     cd $DIST/stage
-    zip $DIST/couchbase-query_dev_preview2_x86_win.zip -r .
+    zip $DIST/couchbase-query_dev_preview3_x86_win.zip -r .
     cd $top
     rm -rf $DIST/stage
 
     #win 64
     mkdir -p $DIST/stage
     cp $DIST/README $DIST/stage
-    cp $DIST/license-ce-2013.txt $DIST/stage/LICENSE.txt
+    cp $DIST/license-ce.txt $DIST/stage/LICENSE.txt
     cp $DIST/start_tutorial.bat $DIST/stage
     cp $DIST/cbq-engine.win64.exe $DIST/stage/cbq-engine.exe
     cp $DIST/cbq.win64.exe $DIST/stage/cbq.exe
@@ -138,7 +138,7 @@ builddistpackages() {
     mkdir -p $DIST/stage/data/default/tutorial
     unzip tutorial/data/sampledb.zip -d $DIST/stage/data/default/
     cd $DIST/stage
-    zip $DIST/couchbase-query_dev_preview2_x86_64_win.zip -r .
+    zip $DIST/couchbase-query_dev_preview3_x86_64_win.zip -r .
     cd $top
     rm -rf $DIST/stage
 
@@ -191,4 +191,4 @@ builddistpackages
 compress
 benchmark
 coverage
-upload
+#upload
