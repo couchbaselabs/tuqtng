@@ -6,6 +6,7 @@
 .settings
 .DS_Store
 /dist/*.gz
+/dist/*.zip
 /dist/version.json
 /dist/tutorial_tmp
 /tuqtng
