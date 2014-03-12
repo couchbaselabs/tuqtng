@@ -79,6 +79,7 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	"DATE_PART_MILLIS": NewFunctionCallDatePartMillis,
 	"NOW_MILLIS":       NewFunctionCallNowMillis,
 	"STR_TO_MILLIS":    NewFunctionCallStrToMillis,
+	"MILLIS":           NewFunctionCallStrToMillis,
 	"MILLIS_TO_STR":    NewFunctionCallMillisToStr,
 
 	// typecast functions
