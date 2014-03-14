@@ -256,5 +256,13 @@
             "type": "contact"
         }
         ]
+    },
+    {
+        "statements": "select substr(profile_details.user_id, 8, 8) from users_with_orders key \"Adaline_67672807\"",
+        "resultset": [
+        {
+            "$1": "67672807"
+        }
+        ]
     }
 ]
