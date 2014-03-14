@@ -481,7 +481,7 @@ func (this *FunctionCallSubStr) Evaluate(item *dparval.Value) (*dparval.Value, e
 					} else {
 						// validate that maxLen is valid
 						endPos := pos + maxLen
-						if endPos < pos || endPos >= len(avalue) {
+						if endPos < pos || endPos > len(avalue) {
 							// FIXME add warning for invalid max len?
 							return dparval.NewValue(nil), nil
 						}
