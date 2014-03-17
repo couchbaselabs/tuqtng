@@ -22,6 +22,9 @@ var tiServer = flag.String("engine", "http://localhost:8093/", "URL to tuqtng")
 
 func main() {
 	flag.Parse()
+	if strings.HasSuffix(*tiServer, "/") == false {
+		*tiServer = *tiServer + "/"
+	}
 	HandleInteractiveMode(*tiServer, filepath.Base(os.Args[0]))
 }
 
