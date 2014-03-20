@@ -1,15 +1,14 @@
-## Assemble a complete user profile blob
+## Merchant query - Purchase order 
 
-When a player loads his gameworld the client application needs to load the data from all the buckets. 
-This can be accomplished with by running a single N1QL query. The query on the right assembles a 
-the blobs from all three buckets for a user with key "zid-pork-0001"
+Merchants need to keep an eye on important customers, special promotions, popular products and ensure orders are processing as they should be. Lets cover some of these scenarios and learn how N1QL can be used to query relevant data in each case. 
+
+The dispatch team has been notified that an order has been placed and would like to review the purchase order.
+
+![ScreenShot](./images/purchaseorder.png)
 
 <pre id="example">
-SELECT * 
-    FROM porkville AS game-data 
-        JOIN  porkville_stats AS stats
-            KEY "zid-pork-stats-0001" 
-        NEST  porkville_inbox AS inbox 
-            KEY "zid-pork-inbox-0001" 
-                WHERE game-data.uuid="zid-pork-0001"
+	SELECT purchases, product, customer 
+	FROM purchases KEY "purchase0" UNNEST purchases.lineItems AS items 
+        JOIN product KEY items.product
+        JOIN customer KEY purchases.customerId
 </pre>

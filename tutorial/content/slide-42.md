@@ -1,16 +1,15 @@
-# Global Leaderboards
+## Merchant - Active customers in the last month
 
-Display the global rankings , ordered by the number of wins and the player-level
+In the e-commerce world, purchases define user activity and growth. The nickelstore sales team wants to know the number of unique customers that purchased something on the site in the last month.  Dixon has been asked to produce a report. 
+
+He uses N1QL to query Couchbase and get the numbers he needs for his report.
+ 
+![ScreenShot](./images/activeshopper.png)
 
 <pre id="example">
-    SELECT 
-        player.name, 
-        player.level, 
-        stats.loadtime, 
-        SUM(CASE WHEN hist.result = "won" THEN 1 ELSE 0 END) AS wins
-            FROM porkville_stats AS stats 
-                UNNEST stats.pvp-hist AS hist 
-                    JOIN porkville AS player KEY stats.uuid
-                        GROUP BY player, stats
-                            ORDER BY wins DESC, player.level DESC
+	SELECT distinct count(purchases.customerId) 
+	FROM purchases
+	WHERE str_to_millis(purchases.purchasedAt) between str_to_millis("2014-02-01") and str_to_millis("2014-03-01")
 </pre>
+
+Now, think about how you would change this query to get a 7-day trend or a 24-hr trend

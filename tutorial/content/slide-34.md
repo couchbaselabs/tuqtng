@@ -1,13 +1,22 @@
-## When do people order?
+## Shopper - Top 3 Appliances 
 
-What's the most popular day to place an order?
+With so many appliance options to choose from, Don wants to know the top 3 appliances so that he can easily pick which one to buy. 
+
+What are the top 3 highly rated appliances? Run the query to figure this out. 
+
+![ScreenShot](./images/top3.png)
 
 <pre id="example">
-SELECT 
-  SUBSTR(shipped_order.order_datetime,0,3) AS day,
-  COUNT(*) AS count
-    FROM users_with_orders AS profiles
-        UNNEST profiles.shipped_order_history AS shipped_order
-            GROUP BY SUBSTR(shipped_order.order_datetime,0,3)
-                ORDER BY count DESC
+    SELECT
+	product.name, 
+	count(reviews) as reviewCount,
+	round(avg(reviews.rating),1) as AvgRating,
+	category from reviews
+	AS reviews
+	JOIN product as product key reviews.productId
+	UNNEST product.categories as category
+	where category = "Appliances"
+	GROUP by category, product
+	ORDER by AvgRating 
+	DESC LIMIT 3 
 </pre>

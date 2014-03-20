@@ -1,12 +1,16 @@
-## Currencies being used 
+## Shopper - List the product categories 
 
-How many different currencies are being used and the number of users using each of the currencies 
+Don also wants to buy a new cup for his everyday coffee.
+
+He looks at the catalog of product categories to see if there is a category for cups.
+
+![ScreenShot](./images/coffeecup.png)
+
+Is there a "cup" category available? (HINT: Run the query to see if there is one) 
 
 <pre id="example">
     SELECT 
-        COUNT(product_details.currency) num_users, 
-        product_details.currency 
-            FROM  users_with_orders 
-                WHERE product_details.currency IS NOT NULL 
-                    GROUP BY product_details.currency
+	DISTINCT categories
+	FROM product
+	UNNEST product.categories as categories
 </pre>

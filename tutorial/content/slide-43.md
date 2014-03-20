@@ -1,13 +1,13 @@
-## Friend Lists
+## Merchant - Non-performing products
 
-Join a player's blob with their friends blob. Such types of joins are needed to compute local leaderboards
+In order to maintain an assortment of products that reflect customer demand and inventory productivity, nickelstore uses product reviews to get a list of low rated products to be removed.
+
+Dillon, a category manager at nickelstore has asked Judy to come up with a list of products that have average review score less than 1.
+
+Run the query to find out which products have an average rating below 1
 
 <pre id="example">
-SELECT 
-    porkville.level, 
-    friends 
-        FROM porkville 
-            JOIN  porkville friends 
-                KEYS porkville.friends 
-        WHERE porkville.uuid="zid-pork-0002"
+	SELECT product, avg(reviews.rating) avgRating, count(reviews) numReviews 
+	FROM product join reviews keys product.reviewList 
+	GROUP BY product having avg(reviews.rating) < 1
 </pre>

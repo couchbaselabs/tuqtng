@@ -1,11 +1,19 @@
-## Search for music? 
+## Shopper - Browse products and sort results 
 
-How many of our users have searched for music?
+Don wants a list of new and popular items - i.e. items that are recently added to the product catalog and have many units sold.
 
-<pre id="example">	
-SELECT 
-    COUNT(*) music_lovers
-        FROM users_with_orders
-            WHERE ANY search IN search_history SATISFIES search.category = "Music" END
+![ScreenShot](./images/sortby.png)
 
+<pre id="example">
+	SELECT product.name, product.dateAdded, sum(items.count) as unitsSold 
+		FROM purchases unnest purchases.lineItems as items 
+		JOIN product key items.product 
+		GROUP BY product 
+		ORDER BY product.dateAdded, unitsSold desc limit 10
 </pre>
+
+How about sorting by price? - Copy, paste, and run the following query to sort by price (Low to high)
+
+<span style="color: red">
+select product from product order by unitPrice desc limit 100
+</span>

@@ -1,15 +1,19 @@
-#  Messages sent by a user
+## Shopper - Merchant query - Most valued shoppers
 
-List all the messages sent by a user zid-pork-0001 to all other users 
+The marketing team at nickelstore wants to e-mail special discount coupons to the top 10 loyal shoppers.
+
+List the top 10 shoppers based on the total amount spent 
+ 
+![ScreenShot](./images/coupons.png)
 
 <pre id="example">
-    SELECT 
-        user.name, 
-        inbox.messages
-            FROM porkville AS user 
-                KEY "zid-pork-0001" 
-                    LEFT JOIN porkville_inbox AS inbox 
-                        KEY "zid-pork-inbox-" || SUBSTR(user.uuid, 9)
+	SELECT 	customer.firstName, 
+		customer.lastName, 
+		customer.emailAddress,
+		sum(items.count) purchaseCount, 
+		round(sum(product.unitPrice * items.count))  totalSpent 
+	FROM purchases unnest purchases.lineItems as items 
+	JOIN product key items.product join customer key purchases.customerId 
+	GROUP BY customer 
+	ORDER BY totalSpent desc limit 10	
 </pre>
-
-

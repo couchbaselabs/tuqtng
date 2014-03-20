@@ -1,17 +1,13 @@
-## Top ten customers
+## Shopper - Browse and search
+ 
+Because, there is no category called "cup", Don decides to search for product names that have the substring "cup".
 
-Here we use the JOIN clause to get our top ten customers
-
-In this query we are first join the list of orders that placed by each customer and iterate over each order value to generate the total amount spent and group the results y th customers display name. The limit clause is used to only display the top ten spenders. 
+<b>Did you know that ....</b><br/>
+when researching branded products, 44% of online shoppers begin by using a search?
 
 <pre id="example">
     SELECT 
-        user.personal_details.display_name, 
-        SUM(orders.payment_details.total_charges) as spent 
-            FROM users_with_orders user 
-                JOIN orders_with_users orders 
-                    KEYS ARRAY s.order_id FOR s IN user.shipped_order_history END 
-                        GROUP BY user.personal_details.display_name 
-                            ORDER BY spent DESC 
-                                LIMIT 10
+	productId, name
+	FROM product
+	WHERE lower(name) like "%cup%"
 </pre>
