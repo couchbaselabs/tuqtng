@@ -6,7 +6,7 @@ In the example on the right we build a new array containing just the childrens n
 
 <pre id="example">
 	SELECT 
-		ARRAY child.fname OVER child IN tutorial.children END AS children_names
+		ARRAY child.fname FOR child IN tutorial.children END AS children_names
 			FROM tutorial 
 				WHERE children IS NOT NULL
 </pre>

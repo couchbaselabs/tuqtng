@@ -1,4 +1,4 @@
-## Shopper - Browse and search
+## Shopper - Browsing and searching for a product
  
 Because, there is no category called "cup", Don decides to search for product names that have the substring "cup".
 

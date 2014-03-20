@@ -1,6 +1,6 @@
-## Shopper - Top 3 Appliances 
+## Shopper - Finding the most popular products in a category 
 
-With so many appliance options to choose from, Don wants to know the top 3 appliances so that he can easily pick which one to buy. 
+With so many appliances to choose from, Don wants to know the top 3 appliances so that he can easily pick which one to buy. 
 
 What are the top 3 highly rated appliances? Run the query to figure this out. 
 

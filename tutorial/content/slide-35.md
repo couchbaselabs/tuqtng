@@ -1,4 +1,4 @@
-## Shopper - Browse products and sort results 
+## Shopper - Browsing products and sorting results 
 
 Don wants a list of new and popular items - i.e. items that are recently added to the product catalog and have many units sold.
 

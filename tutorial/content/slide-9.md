@@ -1,4 +1,4 @@
-## Pattern Matching Text with LIKE
+## Pattern Matching with LIKE
 
 Inexact string matching can be accomplished using the LIKE operator in the WHERE clause.
 
