@@ -1,4 +1,4 @@
-## Shopper - List products belonging to a particular category 
+## Shopper - Listing products in a category 
 
 Don also wants to browse through some appliances. Maybe, a dishwasher to wash his cup. What do you think?
 

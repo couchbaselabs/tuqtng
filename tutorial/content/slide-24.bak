@@ -1,3 +1,5 @@
+## <b>Section 2. Joins</b>
+
 ## UNNEST clause
 
 The UNNEST clause allow us to take the contents of nested arrays and join them with the parent object.

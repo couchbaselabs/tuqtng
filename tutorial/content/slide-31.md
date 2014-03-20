@@ -1,4 +1,4 @@
-## Shopper - List the product categories 
+## Shopper - Listing product categories 
 
 Don also wants to buy a new cup for his everyday coffee.
 

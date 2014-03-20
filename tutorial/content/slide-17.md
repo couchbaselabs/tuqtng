@@ -1,5 +1,4 @@
-## Section 2. Collation Queries
-## Ordering results with ORDER BY
+## Ordering results with ORDER BY clause
 
 Queries can optionally include an ORDER BY clause describing how the results should be sorted.
 

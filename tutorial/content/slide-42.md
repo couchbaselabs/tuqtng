@@ -1,6 +1,6 @@
-## Merchant - Active customers in the last month
+## Merchant - Reporting the active monthly customers
 
-In the e-commerce world, purchases define user activity and growth. The nickelstore sales team wants to know the number of unique customers that purchased something on the site in the last month.  Dixon has been asked to produce a report. 
+In the e-commerce world, purchases define user activity and growth. The dimestore sales team wants to know the number of unique customers that purchased something on the site in the last month.  Dixon has been asked to produce a report. 
 
 He uses N1QL to query Couchbase and get the numbers he needs for his report.
  

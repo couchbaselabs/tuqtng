@@ -1,6 +1,6 @@
-## Shopper - One-day sale 
+## Shopper - Shopping at a one-day sale
 
-Nickelstore announces a one-day super sale, with deals for many products.
+dimestore announces a one-day super sale, with deals for many products.
  
 Are there any appliances on sale below $6.99? 
 

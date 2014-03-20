@@ -1,6 +1,6 @@
-## Shopper - Top 10 best selling products
+## Shopper - Listing the top 10 best selling products
 
-Don wants to know what are the top 10 best selling products on the nickelstore website. 
+Don wants to know what are the top 10 best selling products on the dimestore website. 
 
 Thanks to N1QL, we can now easily query the data in Couchbase to produce that list. 
 

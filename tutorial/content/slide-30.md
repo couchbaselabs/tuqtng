@@ -1,4 +1,4 @@
-##  Shopper - Browsing a list of products and next page 
+##  Shopper - Browsing products from page to page 
 
 Don enjoys playing golf and he is looking for a driver that will bring a new swing to his game. 
 
@@ -6,7 +6,7 @@ He selects the "golf" category and browses through the available golf gear. The 
 
 ![ScreenShot](./images/webpagination.png)
 
-Get a list of all the golfing products limit by 10, skip the first 10
+Get a list of all the golfing products limit by 10, and skip the first 10
 
 <pre id="example">
     SELECT *

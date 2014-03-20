@@ -1,6 +1,6 @@
-## Shopper - Merchant query - Most valued shoppers
+## Merchant - Finding the most valued shoppers
 
-The marketing team at nickelstore wants to e-mail special discount coupons to the top 10 loyal shoppers.
+The marketing team at dimestore wants to e-mail special discount coupons to the top 10 loyal shoppers.
 
 List the top 10 shoppers based on the total amount spent 
  
