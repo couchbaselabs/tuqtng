@@ -1,29 +1,17 @@
-## Case Study II . Social Game 
+## Shopper - Top 5 highest rated products
 
-In this section we look at some typical queries that are needed for a social game applicaton. 
-We look at an imaginary game called porkville uses the following three buckets 
+There are so many choices when it comes to finding the right products, and sometimes it gets overwhelming. To get an un-biased view, why not use product ratings?
 
-```
-1. porkville: this bucket contains the user profile blobs which contains a player game 
-related data such as level, experience and various other gameplay information. 
-Keys in this bucket are named in the following format: zid-pork-<user_id>
+Don wants to know the top 5 highly rated products. 
 
-2. porkville_stats: this bucket contains the systems stats such as frame-rate, game loading 
-time, PvP stats. Keys in this bucket are named as : zid-pork-stats-<user_id>
-
-3. porkville_inbox: This bucket contains a users inbox. Messages sent to a user are appened 
-to the existing array of messages. When a message is consumed by the player those messages 
-are removed from the message array. Run the query on the right to see what a message blob 
-looks like 
-```
+![ScreenShot](./images/reviews.png)
 
 <pre id="example">
-SELECT * FROM porkville_inbox LIMIT 1
+	SELECT product.name, round(avg(reviews.rating),1) as avg_rating 
+	FROM reviews join product key reviews.productId 
+	GROUP BY product 
+	ORDER BY avg(reviews.rating) DESC LIMIT 5
 </pre>
 
-Run the following queries to examine the content of a user profile and stats blob
-
-```
-SELECT * FROM porkville LIMIT 1
-SELECT * FROM porkville_stats LIMIT 1
-```
+What you saw was just a handful of queries that were relevant to a shopper but you can use N1QL for more advanced query scenarios in your applications. In the next few slides, we will go over queries from the merchant point of view. 
+</span>

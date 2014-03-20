@@ -1,19 +1,35 @@
-## Case Study I. E-commerce Application 
+## <b>Case Study I. E-Commerce</b> 
 
-In this section we are going to demonstrate how N1QL can be used to solve a few typical e-commerce use-cases. We will use the following two buckets 
+For this case study, imagine that you are building an e-commerce website called nickelstore. You use Couchbase Server to store variety of different data – everything from product details, and customer information, to purchase and review histories.
+<br/>
+<br/>
+![ScreenShot](./images/ecommerce.png)
 
-```
-1. users_with_orders. This bucket contains a list of user profiles along with order Ids of the orders that they have placed. 
-2. orders_with_users. This bucket contains the description of the orders
-```
+<div>
+Now, lets look at how N1QL can be used to solve some typical e-commerce scenarios. 
+For the sake of this tutorial, let is assume that the data for our application is kept in 4 different couchbase buckets :
+<ul>
+<li>
+<b>product</b> This bucket contains a list of products to be sold, the categories to which they belong, price of each product, and other product info</li>
+<li><b>customers</b> This bucket contains customer information such as the name, address, and the customers creditcard details</li>
+<li><b>purchases</b> This bucket contains a list of purchases made by a customer - each document contains a list of items purchased and the quantity of each item purchased</li>
+<li><b>reviews</b> This bucket contains a list of reviews made by a customer or specific product. Each review is scored from 0 to 5</li>
+</ul>
 
-For starters lets look at what are the languages in use
+There are 2 types of users of our application :
+<ul>
+<li><b>Shopper</b> The shopper is the consumer and uses the application to buy products online.</li>
+<li><b>Merchant</b> An employee of nickelstore</li>
+</ul>
+
+<div>
+<b>Counting all the products</b>
+<br/>
+Don shops online at nickelstore. When he visits the homepage, it displays a count of all the products.  
+</div>
 
 <pre id="example">
 SELECT 
-  profile_details.prefs.ui_language AS language, 
-  COUNT(*) AS count 
-	FROM users_with_orders
-		WHERE doc_type = "user_profile"
-			GROUP BY profile_details.prefs.ui_language
+  COUNT(*) AS product_count 
+	FROM product
 </pre>

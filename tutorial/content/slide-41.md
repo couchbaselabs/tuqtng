@@ -1,15 +1,13 @@
-## Player v/s Player Stats
+## Merchant - Customers by region
 
-Head to head matchups between a particular user and all others that she has competed against
+nickelstore wants to launch a regional marketing campaign and management wants a report of the number of customers
+per region grouped by postal code
+ 
+![ScreenShot](./images/howzipworks.png)
 
 <pre id="example">
-    SELECT 
-        stats.uuid AS player, 
-        hist.uuid AS opponent, 
-        SUM(CASE WHEN hist.result = "won" THEN 1 ELSE 0 END) AS wins, 
-        SUM(CASE WHEN hist.result = "lost" THEN 1 ELSE 0 END) AS losses
-            FROM porkville_stats AS stats 
-                KEY "zid-pork-stats-0004" 
-                    UNNEST stats.pvp-hist AS hist
-                        GROUP BY stats.uuid, hist.uuid
+	SELECT count(customer) as customerCount, state
+	FROM customer 
+	GROUP BY state
+	ORDER BY customerCount DESC
 </pre>
