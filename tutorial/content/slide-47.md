@@ -1,4 +1,4 @@
-#  Messages sent by a user
+##  Messages sent by a user
 
 List all the messages sent by a user zid-jungle-0001 to all other users 
 

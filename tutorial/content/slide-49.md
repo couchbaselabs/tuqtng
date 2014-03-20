@@ -1,4 +1,4 @@
-# Global Leaderboards
+## Global Leaderboards
 
 Display the global rankings, ordered by the number of wins and the player-level
 
