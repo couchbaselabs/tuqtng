@@ -1,10 +1,11 @@
 ## Listing friends
 
 To compute local leaderboards, you might want to join a player's blob with their friends blob. This N1QL query shows you how to do that.
+
 <pre id="example">
-SELECT jungleville.level, friends
-FROM jungleville KEY "zid-jungle-0002"
-JOIN jungleville friends
+SELECT jungleville.level, friends 
+FROM jungleville KEY "zid-jungle-0002" 
+JOIN jungleville.friends
 	KEYS jungleville.friends
 </pre>
 
