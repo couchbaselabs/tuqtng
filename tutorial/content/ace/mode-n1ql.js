@@ -61,9 +61,9 @@ var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 var SqlHighlightRules = function() {
 
     var keywords = (
-        "select|insert|update|delete|from|where|and|or|group|by|order|limit|offset|having|as|case|" +
-        "when|else|end|type|left|right|join|on|outer|desc|asc|" +
-        "over|any|all|is|" +
+        "select|insert|update|delete|from|where|and|or|not|group|by|order|limit|offset|having|as|case|" +
+        "when|else|end|type|left|right|join|key|on|outer|desc|asc|distinct|" +
+        "any|all|is|in|satisfies|like|keys|array|for|nest|unnest|" +
         "create|index|on|using|view"
     );
 
@@ -72,7 +72,7 @@ var SqlHighlightRules = function() {
     );
 
     var builtinFunctions = (
-        "count|min|max|avg|sum|rank|now|coalesce"
+        "count|min|max|avg|sum|rank|now|coalesce|upper|lower|round|str_to_millis"
     );
 
     var keywordMapper = this.createKeywordMapper({
