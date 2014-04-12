@@ -225,3 +225,40 @@ func TestFunctionStrToMillis(t *testing.T) {
 
 	tests.Run(t)
 }
+
+// The UNIX timestamp 1397203323000 represents the datetime
+// "2014-04-11 01:02:03"
+func TestFunctionMillis(t *testing.T) {
+	tests := ExpressionTestSet{
+		{
+			NewFunctionCall("MILLIS", FunctionArgExpressionList{
+				NewFunctionArgExpression(NewLiteralString("2014-04-11T01:02:03.000-07:00")),
+			}),
+			1397203323000.0,
+			nil,
+		},
+		{
+			NewFunctionCall("MILLIS", FunctionArgExpressionList{
+				NewFunctionArgExpression(NewLiteralString("2014-04-11T01:02:03-07:00")),
+			}),
+			1397203323000.0,
+			nil,
+		},
+		{
+			NewFunctionCall("MILLIS", FunctionArgExpressionList{
+				NewFunctionArgExpression(NewLiteralString("2014-04-11 01:02:03.000-07:00")),
+			}),
+			1397203323000.0,
+			nil,
+		},
+		{
+			NewFunctionCall("MILLIS", FunctionArgExpressionList{
+				NewFunctionArgExpression(NewLiteralString("2014-04-11 01:02:03-07:00")),
+			}),
+			1397203323000.0,
+			nil,
+		},
+	}
+
+	tests.Run(t)
+}
