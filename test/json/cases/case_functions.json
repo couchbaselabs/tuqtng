@@ -620,7 +620,7 @@
     },
 
     {
-        "statements": "SELECT DATE_PART_STR(\"year\", \"2004-07-09\") AS year, DATE_PART_str(\"month\", \"2004-07-09\") AS month, DATE_PART_STR(\"day\", \"2004-07-09\") AS day",
+        "statements": "SELECT DATE_PART_STR(\"2004-07-09\", \"year\") AS year, DATE_PART_STR(\"2004-07-09\", \"month\") AS month, DATE_PART_STR(\"2004-07-09\", \"day\") AS day",
         "results": [
         {
             "day": 9,
@@ -631,7 +631,7 @@
     },
 
     {
-        "statements": "SELECT DATE_PART_STR(\"hour\", \"11:42:01Z\") AS hour, DATE_PART_STR(\"minute\", \"11:42:01Z\") AS minute, DATE_PART_STR(\"second\", \"11:42:01Z\") AS second",
+        "statements": "SELECT DATE_PART_STR(\"11:42:01\", \"hour\") AS hour, DATE_PART_STR(\"11:42:01\", \"minute\") AS minute, DATE_PART_STR(\"11:42:01\", \"second\") AS second",
         "results": [
         {
             "hour": 11,
@@ -642,7 +642,7 @@
     },
 
     {
-        "statements": "SELECT DATE_PART_STR(\"year\", \"2004-07-09T11:42:01Z\") AS year, DATE_PART_STR(\"month\", \"2004-07-09T11:42:01Z\") AS month, DATE_PART_STR(\"day\", \"2004-07-09T11:42:01Z\") AS day, DATE_PART_STR(\"hour\", \"2004-07-09T11:42:01Z\") AS hour, DATE_PART_STR(\"minute\", \"2004-07-09T11:42:01Z\") AS minute, DATE_PART_STR(\"second\", \"2004-07-09T11:42:01Z\") AS second",
+        "statements": "SELECT DATE_PART_STR(\"2004-07-09T11:42:01\", \"year\") AS year, DATE_PART_STR(\"2004-07-09T11:42:01\", \"month\") AS month, DATE_PART_STR(\"2004-07-09T11:42:01\", \"day\") AS day, DATE_PART_STR(\"2004-07-09T11:42:01\", \"hour\") AS hour, DATE_PART_STR(\"2004-07-09T11:42:01\", \"minute\") AS minute, DATE_PART_STR(\"2004-07-09T11:42:01\", \"second\") AS second",
         "results": [
         {
             "day": 9,
@@ -657,7 +657,7 @@
 
     {
         "description": "test fraction seconds",
-        "statements": "SELECT DATE_PART_STR(\"milliseconds\", \"2013-10-13T11:42:01.56723-05:01\") AS ms",
+        "statements": "SELECT DATE_PART_STR(\"2013-10-13T11:42:01.56723-05:01\", \"milliseconds\") AS ms",
         "results": [
         {
             "ms": 1567
@@ -667,7 +667,7 @@
 
     {
         "description": "test now_str",
-        "statements": "SELECT DATE_PART_STR(\"millennium\", NOW_STR()) AS millennium WHERE NOW_STR() = NOW_STR() GROUP BY NOW_STR() HAVING NOW_STR() = NOW_STR()",
+        "statements": "SELECT DATE_PART_STR(NOW_STR(), \"millennium\") AS millennium WHERE NOW_STR() = NOW_STR() GROUP BY NOW_STR() HAVING NOW_STR() = NOW_STR()",
         "results": [
         {
             "millennium": 3
@@ -677,7 +677,7 @@
 
     {
         "description": "test now_millis",
-        "statements": "SELECT DATE_PART_MILLIS(\"millennium\", NOW_MILLIS()) AS millennium WHERE NOW_MILLIS() = NOW_MILLIS() GROUP BY NOW_MILLIS() HAVING NOW_MILLIS() = NOW_MILLIS()",
+        "statements": "SELECT DATE_PART_MILLIS(NOW_MILLIS(), \"millennium\") AS millennium WHERE NOW_MILLIS() = NOW_MILLIS() GROUP BY NOW_MILLIS() HAVING NOW_MILLIS() = NOW_MILLIS()",
         "results": [
         {
             "millennium": 3
@@ -687,7 +687,7 @@
 
     {
         "description": "test str_to_millis",
-        "statements": "SELECT DATE_PART_MILLIS(\"millennium\", STR_TO_MILLIS(NOW_STR())) AS millennium",
+        "statements": "SELECT DATE_PART_MILLIS(STR_TO_MILLIS(NOW_STR()), \"millennium\") AS millennium",
         "results": [
         {
             "millennium": 3
@@ -697,7 +697,7 @@
 
     {
         "description": "test millis_to_str",
-        "statements": "SELECT DATE_PART_STR(\"millennium\", MILLIS_TO_STR(NOW_MILLIS())) AS millennium",
+        "statements": "SELECT DATE_PART_STR(MILLIS_TO_STR(NOW_MILLIS()), \"millennium\") AS millennium",
         "results": [
         {
             "millennium": 3
