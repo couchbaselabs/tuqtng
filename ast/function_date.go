@@ -19,14 +19,18 @@ import (
 )
 
 var supportedDateFormats = []string{
-	time.RFC3339Nano,
-	"2006-01-02 15:04:05.999999999Z07:00",
-	time.RFC3339,
+	"2006-01-02T15:04:05.999Z07:00", // time.RFC3339Milli
+	"2006-01-02T15:04:05Z07:00",     // time.RFC3339
+	"2006-01-02T15:04:05.999",
+	"2006-01-02T15:04:05",
+	"2006-01-02 15:04:05.999Z07:00",
 	"2006-01-02 15:04:05Z07:00",
+	"2006-01-02 15:04:05.999",
+	"2006-01-02 15:04:05",
 	"2006-01-02",
-	"15:04:05.999999999Z07:00",
+	"15:04:05.999Z07:00",
 	"15:04:05Z07:00",
-	"15:04:05.999999999",
+	"15:04:05.999",
 	"15:04:05",
 }
 
@@ -60,7 +64,7 @@ func (this *FunctionCallDatePartStr) Copy() Expression {
 
 func (this *FunctionCallDatePartStr) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument (part)
-	av, err := this.Operands[0].Expr.Evaluate(item)
+	dv, err := this.Operands[0].Expr.Evaluate(item)
 
 	// the part must be a string, undefined results in null
 	if err != nil {
@@ -74,12 +78,12 @@ func (this *FunctionCallDatePartStr) Evaluate(item *dparval.Value) (*dparval.Val
 		}
 	}
 
-	if av.Type() == dparval.STRING {
-		part := av.Value()
-		switch part := part.(type) {
+	if dv.Type() == dparval.STRING {
+		date := dv.Value()
+		switch date := date.(type) {
 		case string:
 			// now look at the second argument
-			dv, err := this.Operands[1].Expr.Evaluate(item)
+			av, err := this.Operands[1].Expr.Evaluate(item)
 
 			// *currently* the date must be an rfc3339 string
 			// the part must be a string, undefined results in null
@@ -94,9 +98,9 @@ func (this *FunctionCallDatePartStr) Evaluate(item *dparval.Value) (*dparval.Val
 				}
 			}
 
-			if dv.Type() == dparval.STRING {
-				date := dv.Value()
-				switch date := date.(type) {
+			if av.Type() == dparval.STRING {
+				part := av.Value()
+				switch part := part.(type) {
 				case string:
 					var t time.Time
 					for _, sf := range supportedDateFormats {
@@ -108,10 +112,10 @@ func (this *FunctionCallDatePartStr) Evaluate(item *dparval.Value) (*dparval.Val
 					}
 
 					if err != nil {
-						return nil, fmt.Errorf("Date not in a recognized format.")
+						return nil, fmt.Errorf("Date not in a recognized format. Error: %v", err)
 					}
 
-					return datePart(part, t)
+					return datePart(t, part)
 				}
 			}
 
@@ -155,7 +159,7 @@ func (this *FunctionCallDatePartMillis) Copy() Expression {
 
 func (this *FunctionCallDatePartMillis) Evaluate(item *dparval.Value) (*dparval.Value, error) {
 	// first evaluate the argument (part)
-	av, err := this.Operands[0].Expr.Evaluate(item)
+	dv, err := this.Operands[0].Expr.Evaluate(item)
 
 	// the part must be a string, undefined results in ull
 	if err != nil {
@@ -169,12 +173,12 @@ func (this *FunctionCallDatePartMillis) Evaluate(item *dparval.Value) (*dparval.
 		}
 	}
 
-	if av.Type() == dparval.STRING {
-		part := av.Value()
-		switch part := part.(type) {
-		case string:
+	if dv.Type() == dparval.NUMBER {
+		millis := dv.Value()
+		switch millis := millis.(type) {
+		case float64:
 			// now look at the second argument
-			dv, err := this.Operands[1].Expr.Evaluate(item)
+			av, err := this.Operands[1].Expr.Evaluate(item)
 
 			// the part must be a string, undefined results in null
 			if err != nil {
@@ -188,12 +192,12 @@ func (this *FunctionCallDatePartMillis) Evaluate(item *dparval.Value) (*dparval.
 				}
 			}
 
-			if dv.Type() == dparval.NUMBER {
-				millis := dv.Value()
-				switch millis := millis.(type) {
-				case float64:
+			if av.Type() == dparval.STRING {
+				part := av.Value()
+				switch part := part.(type) {
+				case string:
 					t := time.Unix(0, int64(millis)*1000000)
-					return datePart(part, t)
+					return datePart(t, part)
 				}
 			}
 
@@ -207,7 +211,7 @@ func (this *FunctionCallDatePartMillis) Accept(ev ExpressionVisitor) (Expression
 	return ev.Visit(this)
 }
 
-func datePart(part string, t time.Time) (*dparval.Value, error) {
+func datePart(t time.Time, part string) (*dparval.Value, error) {
 	// now look for the requested part
 	switch part {
 	case "century":
