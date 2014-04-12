@@ -155,14 +155,6 @@ func TestFunctionDatePartMillis(t *testing.T) {
 		{
 			NewFunctionCall("DATE_PART_MILLIS", FunctionArgExpressionList{
 				NewFunctionArgExpression(NewLiteralNumber(1397203323000)),
-				NewFunctionArgExpression(NewLiteralString("hour")),
-			}),
-			1.0,
-			nil,
-		},
-		{
-			NewFunctionCall("DATE_PART_MILLIS", FunctionArgExpressionList{
-				NewFunctionArgExpression(NewLiteralNumber(1397203323000)),
 				NewFunctionArgExpression(NewLiteralString("minute")),
 			}),
 			2.0,
