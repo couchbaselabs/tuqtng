@@ -72,6 +72,7 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	"RTRIM":  NewFunctionCallRTrim,
 	"LTRIM":  NewFunctionCallLTrim,
 	"SUBSTR": NewFunctionCallSubStr,
+	"SPLIT":  NewFunctionCallSplit,
 
 	// date functions
 	"DATE_PART_STR":    NewFunctionCallDatePartStr,

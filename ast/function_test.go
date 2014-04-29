@@ -199,6 +199,24 @@ func TestFunction(t *testing.T) {
 			nil,
 			nil,
 		},
+		{
+			NewFunctionCall("SPLIT", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello world"))}),
+			[]interface{}{"hello", "world"},
+			nil,
+		},
+		{
+			NewFunctionCall("SPLIT", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("hello"))}),
+			[]interface{}{"hello"},
+			nil,
+		},
+		{
+			NewFunctionCall("SPLIT", FunctionArgExpressionList{
+				NewFunctionArgExpression(NewLiteralString("123.14.12.25")),
+				NewFunctionArgExpression(NewLiteralString(".")),
+			}),
+			[]interface{}{"123", "14", "12", "25"},
+			nil,
+		},
 
 		// comparison functions
 		{
