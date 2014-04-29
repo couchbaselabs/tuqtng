@@ -498,3 +498,91 @@ func (this *FunctionCallSubStr) Evaluate(item *dparval.Value) (*dparval.Value, e
 func (this *FunctionCallSubStr) Accept(ev ExpressionVisitor) (Expression, error) {
 	return ev.Visit(this)
 }
+
+type FunctionCallSplit struct {
+	FunctionCall
+}
+
+func NewFunctionCallSplit(operands FunctionArgExpressionList) FunctionCallExpression {
+	return &FunctionCallSplit{
+		FunctionCall{
+			Type:     "function",
+			Name:     "SPLIT",
+			Operands: operands,
+			minArgs:  1,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallSplit) Copy() Expression {
+	return &FunctionCallSplit{
+		FunctionCall{
+			Type:     "function",
+			Name:     "SPLIT",
+			Operands: this.Operands.Copy(),
+			minArgs:  1,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallSplit) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	// first evaluate the arguments
+	av, err := this.Operands[0].Expr.Evaluate(item)
+
+	if err != nil {
+		switch err := err.(type) {
+		case *dparval.Undefined:
+			// undefined returns null
+			return dparval.NewValue(nil), nil
+		default:
+			// any other error return to caller
+			return nil, err
+		}
+
+		// FIXME warn if arguments were wrong type?
+		if av.Type() != dparval.STRING {
+			return dparval.NewValue(nil), nil
+		}
+	}
+
+	var sep *dparval.Value = nil
+	if len(this.Operands) > 1 {
+		sep, err = this.Operands[1].Expr.Evaluate(item)
+		if err != nil {
+			switch err := err.(type) {
+			case *dparval.Undefined:
+				// undefined returns null
+				return dparval.NewValue(nil), nil
+			default:
+				// any other error return to caller
+				return nil, err
+			}
+		}
+
+		// FIXME warn if arguments were wrong type?
+		if sep.Type() != dparval.STRING {
+			return dparval.NewValue(nil), nil
+		}
+	}
+
+	var sa []string
+	if sep != nil {
+		sa = strings.Split(av.Value().(string),
+			sep.Value().(string))
+	} else {
+		sa = strings.Fields(av.Value().(string))
+	}
+
+	rv := make([]interface{}, len(sa))
+	for i, s := range sa {
+		rv[i] = s
+	}
+
+	return dparval.NewValue(rv), nil
+}
+
+func (this *FunctionCallSplit) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
