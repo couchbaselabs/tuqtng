@@ -1,5 +1,25 @@
 [
     {
+	"statements": "SELECT TRUNC(-2.33) as n1, TRUNC(-125.815, -2) as n2, TRUNC(-125.815, 2) as n3",
+	"results": [
+	{
+            "n1": -2,
+            "n2": -100,
+            "n3": -125.81
+        }
+    ]
+    },
+    {
+	"statements": "SELECT ROUND(-5.8) as r1, ROUND(-55.36, 1) as r2, ROUND(-125.815, 2) as r3",
+	"results": [
+	{
+            "r1": -6,
+            "r2": -55.4,
+            "r3": -125.82
+        }
+    ]
+    },
+    {
         "statements": "SELECT lower(details.title) FROM catalog",
         "results": [
         {
