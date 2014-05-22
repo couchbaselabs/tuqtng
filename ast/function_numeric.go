@@ -251,7 +251,7 @@ func TruncateFloat(x float64, prec int) float64 {
 	pow := math.Pow(10, float64(prec))
 	intermed := x * pow
 	//_, frac := math.Modf(intermed)
-	rounder = math.Floor(intermed)
+	rounder = math.Trunc(intermed)
 
 	rv := rounder / pow
 	return rv

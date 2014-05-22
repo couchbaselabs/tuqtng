@@ -530,6 +530,26 @@ func TestFunction(t *testing.T) {
 			nil,
 		},
 		{
+			NewFunctionCall("ROUND", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-5.8))}),
+			-6.0,
+			nil,
+		},
+		{
+			NewFunctionCall("ROUND", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-55.36)), NewFunctionArgExpression(NewLiteralNumber(1))}),
+			-55.4,
+			nil,
+		},
+		{
+			NewFunctionCall("ROUND", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-125.815)), NewFunctionArgExpression(NewLiteralNumber(2))}),
+			-125.82,
+			nil,
+		},
+		{
+			NewFunctionCall("ROUND", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-125.815)), NewFunctionArgExpression(NewLiteralNumber(-2))}),
+			-100.0,
+			nil,
+		},
+		{
 			NewFunctionCall("ROUND", FunctionArgExpressionList{NewFunctionArgExpression(NewProperty("dne"))}),
 			nil,
 			nil,
@@ -584,6 +604,21 @@ func TestFunction(t *testing.T) {
 		{
 			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralNumber(4))}),
 			55.36,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-2.33))}),
+			-2.0,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-125.815)), NewFunctionArgExpression(NewLiteralNumber(2))}),
+			-125.81,
+			nil,
+		},
+		{
+			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-125.815)), NewFunctionArgExpression(NewLiteralNumber(-2))}),
+			-100.0,
 			nil,
 		},
 		{
