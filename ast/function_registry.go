@@ -9,8 +9,6 @@
 
 package ast
 
-import ()
-
 type FunctionCallConstructor func(operands FunctionArgExpressionList) FunctionCallExpression
 
 var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]FunctionCallConstructor{
@@ -53,6 +51,7 @@ var SystemFunctionRegistry map[string]FunctionCallConstructor = map[string]Funct
 	"FLOOR": NewFunctionCallFloor,
 	"ROUND": NewFunctionCallRound,
 	"TRUNC": NewFunctionCallTrunc,
+	"DIV":   NewFunctionCallDiv,
 
 	// numeric infinite functions
 	"IFNAN":      NewFunctionCallIfNaN,

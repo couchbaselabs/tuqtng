@@ -570,6 +570,43 @@ func TestFunction(t *testing.T) {
 			nil,
 		},
 
+		//div
+		{
+			NewFunctionCall("DIV", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(3)), NewFunctionArgExpression(NewLiteralNumber(2))}),
+			1.0,
+			nil,
+		},
+		{
+			NewFunctionCall("DIV", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralNumber(1))}),
+			55.0,
+			nil,
+		},
+		{
+			NewFunctionCall("DIV", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(-125.815)), NewFunctionArgExpression(NewLiteralNumber(-2))}),
+			62.0,
+			nil,
+		},
+		{
+			NewFunctionCall("DIV", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralNumber(5.5))}),
+			10.0,
+			nil,
+		},
+		{
+			NewFunctionCall("DIV", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("DIV", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(55.36)), NewFunctionArgExpression(NewLiteralString("bob"))}),
+			nil,
+			nil,
+		},
+		{
+			NewFunctionCall("DIV", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralString("bob")), NewFunctionArgExpression(NewLiteralNumber(4))}),
+			nil,
+			nil,
+		},
+
 		//trunc
 		{
 			NewFunctionCall("TRUNC", FunctionArgExpressionList{NewFunctionArgExpression(NewLiteralNumber(5.8))}),

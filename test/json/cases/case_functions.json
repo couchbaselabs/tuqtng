@@ -20,6 +20,16 @@
     ]
     },
     {
+	"statements": "SELECT DIV(1, 0) as d1, DIV(55.36, 1) as d2, DIV(-125.815, 2) as d3",
+	"results": [
+	{
+            "d1": "+Infinity",
+            "d2": 55,
+            "d3": -62
+        }
+    ]
+    },
+    {
         "statements": "SELECT lower(details.title) FROM catalog",
         "results": [
         {
