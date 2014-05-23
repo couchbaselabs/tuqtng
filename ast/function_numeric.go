@@ -245,6 +245,87 @@ func (this *FunctionCallRound) Accept(ev ExpressionVisitor) (Expression, error) 
 	return ev.Visit(this)
 }
 
+func DivideFloat(x float64, y float64) float64 {
+	intermed := x / y
+	rv := math.Trunc(intermed)
+	return rv
+}
+
+type FunctionCallDiv struct {
+	FunctionCall
+}
+
+func NewFunctionCallDiv(operands FunctionArgExpressionList) FunctionCallExpression {
+	return &FunctionCallDiv{
+		FunctionCall{
+			Type:     "function",
+			Name:     "DIV",
+			Operands: operands,
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallDiv) Copy() Expression {
+	return &FunctionCallDiv{
+		FunctionCall{
+			Type:     "function",
+			Name:     "DIV",
+			Operands: this.Operands.Copy(),
+			minArgs:  2,
+			maxArgs:  2,
+		},
+	}
+}
+
+func (this *FunctionCallDiv) Evaluate(item *dparval.Value) (*dparval.Value, error) {
+	// Evaluate the Dividend
+	dividend, err := this.Operands[0].Expr.Evaluate(item)
+	if err != nil {
+		switch err := err.(type) {
+		case *dparval.Undefined:
+			// undefined returns null
+			return dparval.NewValue(nil), nil
+		default:
+			// any other error return to caller
+			return nil, err
+		}
+	}
+
+	// Evaluate the Divisor
+	divisor, err := this.Operands[1].Expr.Evaluate(item)
+	if err != nil {
+		switch err := err.(type) {
+		case *dparval.Undefined:
+			// undefined returns null
+			return dparval.NewValue(nil), nil
+		default:
+			// any other error return to caller
+			return nil, err
+		}
+	}
+
+	// DIV operates ONLY on numeric values
+	// all other types result in NULL
+	if (dividend.Type() == dparval.NUMBER) && (divisor.Type() == dparval.NUMBER) {
+		xvalue := dividend.Value()
+		yvalue := divisor.Value()
+		switch xvalue := xvalue.(type) {
+		case float64:
+			switch yvalue := yvalue.(type) {
+			case float64:
+				return dparval.NewValue(DivideFloat(xvalue, yvalue)), nil
+			}
+		}
+	}
+	return dparval.NewValue(nil), nil
+}
+
+func (this *FunctionCallDiv) Accept(ev ExpressionVisitor) (Expression, error) {
+	return ev.Visit(this)
+}
+
 func TruncateFloat(x float64, prec int) float64 {
 
 	var rounder float64
