@@ -13,10 +13,17 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"github.com/couchbaselabs/clog"
 	"github.com/sbinet/liner"
+)
+
+const (
+	QRY_EOL     = ";"
+	QRY_PROMPT1 = "> "
+	QRY_PROMPT2 = "   > "
 )
 
 func HandleInteractiveMode(tiServer, prompt string) {
@@ -38,20 +45,41 @@ func HandleInteractiveMode(tiServer, prompt string) {
 
 	go signalCatcher(liner)
 
+	// state for reading a multi-line query
+	queryLines := []string{}
+	fullPrompt := prompt + QRY_PROMPT1
 	for {
-		line, err := liner.Prompt(prompt + "> ")
+		line, err := liner.Prompt(fullPrompt)
 		if err != nil {
 			break
 		}
 
+		line = strings.TrimSpace(line)
 		if line == "" {
 			continue
 		}
 
-		UpdateHistory(liner, homeDir, line)
-		err = execute_internal(tiServer, line, os.Stdout)
-		if err != nil {
-			clog.Error(err)
+		// Building query string mode: set prompt, gather current line
+		fullPrompt = QRY_PROMPT2
+		queryLines = append(queryLines, line)
+
+		// If the current line ends with a QRY_EOL, join all query lines,
+		// trim off trailing QRY_EOL characters, and submit the query string:
+		if strings.HasSuffix(line, QRY_EOL) {
+			queryString := strings.Join(queryLines, " ")
+			for strings.HasSuffix(queryString, QRY_EOL) {
+				queryString = strings.TrimSuffix(queryString, QRY_EOL)
+			}
+			if queryString != "" {
+				UpdateHistory(liner, homeDir, queryString+QRY_EOL)
+				err = execute_internal(tiServer, queryString, os.Stdout)
+				if err != nil {
+					clog.Error(err)
+				}
+			}
+			// reset state for multi-line query
+			queryLines = []string{}
+			fullPrompt = prompt + QRY_PROMPT1
 		}
 	}
 
