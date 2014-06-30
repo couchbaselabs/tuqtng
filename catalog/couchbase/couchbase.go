@@ -340,8 +340,8 @@ func (b *bucket) CreateIndex(name string, key catalog.IndexKey, using catalog.In
 		b.indexes[idx.Name()] = idx
 		return idx, nil
 
-	case catalog.LSM:
-		idx, err := newLsmIndex(name, key, b)
+	case catalog.LSM, catalog.FOREST:
+		idx, err := newLsmIndex(name, key, b, using)
 		if err != nil {
 			return nil, query.NewError(err, fmt.Sprintf("Error creating index: %s", name))
 		}

@@ -24,7 +24,7 @@ func (ie IndexError) Error() string {
 	return fmt.Sprintf("Code: %v, Msg: %v", ie.Code, ie.Msg)
 }
 
-var client = NewRestClient("http://localhost:8094")
+var client = NewRestClient("http://localhost:9101")
 
 func (li *lsmIndex) DropLsmIndex() query.Error {
 
@@ -58,7 +58,7 @@ func loadLsmIndexesForBucket(b *bucket) ([]*catalog.Index, error) {
 	//client is in sync with the server, we need indexes for this bucket.
 	//Sending ServerUuid=0 makes the server send all the data again.
 	cacheServerUuid := 0
-	serverUuid, indexInfos, err := client.List(string(cacheServerUuid))
+	_, indexInfos, err := client.List(string(cacheServerUuid))
 
 	if err != nil {
 		clog.To(catalog.CHANNEL, "Error Response for List Index %v", err)
@@ -111,11 +111,13 @@ func loadLsmIndexesForBucket(b *bucket) ([]*catalog.Index, error) {
 		}
 	}
 
-	if cacheMgrState.isRunning != true {
-		cacheMgrState.isRunning = true
-		cacheMgrState.serverUuid = serverUuid
-		go manageLSMIndexCache(b.pool)
-	}
+	/*
+		if cacheMgrState.isRunning != true {
+			cacheMgrState.isRunning = true
+			cacheMgrState.serverUuid = serverUuid
+			go manageLSMIndexCache(b.pool)
+		}
+	*/
 
 	return indexes, nil
 
@@ -245,7 +247,7 @@ func newPrimaryIndex(bkt *bucket) (*primaryLsmIndex, error) {
 
 	index := IndexInfo{
 		Name:      PRIMARY_INDEX,
-		Using:     catalog.LSM,
+		Using:     catalog.FOREST,
 		Bucket:    bkt.Name(),
 		IsPrimary: true,
 	}
@@ -281,7 +283,7 @@ func newPrimaryIndex(bkt *bucket) (*primaryLsmIndex, error) {
 
 }
 
-func newLsmIndex(name string, on catalog.IndexKey, bkt *bucket) (*lsmIndex, error) {
+func newLsmIndex(name string, on catalog.IndexKey, bkt *bucket, using catalog.IndexType) (*lsmIndex, error) {
 
 	var exprList []string
 
@@ -296,7 +298,7 @@ func newLsmIndex(name string, on catalog.IndexKey, bkt *bucket) (*lsmIndex, erro
 
 	index := IndexInfo{
 		Name:       name,
-		Using:      catalog.LSM,
+		Using:      using,
 		OnExprList: exprList,
 		Bucket:     bkt.Name(),
 		IsPrimary:  false,
@@ -323,7 +325,7 @@ func newLsmIndex(name string, on catalog.IndexKey, bkt *bucket) (*lsmIndex, erro
 	inst := lsmIndex{
 		name:   name,
 		uuid:   indexinfo.Uuid,
-		using:  catalog.LSM,
+		using:  using,
 		on:     on,
 		bucket: bkt,
 	}

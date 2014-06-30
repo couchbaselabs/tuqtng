@@ -74,6 +74,7 @@ const (
 	UNSPECIFIED IndexType = "unspecified" // used by non-view primary_indexes
 	VIEW        IndexType = "view"
 	LSM         IndexType = "leveldb"
+	FOREST      IndexType = "forestdb"
 )
 
 type IndexKey []ast.Expression
