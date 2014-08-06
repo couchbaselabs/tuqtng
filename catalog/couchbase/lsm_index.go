@@ -107,12 +107,12 @@ func (li *lsmIndex) executeScanQuery(scanType ScanType, low catalog.LookupValue,
 	q.Limit = limit
 	q.ScanType = scanType
 
-	nodes, _ := client.Nodes()
+	//	nodes, _ := client.Nodes()
 	//FIXME choose a random node
-	indexerClient := NewRestClient(nodes[0].IndexerURL)
+	//indexerClient := NewRestClient(nodes[0].IndexerURL)
 	clog.To(catalog.CHANNEL, "Requesting Scan with Params %v", q)
 	//FIXME Send multiple scan requests in batches
-	rows, _, err := indexerClient.Scan(li.Id(), q)
+	rows, _, err := client.Scan(li.Id(), q)
 
 	if err != nil {
 		clog.To(catalog.CHANNEL, "Error in Scan response %v", err)

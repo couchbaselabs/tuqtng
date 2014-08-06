@@ -82,7 +82,7 @@ func loadLsmIndexesForBucket(b *bucket) ([]*catalog.Index, error) {
 						name:   i.Name,
 						uuid:   i.Uuid,
 						bucket: b,
-						using:  catalog.LSM,
+						using:  catalog.FOREST,
 					},
 				}
 				indexes = append(indexes, &index)
@@ -102,7 +102,7 @@ func loadLsmIndexesForBucket(b *bucket) ([]*catalog.Index, error) {
 					name:   i.Name,
 					uuid:   i.Uuid,
 					bucket: b,
-					using:  catalog.LSM,
+					using:  catalog.FOREST,
 					on:     on,
 				}
 				indexes = append(indexes, &index)
@@ -141,7 +141,7 @@ func loadLsmIndexesForPool(p *pool) (string, error) {
 	for _, bc := range p.bucketCache {
 		bi := bc.(*bucket)
 		for i, info := range bi.indexes {
-			if info.Type() == catalog.LSM {
+			if info.Type() == catalog.FOREST {
 				delete(bi.indexes, i)
 			}
 		}
@@ -166,7 +166,7 @@ func loadLsmIndexesForPool(p *pool) (string, error) {
 						uuid: i.Uuid,
 						//FIXME add a private method to pool to return this
 						bucket: b,
-						using:  catalog.LSM,
+						using:  catalog.FOREST,
 					},
 				}
 				b.indexes[i.Name] = index
@@ -187,7 +187,7 @@ func loadLsmIndexesForPool(p *pool) (string, error) {
 					uuid: i.Uuid,
 					//FIXME add a private method to pool to return this
 					bucket: b,
-					using:  catalog.LSM,
+					using:  catalog.FOREST,
 					on:     on,
 				}
 				b.indexes[i.Name] = index
@@ -243,6 +243,7 @@ func manageLSMIndexCache(pool *pool) {
 
 }
 
+/*
 func newPrimaryIndex(bkt *bucket) (*primaryLsmIndex, error) {
 
 	index := IndexInfo{
@@ -274,7 +275,7 @@ func newPrimaryIndex(bkt *bucket) (*primaryLsmIndex, error) {
 		lsmIndex{
 			name:   PRIMARY_INDEX,
 			uuid:   indexinfo.Uuid,
-			using:  catalog.LSM,
+			using:  catalog.FOREST,
 			bucket: bkt,
 		},
 	}
@@ -282,6 +283,7 @@ func newPrimaryIndex(bkt *bucket) (*primaryLsmIndex, error) {
 	return &inst, nil
 
 }
+*/
 
 func newLsmIndex(name string, on catalog.IndexKey, bkt *bucket, using catalog.IndexType) (*lsmIndex, error) {
 

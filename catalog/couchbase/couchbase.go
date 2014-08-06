@@ -241,11 +241,13 @@ func (b *bucket) IndexByPrimary() (catalog.PrimaryIndex, query.Error) {
 		primary := idx.(catalog.PrimaryIndex)
 		return primary, nil
 	}
-	all, ok := b.indexes[ALLDOCS_INDEX]
-	if ok {
-		primary := all.(catalog.PrimaryIndex)
-		return primary, nil
-	}
+	/*
+		all, ok := b.indexes[ALLDOCS_INDEX]
+		if ok {
+			primary := all.(catalog.PrimaryIndex)
+			return primary, nil
+		}
+	*/
 	return nil, query.NewError(nil, "no primary index found!")
 }
 
@@ -355,9 +357,10 @@ func (b *bucket) CreateIndex(name string, key catalog.IndexKey, using catalog.In
 
 func (b *bucket) loadIndexes() query.Error {
 	// #alldocs implicitly exists
-	pi := newAllDocsIndex(b)
-	b.indexes[pi.name] = pi
-
+	/*
+		pi := newAllDocsIndex(b)
+		b.indexes[pi.name] = pi
+	*/
 	// and recreate remaining from ddocs
 	indexes, err := loadViewIndexes(b)
 	if err != nil {
