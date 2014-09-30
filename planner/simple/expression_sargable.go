@@ -171,6 +171,10 @@ func (this *ExpressionSargable) Visit(e ast.Expression) (ast.Expression, error) 
 			pattern, ok := val.Value().(string)
 			if ok {
 				startKey, endKey := this.computePatternRange(pattern)
+				if endKey == "" {
+					return e, nil
+				}
+
 				this.sargable = true
 				newScanRange := &plan.ScanRange{
 					Low:       catalog.LookupValue{dparval.NewValue(startKey)},
@@ -189,6 +193,10 @@ func (this *ExpressionSargable) Visit(e ast.Expression) (ast.Expression, error) 
 			pattern, ok := val.Value().(string)
 			if ok {
 				startKey, endKey := this.computePatternRange(pattern)
+				if endKey == "" {
+					return e, nil
+				}
+
 				this.sargable = true
 				newScanRange := &plan.ScanRange{
 					High:      catalog.LookupValue{dparval.NewValue(startKey)},
@@ -282,6 +290,11 @@ func (this *ExpressionSargable) computePatternRange(pattern string) (string, str
 	patternParts = strings.SplitN(patternParts[0], "_", 2)
 	patternPrefix := patternParts[0]
 	patternPrefixEndBytes := []byte(patternPrefix)
+
+	if len(patternPrefixEndBytes) == 0 {
+		return "", ""
+	}
+
 	patternPrefixEndBytes[len(patternPrefixEndBytes)-1] = patternPrefixEndBytes[len(patternPrefixEndBytes)-1] + 1
 	patternPrefixEnd := string(patternPrefixEndBytes)
 	return patternPrefix, patternPrefixEnd
